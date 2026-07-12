@@ -1,6 +1,6 @@
-# Portfóliový asistent s pixelovým chameleónom
+# Chameleon AI widget
 
-Vizuálny React/TypeScript prototyp asistenta pre portfóliovú stránku. Funguje kompletne lokálne: otváranie, presety, viac-krokový výber, súhrn, animovaný maskot, responzívny panel a ochrana pred konfliktmi s ostatnými prekryvmi.
+Samostatný React/TypeScript widget inšpirovaný rozložením DERAT asistenta. Obsahuje 80 px chameleónovú bublinu, veľký preview text, AI konverzáciu, prepínanie na kalkulačku návrhu, viac-krokový výber, súhrn a animáciu chytania muchy.
 
 Verejná ukážka: <https://danielvendzur-code.github.io/moj.chatbot.backend/>
 
@@ -22,11 +22,11 @@ Push do vetvy `main` automaticky spustí workflow `.github/workflows/deploy-page
 
 ## Architektúra
 
-- `src/components/assistant/` — vizuálne komponenty asistenta, launchera, maskota, výzvy a muchy.
-- `src/hooks/useChameleonMachine.ts` — centrálne časovanie a stavový automat chameleóna.
-- `src/lib/assistantFlow.ts` — otázky, možnosti a lokálne súhrny jednotlivých flow.
-- `src/context/SiteAssistantContext.tsx` — otvorenie/zatvorenie, scroll lock, konflikt prekryvov a obnovenie focusu.
+- `src/components/widget/` — launcher, konverzácia, kalkulačka, ikony a sprite maskota.
+- `src/hooks/useFlyCatch.ts` — náhodné aj interaktívne načasovanie chytania muchy.
+- `src/lib/assistantFlow.ts` — možnosti a lokálne súhrny kalkulačky.
 - `src/lib/siteAssistant.ts` — verejné API a integračné udalosti.
+- `public/chameleon-sprite.png` — dodaný chameleónový sprite použitý bez generovania nového dizajnu.
 
 ## CTA API
 
@@ -38,7 +38,7 @@ openSiteAssistant({ entry: "advisor", preset: "advisor" });
 openSiteAssistant({ entry: "booking", preset: "booking" });
 ```
 
-Funkcia je dostupná ako import aj cez `window.openSiteAssistant(options)`. Blokujúci modal alebo menu môže použiť `setSiteOverlayOpen(true | false)`, prípadne atribút `data-site-overlay-open` na `<body>` a udalosť `site:overlay-change`.
+Funkcia je dostupná ako import aj cez `window.openSiteAssistant(options)`.
 
 ## Aktuálny rozsah
 

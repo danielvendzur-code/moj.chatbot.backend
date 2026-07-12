@@ -1,11 +1,10 @@
-import { SiteAssistant } from "./components/assistant/SiteAssistant";
-import { PortfolioDemo } from "./components/portfolio/PortfolioDemo";
+import { ChameleonWidget } from "./components/widget/ChameleonWidget";
 
 export default function App(): JSX.Element {
   return (
-    <>
-      <PortfolioDemo />
-      <SiteAssistant />
-    </>
+    <main className="widget-preview" aria-label="Ukážka Chameleon AI widgetu">
+      <div className="widget-preview__surface" aria-hidden="true" />
+      <ChameleonWidget />
+    </main>
   );
 }
