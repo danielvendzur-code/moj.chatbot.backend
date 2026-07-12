@@ -14,7 +14,7 @@ export function ChameleonMascot({ state, mode, className = "" }: ChameleonMascot
       aria-hidden="true"
     >
       <span className="chameleon-mascot__crop">
-        <img src="/chameleon.png" alt="" draggable="false" />
+        <img src={`${import.meta.env.BASE_URL}chameleon.png`} alt="" draggable="false" />
       </span>
       <span className="chameleon-mascot__tongue" />
       <span className="chameleon-mascot__shadow" />

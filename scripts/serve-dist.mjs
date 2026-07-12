@@ -4,6 +4,8 @@ import { extname, join, normalize, resolve } from "node:path";
 
 const root = resolve("dist");
 const port = Number(process.env.PORT || 4173);
+const configuredBase = process.env.BASE_PATH || "/";
+const basePath = `/${configuredBase.replace(/^\/+|\/+$/g, "")}${configuredBase === "/" ? "" : "/"}`;
 const mime = {
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
@@ -16,7 +18,18 @@ const mime = {
 createServer(async (request, response) => {
   try {
     const url = new URL(request.url || "/", "http://localhost");
-    const pathname = decodeURIComponent(url.pathname);
+    let pathname = decodeURIComponent(url.pathname);
+    if (basePath !== "/") {
+      if (pathname === basePath.slice(0, -1)) {
+        response.writeHead(308, { Location: basePath }).end();
+        return;
+      }
+      if (!pathname.startsWith(basePath)) {
+        response.writeHead(404).end("Not found");
+        return;
+      }
+      pathname = `/${pathname.slice(basePath.length)}`;
+    }
     const relative = pathname === "/" ? "index.html" : normalize(pathname).replace(/^[/\\]+/, "");
     let file = join(root, relative);
     if (!file.startsWith(root)) {
@@ -27,6 +40,10 @@ createServer(async (request, response) => {
     try {
       if ((await stat(file)).isDirectory()) file = join(file, "index.html");
     } catch {
+      if (extname(relative)) {
+        response.writeHead(404).end("Not found");
+        return;
+      }
       file = join(root, "index.html");
     }
 
@@ -40,5 +57,5 @@ createServer(async (request, response) => {
     response.writeHead(500).end("Server error");
   }
 }).listen(port, "127.0.0.1", () => {
-  console.log(`Site assistant preview: http://127.0.0.1:${port}`);
+  console.log(`Site assistant preview: http://127.0.0.1:${port}${basePath}`);
 });

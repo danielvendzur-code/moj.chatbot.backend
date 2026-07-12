@@ -2,6 +2,8 @@
 
 Vizuálny React/TypeScript prototyp asistenta pre portfóliovú stránku. Funguje kompletne lokálne: otváranie, presety, viac-krokový výber, súhrn, animovaný maskot, responzívny panel a ochrana pred konfliktmi s ostatnými prekryvmi.
 
+Verejná ukážka: <https://danielvendzur-code.github.io/moj.chatbot.backend/>
+
 ## Spustenie
 
 ```bash
@@ -15,6 +17,8 @@ Produkčná kontrola:
 pnpm check
 pnpm build
 ```
+
+Push do vetvy `main` automaticky spustí workflow `.github/workflows/deploy-pages.yml`, ktorý vytvorí produkčný Vite build a nasadí priečinok `dist` na GitHub Pages.
 
 ## Architektúra
 
