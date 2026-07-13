@@ -1,6 +1,6 @@
 # Chameleon AI widget
 
-Samostatný React/TypeScript widget inšpirovaný rozložením DERAT asistenta. Obsahuje 80 px chameleónovú bublinu, veľký preview text, AI konverzáciu, prepínanie na kalkulačku návrhu, viac-krokový výber, súhrn a animáciu chytania muchy.
+Samostatný React/TypeScript widget s prémiovým vizuálnym systémom nadviazaným na osvedčené rozloženie DERAT asistenta. Obsahuje 80 px chameleónovú bublinu, veľký preview text, AI konverzáciu, prepínanie na kalkulačku návrhu, viac-krokový výber, súhrn a animáciu chytania muchy.
 
 Verejná ukážka: <https://danielvendzur-code.github.io/moj.chatbot.backend/>
 
@@ -22,11 +22,11 @@ Push do vetvy `main` automaticky spustí workflow `.github/workflows/deploy-page
 
 ## Architektúra
 
-- `src/components/widget/` — launcher, konverzácia, kalkulačka, ikony a sprite maskota.
+- `src/components/widget/` — launcher, konverzácia, kalkulačka, ikony a maskot.
 - `src/hooks/useFlyCatch.ts` — náhodné aj interaktívne načasovanie chytania muchy.
 - `src/lib/assistantFlow.ts` — možnosti a lokálne súhrny kalkulačky.
 - `src/lib/siteAssistant.ts` — verejné API a integračné udalosti.
-- `public/chameleon-sprite.png` — dodaný chameleónový sprite použitý bez generovania nového dizajnu.
+- `public/chameleon-mascot.png` — optimalizovaný transparentný pixel-art maskot používaný vo všetkých veľkostiach widgetu.
 
 ## CTA API
 

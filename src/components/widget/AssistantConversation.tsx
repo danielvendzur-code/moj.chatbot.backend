@@ -117,6 +117,7 @@ export function AssistantConversation({
       </div>
 
       <div className="cw-quick-replies" aria-label="Rýchle možnosti">
+        <span className="cw-quick-replies__label">Rýchly štart</span>
         <button type="button" onClick={onOpenCalculator}>Vyskladať nástroj</button>
         {Object.keys(QUICK_REPLIES).map((label) => (
           <button
@@ -148,7 +149,7 @@ export function AssistantConversation({
       </div>
 
       <div className="cw-contactbar">
-        <span className="cw-contactbar__label">Ďalší krok zostáva zatiaľ lokálny</span>
+        <span className="cw-contactbar__label"><WidgetIcon name="spark" /> Ďalší krok zostáva zatiaľ lokálny</span>
         <div>
           <button type="button" onClick={() => setContactStatus("E-mail sa zapojí v ďalšej fáze.")}>
             <WidgetIcon name="mail" /> E-mail

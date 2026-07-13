@@ -26,7 +26,10 @@ export function ChameleonWidget(): JSX.Element {
   const panelRef = useRef<HTMLElement>(null);
   const { phase, trigger } = useFlyCatch();
 
-  const close = useCallback(() => setIsOpen(false), []);
+  const close = useCallback(() => {
+    setIsOpen(false);
+    trigger();
+  }, [trigger]);
   useFocusTrap(panelRef, isOpen, close);
 
   const open = useCallback((nextMode: WidgetMode, nextPreset: GoalId | null = null) => {
@@ -82,8 +85,9 @@ export function ChameleonWidget(): JSX.Element {
             ×
           </button>
           <button type="button" className="cw-teaser__content" onClick={() => open("calculator")}>
+            <small className="cw-teaser__eyebrow"><i /> Chameleon AI</small>
             <strong>Zistite, čo by fungovalo na vašom webe</strong>
-            <span>
+            <span className="cw-teaser__copy">
               Otvorte <b>kalkulačku návrhu</b> — základ máte do minúty. <b>AI asistent</b> poradí ďalší krok.
             </span>
           </button>
@@ -120,7 +124,7 @@ export function ChameleonWidget(): JSX.Element {
             <span className="cw-panel-head__mascot"><ChameleonSprite phase={phase} size="header" /></span>
             <div className="cw-panel-head__title">
               <b id="chameleon-widget-title">{mode === "assistant" ? "Chameleon AI" : "Kalkulačka návrhu"}</b>
-              <span><i /> Online · lokálna ukážka</span>
+              <span className="cw-panel-head__meta"><i /> Online <em>Bez odosielania</em></span>
             </div>
             <div className="cw-panel-head__actions">
               <button
