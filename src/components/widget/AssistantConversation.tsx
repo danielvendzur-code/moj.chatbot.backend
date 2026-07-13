@@ -19,7 +19,7 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   {
     id: 1,
     from: "bot",
-    text: "Dobrý deň, som Chameleon AI. Pomôžem vám vybrať digitálny nástroj, ktorý dáva zmysel pre váš web.",
+    text: "Dobrý deň. Pomôžem vám vybrať digitálny nástroj, ktorý dáva zmysel pre váš web.",
   },
   {
     id: 2,
@@ -101,7 +101,7 @@ export function AssistantConversation({
             ) : null}
             <div className="cw-message-wrap">
               <p>{message.text}</p>
-              <small>{message.from === "bot" ? "Chameleon AI" : "Vy"}</small>
+              <small>{message.from === "bot" ? "Asistent" : "Vy"}</small>
             </div>
           </div>
         ))}
@@ -109,7 +109,7 @@ export function AssistantConversation({
         {typing ? (
           <div className="cw-message-row cw-message-row--bot">
             <span className="cw-avatar"><ChameleonSprite phase={phase} size="avatar" /></span>
-            <div className="cw-typing" aria-label="Asistent píše">
+            <div className="cw-typing" aria-label="Asistent odpovedá">
               <i /><i /><i />
             </div>
           </div>
@@ -149,7 +149,7 @@ export function AssistantConversation({
       </div>
 
       <div className="cw-contactbar">
-        <span className="cw-contactbar__label"><WidgetIcon name="spark" /> Ďalší krok zostáva zatiaľ lokálny</span>
+        <span className="cw-contactbar__label"><WidgetIcon name="spark" /> Ukážka neodosiela žiadne údaje</span>
         <div>
           <button type="button" onClick={() => setContactStatus("E-mail sa zapojí v ďalšej fáze.")}>
             <WidgetIcon name="mail" /> E-mail

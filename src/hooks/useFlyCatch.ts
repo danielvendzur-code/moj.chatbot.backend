@@ -6,13 +6,8 @@ export type FlyCatchPhase = "idle" | "watching" | "feeding";
 export function useFlyCatch(): { phase: FlyCatchPhase; trigger: () => void } {
   const reducedMotion = useReducedMotion();
   const [phase, setPhase] = useState<FlyCatchPhase>("idle");
-  const phaseRef = useRef<FlyCatchPhase>("idle");
   const scheduleTimerRef = useRef<number | null>(null);
   const sequenceTimersRef = useRef<number[]>([]);
-
-  useEffect(() => {
-    phaseRef.current = phase;
-  }, [phase]);
 
   const clearSchedule = useCallback(() => {
     if (scheduleTimerRef.current !== null) window.clearTimeout(scheduleTimerRef.current);
@@ -25,7 +20,7 @@ export function useFlyCatch(): { phase: FlyCatchPhase; trigger: () => void } {
   }, []);
 
   const trigger = useCallback(() => {
-    if (reducedMotion || document.hidden || phaseRef.current !== "idle") return;
+    if (reducedMotion || document.hidden) return;
 
     clearSchedule();
     clearSequence();

@@ -1,6 +1,6 @@
-# Chameleon AI widget
+# Webový asistent s chameleónom
 
-Samostatný React/TypeScript widget s prémiovým vizuálnym systémom nadviazaným na osvedčené rozloženie DERAT asistenta. Obsahuje 80 px chameleónovú bublinu, veľký preview text, AI konverzáciu, prepínanie na kalkulačku návrhu, viac-krokový výber, súhrn a animáciu chytania muchy.
+Samostatný React/TypeScript widget s prémiovým vizuálnym systémom nadviazaným na osvedčené rozloženie DERAT asistenta. Obsahuje 80 px chameleónovú bublinu, veľký preview text, konverzáciu s asistentom, prepínanie na kalkulačku návrhu, viac-krokový výber, súhrn a animáciu chytania muchy.
 
 Verejná ukážka: <https://danielvendzur-code.github.io/moj.chatbot.backend/>
 

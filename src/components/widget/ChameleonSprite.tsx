@@ -16,7 +16,9 @@ export function ChameleonSprite({ phase, size }: ChameleonSpriteProps): JSX.Elem
     >
       <span className="cw-sprite__halo" />
       <span className="cw-sprite__tongue"><i /></span>
-      <img className="cw-sprite__image" src={mascotUrl} alt="" draggable={false} />
+      <span className="cw-sprite__art">
+        <img className="cw-sprite__image" src={mascotUrl} alt="" draggable={false} />
+      </span>
       <span className="cw-sprite__fly">
         <i />
         <b />
