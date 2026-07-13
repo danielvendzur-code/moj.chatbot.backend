@@ -1,8 +1,17 @@
-# Webový asistent s chameleónom
+# Webový asistent s pixelovým zlatým chameleónom
 
-Samostatný React/TypeScript widget s prémiovým vizuálnym systémom nadviazaným na osvedčené rozloženie DERAT asistenta. Obsahuje 80 px chameleónovú bublinu, veľký preview text, konverzáciu s asistentom, prepínanie na kalkulačku návrhu, viac-krokový výber, súhrn a animáciu chytania muchy.
+Samostatný React/TypeScript widget s pixel-art maskotom a viac-krokovým konfigurátorom
+inšpirovaným osvedčeným rozložením DERAT asistenta (výberové karty, krokovanie s bodkami,
+hover výplne, kontaktný formulár so zhrnutím).
 
 Verejná ukážka: <https://danielvendzur-code.github.io/moj.chatbot.backend/>
+
+## Maskot
+
+Maskot je ručne kreslený pixel-art zlatý chameleón (`src/components/widget/PixelMascot.tsx`)
+— žiadne obrázky, čistý SVG z pixelovej mapy. Vie dýchať, žmurkať, sledovať muchu zreničkou
+a chytiť ju vystreleným jazykom (fázy `idle → watching → feeding` riadi `useFlyCatch`).
+Animácia sa spúšťa pri hoveri na bubline, pri zatvorení okna a náhodne v pokoji.
 
 ## Spustenie
 
@@ -22,11 +31,13 @@ Push do vetvy `main` automaticky spustí workflow `.github/workflows/deploy-page
 
 ## Architektúra
 
-- `src/components/widget/` — launcher, konverzácia, kalkulačka, ikony a maskot.
+- `src/components/widget/AssistantWidget.tsx` — launcher, teaser, okno, prepínanie režimov.
+- `src/components/widget/PixelMascot.tsx` — pixel-art maskot s animáciou chytania muchy.
+- `src/components/widget/AssistantConversation.tsx` — konverzácia s rýchlymi čipmi a kontaktnou lištou.
+- `src/components/widget/ToolCalculator.tsx` — 6-krokový konfigurátor: záujem → odvetvie → nasadenie → funkcie → objem dopytov → zhrnutie + kontakt (s poďakovaním).
+- `src/lib/assistantFlow.ts` — dáta krokov, odporúčané funkcie podľa výberu, číslo návrhu.
 - `src/hooks/useFlyCatch.ts` — náhodné aj interaktívne načasovanie chytania muchy.
-- `src/lib/assistantFlow.ts` — možnosti a lokálne súhrny kalkulačky.
 - `src/lib/siteAssistant.ts` — verejné API a integračné udalosti.
-- `public/chameleon-mascot.png` — optimalizovaný transparentný pixel-art maskot používaný vo všetkých veľkostiach widgetu.
 
 ## CTA API
 

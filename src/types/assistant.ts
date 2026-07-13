@@ -13,26 +13,10 @@ export type OpenSiteAssistantOptions = {
   preset?: AssistantPreset;
 };
 
-export type ChameleonState =
-  | "page-idle"
-  | "noticed-fly"
-  | "walking-to-launcher"
-  | "arrived-at-launcher"
-  | "prompting"
-  | "opening-assistant"
-  | "inside-assistant"
-  | "watching"
-  | "feeding"
-  | "sleeping";
-
-export type GoalId = AssistantPreset | "combined";
+export type InterestId = "chatbot" | "calcbot" | "booking" | "custom";
 
 declare global {
   interface Window {
     openSiteAssistant: (options: OpenSiteAssistantOptions) => void;
-    __siteAssistantDebug?: {
-      getState: () => ChameleonState;
-      triggerFly: () => void;
-    };
   }
 }

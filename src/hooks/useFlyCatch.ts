@@ -26,8 +26,8 @@ export function useFlyCatch(): { phase: FlyCatchPhase; trigger: () => void } {
     clearSequence();
     setPhase("watching");
     sequenceTimersRef.current.push(
-      window.setTimeout(() => setPhase("feeding"), 420),
-      window.setTimeout(() => setPhase("idle"), 1_180),
+      window.setTimeout(() => setPhase("feeding"), 650),
+      window.setTimeout(() => setPhase("idle"), 1_550),
     );
   }, [clearSchedule, clearSequence, reducedMotion]);
 

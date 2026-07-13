@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { FlyCatchPhase } from "../../hooks/useFlyCatch";
-import { ChameleonSprite } from "./ChameleonSprite";
+import { PixelMascot } from "./PixelMascot";
 import { WidgetIcon } from "./WidgetIcon";
 
 type AssistantConversationProps = {
@@ -19,19 +19,19 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   {
     id: 1,
     from: "bot",
-    text: "Dobrý deň. Pomôžem vám vybrať digitálny nástroj, ktorý dáva zmysel pre váš web.",
+    text: "Dobrý deň! Som váš webový asistent. Pomôžem vám vybrať chatbota alebo kalkulačku, ktorá dáva pre váš web zmysel.",
   },
   {
     id: 2,
     from: "bot",
-    text: "Najrýchlejšie začnete v kalkulačke návrhu. Alebo mi napíšte, čo má váš web zjednodušiť.",
+    text: "Najrýchlejšie začnete v konfigurátore — návrh riešenia máte do minúty. Alebo mi napíšte, čo má váš web zjednodušiť.",
   },
 ];
 
 const QUICK_REPLIES: Record<string, string> = {
-  "Presné dopyty": "Dopytový asistent vie zozbierať rozsah, lokalitu, termín, fotografie aj kontakt ešte pred prvým telefonátom.",
-  "Výber produktu": "Produktový poradca odporučí vhodnú možnosť podľa použitia, rozpočtu, veľkosti a ďalších rozhodovacích kritérií.",
-  Rezervácia: "Rezervácia môže prísť až po krátkom dopyte, výbere služby alebo lokality, aby mal termín správny kontext.",
+  "AI chatbot": "AI chatbot odpovedá návštevníkom 24/7 — zaučí sa na vaše služby, ceny aj postupy a nikdy ho nezastihnete nepripraveného.",
+  "Chatbot s kalkulačkou": "Chatbot s kalkulačkou spočíta orientačnú cenu podľa vašich parametrov a rovno z nej urobí hotový dopyt s kontaktom.",
+  Rezervácie: "Rezervačný asistent najprv zozbiera krátky dopyt, potom ponúkne termín a pošle pripomienku — bez telefonátov tam a späť.",
 };
 
 export function AssistantConversation({
@@ -78,7 +78,7 @@ export function AssistantConversation({
         { id: nextIdRef.current++, from: "bot", text: response },
       ]);
       setTyping(false);
-    }, 620);
+    }, 720);
   };
 
   const submit = () => {
@@ -87,7 +87,7 @@ export function AssistantConversation({
     setInput("");
     addExchange(
       value,
-      "Rozumiem. V ostrej verzii by som túto odpoveď použil na výber vhodného flow a pripravil konkrétny ďalší krok. Táto ukážka zatiaľ nič neodosiela.",
+      "Rozumiem. V ostrej verzii by som z tejto odpovede vybral vhodné riešenie a pripravil ďalší krok. Táto ukážka zatiaľ nič neodosiela — skúste konfigurátor.",
     );
   };
 
@@ -97,7 +97,7 @@ export function AssistantConversation({
         {messages.map((message) => (
           <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>
             {message.from === "bot" ? (
-              <span className="cw-avatar"><ChameleonSprite phase={phase} size="avatar" /></span>
+              <span className="cw-avatar"><PixelMascot phase={phase} size="avatar" /></span>
             ) : null}
             <div className="cw-message-wrap">
               <p>{message.text}</p>
@@ -108,7 +108,7 @@ export function AssistantConversation({
 
         {typing ? (
           <div className="cw-message-row cw-message-row--bot">
-            <span className="cw-avatar"><ChameleonSprite phase={phase} size="avatar" /></span>
+            <span className="cw-avatar"><PixelMascot phase={phase} size="avatar" /></span>
             <div className="cw-typing" aria-label="Asistent odpovedá">
               <i /><i /><i />
             </div>
@@ -117,11 +117,13 @@ export function AssistantConversation({
       </div>
 
       <div className="cw-quick-replies" aria-label="Rýchle možnosti">
-        <span className="cw-quick-replies__label">Rýchly štart</span>
-        <button type="button" onClick={onOpenCalculator}>Vyskladať nástroj</button>
+        <button type="button" className="cw-chip cw-chip--primary" onClick={onOpenCalculator}>
+          Vyskladať riešenie
+        </button>
         {Object.keys(QUICK_REPLIES).map((label) => (
           <button
             type="button"
+            className="cw-chip"
             key={label}
             onClick={() => addExchange(label, QUICK_REPLIES[label])}
           >
@@ -140,7 +142,7 @@ export function AssistantConversation({
               submit();
             }
           }}
-          placeholder="Napíšte, čo chcete vyriešiť…"
+          placeholder="Napíšte svoju otázku…"
           aria-label="Správa pre asistenta"
         />
         <button type="button" onClick={submit} disabled={!input.trim() || typing} aria-label="Odoslať správu">
@@ -149,16 +151,19 @@ export function AssistantConversation({
       </div>
 
       <div className="cw-contactbar">
-        <span className="cw-contactbar__label"><WidgetIcon name="spark" /> Ukážka neodosiela žiadne údaje</span>
-        <div>
-          <button type="button" onClick={() => setContactStatus("E-mail sa zapojí v ďalšej fáze.")}>
-            <WidgetIcon name="mail" /> E-mail
+        <span className="cw-contactbar__label">Radšej naživo? Sme na príjme</span>
+        <div className="cw-contactbar__grid">
+          <button type="button" onClick={() => setContactStatus("Telefonát sa zapojí v ostrej verzii.")}>
+            <span className="cw-contactbar__icon"><WidgetIcon name="phone" /></span>
+            <span>Volať</span>
           </button>
-          <button type="button" onClick={() => setContactStatus("Termín sa zatiaľ nerezervuje.")}>
-            <WidgetIcon name="user" /> Konzultácia
+          <button type="button" onClick={() => setContactStatus("E-mail sa zapojí v ostrej verzii.")}>
+            <span className="cw-contactbar__icon"><WidgetIcon name="mail" /></span>
+            <span>E-mail</span>
           </button>
-          <button type="button" onClick={() => setContactStatus("Brief zostáva iba v tejto ukážke.")}>
-            <WidgetIcon name="spark" /> Brief
+          <button type="button" onClick={() => setContactStatus("Konzultácia sa zatiaľ nerezervuje — ukážka.")}>
+            <span className="cw-contactbar__icon"><WidgetIcon name="calendar" /></span>
+            <span>Konzultácia</span>
           </button>
         </div>
         {contactStatus ? <p role="status">{contactStatus}</p> : null}

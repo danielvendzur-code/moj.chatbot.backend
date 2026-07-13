@@ -1,112 +1,144 @@
-import type { GoalId } from "../types/assistant";
+import type { AssistantPreset, InterestId } from "../types/assistant";
 
-export type FlowOption = {
-  id: string;
+export type StepId =
+  | "interest"
+  | "industry"
+  | "channel"
+  | "features"
+  | "volume"
+  | "contact";
+
+export const STEPS: StepId[] = [
+  "interest",
+  "industry",
+  "channel",
+  "features",
+  "volume",
+  "contact",
+];
+
+export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
+  interest: ["Čo vás zaujíma?", "Vyberte, s čím vám mám pomôcť. Detaily doladíme v ďalších krokoch."],
+  industry: ["V akom odvetví podnikáte?", "Podľa odvetvia pripravím vhodné ukážky a tón komunikácie."],
+  channel: ["Kde má asistent bežať?", "Vyberte hlavné miesto nasadenia — ďalšie vieme pridať neskôr."],
+  features: ["Čo má asistent zvládnuť?", "Označte všetko, čo dáva zmysel. Pokojne viac možností."],
+  volume: ["Koľko dopytov mesačne riešite?", "Stačí odhad — pomôže nastaviť kapacitu a cenu."],
+  contact: ["Zhrnutie návrhu", "Skontrolujte výber a nechajte mi kontakt — pripravím návrh na mieru."],
+};
+
+export type InterestOption = {
+  id: InterestId;
   label: string;
-};
-
-export type GoalOption = FlowOption & {
   description: string;
+  badge?: string;
+  icon: "chat" | "calculator" | "calendar" | "spark";
 };
 
-export type DetailFlow = {
-  question: string;
-  eyebrow: string;
-  options: FlowOption[];
-};
-
-export const GOALS: GoalOption[] = [
+export const INTERESTS: InterestOption[] = [
   {
-    id: "calculator",
-    label: "Počítať cenu",
-    description: "Orientačný výpočet podľa konkrétnych parametrov.",
+    id: "chatbot",
+    label: "AI chatbot",
+    description: "Odpovedá návštevníkom 24/7 a je zaučený na vašu firmu.",
+    icon: "chat",
   },
   {
-    id: "inquiry",
-    label: "Získavať presné dopyty",
-    description: "Menej telefonátov tam a späť, viac podkladov vopred.",
-  },
-  {
-    id: "advisor",
-    label: "Pomáhať s výberom produktu",
-    description: "Pokojné odporúčanie podľa potrieb zákazníka.",
+    id: "calcbot",
+    label: "Chatbot s kalkulačkou",
+    description: "Spočíta orientačnú cenu a premení ju na hotový dopyt.",
+    badge: "Najobľúbenejšie",
+    icon: "calculator",
   },
   {
     id: "booking",
-    label: "Rezervovať termín",
-    description: "Zmysluplný kontext ešte pred výberom termínu.",
+    label: "Rezervačný asistent",
+    description: "Krátky dopyt, výber termínu a automatické pripomienky.",
+    icon: "calendar",
   },
   {
-    id: "combined",
-    label: "Kombinovať viac funkcií",
-    description: "Jeden súvislý nástroj namiesto niekoľkých formulárov.",
+    id: "custom",
+    label: "Niečo iné",
+    description: "Popíšte vlastnú predstavu — navrhnem riešenie na mieru.",
+    icon: "spark",
   },
 ];
 
-export const DETAIL_FLOWS: Record<GoalId, DetailFlow> = {
-  calculator: {
-    eyebrow: "Krok 2 · Kalkulačka",
-    question: "Od čoho sa cena odvíja?",
-    options: ["Rozmery", "Množstvo", "Materiál", "Doprava", "Montáž", "Doplnky"].map(
-      (label) => ({ id: label.toLocaleLowerCase("sk"), label }),
-    ),
-  },
-  inquiry: {
-    eyebrow: "Krok 2 · Dopytový asistent",
-    question: "Čo potrebuje firma od zákazníka zistiť?",
-    options: ["Typ služby", "Rozsah", "Lokalitu", "Termín", "Fotografie", "Kontakt"].map(
-      (label) => ({ id: label.toLocaleLowerCase("sk"), label }),
-    ),
-  },
-  advisor: {
-    eyebrow: "Krok 2 · Produktový poradca",
-    question: "Podľa čoho sa zákazník rozhoduje?",
-    options: ["Použitie", "Rozpočet", "Veľkosť", "Materiál", "Farba", "Doplnky"].map(
-      (label) => ({ id: label.toLocaleLowerCase("sk"), label }),
-    ),
-  },
-  booking: {
-    eyebrow: "Krok 2 · Rezervácia",
-    question: "Čo má rezervácii predchádzať?",
-    options: [
-      "Výber služby",
-      "Krátky dopyt",
-      "Výber pracovníka",
-      "Výber lokality",
-      "Bez ďalších otázok",
-    ].map((label) => ({ id: label.toLocaleLowerCase("sk"), label })),
-  },
-  combined: {
-    eyebrow: "Krok 2 · Kombinácia",
-    question: "Ktoré časti majú spolupracovať?",
-    options: ["Kalkulačka", "Dopyt", "Produktový poradca", "Rezervácia", "E-mail", "Kalendár"].map(
-      (label) => ({ id: label.toLocaleLowerCase("sk"), label }),
-    ),
-  },
+export type IndustryOption = {
+  id: string;
+  label: string;
+  icon: "tools" | "cart" | "food" | "heart" | "factory" | "spark";
 };
 
-const SUMMARY: Record<GoalId, string> = {
-  calculator: "Najvhodnejším základom by bola interaktívna kalkulačka s krátkym kvalifikačným dopytom.",
-  inquiry: "Najvhodnejším základom by bol dopytový asistent, ktorý pripraví firme použiteľné podklady.",
-  advisor: "Najvhodnejším základom by bol produktový poradca s jasným odporúčaním ďalšieho kroku.",
-  booking: "Najvhodnejším základom by bol rezervačný asistent s krátkou prípravou pred výberom termínu.",
-  combined: "Podľa výberu by dával zmysel kombinovaný dopytový asistent s kalkulačkou.",
+export const INDUSTRIES: IndustryOption[] = [
+  { id: "sluzby", label: "Služby a remeslá", icon: "tools" },
+  { id: "eshop", label: "E-shop a predaj", icon: "cart" },
+  { id: "gastro", label: "Gastro a ubytovanie", icon: "food" },
+  { id: "zdravie", label: "Zdravie a krása", icon: "heart" },
+  { id: "vyroba", label: "Výroba a B2B", icon: "factory" },
+  { id: "ine", label: "Iné odvetvie", icon: "spark" },
+];
+
+export type ChannelOption = {
+  id: string;
+  label: string;
+  description: string;
 };
 
-export function getSummary(goal: GoalId, selectedLabels: string[]): string {
-  const detail = selectedLabels.length
-    ? ` Zohľadní pritom: ${selectedLabels.slice(0, 4).join(", ").toLocaleLowerCase("sk")}.`
-    : "";
-  return `${SUMMARY[goal]}${detail}`;
-}
+export const CHANNELS: ChannelOption[] = [
+  { id: "web", label: "Na našom webe", description: "Widget doplníme na existujúce stránky." },
+  { id: "novy-web", label: "Web ešte len chystáme", description: "Asistent navrhneme spolu s novým webom." },
+  { id: "social", label: "Facebook / Instagram", description: "Odpovede v Messengeri a na Instagrame." },
+  { id: "whatsapp", label: "WhatsApp", description: "Konverzácie priamo v telefóne zákazníka." },
+  { id: "neviem", label: "Neviem, poradíte mi", description: "Odporučím najvhodnejší kanál podľa cieľa." },
+];
 
-export function getSummaryChips(goal: GoalId): string[] {
-  const base: Record<GoalId, string[]> = {
-    calculator: ["kalkulačka", "dopyt", "e-mail"],
-    inquiry: ["dopyt", "fotografie", "e-mail"],
-    advisor: ["poradca", "odporúčanie", "dopyt"],
-    booking: ["dopyt", "kalendár", "e-mail"],
-    combined: ["kalkulačka", "dopyt", "e-mail", "kalendár"],
-  };
-  return base[goal];
+export type FeatureOption = {
+  id: string;
+  label: string;
+  description: string;
+};
+
+export const FEATURES: FeatureOption[] = [
+  { id: "faq", label: "Odpovedať na časté otázky", description: "Ceny, otváracie hodiny, postupy…" },
+  { id: "dopyty", label: "Zbierať dopyty a kontakty", description: "Použiteľné podklady ešte pred telefonátom." },
+  { id: "cena", label: "Počítať orientačné ceny", description: "Kalkulačka podľa vašich parametrov." },
+  { id: "rezervacie", label: "Rezervovať termíny", description: "Prepojenie na kalendár a pripomienky." },
+  { id: "email", label: "Posielať zhrnutia e-mailom", description: "Vám aj zákazníkovi, automaticky." },
+  { id: "crm", label: "Zapisovať do CRM / tabuľky", description: "Každý dopyt na svojom mieste." },
+];
+
+/* Predvolené funkcie podľa vybraného záujmu — dajú sa upraviť. */
+export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
+  chatbot: ["faq", "dopyty"],
+  calcbot: ["cena", "dopyty", "email"],
+  booking: ["rezervacie", "dopyty", "email"],
+  custom: [],
+};
+
+export type VolumeOption = {
+  id: string;
+  label: string;
+  description: string;
+};
+
+export const VOLUMES: VolumeOption[] = [
+  { id: "v20", label: "Do 20", description: "Občasné dopyty, dôraz na osobný tón." },
+  { id: "v100", label: "20 – 100", description: "Stabilný tok — asistent odbremení telefón." },
+  { id: "v500", label: "100 – 500", description: "Vyťažená prevádzka, triedenie má veľký efekt." },
+  { id: "v500plus", label: "Viac než 500", description: "Veľký objem — automatizácia je nutnosť." },
+];
+
+export const PRESET_TO_INTEREST: Record<AssistantPreset, InterestId> = {
+  calculator: "calcbot",
+  inquiry: "chatbot",
+  advisor: "chatbot",
+  booking: "booking",
+};
+
+export const labelOf = (
+  options: ReadonlyArray<{ id: string; label: string }>,
+  id: string | null,
+): string => options.find((option) => option.id === id)?.label ?? "—";
+
+export function buildProposalNumber(): string {
+  return `NV-${Date.now().toString(36).toUpperCase().slice(-6)}`;
 }
