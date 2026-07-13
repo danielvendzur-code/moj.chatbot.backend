@@ -1,17 +1,17 @@
-# Webový asistent s pixelovým zlatým chameleónom
+# Webový asistent — konfigurátor riešenia
 
-Samostatný React/TypeScript widget s pixel-art maskotom a viac-krokovým konfigurátorom
-inšpirovaným osvedčeným rozložením DERAT asistenta (výberové karty, krokovanie s bodkami,
-hover výplne, kontaktný formulár so zhrnutím).
+Samostatný React/TypeScript widget s viac-krokovým konfigurátorom inšpirovaným osvedčeným
+rozložením DERAT asistenta (výberové karty, krokovanie s bodkami, hover výplne, kontaktný
+formulár so zhrnutím). Profesionálna zeleno-zlatá paleta: hlboká lesná zelená ako základ,
+šampanské zlato ako hover akcent.
 
 Verejná ukážka: <https://danielvendzur-code.github.io/moj.chatbot.backend/>
 
-## Maskot
+## Logo
 
-Maskot je ručne kreslený pixel-art zlatý chameleón (`src/components/widget/PixelMascot.tsx`)
-— žiadne obrázky, čistý SVG z pixelovej mapy. Vie dýchať, žmurkať, sledovať muchu zreničkou
-a chytiť ju vystreleným jazykom (fázy `idle → watching → feeding` riadi `useFlyCatch`).
-Animácia sa spúšťa pri hoveri na bubline, pri zatvorení okna a náhodne v pokoji.
+Logom je čistá chatová bublina s tromi zlatými bodkami (`src/components/widget/BubbleLogo.tsx`)
+v troch veľkostiach — launcher, hlavička a avatar pri správach. (Skorší pixel-art maskot
+chameleóna zostáva dostupný v git histórii, keby sa hodil neskôr.)
 
 ## Spustenie
 
@@ -32,11 +32,10 @@ Push do vetvy `main` automaticky spustí workflow `.github/workflows/deploy-page
 ## Architektúra
 
 - `src/components/widget/AssistantWidget.tsx` — launcher, teaser, okno, prepínanie režimov.
-- `src/components/widget/PixelMascot.tsx` — pixel-art maskot s animáciou chytania muchy.
-- `src/components/widget/AssistantConversation.tsx` — konverzácia s rýchlymi čipmi a kontaktnou lištou.
+- `src/components/widget/BubbleLogo.tsx` — logo asistenta (chatová bublina, tri veľkosti).
+- `src/components/widget/AssistantConversation.tsx` — konverzácia s rýchlymi čipmi.
 - `src/components/widget/ToolCalculator.tsx` — 6-krokový konfigurátor: záujem → odvetvie → nasadenie → funkcie → objem dopytov → zhrnutie + kontakt (s poďakovaním).
 - `src/lib/assistantFlow.ts` — dáta krokov, odporúčané funkcie podľa výberu, číslo návrhu.
-- `src/hooks/useFlyCatch.ts` — náhodné aj interaktívne načasovanie chytania muchy.
 - `src/lib/siteAssistant.ts` — verejné API a integračné udalosti.
 
 ## CTA API

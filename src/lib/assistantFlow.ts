@@ -50,7 +50,7 @@ export const INTERESTS: InterestOption[] = [
   },
   {
     id: "booking",
-    label: "Rezervačný asistent",
+    label: "Rezervačný chatbot",
     description: "Krátky dopyt, výber termínu a automatické pripomienky.",
     icon: "calendar",
   },

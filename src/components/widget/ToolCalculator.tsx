@@ -453,10 +453,6 @@ export function ToolCalculator({
 
       {!isLast ? (
         <footer className="cw-calc-actions">
-          <div className="cw-calc-actions__hint">
-            <small>Krok {step + 1} z {STEPS.length}</small>
-            <b>{interest ? (interest === "custom" ? "Na mieru" : labelOf(INTERESTS, interest)) : "Nevybrané"}</b>
-          </div>
           <button
             type="button"
             className="cw-next"

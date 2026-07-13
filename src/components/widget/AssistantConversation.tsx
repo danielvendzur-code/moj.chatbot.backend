@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import type { FlyCatchPhase } from "../../hooks/useFlyCatch";
-import { PixelMascot } from "./PixelMascot";
+import { BubbleLogo } from "./BubbleLogo";
 import { WidgetIcon } from "./WidgetIcon";
 
 type AssistantConversationProps = {
-  phase: FlyCatchPhase;
   resetToken: number;
   onOpenCalculator: () => void;
 };
@@ -31,18 +29,16 @@ const INITIAL_MESSAGES: ChatMessage[] = [
 const QUICK_REPLIES: Record<string, string> = {
   "AI chatbot": "AI chatbot odpovedá návštevníkom 24/7 — zaučí sa na vaše služby, ceny aj postupy a nikdy ho nezastihnete nepripraveného.",
   "Chatbot s kalkulačkou": "Chatbot s kalkulačkou spočíta orientačnú cenu podľa vašich parametrov a rovno z nej urobí hotový dopyt s kontaktom.",
-  Rezervácie: "Rezervačný asistent najprv zozbiera krátky dopyt, potom ponúkne termín a pošle pripomienku — bez telefonátov tam a späť.",
+  "Rezervačný chatbot": "Rezervačný chatbot najprv zozbiera krátky dopyt, potom ponúkne termín a pošle pripomienku — bez telefonátov tam a späť.",
 };
 
 export function AssistantConversation({
-  phase,
   resetToken,
   onOpenCalculator,
 }: AssistantConversationProps): JSX.Element {
   const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
-  const [contactStatus, setContactStatus] = useState("");
   const nextIdRef = useRef(3);
   const replyTimerRef = useRef<number | null>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
@@ -51,7 +47,6 @@ export function AssistantConversation({
     setMessages(INITIAL_MESSAGES);
     setInput("");
     setTyping(false);
-    setContactStatus("");
     nextIdRef.current = 3;
     if (replyTimerRef.current !== null) window.clearTimeout(replyTimerRef.current);
   }, [resetToken]);
@@ -97,7 +92,7 @@ export function AssistantConversation({
         {messages.map((message) => (
           <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>
             {message.from === "bot" ? (
-              <span className="cw-avatar"><PixelMascot phase={phase} size="avatar" /></span>
+              <span className="cw-avatar"><BubbleLogo size="avatar" /></span>
             ) : null}
             <div className="cw-message-wrap">
               <p>{message.text}</p>
@@ -108,7 +103,7 @@ export function AssistantConversation({
 
         {typing ? (
           <div className="cw-message-row cw-message-row--bot">
-            <span className="cw-avatar"><PixelMascot phase={phase} size="avatar" /></span>
+            <span className="cw-avatar"><BubbleLogo size="avatar" /></span>
             <div className="cw-typing" aria-label="Asistent odpovedá">
               <i /><i /><i />
             </div>
@@ -148,25 +143,6 @@ export function AssistantConversation({
         <button type="button" onClick={submit} disabled={!input.trim() || typing} aria-label="Odoslať správu">
           <WidgetIcon name="send" />
         </button>
-      </div>
-
-      <div className="cw-contactbar">
-        <span className="cw-contactbar__label">Radšej naživo? Sme na príjme</span>
-        <div className="cw-contactbar__grid">
-          <button type="button" onClick={() => setContactStatus("Telefonát sa zapojí v ostrej verzii.")}>
-            <span className="cw-contactbar__icon"><WidgetIcon name="phone" /></span>
-            <span>Volať</span>
-          </button>
-          <button type="button" onClick={() => setContactStatus("E-mail sa zapojí v ostrej verzii.")}>
-            <span className="cw-contactbar__icon"><WidgetIcon name="mail" /></span>
-            <span>E-mail</span>
-          </button>
-          <button type="button" onClick={() => setContactStatus("Konzultácia sa zatiaľ nerezervuje — ukážka.")}>
-            <span className="cw-contactbar__icon"><WidgetIcon name="calendar" /></span>
-            <span>Konzultácia</span>
-          </button>
-        </div>
-        {contactStatus ? <p role="status">{contactStatus}</p> : null}
       </div>
     </div>
   );

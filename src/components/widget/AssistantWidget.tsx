@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useFlyCatch } from "../../hooks/useFlyCatch";
 import { useFocusTrap } from "../../hooks/useFocusTrap";
 import {
   installSiteAssistantGlobal,
@@ -7,7 +6,7 @@ import {
 } from "../../lib/siteAssistant";
 import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";
 import { AssistantConversation } from "./AssistantConversation";
-import { PixelMascot } from "./PixelMascot";
+import { BubbleLogo } from "./BubbleLogo";
 import { ToolCalculator } from "./ToolCalculator";
 import { WidgetIcon } from "./WidgetIcon";
 
@@ -24,12 +23,10 @@ export function AssistantWidget(): JSX.Element {
   const [resetToken, setResetToken] = useState(0);
   const [preset, setPreset] = useState<AssistantPreset | null>(null);
   const panelRef = useRef<HTMLElement>(null);
-  const { phase, trigger } = useFlyCatch();
 
   const close = useCallback(() => {
     setIsOpen(false);
-    trigger();
-  }, [trigger]);
+  }, []);
   useFocusTrap(panelRef, isOpen, close);
 
   const open = useCallback((nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {
@@ -70,7 +67,7 @@ export function AssistantWidget(): JSX.Element {
   }, [isOpen]);
 
   return (
-    <div className="cw-widget" data-phase={phase}>
+    <div className="cw-widget">
       {teaserVisible && !isOpen ? (
         <aside className="cw-teaser" data-testid="widget-teaser">
           <button
@@ -101,11 +98,9 @@ export function AssistantWidget(): JSX.Element {
         aria-label="Otvoriť webového asistenta"
         aria-expanded={isOpen}
         aria-controls="chameleon-widget-panel"
-        onMouseEnter={trigger}
-        onFocus={trigger}
         onClick={() => open("assistant")}
       >
-        <PixelMascot phase={phase} size="launcher" />
+        <BubbleLogo size="launcher" />
         <span className="cw-launcher__online" aria-hidden="true" />
       </button>
 
@@ -121,7 +116,7 @@ export function AssistantWidget(): JSX.Element {
         >
           <header className="cw-panel-head">
             <span className="cw-panel-head__mascot">
-              <PixelMascot phase={phase} size="header" />
+              <BubbleLogo size="header" />
             </span>
             <div className="cw-panel-head__title">
               <b id="chameleon-widget-title">{mode === "assistant" ? "AI asistent" : "Návrh riešenia"}</b>
@@ -178,7 +173,6 @@ export function AssistantWidget(): JSX.Element {
           <div className="cw-panel-body">
             {mode === "assistant" ? (
               <AssistantConversation
-                phase={phase}
                 resetToken={resetToken}
                 onOpenCalculator={() => setMode("calculator")}
               />
