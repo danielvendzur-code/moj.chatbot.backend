@@ -2,8 +2,8 @@
 
 Samostatný React/TypeScript widget s viac-krokovým konfigurátorom inšpirovaným osvedčeným
 rozložením DERAT asistenta (výberové karty, krokovanie s bodkami, hover výplne, kontaktný
-formulár so zhrnutím). Profesionálna zeleno-zlatá paleta: hlboká lesná zelená ako základ,
-šampanské zlato ako hover akcent.
+formulár so zhrnutím). Paleta „Dark Heritage": takmer čierno-zelený panel (British racing
+green) s jemnou zrnitou textúrou kože, leštená mosadz ako hover akcent a zlaté hairline linky.
 
 Verejná ukážka: <https://danielvendzur-code.github.io/moj.chatbot.backend/>
 
