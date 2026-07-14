@@ -1,38 +1,35 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useFlyCatch } from "../../hooks/useFlyCatch";
 import { useFocusTrap } from "../../hooks/useFocusTrap";
 import {
   installSiteAssistantGlobal,
   SITE_ASSISTANT_OPEN_EVENT,
 } from "../../lib/siteAssistant";
-import type { GoalId, OpenSiteAssistantOptions } from "../../types/assistant";
+import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";
 import { AssistantConversation } from "./AssistantConversation";
-import { ChameleonSprite } from "./ChameleonSprite";
+import { BubbleLogo } from "./BubbleLogo";
 import { ToolCalculator } from "./ToolCalculator";
 import { WidgetIcon } from "./WidgetIcon";
 
 type WidgetMode = "assistant" | "calculator";
 
-const isGoalPreset = (value: string | undefined): value is Exclude<GoalId, "combined"> =>
+const isPreset = (value: string | undefined): value is AssistantPreset =>
   Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));
 
-export function ChameleonWidget(): JSX.Element {
+export function AssistantWidget(): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<WidgetMode>("assistant");
   const [teaserVisible, setTeaserVisible] = useState(false);
   const [teaserDismissed, setTeaserDismissed] = useState(false);
   const [resetToken, setResetToken] = useState(0);
-  const [preset, setPreset] = useState<GoalId | null>(null);
+  const [preset, setPreset] = useState<AssistantPreset | null>(null);
   const panelRef = useRef<HTMLElement>(null);
-  const { phase, trigger } = useFlyCatch();
 
   const close = useCallback(() => {
     setIsOpen(false);
-    trigger();
-  }, [trigger]);
+  }, []);
   useFocusTrap(panelRef, isOpen, close);
 
-  const open = useCallback((nextMode: WidgetMode, nextPreset: GoalId | null = null) => {
+  const open = useCallback((nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {
     setMode(nextMode);
     setPreset(nextPreset);
     setResetToken((value) => value + 1);
@@ -45,7 +42,7 @@ export function ChameleonWidget(): JSX.Element {
   useEffect(() => {
     const onOpen = (event: Event) => {
       const options = (event as CustomEvent<OpenSiteAssistantOptions>).detail;
-      const directPreset = options?.preset ?? (isGoalPreset(options?.entry) ? options.entry : undefined);
+      const directPreset = options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);
       const calculatorEntry = options?.entry === "builder" || options?.entry === "calculator" || Boolean(directPreset);
       open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);
     };
@@ -70,7 +67,7 @@ export function ChameleonWidget(): JSX.Element {
   }, [isOpen]);
 
   return (
-    <div className="cw-widget" data-phase={phase}>
+    <div className="cw-widget">
       {teaserVisible && !isOpen ? (
         <aside className="cw-teaser" data-testid="widget-teaser">
           <button
@@ -85,10 +82,9 @@ export function ChameleonWidget(): JSX.Element {
             ×
           </button>
           <button type="button" className="cw-teaser__content" onClick={() => open("calculator")}>
-            <small className="cw-teaser__eyebrow"><i /> Webový asistent</small>
-            <strong>Zistite, čo môže váš web zjednodušiť</strong>
+            <strong>Vyskladajte si asistenta na počkanie</strong>
             <span className="cw-teaser__copy">
-              Otvorte <b>krátky konfigurátor</b> — základ návrhu máte do minúty. <b>Asistent</b> poradí ďalší krok.
+              Otvorte <b>konfigurátor</b> — návrh riešenia máte do minúty. <b>AI asistent</b> poradí ďalší krok.
             </span>
           </button>
         </aside>
@@ -102,11 +98,9 @@ export function ChameleonWidget(): JSX.Element {
         aria-label="Otvoriť webového asistenta"
         aria-expanded={isOpen}
         aria-controls="chameleon-widget-panel"
-        onMouseEnter={trigger}
-        onFocus={trigger}
         onClick={() => open("assistant")}
       >
-        <ChameleonSprite phase={phase} size="launcher" />
+        <BubbleLogo size="launcher" />
         <span className="cw-launcher__online" aria-hidden="true" />
       </button>
 
@@ -121,10 +115,12 @@ export function ChameleonWidget(): JSX.Element {
           tabIndex={-1}
         >
           <header className="cw-panel-head">
-            <span className="cw-panel-head__mascot"><ChameleonSprite phase={phase} size="header" /></span>
+            <span className="cw-panel-head__mascot">
+              <BubbleLogo size="header" />
+            </span>
             <div className="cw-panel-head__title">
-              <b id="chameleon-widget-title">{mode === "assistant" ? "Webový asistent" : "Návrh riešenia"}</b>
-              <span className="cw-panel-head__meta"><i /> Online <em>Lokálna ukážka</em></span>
+              <b id="chameleon-widget-title">{mode === "assistant" ? "AI asistent" : "Návrh riešenia"}</b>
+              <span className="cw-panel-head__meta"><i /> Online · lokálna ukážka</span>
             </div>
             <div className="cw-panel-head__actions">
               <button
@@ -150,6 +146,7 @@ export function ChameleonWidget(): JSX.Element {
                 <WidgetIcon name="close" />
               </button>
             </div>
+            <span className="cw-panel-head__beam" aria-hidden="true" />
           </header>
 
           <nav className="cw-tabs" aria-label="Režim asistenta">
@@ -160,7 +157,7 @@ export function ChameleonWidget(): JSX.Element {
               aria-current={mode === "calculator" ? "page" : undefined}
               onClick={() => setMode("calculator")}
             >
-              <WidgetIcon name="calculator" /> Kalkulačka
+              <WidgetIcon name="calculator" /> Konfigurátor
             </button>
             <button
               type="button"
@@ -169,19 +166,22 @@ export function ChameleonWidget(): JSX.Element {
               aria-current={mode === "assistant" ? "page" : undefined}
               onClick={() => setMode("assistant")}
             >
-              <WidgetIcon name="chat" /> Asistent
+              <WidgetIcon name="chat" /> AI asistent
             </button>
           </nav>
 
           <div className="cw-panel-body">
             {mode === "assistant" ? (
               <AssistantConversation
-                phase={phase}
                 resetToken={resetToken}
                 onOpenCalculator={() => setMode("calculator")}
               />
             ) : (
-              <ToolCalculator resetToken={resetToken} initialGoal={preset} />
+              <ToolCalculator
+                resetToken={resetToken}
+                initialPreset={preset}
+                onOpenChat={() => setMode("assistant")}
+              />
             )}
           </div>
         </section>

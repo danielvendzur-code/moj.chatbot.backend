@@ -1,8 +1,17 @@
-# Webový asistent s chameleónom
+# Webový asistent — konfigurátor riešenia
 
-Samostatný React/TypeScript widget s prémiovým vizuálnym systémom nadviazaným na osvedčené rozloženie DERAT asistenta. Obsahuje 80 px chameleónovú bublinu, veľký preview text, konverzáciu s asistentom, prepínanie na kalkulačku návrhu, viac-krokový výber, súhrn a animáciu chytania muchy.
+Samostatný React/TypeScript widget s viac-krokovým konfigurátorom inšpirovaným osvedčeným
+rozložením DERAT asistenta (výberové karty, krokovanie s bodkami, hover výplne, kontaktný
+formulár so zhrnutím). Paleta „Dark Heritage": takmer čierno-zelený panel (British racing
+green) s jemnou zrnitou textúrou kože, leštená mosadz ako hover akcent a zlaté hairline linky.
 
 Verejná ukážka: <https://danielvendzur-code.github.io/moj.chatbot.backend/>
+
+## Logo
+
+Logom je čistá chatová bublina s tromi zlatými bodkami (`src/components/widget/BubbleLogo.tsx`)
+v troch veľkostiach — launcher, hlavička a avatar pri správach. (Skorší pixel-art maskot
+chameleóna zostáva dostupný v git histórii, keby sa hodil neskôr.)
 
 ## Spustenie
 
@@ -22,11 +31,12 @@ Push do vetvy `main` automaticky spustí workflow `.github/workflows/deploy-page
 
 ## Architektúra
 
-- `src/components/widget/` — launcher, konverzácia, kalkulačka, ikony a maskot.
-- `src/hooks/useFlyCatch.ts` — náhodné aj interaktívne načasovanie chytania muchy.
-- `src/lib/assistantFlow.ts` — možnosti a lokálne súhrny kalkulačky.
+- `src/components/widget/AssistantWidget.tsx` — launcher, teaser, okno, prepínanie režimov.
+- `src/components/widget/BubbleLogo.tsx` — logo asistenta (chatová bublina, tri veľkosti).
+- `src/components/widget/AssistantConversation.tsx` — konverzácia s rýchlymi čipmi.
+- `src/components/widget/ToolCalculator.tsx` — 6-krokový konfigurátor: záujem → odvetvie → nasadenie → funkcie → objem dopytov → zhrnutie + kontakt (s poďakovaním).
+- `src/lib/assistantFlow.ts` — dáta krokov, odporúčané funkcie podľa výberu, číslo návrhu.
 - `src/lib/siteAssistant.ts` — verejné API a integračné udalosti.
-- `public/chameleon-mascot.png` — optimalizovaný transparentný pixel-art maskot používaný vo všetkých veľkostiach widgetu.
 
 ## CTA API
 
