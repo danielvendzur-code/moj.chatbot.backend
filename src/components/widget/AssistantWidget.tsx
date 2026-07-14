@@ -149,7 +149,8 @@ export function AssistantWidget(): JSX.Element {
             <span className="cw-panel-head__beam" aria-hidden="true" />
           </header>
 
-          <nav className="cw-tabs" aria-label="Režim asistenta">
+          <nav className="cw-tabs" aria-label="Režim asistenta" data-mode={mode}>
+            <span className="cw-tabs__glass" aria-hidden="true" />
             <button
               type="button"
               data-testid="tab-calculator"
@@ -170,7 +171,7 @@ export function AssistantWidget(): JSX.Element {
             </button>
           </nav>
 
-          <div className="cw-panel-body">
+          <div className="cw-panel-body" key={mode}>
             {mode === "assistant" ? (
               <AssistantConversation
                 resetToken={resetToken}

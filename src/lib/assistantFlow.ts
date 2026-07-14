@@ -66,15 +66,71 @@ export type IndustryOption = {
   id: string;
   label: string;
   icon: "tools" | "cart" | "food" | "heart" | "factory" | "spark";
+  /* Reálne use-casy chatbotov v danom odvetví — zobrazia sa po výbere. */
+  examples: string[];
 };
 
 export const INDUSTRIES: IndustryOption[] = [
-  { id: "sluzby", label: "Služby a remeslá", icon: "tools" },
-  { id: "eshop", label: "E-shop a predaj", icon: "cart" },
-  { id: "gastro", label: "Gastro a ubytovanie", icon: "food" },
-  { id: "zdravie", label: "Zdravie a krása", icon: "heart" },
-  { id: "vyroba", label: "Výroba a B2B", icon: "factory" },
-  { id: "ine", label: "Iné odvetvie", icon: "spark" },
+  {
+    id: "sluzby",
+    label: "Služby a remeslá",
+    icon: "tools",
+    examples: [
+      "Cenový dopyt aj s fotkami rozsahu práce",
+      "Rezervácia obhliadky priamo do kalendára",
+      "Zachytenie urgentných požiadaviek mimo pracovného času",
+    ],
+  },
+  {
+    id: "eshop",
+    label: "E-shop a predaj",
+    icon: "cart",
+    examples: [
+      "Stav objednávky a doručenia bez čakania na podporu",
+      "Odporúčanie produktu podľa potreby zákazníka",
+      "Záchrana opusteného košíka a rýchle vrátenie tovaru",
+    ],
+  },
+  {
+    id: "gastro",
+    label: "Gastro a ubytovanie",
+    icon: "food",
+    examples: [
+      "Rezervácia stola či izby vrátane waitlistu",
+      "Objednávky a menu s alergénmi na jednu správu",
+      "Otváracie hodiny a info 24/7, aj viacjazyčne",
+    ],
+  },
+  {
+    id: "zdravie",
+    label: "Zdravie a krása",
+    icon: "heart",
+    examples: [
+      "Objednanie termínu s automatickou pripomienkou (menej no-show)",
+      "Predpríprava klienta pred návštevou",
+      "Cenník, permanentky a časté otázky bez telefonátu",
+    ],
+  },
+  {
+    id: "vyroba",
+    label: "Výroba a B2B",
+    icon: "factory",
+    examples: [
+      "Kvalifikácia dopytov (RFQ) ešte pred obchodníkom",
+      "Technické parametre a dostupnosť z katalógu",
+      "Dopyty na servis a náhradné diely s presným kontextom",
+    ],
+  },
+  {
+    id: "ine",
+    label: "Iné odvetvie",
+    icon: "spark",
+    examples: [
+      "Odpovede na časté otázky 24/7",
+      "Zber dopytov a kontaktov s kontextom",
+      "Odovzdanie zložitých otázok živému človeku",
+    ],
+  },
 ];
 
 export type ChannelOption = {
@@ -104,6 +160,8 @@ export const FEATURES: FeatureOption[] = [
   { id: "rezervacie", label: "Rezervovať termíny", description: "Prepojenie na kalendár a pripomienky." },
   { id: "email", label: "Posielať zhrnutia e-mailom", description: "Vám aj zákazníkovi, automaticky." },
   { id: "crm", label: "Zapisovať do CRM / tabuľky", description: "Každý dopyt na svojom mieste." },
+  { id: "handoff", label: "Prepnúť na živého človeka", description: "Zložitú požiadavku odovzdá aj s kontextom." },
+  { id: "jazyky", label: "Odpovedať vo viacerých jazykoch", description: "SK, EN, DE… podľa zákazníka." },
 ];
 
 /* Predvolené funkcie podľa vybraného záujmu — dajú sa upraviť. */

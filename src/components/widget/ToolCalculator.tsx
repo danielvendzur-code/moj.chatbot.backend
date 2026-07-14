@@ -99,6 +99,11 @@ export function ToolCalculator({
     [features],
   );
 
+  const selectedIndustry = useMemo(
+    () => INDUSTRIES.find((option) => option.id === industry) ?? null,
+    [industry],
+  );
+
   const canContinue = (() => {
     switch (stepId) {
       case "interest":
@@ -251,25 +256,37 @@ export function ToolCalculator({
           ) : null}
 
           {stepId === "industry" ? (
-            <div className="cw-grid">
-              {INDUSTRIES.map((option) => {
-                const selected = industry === option.id;
-                return (
-                  <button
-                    type="button"
-                    className="cw-scard"
-                    data-testid={`industry-${option.id}`}
-                    data-selected={selected}
-                    aria-pressed={selected}
-                    key={option.id}
-                    onClick={() => setIndustry(option.id)}
-                  >
-                    <span className="cw-scard__icon"><WidgetIcon name={option.icon} /></span>
-                    <b>{option.label}</b>
-                  </button>
-                );
-              })}
-            </div>
+            <>
+              <div className="cw-grid">
+                {INDUSTRIES.map((option) => {
+                  const selected = industry === option.id;
+                  return (
+                    <button
+                      type="button"
+                      className="cw-scard"
+                      data-testid={`industry-${option.id}`}
+                      data-selected={selected}
+                      aria-pressed={selected}
+                      key={option.id}
+                      onClick={() => setIndustry(option.id)}
+                    >
+                      <span className="cw-scard__icon"><WidgetIcon name={option.icon} /></span>
+                      <b>{option.label}</b>
+                    </button>
+                  );
+                })}
+              </div>
+              {selectedIndustry ? (
+                <aside className="cw-industry-tip" key={selectedIndustry.id} data-testid="industry-tip">
+                  <b><WidgetIcon name="spark" /> Čo chatbot zvládne pre {selectedIndustry.label.toLocaleLowerCase("sk")}</b>
+                  <ul>
+                    {selectedIndustry.examples.map((example) => (
+                      <li key={example}>{example}</li>
+                    ))}
+                  </ul>
+                </aside>
+              ) : null}
+            </>
           ) : null}
 
           {stepId === "channel" ? (
