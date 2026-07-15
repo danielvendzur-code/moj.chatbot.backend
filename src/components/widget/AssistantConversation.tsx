@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { animateChipsIn } from "../../lib/motion";
 import { BubbleLogo } from "./BubbleLogo";
 import { WidgetIcon } from "./WidgetIcon";
 
@@ -42,6 +43,11 @@ export function AssistantConversation({
   const nextIdRef = useRef(3);
   const replyTimerRef = useRef<number | null>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
+  const chipsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    animateChipsIn(chipsRef.current);
+  }, [resetToken]);
 
   useEffect(() => {
     setMessages(INITIAL_MESSAGES);
@@ -111,7 +117,7 @@ export function AssistantConversation({
         ) : null}
       </div>
 
-      <div className="cw-quick-replies" aria-label="Rýchle možnosti">
+      <div className="cw-quick-replies" aria-label="Rýchle možnosti" ref={chipsRef}>
         <button type="button" className="cw-chip cw-chip--primary" onClick={onOpenCalculator}>
           Vyskladať riešenie
         </button>
