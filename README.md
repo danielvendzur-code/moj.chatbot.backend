@@ -1,9 +1,11 @@
 # Webový asistent — konfigurátor riešenia
 
 Samostatný React/TypeScript widget s viac-krokovým konfigurátorom inšpirovaným osvedčeným
-rozložením DERAT asistenta (výberové karty, krokovanie s bodkami, hover výplne, kontaktný
-formulár so zhrnutím). Paleta „Dark Heritage": takmer čierno-zelený panel (British racing
-green) s jemnou zrnitou textúrou kože, leštená mosadz ako hover akcent a zlaté hairline linky.
+rozložením DERAT asistenta (výberové karty, krokovanie s bodkami, kontaktný formulár so
+zhrnutím). Vizuál „Aurora Fresh — liquid glass": svetlé mliečne sklo (backdrop-filter) nad
+jemným aurora gradientom mint → cyan → limetka, prepínač režimov ako iOS segmented control
+s pružinovým sklom a chipy/tlačidlá so sekvenciou „border sa obkreslí tenkou čiarkou →
+celý prvok sa rozsvieti".
 
 Verejná ukážka: <https://danielvendzur-code.github.io/moj.chatbot.backend/>
 

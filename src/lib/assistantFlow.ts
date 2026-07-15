@@ -31,7 +31,7 @@ export type InterestOption = {
   label: string;
   description: string;
   badge?: string;
-  icon: "chat" | "calculator" | "calendar" | "spark";
+  icon: "chat" | "calculator" | "cart" | "calendar" | "spark";
 };
 
 export const INTERESTS: InterestOption[] = [
@@ -44,9 +44,15 @@ export const INTERESTS: InterestOption[] = [
   {
     id: "calcbot",
     label: "Chatbot s kalkulačkou",
-    description: "Spočíta orientačnú cenu a premení ju na hotový dopyt.",
+    description: "Cena podľa rozmerov, materiálu a montáže — ako Môj plot.",
     badge: "Najobľúbenejšie",
     icon: "calculator",
+  },
+  {
+    id: "product",
+    label: "Produktový konfigurátor",
+    description: "Výber modelu, variantov a doplnkov s cenou — ako NOVA.",
+    icon: "cart",
   },
   {
     id: "booking",
@@ -66,15 +72,71 @@ export type IndustryOption = {
   id: string;
   label: string;
   icon: "tools" | "cart" | "food" | "heart" | "factory" | "spark";
+  /* Reálne use-casy chatbotov v danom odvetví — zobrazia sa po výbere. */
+  examples: string[];
 };
 
 export const INDUSTRIES: IndustryOption[] = [
-  { id: "sluzby", label: "Služby a remeslá", icon: "tools" },
-  { id: "eshop", label: "E-shop a predaj", icon: "cart" },
-  { id: "gastro", label: "Gastro a ubytovanie", icon: "food" },
-  { id: "zdravie", label: "Zdravie a krása", icon: "heart" },
-  { id: "vyroba", label: "Výroba a B2B", icon: "factory" },
-  { id: "ine", label: "Iné odvetvie", icon: "spark" },
+  {
+    id: "sluzby",
+    label: "Služby a remeslá",
+    icon: "tools",
+    examples: [
+      "Cenový dopyt aj s fotkami rozsahu práce",
+      "Rezervácia obhliadky priamo do kalendára",
+      "Zachytenie urgentných požiadaviek mimo pracovného času",
+    ],
+  },
+  {
+    id: "eshop",
+    label: "E-shop a predaj",
+    icon: "cart",
+    examples: [
+      "Stav objednávky a doručenia bez čakania na podporu",
+      "Odporúčanie produktu podľa potreby zákazníka",
+      "Záchrana opusteného košíka a rýchle vrátenie tovaru",
+    ],
+  },
+  {
+    id: "gastro",
+    label: "Gastro a ubytovanie",
+    icon: "food",
+    examples: [
+      "Rezervácia stola či izby vrátane waitlistu",
+      "Objednávky a menu s alergénmi na jednu správu",
+      "Otváracie hodiny a info 24/7, aj viacjazyčne",
+    ],
+  },
+  {
+    id: "zdravie",
+    label: "Zdravie a krása",
+    icon: "heart",
+    examples: [
+      "Objednanie termínu s automatickou pripomienkou (menej no-show)",
+      "Predpríprava klienta pred návštevou",
+      "Cenník, permanentky a časté otázky bez telefonátu",
+    ],
+  },
+  {
+    id: "vyroba",
+    label: "Výroba a B2B",
+    icon: "factory",
+    examples: [
+      "Kvalifikácia dopytov (RFQ) ešte pred obchodníkom",
+      "Technické parametre a dostupnosť z katalógu",
+      "Dopyty na servis a náhradné diely s presným kontextom",
+    ],
+  },
+  {
+    id: "ine",
+    label: "Iné odvetvie",
+    icon: "spark",
+    examples: [
+      "Odpovede na časté otázky 24/7",
+      "Zber dopytov a kontaktov s kontextom",
+      "Odovzdanie zložitých otázok živému človeku",
+    ],
+  },
 ];
 
 export type ChannelOption = {
@@ -100,16 +162,23 @@ export type FeatureOption = {
 export const FEATURES: FeatureOption[] = [
   { id: "faq", label: "Odpovedať na časté otázky", description: "Ceny, otváracie hodiny, postupy…" },
   { id: "dopyty", label: "Zbierať dopyty a kontakty", description: "Použiteľné podklady ešte pred telefonátom." },
-  { id: "cena", label: "Počítať orientačné ceny", description: "Kalkulačka podľa vašich parametrov." },
+  { id: "cena", label: "Počítať cenu podľa parametrov", description: "Rozmery, materiál, montáž — cena hneď." },
+  { id: "varianty", label: "Ponúkať varianty a doplnky", description: "Zákazník si vyskladá model bez neistoty." },
+  { id: "fotky", label: "Prijímať fotky od zákazníka", description: "Rozsah práce jasný ešte pred obhliadkou." },
   { id: "rezervacie", label: "Rezervovať termíny", description: "Prepojenie na kalendár a pripomienky." },
+  { id: "pdf", label: "Vygenerovať PDF ponuku", description: "Hotová ponuka na stiahnutie či do e-mailu." },
+  { id: "scoring", label: "Lead scoring", description: "Priorita dopytu podľa hodnoty zákazky." },
   { id: "email", label: "Posielať zhrnutia e-mailom", description: "Vám aj zákazníkovi, automaticky." },
   { id: "crm", label: "Zapisovať do CRM / tabuľky", description: "Každý dopyt na svojom mieste." },
+  { id: "handoff", label: "Prepnúť na živého človeka", description: "Zložitú požiadavku odovzdá aj s kontextom." },
+  { id: "jazyky", label: "Odpovedať vo viacerých jazykoch", description: "SK, EN, DE… podľa zákazníka." },
 ];
 
 /* Predvolené funkcie podľa vybraného záujmu — dajú sa upraviť. */
 export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
   chatbot: ["faq", "dopyty"],
-  calcbot: ["cena", "dopyty", "email"],
+  calcbot: ["cena", "dopyty", "pdf", "email"],
+  product: ["varianty", "cena", "dopyty"],
   booking: ["rezervacie", "dopyty", "email"],
   custom: [],
 };

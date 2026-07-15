@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { animateChipsIn, animateSentMessage } from "../../lib/motion";
 import { BubbleLogo } from "./BubbleLogo";
 import { WidgetIcon } from "./WidgetIcon";
 
@@ -42,6 +43,32 @@ export function AssistantConversation({
   const nextIdRef = useRef(3);
   const replyTimerRef = useRef<number | null>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
+  const chipsRef = useRef<HTMLDivElement>(null);
+  const [planeFx, setPlaneFx] = useState(false);
+  const planeTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    animateChipsIn(chipsRef.current);
+  }, [resetToken]);
+
+  /* nová odoslaná správa priletí ako lietadlo od vstupného poľa */
+  useEffect(() => {
+    const last = messages[messages.length - 1];
+    if (!last || last.from !== "me") return;
+    const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");
+    animateSentMessage(rows?.[rows.length - 1] ?? null);
+  }, [messages]);
+
+  useEffect(() => () => {
+    if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
+  }, []);
+
+  const launchPlane = () => {
+    setPlaneFx(false);
+    requestAnimationFrame(() => setPlaneFx(true));
+    if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
+    planeTimerRef.current = window.setTimeout(() => setPlaneFx(false), 700);
+  };
 
   useEffect(() => {
     setMessages(INITIAL_MESSAGES);
@@ -80,6 +107,7 @@ export function AssistantConversation({
     const value = input.trim();
     if (!value || typing) return;
     setInput("");
+    launchPlane();
     addExchange(
       value,
       "Rozumiem. V ostrej verzii by som z tejto odpovede vybral vhodné riešenie a pripravil ďalší krok. Táto ukážka zatiaľ nič neodosiela — skúste konfigurátor.",
@@ -96,7 +124,6 @@ export function AssistantConversation({
             ) : null}
             <div className="cw-message-wrap">
               <p>{message.text}</p>
-              <small>{message.from === "bot" ? "Asistent" : "Vy"}</small>
             </div>
           </div>
         ))}
@@ -111,7 +138,7 @@ export function AssistantConversation({
         ) : null}
       </div>
 
-      <div className="cw-quick-replies" aria-label="Rýchle možnosti">
+      <div className="cw-quick-replies" aria-label="Rýchle možnosti" ref={chipsRef}>
         <button type="button" className="cw-chip cw-chip--primary" onClick={onOpenCalculator}>
           Vyskladať riešenie
         </button>
@@ -140,7 +167,13 @@ export function AssistantConversation({
           placeholder="Napíšte svoju otázku…"
           aria-label="Správa pre asistenta"
         />
-        <button type="button" onClick={submit} disabled={!input.trim() || typing} aria-label="Odoslať správu">
+        <button
+          type="button"
+          className={planeFx ? "is-sending" : undefined}
+          onClick={submit}
+          disabled={!input.trim() || typing}
+          aria-label="Odoslať správu"
+        >
           <WidgetIcon name="send" />
         </button>
       </div>

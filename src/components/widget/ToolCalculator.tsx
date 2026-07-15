@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
+import { animateStepIn, drawCheck } from "../../lib/motion";
 import {
   buildProposalNumber,
   CHANNELS,
@@ -63,6 +64,8 @@ export function ToolCalculator({
   const [sendState, setSendState] = useState<SendState>("idle");
   const [proposalNumber, setProposalNumber] = useState("");
   const bodyRef = useRef<HTMLDivElement>(null);
+  const stepRef = useRef<HTMLElement>(null);
+  const thanksIconRef = useRef<HTMLSpanElement>(null);
   const sendTimerRef = useRef<number | null>(null);
 
   const restart = (nextInterest: InterestId | null) => {
@@ -88,7 +91,12 @@ export function ToolCalculator({
 
   useEffect(() => {
     bodyRef.current?.scrollTo({ top: 0 });
-  }, [step]);
+    animateStepIn(stepRef.current);
+  }, [step, resetToken]);
+
+  useEffect(() => {
+    if (sendState === "done") drawCheck(thanksIconRef.current);
+  }, [sendState]);
 
   const stepId = STEPS[step];
   const [title, subtitle] = QUESTIONS[stepId];
@@ -97,6 +105,11 @@ export function ToolCalculator({
   const featureLabels = useMemo(
     () => FEATURES.filter((option) => features.includes(option.id)).map((option) => option.label),
     [features],
+  );
+
+  const selectedIndustry = useMemo(
+    () => INDUSTRIES.find((option) => option.id === industry) ?? null,
+    [industry],
   );
 
   const canContinue = (() => {
@@ -155,7 +168,7 @@ export function ToolCalculator({
     return (
       <div className="cw-calculator" data-testid="calculator-view">
         <div className="cw-thanks" role="status">
-          <span className="cw-thanks__icon"><WidgetIcon name="check" /></span>
+          <span className="cw-thanks__icon" ref={thanksIconRef}><WidgetIcon name="check" /></span>
           <h3>Návrh je pripravený</h3>
           <p>
             Ďakujem, <b>{lead.name.trim()}</b>. V ostrej verzii by vám teraz prišlo zhrnutie
@@ -207,7 +220,7 @@ export function ToolCalculator({
       </div>
 
       <div className="cw-calc-body" ref={bodyRef}>
-        <section className="cw-calc-step" key={stepId}>
+        <section className="cw-calc-step" key={stepId} ref={stepRef}>
           <h3 className="cw-q">{title}</h3>
           <p className="cw-q-sub">{subtitle}</p>
 
@@ -251,25 +264,37 @@ export function ToolCalculator({
           ) : null}
 
           {stepId === "industry" ? (
-            <div className="cw-grid">
-              {INDUSTRIES.map((option) => {
-                const selected = industry === option.id;
-                return (
-                  <button
-                    type="button"
-                    className="cw-scard"
-                    data-testid={`industry-${option.id}`}
-                    data-selected={selected}
-                    aria-pressed={selected}
-                    key={option.id}
-                    onClick={() => setIndustry(option.id)}
-                  >
-                    <span className="cw-scard__icon"><WidgetIcon name={option.icon} /></span>
-                    <b>{option.label}</b>
-                  </button>
-                );
-              })}
-            </div>
+            <>
+              <div className="cw-grid">
+                {INDUSTRIES.map((option) => {
+                  const selected = industry === option.id;
+                  return (
+                    <button
+                      type="button"
+                      className="cw-scard"
+                      data-testid={`industry-${option.id}`}
+                      data-selected={selected}
+                      aria-pressed={selected}
+                      key={option.id}
+                      onClick={() => setIndustry(option.id)}
+                    >
+                      <span className="cw-scard__icon"><WidgetIcon name={option.icon} /></span>
+                      <b>{option.label}</b>
+                    </button>
+                  );
+                })}
+              </div>
+              {selectedIndustry ? (
+                <aside className="cw-industry-tip" key={selectedIndustry.id} data-testid="industry-tip">
+                  <b><WidgetIcon name="spark" /> Čo chatbot zvládne pre {selectedIndustry.label.toLocaleLowerCase("sk")}</b>
+                  <ul>
+                    {selectedIndustry.examples.map((example) => (
+                      <li key={example}>{example}</li>
+                    ))}
+                  </ul>
+                </aside>
+              ) : null}
+            </>
           ) : null}
 
           {stepId === "channel" ? (
