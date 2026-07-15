@@ -102,7 +102,6 @@ export function AssistantConversation({
             ) : null}
             <div className="cw-message-wrap">
               <p>{message.text}</p>
-              <small>{message.from === "bot" ? "Asistent" : "Vy"}</small>
             </div>
           </div>
         ))}
