@@ -156,11 +156,18 @@ button {
   0%, 100% { scale: 1 1; }
   45% { scale: 1.1 0.8; }
 }
-@keyframes bl-dot-wave {
-  0%, 84%, 100% { transform: translateY(0); }
-  88% { transform: translateY(-2.4px); }
-  93% { transform: translateY(0.8px); }
-  96% { transform: translateY(0); }
+/* bodky sa raz za čas ticho nadýchnu — po jednej, veľmi jemne */
+@keyframes bl-dot-breathe {
+  0%, 76%, 100% { opacity: 0.82; transform: scale(1); }
+  84% { opacity: 1; transform: scale(1.16); }
+  92% { opacity: 0.82; transform: scale(1); }
+}
+/* diskrétny záblesk svetla cez bublinu (raz za ~7 s) */
+@keyframes bl-glint {
+  0%, 82% { transform: translateX(0) skewX(-18deg); opacity: 0; }
+  84% { opacity: 1; }
+  94% { transform: translateX(76px) skewX(-18deg); opacity: 1; }
+  95%, 100% { transform: translateX(76px) skewX(-18deg); opacity: 0; }
 }
 
 /* ============================================================
@@ -178,19 +185,30 @@ button {
   overflow: visible;
 }
 
+/* tonálna rodina zelenej — od lesnej po mätovú */
 .bl__dot {
-  fill: var(--cw-spring);
-  animation: bl-dot-wave 5.4s ease-in-out infinite;
+  fill: #0e3d2c;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bl-dot-breathe 6.4s ease-in-out infinite;
 }
 
 .bl__dot:nth-of-type(2) {
-  animation-delay: 0.14s;
-  fill: var(--cw-coral);
+  animation-delay: 0.22s;
+  fill: #1aa268;
 }
 
 .bl__dot:nth-of-type(3) {
-  animation-delay: 0.28s;
-  fill: var(--cw-indigo);
+  animation-delay: 0.44s;
+  fill: #7fd7ab;
+}
+
+.bl__glint {
+  opacity: 0;
+  transform: skewX(-18deg);
+  animation: bl-glint 7.2s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
 }
 
 .bl--launcher {
@@ -240,9 +258,6 @@ button {
   will-change: transform;
 }
 
-.cw-launcher .bl__dot { fill: #0e3d2c; }
-.cw-launcher .bl__dot:nth-of-type(2) { fill: #ff8a70; }
-.cw-launcher .bl__dot:nth-of-type(3) { fill: #6b6bff; }
 
 .cw-launcher:hover {
   transform: translateY(-3px) scale(1.05);
@@ -417,9 +432,6 @@ button {
     inset 0 -2px 5px rgba(10, 46, 33, 0.22);
 }
 
-.cw-panel-head__mascot .bl__dot { fill: #0e3d2c; }
-.cw-panel-head__mascot .bl__dot:nth-of-type(2) { fill: #ff8a70; }
-.cw-panel-head__mascot .bl__dot:nth-of-type(3) { fill: #6b6bff; }
 
 .cw-panel-head__title {
   position: relative;
@@ -663,9 +675,6 @@ button {
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.45), inset 0 -1px 3px rgba(10, 46, 33, 0.2);
 }
 
-.cw-avatar .bl__dot { fill: #0e3d2c; }
-.cw-avatar .bl__dot:nth-of-type(2) { fill: #ff8a70; }
-.cw-avatar .bl__dot:nth-of-type(3) { fill: #6b6bff; }
 
 .cw-message-wrap {
   max-width: 80%;
@@ -717,8 +726,8 @@ button {
   animation: cw-dot 1.1s ease-in-out infinite;
 }
 
-.cw-typing i:nth-child(2) { animation-delay: 0.15s; background: var(--cw-coral); }
-.cw-typing i:nth-child(3) { animation-delay: 0.3s; background: var(--cw-indigo); }
+.cw-typing i:nth-child(2) { animation-delay: 0.15s; background: #4cc491; }
+.cw-typing i:nth-child(3) { animation-delay: 0.3s; background: #8adcb8; }
 
 /* ============================================================
    Chipy — obkreslenie borderu čiarkou → rozsvietenie
