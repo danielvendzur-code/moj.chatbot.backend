@@ -44,14 +44,14 @@ export const INTERESTS: InterestOption[] = [
   {
     id: "calcbot",
     label: "Chatbot s kalkulačkou",
-    description: "Cena podľa rozmerov, materiálu a montáže — ako Môj plot.",
+    description: "Cena podľa rozmerov, materiálu a montáže — hneď na webe.",
     badge: "Najobľúbenejšie",
     icon: "calculator",
   },
   {
     id: "product",
     label: "Produktový konfigurátor",
-    description: "Výber modelu, variantov a doplnkov s cenou — ako NOVA.",
+    description: "Výber modelu, variantov a doplnkov aj s cenou.",
     icon: "cart",
   },
   {
