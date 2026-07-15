@@ -39,6 +39,21 @@ export function animateChipsIn(container: HTMLElement | null): void {
   });
 }
 
+/* Odoslaná správa priletí od vstupného poľa ako papierové lietadlo. */
+export function animateSentMessage(row: HTMLElement | null): void {
+  if (!row) return;
+  if (prefersReducedMotion()) return;
+  animate(row, {
+    opacity: [0, 1],
+    translateY: [64, 0],
+    translateX: [36, 0],
+    rotate: ["-7deg", "0deg"],
+    scale: [0.82, 1],
+    duration: 680,
+    ease: createSpring({ mass: 1, stiffness: 170, damping: 15, velocity: 0 }),
+  });
+}
+
 /* Fajka na poďakovaní sa nakreslí ťahom (anime.js createDrawable). */
 export function drawCheck(scope: HTMLElement | null): void {
   if (!scope) return;

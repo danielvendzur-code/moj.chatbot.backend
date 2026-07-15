@@ -653,9 +653,10 @@ button {
   animation: cw-in-bot 0.42s cubic-bezier(0.2, 0.8, 0.25, 1) both;
 }
 
+/* odoslané správy animuje anime.js (prílet lietadla od vstupného poľa) */
 .cw-message-row--me {
   justify-content: flex-end;
-  animation: cw-in-me 0.4s cubic-bezier(0.2, 0.8, 0.25, 1) both;
+  animation: none;
 }
 
 .cw-avatar {
@@ -915,6 +916,18 @@ button {
 .cw-inputbar svg {
   width: 18px;
   height: 18px;
+}
+
+/* lietadielko pri odoslaní — vzlietne, otočí sa a priletí späť */
+@keyframes cw-plane-fly {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  42% { transform: translate(26px, -22px) rotate(-14deg); opacity: 0; }
+  50% { transform: translate(-20px, 16px) rotate(10deg); opacity: 0; }
+  100% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+}
+
+.cw-inputbar > button.is-sending svg {
+  animation: cw-plane-fly 0.6s cubic-bezier(0.4, 0, 0.4, 1) both;
 }
 
 /* ============================================================
@@ -2028,6 +2041,7 @@ button {
   .cw-submit::after,
   .cw-next::after,
   .cw-tabs__glass,
+  .cw-inputbar > button.is-sending svg,
   .bl__dot {
     animation: none !important;
     transition-duration: 0.01ms !important;

@@ -31,7 +31,7 @@ export type InterestOption = {
   label: string;
   description: string;
   badge?: string;
-  icon: "chat" | "calculator" | "calendar" | "spark";
+  icon: "chat" | "calculator" | "cart" | "calendar" | "spark";
 };
 
 export const INTERESTS: InterestOption[] = [
@@ -44,9 +44,15 @@ export const INTERESTS: InterestOption[] = [
   {
     id: "calcbot",
     label: "Chatbot s kalkulačkou",
-    description: "Spočíta orientačnú cenu a premení ju na hotový dopyt.",
+    description: "Cena podľa rozmerov, materiálu a montáže — ako Môj plot.",
     badge: "Najobľúbenejšie",
     icon: "calculator",
+  },
+  {
+    id: "product",
+    label: "Produktový konfigurátor",
+    description: "Výber modelu, variantov a doplnkov s cenou — ako NOVA.",
+    icon: "cart",
   },
   {
     id: "booking",
@@ -156,8 +162,12 @@ export type FeatureOption = {
 export const FEATURES: FeatureOption[] = [
   { id: "faq", label: "Odpovedať na časté otázky", description: "Ceny, otváracie hodiny, postupy…" },
   { id: "dopyty", label: "Zbierať dopyty a kontakty", description: "Použiteľné podklady ešte pred telefonátom." },
-  { id: "cena", label: "Počítať orientačné ceny", description: "Kalkulačka podľa vašich parametrov." },
+  { id: "cena", label: "Počítať cenu podľa parametrov", description: "Rozmery, materiál, montáž — cena hneď." },
+  { id: "varianty", label: "Ponúkať varianty a doplnky", description: "Zákazník si vyskladá model bez neistoty." },
+  { id: "fotky", label: "Prijímať fotky od zákazníka", description: "Rozsah práce jasný ešte pred obhliadkou." },
   { id: "rezervacie", label: "Rezervovať termíny", description: "Prepojenie na kalendár a pripomienky." },
+  { id: "pdf", label: "Vygenerovať PDF ponuku", description: "Hotová ponuka na stiahnutie či do e-mailu." },
+  { id: "scoring", label: "Lead scoring", description: "Priorita dopytu podľa hodnoty zákazky." },
   { id: "email", label: "Posielať zhrnutia e-mailom", description: "Vám aj zákazníkovi, automaticky." },
   { id: "crm", label: "Zapisovať do CRM / tabuľky", description: "Každý dopyt na svojom mieste." },
   { id: "handoff", label: "Prepnúť na živého človeka", description: "Zložitú požiadavku odovzdá aj s kontextom." },
@@ -167,7 +177,8 @@ export const FEATURES: FeatureOption[] = [
 /* Predvolené funkcie podľa vybraného záujmu — dajú sa upraviť. */
 export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
   chatbot: ["faq", "dopyty"],
-  calcbot: ["cena", "dopyty", "email"],
+  calcbot: ["cena", "dopyty", "pdf", "email"],
+  product: ["varianty", "cena", "dopyty"],
   booking: ["rezervacie", "dopyty", "email"],
   custom: [],
 };
