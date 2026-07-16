@@ -111,7 +111,7 @@ export function AssistantConversation({
     launchPlane();
     addExchange(
       value,
-      "Rozumiem. V ostrej verzii by som z tejto odpovede vybral vhodné riešenie a pripravil ďalší krok. Táto ukážka zatiaľ nič neodosiela — skúste konfigurátor.",
+      "Rozumiem. Najrýchlejšie sa k návrhu dostanete cez konfigurátor hore — alebo mi napíšte pár detailov a pripravím vám ho na mieru.",
     );
   };
 
