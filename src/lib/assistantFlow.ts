@@ -3,7 +3,7 @@ import type { AssistantPreset, InterestId } from "../types/assistant";
 export type StepId =
   | "interest"
   | "industry"
-  | "channel"
+  | "priority"
   | "features"
   | "volume"
   | "contact";
@@ -11,7 +11,7 @@ export type StepId =
 export const STEPS: StepId[] = [
   "interest",
   "industry",
-  "channel",
+  "priority",
   "features",
   "volume",
   "contact",
@@ -20,7 +20,7 @@ export const STEPS: StepId[] = [
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: ["Čo vás zaujíma?", "Vyberte, s čím vám mám pomôcť. Detaily doladíme v ďalších krokoch."],
   industry: ["V akom odvetví podnikáte?", "Podľa odvetvia pripravím vhodné ukážky a tón komunikácie."],
-  channel: ["Kde má asistent bežať?", "Vyberte hlavné miesto nasadenia — ďalšie vieme pridať neskôr."],
+  priority: ["Čo od asistenta čakáte najviac?", "Vyberte hlavný cieľ — podľa neho nastavím správanie bota."],
   features: ["Čo má asistent zvládnuť?", "Označte všetko, čo dáva zmysel. Pokojne viac možností."],
   volume: ["Koľko dopytov mesačne riešite?", "Stačí odhad — pomôže nastaviť kapacitu a cenu."],
   contact: ["Zhrnutie návrhu", "Skontrolujte výber a nechajte mi kontakt — pripravím návrh na mieru."],
@@ -139,18 +139,18 @@ export const INDUSTRIES: IndustryOption[] = [
   },
 ];
 
-export type ChannelOption = {
+export type PriorityOption = {
   id: string;
   label: string;
   description: string;
 };
 
-export const CHANNELS: ChannelOption[] = [
-  { id: "web", label: "Na našom webe", description: "Widget doplníme na existujúce stránky." },
-  { id: "novy-web", label: "Web ešte len chystáme", description: "Asistent navrhneme spolu s novým webom." },
-  { id: "social", label: "Facebook / Instagram", description: "Odpovede v Messengeri a na Instagrame." },
-  { id: "whatsapp", label: "WhatsApp", description: "Konverzácie priamo v telefóne zákazníka." },
-  { id: "neviem", label: "Neviem, poradíte mi", description: "Odporučím najvhodnejší kanál podľa cieľa." },
+export const PRIORITIES: PriorityOption[] = [
+  { id: "dopyty", label: "Viac dopytov z webu", description: "Návštevníkov, čo by odišli, premení na kontakty." },
+  { id: "telefonaty", label: "Menej telefonátov a e-mailov", description: "Rutinné otázky vybaví bot, vy len vážnych záujemcov." },
+  { id: "nonstop", label: "Dostupnosť aj mimo pracovného času", description: "Večer a cez víkend, keď ľudia reálne hľadajú." },
+  { id: "rychlost", label: "Rýchlejšie odpovede zákazníkom", description: "Okamžitá reakcia namiesto čakania na e-mail." },
+  { id: "imidz", label: "Modernejší dojem webu", description: "Stránka pôsobí živo a profesionálne." },
 ];
 
 export type FeatureOption = {

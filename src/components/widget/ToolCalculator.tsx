@@ -4,7 +4,7 @@ import { animateStepIn, drawCheck } from "../../lib/motion";
 import { HoverGlide } from "./HoverGlide";
 import {
   buildProposalNumber,
-  CHANNELS,
+  PRIORITIES,
   FEATURES,
   INDUSTRIES,
   INTERESTS,
@@ -55,7 +55,7 @@ export function ToolCalculator({
   const [interest, setInterest] = useState<InterestId | null>(initialInterest);
   const [customText, setCustomText] = useState("");
   const [industry, setIndustry] = useState<string | null>(null);
-  const [channel, setChannel] = useState<string | null>(null);
+  const [priority, setPriority] = useState<string | null>(null);
   const [features, setFeatures] = useState<string[]>(
     initialInterest ? RECOMMENDED_FEATURES[initialInterest] : [],
   );
@@ -75,7 +75,7 @@ export function ToolCalculator({
     setInterest(nextInterest);
     setCustomText("");
     setIndustry(null);
-    setChannel(null);
+    setPriority(null);
     setFeatures(nextInterest ? RECOMMENDED_FEATURES[nextInterest] : []);
     setVolume(null);
     setLead(EMPTY_LEAD);
@@ -120,8 +120,8 @@ export function ToolCalculator({
         return interest !== null && (interest !== "custom" || customText.trim().length > 0);
       case "industry":
         return industry !== null;
-      case "channel":
-        return channel !== null;
+      case "priority":
+        return priority !== null;
       case "features":
         return features.length > 0;
       case "volume":
@@ -161,7 +161,7 @@ export function ToolCalculator({
   const summaryRows: Array<[string, string]> = [
     ["Riešenie", interest === "custom" ? "Riešenie na mieru" : labelOf(INTERESTS, interest)],
     ["Odvetvie", labelOf(INDUSTRIES, industry)],
-    ["Nasadenie", labelOf(CHANNELS, channel)],
+    ["Hlavný cieľ", labelOf(PRIORITIES, priority)],
     ["Funkcie", featureLabels.length ? featureLabels.join(", ") : "—"],
     ["Dopyty mesačne", labelOf(VOLUMES, volume)],
   ];
@@ -303,21 +303,21 @@ export function ToolCalculator({
             </>
           ) : null}
 
-          {stepId === "channel" ? (
+          {stepId === "priority" ? (
             <div className="cw-list" ref={optionsRef}>
-              <HoverGlide containerRef={optionsRef} park deps={[stepId, channel]} />
-              {CHANNELS.map((option) => {
-                const selected = channel === option.id;
+              <HoverGlide containerRef={optionsRef} park deps={[stepId, priority]} />
+              {PRIORITIES.map((option) => {
+                const selected = priority === option.id;
                 return (
                   <button
                     type="button"
                     className="cw-opt"
                     data-glide
-                    data-testid={`channel-${option.id}`}
+                    data-testid={`priority-${option.id}`}
                     data-selected={selected}
                     aria-pressed={selected}
                     key={option.id}
-                    onClick={() => setChannel(option.id)}
+                    onClick={() => setPriority(option.id)}
                   >
                     <span className="cw-opt__radio" />
                     <span className="cw-opt__body">
