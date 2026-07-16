@@ -4,6 +4,7 @@ import {
   installSiteAssistantGlobal,
   SITE_ASSISTANT_OPEN_EVENT,
 } from "../../lib/siteAssistant";
+import { announceEmbedState, installEmbedBridge } from "../../lib/embedBridge";
 import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";
 import { AssistantConversation } from "./AssistantConversation";
 import { BubbleLogo } from "./BubbleLogo";
@@ -12,10 +13,14 @@ import { WidgetIcon } from "./WidgetIcon";
 
 type WidgetMode = "assistant" | "calculator";
 
+type AssistantWidgetProps = {
+  embedMode?: boolean;
+};
+
 const isPreset = (value: string | undefined): value is AssistantPreset =>
   Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));
 
-export function AssistantWidget(): JSX.Element {
+export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<WidgetMode>("assistant");
   const [teaserVisible, setTeaserVisible] = useState(false);
@@ -37,25 +42,45 @@ export function AssistantWidget(): JSX.Element {
     setIsOpen(true);
   }, []);
 
+  const openFromOptions = useCallback(
+    (options: OpenSiteAssistantOptions) => {
+      const directPreset =
+        options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);
+      const calculatorEntry =
+        options?.entry === "builder" ||
+        options?.entry === "calculator" ||
+        Boolean(directPreset);
+      open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);
+    },
+    [open],
+  );
+
   useEffect(() => installSiteAssistantGlobal(), []);
 
   useEffect(() => {
     const onOpen = (event: Event) => {
       const options = (event as CustomEvent<OpenSiteAssistantOptions>).detail;
-      const directPreset = options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);
-      const calculatorEntry = options?.entry === "builder" || options?.entry === "calculator" || Boolean(directPreset);
-      open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);
+      openFromOptions(options ?? { entry: "builder" });
     };
 
     window.addEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);
     return () => window.removeEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);
-  }, [open]);
+  }, [openFromOptions]);
 
   useEffect(() => {
-    if (teaserDismissed || isOpen) return;
+    if (!embedMode) return;
+    return installEmbedBridge({ open: openFromOptions, close });
+  }, [close, embedMode, openFromOptions]);
+
+  useEffect(() => {
+    if (embedMode) announceEmbedState(isOpen);
+  }, [embedMode, isOpen]);
+
+  useEffect(() => {
+    if (embedMode || teaserDismissed || isOpen) return;
     const timer = window.setTimeout(() => setTeaserVisible(true), 1_100);
     return () => window.clearTimeout(timer);
-  }, [isOpen, teaserDismissed]);
+  }, [embedMode, isOpen, teaserDismissed]);
 
   useEffect(() => {
     if (!isOpen || !window.matchMedia("(max-width: 520px)").matches) return;
@@ -68,7 +93,7 @@ export function AssistantWidget(): JSX.Element {
 
   return (
     <div className="cw-widget">
-      {teaserVisible && !isOpen ? (
+      {!embedMode && teaserVisible && !isOpen ? (
         <aside className="cw-teaser" data-testid="widget-teaser">
           <button
             type="button"
@@ -115,14 +140,13 @@ export function AssistantWidget(): JSX.Element {
           tabIndex={-1}
         >
           <header className="cw-panel-head">
+            <h2 id="chameleon-widget-title" className="cw-sr-only">
+              Webový asistent a konfigurátor
+            </h2>
             <span className="cw-panel-head__mascot">
               <BubbleLogo size="header" />
             </span>
-            <div className="cw-panel-head__title">
-              <b id="chameleon-widget-title">{mode === "assistant" ? "Digitálny asistent" : "Návrh riešenia"}</b>
-              <span className="cw-panel-head__meta"><i /> online · pripravený odpovedať</span>
-            </div>
-            <span className="cw-247" aria-label="Dostupný nonstop">24/7</span>
+            <span className="cw-panel-head__spacer" aria-hidden="true" />
             <div className="cw-panel-head__actions">
               <button
                 type="button"
