@@ -173,8 +173,8 @@ export function ToolCalculator({
           <span className="cw-thanks__icon" ref={thanksIconRef}><WidgetIcon name="check" /></span>
           <h3>Návrh je pripravený</h3>
           <p>
-            Ďakujem, <b>{lead.name.trim()}</b>. V ostrej verzii by vám teraz prišlo zhrnutie
-            e-mailom — táto ukážka nič neodosiela.
+            Ďakujem, <b>{lead.name.trim()}</b>. Zhrnutie vám pošlem e-mailom a ozvem sa
+            s návrhom zvyčajne do 24 hodín.
           </p>
           <div className="cw-thanks__grid">
             <div><span>Riešenie</span>{summaryRows[0][1]}</div>
@@ -480,7 +480,7 @@ export function ToolCalculator({
                       </>
                     )}
                   </button>
-                  <p className="cw-local-note">Ukážka — údaje sa neodosielajú ani neukladajú.</p>
+                  <p className="cw-local-note">Odpoviem zvyčajne do 24 hodín. Bez záväzkov.</p>
                 </div>
               </div>
             </>

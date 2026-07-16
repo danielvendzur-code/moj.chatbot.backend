@@ -119,9 +119,10 @@ export function AssistantWidget(): JSX.Element {
               <BubbleLogo size="header" />
             </span>
             <div className="cw-panel-head__title">
-              <b id="chameleon-widget-title">{mode === "assistant" ? "AI asistent" : "Návrh riešenia"}</b>
-              <span className="cw-panel-head__meta"><i /> Online · lokálna ukážka</span>
+              <b id="chameleon-widget-title">{mode === "assistant" ? "Digitálny asistent" : "Návrh riešenia"}</b>
+              <span className="cw-panel-head__meta"><i /> online · pripravený odpovedať</span>
             </div>
+            <span className="cw-247" aria-label="Dostupný nonstop">24/7</span>
             <div className="cw-panel-head__actions">
               <button
                 type="button"
