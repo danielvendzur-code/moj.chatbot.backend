@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { animateStepIn, drawCheck } from "../../lib/motion";
+import { HoverGlide } from "./HoverGlide";
 import {
   buildProposalNumber,
   CHANNELS,
@@ -65,6 +66,7 @@ export function ToolCalculator({
   const [proposalNumber, setProposalNumber] = useState("");
   const bodyRef = useRef<HTMLDivElement>(null);
   const stepRef = useRef<HTMLElement>(null);
+  const optionsRef = useRef<HTMLDivElement>(null);
   const thanksIconRef = useRef<HTMLSpanElement>(null);
   const sendTimerRef = useRef<number | null>(null);
 
@@ -226,13 +228,15 @@ export function ToolCalculator({
 
           {stepId === "interest" ? (
             <>
-              <div className="cw-rows">
+              <div className="cw-rows" ref={optionsRef}>
+                <HoverGlide containerRef={optionsRef} park deps={[stepId, interest]} />
                 {INTERESTS.map((option) => {
                   const selected = interest === option.id;
                   return (
                     <button
                       type="button"
                       className="cw-rowcard"
+                      data-glide
                       data-testid={`interest-${option.id}`}
                       data-selected={selected}
                       aria-pressed={selected}
@@ -265,13 +269,15 @@ export function ToolCalculator({
 
           {stepId === "industry" ? (
             <>
-              <div className="cw-grid">
+              <div className="cw-grid" ref={optionsRef}>
+                <HoverGlide containerRef={optionsRef} park deps={[stepId, industry]} />
                 {INDUSTRIES.map((option) => {
                   const selected = industry === option.id;
                   return (
                     <button
                       type="button"
                       className="cw-scard"
+                      data-glide
                       data-testid={`industry-${option.id}`}
                       data-selected={selected}
                       aria-pressed={selected}
@@ -298,13 +304,15 @@ export function ToolCalculator({
           ) : null}
 
           {stepId === "channel" ? (
-            <div className="cw-list">
+            <div className="cw-list" ref={optionsRef}>
+              <HoverGlide containerRef={optionsRef} park deps={[stepId, channel]} />
               {CHANNELS.map((option) => {
                 const selected = channel === option.id;
                 return (
                   <button
                     type="button"
                     className="cw-opt"
+                    data-glide
                     data-testid={`channel-${option.id}`}
                     data-selected={selected}
                     aria-pressed={selected}
@@ -323,13 +331,15 @@ export function ToolCalculator({
           ) : null}
 
           {stepId === "features" ? (
-            <div className="cw-list">
+            <div className="cw-list" ref={optionsRef}>
+              <HoverGlide containerRef={optionsRef} deps={[stepId]} />
               {FEATURES.map((option) => {
                 const selected = features.includes(option.id);
                 return (
                   <button
                     type="button"
                     className="cw-opt"
+                    data-glide
                     data-testid={`feature-${option.id}`}
                     data-selected={selected}
                     aria-pressed={selected}
@@ -348,13 +358,15 @@ export function ToolCalculator({
           ) : null}
 
           {stepId === "volume" ? (
-            <div className="cw-grid cw-grid--volume">
+            <div className="cw-grid cw-grid--volume" ref={optionsRef}>
+              <HoverGlide containerRef={optionsRef} park deps={[stepId, volume]} />
               {VOLUMES.map((option) => {
                 const selected = volume === option.id;
                 return (
                   <button
                     type="button"
                     className="cw-vcard"
+                    data-glide
                     data-testid={`volume-${option.id}`}
                     data-selected={selected}
                     aria-pressed={selected}

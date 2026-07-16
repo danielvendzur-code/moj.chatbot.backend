@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { animateChipsIn, animateSentMessage } from "../../lib/motion";
 import { BubbleLogo } from "./BubbleLogo";
+import { HoverGlide } from "./HoverGlide";
 import { WidgetIcon } from "./WidgetIcon";
 
 type AssistantConversationProps = {
@@ -139,6 +140,7 @@ export function AssistantConversation({
       </div>
 
       <div className="cw-quick-replies" aria-label="Rýchle možnosti" ref={chipsRef}>
+        <HoverGlide containerRef={chipsRef} pill deps={[resetToken]} />
         <button type="button" className="cw-chip cw-chip--primary" onClick={onOpenCalculator}>
           Vyskladať riešenie
         </button>
@@ -146,6 +148,7 @@ export function AssistantConversation({
           <button
             type="button"
             className="cw-chip"
+            data-glide
             key={label}
             onClick={() => addExchange(label, QUICK_REPLIES[label])}
           >

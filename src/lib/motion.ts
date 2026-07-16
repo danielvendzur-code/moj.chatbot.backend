@@ -10,7 +10,7 @@ export function animateStepIn(container: HTMLElement | null): void {
   if (!container || prefersReducedMotion()) return;
   const targets = Array.from(
     container.querySelectorAll(
-      ".cw-rows > *, .cw-grid > *, .cw-list > *, .cw-summary, .cw-lead, .cw-industry-tip, .cw-custom",
+      ".cw-rows > *:not(.cw-glide), .cw-grid > *:not(.cw-glide), .cw-list > *:not(.cw-glide), .cw-summary, .cw-lead, .cw-industry-tip, .cw-custom",
     ),
   ) as HTMLElement[];
   if (targets.length === 0) return;
@@ -27,7 +27,7 @@ export function animateStepIn(container: HTMLElement | null): void {
 /* Chipy vyskočia po jednom. */
 export function animateChipsIn(container: HTMLElement | null): void {
   if (!container || prefersReducedMotion()) return;
-  const targets = Array.from(container.children) as HTMLElement[];
+  const targets = Array.from(container.querySelectorAll(":scope > .cw-chip")) as HTMLElement[];
   if (targets.length === 0) return;
   animate(targets, {
     opacity: [0, 1],
