@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build --base=/moj.chatbot.backend/",
+    "build": "tsc -b && vite build --base=/moj.chatbot.backend/ && vite build --config vite.embed.config.ts",
     "preview": "vite preview",
     "serve:dist": "node scripts/serve-dist.mjs",
     "check": "tsc -b --pretty false"
