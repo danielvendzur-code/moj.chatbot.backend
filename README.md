@@ -40,6 +40,17 @@ Push do vetvy `main` automaticky spustí workflow `.github/workflows/deploy-page
 - `src/lib/assistantFlow.ts` — dáta krokov, odporúčané funkcie podľa výberu, číslo návrhu.
 - `src/lib/siteAssistant.ts` — verejné API a integračné udalosti.
 
+## Vloženie na web
+
+Jeden riadok pred `</body>`:
+
+```html
+<script src="https://danielvendzur-code.github.io/moj.chatbot.backend/widget.js" defer></script>
+```
+
+Skript si sám pripojí štýly (`widget.css`), vytvorí widget v pravom dolnom rohu
+a prevezme font hostiteľskej stránky, takže vyzerá ako natívna súčasť webu.
+
 ## CTA API
 
 ```ts
