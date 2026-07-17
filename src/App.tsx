@@ -1,10 +1,16 @@
 import { AssistantWidget } from "./components/widget/AssistantWidget";
+import { isEmbedMode } from "./lib/embedBridge";
 
 export default function App(): JSX.Element {
+  const embedMode = isEmbedMode();
+
   return (
-    <main className="widget-preview" aria-label="Ukážka webového asistenta">
-      <div className="widget-preview__surface" aria-hidden="true" />
-      <AssistantWidget />
+    <main
+      className="widget-preview"
+      aria-label={embedMode ? "Webový asistent" : "Ukážka webového asistenta"}
+    >
+      {!embedMode ? <div className="widget-preview__surface" aria-hidden="true" /> : null}
+      <AssistantWidget embedMode={embedMode} />
     </main>
   );
 }

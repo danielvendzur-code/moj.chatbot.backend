@@ -31,6 +31,23 @@ pnpm build
 
 Push do vetvy `main` automaticky spustí workflow `.github/workflows/deploy-pages.yml`, ktorý vytvorí produkčný Vite build a nasadí priečinok `dist` na GitHub Pages.
 
+## Vloženie na iný web
+
+Stabilný loader vytvorí izolovaný iframe a pri každom načítaní stránky si otvorí najnovší
+GitHub Pages build. Hostiteľský web preto nemusí poznať hash JavaScript alebo CSS súborov.
+
+```html
+<script
+  src="https://danielvendzur-code.github.io/moj.chatbot.backend/embed.js"
+  defer
+></script>
+```
+
+V embed režime je pozadie priehľadné, teaser sa nezobrazuje a iframe automaticky mení veľkosť
+medzi launcherom a otvoreným panelom. Na mobile panel uzamkne scrollovanie hostiteľskej stránky
+a vyplní viewport. Loader používa otvorený Shadow DOM s hostom
+`#site-assistant-widget-host`; samotné UI zostáva v iframe `#site-assistant-frame`.
+
 ## Architektúra
 
 - `src/components/widget/AssistantWidget.tsx` — launcher, teaser, okno, prepínanie režimov.
@@ -62,6 +79,22 @@ openSiteAssistant({ entry: "booking", preset: "booking" });
 ```
 
 Funkcia je dostupná ako import aj cez `window.openSiteAssistant(options)`.
+
+Loader prepojí rovnaké API aj z hostiteľskej stránky:
+
+```js
+window.openSiteAssistant({ entry: "builder" });
+```
+
+Podporuje aj udalosť `site-assistant:open`, takže existujúce CTA nemusia poznať iframe:
+
+```js
+window.dispatchEvent(
+  new CustomEvent("site-assistant:open", {
+    detail: { entry: "calculator", preset: "calculator" },
+  }),
+);
+```
 
 ## Aktuálny rozsah
 
