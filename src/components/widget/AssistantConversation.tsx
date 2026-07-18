@@ -28,11 +28,32 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   },
 ];
 
-const QUICK_REPLIES: Record<string, string> = {
-  "AI chatbot": "AI chatbot odpovedá návštevníkom 24/7 — zaučí sa na vaše služby, ceny aj postupy a nikdy ho nezastihnete nepripraveného.",
-  "Chatbot s kalkulačkou": "Chatbot s kalkulačkou spočíta orientačnú cenu podľa vašich parametrov a rovno z nej urobí hotový dopyt s kontaktom.",
-  "Rezervačný chatbot": "Rezervačný chatbot najprv zozbiera krátky dopyt, potom ponúkne termín a pošle pripomienku — bez telefonátov tam a späť.",
+type QuickReply = {
+  label: string;
+  icon: "chat" | "calculator" | "calendar";
+  response: string;
 };
+
+const QUICK_REPLIES: QuickReply[] = [
+  {
+    label: "AI chatbot",
+    icon: "chat",
+    response:
+      "AI chatbot odpovedá návštevníkom 24/7 — zaučí sa na vaše služby, ceny aj postupy a nikdy ho nezastihnete nepripraveného.",
+  },
+  {
+    label: "Chatbot s kalkulačkou",
+    icon: "calculator",
+    response:
+      "Chatbot s kalkulačkou spočíta orientačnú cenu podľa vašich parametrov a rovno z nej urobí hotový dopyt s kontaktom.",
+  },
+  {
+    label: "Rezervačný chatbot",
+    icon: "calendar",
+    response:
+      "Rezervačný chatbot najprv zozbiera krátky dopyt, potom ponúkne termín a pošle pripomienku — bez telefonátov tam a späť.",
+  },
+];
 
 export function AssistantConversation({
   resetToken,
@@ -144,14 +165,15 @@ export function AssistantConversation({
         <button type="button" className="cw-chip cw-chip--primary" onClick={onOpenCalculator}>
           Vyskladať riešenie
         </button>
-        {Object.keys(QUICK_REPLIES).map((label) => (
+        {QUICK_REPLIES.map(({ label, icon, response }) => (
           <button
             type="button"
             className="cw-chip"
             data-glide
             key={label}
-            onClick={() => addExchange(label, QUICK_REPLIES[label])}
+            onClick={() => addExchange(label, response)}
           >
+            <WidgetIcon name={icon} className="cw-chip__icon" />
             {label}
           </button>
         ))}

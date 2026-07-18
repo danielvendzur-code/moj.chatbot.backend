@@ -6,6 +6,7 @@ export type StepId =
   | "priority"
   | "features"
   | "volume"
+  | "timeline"
   | "contact";
 
 export const STEPS: StepId[] = [
@@ -14,6 +15,7 @@ export const STEPS: StepId[] = [
   "priority",
   "features",
   "volume",
+  "timeline",
   "contact",
 ];
 
@@ -23,6 +25,7 @@ export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   priority: ["Čo od asistenta čakáte najviac?", "Vyberte hlavný cieľ — podľa neho nastavím správanie bota."],
   features: ["Čo má asistent zvládnuť?", "Označte všetko, čo dáva zmysel. Pokojne viac možností."],
   volume: ["Koľko dopytov mesačne riešite?", "Stačí odhad — pomôže nastaviť kapacitu a cenu."],
+  timeline: ["Kedy chcete asistenta spustiť?", "Podľa termínu prispôsobím návrh aj harmonogram nasadenia."],
   contact: ["Zhrnutie návrhu", "Skontrolujte výber a nechajte mi kontakt — pripravím návrh na mieru."],
 };
 
@@ -194,6 +197,19 @@ export const VOLUMES: VolumeOption[] = [
   { id: "v100", label: "20 – 100", description: "Stabilný tok — asistent odbremení telefón." },
   { id: "v500", label: "100 – 500", description: "Vyťažená prevádzka, triedenie má veľký efekt." },
   { id: "v500plus", label: "Viac než 500", description: "Veľký objem — automatizácia je nutnosť." },
+];
+
+export type TimelineOption = {
+  id: string;
+  label: string;
+  description: string;
+};
+
+export const TIMELINES: TimelineOption[] = [
+  { id: "asap", label: "Čo najskôr", description: "Návrh dostanete prioritne, spustenie do pár týždňov." },
+  { id: "mesiac", label: "Do mesiaca", description: "Dosť času na doladenie obsahu aj vzhľadu." },
+  { id: "kvartal", label: "O 1 – 3 mesiace", description: "Pripravím plán a ozvem sa v správnom čase." },
+  { id: "rozhliadam", label: "Zatiaľ sa rozhliadam", description: "Nezáväzný návrh s cenou — rozhodnete sa v pokoji." },
 ];
 
 export const PRESET_TO_INTEREST: Record<AssistantPreset, InterestId> = {

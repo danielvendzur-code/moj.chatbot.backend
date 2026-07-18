@@ -13,6 +13,7 @@ import {
   QUESTIONS,
   RECOMMENDED_FEATURES,
   STEPS,
+  TIMELINES,
   VOLUMES,
 } from "../../lib/assistantFlow";
 import type { AssistantPreset, InterestId } from "../../types/assistant";
@@ -29,6 +30,7 @@ type LeadState = {
   email: string;
   phone: string;
   company: string;
+  web: string;
   note: string;
   consent: boolean;
 };
@@ -38,6 +40,7 @@ const EMPTY_LEAD: LeadState = {
   email: "",
   phone: "",
   company: "",
+  web: "",
   note: "",
   consent: false,
 };
@@ -60,6 +63,7 @@ export function ToolCalculator({
     initialInterest ? RECOMMENDED_FEATURES[initialInterest] : [],
   );
   const [volume, setVolume] = useState<string | null>(null);
+  const [timeline, setTimeline] = useState<string | null>(null);
   const [lead, setLead] = useState<LeadState>(EMPTY_LEAD);
   const [leadError, setLeadError] = useState("");
   const [sendState, setSendState] = useState<SendState>("idle");
@@ -78,6 +82,7 @@ export function ToolCalculator({
     setPriority(null);
     setFeatures(nextInterest ? RECOMMENDED_FEATURES[nextInterest] : []);
     setVolume(null);
+    setTimeline(null);
     setLead(EMPTY_LEAD);
     setLeadError("");
     setSendState("idle");
@@ -126,6 +131,8 @@ export function ToolCalculator({
         return features.length > 0;
       case "volume":
         return volume !== null;
+      case "timeline":
+        return timeline !== null;
       default:
         return true;
     }
@@ -164,6 +171,7 @@ export function ToolCalculator({
     ["Hlavný cieľ", labelOf(PRIORITIES, priority)],
     ["Funkcie", featureLabels.length ? featureLabels.join(", ") : "—"],
     ["Dopyty mesačne", labelOf(VOLUMES, volume)],
+    ["Spustenie", labelOf(TIMELINES, timeline)],
   ];
 
   if (sendState === "done") {
@@ -381,6 +389,30 @@ export function ToolCalculator({
             </div>
           ) : null}
 
+          {stepId === "timeline" ? (
+            <div className="cw-grid cw-grid--volume" ref={optionsRef}>
+              <HoverGlide containerRef={optionsRef} park deps={[stepId, timeline]} />
+              {TIMELINES.map((option) => {
+                const selected = timeline === option.id;
+                return (
+                  <button
+                    type="button"
+                    className="cw-vcard"
+                    data-glide
+                    data-testid={`timeline-${option.id}`}
+                    data-selected={selected}
+                    aria-pressed={selected}
+                    key={option.id}
+                    onClick={() => setTimeline(option.id)}
+                  >
+                    <b>{option.label}</b>
+                    <span>{option.description}</span>
+                  </button>
+                );
+              })}
+            </div>
+          ) : null}
+
           {stepId === "contact" ? (
             <>
               <div className="cw-summary">
@@ -438,13 +470,23 @@ export function ToolCalculator({
                       autoComplete="tel"
                     />
                   </div>
-                  <input
-                    value={lead.company}
-                    onChange={(event) => setLead({ ...lead, company: event.target.value })}
-                    placeholder="Firma alebo web (nepovinné)"
-                    aria-label="Firma alebo web"
-                    autoComplete="organization"
-                  />
+                  <div className="cw-lead__row">
+                    <input
+                      value={lead.company}
+                      onChange={(event) => setLead({ ...lead, company: event.target.value })}
+                      placeholder="Firma (nepovinné)"
+                      aria-label="Firma"
+                      autoComplete="organization"
+                    />
+                    <input
+                      value={lead.web}
+                      onChange={(event) => setLead({ ...lead, web: event.target.value })}
+                      placeholder="Web — vasafirma.sk"
+                      aria-label="Adresa webu"
+                      autoComplete="url"
+                      inputMode="url"
+                    />
+                  </div>
                   <textarea
                     value={lead.note}
                     onChange={(event) => setLead({ ...lead, note: event.target.value })}
