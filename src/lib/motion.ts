@@ -17,6 +17,7 @@ export function animateStepIn(container: HTMLElement | null): void {
   animate(targets, {
     opacity: [0, 1],
     translateY: [16, 0],
+    translateX: [26, 0],
     scale: [0.985, 1],
     delay: stagger(55, { start: 40 }),
     duration: 620,

@@ -4,6 +4,7 @@ import { animateStepIn, drawCheck } from "../../lib/motion";
 import { HoverGlide } from "./HoverGlide";
 import {
   buildProposalNumber,
+  defaultFeatures,
   PRIORITIES,
   FEATURES,
   INDUSTRIES,
@@ -59,9 +60,7 @@ export function ToolCalculator({
   const [customText, setCustomText] = useState("");
   const [industry, setIndustry] = useState<string | null>(null);
   const [priority, setPriority] = useState<string | null>(null);
-  const [features, setFeatures] = useState<string[]>(
-    initialInterest ? RECOMMENDED_FEATURES[initialInterest] : [],
-  );
+  const [features, setFeatures] = useState<string[]>(defaultFeatures(initialInterest));
   const [volume, setVolume] = useState<string | null>(null);
   const [timeline, setTimeline] = useState<string | null>(null);
   const [lead, setLead] = useState<LeadState>(EMPTY_LEAD);
@@ -80,7 +79,7 @@ export function ToolCalculator({
     setCustomText("");
     setIndustry(null);
     setPriority(null);
-    setFeatures(nextInterest ? RECOMMENDED_FEATURES[nextInterest] : []);
+    setFeatures(defaultFeatures(nextInterest));
     setVolume(null);
     setTimeline(null);
     setLead(EMPTY_LEAD);
@@ -138,9 +137,13 @@ export function ToolCalculator({
     }
   })();
 
+  /* pri zmene záujmu sa k výberu pridajú odporúčané nadstavby (nič sa neodoberá) */
   const pickInterest = (id: InterestId) => {
     setInterest(id);
-    setFeatures((current) => (current.length > 0 ? current : RECOMMENDED_FEATURES[id]));
+    setFeatures((current) => [
+      ...current,
+      ...RECOMMENDED_FEATURES[id].filter((featureId) => !current.includes(featureId)),
+    ]);
   };
 
   const toggleFeature = (id: string) => {
@@ -356,7 +359,10 @@ export function ToolCalculator({
                   >
                     <span className="cw-opt__radio cw-opt__radio--square" />
                     <span className="cw-opt__body">
-                      <b>{option.label}</b>
+                      <b>
+                        {option.label}
+                        {option.basic ? <em className="cw-opt__tag">V základe</em> : null}
+                      </b>
                       <span>{option.description}</span>
                     </span>
                   </button>

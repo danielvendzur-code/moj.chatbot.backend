@@ -23,7 +23,7 @@ export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: ["Čo vás zaujíma?", "Vyberte, s čím vám mám pomôcť. Detaily doladíme v ďalších krokoch."],
   industry: ["V akom odvetví podnikáte?", "Podľa odvetvia pripravím vhodné ukážky a tón komunikácie."],
   priority: ["Čo od asistenta čakáte najviac?", "Vyberte hlavný cieľ — podľa neho nastavím správanie bota."],
-  features: ["Čo má asistent zvládnuť?", "Označte všetko, čo dáva zmysel. Pokojne viac možností."],
+  features: ["Čo má asistent zvládnuť?", "Základ má každý môj chatbot — je už označený. Doplňte, čo potrebujete navyše."],
   volume: ["Koľko dopytov mesačne riešite?", "Stačí odhad — pomôže nastaviť kapacitu a cenu."],
   timeline: ["Kedy chcete asistenta spustiť?", "Podľa termínu prispôsobím návrh aj harmonogram nasadenia."],
   contact: ["Zhrnutie návrhu", "Skontrolujte výber a nechajte mi kontakt — pripravím návrh na mieru."],
@@ -160,31 +160,42 @@ export type FeatureOption = {
   id: string;
   label: string;
   description: string;
+  /* Základ, ktorý má každý dodaný chatbot — vopred označené. */
+  basic?: boolean;
 };
 
 export const FEATURES: FeatureOption[] = [
-  { id: "faq", label: "Odpovedať na časté otázky", description: "Ceny, otváracie hodiny, postupy…" },
-  { id: "dopyty", label: "Zbierať dopyty a kontakty", description: "Použiteľné podklady ešte pred telefonátom." },
+  { id: "faq", label: "Odpovedať na časté otázky", description: "Ceny, otváracie hodiny, postupy…", basic: true },
+  { id: "dopyty", label: "Zbierať dopyty a kontakty", description: "Použiteľné podklady ešte pred telefonátom.", basic: true },
+  { id: "email", label: "Posielať zhrnutia e-mailom", description: "Vám aj zákazníkovi, automaticky.", basic: true },
+  { id: "handoff", label: "Prepnúť na živého človeka", description: "Zložitú požiadavku odovzdá aj s kontextom.", basic: true },
   { id: "cena", label: "Počítať cenu podľa parametrov", description: "Rozmery, materiál, montáž — cena hneď." },
   { id: "varianty", label: "Ponúkať varianty a doplnky", description: "Zákazník si vyskladá model bez neistoty." },
   { id: "fotky", label: "Prijímať fotky od zákazníka", description: "Rozsah práce jasný ešte pred obhliadkou." },
   { id: "rezervacie", label: "Rezervovať termíny", description: "Prepojenie na kalendár a pripomienky." },
   { id: "pdf", label: "Vygenerovať PDF ponuku", description: "Hotová ponuka na stiahnutie či do e-mailu." },
   { id: "scoring", label: "Lead scoring", description: "Priorita dopytu podľa hodnoty zákazky." },
-  { id: "email", label: "Posielať zhrnutia e-mailom", description: "Vám aj zákazníkovi, automaticky." },
   { id: "crm", label: "Zapisovať do CRM / tabuľky", description: "Každý dopyt na svojom mieste." },
-  { id: "handoff", label: "Prepnúť na živého človeka", description: "Zložitú požiadavku odovzdá aj s kontextom." },
   { id: "jazyky", label: "Odpovedať vo viacerých jazykoch", description: "SK, EN, DE… podľa zákazníka." },
 ];
 
-/* Predvolené funkcie podľa vybraného záujmu — dajú sa upraviť. */
+export const BASIC_FEATURE_IDS: string[] = FEATURES.filter((option) => option.basic).map(
+  (option) => option.id,
+);
+
+/* Nadstavbové funkcie podľa vybraného záujmu — pridajú sa k základu. */
 export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
-  chatbot: ["faq", "dopyty"],
-  calcbot: ["cena", "dopyty", "pdf", "email"],
-  product: ["varianty", "cena", "dopyty"],
-  booking: ["rezervacie", "dopyty", "email"],
+  chatbot: [],
+  calcbot: ["cena", "pdf"],
+  product: ["varianty", "cena"],
+  booking: ["rezervacie"],
   custom: [],
 };
+
+export const defaultFeatures = (interest: InterestId | null): string[] => [
+  ...BASIC_FEATURE_IDS,
+  ...(interest ? RECOMMENDED_FEATURES[interest] : []),
+];
 
 export type VolumeOption = {
   id: string;

@@ -163,6 +163,7 @@ export function AssistantConversation({
       <div className="cw-quick-replies" aria-label="Rýchle možnosti" ref={chipsRef}>
         <HoverGlide containerRef={chipsRef} pill deps={[resetToken]} />
         <button type="button" className="cw-chip cw-chip--primary" onClick={onOpenCalculator}>
+          <span className="cw-chip__icon"><WidgetIcon name="spark" /></span>
           Vyskladať riešenie
         </button>
         {QUICK_REPLIES.map(({ label, icon, response }) => (
@@ -173,7 +174,7 @@ export function AssistantConversation({
             key={label}
             onClick={() => addExchange(label, response)}
           >
-            <WidgetIcon name={icon} className="cw-chip__icon" />
+            <span className="cw-chip__icon"><WidgetIcon name={icon} /></span>
             {label}
           </button>
         ))}
