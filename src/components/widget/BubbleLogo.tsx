@@ -9,8 +9,8 @@ const BUBBLE_PATH =
 
 /*
  * Logo asistenta — chatová bublina s tromi tonálnymi bodkami.
- * Kvalita app ikony: gradient tela, mäkký tieň, horný lesk
- * a raz za pár sekúnd diskrétny záblesk svetla (glint) cez bublinu.
+ * Tieň je lacný duplikovaný path (žiadny SVG filter — tie sa
+ * prepočítavajú pri každej animácii a spôsobovali trhanie).
  */
 export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
   const uid = `bl${++gradientCounter}`;
@@ -21,10 +21,10 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
         <defs>
           <linearGradient id={`${uid}-body`} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#ffffff" />
-            <stop offset="100%" stopColor="#e2efe8" />
+            <stop offset="100%" stopColor="#eefbf4" />
           </linearGradient>
           <linearGradient id={`${uid}-gloss`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.85" />
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
             <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
           </linearGradient>
           <linearGradient id={`${uid}-glint`} x1="0" y1="0" x2="1" y2="0">
@@ -35,12 +35,11 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
           <clipPath id={`${uid}-clip`}>
             <path d={BUBBLE_PATH} />
           </clipPath>
-          <filter id={`${uid}-sh`} x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="0.8" stdDeviation="0.9" floodColor="#0a2e21" floodOpacity="0.32" />
-          </filter>
         </defs>
+        {/* lacný tieň — posunutá tmavá kópia */}
+        <path d={BUBBLE_PATH} transform="translate(0 1.1)" fill="#04160f" opacity="0.28" />
         {/* telo bubliny */}
-        <path fill={`url(#${uid}-body)`} filter={`url(#${uid}-sh)`} d={BUBBLE_PATH} />
+        <path fill={`url(#${uid}-body)`} d={BUBBLE_PATH} />
         {/* horný lesk */}
         <path
           className="bl__gloss"
@@ -51,7 +50,7 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
         <g clipPath={`url(#${uid}-clip)`}>
           <rect className="bl__glint" x="-16" y="2" width="13" height="44" fill={`url(#${uid}-glint)`} />
         </g>
-        {/* tonálne bodky — jedna rodina zelenej, žiadny cirkus */}
+        {/* tonálne bodky */}
         <circle className="bl__dot" cx="15.4" cy="21.7" r="2.7" />
         <circle className="bl__dot" cx="24" cy="21.7" r="2.7" />
         <circle className="bl__dot" cx="32.6" cy="21.7" r="2.7" />
