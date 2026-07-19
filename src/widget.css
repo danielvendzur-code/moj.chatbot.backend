@@ -200,6 +200,38 @@ html[data-embed="true"] .widget-preview__surface {
   94% { transform: translateX(76px) skewX(-18deg); opacity: 1; }
   95%, 100% { transform: translateX(76px) skewX(-18deg); opacity: 0; }
 }
+/* launcher „dýcha" — jemný mosadzný prstenec */
+@keyframes cw-breathe {
+  0% { transform: scale(1); opacity: 0.5; }
+  70%, 100% { transform: scale(1.14); opacity: 0; }
+}
+/* panel vyrastie z rohu launchera */
+@keyframes cw-panel-grow {
+  0% { opacity: 0; transform: translate(8px, 10px) scale(0.86); }
+  100% { opacity: 1; transform: none; }
+}
+/* najnovšia bot bublina raz mäkko zažiari */
+@keyframes cw-bubble-arrive {
+  0% { opacity: 0.55; }
+  100% { opacity: 0; }
+}
+/* pomalý svetelný pruh cez medené CTA */
+@keyframes cw-sheen {
+  0%, 62% { transform: translateX(-140%) skewX(-18deg); }
+  86%, 100% { transform: translateX(260%) skewX(-18deg); }
+}
+/* jednorazový lesk cez vybranú kartu */
+@keyframes cw-card-sheen {
+  0% { transform: translateX(-120%) skewX(-16deg); opacity: 0; }
+  30% { opacity: 0.5; }
+  100% { transform: translateX(260%) skewX(-16deg); opacity: 0; }
+}
+/* fajka na karte — nábeh v mieste, bez presunu (drží centrovanie) */
+@keyframes cw-check-in {
+  0% { opacity: 0; transform: translateY(-50%) scale(0.6); }
+  60% { transform: translateY(-50%) scale(1.1); }
+  100% { opacity: 1; transform: translateY(-50%) scale(1); }
+}
 
 /* ============================================================
    Logo — chatová bublina, telo v starej mosadzi, tmavé bodky
@@ -288,6 +320,24 @@ html[data-embed="true"] .widget-preview__surface {
   transition-duration: 0.1s;
 }
 
+/* živý detail — pomaly dýchajúci mosadzný prstenec (GPU, len transform/opacity) */
+.cw-launcher::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 1.5px solid rgba(201, 170, 112, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  animation: cw-breathe 4.6s ease-out infinite;
+  will-change: transform, opacity;
+}
+
+.cw-launcher:hover::after {
+  animation-play-state: paused;
+  opacity: 0;
+}
+
 .cw-launcher[aria-expanded="true"] {
   opacity: 0;
   pointer-events: none;
@@ -319,7 +369,8 @@ html[data-embed="true"] .widget-preview__surface {
   border-radius: var(--cw-r-md);
   border-bottom-right-radius: 6px;
   padding: 15px 17px 16px;
-  box-shadow: var(--cw-shadow);
+  box-shadow: var(--cw-shadow), inset 0 1px 0 rgba(242, 239, 230, 0.06);
+  border-top: 1px solid rgba(201, 170, 112, 0.28);
   animation: cw-panel-in 0.34s cubic-bezier(0.2, 0.85, 0.25, 1) both;
 }
 
@@ -403,12 +454,13 @@ html[data-embed="true"] .widget-preview__surface {
   -webkit-backdrop-filter: var(--cw-glass-blur);
   backdrop-filter: var(--cw-glass-blur);
   border: 1px solid var(--cw-line-strong);
-  box-shadow: var(--cw-shadow);
+  box-shadow: var(--cw-shadow), inset 0 1px 0 rgba(242, 239, 230, 0.07);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   color: var(--cw-ink);
-  animation: cw-panel-in 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform-origin: bottom right;
+  animation: cw-panel-grow 0.36s cubic-bezier(0.2, 0.9, 0.25, 1.12) both;
 }
 
 /* fallback bez podpory backdrop-filter — plný tmavý povrch */
@@ -423,8 +475,11 @@ html[data-embed="true"] .widget-preview__surface {
   position: relative;
   overflow: hidden;
   padding: 13px 14px;
-  background: linear-gradient(180deg, rgba(23, 53, 42, 0.6), rgba(12, 31, 24, 0.2));
+  background:
+    radial-gradient(150px 60px at 82% -10%, rgba(201, 170, 112, 0.1), transparent 70%),
+    linear-gradient(180deg, rgba(23, 53, 42, 0.6), rgba(12, 31, 24, 0.2));
   border-bottom: 1px solid var(--cw-line);
+  box-shadow: inset 0 1px 0 rgba(242, 239, 230, 0.05);
   color: var(--cw-ink);
   display: flex;
   align-items: center;
@@ -502,8 +557,8 @@ html[data-embed="true"] .widget-preview__surface {
 
 .cw-panel-head__actions button:hover {
   background: var(--cw-surface-raised);
-  border-color: var(--cw-line-strong);
-  color: var(--cw-ink);
+  border-color: rgba(201, 170, 112, 0.4);
+  color: var(--cw-brass);
 }
 
 .cw-panel-head__actions button svg {
@@ -647,7 +702,7 @@ html[data-embed="true"] .widget-preview__surface {
 }
 
 .cw-messages::-webkit-scrollbar-thumb {
-  background: var(--cw-line-strong);
+  background: rgba(201, 170, 112, 0.35);
   border-radius: var(--cw-r-pill);
 }
 
@@ -688,6 +743,7 @@ html[data-embed="true"] .widget-preview__surface {
 
 /* bot bublina = jemné sklo (aktívna odpoveď); ja = medená */
 .cw-message-wrap p {
+  position: relative;
   margin: 0;
   max-width: 100%;
   padding: 11px 14px;
@@ -697,6 +753,19 @@ html[data-embed="true"] .widget-preview__surface {
   background: var(--cw-surface);
   border: 1px solid var(--cw-line);
   color: var(--cw-ink);
+  box-shadow: inset 0 1px 0 rgba(242, 239, 230, 0.05);
+}
+
+/* najnovšia bot bublina raz mäkko zažiari (len opacity, žiadny box-shadow anim) */
+.cw-message-row--bot:last-child .cw-message-wrap p::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border-bottom-left-radius: 6px;
+  background: radial-gradient(120% 120% at 20% 0%, rgba(127, 165, 143, 0.28), transparent 70%);
+  pointer-events: none;
+  animation: cw-bubble-arrive 0.9s ease-out both;
 }
 
 .cw-message-row--me .cw-message-wrap p {
@@ -804,17 +873,26 @@ html[data-embed="true"] .widget-preview__surface {
   transition-duration: 0.1s;
 }
 
+/* návrhové čipy — rovnaká šírka, úhľadný rad */
+.cw-chip:not(.cw-chip--primary) {
+  flex: 1 1 0;
+  min-width: 0;
+  justify-content: center;
+  white-space: nowrap;
+}
+
 /* primárny čip — medené CTA na vlastnom riadku, plná šírka */
 .cw-chip--primary {
   flex: 1 0 100%;
   justify-content: center;
+  overflow: hidden;
   margin-top: 2px;
   background: linear-gradient(180deg, var(--cw-copper-hover), var(--cw-copper));
   border-color: transparent;
   color: var(--cw-on-copper);
   font-weight: 800;
   padding: 11px 15px;
-  box-shadow: 0 6px 16px -6px rgba(188, 115, 82, 0.6);
+  box-shadow: 0 6px 16px -6px rgba(188, 115, 82, 0.6), inset 0 1px 0 rgba(255, 245, 230, 0.28);
 }
 
 .cw-chip--primary::after {
@@ -872,6 +950,8 @@ html[data-embed="true"] .widget-preview__surface {
 }
 
 .cw-inputbar > button {
+  position: relative;
+  overflow: hidden;
   width: 44px;
   height: 44px;
   border: 0;
@@ -883,7 +963,7 @@ html[data-embed="true"] .widget-preview__surface {
   justify-content: center;
   cursor: pointer;
   flex: 0 0 auto;
-  box-shadow: 0 5px 14px -4px rgba(188, 115, 82, 0.55);
+  box-shadow: 0 5px 14px -4px rgba(188, 115, 82, 0.55), inset 0 1px 0 rgba(255, 245, 230, 0.28);
   transition: transform 0.2s cubic-bezier(0.34, 1.3, 0.5, 1), box-shadow 0.2s, filter 0.2s;
 }
 
@@ -964,25 +1044,26 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-progress__dots {
   flex: 1;
   display: flex;
-  gap: 6px;
+  gap: 5px;
   align-items: center;
 }
 
+/* segmenty na plnú šírku — každý rovnaký diel */
 .cw-progress__dots i {
-  width: 10px;
+  flex: 1;
   height: 7px;
   border-radius: var(--cw-r-pill);
   background: var(--cw-line-strong);
-  transition: width 0.28s cubic-bezier(0.3, 1, 0.4, 1), background 0.28s ease;
+  transition: background 0.28s ease, box-shadow 0.28s ease;
 }
 
 .cw-progress__dots i.done {
-  background: var(--cw-brass);
+  background: linear-gradient(90deg, var(--cw-brass), var(--cw-brass-hover));
 }
 
 .cw-progress__dots i.active {
-  width: 30px;
-  background: var(--cw-sage);
+  background: linear-gradient(90deg, var(--cw-sage), var(--cw-sage-hover));
+  box-shadow: 0 0 10px rgba(127, 165, 143, 0.5);
 }
 
 .cw-progress__count {
@@ -995,10 +1076,27 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-calc-body {
   flex: 1;
   min-height: 0;
-  overflow: auto;
+  overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   padding: 0 13px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* krok vyplní dostupnú výšku, aby riedke kroky nenechávali prázdno */
+.cw-calc-step {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* riedke mriežky (odvetvie, objem, spustenie) sa roztiahnu na výšku */
+.cw-grid {
+  flex: 1 1 auto;
+  align-content: stretch;
+  grid-auto-rows: 1fr;
 }
 
 .cw-calc-body::-webkit-scrollbar {
@@ -1006,25 +1104,27 @@ html[data-embed="true"] .widget-preview__surface {
 }
 
 .cw-calc-body::-webkit-scrollbar-thumb {
-  background: var(--cw-line-strong);
+  background: rgba(201, 170, 112, 0.35);
   border-radius: var(--cw-r-pill);
 }
 
 .cw-q {
-  margin: 0 0 3px;
+  margin: 0 0 4px;
   font-size: 17px;
   font-weight: 900;
   color: var(--cw-ink);
-  letter-spacing: -0.2px;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
   animation: cw-q-in 0.3s ease both;
 }
 
 .cw-q-sub {
-  margin: 0 0 12px;
+  margin: 0 0 13px;
   font-size: 11.5px;
   font-weight: 500;
   color: var(--cw-muted);
-  line-height: 1.4;
+  line-height: 1.45;
+  letter-spacing: 0.1px;
   animation: cw-q-in 0.3s 0.04s ease both;
 }
 
@@ -1066,7 +1166,7 @@ html[data-embed="true"] .widget-preview__surface {
   position: absolute;
   right: 15px;
   top: 50%;
-  transform: translateY(-52%);
+  transform: translateY(-50%);
   font: 300 22px/1 var(--cw-font);
   color: var(--cw-faint);
   transition: color 0.2s, transform 0.24s;
@@ -1075,13 +1175,16 @@ html[data-embed="true"] .widget-preview__surface {
 
 .cw-rowcard:hover::before {
   color: var(--cw-sage);
-  transform: translateY(-52%) translateX(3px);
+  transform: translateY(-50%) translateX(3px);
+}
+
+.cw-rowcard:hover:not([data-selected="true"]) {
+  background: rgba(127, 165, 143, 0.05);
 }
 
 .cw-rowcard[data-selected="true"] {
   border-color: rgba(127, 165, 143, 0.55);
   background: rgba(127, 165, 143, 0.08);
-  animation: cw-sel-pop 0.3s cubic-bezier(0.2, 1.5, 0.35, 1);
 }
 
 /* svietiaci šalviový rail pri výbere */
@@ -1114,7 +1217,7 @@ html[data-embed="true"] .widget-preview__surface {
   align-items: center;
   justify-content: center;
   font: 900 12px var(--cw-font);
-  animation: cw-pop 0.3s ease;
+  animation: cw-check-in 0.3s ease both;
 }
 
 .cw-rowcard[data-selected="true"]::after {
@@ -1225,6 +1328,13 @@ html[data-embed="true"] .widget-preview__surface {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4px;
+}
+
+/* jemný hover povrch (nahrádza odstránené kĺžuce sklo) */
+.cw-scard:hover:not([data-selected="true"]),
+.cw-opt:hover:not([data-selected="true"]),
+.cw-grid--volume .cw-vcard:hover:not([data-selected="true"]) {
+  background: rgba(127, 165, 143, 0.05);
 }
 
 .cw-scard {
@@ -1704,6 +1814,7 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-next {
   position: relative;
   z-index: 0;
+  overflow: hidden;
   border: 0;
   border-radius: var(--cw-r-pill);
   background: linear-gradient(180deg, var(--cw-copper-hover), var(--cw-copper));
@@ -1716,9 +1827,27 @@ html[data-embed="true"] .widget-preview__surface {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 8px 20px -8px rgba(188, 115, 82, 0.6);
+  box-shadow: 0 8px 20px -8px rgba(188, 115, 82, 0.6), inset 0 1px 0 rgba(255, 245, 230, 0.28);
   transition: transform 0.22s cubic-bezier(0.34, 1.3, 0.5, 1), box-shadow 0.22s ease, filter 0.2s;
   will-change: transform;
+}
+
+/* pomalý svetelný pruh cez medené CTA (len transform; nízka intenzita nad obsahom) */
+.cw-submit::before,
+.cw-next::before,
+.cw-chip--primary::before,
+.cw-inputbar > button::before {
+  content: "";
+  position: absolute;
+  top: -30%;
+  left: 0;
+  width: 42%;
+  height: 160%;
+  background: linear-gradient(90deg, transparent, rgba(255, 246, 232, 0.22), transparent);
+  transform: translateX(-140%) skewX(-18deg);
+  animation: cw-sheen 7s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 2;
 }
 
 .cw-submit:hover:not(:disabled),
@@ -1929,6 +2058,9 @@ html[data-embed="true"] .widget-preview__surface {
     max-height: 100dvh;
     border-radius: 0;
     border: 0;
+    /* na mobile radšej jemný sheet-up než rast z rohu */
+    transform-origin: bottom center;
+    animation: cw-panel-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   }
 
   .cw-panel-head {
@@ -1987,9 +2119,11 @@ html[data-embed="true"] .widget-preview__surface {
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   .cw-launcher,
+  .cw-launcher::after,
   .cw-panel,
   .cw-panel-body,
   .cw-message-row,
+  .cw-message-row--bot:last-child .cw-message-wrap p::after,
   .cw-chip,
   .cw-rowcard,
   .cw-rowcard::after,
@@ -2004,7 +2138,11 @@ html[data-embed="true"] .widget-preview__surface {
   .cw-thanks__icon,
   .cw-panel-head__beam,
   .cw-submit,
+  .cw-submit::before,
   .cw-next,
+  .cw-next::before,
+  .cw-chip--primary::before,
+  .cw-inputbar > button::before,
   .cw-tabs__glass,
   .cw-glide,
   .cw-inputbar > button.is-sending svg,

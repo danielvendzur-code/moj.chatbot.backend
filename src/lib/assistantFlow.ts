@@ -149,11 +149,11 @@ export type PriorityOption = {
 };
 
 export const PRIORITIES: PriorityOption[] = [
-  { id: "dopyty", label: "Viac dopytov z webu", description: "Návštevníkov, čo by odišli, premení na kontakty." },
-  { id: "telefonaty", label: "Menej telefonátov a e-mailov", description: "Rutinné otázky vybaví bot, vy len vážnych záujemcov." },
-  { id: "nonstop", label: "Dostupnosť aj mimo pracovného času", description: "Večer a cez víkend, keď ľudia reálne hľadajú." },
-  { id: "rychlost", label: "Rýchlejšie odpovede zákazníkom", description: "Okamžitá reakcia namiesto čakania na e-mail." },
-  { id: "imidz", label: "Modernejší dojem webu", description: "Stránka pôsobí živo a profesionálne." },
+  { id: "dopyty", label: "Viac dopytov a kontaktov", description: "Premeniť anonymných návštevníkov na konkrétne dopyty s kontaktom." },
+  { id: "telefonaty", label: "Menej opakovaných otázok", description: "Ceny, hodiny a bežné otázky vybaví bot — vy riešite len vážnych záujemcov." },
+  { id: "nonstop", label: "Dostupnosť 24/7", description: "Odpovie aj večer a cez víkend, keď ľudia reálne rozhodujú." },
+  { id: "rychlost", label: "Okamžitá reakcia", description: "Zákazník má odpoveď hneď, nečaká na e-mail ani telefonát." },
+  { id: "imidz", label: "Vyššia dôvera a moderný web", description: "Stránka pôsobí živo a profesionálne — to zvyšuje konverziu." },
 ];
 
 export type FeatureOption = {
