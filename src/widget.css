@@ -1,47 +1,61 @@
 /* ============================================================
-   Webový asistent · paleta podľa webu danielvendzur
-   Lesná zelená + živá jarná zelená, mätové tinty, koralový
-   akcent, indigo CTA. Liquid glass prepínač režimov (iOS),
-   chipy a tlačidlá so sekvenciou „border sa obkreslí tenkou
-   čiarkou → celé sa rozsvieti". Vstupy prvkov animuje anime.js
-   (pružinový stagger, kreslená fajka).
+   Webový asistent · „Forest Night"
+   Tmavá lesná paleta (near-black green), teplá ivory typografia,
+   akcenty starej mosadze / šalvie / medi. Liquid glass striedmo
+   (panel, prepínač režimov, aktívna odpoveď). Animuje sa iba
+   transform a opacity. Plná klávesová prístupnosť (:focus-visible).
    ============================================================ */
 
 :root {
-  color: #0d2b21;
-  background: #f7f6f2;
+  color: #f2efe6;
+  background: #06120e;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+
+  /* pozadia a povrchy */
+  --cw-bg: #06120e;
+  --cw-bg-soft: #091a14;
+  --cw-surface-muted: #0c1f18;
+  --cw-surface: #10261d;
+  --cw-surface-raised: #17352a;
 
   /* text */
-  --cw-ink: #0d2b21;
-  --cw-muted: #64766c;
-  --cw-faint: #93a49a;
-
-  /* zelená rodina (podľa webu) */
-  --cw-forest: #0e3d2c;
-  --cw-forest-2: #0a2e21;
-  --cw-spring: #2fd08c;
-  --cw-spring-hi: #59e2a8;
-  --cw-spring-dark: #17925f;
-  --cw-mint: #e7f6ee;
-  --cw-mint-strong: #cdeadb;
+  --cw-ink: #f2efe6;
+  --cw-muted: #b7beb4;
+  --cw-faint: #88968d;
 
   /* akcenty */
-  --cw-coral: #ff7a5f;
-  --cw-coral-soft: #ffece6;
-  --cw-indigo: #5a5bf0;
-  --cw-indigo-dark: #4849e0;
+  --cw-brass: #c9aa70;
+  --cw-brass-hover: #d9bc84;
+  --cw-sage: #7fa58f;
+  --cw-sage-hover: #98baa8;
+  --cw-copper: #bc7352;
+  --cw-copper-hover: #cd8665;
+  --cw-on-copper: #07140e;
 
-  /* povrchy */
-  --cw-paper: #f7f6f2;
-  --cw-card: #ffffff;
-  --cw-line: #e7e5dd;
-  --cw-line-strong: #d9d6cc;
+  /* línie */
+  --cw-line: rgba(242, 239, 230, 0.12);
+  --cw-line-strong: rgba(242, 239, 230, 0.22);
 
-  --cw-shadow: 0 30px 70px -22px rgba(13, 43, 33, 0.28), 0 10px 28px -14px rgba(13, 43, 33, 0.14);
+  /* sklo */
+  --cw-glass: rgba(9, 26, 20, 0.86);
+  --cw-glass-blur: blur(20px) saturate(115%);
+
+  /* tiene */
+  --cw-shadow: 0 30px 70px -24px rgba(0, 0, 0, 0.7), 0 12px 30px -16px rgba(0, 0, 0, 0.55);
+
+  /* jemné zrno na pozadí (statické, žiadne prekresľovanie) */
+  --cw-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
   --cw-font: Inter, ui-sans-serif, system-ui, sans-serif;
+
+  /* jednotné zaoblenia — obmedzená sada */
+  --cw-r-pill: 999px;
+  --cw-r-lg: 20px;
+  --cw-r-md: 14px;
+  --cw-r-sm: 10px;
 }
 
 * {
@@ -76,28 +90,34 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ===== Ukážková stránka pod widgetom ===== */
+/* ===== Ukážková stránka pod widgetom — tmavé lesné pozadie, žiadny grid ===== */
 .widget-preview {
   position: relative;
   min-height: 100dvh;
   overflow: hidden;
-  background: var(--cw-paper);
+  background:
+    radial-gradient(120% 90% at 88% 8%, #0d241b 0%, transparent 55%),
+    radial-gradient(90% 80% at 6% 96%, #0a1c15 0%, transparent 60%),
+    var(--cw-bg);
 }
 
+/* len jemné organické zrno — bez štvorčekov, bez animácie */
 .widget-preview__surface {
   position: absolute;
   inset: 0;
-  opacity: 0.4;
-  background-image:
-    linear-gradient(rgba(14, 61, 44, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(14, 61, 44, 0.05) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: linear-gradient(135deg, transparent 2%, #000 42%, transparent 96%);
+  opacity: 0.035;
+  background-image: var(--cw-grain);
+  background-size: 140px 140px;
+  pointer-events: none;
 }
 
 html[data-embed="true"] .widget-preview {
   min-height: 100dvh;
   background: transparent;
+}
+
+html[data-embed="true"] .widget-preview__surface {
+  display: none;
 }
 
 .cw-sr-only {
@@ -118,36 +138,28 @@ html[data-embed="true"] .widget-preview {
 }
 
 /* ============================================================
-   Animácie
+   Animácie — iba transform a opacity
    ============================================================ */
-@keyframes cw-pulse-ring {
-  0% { transform: scale(1); opacity: 0.45; }
-  70%, 100% { transform: scale(1.32); opacity: 0; }
-}
 @keyframes cw-in-bot {
-  from { opacity: 0; transform: translateX(-10px) translateY(6px); }
-  to { opacity: 1; transform: none; }
-}
-@keyframes cw-in-me {
-  from { opacity: 0; transform: translateX(14px) translateY(6px) scale(0.96); }
+  from { opacity: 0; transform: translateX(-8px) translateY(5px); }
   to { opacity: 1; transform: none; }
 }
 @keyframes cw-pop {
   0% { transform: scale(0.5); opacity: 0; }
-  60% { transform: scale(1.15); }
+  60% { transform: scale(1.12); }
   100% { transform: scale(1); opacity: 1; }
 }
 @keyframes cw-sel-pop {
   0% { transform: scale(1); }
-  45% { transform: scale(1.03); }
+  45% { transform: scale(1.02); }
   100% { transform: scale(1); }
 }
 @keyframes cw-step-box {
-  from { opacity: 0; transform: translateY(10px) scale(0.99); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: none; }
 }
 @keyframes cw-q-in {
-  0% { opacity: 0; transform: translateY(8px); }
+  0% { opacity: 0; transform: translateY(6px); }
   100% { opacity: 1; transform: none; }
 }
 @keyframes cw-dot {
@@ -159,39 +171,29 @@ html[data-embed="true"] .widget-preview {
   100% { transform: translateX(340%); }
 }
 @keyframes cw-panel-in {
-  0% { opacity: 0; transform: translateY(20px) scale(0.96); }
+  0% { opacity: 0; transform: translateY(16px) scale(0.98); }
   100% { opacity: 1; transform: none; }
 }
 @keyframes cw-spin {
   100% { transform: rotate(360deg); }
 }
-/* prepnutie obsahu režimu — len transform a opacity (plynulé) */
 @keyframes cw-mode-in {
-  0% { opacity: 0; transform: translateY(12px) scale(0.985); }
+  0% { opacity: 0; transform: translateY(10px); }
   100% { opacity: 1; transform: none; }
 }
-/* squish skleneného indikátora počas presunu */
 @keyframes cw-squish-a {
   0%, 100% { scale: 1 1; }
-  45% { scale: 1.1 0.8; }
+  45% { scale: 1.08 0.84; }
 }
 @keyframes cw-squish-b {
   0%, 100% { scale: 1 1; }
-  45% { scale: 1.1 0.8; }
+  45% { scale: 1.08 0.84; }
 }
-/* rýchla vlnka pri hoveri */
-@keyframes bl-dot-hop {
-  0%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-3px); }
-  75% { transform: translateY(1px); }
-}
-/* bodky sa raz za čas ticho nadýchnu — po jednej, veľmi jemne */
 @keyframes bl-dot-breathe {
-  0%, 76%, 100% { opacity: 0.82; transform: scale(1); }
-  84% { opacity: 1; transform: scale(1.16); }
-  92% { opacity: 0.82; transform: scale(1); }
+  0%, 76%, 100% { opacity: 0.9; transform: scale(1); }
+  84% { opacity: 1; transform: scale(1.14); }
+  92% { opacity: 0.9; transform: scale(1); }
 }
-/* diskrétny záblesk svetla cez bublinu (raz za ~7 s) */
 @keyframes bl-glint {
   0%, 82% { transform: translateX(0) skewX(-18deg); opacity: 0; }
   84% { opacity: 1; }
@@ -200,7 +202,7 @@ html[data-embed="true"] .widget-preview {
 }
 
 /* ============================================================
-   Logo — chatová bublina so živými bodkami vo farbách brandu
+   Logo — chatová bublina, telo v starej mosadzi, tmavé bodky
    ============================================================ */
 .bl {
   display: block;
@@ -214,159 +216,111 @@ html[data-embed="true"] .widget-preview {
   overflow: visible;
 }
 
-/* bodky v jednom zelenom tóne — logo má len dve farby */
 .bl__dot {
-  fill: #17925f;
+  fill: #0a1f17;
   transform-box: fill-box;
   transform-origin: center;
-  animation: bl-dot-breathe 6.4s ease-in-out infinite;
+  animation: bl-dot-breathe 6.8s ease-in-out infinite;
 }
 
-.bl__dot:nth-of-type(2) {
-  animation-delay: 0.22s;
-}
-
-.bl__dot:nth-of-type(3) {
-  animation-delay: 0.44s;
-}
-
-/* pri hoveri na bublinu bodky odpovedia rýchlou vlnkou */
-.cw-launcher:hover .bl__dot,
-.cw-panel-head__mascot:hover .bl__dot {
-  animation: bl-dot-hop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.cw-launcher:hover .bl__dot:nth-of-type(2),
-.cw-panel-head__mascot:hover .bl__dot:nth-of-type(2) {
-  animation-delay: 0.07s;
-}
-
-.cw-launcher:hover .bl__dot:nth-of-type(3),
-.cw-panel-head__mascot:hover .bl__dot:nth-of-type(3) {
-  animation-delay: 0.14s;
-}
+.bl__dot:nth-of-type(2) { animation-delay: 0.22s; }
+.bl__dot:nth-of-type(3) { animation-delay: 0.44s; }
 
 .bl__glint {
   opacity: 0;
   transform: skewX(-18deg);
-  animation: bl-glint 7.2s ease-in-out infinite;
+  animation: bl-glint 8.4s ease-in-out infinite;
   will-change: transform, opacity;
   pointer-events: none;
 }
 
 .bl--launcher {
-  width: 40px;
-  height: 40px;
-  color: #ffffff;
+  width: 34px;
+  height: 34px;
 }
 
 .bl--header {
   width: 24px;
   height: 24px;
-  color: #ffffff;
 }
 
 .bl--avatar {
-  width: 17px;
-  height: 17px;
-  color: #ffffff;
+  width: 18px;
+  height: 18px;
 }
 
 /* ============================================================
-   Spúšťacia bublina — sýta zelená ako CTA na webe
+   Spúšťacia bublina — malá, elegantná, bez neónu
    ============================================================ */
 .cw-launcher {
   position: fixed;
   z-index: 2147483002;
   right: 24px;
-  bottom: 20px;
-  width: 72px;
-  height: 72px;
+  bottom: 22px;
+  width: 60px;
+  height: 60px;
   padding: 0;
   display: grid;
   place-items: center;
-  border: 0;
-  border-radius: 24px;
+  border: 1px solid var(--cw-line-strong);
+  border-radius: var(--cw-r-lg);
   background:
-    radial-gradient(52px 40px at 32% 18%, rgba(255, 255, 255, 0.4), transparent 62%),
-    linear-gradient(180deg, #3ade9a, #28c983 58%, #1fb374);
+    radial-gradient(40px 30px at 30% 20%, rgba(201, 170, 112, 0.18), transparent 62%),
+    linear-gradient(180deg, var(--cw-surface-raised), var(--cw-surface));
   box-shadow:
-    0 1px 2px rgba(13, 43, 33, 0.2),
-    0 14px 34px -10px rgba(31, 179, 116, 0.5),
-    inset 0 1px 1px rgba(255, 255, 255, 0.55),
-    inset 0 -2px 6px rgba(10, 70, 47, 0.28);
+    0 10px 26px -10px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(242, 239, 230, 0.08);
   cursor: pointer;
-  transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.5, 1), box-shadow 0.3s ease;
+  transition: transform 0.24s cubic-bezier(0.2, 0.8, 0.3, 1), box-shadow 0.24s ease, border-color 0.24s ease;
   will-change: transform;
 }
 
-/* pulz ako GPU ring — žiadne prekresľovanie tieňov */
-.cw-launcher::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  border: 2px solid rgba(34, 181, 115, 0.55);
-  animation: cw-pulse-ring 3.2s ease-out infinite;
-  pointer-events: none;
-}
-
-.cw-launcher:hover::before {
-  animation-play-state: paused;
-  opacity: 0;
-}
-
-
 .cw-launcher:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 18px 40px -8px rgba(10, 46, 33, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  transform: translateY(-3px);
+  border-color: rgba(201, 170, 112, 0.5);
+  box-shadow:
+    0 18px 34px -12px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(242, 239, 230, 0.12);
+}
+
+.cw-launcher:active {
+  transform: translateY(-1px) scale(0.96);
+  transition-duration: 0.1s;
 }
 
 .cw-launcher[aria-expanded="true"] {
   opacity: 0;
   pointer-events: none;
-  transform: translateY(8px) scale(0.86);
-  animation: none;
-  transition: opacity 0.22s ease, transform 0.22s ease;
-}
-
-/* biela statická bodka — žiadna ďalšia farba, žiadne prekresľovanie */
-.cw-launcher__online {
-  position: absolute;
-  right: -1px;
-  bottom: -1px;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 1px 4px rgba(4, 22, 15, 0.28);
+  transform: translateY(6px) scale(0.9);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .cw-launcher:focus-visible,
 .cw-teaser button:focus-visible,
 .cw-panel button:focus-visible,
 .cw-panel input:focus-visible,
-.cw-panel textarea:focus-visible {
-  outline: 2.5px solid rgba(34, 181, 115, 0.55);
+.cw-panel textarea:focus-visible,
+.cw-panel [tabindex]:focus-visible {
+  outline: 2.5px solid var(--cw-sage);
   outline-offset: 2px;
 }
 
 /* ============================================================
-   Teaser bublina pred otvorením
+   Teaser bublina pred otvorením — tmavá karta
    ============================================================ */
 .cw-teaser {
   position: fixed;
   z-index: 2147483001;
-  right: 22px;
-  bottom: 106px;
+  right: 24px;
+  bottom: 94px;
   max-width: 280px;
-  background: var(--cw-card);
+  background: var(--cw-surface);
   border: 1px solid var(--cw-line);
-  border-radius: 18px;
+  border-radius: var(--cw-r-md);
   border-bottom-right-radius: 6px;
   padding: 15px 17px 16px;
-  box-shadow: 0 18px 46px rgba(13, 43, 33, 0.16);
-  animation: cw-panel-in 0.4s cubic-bezier(0.2, 0.85, 0.25, 1) both;
+  box-shadow: var(--cw-shadow);
+  animation: cw-panel-in 0.34s cubic-bezier(0.2, 0.85, 0.25, 1) both;
 }
 
 .cw-teaser::after {
@@ -376,7 +330,7 @@ html[data-embed="true"] .widget-preview {
   bottom: -8px;
   width: 16px;
   height: 16px;
-  background: var(--cw-card);
+  background: var(--cw-surface);
   border-right: 1px solid var(--cw-line);
   border-bottom: 1px solid var(--cw-line);
   transform: rotate(45deg);
@@ -386,11 +340,11 @@ html[data-embed="true"] .widget-preview {
   position: absolute;
   top: 7px;
   right: 8px;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border: 0;
   border-radius: 50%;
-  background: #f0eee7;
+  background: var(--cw-surface-raised);
   color: var(--cw-muted);
   font-size: 14px;
   line-height: 1;
@@ -398,12 +352,12 @@ html[data-embed="true"] .widget-preview {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.15s;
+  transition: background 0.18s, color 0.18s;
 }
 
 .cw-teaser__close:hover {
-  background: var(--cw-mint);
-  color: var(--cw-forest);
+  background: var(--cw-copper);
+  color: var(--cw-on-copper);
 }
 
 .cw-teaser__content {
@@ -430,40 +384,47 @@ html[data-embed="true"] .widget-preview {
 }
 
 .cw-teaser__copy b {
-  color: var(--cw-spring);
+  color: var(--cw-brass);
   font-weight: 800;
 }
 
 /* ============================================================
-   Okno asistenta
+   Okno asistenta — liquid glass
    ============================================================ */
 .cw-panel {
   position: fixed;
   z-index: 2147483003;
-  right: 20px;
-  bottom: 20px;
-  width: min(430px, calc(100vw - 40px));
-  height: min(720px, calc(100dvh - 40px));
-  border-radius: 24px;
-  background: #ffffff;
-  border: 1px solid #edebe4;
-  box-shadow: 0 24px 60px -18px rgba(13, 43, 33, 0.24), 0 8px 22px -12px rgba(13, 43, 33, 0.1);
+  right: 22px;
+  bottom: 22px;
+  width: min(448px, calc(100vw - 44px));
+  height: min(720px, calc(100dvh - 44px));
+  border-radius: var(--cw-r-lg);
+  background: var(--cw-glass);
+  -webkit-backdrop-filter: var(--cw-glass-blur);
+  backdrop-filter: var(--cw-glass-blur);
+  border: 1px solid var(--cw-line-strong);
+  box-shadow: var(--cw-shadow);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   color: var(--cw-ink);
-  animation: cw-panel-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: cw-panel-in 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-/* hlavička — čistá biela ako navigácia webu */
+/* fallback bez podpory backdrop-filter — plný tmavý povrch */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .cw-panel {
+    background: var(--cw-bg-soft);
+  }
+}
+
+/* hlavička — logo, kontext, akcie */
 .cw-panel-head {
   position: relative;
   overflow: hidden;
   padding: 13px 14px;
-  background:
-    radial-gradient(240px 70px at 96% 0%, rgba(34, 181, 115, 0.07), transparent 70%),
-    linear-gradient(180deg, #ffffff, #f4faf6);
-  border-bottom: 1px solid #eaf0ea;
+  background: linear-gradient(180deg, rgba(23, 53, 42, 0.6), rgba(12, 31, 24, 0.2));
+  border-bottom: 1px solid var(--cw-line);
   color: var(--cw-ink);
   display: flex;
   align-items: center;
@@ -474,23 +435,17 @@ html[data-embed="true"] .widget-preview {
 .cw-panel-head__mascot {
   position: relative;
   z-index: 1;
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  background:
-    radial-gradient(30px 24px at 32% 18%, rgba(255, 255, 255, 0.4), transparent 62%),
-    linear-gradient(180deg, #3ade9a, #28c983 58%, #1fb374);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--cw-r-md);
+  background: linear-gradient(180deg, var(--cw-surface-raised), var(--cw-surface));
+  border: 1px solid var(--cw-line);
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  box-shadow:
-    0 1px 2px rgba(13, 43, 33, 0.22),
-    0 6px 16px rgba(10, 46, 33, 0.28),
-    inset 0 1px 1px rgba(255, 255, 255, 0.2),
-    inset 0 -2px 5px rgba(0, 0, 0, 0.28);
+  box-shadow: inset 0 1px 0 rgba(242, 239, 230, 0.06);
 }
-
 
 .cw-panel-head__spacer {
   flex: 1;
@@ -504,36 +459,24 @@ html[data-embed="true"] .widget-preview {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 3px;
+  gap: 2px;
 }
 
 .cw-panel-head__title b {
   font-size: 15px;
   font-weight: 800;
-  line-height: 1.1;
+  line-height: 1.15;
   letter-spacing: -0.1px;
+  color: var(--cw-ink);
 }
 
-.cw-panel-head__meta {
-  font-size: 10.5px;
-  font-weight: 600;
-  color: var(--cw-muted);
-  display: flex;
-  gap: 5px;
-  align-items: center;
-  line-height: 1;
+.cw-panel-head__context {
+  font: 600 10.5px var(--cw-font);
+  color: var(--cw-brass);
+  letter-spacing: 0.3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.cw-panel-head__meta i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--cw-spring);
-  box-shadow: 0 0 6px rgba(34, 181, 115, 0.7);
-  flex: 0 0 auto;
 }
 
 .cw-panel-head__actions {
@@ -547,20 +490,20 @@ html[data-embed="true"] .widget-preview {
   width: 36px;
   height: 36px;
   border: 1px solid var(--cw-line);
-  background: #fff;
-  color: var(--cw-ink);
-  border-radius: 11px;
+  background: var(--cw-surface);
+  color: var(--cw-muted);
+  border-radius: var(--cw-r-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.15s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
 }
 
 .cw-panel-head__actions button:hover {
-  background: linear-gradient(180deg, #3ade9a, #28c983);
-  border-color: transparent;
-  color: #06281c;
+  background: var(--cw-surface-raised);
+  border-color: var(--cw-line-strong);
+  color: var(--cw-ink);
 }
 
 .cw-panel-head__actions button svg {
@@ -574,22 +517,22 @@ html[data-embed="true"] .widget-preview {
 }
 
 .cw-panel-head__actions .cw-panel-head__close:hover {
-  background: var(--cw-coral);
-  border-color: var(--cw-coral);
-  color: #fff;
+  background: var(--cw-copper);
+  border-color: var(--cw-copper);
+  color: var(--cw-on-copper);
 }
 
-/* „rozmýšľací" lúč */
+/* „rozmýšľací" lúč — mosadzný */
 .cw-panel-head__beam {
   position: absolute;
   left: -42%;
   bottom: -1px;
   width: 42%;
-  height: 2.5px;
+  height: 2px;
   z-index: 3;
   pointer-events: none;
   opacity: 0;
-  background: linear-gradient(90deg, transparent, var(--cw-spring) 26%, var(--cw-spring-hi) 50%, var(--cw-spring) 74%, transparent);
+  background: linear-gradient(90deg, transparent, var(--cw-brass) 50%, transparent);
   transition: opacity 0.3s;
   will-change: transform;
 }
@@ -600,7 +543,7 @@ html[data-embed="true"] .widget-preview {
 }
 
 /* ============================================================
-   Prepínač režimov — iOS liquid glass segmented control
+   Prepínač režimov — sklenený segmented control
    ============================================================ */
 .cw-tabs {
   position: relative;
@@ -608,10 +551,11 @@ html[data-embed="true"] .widget-preview {
   gap: 0;
   margin: 10px 13px;
   padding: 4px;
-  border-radius: 999px;
-  background: #edf3ed;
-  border: 0;
-  box-shadow: inset 0 1px 2px rgba(13, 43, 33, 0.05);
+  border-radius: var(--cw-r-pill);
+  background: rgba(12, 31, 24, 0.7);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--cw-line);
   flex: 0 0 auto;
 }
 
@@ -621,24 +565,24 @@ html[data-embed="true"] .widget-preview {
   bottom: 4px;
   left: 4px;
   width: calc(50% - 4px);
-  border-radius: 999px;
-  background: #ffffff;
+  border-radius: var(--cw-r-pill);
+  background: linear-gradient(180deg, var(--cw-surface-raised), var(--cw-surface));
+  border: 1px solid rgba(127, 165, 143, 0.4);
   box-shadow:
-    0 1px 2px rgba(13, 43, 33, 0.1),
-    0 3px 10px rgba(13, 43, 33, 0.08),
-    inset 0 1px 0 #ffffff;
-  transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(242, 239, 230, 0.08);
+  transition: transform 0.42s cubic-bezier(0.34, 1.5, 0.64, 1);
   will-change: transform;
 }
 
 .cw-tabs[data-mode="calculator"] .cw-tabs__glass {
   transform: translateX(0);
-  animation: cw-squish-a 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: cw-squish-a 0.42s cubic-bezier(0.34, 1.5, 0.64, 1);
 }
 
 .cw-tabs[data-mode="assistant"] .cw-tabs__glass {
   transform: translateX(100%);
-  animation: cw-squish-b 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: cw-squish-b 0.42s cubic-bezier(0.34, 1.5, 0.64, 1);
 }
 
 .cw-tabs button {
@@ -651,12 +595,12 @@ html[data-embed="true"] .widget-preview {
   gap: 7px;
   padding: 9px 8px;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--cw-r-pill);
   background: none;
   color: var(--cw-muted);
   font: 700 12px var(--cw-font);
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: color 0.24s ease;
 }
 
 .cw-tabs button svg {
@@ -678,7 +622,7 @@ html[data-embed="true"] .widget-preview {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  animation: cw-mode-in 0.38s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: cw-mode-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 /* ============================================================
@@ -709,36 +653,32 @@ html[data-embed="true"] .widget-preview {
 
 .cw-messages::-webkit-scrollbar-thumb {
   background: var(--cw-line-strong);
-  border-radius: 999px;
+  border-radius: var(--cw-r-pill);
 }
 
 .cw-message-row {
   display: flex;
   gap: 8px;
   align-items: flex-end;
-  animation: cw-in-bot 0.42s cubic-bezier(0.2, 0.8, 0.25, 1) both;
+  animation: cw-in-bot 0.36s cubic-bezier(0.2, 0.8, 0.25, 1) both;
 }
 
-/* odoslané správy animuje anime.js (prílet lietadla od vstupného poľa) */
 .cw-message-row--me {
   justify-content: flex-end;
   animation: none;
 }
 
 .cw-avatar {
-  width: 26px;
-  height: 26px;
-  border-radius: 9px;
-  background:
-    radial-gradient(18px 14px at 32% 18%, rgba(255, 255, 255, 0.4), transparent 62%),
-    linear-gradient(180deg, #3ade9a, #28c983 58%, #1fb374);
+  width: 28px;
+  height: 28px;
+  border-radius: var(--cw-r-sm);
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-line);
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.18), inset 0 -1px 3px rgba(0, 0, 0, 0.25);
 }
-
 
 .cw-message-wrap {
   max-width: 80%;
@@ -751,24 +691,26 @@ html[data-embed="true"] .widget-preview {
   align-items: flex-end;
 }
 
-/* bubliny bez borderov — Intercom štýl */
+/* bot bublina = jemné sklo (aktívna odpoveď); ja = medená */
 .cw-message-wrap p {
   margin: 0;
   max-width: 100%;
   padding: 11px 14px;
-  border-radius: 18px;
+  border-radius: var(--cw-r-md);
   border-bottom-left-radius: 6px;
   font: 500 13px/1.55 var(--cw-font);
-  background: #f2f1ea;
-  border: 0;
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-line);
   color: var(--cw-ink);
 }
 
 .cw-message-row--me .cw-message-wrap p {
-  background: linear-gradient(180deg, #3ade9a, #2bc985);
-  border-radius: 18px;
+  background: linear-gradient(180deg, var(--cw-copper-hover), var(--cw-copper));
+  border: 0;
+  border-radius: var(--cw-r-md);
   border-bottom-right-radius: 6px;
-  color: #06281c;
+  color: var(--cw-on-copper);
+  font-weight: 600;
 }
 
 .cw-typing {
@@ -776,9 +718,9 @@ html[data-embed="true"] .widget-preview {
   gap: 4px;
   align-items: center;
   padding: 14px;
-  background: #f2f1ea;
-  border: 0;
-  border-radius: 18px;
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-line);
+  border-radius: var(--cw-r-md);
   border-bottom-left-radius: 6px;
 }
 
@@ -786,15 +728,15 @@ html[data-embed="true"] .widget-preview {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--cw-spring);
+  background: var(--cw-sage);
   animation: cw-dot 1.1s ease-in-out infinite;
 }
 
-.cw-typing i:nth-child(2) { animation-delay: 0.15s; background: #4cc491; }
-.cw-typing i:nth-child(3) { animation-delay: 0.3s; background: #8adcb8; }
+.cw-typing i:nth-child(2) { animation-delay: 0.15s; }
+.cw-typing i:nth-child(3) { animation-delay: 0.3s; }
 
 /* ============================================================
-   Chipy — obkreslenie borderu čiarkou → rozsvietenie
+   Chipy
    ============================================================ */
 .cw-quick-replies {
   position: relative;
@@ -805,10 +747,7 @@ html[data-embed="true"] .widget-preview {
   flex: 0 0 auto;
 }
 
-/* ============================================================
-   Kĺžuce sklo — rovnaký povrch ako pilulka prepínača režimov,
-   pružinovo sa presúva pod chipmi aj kartami konfigurátora
-   ============================================================ */
+/* Kĺžuce sklo — šalvia; pružinovo sleduje chipy aj karty konfigurátora */
 .cw-glide {
   position: absolute;
   top: 0;
@@ -817,104 +756,112 @@ html[data-embed="true"] .widget-preview {
   width: 0;
   height: 0;
   opacity: 0;
-  border-radius: 16px;
-  background: radial-gradient(140px 46px at 30% 0%, #ffffff, #f8faf7 70%);
-  border: 1px solid rgba(47, 208, 140, 0.22);
-  box-shadow: 0 4px 14px rgba(13, 43, 33, 0.1);
+  border-radius: var(--cw-r-md);
+  background: rgba(127, 165, 143, 0.14);
+  border: 1px solid rgba(127, 165, 143, 0.4);
+  box-shadow: inset 0 1px 0 rgba(242, 239, 230, 0.05);
   pointer-events: none;
   transition:
-    transform 0.44s cubic-bezier(0.3, 1.35, 0.45, 1),
-    width 0.44s cubic-bezier(0.3, 1.35, 0.45, 1),
-    height 0.44s cubic-bezier(0.3, 1.35, 0.45, 1),
-    opacity 0.22s ease;
+    transform 0.34s cubic-bezier(0.3, 1.3, 0.45, 1),
+    width 0.34s cubic-bezier(0.3, 1.3, 0.45, 1),
+    height 0.34s cubic-bezier(0.3, 1.3, 0.45, 1),
+    opacity 0.2s ease;
   will-change: transform;
 }
 
 .cw-glide--pill {
-  border-radius: 999px;
+  border-radius: var(--cw-r-pill);
 }
 
-/* chip = tichá obrysová pilulka s ikonou; povrch dodáva kĺžuce sklo (.cw-glide) */
+/* chip = tichá obrysová pilulka s ikonou */
 .cw-chip {
   position: relative;
   z-index: 1;
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  border: 1px solid rgba(23, 146, 95, 0.26);
-  border-radius: 999px;
+  border: 1px solid var(--cw-line-strong);
+  border-radius: var(--cw-r-pill);
   color: var(--cw-ink);
   background: transparent;
-  padding: 10px 16px;
+  padding: 9px 15px;
   font: 700 12px var(--cw-font);
   letter-spacing: 0.1px;
   cursor: pointer;
   transition:
-    color 0.25s ease,
-    border-color 0.25s ease,
-    transform 0.25s cubic-bezier(0.34, 1.3, 0.5, 1);
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s cubic-bezier(0.34, 1.3, 0.5, 1);
 }
 
 .cw-chip__icon {
-  width: 13px;
-  height: 13px;
+  width: 22px;
+  height: 22px;
   flex: 0 0 auto;
-  color: #17925f;
-  transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.5, 1);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(127, 165, 143, 0.16);
+  color: var(--cw-sage);
+  transition: transform 0.24s cubic-bezier(0.34, 1.3, 0.5, 1), background 0.2s, color 0.2s;
+}
+
+.cw-chip__icon svg {
+  width: 12px;
+  height: 12px;
 }
 
 .cw-chip:hover,
 .cw-chip:focus-visible {
-  color: #0c5c3c;
-  border-color: transparent;
+  color: var(--cw-sage-hover);
+  border-color: rgba(127, 165, 143, 0.45);
   transform: translateY(-1px);
 }
 
 .cw-chip:hover .cw-chip__icon,
 .cw-chip:focus-visible .cw-chip__icon {
-  transform: scale(1.14) rotate(-6deg);
+  transform: scale(1.08);
 }
 
 .cw-chip:active {
   transform: scale(0.97);
-  transition-duration: 0.12s;
+  transition-duration: 0.1s;
 }
 
-/* primárny čip — lesná zelená so stálou šípkou */
+/* primárny čip — medené CTA so stálou šípkou */
 .cw-chip--primary {
-  background: linear-gradient(180deg, #3ade9a, #28c983 55%);
-  border-color: rgba(255, 255, 255, 0.5);
-  color: #06281c;
+  background: linear-gradient(180deg, var(--cw-copper-hover), var(--cw-copper));
+  border-color: transparent;
+  color: var(--cw-on-copper);
   font-weight: 800;
-  box-shadow:
-    0 1px 2px rgba(13, 43, 33, 0.14),
-    0 6px 16px rgba(31, 179, 116, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  box-shadow: 0 6px 16px -6px rgba(188, 115, 82, 0.6);
+}
+
+.cw-chip--primary .cw-chip__icon {
+  background: rgba(7, 20, 14, 0.2);
+  color: var(--cw-on-copper);
 }
 
 .cw-chip--primary::after {
   content: "→";
   font: 800 12px var(--cw-font);
-  color: #06281c;
-  transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.5, 1);
+  color: var(--cw-on-copper);
+  transition: transform 0.24s cubic-bezier(0.34, 1.3, 0.5, 1);
 }
 
 .cw-chip--primary:hover,
 .cw-chip--primary:focus-visible {
-  color: #06281c;
-  filter: brightness(1.06);
-  transform: translateY(-2px) scale(1.02);
-  box-shadow:
-    0 2px 4px rgba(13, 43, 33, 0.16),
-    0 12px 26px rgba(31, 179, 116, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  color: var(--cw-on-copper);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -8px rgba(188, 115, 82, 0.7);
 }
 
 .cw-chip--primary:hover::after {
   transform: translateX(3px);
 }
 
-/* vstupný riadok — pill pole ako moderné chat appky */
+/* vstupný riadok */
 .cw-inputbar {
   display: flex;
   gap: 8px;
@@ -930,14 +877,14 @@ html[data-embed="true"] .widget-preview {
   flex: 1;
   min-width: 0;
   height: 44px;
-  border: 1.5px solid transparent;
-  border-radius: 999px;
-  background: #f2f1ea;
+  border: 1.5px solid var(--cw-line);
+  border-radius: var(--cw-r-pill);
+  background: var(--cw-surface);
   padding: 0 18px;
   font: 600 13px var(--cw-font);
   color: var(--cw-ink);
   outline: none;
-  transition: 0.2s;
+  transition: border-color 0.2s, background 0.2s;
 }
 
 .cw-inputbar input::placeholder {
@@ -945,8 +892,8 @@ html[data-embed="true"] .widget-preview {
 }
 
 .cw-inputbar input:focus {
-  border-color: var(--cw-spring);
-  background: #fff;
+  border-color: var(--cw-sage);
+  background: var(--cw-surface-raised);
 }
 
 .cw-inputbar > button {
@@ -954,30 +901,25 @@ html[data-embed="true"] .widget-preview {
   height: 44px;
   border: 0;
   border-radius: 50%;
-  background:
-    radial-gradient(32px 24px at 32% 18%, rgba(255, 255, 255, 0.45), transparent 62%),
-    linear-gradient(180deg, #3ade9a, #28c983 58%, #1fb374);
-  color: #06281c;
+  background: linear-gradient(180deg, var(--cw-copper-hover), var(--cw-copper));
+  color: var(--cw-on-copper);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   flex: 0 0 auto;
-  box-shadow:
-    0 1px 2px rgba(13, 43, 33, 0.2),
-    0 5px 14px rgba(34, 181, 115, 0.3),
-    inset 0 1px 1px rgba(255, 255, 255, 0.5);
-  transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.5, 1), box-shadow 0.25s, filter 0.2s;
+  box-shadow: 0 5px 14px -4px rgba(188, 115, 82, 0.55);
+  transition: transform 0.2s cubic-bezier(0.34, 1.3, 0.5, 1), box-shadow 0.2s, filter 0.2s;
 }
 
 .cw-inputbar > button:hover:not(:disabled) {
   filter: brightness(1.06);
-  box-shadow: 0 8px 20px rgba(34, 181, 115, 0.35);
+  box-shadow: 0 8px 20px -4px rgba(188, 115, 82, 0.7);
   transform: scale(1.06);
 }
 
 .cw-inputbar > button:active:not(:disabled) {
-  transform: scale(0.88);
+  transform: scale(0.9);
 }
 
 .cw-inputbar > button:disabled {
@@ -990,7 +932,6 @@ html[data-embed="true"] .widget-preview {
   height: 18px;
 }
 
-/* lietadielko pri odoslaní — vzlietne, otočí sa a priletí späť */
 @keyframes cw-plane-fly {
   0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
   42% { transform: translate(26px, -22px) rotate(-14deg); opacity: 0; }
@@ -1025,19 +966,19 @@ html[data-embed="true"] .widget-preview {
   height: 30px;
   border-radius: 50%;
   border: 1px solid var(--cw-line);
-  background: #fff;
+  background: var(--cw-surface);
   color: var(--cw-ink);
   font-weight: 900;
   font-size: 16px;
   line-height: 1;
   cursor: pointer;
   flex: 0 0 auto;
-  transition: 0.18s;
+  transition: border-color 0.18s, color 0.18s;
 }
 
 .cw-progress__back:hover:not(:disabled) {
-  border-color: var(--cw-spring);
-  color: var(--cw-spring);
+  border-color: var(--cw-sage);
+  color: var(--cw-sage);
 }
 
 .cw-progress__back:disabled {
@@ -1047,42 +988,31 @@ html[data-embed="true"] .widget-preview {
 
 .cw-progress__dots {
   flex: 1;
-  display: grid;
-  grid-template-columns: repeat(var(--steps, 6), 1fr);
-  gap: 7px;
+  display: flex;
+  gap: 6px;
   align-items: center;
 }
 
 .cw-progress__dots i {
-  height: 6px;
-  border-radius: 999px;
-  background: #e9e7df;
-  transition: height 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+  width: 10px;
+  height: 7px;
+  border-radius: var(--cw-r-pill);
+  background: var(--cw-line-strong);
+  transition: width 0.28s cubic-bezier(0.3, 1, 0.4, 1), background 0.28s ease;
 }
 
 .cw-progress__dots i.done {
-  background: var(--cw-spring);
+  background: var(--cw-brass);
 }
 
 .cw-progress__dots i.active {
-  height: 18px;
-  background: linear-gradient(180deg, #3ade9a, #28c983);
-  box-shadow: 0 5px 12px rgba(31, 179, 116, 0.4);
-}
-
-.cw-progress__dots i.active::after {
-  content: attr(data-step);
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #06281c;
-  font: 900 10px var(--cw-font);
+  width: 30px;
+  background: var(--cw-sage);
 }
 
 .cw-progress__count {
   font: 900 11px var(--cw-font);
-  color: var(--cw-spring);
+  color: var(--cw-brass);
   white-space: nowrap;
   letter-spacing: 0.4px;
 }
@@ -1102,7 +1032,7 @@ html[data-embed="true"] .widget-preview {
 
 .cw-calc-body::-webkit-scrollbar-thumb {
   background: var(--cw-line-strong);
-  border-radius: 999px;
+  border-radius: var(--cw-r-pill);
 }
 
 .cw-q {
@@ -1111,7 +1041,7 @@ html[data-embed="true"] .widget-preview {
   font-weight: 900;
   color: var(--cw-ink);
   letter-spacing: -0.2px;
-  animation: cw-q-in 0.42s ease both;
+  animation: cw-q-in 0.3s ease both;
 }
 
 .cw-q-sub {
@@ -1120,20 +1050,20 @@ html[data-embed="true"] .widget-preview {
   font-weight: 500;
   color: var(--cw-muted);
   line-height: 1.4;
-  animation: cw-q-in 0.42s 0.04s ease both;
+  animation: cw-q-in 0.3s 0.04s ease both;
 }
 
-/* --- skupiny možností = dráhy pre kĺžuce sklo --- */
+/* skupiny možností = dráhy pre kĺžuce sklo */
 .cw-rows,
 .cw-list,
 .cw-grid {
   position: relative;
-  background: linear-gradient(180deg, #f1f6f1, #f4f3ec);
-  border-radius: 20px;
+  background: var(--cw-surface-muted);
+  border: 1px solid var(--cw-line);
+  border-radius: var(--cw-r-lg);
   padding: 6px;
 }
 
-/* --- výberové karty na celú šírku (krok 1) --- */
 .cw-rows {
   display: flex;
   flex-direction: column;
@@ -1150,13 +1080,12 @@ html[data-embed="true"] .widget-preview {
   padding: 13px 15px;
   border: 1.5px solid transparent;
   background: transparent;
-  border-radius: 16px;
+  border-radius: var(--cw-r-md);
   cursor: pointer;
   text-align: left;
-  transition: border-color 0.25s ease, transform 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
-/* šípka vpravo ako na riadkových kartách Airbnb/Linear */
 .cw-rowcard::before {
   content: "›";
   position: absolute;
@@ -1164,36 +1093,48 @@ html[data-embed="true"] .widget-preview {
   top: 50%;
   transform: translateY(-52%);
   font: 300 22px/1 var(--cw-font);
-  color: #c9c5b8;
-  transition: color 0.2s, transform 0.25s;
+  color: var(--cw-faint);
+  transition: color 0.2s, transform 0.24s;
   pointer-events: none;
 }
 
 .cw-rowcard:hover::before {
-  color: var(--cw-spring);
+  color: var(--cw-sage);
   transform: translateY(-52%) translateX(3px);
 }
 
 .cw-rowcard[data-selected="true"] {
-  border-color: var(--cw-spring);
-  animation: cw-sel-pop 0.34s cubic-bezier(0.2, 1.6, 0.35, 1);
+  border-color: rgba(127, 165, 143, 0.55);
+  background: rgba(127, 165, 143, 0.08);
+  animation: cw-sel-pop 0.3s cubic-bezier(0.2, 1.5, 0.35, 1);
+}
+
+/* svietiaci šalviový rail pri výbere */
+.cw-rowcard::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  border-radius: var(--cw-r-pill);
+  background: var(--cw-sage);
+  opacity: 0;
+  transform: scaleY(0.3);
+  transform-origin: center;
+  transition: opacity 0.24s ease, transform 0.3s cubic-bezier(0.2, 1.4, 0.4, 1);
 }
 
 .cw-rowcard[data-selected="true"]::before {
-  display: none;
-}
-
-.cw-rowcard[data-selected="true"]::after {
   content: "✓";
-  position: absolute;
-  right: 14px;
+  right: 15px;
   top: 50%;
   transform: translateY(-50%);
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: linear-gradient(180deg, #3ade9a, #28c983);
-  color: #06281c;
+  background: var(--cw-sage);
+  color: var(--cw-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1201,29 +1142,31 @@ html[data-embed="true"] .widget-preview {
   animation: cw-pop 0.3s ease;
 }
 
+.cw-rowcard[data-selected="true"]::after {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
 .cw-rowcard__icon {
   width: 46px;
   height: 46px;
-  border-radius: 13px;
-  background: #ffffff;
-  color: var(--cw-spring);
-  box-shadow: 0 1px 3px rgba(13, 43, 33, 0.08), inset 0 1px 0 #ffffff;
+  border-radius: var(--cw-r-md);
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-line);
+  color: var(--cw-brass);
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  transition: 0.28s;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.28s cubic-bezier(0.2, 1.4, 0.4, 1), border-color 0.2s;
 }
 
 .cw-rowcard:hover .cw-rowcard__icon,
 .cw-rowcard[data-selected="true"] .cw-rowcard__icon {
-  background: linear-gradient(180deg, #3ade9a, #28c983);
-  color: #06281c;
-  transform: scale(1.06) rotate(-3deg);
-}
-
-.cw-rowcard__icon {
-  transition: background 0.25s ease, color 0.25s ease, transform 0.3s cubic-bezier(0.2, 1.4, 0.4, 1);
+  background: linear-gradient(160deg, var(--cw-sage), #5f8a74);
+  border-color: transparent;
+  color: var(--cw-bg);
+  transform: scale(1.05) rotate(-3deg);
 }
 
 .cw-rowcard__icon svg {
@@ -1263,11 +1206,11 @@ html[data-embed="true"] .widget-preview {
   font-style: normal;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #06281c;
-  background: linear-gradient(180deg, #7ff0c0, #4ce7a6);
+  color: var(--cw-on-copper);
+  background: linear-gradient(180deg, var(--cw-brass-hover), var(--cw-brass));
   padding: 3px 8px;
-  border-radius: 999px;
-  box-shadow: 0 4px 12px rgba(31, 179, 116, 0.35);
+  border-radius: var(--cw-r-pill);
+  box-shadow: 0 4px 12px -4px rgba(201, 170, 112, 0.5);
 }
 
 /* vlastná predstava */
@@ -1279,15 +1222,15 @@ html[data-embed="true"] .widget-preview {
 .cw-lead__form textarea {
   width: 100%;
   border: 1px solid var(--cw-line);
-  border-radius: 12px;
-  background: var(--cw-paper);
+  border-radius: var(--cw-r-md);
+  background: var(--cw-surface);
   padding: 11px 12px;
   font: 600 12.5px/1.45 var(--cw-font);
   color: var(--cw-ink);
   outline: none;
   resize: vertical;
   min-height: 56px;
-  transition: 0.15s;
+  transition: border-color 0.15s, background 0.15s;
 }
 
 .cw-custom textarea::placeholder,
@@ -1298,12 +1241,11 @@ html[data-embed="true"] .widget-preview {
 
 .cw-custom textarea:focus,
 .cw-lead__form textarea:focus {
-  border-color: var(--cw-spring);
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(34, 181, 115, 0.14);
+  border-color: var(--cw-sage);
+  background: var(--cw-surface-raised);
 }
 
-/* --- mriežka malých kariet (odvetvie) --- */
+/* mriežka malých kariet (odvetvie) */
 .cw-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1315,7 +1257,7 @@ html[data-embed="true"] .widget-preview {
   z-index: 1;
   border: 1.5px solid transparent;
   background: transparent;
-  border-radius: 16px;
+  border-radius: var(--cw-r-md);
   cursor: pointer;
   padding: 15px 8px 13px;
   display: flex;
@@ -1323,12 +1265,13 @@ html[data-embed="true"] .widget-preview {
   align-items: center;
   gap: 9px;
   text-align: center;
-  transition: border-color 0.25s ease;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .cw-scard[data-selected="true"] {
-  border-color: var(--cw-spring);
-  animation: cw-sel-pop 0.34s cubic-bezier(0.2, 1.6, 0.35, 1);
+  border-color: rgba(127, 165, 143, 0.55);
+  background: rgba(127, 165, 143, 0.08);
+  animation: cw-sel-pop 0.3s cubic-bezier(0.2, 1.5, 0.35, 1);
 }
 
 .cw-scard[data-selected="true"]::after {
@@ -1339,8 +1282,8 @@ html[data-embed="true"] .widget-preview {
   width: 19px;
   height: 19px;
   border-radius: 50%;
-  background: linear-gradient(180deg, #3ade9a, #28c983);
-  color: #06281c;
+  background: var(--cw-sage);
+  color: var(--cw-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1351,21 +1294,22 @@ html[data-embed="true"] .widget-preview {
 .cw-scard__icon {
   width: 38px;
   height: 38px;
-  border-radius: 11px;
-  background: #ffffff;
-  color: var(--cw-spring);
-  box-shadow: 0 1px 3px rgba(13, 43, 33, 0.08), inset 0 1px 0 #ffffff;
+  border-radius: var(--cw-r-sm);
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-line);
+  color: var(--cw-brass);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s cubic-bezier(0.2, 1.6, 0.4, 1), background 0.25s, color 0.25s;
+  transition: transform 0.28s cubic-bezier(0.2, 1.5, 0.4, 1), background 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .cw-scard:hover .cw-scard__icon,
 .cw-scard[data-selected="true"] .cw-scard__icon {
-  background: linear-gradient(180deg, #3ade9a, #28c983);
-  color: #06281c;
-  transform: scale(1.1) rotate(-3deg);
+  background: linear-gradient(160deg, var(--cw-sage), #5f8a74);
+  border-color: transparent;
+  color: var(--cw-bg);
+  transform: scale(1.08) rotate(-3deg);
 }
 
 .cw-scard__icon svg {
@@ -1380,15 +1324,15 @@ html[data-embed="true"] .widget-preview {
   line-height: 1.15;
 }
 
-/* --- karta „čo chatbot zvládne pre odvetvie" --- */
+/* karta „čo chatbot zvládne pre odvetvie" */
 .cw-industry-tip {
   margin-top: 11px;
   padding: 12px 13px;
-  border-radius: 14px;
-  background: var(--cw-mint);
-  border: 1px solid var(--cw-mint-strong);
-  border-left: 3px solid var(--cw-spring);
-  animation: cw-step-box 0.35s ease both;
+  border-radius: var(--cw-r-md);
+  background: var(--cw-surface-muted);
+  border: 1px solid var(--cw-line);
+  border-left: 3px solid var(--cw-brass);
+  animation: cw-step-box 0.3s ease both;
 }
 
 .cw-industry-tip b {
@@ -1396,7 +1340,7 @@ html[data-embed="true"] .widget-preview {
   align-items: center;
   gap: 6px;
   font: 800 11.5px var(--cw-font);
-  color: var(--cw-forest);
+  color: var(--cw-brass);
   margin-bottom: 7px;
 }
 
@@ -1404,7 +1348,7 @@ html[data-embed="true"] .widget-preview {
   width: 14px;
   height: 14px;
   flex: 0 0 auto;
-  color: var(--cw-spring);
+  color: var(--cw-brass);
 }
 
 .cw-industry-tip ul {
@@ -1431,10 +1375,10 @@ html[data-embed="true"] .widget-preview {
   width: 6px;
   height: 6px;
   border-radius: 2px;
-  background: var(--cw-spring);
+  background: var(--cw-sage);
 }
 
-/* --- zoznam s rádiami / checkboxami --- */
+/* zoznam s rádiami / checkboxami */
 .cw-list {
   display: flex;
   flex-direction: column;
@@ -1446,20 +1390,20 @@ html[data-embed="true"] .widget-preview {
   z-index: 1;
   border: 1.5px solid transparent;
   background: transparent;
-  border-radius: 15px;
+  border-radius: var(--cw-r-md);
   cursor: pointer;
   display: flex;
   gap: 10px;
   align-items: center;
   padding: 12px;
   text-align: left;
-  transition: border-color 0.25s ease;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .cw-opt[data-selected="true"] {
-  border-color: var(--cw-spring);
-  background: #eaf7f0;
-  animation: cw-sel-pop 0.34s cubic-bezier(0.2, 1.6, 0.35, 1);
+  border-color: rgba(127, 165, 143, 0.55);
+  background: rgba(127, 165, 143, 0.09);
+  animation: cw-sel-pop 0.3s cubic-bezier(0.2, 1.5, 0.35, 1);
 }
 
 .cw-opt__radio {
@@ -1471,7 +1415,7 @@ html[data-embed="true"] .widget-preview {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  background: var(--cw-surface);
   transition: border-color 0.15s;
 }
 
@@ -1480,15 +1424,16 @@ html[data-embed="true"] .widget-preview {
 }
 
 .cw-opt[data-selected="true"] .cw-opt__radio {
-  border-color: var(--cw-spring);
+  border-color: var(--cw-sage);
+  background: var(--cw-sage);
 }
 
 .cw-opt[data-selected="true"] .cw-opt__radio::after {
   content: "";
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: var(--cw-spring);
+  background: var(--cw-bg);
   animation: cw-pop 0.25s ease;
 }
 
@@ -1497,8 +1442,8 @@ html[data-embed="true"] .widget-preview {
   height: 5px;
   border-radius: 0;
   background: none;
-  border-left: 2px solid var(--cw-spring);
-  border-bottom: 2px solid var(--cw-spring);
+  border-left: 2px solid var(--cw-bg);
+  border-bottom: 2px solid var(--cw-bg);
   transform: rotate(-45deg) translateY(-1px);
 }
 
@@ -1516,7 +1461,7 @@ html[data-embed="true"] .widget-preview {
 }
 
 .cw-opt:hover .cw-opt__body b {
-  color: var(--cw-forest);
+  color: var(--cw-sage-hover);
 }
 
 .cw-opt__body span {
@@ -1527,22 +1472,39 @@ html[data-embed="true"] .widget-preview {
   line-height: 1.3;
 }
 
-/* --- objem dopytov --- */
+/* štítok „V základe" pri základných funkciách */
+.cw-opt__tag {
+  display: inline-block;
+  margin-left: 7px;
+  padding: 2px 7px 2.5px;
+  border-radius: var(--cw-r-pill);
+  background: rgba(201, 170, 112, 0.16);
+  color: var(--cw-brass);
+  font: 800 9px var(--cw-font);
+  font-style: normal;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+
+/* objem dopytov */
 .cw-grid--volume .cw-vcard {
   position: relative;
   z-index: 1;
   border: 1.5px solid transparent;
   background: transparent;
-  border-radius: 16px;
+  border-radius: var(--cw-r-md);
   padding: 14px 12px;
   cursor: pointer;
   text-align: left;
-  transition: border-color 0.25s ease;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .cw-vcard[data-selected="true"] {
-  border-color: var(--cw-spring);
-  animation: cw-sel-pop 0.34s cubic-bezier(0.2, 1.6, 0.35, 1);
+  border-color: rgba(127, 165, 143, 0.55);
+  background: rgba(127, 165, 143, 0.08);
+  animation: cw-sel-pop 0.3s cubic-bezier(0.2, 1.5, 0.35, 1);
 }
 
 .cw-vcard[data-selected="true"]::after {
@@ -1553,8 +1515,8 @@ html[data-embed="true"] .widget-preview {
   width: 19px;
   height: 19px;
   border-radius: 50%;
-  background: linear-gradient(180deg, #3ade9a, #28c983);
-  color: #06281c;
+  background: var(--cw-sage);
+  color: var(--cw-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1565,7 +1527,7 @@ html[data-embed="true"] .widget-preview {
 .cw-vcard b {
   display: block;
   font: 900 15px var(--cw-font);
-  color: var(--cw-spring);
+  color: var(--cw-brass);
 }
 
 .cw-vcard span {
@@ -1575,17 +1537,17 @@ html[data-embed="true"] .widget-preview {
   color: var(--cw-muted);
 }
 
-/* --- zhrnutie — tmavozelená karta ako cena na webe --- */
+/* zhrnutie — tmavá raised karta s mosadzným rámom */
 .cw-summary {
   position: relative;
   overflow: hidden;
-  border: 0;
-  border-radius: 18px;
-  background: linear-gradient(160deg, #46e3a2, #2bc985);
+  border: 1px solid rgba(201, 170, 112, 0.35);
+  border-radius: var(--cw-r-md);
+  background: linear-gradient(165deg, var(--cw-surface-raised), var(--cw-surface));
   padding: 15px 14px;
-  box-shadow: 0 14px 34px rgba(31, 179, 116, 0.35);
+  box-shadow: inset 0 1px 0 rgba(242, 239, 230, 0.05);
   margin-bottom: 11px;
-  color: #06281c;
+  color: var(--cw-ink);
 }
 
 .cw-summary::after {
@@ -1596,7 +1558,7 @@ html[data-embed="true"] .widget-preview {
   width: 160px;
   height: 160px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
+  background: radial-gradient(circle, rgba(201, 170, 112, 0.12), transparent 70%);
   pointer-events: none;
 }
 
@@ -1605,7 +1567,7 @@ html[data-embed="true"] .widget-preview {
   font: 900 9.5px var(--cw-font);
   text-transform: uppercase;
   letter-spacing: 1.2px;
-  color: #0a5c3d;
+  color: var(--cw-brass);
   margin-bottom: 8px;
 }
 
@@ -1614,9 +1576,9 @@ html[data-embed="true"] .widget-preview {
   justify-content: space-between;
   gap: 10px;
   padding: 5px 0;
-  border-bottom: 1px dashed rgba(6, 40, 28, 0.22);
+  border-bottom: 1px dashed var(--cw-line);
   font: 600 11.3px var(--cw-font);
-  color: rgba(6, 40, 28, 0.72);
+  color: var(--cw-muted);
 }
 
 .cw-summary__row:last-of-type {
@@ -1624,7 +1586,7 @@ html[data-embed="true"] .widget-preview {
 }
 
 .cw-summary__row b {
-  color: #06281c;
+  color: var(--cw-ink);
   font-weight: 800;
   text-align: right;
   max-width: 62%;
@@ -1649,22 +1611,21 @@ html[data-embed="true"] .widget-preview {
 
 .cw-summary__pills span {
   font: 700 9.5px var(--cw-font);
-  color: #06281c;
-  background: rgba(255, 255, 255, 0.42);
-  border: 1px solid rgba(6, 40, 28, 0.22);
+  color: var(--cw-sage-hover);
+  background: rgba(127, 165, 143, 0.12);
+  border: 1px solid rgba(127, 165, 143, 0.3);
   padding: 4px 8px;
-  border-radius: 999px;
+  border-radius: var(--cw-r-pill);
   letter-spacing: 0.2px;
 }
 
-/* --- kontaktný formulár --- */
+/* kontaktný formulár */
 .cw-lead {
   border: 1px solid var(--cw-line);
-  border-radius: 16px;
-  background: #fff;
+  border-radius: var(--cw-r-md);
+  background: var(--cw-surface-muted);
   padding: 14px;
   margin-bottom: 6px;
-  box-shadow: 0 6px 18px rgba(13, 43, 33, 0.06);
 }
 
 .cw-lead__head {
@@ -1677,14 +1638,14 @@ html[data-embed="true"] .widget-preview {
 .cw-lead__icon {
   width: 38px;
   height: 38px;
-  border-radius: 12px;
-  background: linear-gradient(180deg, #3ade9a, #28c983);
+  border-radius: var(--cw-r-md);
+  background: linear-gradient(160deg, var(--cw-brass-hover), var(--cw-brass));
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #06281c;
+  color: var(--cw-on-copper);
   flex: 0 0 38px;
-  box-shadow: 0 5px 14px rgba(31, 179, 116, 0.35);
+  box-shadow: 0 5px 14px -6px rgba(201, 170, 112, 0.5);
 }
 
 .cw-lead__icon svg {
@@ -1718,19 +1679,18 @@ html[data-embed="true"] .widget-preview {
 .cw-lead__form input {
   width: 100%;
   border: 1px solid var(--cw-line);
-  background: var(--cw-paper);
-  border-radius: 11px;
+  background: var(--cw-surface);
+  border-radius: var(--cw-r-sm);
   padding: 11px;
   font: 600 12.5px var(--cw-font);
   color: var(--cw-ink);
   outline: none;
-  transition: 0.15s;
+  transition: border-color 0.15s, background 0.15s;
 }
 
 .cw-lead__form input:focus {
-  border-color: var(--cw-spring);
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(34, 181, 115, 0.14);
+  border-color: var(--cw-sage);
+  background: var(--cw-surface-raised);
 }
 
 .cw-consent {
@@ -1747,35 +1707,32 @@ html[data-embed="true"] .widget-preview {
   height: 17px;
   flex: 0 0 17px;
   margin: 0;
-  accent-color: var(--cw-spring);
+  accent-color: var(--cw-sage);
   cursor: pointer;
 }
 
 .cw-lead__status {
   margin: 0;
-  border-radius: 11px;
+  border-radius: var(--cw-r-sm);
   padding: 9px 11px;
   font: 700 11.5px var(--cw-font);
-  background: var(--cw-coral-soft);
-  color: #b3402a;
-  border: 1px solid #f5c8ba;
-  animation: cw-q-in 0.25s ease both;
+  background: rgba(188, 115, 82, 0.14);
+  color: var(--cw-copper-hover);
+  border: 1px solid rgba(188, 115, 82, 0.4);
+  animation: cw-q-in 0.24s ease both;
 }
 
 /* ============================================================
-   Primárne tlačidlá — indigo CTA ako na webe,
-   hover: obkreslenie čiarkou → rozsvietenie
+   Primárne tlačidlá — medené CTA
    ============================================================ */
-/* CTA: v pokoji zelené ako brand, modré až pri hoveri/kliku
-   (modrá vrstva sa plynulo vynorí cez ::after) */
 .cw-submit,
 .cw-next {
   position: relative;
   z-index: 0;
   border: 0;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #3ade9a, #28c983 58%, #22bd7c);
-  color: #06281c;
+  border-radius: var(--cw-r-pill);
+  background: linear-gradient(180deg, var(--cw-copper-hover), var(--cw-copper));
+  color: var(--cw-on-copper);
   font: 800 13px var(--cw-font);
   letter-spacing: 0.2px;
   padding: 13px;
@@ -1784,13 +1741,8 @@ html[data-embed="true"] .widget-preview {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow:
-    0 1px 2px rgba(13, 43, 33, 0.16),
-    0 8px 20px rgba(31, 179, 116, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  transition:
-    transform 0.3s cubic-bezier(0.34, 1.3, 0.5, 1),
-    box-shadow 0.3s ease;
+  box-shadow: 0 8px 20px -8px rgba(188, 115, 82, 0.6);
+  transition: transform 0.22s cubic-bezier(0.34, 1.3, 0.5, 1), box-shadow 0.22s ease, filter 0.2s;
   will-change: transform;
 }
 
@@ -1799,22 +1751,19 @@ html[data-embed="true"] .widget-preview {
 .cw-submit:focus-visible:not(:disabled),
 .cw-next:focus-visible:not(:disabled) {
   transform: translateY(-1.5px);
-  filter: brightness(1.05) saturate(1.05);
-  box-shadow:
-    0 2px 4px rgba(13, 43, 33, 0.16),
-    0 12px 28px rgba(31, 179, 116, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  filter: brightness(1.05);
+  box-shadow: 0 14px 28px -8px rgba(188, 115, 82, 0.75);
 }
 
 .cw-submit:active:not(:disabled),
 .cw-next:active:not(:disabled) {
   transform: translateY(0) scale(0.98);
-  transition-duration: 0.12s;
+  transition-duration: 0.1s;
 }
 
 .cw-next:disabled,
 .cw-submit:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: default;
   box-shadow: none;
 }
@@ -1832,8 +1781,8 @@ html[data-embed="true"] .widget-preview {
   width: 15px;
   height: 15px;
   border-radius: 50%;
-  border: 2.5px solid rgba(6, 40, 28, 0.25);
-  border-top-color: #06281c;
+  border: 2.5px solid rgba(7, 20, 14, 0.3);
+  border-top-color: var(--cw-on-copper);
   animation: cw-spin 0.8s linear infinite;
 }
 
@@ -1844,55 +1793,55 @@ html[data-embed="true"] .widget-preview {
   color: var(--cw-faint);
 }
 
-/* --- spodné akcie --- */
+/* spodné akcie */
 .cw-calc-actions {
   display: flex;
   flex: 0 0 auto;
   gap: 10px;
   padding: 10px 13px 13px;
-  border-top: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0), #fff 40%);
+  border-top: 1px solid var(--cw-line);
+  background: linear-gradient(180deg, rgba(6, 18, 14, 0), rgba(6, 18, 14, 0.5) 45%);
   align-items: center;
 }
 
 .cw-restart {
   flex: 1;
   border: 1px solid var(--cw-line-strong);
-  border-radius: 999px;
-  background: #fff;
+  border-radius: var(--cw-r-pill);
+  background: var(--cw-surface);
   color: var(--cw-ink);
   font: 800 12.5px var(--cw-font);
   padding: 12px;
   cursor: pointer;
-  transition: 0.22s;
+  transition: border-color 0.2s, color 0.2s;
 }
 
 .cw-restart:hover {
-  border-color: var(--cw-spring);
-  color: var(--cw-spring);
+  border-color: var(--cw-sage);
+  color: var(--cw-sage);
 }
 
-/* --- poďakovanie --- */
+/* poďakovanie */
 .cw-thanks {
   flex: 1;
   min-height: 0;
   overflow: auto;
   text-align: center;
   padding: 26px 18px 18px;
-  animation: cw-step-box 0.4s ease both;
+  animation: cw-step-box 0.34s ease both;
 }
 
 .cw-thanks__icon {
   width: 52px;
   height: 52px;
   margin: 0 auto 10px;
-  border-radius: 16px;
-  background: linear-gradient(180deg, #3ade9a, #28c983);
-  color: #06281c;
+  border-radius: var(--cw-r-md);
+  background: linear-gradient(160deg, var(--cw-sage), #5f8a74);
+  color: var(--cw-bg);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 12px 28px rgba(31, 179, 116, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  box-shadow: 0 12px 28px -10px rgba(127, 165, 143, 0.5);
   animation: cw-pop 0.4s cubic-bezier(0.2, 1.4, 0.4, 1) both;
 }
 
@@ -1916,7 +1865,7 @@ html[data-embed="true"] .widget-preview {
 }
 
 .cw-thanks p b {
-  color: var(--cw-spring);
+  color: var(--cw-brass);
 }
 
 .cw-thanks__grid {
@@ -1929,8 +1878,8 @@ html[data-embed="true"] .widget-preview {
 
 .cw-thanks__grid div {
   border: 1px solid var(--cw-line);
-  border-radius: 11px;
-  background: var(--cw-paper);
+  border-radius: var(--cw-r-sm);
+  background: var(--cw-surface);
   padding: 8px 9px;
   color: var(--cw-ink);
   font: 700 11px/1.35 var(--cw-font);
@@ -1954,7 +1903,7 @@ html[data-embed="true"] .widget-preview {
 .cw-thanks__actions button {
   flex: 1;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--cw-r-pill);
   padding: 12px 8px;
   font: 800 12px var(--cw-font);
   cursor: pointer;
@@ -1962,10 +1911,10 @@ html[data-embed="true"] .widget-preview {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  background: linear-gradient(180deg, #3ade9a, #28c983 58%, #22bd7c);
-  color: #06281c;
-  box-shadow: 0 8px 20px rgba(31, 179, 116, 0.35);
-  transition: 0.25s;
+  background: linear-gradient(180deg, var(--cw-copper-hover), var(--cw-copper));
+  color: var(--cw-on-copper);
+  box-shadow: 0 8px 20px -8px rgba(188, 115, 82, 0.55);
+  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
 }
 
 .cw-thanks__actions button svg {
@@ -1975,25 +1924,25 @@ html[data-embed="true"] .widget-preview {
 
 .cw-thanks__actions button:hover {
   filter: brightness(1.05);
-  box-shadow: 0 10px 24px rgba(31, 179, 116, 0.45);
+  box-shadow: 0 12px 24px -8px rgba(188, 115, 82, 0.7);
   transform: translateY(-1px);
 }
 
 .cw-thanks__actions button.ghost {
-  background: #fff;
+  background: var(--cw-surface);
   border: 1px solid var(--cw-line-strong);
   color: var(--cw-ink);
   box-shadow: none;
 }
 
 .cw-thanks__actions button.ghost:hover {
-  border-color: var(--cw-spring);
-  color: var(--cw-spring);
+  border-color: var(--cw-sage);
+  color: var(--cw-sage);
   filter: none;
 }
 
 /* ============================================================
-   Mobil
+   Mobil — bottom sheet, safe-area, viditeľný input pri klávesnici
    ============================================================ */
 @media (max-width: 520px) {
   .cw-panel {
@@ -2012,11 +1961,11 @@ html[data-embed="true"] .widget-preview {
   }
 
   .cw-inputbar {
-    margin-bottom: calc(13px + env(safe-area-inset-bottom));
+    padding-bottom: calc(13px + env(safe-area-inset-bottom));
   }
 
   .cw-calc-actions {
-    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    padding-bottom: calc(13px + env(safe-area-inset-bottom));
   }
 
   .cw-launcher {
@@ -2026,7 +1975,7 @@ html[data-embed="true"] .widget-preview {
 
   .cw-teaser {
     right: 16px;
-    bottom: 98px;
+    bottom: 86px;
     max-width: 250px;
   }
 
@@ -2035,16 +1984,15 @@ html[data-embed="true"] .widget-preview {
   }
 }
 
-/* Iframe má na desktope zámerne kompaktný viewport. Rozloženie preto
-   riadi šírka hostiteľskej stránky, ktorú loader pošle cez postMessage. */
+/* Iframe má na desktope zámerne kompaktný viewport. */
 @media (max-width: 520px) {
   html[data-embed="true"][data-embed-viewport="desktop"] .cw-panel {
-    inset: auto 20px 20px auto;
-    width: min(430px, calc(100vw - 40px));
-    height: min(720px, calc(100dvh - 40px));
+    inset: auto 22px 22px auto;
+    width: min(448px, calc(100vw - 44px));
+    height: min(720px, calc(100dvh - 44px));
     max-height: none;
-    border: 1px solid #edebe4;
-    border-radius: 24px;
+    border: 1px solid var(--cw-line-strong);
+    border-radius: var(--cw-r-lg);
   }
 
   html[data-embed="true"][data-embed-viewport="desktop"] .cw-panel-head {
@@ -2068,26 +2016,25 @@ html[data-embed="true"] .widget-preview {
   .cw-panel-body,
   .cw-message-row,
   .cw-chip,
-  .cw-chip::before,
-  .cw-chip::after,
   .cw-rowcard,
+  .cw-rowcard::after,
+  .cw-rowcard[data-selected="true"]::before,
   .cw-scard,
+  .cw-scard[data-selected="true"]::after,
   .cw-opt,
   .cw-vcard,
+  .cw-vcard[data-selected="true"]::after,
   .cw-industry-tip,
   .cw-thanks,
   .cw-thanks__icon,
   .cw-panel-head__beam,
-  .cw-launcher__online,
   .cw-submit,
   .cw-next,
-  .cw-submit::before,
-  .cw-next::before,
-  .cw-submit::after,
-  .cw-next::after,
   .cw-tabs__glass,
+  .cw-glide,
   .cw-inputbar > button.is-sending svg,
-  .bl__dot {
+  .bl__dot,
+  .bl__glint {
     animation: none !important;
     transition-duration: 0.01ms !important;
   }

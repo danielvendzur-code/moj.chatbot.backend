@@ -1,7 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { AssistantWidget } from "./components/widget/AssistantWidget";
 import "./widget.css";
-import "./widget-upgrade.css";
 
 /*
  * Vložiteľný widget — jeden riadok na webe:

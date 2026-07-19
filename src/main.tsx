@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import { getInitialEmbedViewport, isEmbedMode } from "./lib/embedBridge";
 import "./widget.css";
-import "./widget-upgrade.css";
 
 if (isEmbedMode()) {
   document.documentElement.dataset.embed = "true";

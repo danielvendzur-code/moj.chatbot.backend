@@ -1,16 +1,19 @@
 # Webový asistent — konfigurátor riešenia
 
 Samostatný React/TypeScript widget s viac-krokovým konfigurátorom (výberové karty,
-krokovanie s bodkami, kontaktný formulár so zhrnutím). Vizuál nadväzuje na portfólio
-danielvendzur-code.github.io/vne-n: svetlý panel, žiarivá jarná zelená s tmavým textom
-(žiadne tmavozelené výplne), prepínač režimov ako iOS segmented control a posuvná
-sklenená pilulka pod chipmi aj kartami konfigurátora.
+krokovanie s bodkami, kontaktný formulár so zhrnutím). Vizuál „Forest Night": tmavé
+lesné pozadie (near-black green), teplá ivory typografia a akcenty starej mosadze
+(logá, progress), šalvie (aktívne voľby a focus) a medi (hlavné CTA). Liquid glass
+sa používa striedmo — panel, prepínač režimov a bubliny odpovedí — s fallbackom pre
+prehliadače bez `backdrop-filter`. Prepínač režimov je iOS segmented control a pod
+chipmi aj kartami konfigurátora sa pružinovo presúva šalviová sklenená pilulka.
+Animuje sa iba `transform` a `opacity`, s rešpektom k `prefers-reduced-motion`.
 
 Verejná ukážka: <https://danielvendzur-code.github.io/moj.chatbot.backend/>
 
 ## Logo
 
-Logom je čistá chatová bublina s tromi tonálnymi zelenými bodkami (`src/components/widget/BubbleLogo.tsx`)
+Logom je čistá chatová bublina v starej mosadzi s tromi tmavými bodkami (`src/components/widget/BubbleLogo.tsx`)
 v troch veľkostiach — launcher, hlavička a avatar pri správach. (Skorší pixel-art maskot
 chameleóna zostáva dostupný v git histórii, keby sa hodil neskôr.)
 

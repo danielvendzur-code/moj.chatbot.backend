@@ -107,9 +107,9 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
             ×
           </button>
           <button type="button" className="cw-teaser__content" onClick={() => open("calculator")}>
-            <strong>Vyskladajte si asistenta na počkanie</strong>
+            <strong>Vyskladajte si riešenie na počkanie</strong>
             <span className="cw-teaser__copy">
-              Otvorte <b>konfigurátor</b> — návrh riešenia máte do minúty. <b>AI asistent</b> poradí ďalší krok.
+              Návrh máte do minúty — alebo sa <b>poradíme</b>, čo dáva pre váš web zmysel.
             </span>
           </button>
         </aside>
@@ -126,7 +126,6 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
         onClick={() => open("assistant")}
       >
         <BubbleLogo size="launcher" />
-        <span className="cw-launcher__online" aria-hidden="true" />
       </button>
 
       {isOpen ? (
@@ -147,8 +146,10 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
               <BubbleLogo size="header" />
             </span>
             <div className="cw-panel-head__title">
-              <b>{mode === "assistant" ? "Digitálny asistent" : "Návrh riešenia"}</b>
-              <span className="cw-panel-head__meta"><i /> online · pripravený odpovedať</span>
+              <b>{mode === "assistant" ? "Poradiť sa" : "Vyskladať riešenie"}</b>
+              <span className="cw-panel-head__context">
+                {mode === "assistant" ? "Napíšte, s čím pomôcť" : "Krok za krokom k návrhu"}
+              </span>
             </div>
             <div className="cw-panel-head__actions">
               <button
@@ -186,7 +187,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
               aria-current={mode === "calculator" ? "page" : undefined}
               onClick={() => setMode("calculator")}
             >
-              <WidgetIcon name="calculator" /> Konfigurátor
+              <WidgetIcon name="calculator" /> Vyskladať riešenie
             </button>
             <button
               type="button"
@@ -195,7 +196,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
               aria-current={mode === "assistant" ? "page" : undefined}
               onClick={() => setMode("assistant")}
             >
-              <WidgetIcon name="chat" /> AI asistent
+              <WidgetIcon name="chat" /> Poradiť sa
             </button>
           </nav>
 
