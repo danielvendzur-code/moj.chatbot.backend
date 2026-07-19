@@ -3,7 +3,6 @@ import { animateChipsIn, animateSentMessage } from "../../lib/motion";
 import { sendChat, type ChatTurn } from "../../lib/assistantApi";
 import { track } from "../../lib/analytics";
 import { BubbleLogo } from "./BubbleLogo";
-import { HoverGlide } from "./HoverGlide";
 import { WidgetIcon } from "./WidgetIcon";
 
 type AssistantConversationProps = {
@@ -30,11 +29,13 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   },
 ];
 
-/* Návrhové otázky — kliknutie ich pošle asistentovi ako reálnu otázku. */
-const QUICK_REPLIES: string[] = [
-  "Čím mi pomôže AI chatbot?",
-  "Ako funguje chatbot s kalkulačkou?",
-  "Zvládne rezervácie termínov?",
+/* Návrhové otázky — krátky štítok, kliknutie pošle asistentovi celú otázku. */
+type QuickReply = { label: string; question: string };
+
+const QUICK_REPLIES: QuickReply[] = [
+  { label: "AI chatbot", question: "Čím mi pomôže AI chatbot na webe?" },
+  { label: "Kalkulačka cien", question: "Ako funguje chatbot s kalkulačkou cien?" },
+  { label: "Rezervácie", question: "Zvládne chatbot rezervácie termínov?" },
 ];
 
 const CHAT_FALLBACK =
@@ -157,21 +158,20 @@ export function AssistantConversation({
       </div>
 
       <div className="cw-quick-replies" aria-label="Rýchle možnosti" ref={chipsRef}>
-        <HoverGlide containerRef={chipsRef} pill deps={[resetToken]} />
-        <button type="button" className="cw-chip cw-chip--primary" onClick={onOpenCalculator}>
-          Vyskladať riešenie
-        </button>
-        {QUICK_REPLIES.map((label) => (
+        {QUICK_REPLIES.map(({ label, question }) => (
           <button
             type="button"
             className="cw-chip"
-            data-glide
             key={label}
-            onClick={() => void ask(label)}
+            title={question}
+            onClick={() => void ask(question)}
           >
             {label}
           </button>
         ))}
+        <button type="button" className="cw-chip cw-chip--primary" onClick={onOpenCalculator}>
+          Vyskladať riešenie
+        </button>
       </div>
 
       <div className="cw-inputbar">
