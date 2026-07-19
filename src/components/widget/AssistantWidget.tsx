@@ -5,6 +5,7 @@ import {
   SITE_ASSISTANT_OPEN_EVENT,
 } from "../../lib/siteAssistant";
 import { announceEmbedState, installEmbedBridge } from "../../lib/embedBridge";
+import { track } from "../../lib/analytics";
 import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";
 import { AssistantConversation } from "./AssistantConversation";
 import { BubbleLogo } from "./BubbleLogo";
@@ -31,6 +32,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
 
   const close = useCallback(() => {
     setIsOpen(false);
+    track("widget_close");
   }, []);
   useFocusTrap(panelRef, isOpen, close);
 
@@ -40,6 +42,12 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
     setResetToken((value) => value + 1);
     setTeaserVisible(false);
     setIsOpen(true);
+    track("widget_open", { mode: nextMode });
+  }, []);
+
+  const switchMode = useCallback((nextMode: WidgetMode) => {
+    setMode(nextMode);
+    track("mode_switch", { to: nextMode });
   }, []);
 
   const openFromOptions = useCallback(
@@ -185,18 +193,18 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
               data-testid="tab-calculator"
               data-active={mode === "calculator"}
               aria-current={mode === "calculator" ? "page" : undefined}
-              onClick={() => setMode("calculator")}
+              onClick={() => switchMode("calculator")}
             >
-              <WidgetIcon name="calculator" /> Vyskladať riešenie
+              Vyskladať riešenie
             </button>
             <button
               type="button"
               data-testid="tab-assistant"
               data-active={mode === "assistant"}
               aria-current={mode === "assistant" ? "page" : undefined}
-              onClick={() => setMode("assistant")}
+              onClick={() => switchMode("assistant")}
             >
-              <WidgetIcon name="chat" /> Poradiť sa
+              Poradiť sa
             </button>
           </nav>
 
@@ -204,13 +212,13 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
             {mode === "assistant" ? (
               <AssistantConversation
                 resetToken={resetToken}
-                onOpenCalculator={() => setMode("calculator")}
+                onOpenCalculator={() => switchMode("calculator")}
               />
             ) : (
               <ToolCalculator
                 resetToken={resetToken}
                 initialPreset={preset}
-                onOpenChat={() => setMode("assistant")}
+                onOpenChat={() => switchMode("assistant")}
               />
             )}
           </div>

@@ -98,6 +98,42 @@ window.dispatchEvent(
 );
 ```
 
+## Reálny AI chat (Claude cez Vercel)
+
+Režim „Poradiť sa" odpovedá naozaj cez Claude (model **Haiku 4.5**). Keďže GitHub Pages je
+statický, API kľúč nesmie ísť do prehliadača — chat prechádza cez malú serverless funkciu
+`api/chat.ts` nasadenú na **Vercel**.
+
+Nastavenie:
+
+1. Prepojte tento repozitár s Vercel projektom (Vercel autodetekuje `api/chat.ts`).
+2. V *Project Settings → Environment Variables* pridajte `ANTHROPIC_API_KEY` (Anthropic API kľúč).
+   Kľúč zostáva len na serveri — nikde v repe ani v klientovi.
+3. URL nasadenej funkcie (napr. `https://<projekt>.vercel.app/api/chat`) vložte do
+   `src/lib/assistantApi.ts` (konštanta `DEFAULT_ENDPOINT`) alebo ju nastavte za behu bez
+   rebuildu: `window.__DV_ASSISTANT_ENDPOINT__ = "https://…/api/chat";` (napr. z embed skriptu).
+
+Kým endpoint nie je nastavený, chat elegantne padne na fallback hlášku a widget (vrátane
+konfigurátora) ostáva plne funkčný. Funkcia obmedzuje vstup (počet a dĺžku správ), drží nízke
+`max_tokens` a system prompt, ktorý ostáva pri téme Danielových služieb. Odporúčané ďalšie
+zlepšenie: rate-limiting cez Vercel KV/Upstash.
+
+## Analytika lievika
+
+Widget dispatchne `CustomEvent("site-assistant:analytics", { detail: { event, props, ts } })`
+a ak je na stránke GA4 (`window.dataLayer`), pushne aj `{ event: "dv_assistant_<event>", ...props }`.
+Sledované udalosti: `widget_open`, `widget_close`, `mode_switch`, `chat_message_sent`,
+`chat_reply_received`, `chat_error`, `config_step_view`, `config_interest_select`, `lead_submit`.
+
+Príklad odchytenia na hostiteľskej stránke:
+
+```js
+window.addEventListener("site-assistant:analytics", (e) => {
+  console.log(e.detail.event, e.detail.props);
+});
+```
+
 ## Aktuálny rozsah
 
-Prototyp nič neodosiela ani neukladá. Backend, e-mail, databáza, CRM, kalendár a reálne spracovanie formulára patria do ďalšej fázy.
+Chat odpovedá reálne (po nastavení Vercel proxy). Kontaktný formulár konfigurátora zatiaľ nič
+neodosiela ani neukladá — e-mail, databáza, CRM a kalendár patria do ďalšej fázy.

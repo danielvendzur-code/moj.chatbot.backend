@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { animateStepIn, drawCheck } from "../../lib/motion";
+import { track } from "../../lib/analytics";
 import { HoverGlide } from "./HoverGlide";
 import {
   buildProposalNumber,
@@ -98,6 +99,7 @@ export function ToolCalculator({
   useEffect(() => {
     bodyRef.current?.scrollTo({ top: 0 });
     animateStepIn(stepRef.current);
+    track("config_step_view", { step: STEPS[step], index: step + 1 });
   }, [step, resetToken]);
 
   useEffect(() => {
@@ -144,6 +146,7 @@ export function ToolCalculator({
       ...current,
       ...RECOMMENDED_FEATURES[id].filter((featureId) => !current.includes(featureId)),
     ]);
+    track("config_interest_select", { interest: id });
   };
 
   const toggleFeature = (id: string) => {
@@ -165,6 +168,7 @@ export function ToolCalculator({
     setLeadError("");
     setSendState("sending");
     setProposalNumber(buildProposalNumber());
+    track("lead_submit", { interest, industry, timeline });
     sendTimerRef.current = window.setTimeout(() => setSendState("done"), 900);
   };
 

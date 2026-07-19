@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { animateChipsIn, animateSentMessage } from "../../lib/motion";
+import { sendChat, type ChatTurn } from "../../lib/assistantApi";
+import { track } from "../../lib/analytics";
 import { BubbleLogo } from "./BubbleLogo";
 import { HoverGlide } from "./HoverGlide";
 import { WidgetIcon } from "./WidgetIcon";
@@ -28,32 +30,15 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   },
 ];
 
-type QuickReply = {
-  label: string;
-  icon: "chat" | "calculator" | "calendar";
-  response: string;
-};
-
-const QUICK_REPLIES: QuickReply[] = [
-  {
-    label: "AI chatbot",
-    icon: "chat",
-    response:
-      "AI chatbot odpovedá návštevníkom 24/7 — zaučí sa na vaše služby, ceny aj postupy a nikdy ho nezastihnete nepripraveného.",
-  },
-  {
-    label: "Chatbot s kalkulačkou",
-    icon: "calculator",
-    response:
-      "Chatbot s kalkulačkou spočíta orientačnú cenu podľa vašich parametrov a rovno z nej urobí hotový dopyt s kontaktom.",
-  },
-  {
-    label: "Rezervačný chatbot",
-    icon: "calendar",
-    response:
-      "Rezervačný chatbot najprv zozbiera krátky dopyt, potom ponúkne termín a pošle pripomienku — bez telefonátov tam a späť.",
-  },
+/* Návrhové otázky — kliknutie ich pošle asistentovi ako reálnu otázku. */
+const QUICK_REPLIES: string[] = [
+  "Čím mi pomôže AI chatbot?",
+  "Ako funguje chatbot s kalkulačkou?",
+  "Zvládne rezervácie termínov?",
 ];
+
+const CHAT_FALLBACK =
+  "Prepáčte, teraz sa neviem spojiť. Skúste to o chvíľu, otvorte konfigurátor („Vyskladať riešenie“) alebo mi nechajte kontakt a ozvem sa.";
 
 export function AssistantConversation({
   resetToken,
@@ -109,20 +94,34 @@ export function AssistantConversation({
     if (replyTimerRef.current !== null) window.clearTimeout(replyTimerRef.current);
   }, []);
 
-  const addExchange = (question: string, response: string) => {
+  const ask = async (question: string) => {
     if (typing) return;
-    setMessages((current) => [
-      ...current,
-      { id: nextIdRef.current++, from: "me", text: question },
-    ]);
+    const userMessage = { id: nextIdRef.current++, from: "me" as const, text: question };
+    setMessages((current) => [...current, userMessage]);
     setTyping(true);
-    replyTimerRef.current = window.setTimeout(() => {
+    track("chat_message_sent", { length: question.length });
+
+    /* História pre AI — bez úvodných pozdravov bota (API začína user správou). */
+    const turns: ChatTurn[] = [...messages, userMessage].map((message) => ({
+      role: message.from === "me" ? "user" : "assistant",
+      text: message.text,
+    }));
+    const firstUser = turns.findIndex((turn) => turn.role === "user");
+    const history = firstUser === -1 ? [] : turns.slice(firstUser);
+
+    try {
+      const reply = await sendChat(history);
+      setMessages((current) => [...current, { id: nextIdRef.current++, from: "bot", text: reply }]);
+      track("chat_reply_received");
+    } catch (error) {
       setMessages((current) => [
         ...current,
-        { id: nextIdRef.current++, from: "bot", text: response },
+        { id: nextIdRef.current++, from: "bot", text: CHAT_FALLBACK },
       ]);
+      track("chat_error", { reason: error instanceof Error ? error.message : "unknown" });
+    } finally {
       setTyping(false);
-    }, 720);
+    }
   };
 
   const submit = () => {
@@ -130,10 +129,7 @@ export function AssistantConversation({
     if (!value || typing) return;
     setInput("");
     launchPlane();
-    addExchange(
-      value,
-      "Rozumiem. Najrýchlejšie sa k návrhu dostanete cez konfigurátor hore — alebo mi napíšte pár detailov a pripravím vám ho na mieru.",
-    );
+    void ask(value);
   };
 
   return (
@@ -163,18 +159,16 @@ export function AssistantConversation({
       <div className="cw-quick-replies" aria-label="Rýchle možnosti" ref={chipsRef}>
         <HoverGlide containerRef={chipsRef} pill deps={[resetToken]} />
         <button type="button" className="cw-chip cw-chip--primary" onClick={onOpenCalculator}>
-          <span className="cw-chip__icon"><WidgetIcon name="spark" /></span>
           Vyskladať riešenie
         </button>
-        {QUICK_REPLIES.map(({ label, icon, response }) => (
+        {QUICK_REPLIES.map((label) => (
           <button
             type="button"
             className="cw-chip"
             data-glide
             key={label}
-            onClick={() => addExchange(label, response)}
+            onClick={() => void ask(label)}
           >
-            <span className="cw-chip__icon"><WidgetIcon name={icon} /></span>
             {label}
           </button>
         ))}
