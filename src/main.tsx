@@ -4,6 +4,7 @@ import App from "./App";
 import { getInitialEmbedViewport, isEmbedMode } from "./lib/embedBridge";
 import { installWidgetRailDrag } from "./lib/widgetRailDrag";
 import "./widget.css";
+import "./interaction.css";
 
 if (isEmbedMode()) {
   document.documentElement.dataset.embed = "true";
