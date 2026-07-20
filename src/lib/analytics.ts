@@ -1,8 +1,7 @@
 /*
- * Ľahká analytika lievika. Bez závislostí — udalosti len dispatchne ako
- * CustomEvent (rovnaká konvencia ako siteAssistant.ts) a ak je na stránke
- * GA4 (window.dataLayer), pushne ich aj tam. Hostiteľský web si ich vie
- * odchytiť a poslať kam potrebuje.
+ * Ľahká analytika lievika. Udalosti sa vytvoria výhradne po explicitnom
+ * analytickom súhlase hostiteľskej stránky. Bez stavu `granted` sa nič
+ * nedispatchne ani nepridá do dataLayer.
  */
 
 export const SITE_ASSISTANT_ANALYTICS_EVENT = "site-assistant:analytics";
@@ -16,7 +15,8 @@ declare global {
 }
 
 export function track(event: string, props: AnalyticsProps = {}): void {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || typeof document === "undefined") return;
+  if (document.documentElement.dataset.analyticsConsent !== "granted") return;
 
   const detail = { event, props, ts: Date.now() };
 
