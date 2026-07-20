@@ -2,6 +2,7 @@ const selector = ".cw-rows, .cw-grid";
 
 export function installWidgetRailDrag(): () => void {
   const cleanups = new Map<HTMLElement, () => void>();
+  document.documentElement.dataset.horizontalDrag = "native";
 
   const install = (element: HTMLElement) => {
     if (cleanups.has(element)) return;
@@ -98,5 +99,6 @@ export function installWidgetRailDrag(): () => void {
     observer.disconnect();
     cleanups.forEach((cleanup) => cleanup());
     cleanups.clear();
+    delete document.documentElement.dataset.horizontalDrag;
   };
 }
