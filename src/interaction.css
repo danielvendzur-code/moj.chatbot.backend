@@ -1,0 +1,20 @@
+.cw-widget [data-horizontal-drag="true"],
+.cw-widget [data-widget-drag-ready="true"] {
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cw-widget [data-horizontal-drag="true"]::-webkit-scrollbar,
+.cw-widget [data-widget-drag-ready="true"]::-webkit-scrollbar {
+  display: none;
+}
+
+.cw-widget [data-dragging="true"] {
+  cursor: grabbing;
+  scroll-behavior: auto !important;
+}
