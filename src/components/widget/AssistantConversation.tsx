@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useHorizontalDrag } from "../../hooks/useHorizontalDrag";
 import { animateChipsIn, animateSentMessage } from "../../lib/motion";
 import { sendChat, type ChatTurn } from "../../lib/assistantApi";
 import { track } from "../../lib/analytics";
@@ -29,7 +30,6 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   },
 ];
 
-/* Návrhové otázky — krátky štítok, kliknutie pošle asistentovi celú otázku. */
 type QuickReply = { label: string; question: string };
 
 const QUICK_REPLIES: QuickReply[] = [
@@ -52,6 +52,7 @@ export function AssistantConversation({
   const replyTimerRef = useRef<number | null>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
   const chipsRef = useRef<HTMLDivElement>(null);
+  const quickRepliesDrag = useHorizontalDrag<HTMLDivElement>();
   const [planeFx, setPlaneFx] = useState(false);
   const planeTimerRef = useRef<number | null>(null);
 
@@ -59,7 +60,6 @@ export function AssistantConversation({
     animateChipsIn(chipsRef.current);
   }, [resetToken]);
 
-  /* nová odoslaná správa priletí ako lietadlo od vstupného poľa */
   useEffect(() => {
     const last = messages[messages.length - 1];
     if (!last || last.from !== "me") return;
@@ -67,9 +67,12 @@ export function AssistantConversation({
     animateSentMessage(rows?.[rows.length - 1] ?? null);
   }, [messages]);
 
-  useEffect(() => () => {
-    if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
+    },
+    [],
+  );
 
   const launchPlane = () => {
     setPlaneFx(false);
@@ -91,9 +94,12 @@ export function AssistantConversation({
     if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
   }, [messages, typing]);
 
-  useEffect(() => () => {
-    if (replyTimerRef.current !== null) window.clearTimeout(replyTimerRef.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (replyTimerRef.current !== null) window.clearTimeout(replyTimerRef.current);
+    },
+    [],
+  );
 
   const ask = async (question: string) => {
     if (typing) return;
@@ -102,7 +108,6 @@ export function AssistantConversation({
     setTyping(true);
     track("chat_message_sent", { length: question.length });
 
-    /* História pre AI — bez úvodných pozdravov bota (API začína user správou). */
     const turns: ChatTurn[] = [...messages, userMessage].map((message) => ({
       role: message.from === "me" ? "user" : "assistant",
       text: message.text,
@@ -139,7 +144,9 @@ export function AssistantConversation({
         {messages.map((message) => (
           <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>
             {message.from === "bot" ? (
-              <span className="cw-avatar"><BubbleLogo size="avatar" /></span>
+              <span className="cw-avatar">
+                <BubbleLogo size="avatar" />
+              </span>
             ) : null}
             <div className="cw-message-wrap">
               <p>{message.text}</p>
@@ -149,15 +156,24 @@ export function AssistantConversation({
 
         {typing ? (
           <div className="cw-message-row cw-message-row--bot">
-            <span className="cw-avatar"><BubbleLogo size="avatar" /></span>
+            <span className="cw-avatar">
+              <BubbleLogo size="avatar" />
+            </span>
             <div className="cw-typing" aria-label="Asistent odpovedá">
-              <i /><i /><i />
+              <i />
+              <i />
+              <i />
             </div>
           </div>
         ) : null}
       </div>
 
-      <div className="cw-quick-replies" aria-label="Rýchle možnosti" ref={chipsRef}>
+      <div
+        className="cw-quick-replies"
+        aria-label="Rýchle možnosti"
+        ref={chipsRef}
+        {...quickRepliesDrag}
+      >
         {QUICK_REPLIES.map(({ label, question }) => (
           <button
             type="button"
