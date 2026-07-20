@@ -86,8 +86,14 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
 
   useEffect(() => {
     if (embedMode || teaserDismissed || isOpen) return;
-    const timer = window.setTimeout(() => setTeaserVisible(true), 1_100);
-    return () => window.clearTimeout(timer);
+
+    const showTimer = window.setTimeout(() => setTeaserVisible(true), 3_000);
+    const hideTimer = window.setTimeout(() => setTeaserVisible(false), 11_500);
+
+    return () => {
+      window.clearTimeout(showTimer);
+      window.clearTimeout(hideTimer);
+    };
   }, [embedMode, isOpen, teaserDismissed]);
 
   useEffect(() => {
@@ -115,9 +121,9 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
             ×
           </button>
           <button type="button" className="cw-teaser__content" onClick={() => open("calculator")}>
-            <strong>Vyskladajte si riešenie na počkanie</strong>
+            <strong>Čo by pomohlo vášmu webu?</strong>
             <span className="cw-teaser__copy">
-              Návrh máte do minúty — alebo sa <b>poradíme</b>, čo dáva pre váš web zmysel.
+              Za minútu zistíte, aké riešenie dáva pre váš web zmysel.
             </span>
           </button>
         </aside>
