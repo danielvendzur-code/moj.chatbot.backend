@@ -31,9 +31,9 @@
   --cw-brass-hover: #d9bc84;
   --cw-sage: #7fa58f;
   --cw-sage-hover: #98baa8;
-  --cw-copper: #bc7352;
-  --cw-copper-hover: #cd8665;
-  --cw-on-copper: #07140e;
+  --cw-copper: #c47c5e;
+  --cw-copper-hover: #d18b6c;
+  --cw-on-copper: #12130f;
 
   /* línie */
   --cw-line: rgba(242, 239, 230, 0.12);
@@ -450,7 +450,10 @@ html[data-embed="true"] .widget-preview__surface {
   width: min(448px, calc(100vw - 44px));
   height: min(720px, calc(100dvh - 44px));
   border-radius: var(--cw-r-lg);
-  background: var(--cw-glass);
+  background:
+    radial-gradient(130% 70% at 50% -8%, rgba(127, 165, 143, 0.1), transparent 58%),
+    radial-gradient(90% 60% at 88% 108%, rgba(196, 124, 94, 0.06), transparent 60%),
+    var(--cw-glass);
   -webkit-backdrop-filter: var(--cw-glass-blur);
   backdrop-filter: var(--cw-glass-blur);
   border: 1px solid var(--cw-line-strong);
