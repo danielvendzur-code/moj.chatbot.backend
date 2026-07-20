@@ -46,8 +46,20 @@ const PATHS: Record<WidgetIconName, JSX.Element> = {
   chat: <path d="M4 5h16v11H9l-5 4V5Zm4 5h8m-8 3h5" />,
   check: <path d="m5 12 4 4L19 6" />,
   close: <path d="m6 6 12 12M18 6 6 18" />,
-  factory: <path d="M3 21V9l6 4V9l6 4V4h6v17H3Zm13-5h2m-2 3h2M7 16h2m-2 3h2" />,
-  food: <path d="M6 3v7m4-7v7M8 3v18M8 10c-1.6 0-3-1-3-3m6 3c1.6 0 3-1 3-3m2 14V4c2.4 1.4 4 4 4 7v4h-4" />,
+  factory: (
+    <>
+      <path d="M3 21h18" />
+      <path d="M5 21V11l5 3V11l5 3V7h3v14" />
+      <path d="M9 21v-4h3v4" />
+    </>
+  ),
+  food: (
+    <>
+      <path d="M5 3v6a2.5 2.5 0 0 0 5 0V3" />
+      <path d="M7.5 11v10" />
+      <path d="M17 3c-1.6 1-2.6 3-2.6 5.5 0 1.9 1 3.4 2.6 4.2V21" />
+    </>
+  ),
   heart: <path d="M12 20 5.2 13a4.6 4.6 0 0 1 0-6.4 4.3 4.3 0 0 1 6.2 0l.6.6.6-.6a4.3 4.3 0 0 1 6.2 0 4.6 4.6 0 0 1 0 6.4L12 20Z" />,
   mail: (
     <>

@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { CSSProperties } from "react";
 import { animateStepIn, drawCheck } from "../../lib/motion";
 import { track } from "../../lib/analytics";
 import {
@@ -221,16 +220,11 @@ export function ToolCalculator({
         >
           ‹
         </button>
-        <div className="cw-progress__dots" style={{ "--steps": STEPS.length } as CSSProperties}>
-          {STEPS.map((id, index) => (
-            <i
-              key={id}
-              className={
-                index < step ? "done" : index === step ? "active" : ""
-              }
-              data-step={index + 1}
-            />
-          ))}
+        <div className="cw-progress__track">
+          <span
+            className="cw-progress__fill"
+            style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
+          />
         </div>
         <span className="cw-progress__count">{step + 1}/{STEPS.length}</span>
       </div>
