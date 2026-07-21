@@ -1,4 +1,4 @@
-run_id=29778581969
+run_id=29818807336
 install=success
 lint=failure
 build=success
@@ -20,16 +20,16 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.40 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-DFBVJb3S.css  [39m[1m[2m 37.44 kB[22m[1m[22m[2m │ gzip:  7.89 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-DgbDVnPW.js   [39m[1m[2m219.87 kB[22m[1m[22m[2m │ gzip: 74.31 kB[22m
-[32m✓ built in 905ms[39m
+[2mdist/[22m[2massets/[22m[36mindex-C5KbzMiZ.js   [39m[1m[2m220.41 kB[22m[1m[22m[2m │ gzip: 74.49 kB[22m
+[32m✓ built in 1.13s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 91 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m 37.00 kB[22m[1m[22m[2m │ gzip:  7.77 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m217.57 kB[22m[1m[22m[2m │ gzip: 73.55 kB[22m
-[32m✓ built in 863ms[39m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m218.11 kB[22m[1m[22m[2m │ gzip: 73.75 kB[22m
+[32m✓ built in 1.10s[39m
 
 ===== test =====
 test: ‘--’: unary operator expected
