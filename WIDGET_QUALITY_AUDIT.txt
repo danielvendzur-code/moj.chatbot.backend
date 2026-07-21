@@ -1,12 +1,18 @@
-run_id=29820200685
+run_id=29820587499
 install=success
-lint=failure
+lint=success
 build=success
 test=failure
 
 ===== lint =====
-undefined
- ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command "lint" not found
+
+> site-assistant-widget@0.1.0 lint /home/runner/work/moj.chatbot.backend/moj.chatbot.backend
+> npm run check
+
+
+> site-assistant-widget@0.1.0 check
+> tsc -b --pretty false
+
 
 ===== build =====
 
@@ -21,7 +27,7 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.40 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-B0m0VY7G.css  [39m[1m[2m 45.99 kB[22m[1m[22m[2m │ gzip:  9.46 kB[22m
 [2mdist/[22m[2massets/[22m[36mindex-CmmLWF9d.js   [39m[1m[2m219.20 kB[22m[1m[22m[2m │ gzip: 74.12 kB[22m
-[32m✓ built in 970ms[39m
+[32m✓ built in 863ms[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 91 modules transformed.
@@ -29,7 +35,7 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m 37.00 kB[22m[1m[22m[2m │ gzip:  7.77 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m216.90 kB[22m[1m[22m[2m │ gzip: 73.33 kB[22m
-[32m✓ built in 957ms[39m
+[32m✓ built in 854ms[39m
 
 ===== test =====
 test: ‘--’: unary operator expected
