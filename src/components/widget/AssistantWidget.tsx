@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type PointerEvent as ReactPointerEvent,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useFocusTrap } from "../../hooks/useFocusTrap";
 import {
   installSiteAssistantGlobal,
@@ -24,13 +18,6 @@ type AssistantWidgetProps = {
   embedMode?: boolean;
 };
 
-type TabDragState = {
-  pointerId: number;
-  startX: number;
-  startY: number;
-  dragged: boolean;
-};
-
 const isPreset = (value: string | undefined): value is AssistantPreset =>
   Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));
 
@@ -42,8 +29,6 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
   const [resetToken, setResetToken] = useState(0);
   const [preset, setPreset] = useState<AssistantPreset | null>(null);
   const panelRef = useRef<HTMLElement>(null);
-  const tabDragRef = useRef<TabDragState | null>(null);
-  const suppressTabClickRef = useRef(false);
 
   const close = useCallback(() => {
     setIsOpen(false);
@@ -76,70 +61,6 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
       open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);
     },
     [open],
-  );
-
-  const handleTabPointerDown = useCallback((event: ReactPointerEvent<HTMLElement>) => {
-    if (!event.isPrimary || (event.pointerType === "mouse" && event.button !== 0)) return;
-    tabDragRef.current = {
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      startY: event.clientY,
-      dragged: false,
-    };
-    event.currentTarget.setPointerCapture?.(event.pointerId);
-  }, []);
-
-  const handleTabPointerMove = useCallback((event: ReactPointerEvent<HTMLElement>) => {
-    const drag = tabDragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) return;
-
-    const deltaX = event.clientX - drag.startX;
-    const deltaY = event.clientY - drag.startY;
-    if (!drag.dragged) {
-      if (Math.abs(deltaX) <= 7 || Math.abs(deltaX) <= Math.abs(deltaY) + 2) return;
-      drag.dragged = true;
-    }
-
-    event.preventDefault();
-  }, []);
-
-  const handleTabPointerUp = useCallback(
-    (event: ReactPointerEvent<HTMLElement>) => {
-      const drag = tabDragRef.current;
-      if (!drag || drag.pointerId !== event.pointerId) return;
-
-      if (drag.dragged) {
-        const bounds = event.currentTarget.getBoundingClientRect();
-        const nextMode: WidgetMode =
-          event.clientX < bounds.left + bounds.width / 2 ? "calculator" : "assistant";
-        suppressTabClickRef.current = true;
-        switchMode(nextMode);
-        window.setTimeout(() => {
-          suppressTabClickRef.current = false;
-        }, 120);
-      }
-
-      if (event.currentTarget.hasPointerCapture?.(event.pointerId)) {
-        event.currentTarget.releasePointerCapture(event.pointerId);
-      }
-      tabDragRef.current = null;
-    },
-    [switchMode],
-  );
-
-  const handleTabPointerCancel = useCallback((event: ReactPointerEvent<HTMLElement>) => {
-    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-    tabDragRef.current = null;
-  }, []);
-
-  const handleTabClick = useCallback(
-    (nextMode: WidgetMode) => {
-      if (suppressTabClickRef.current) return;
-      switchMode(nextMode);
-    },
-    [switchMode],
   );
 
   useEffect(() => installSiteAssistantGlobal(), []);
@@ -200,9 +121,9 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
             ×
           </button>
           <button type="button" className="cw-teaser__content" onClick={() => open("calculator")}>
-            <strong>Čo by pomohlo vášmu webu?</strong>
+            <strong>Aký chatbot by pomohol vášmu webu?</strong>
             <span className="cw-teaser__copy">
-              Za minútu zistíte, aké riešenie dáva pre váš web zmysel.
+              Za minútu si vyskladáte riešenie aj s funkciami.
             </span>
           </button>
         </aside>
@@ -233,15 +154,15 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
         >
           <header className="cw-panel-head">
             <h2 id="chameleon-widget-title" className="cw-sr-only">
-              Webový asistent a konfigurátor
+              Online chatbot a konfigurátor riešenia
             </h2>
             <span className="cw-panel-head__mascot">
               <BubbleLogo size="header" />
             </span>
             <div className="cw-panel-head__title">
-              <b>{mode === "assistant" ? "Poradiť sa" : "Vyskladať riešenie"}</b>
-              <span className="cw-panel-head__context">
-                {mode === "assistant" ? "Napíšte, s čím pomôcť" : "Krok za krokom k návrhu"}
+              <b>Webový asistent</b>
+              <span className="cw-panel-head__context cw-panel-head__online">
+                <i aria-hidden="true" /> Online
               </span>
             </div>
             <div className="cw-panel-head__actions">
@@ -271,22 +192,14 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
             <span className="cw-panel-head__beam" aria-hidden="true" />
           </header>
 
-          <nav
-            className="cw-tabs"
-            aria-label="Režim asistenta"
-            data-mode={mode}
-            onPointerDown={handleTabPointerDown}
-            onPointerMove={handleTabPointerMove}
-            onPointerUp={handleTabPointerUp}
-            onPointerCancel={handleTabPointerCancel}
-          >
+          <nav className="cw-tabs" aria-label="Režim asistenta" data-mode={mode}>
             <span className="cw-tabs__glass" aria-hidden="true" />
             <button
               type="button"
               data-testid="tab-calculator"
               data-active={mode === "calculator"}
               aria-current={mode === "calculator" ? "page" : undefined}
-              onClick={() => handleTabClick("calculator")}
+              onClick={() => switchMode("calculator")}
             >
               Vyskladať riešenie
             </button>
@@ -295,7 +208,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
               data-testid="tab-assistant"
               data-active={mode === "assistant"}
               aria-current={mode === "assistant" ? "page" : undefined}
-              onClick={() => handleTabClick("assistant")}
+              onClick={() => switchMode("assistant")}
             >
               Poradiť sa
             </button>
