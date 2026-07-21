@@ -1,4 +1,4 @@
-name: Deploy portfolio to GitHub Pages
+name: Deploy and verify chatbot
 
 on:
   push:
@@ -20,15 +20,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@v4
         with:
-          version: 11.11.0
+          version: 10
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
@@ -36,14 +36,39 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build site and embed widget
+      - name: TypeScript check
+        run: pnpm lint
+
+      - name: Run visual and security contracts
+        run: pnpm test -- --run
+
+      - name: Build demo and embedded widget
         run: pnpm build
 
+      - name: Create immutable build metadata
+        shell: bash
+        run: |
+          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"competition-20260721"},null,2))'
+
+      - name: Validate production artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f dist/index.html
+          test -f dist/widget.js
+          test -f dist/widget.css
+          test -f dist/build-meta.json
+          grep -Fq "competition-20260721" dist/widget.js
+          grep -Fqi "65e6c1" dist/widget.css
+          grep -Fqi "72c7ff" dist/widget.css
+          ! grep -Fq "REPLACE-ME" dist/widget.js
+          grep -Fq "${GITHUB_SHA}" dist/build-meta.json
+
       - name: Configure GitHub Pages
-        uses: actions/configure-pages@v6
+        uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
@@ -58,22 +83,63 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
+      - name: Verify live demo and embedded assets
+        shell: bash
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          BASE="${PAGE_URL%/}"
+
+          verify() {
+            local path="$1"
+            local expected="$2"
+            local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"
+
+            for attempt in {1..24}; do
+              if curl --location --fail --silent --show-error \
+                --header "Cache-Control: no-cache" \
+                "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then
+                if grep -Fqi "$expected" "$body"; then
+                  echo "verified ${path}"
+                  return 0
+                fi
+              fi
+              sleep 5
+            done
+
+            echo "Live verification failed for ${path}"
+            head -c 1000 "$body" 2>/dev/null || true
+            return 1
+          }
+
+          verify "/" "Webový asistent"
+          verify "/widget.js" "competition-20260721"
+          verify "/widget.css" "65e6c1"
+          verify "/build-meta.json" "$SOURCE_SHA"
+
       - name: Checkout latest main for deployment record
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
         with:
           ref: main
 
-      - name: Record successful widget deployment
+      - name: Record verified widget deployment
         shell: bash
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          SOURCE_SHA: ${{ github.sha }}
         run: |
           {
             echo "deployment=success"
-            echo "source_sha=${GITHUB_SHA}"
-            echo "page_url=${{ steps.deployment.outputs.page_url }}"
+            echo "live_smoke=success"
+            echo "source_sha=${SOURCE_SHA}"
+            echo "page_url=${PAGE_URL}"
             echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           } > PAGES_DEPLOY_AUDIT.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add PAGES_DEPLOY_AUDIT.txt
-          git commit -m "chore: record widget Pages deployment [skip widget-quality]" || exit 0
+          git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0
+          git pull --rebase origin main
           git push origin HEAD:main
