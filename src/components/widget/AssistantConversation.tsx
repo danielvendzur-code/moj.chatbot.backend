@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useHorizontalDrag } from "../../hooks/useHorizontalDrag";
 import { animateChipsIn, animateSentMessage } from "../../lib/motion";
 import { sendChat, type ChatTurn } from "../../lib/assistantApi";
 import { track } from "../../lib/analytics";
@@ -21,12 +20,12 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   {
     id: 1,
     from: "bot",
-    text: "Dobrý deň! Som váš webový asistent. Pomôžem vám vybrať chatbota alebo kalkulačku, ktorá dáva pre váš web zmysel.",
+    text: "Dobrý deň! Som váš webový asistent. Pomôžem vám vybrať chatbota na mieru — aj s kalkulačkou, konfigurátorom alebo rezerváciami.",
   },
   {
     id: 2,
     from: "bot",
-    text: "Najrýchlejšie začnete v konfigurátore — návrh riešenia máte do minúty. Alebo mi napíšte, čo má váš web zjednodušiť.",
+    text: "Najrýchlejšie začnete cez „Vyskladať riešenie“. Za minútu pripravíte zadanie, funkcie aj kontakt bez zdĺhavého formulára.",
   },
 ];
 
@@ -34,7 +33,8 @@ type QuickReply = { label: string; question: string };
 
 const QUICK_REPLIES: QuickReply[] = [
   { label: "AI chatbot", question: "Čím mi pomôže AI chatbot na webe?" },
-  { label: "Kalkulačka cien", question: "Ako funguje chatbot s kalkulačkou cien?" },
+  { label: "Kalkulačka ceny", question: "Ako funguje chatbot s kalkulačkou ceny?" },
+  { label: "Konfigurátor", question: "Ako chatbot prevedie zákazníka konfiguráciou produktu?" },
   { label: "Rezervácie", question: "Zvládne chatbot rezervácie termínov?" },
 ];
 
@@ -52,7 +52,6 @@ export function AssistantConversation({
   const replyTimerRef = useRef<number | null>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
   const chipsRef = useRef<HTMLDivElement>(null);
-  const quickRepliesDrag = useHorizontalDrag<HTMLDivElement>();
   const [planeFx, setPlaneFx] = useState(false);
   const planeTimerRef = useRef<number | null>(null);
 
@@ -168,12 +167,7 @@ export function AssistantConversation({
         ) : null}
       </div>
 
-      <div
-        className="cw-quick-replies"
-        aria-label="Rýchle možnosti"
-        ref={chipsRef}
-        {...quickRepliesDrag}
-      >
+      <div className="cw-quick-replies" aria-label="Rýchle možnosti" ref={chipsRef}>
         {QUICK_REPLIES.map(({ label, question }) => (
           <button
             type="button"
