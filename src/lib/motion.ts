@@ -20,7 +20,7 @@ export function animateStepIn(container: HTMLElement | null): void {
     scale: [0.99, 1],
     delay: stagger(32, { start: 20 }),
     duration: 380,
-    ease: "outCubic",
+    ease: "outQuad",
   });
 }
 
