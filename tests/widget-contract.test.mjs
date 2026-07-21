@@ -38,3 +38,15 @@ test("final screen visually orders contact before summary", async () => {
   assert.match(css, /> \.cw-lead \{ order: 1; \}/);
   assert.match(css, /> \.cw-summary \{ order: 2;/);
 });
+
+test("quick replies do not drag horizontally and wrap on mobile", async () => {
+  const conversation = await read("src/components/widget/AssistantConversation.tsx");
+  const polish = await read("src/world-class-polish.css");
+  const main = await read("src/main.tsx");
+  assert.doesNotMatch(conversation, /useHorizontalDrag|quickRepliesDrag/);
+  assert.match(conversation, /Konfigurátor/);
+  assert.match(polish, /\.cw-quick-replies[\s\S]*?flex-wrap:\s*wrap/i);
+  assert.match(polish, /touch-action:\s*pan-y/i);
+  assert.match(polish, /font-size:\s*16px !important/i);
+  assert.match(main, /world-class-polish\.css/);
+});
