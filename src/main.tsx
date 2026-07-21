@@ -6,6 +6,7 @@ import { installWidgetRailDrag } from "./lib/widgetRailDrag";
 import "./widget.css";
 import "./interaction.css";
 import "./requested-polish.css";
+import "./world-class-polish.css";
 
 if (isEmbedMode()) {
   document.documentElement.dataset.embed = "true";
