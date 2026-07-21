@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build --base=/moj.chatbot.backend/ && vite build --config vite.embed.config.ts",
     "preview": "vite preview",
     "serve:dist": "node scripts/serve-dist.mjs",
-    "check": "tsc -b --pretty false"
+    "check": "tsc -b --pretty false",
+    "lint": "npm run check"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.68.0",
