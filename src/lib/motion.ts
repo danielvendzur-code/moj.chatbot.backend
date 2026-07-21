@@ -5,7 +5,7 @@ const prefersReducedMotion = (): boolean =>
 
 const SPRING = createSpring({ mass: 1, stiffness: 190, damping: 16, velocity: 0 });
 
-/* Karty kroku nabehnú postupne s pružinou (inšpirované anime.js stagger grid demami). */
+/* Kroky sa zobrazia pokojne zdola. Bez bočného presunu a bez prehnaného pruženia. */
 export function animateStepIn(container: HTMLElement | null): void {
   if (!container || prefersReducedMotion()) return;
   const targets = Array.from(
@@ -16,12 +16,11 @@ export function animateStepIn(container: HTMLElement | null): void {
   if (targets.length === 0) return;
   animate(targets, {
     opacity: [0, 1],
-    translateY: [16, 0],
-    translateX: [26, 0],
-    scale: [0.985, 1],
-    delay: stagger(55, { start: 40 }),
-    duration: 620,
-    ease: SPRING,
+    translateY: [8, 0],
+    scale: [0.99, 1],
+    delay: stagger(32, { start: 20 }),
+    duration: 380,
+    ease: "outCubic",
   });
 }
 
