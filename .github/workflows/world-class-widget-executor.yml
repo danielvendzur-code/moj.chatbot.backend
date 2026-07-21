@@ -13,7 +13,7 @@ jobs:
   execute:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,10 +25,14 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - name: Extract and run verified refactor
+      - name: Install, refactor, verify and publish
+        shell: bash
         run: |
-          python <<'PY'
+          set +e
+          pnpm install --frozen-lockfile > /tmp/install.log 2>&1
+          INSTALL=$?
+
+          python <<'PY' > /tmp/extract.log 2>&1
           from pathlib import Path
           source = Path('.github/workflows/world-class-widget-refactor.yml').read_text()
           start = source.index("          python <<'PY'\n") + len("          python <<'PY'\n")
@@ -37,20 +41,58 @@ jobs:
           script = "\n".join(line[10:] if line.startswith("          ") else line for line in lines) + "\n"
           Path('/tmp/widget-refactor.py').write_text(script)
           PY
-          python /tmp/widget-refactor.py
-      - name: Format
-        run: pnpm exec prettier --write src/components/widget/AssistantConversation.tsx src/components/widget/ToolCalculator.tsx src/requested-polish.css tests/widget-contract.test.mjs
-      - name: Type check
-        run: pnpm lint
-      - name: Contract tests
-        run: pnpm test -- --run
-      - name: Production build
-        run: pnpm build
-      - name: Commit and safely publish
-        run: |
+          EXTRACT=$?
+
+          if [ "$EXTRACT" -eq 0 ]; then
+            python /tmp/widget-refactor.py > /tmp/refactor.log 2>&1
+            REFACTOR=$?
+          else
+            REFACTOR=99
+          fi
+
+          if [ "$REFACTOR" -eq 0 ]; then
+            pnpm exec prettier --write src/components/widget/AssistantConversation.tsx src/components/widget/ToolCalculator.tsx src/requested-polish.css tests/widget-contract.test.mjs > /tmp/format.log 2>&1
+            FORMAT=$?
+            pnpm lint > /tmp/lint.log 2>&1
+            LINT=$?
+            pnpm test -- --run > /tmp/test.log 2>&1
+            TEST=$?
+            pnpm build > /tmp/build.log 2>&1
+            BUILD=$?
+          else
+            FORMAT=99
+            LINT=99
+            TEST=99
+            BUILD=99
+          fi
+
+          {
+            echo "install=$INSTALL"
+            echo "extract=$EXTRACT"
+            echo "refactor=$REFACTOR"
+            echo "format=$FORMAT"
+            echo "lint=$LINT"
+            echo "test=$TEST"
+            echo "build=$BUILD"
+            for name in install extract refactor format lint test build; do
+              echo
+              echo "===== $name ====="
+              cat "/tmp/$name.log" 2>/dev/null || true
+            done
+          } > WIDGET_REFACTOR_EXECUTION.txt
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "refactor: make widget flow direct, stable and mobile-first [skip widget-quality]"
+          git add WIDGET_REFACTOR_EXECUTION.txt
+
+          if [ "$INSTALL" -eq 0 ] && [ "$EXTRACT" -eq 0 ] && [ "$REFACTOR" -eq 0 ] && [ "$FORMAT" -eq 0 ] && [ "$LINT" -eq 0 ] && [ "$TEST" -eq 0 ] && [ "$BUILD" -eq 0 ]; then
+            git add -A
+            MESSAGE="refactor: make widget flow direct, stable and mobile-first [skip widget-quality]"
+          else
+            git reset .github/workflows/world-class-widget-executor.yml 2>/dev/null || true
+            MESSAGE="chore: record widget refactor execution [skip widget-quality]"
+          fi
+
+          git commit -m "$MESSAGE" || true
           git pull --rebase origin main
           git push origin HEAD:main
