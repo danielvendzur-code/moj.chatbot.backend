@@ -9,6 +9,7 @@ import "./requested-polish.css";
 import "./world-class-polish.css";
 import "./competition-widget.css";
 import "./selection-border-polish.css";
+import "./flow-content-polish.css";
 
 if (isEmbedMode()) {
   document.documentElement.dataset.embed = "true";
