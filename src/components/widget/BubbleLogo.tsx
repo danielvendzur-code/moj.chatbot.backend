@@ -2,48 +2,37 @@ type BubbleLogoProps = {
   size: "launcher" | "header" | "avatar";
 };
 
-let gradientCounter = 0;
-
-const BUBBLE_PATH =
-  "M15 7h18a11 11 0 0 1 11 11v7a11 11 0 0 1-11 11h-9.6l-8.3 6.9c-.65.54-1.64.08-1.64-.77v-6.75A11 11 0 0 1 4 25v-7A11 11 0 0 1 15 7Z";
-
-/*
- * Emblém asistenta (paleta Forest Night): chatová bublina
- * v starej mosadzi, tmavé lesné bodky, jemný ivory záblesk.
- * Tieň ostáva lacný duplikovaný path (žiadny SVG filter).
- */
+/** The same robot-in-a-bubble mark used by the portfolio navigation. */
 export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
-  const uid = `bl${++gradientCounter}`;
-
   return (
     <span className={`bl bl--${size}`} aria-hidden="true">
       <svg viewBox="0 0 48 48" focusable="false">
-        <defs>
-          <linearGradient id={`${uid}-body`} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#d9bc84" />
-            <stop offset="100%" stopColor="#c9aa70" />
-          </linearGradient>
-          <linearGradient id={`${uid}-glint`} x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#fdf7e9" stopOpacity="0" />
-            <stop offset="50%" stopColor="#fdf7e9" stopOpacity="0.7" />
-            <stop offset="100%" stopColor="#fdf7e9" stopOpacity="0" />
-          </linearGradient>
-          <clipPath id={`${uid}-clip`}>
-            <path d={BUBBLE_PATH} />
-          </clipPath>
-        </defs>
-        {/* lacný tieň — posunutá tmavá kópia */}
-        <path d={BUBBLE_PATH} transform="translate(0 1.1)" fill="#000000" opacity="0.32" />
-        {/* telo bubliny — mosadzný gradient */}
-        <path fill={`url(#${uid}-body)`} d={BUBBLE_PATH} />
-        {/* diskrétny záblesk svetla — orezaný na tvar bubliny */}
-        <g clipPath={`url(#${uid}-clip)`}>
-          <rect className="bl__glint" x="-16" y="2" width="13" height="44" fill={`url(#${uid}-glint)`} />
-        </g>
-        {/* tmavé bodky — jemný nádych rieši widget.css */}
-        <circle className="bl__dot" cx="15.4" cy="21.7" r="2.7" />
-        <circle className="bl__dot" cx="24" cy="21.7" r="2.7" />
-        <circle className="bl__dot" cx="32.6" cy="21.7" r="2.7" />
+        <path d="M24 7V4.5" stroke="#3478f6" strokeWidth="2.6" strokeLinecap="round" />
+        <circle cx="24" cy="3" r="2.6" fill="#3478f6" />
+        <path
+          d="M14 6.5h20c6.2 0 10 3.8 10 10V27c0 6.2-3.8 10-10 10h-9.5L15 44.5V37C8.1 36.5 4 32.8 4 26.5v-10c0-6.2 3.8-10 10-10Z"
+          fill="#f7f9fc"
+        />
+        <rect x="9" y="13" width="30" height="19" rx="9.5" fill="#3478f6" />
+        <path
+          d="M14 16.8c2.1-1.5 4.6-2.2 7.5-2.2h5.8"
+          stroke="#ffffff"
+          strokeOpacity="0.45"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
+        <ellipse cx="18" cy="22" rx="2.3" ry="2.7" fill="#050609" />
+        <ellipse cx="30" cy="22" rx="2.3" ry="2.7" fill="#050609" />
+        <circle cx="18.8" cy="21" r="0.7" fill="#ffffff" />
+        <circle cx="30.8" cy="21" r="0.7" fill="#ffffff" />
+        <path
+          d="M18 27c1.6 1.2 3.6 1.8 6 1.8s4.4-.6 6-1.8"
+          stroke="#050609"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+        />
+        <circle cx="8.6" cy="22.5" r="1.6" fill="#3478f6" />
+        <circle cx="39.4" cy="22.5" r="1.6" fill="#3478f6" />
       </svg>
     </span>
   );

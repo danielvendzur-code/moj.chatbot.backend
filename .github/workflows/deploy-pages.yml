@@ -51,7 +51,7 @@ jobs:
       - name: Create immutable build metadata
         shell: bash
         run: |
-          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"competition-20260721"},null,2))'
+          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"black-blue-20260722"},null,2))'
 
       - name: Validate production artifacts
         shell: bash
@@ -61,9 +61,9 @@ jobs:
           test -f dist/widget.js
           test -f dist/widget.css
           test -f dist/build-meta.json
-          grep -Fq "competition-20260721" dist/widget.js
-          grep -Fqi "65e6c1" dist/widget.css
-          grep -Fqi "72c7ff" dist/widget.css
+          grep -Fq "black-blue-20260722" dist/widget.js
+          grep -Fqi "3478f6" dist/widget.css
+          grep -Fqi "1f55c9" dist/widget.css
           ! grep -Fq "REPLACE-ME" dist/widget.js
           grep -Fq "${GITHUB_SHA}" dist/build-meta.json
 
@@ -118,8 +118,8 @@ jobs:
           }
 
           verify "/" "Webový asistent"
-          verify "/widget.js" "competition-20260721"
-          verify "/widget.css" "65e6c1"
+          verify "/widget.js" "black-blue-20260722"
+          verify "/widget.css" "3478f6"
           verify "/build-meta.json" "$SOURCE_SHA"
 
       - name: Checkout latest main for deployment record

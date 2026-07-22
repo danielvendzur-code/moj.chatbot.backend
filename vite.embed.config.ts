@@ -1,11 +1,11 @@
-import { defineConfig } from "vite";
+import type { UserConfig } from "vite";
 
 /*
  * Build vložiteľného widgetu: dist/widget.js + dist/widget.css.
  * Beží po hlavnom builde (emptyOutDir: false), takže Pages nesie
  * demo stránku aj embed súbory z jedného priečinka.
  */
-export default defineConfig({
+const config: UserConfig = {
   define: {
     "process.env.NODE_ENV": JSON.stringify("production"),
   },
@@ -26,4 +26,6 @@ export default defineConfig({
       },
     },
   },
-});
+};
+
+export default config;

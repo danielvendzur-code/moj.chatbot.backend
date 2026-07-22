@@ -243,7 +243,6 @@ export function ToolCalculator({
                     <button
                       type="button"
                       className="cw-rowcard"
-                      data-glide
                       data-testid={`interest-${option.id}`}
                       data-selected={selected}
                       aria-pressed={selected}
@@ -253,9 +252,7 @@ export function ToolCalculator({
                       <span className="cw-rowcard__icon"><WidgetIcon name={option.icon} /></span>
                       <span className="cw-rowcard__body">
                         <b>{option.label}</b>
-                        <span>{option.description}</span>
                       </span>
-                      {option.badge ? <em className="cw-rowcard__badge">{option.badge}</em> : null}
                     </button>
                   );
                 })}

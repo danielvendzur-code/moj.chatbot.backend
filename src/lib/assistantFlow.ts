@@ -62,7 +62,7 @@ export type InterestOption = {
 export const INTERESTS: InterestOption[] = [
   {
     id: "chatbot",
-    label: "AI chatbot a dopyty",
+    label: "AI chatbot",
     description: "Odpovedá návštevníkom 24/7, poradí a pripraví použiteľný dopyt.",
     icon: "chat",
   },
