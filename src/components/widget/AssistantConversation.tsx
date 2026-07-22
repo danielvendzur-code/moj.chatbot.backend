@@ -34,7 +34,6 @@ type QuickReply = { label: string; question: string };
 const QUICK_REPLIES: QuickReply[] = [
   { label: "AI chatbot", question: "Čím mi pomôže AI chatbot na webe?" },
   { label: "Kalkulačka ceny", question: "Ako funguje chatbot s kalkulačkou ceny?" },
-  { label: "Konfigurátor", question: "Ako chatbot prevedie zákazníka konfiguráciou produktu?" },
   { label: "Rezervácie", question: "Zvládne chatbot rezervácie termínov?" },
 ];
 

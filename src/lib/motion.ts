@@ -3,9 +3,7 @@ import { animate, createSpring, stagger, svg } from "animejs";
 const prefersReducedMotion = (): boolean =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const SPRING = createSpring({ mass: 1, stiffness: 190, damping: 16, velocity: 0 });
-
-/* Karty kroku nabehnú postupne s pružinou (inšpirované anime.js stagger grid demami). */
+/* Builder choices use a short, quiet entrance without spring or sideways movement. */
 export function animateStepIn(container: HTMLElement | null): void {
   if (!container || prefersReducedMotion()) return;
   const targets = Array.from(
@@ -16,27 +14,26 @@ export function animateStepIn(container: HTMLElement | null): void {
   if (targets.length === 0) return;
   animate(targets, {
     opacity: [0, 1],
-    translateY: [16, 0],
-    translateX: [26, 0],
-    scale: [0.985, 1],
-    delay: stagger(55, { start: 40 }),
-    duration: 620,
-    ease: SPRING,
+    translateY: [5, 0],
+    scale: [0.99, 1],
+    delay: stagger(18, { start: 20 }),
+    duration: 260,
+    ease: "outCubic",
   });
 }
 
-/* Chipy vyskočia po jednom. */
+/* Quick choices arrive quietly; no springy scale or scattered motion. */
 export function animateChipsIn(container: HTMLElement | null): void {
   if (!container || prefersReducedMotion()) return;
   const targets = Array.from(container.querySelectorAll(":scope > .cw-chip")) as HTMLElement[];
   if (targets.length === 0) return;
   animate(targets, {
     opacity: [0, 1],
-    translateY: [10, 0],
-    scale: [0.7, 1],
-    delay: stagger(70, { start: 120 }),
-    duration: 640,
-    ease: SPRING,
+    translateY: [6, 0],
+    scale: [0.98, 1],
+    delay: stagger(45, { start: 70 }),
+    duration: 320,
+    ease: "outCubic",
   });
 }
 

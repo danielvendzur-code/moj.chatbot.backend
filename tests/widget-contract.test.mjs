@@ -4,14 +4,14 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("final visual system uses mint actions, blue interactions and red only for close", async () => {
-  const css = await read("src/competition-widget.css");
-  assert.match(css, /--cw-action:\s*#65e6c1/i);
-  assert.match(css, /--cw-action-hover:\s*#83f1d0/i);
-  assert.match(css, /--cw-cyan:\s*#72c7ff/i);
-  assert.match(css, /--cw-danger:\s*#ff6c67/i);
-  assert.match(css, /\.cw-panel-head__actions \.cw-panel-head__close:hover[\s\S]*?var\(--cw-danger\)/i);
-  assert.doesNotMatch(css, /#c9aa70|#c47c5e|#d9bc84/i);
+test("final visual system uses black, white and blue with a darker blue hover", async () => {
+  const css = await read("src/black-blue-refresh.css");
+  assert.match(css, /--cw-bg:\s*#050609/i);
+  assert.match(css, /--cw-ink:\s*#f7f9fc/i);
+  assert.match(css, /--cw-action:\s*#3478f6/i);
+  assert.match(css, /--cw-action-hover:\s*#1f55c9/i);
+  assert.match(css, /\.cw-panel-head__actions \.cw-panel-head__close:hover[\s\S]*?background:\s*#1f55c9/i);
+  assert.doesNotMatch(css, /#65e6c1|#83f1d0|#72c7ff|#ff6c67|#c9aa70|#c47c5e|#d9bc84/i);
 });
 
 test("demo and embedded builds import the identical final style stack", async () => {
@@ -23,13 +23,14 @@ test("demo and embedded builds import the identical final style stack", async ()
     "requested-polish.css",
     "world-class-polish.css",
     "competition-widget.css",
+    "black-blue-refresh.css",
   ];
   for (const stylesheet of expected) {
     assert.match(main, new RegExp(stylesheet.replace(".", "\\.")));
     assert.match(embed, new RegExp(stylesheet.replace(".", "\\.")));
   }
   assert.match(embed, /data-dv-assistant-version/);
-  assert.match(embed, /competition-20260721/);
+  assert.match(embed, /black-blue-20260722/);
 });
 
 test("mode tabs switch directly and expose online state", async () => {
@@ -60,10 +61,13 @@ test("final screen visually orders contact before summary", async () => {
 
 test("quick replies never drag sideways and mobile inputs prevent browser zoom", async () => {
   const conversation = await read("src/components/widget/AssistantConversation.tsx");
-  const css = await read("src/competition-widget.css");
+  const css = await read("src/black-blue-refresh.css");
   assert.doesNotMatch(conversation, /useHorizontalDrag|quickRepliesDrag/);
-  assert.match(conversation, /Konfigurátor/);
-  assert.match(css, /\.cw-quick-replies[\s\S]*?flex-wrap:\s*wrap/i);
+  assert.doesNotMatch(conversation, /label:\s*"Konfigurátor"/);
+  const replies = conversation.match(/const QUICK_REPLIES[\s\S]*?\n\];/)?.[0] ?? "";
+  assert.equal((replies.match(/label:/g) ?? []).length, 3);
+  assert.match(conversation, /cw-chip cw-chip--primary[\s\S]*?Vyskladať riešenie/);
+  assert.match(css, /\.cw-quick-replies[\s\S]*?grid-template-columns:\s*repeat\(2/i);
   assert.match(css, /touch-action:\s*pan-y/i);
   assert.match(css, /font-size:\s*16px !important/i);
   assert.match(css, /height:\s*100dvh !important/i);
@@ -96,7 +100,7 @@ test("server API enforces origins, JSON, body limits, rate limits and upstream t
 });
 
 test("final styles cover every major chatbot surface and reduced motion", async () => {
-  const css = await read("src/competition-widget.css");
+  const css = await read("src/black-blue-refresh.css");
   for (const selector of [
     ".cw-launcher",
     ".cw-teaser",
