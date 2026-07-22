@@ -6,6 +6,7 @@ import "./requested-polish.css";
 import "./world-class-polish.css";
 import "./competition-widget.css";
 import "./selection-border-polish.css";
+import "./flow-content-polish.css";
 
 const HOST_ID = "dv-assistant-root";
 const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
@@ -32,7 +33,7 @@ function mount(): void {
   ensureStylesheet();
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "competition-20260721");
+  host.setAttribute("data-dv-assistant-version", "repair-20260722-v2");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);
