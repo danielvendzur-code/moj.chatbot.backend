@@ -1,0 +1,6 @@
+/* The third summary row belongs to the retired priority step. The component
+   keeps it temporarily for backwards-compatible state, but it must not appear
+   in the current six-step flow. */
+.cw-widget .cw-summary > .cw-summary__row:nth-of-type(3) {
+  display: none !important;
+}
