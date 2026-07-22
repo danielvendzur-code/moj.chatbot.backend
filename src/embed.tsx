@@ -5,6 +5,7 @@ import "./interaction.css";
 import "./requested-polish.css";
 import "./world-class-polish.css";
 import "./competition-widget.css";
+import "./selection-border-polish.css";
 
 const HOST_ID = "dv-assistant-root";
 const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
