@@ -1,4 +1,4 @@
-run_id=30048048224
+run_id=30049252347
 install=success
 lint=success
 build=success
@@ -25,17 +25,17 @@ transforming...
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
-[2mdist/[22m[2massets/[22m[35mindex-Bx-F-Vrc.css  [39m[1m[2m 24.25 kB[22m[1m[22m[2m │ gzip:  5.46 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-C0dfojsu.js   [39m[1m[2m215.25 kB[22m[1m[22m[2m │ gzip: 72.76 kB[22m
-[32m✓ built in 1.11s[39m
+[2mdist/[22m[2massets/[22m[35mindex-BLl3NXpy.css  [39m[1m[2m 35.79 kB[22m[1m[22m[2m │ gzip:  7.67 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-wx_v-9qI.js   [39m[1m[2m216.11 kB[22m[1m[22m[2m │ gzip: 72.94 kB[22m
+[32m✓ built in 1.10s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 93 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[35mwidget.css  [39m[1m[2m 24.25 kB[22m[1m[22m[2m │ gzip:  5.46 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m215.02 kB[22m[1m[22m[2m │ gzip: 72.70 kB[22m
-[32m✓ built in 1.06s[39m
+[2mdist/[22m[35mwidget.css  [39m[1m[2m 35.79 kB[22m[1m[22m[2m │ gzip:  7.67 kB[22m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m215.88 kB[22m[1m[22m[2m │ gzip: 72.89 kB[22m
+[32m✓ built in 1.04s[39m
 
 ===== test =====
 
@@ -46,75 +46,93 @@ TAP version 13
 # Subtest: demo and embed load one foundation and one authoritative redesign
 ok 1 - demo and embed load one foundation and one authoritative redesign
   ---
-  duration_ms: 6.697741
+  duration_ms: 6.837119
   type: 'test'
   ...
-# Subtest: assistant order remains direct for non-technical business owners
-ok 2 - assistant order remains direct for non-technical business owners
+# Subtest: assistant order and interactive send feedback remain explicit
+ok 2 - assistant order and interactive send feedback remain explicit
   ---
-  duration_ms: 1.047478
+  duration_ms: 1.765565
+  type: 'test'
+  ...
+# Subtest: panel has the corrected premium desktop proportions
+ok 3 - panel has the corrected premium desktop proportions
+  ---
+  duration_ms: 1.056601
   type: 'test'
   ...
 # Subtest: mode switch is one rounded segmented control without pill geometry
-ok 3 - mode switch is one rounded segmented control without pill geometry
+ok 4 - mode switch is one rounded segmented control without pill geometry
   ---
-  duration_ms: 1.873413
+  duration_ms: 1.230865
   type: 'test'
   ...
 # Subtest: the redesign uses only the website black and blue palette
-ok 4 - the redesign uses only the website black and blue palette
+ok 5 - the redesign uses only the website black and blue palette
   ---
-  duration_ms: 0.897209
+  duration_ms: 2.417513
   type: 'test'
   ...
-# Subtest: only primary CTAs and real quick chips use full oval geometry
-ok 5 - only primary CTAs and real quick chips use full oval geometry
+# Subtest: primary actions, quick chips and composer use intentional geometry
+ok 6 - primary actions, quick chips and composer use intentional geometry
   ---
-  duration_ms: 0.921635
+  duration_ms: 1.319088
   type: 'test'
   ...
-# Subtest: calculator choices use balanced grids and one selected system
-ok 6 - calculator choices use balanced grids and one selected system
+# Subtest: fillout chips and send button have restrained motion states
+ok 7 - fillout chips and send button have restrained motion states
   ---
-  duration_ms: 1.802239
+  duration_ms: 1.015388
+  type: 'test'
+  ...
+# Subtest: calculator choices use balanced grids, expressive visuals and one selected system
+ok 8 - calculator choices use balanced grids, expressive visuals and one selected system
+  ---
+  duration_ms: 1.471029
   type: 'test'
   ...
 # Subtest: selection indicator is one real aligned circular check
-ok 7 - selection indicator is one real aligned circular check
+ok 9 - selection indicator is one real aligned circular check
   ---
-  duration_ms: 1.52219
+  duration_ms: 1.282072
   type: 'test'
   ...
-# Subtest: icons form one custom rounded line family
-ok 8 - icons form one custom rounded line family
+# Subtest: icons remain one custom rounded line family
+ok 10 - icons remain one custom rounded line family
   ---
-  duration_ms: 1.042591
+  duration_ms: 1.457308
+  type: 'test'
+  ...
+# Subtest: chat and configurator motion remain reduced-motion safe
+ok 11 - chat and configurator motion remain reduced-motion safe
+  ---
+  duration_ms: 1.103402
   type: 'test'
   ...
 # Subtest: configurator remains five short steps with explicit selection guidance
-ok 9 - configurator remains five short steps with explicit selection guidance
+ok 12 - configurator remains five short steps with explicit selection guidance
   ---
-  duration_ms: 1.181564
+  duration_ms: 0.971382
   type: 'test'
   ...
 # Subtest: contact submits a real lead and keeps API protections
-ok 10 - contact submits a real lead and keeps API protections
+ok 13 - contact submits a real lead and keeps API protections
   ---
-  duration_ms: 1.5015
+  duration_ms: 1.098734
   type: 'test'
   ...
-# Subtest: mobile full screen, safe areas and reduced motion remain safe
-ok 11 - mobile full screen, safe areas and reduced motion remain safe
+# Subtest: mobile full screen, safe areas and keyboard constraints remain safe
+ok 14 - mobile full screen, safe areas and keyboard constraints remain safe
   ---
-  duration_ms: 0.793198
+  duration_ms: 0.88408
   type: 'test'
   ...
-1..11
-# tests 11
+1..14
+# tests 14
 # suites 0
-# pass 11
+# pass 14
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 73.957919
+# duration_ms 80.230774
