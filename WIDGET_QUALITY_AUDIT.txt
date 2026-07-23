@@ -1,8 +1,8 @@
-run_id=30009849654
+run_id=30009926168
 install=success
 lint=success
 build=success
-test=success
+test=failure
 
 ===== lint =====
 
@@ -21,21 +21,21 @@ test=success
 
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 103 modules transformed.
+[32m✓[39m 104 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.39 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-BR5LY9uO.css  [39m[1m[2m113.76 kB[22m[1m[22m[2m │ gzip: 18.22 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-mUunjVB2.js   [39m[1m[2m220.20 kB[22m[1m[22m[2m │ gzip: 74.66 kB[22m
-[32m✓ built in 1.02s[39m
+[2mdist/[22m[2massets/[22m[36mindex-0iKppBE5.js   [39m[1m[2m222.75 kB[22m[1m[22m[2m │ gzip: 75.52 kB[22m
+[32m✓ built in 1.24s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 99 modules transformed.
+[32m✓[39m 100 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m113.76 kB[22m[1m[22m[2m │ gzip: 18.22 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m218.17 kB[22m[1m[22m[2m │ gzip: 73.96 kB[22m
-[32m✓ built in 965ms[39m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m220.72 kB[22m[1m[22m[2m │ gzip: 74.88 kB[22m
+[32m✓ built in 1.13s[39m
 
 ===== test =====
 
@@ -46,81 +46,258 @@ TAP version 13
 # Subtest: final visual system keeps the shared black, white and blue palette
 ok 1 - final visual system keeps the shared black, white and blue palette
   ---
-  duration_ms: 6.664196
+  duration_ms: 8.482087
   type: 'test'
   ...
 # Subtest: demo and embedded builds import the identical final style stack
-ok 2 - demo and embedded builds import the identical final style stack
+not ok 2 - demo and embedded builds import the identical final style stack
   ---
-  duration_ms: 1.209579
+  duration_ms: 2.438081
   type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:23:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /professional-chips-20260723/. Input:
+    
+    'import { createRoot } from "react-dom/client";\n' +
+      'import { AssistantWidget } from "./components/widget/AssistantWidget";\n' +
+      'import { installLiquidSegmentedDrag } from "./lib/liquidSegmentedDrag";\n' +
+      'import "./widget.css";\n' +
+      'import "./interaction.css";\n' +
+      'import "./requested-polish.css";\n' +
+      'import "./world-class-polish.css";\n' +
+      'import "./competition-widget.css";\n' +
+      'import "./flow-content-polish.css";\n' +
+      'import "./black-blue-refresh.css";\n' +
+      'import "./premium-liquid-final.css";\n' +
+      'import "./chip-refinement-final.css";\n' +
+      '\n' +
+      'const HOST_ID = "dv-assistant-root";\n' +
+      'const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";\n' +
+      '\n' +
+      'function ensureStylesheet(): void {\n' +
+      '  if (!scriptSrc) return;\n' +
+      '  const href = scriptSrc.replace(/widget\\.js(\\?.*)?$/, "widget.css$1");\n' +
+      '  if (href === scriptSrc) return;\n' +
+      '  if (document.querySelector(`link[data-dv-assistant-styles="true"]`)) return;\n' +
+      '\n' +
+      '  const link = document.createElement("link");\n' +
+      '  link.rel = "stylesheet";\n' +
+      '  link.href = href;\n' +
+      '  link.crossOrigin = "anonymous";\n' +
+      '  link.referrerPolicy = "strict-origin-when-cross-origin";\n' +
+      '  link.dataset.dvAssistantStyles = "true";\n' +
+      '  document.head.appendChild(link);\n' +
+      '}\n' +
+      '\n' +
+      'function mount(): void {\n' +
+      '  const existing = document.getElementById(HOST_ID);\n' +
+      '  if (existing?.childElementCount) return;\n' +
+      '\n' +
+      '  ensureStylesheet();\n' +
+      '  installLiquidSegmentedDrag();\n' +
+      '  const host = existing ?? document.createElement("div");\n' +
+      '  host.id = HOST_ID;\n' +
+      '  host.setAttribute("data-dv-assistant-version", "apple-liquid-controls-20260723");\n' +
+      '\n' +
+      '  const siteFont = window.getComputedStyle(document.body).fontFamily;\n' +
+      '  if (siteFont) host.style.setProperty("--cw-font", siteFont);\n' +
+      '  if (!existing) document.body.appendChild(host);\n' +
+      '\n' +
+      '  createRoot(host).render(<AssistantWidget />);\n' +
+      '}\n' +
+      '\n' +
+      'if (document.readyState === "loading") {\n' +
+      '  document.addEventListener("DOMContentLoaded", mount, { once: true });\n' +
+      '} else {\n' +
+      '  mount();\n' +
+      '}\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    import { createRoot } from "react-dom/client";
+    import { AssistantWidget } from "./components/widget/AssistantWidget";
+    import { installLiquidSegmentedDrag } from "./lib/liquidSegmentedDrag";
+    import "./widget.css";
+    import "./interaction.css";
+    import "./requested-polish.css";
+    import "./world-class-polish.css";
+    import "./competition-widget.css";
+    import "./flow-content-polish.css";
+    import "./black-blue-refresh.css";
+    import "./premium-liquid-final.css";
+    import "./chip-refinement-final.css";
+    
+    const HOST_ID = "dv-assistant-root";
+    const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
+    
+    function ensureStylesheet(): void {
+      if (!scriptSrc) return;
+      const href = scriptSrc.replace(/widget\.js(\?.*)?$/, "widget.css$1");
+      if (href === scriptSrc) return;
+      if (document.querySelector(`link[data-dv-assistant-styles="true"]`)) return;
+    
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = href;
+      link.crossOrigin = "anonymous";
+      link.referrerPolicy = "strict-origin-when-cross-origin";
+      link.dataset.dvAssistantStyles = "true";
+      document.head.appendChild(link);
+    }
+    
+    function mount(): void {
+      const existing = document.getElementById(HOST_ID);
+      if (existing?.childElementCount) return;
+    
+      ensureStylesheet();
+      installLiquidSegmentedDrag();
+      const host = existing ?? document.createElement("div");
+      host.id = HOST_ID;
+      host.setAttribute("data-dv-assistant-version", "apple-liquid-controls-20260723");
+    
+      const siteFont = window.getComputedStyle(document.body).fontFamily;
+      if (siteFont) host.style.setProperty("--cw-font", siteFont);
+      if (!existing) document.body.appendChild(host);
+    
+      createRoot(host).render(<AssistantWidget />);
+    }
+    
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", mount, { once: true });
+    } else {
+      mount();
+    }
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:50:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 # Subtest: AI Assistant identity and vector mascot are consistent
 ok 3 - AI Assistant identity and vector mascot are consistent
   ---
-  duration_ms: 1.248518
+  duration_ms: 2.647954
   type: 'test'
   ...
 # Subtest: mode tabs switch directly and use a liquid glass indicator
 ok 4 - mode tabs switch directly and use a liquid glass indicator
   ---
-  duration_ms: 1.590116
+  duration_ms: 2.371539
   type: 'test'
   ...
 # Subtest: builder flow omits priority and keeps contact as final step
 ok 5 - builder flow omits priority and keeps contact as final step
   ---
-  duration_ms: 1.158244
+  duration_ms: 0.996129
   type: 'test'
   ...
 # Subtest: final screen visually orders contact before summary
 ok 6 - final screen visually orders contact before summary
   ---
-  duration_ms: 0.741584
+  duration_ms: 0.633915
   type: 'test'
   ...
 # Subtest: quick replies never drag sideways and mobile inputs prevent browser zoom
 ok 7 - quick replies never drag sideways and mobile inputs prevent browser zoom
   ---
-  duration_ms: 1.191453
+  duration_ms: 1.351684
   type: 'test'
   ...
 # Subtest: chips trace the full border before filling from the centre
-ok 8 - chips trace the full border before filling from the centre
+not ok 8 - chips trace the full border before filling from the centre
   ---
-  duration_ms: 1.206786
+  duration_ms: 1.570964
   type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:114:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /1260/. Input:
+    
+    'const timers = new WeakMap<HTMLElement, number>();\n' +
+      '\n' +
+      '/** Replays the click-only border trace, then leaves enough time for the centre fill. */\n' +
+      'export function replayBorderTrace(element: HTMLElement): void {\n' +
+      '  const previousTimer = timers.get(element);\n' +
+      '  if (previousTimer) window.clearTimeout(previousTimer);\n' +
+      '\n' +
+      '  element.classList.remove("is-border-tracing");\n' +
+      '  void element.offsetWidth;\n' +
+      '  element.classList.add("is-border-tracing");\n' +
+      '\n' +
+      '  timers.set(\n' +
+      '    element,\n' +
+      '    window.setTimeout(() => {\n' +
+      '      element.classList.remove("is-border-tracing");\n' +
+      '      timers.delete(element);\n' +
+      '    }, 1420),\n' +
+      '  );\n' +
+      '}\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    const timers = new WeakMap<HTMLElement, number>();
+    
+    /** Replays the click-only border trace, then leaves enough time for the centre fill. */
+    export function replayBorderTrace(element: HTMLElement): void {
+      const previousTimer = timers.get(element);
+      if (previousTimer) window.clearTimeout(previousTimer);
+    
+      element.classList.remove("is-border-tracing");
+      void element.offsetWidth;
+      element.classList.add("is-border-tracing");
+    
+      timers.set(
+        element,
+        window.setTimeout(() => {
+          element.classList.remove("is-border-tracing");
+          timers.delete(element);
+        }, 1420),
+      );
+    }
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:121:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 # Subtest: nested chip bubbles are removed while icons remain sharp
 ok 9 - nested chip bubbles are removed while icons remain sharp
   ---
-  duration_ms: 0.941641
+  duration_ms: 1.52355
   type: 'test'
   ...
 # Subtest: chat client has a real HTTPS endpoint, timeout and deterministic outage fallback
 ok 10 - chat client has a real HTTPS endpoint, timeout and deterministic outage fallback
   ---
-  duration_ms: 0.854511
+  duration_ms: 1.034739
   type: 'test'
   ...
 # Subtest: server API enforces origins, JSON, body limits, rate limits and upstream timeout
 ok 11 - server API enforces origins, JSON, body limits, rate limits and upstream timeout
   ---
-  duration_ms: 0.702495
+  duration_ms: 0.897919
   type: 'test'
   ...
 # Subtest: premium styles cover major surfaces, chips, mobile and reduced motion
 ok 12 - premium styles cover major surfaces, chips, mobile and reduced motion
   ---
-  duration_ms: 1.200907
+  duration_ms: 2.342381
   type: 'test'
   ...
 1..12
 # tests 12
 # suites 0
-# pass 12
-# fail 0
+# pass 10
+# fail 2
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 68.243582
+# duration_ms 80.084869
+ ELIFECYCLE  Test failed. See above for more details.
