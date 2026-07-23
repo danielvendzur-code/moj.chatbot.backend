@@ -1,4 +1,4 @@
-run_id=30010340668
+run_id=30010420473
 install=success
 lint=success
 build=success
@@ -27,7 +27,7 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.38 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-BDnd_9tJ.css  [39m[1m[2m118.72 kB[22m[1m[22m[2m │ gzip: 19.07 kB[22m
 [2mdist/[22m[2massets/[22m[36mindex-s3KB39mP.js   [39m[1m[2m222.75 kB[22m[1m[22m[2m │ gzip: 75.52 kB[22m
-[32m✓ built in 1.22s[39m
+[32m✓ built in 1.37s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 101 modules transformed.
@@ -35,7 +35,7 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m118.72 kB[22m[1m[22m[2m │ gzip: 19.07 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m220.72 kB[22m[1m[22m[2m │ gzip: 74.88 kB[22m
-[32m✓ built in 1.16s[39m
+[32m✓ built in 1.34s[39m
 
 ===== test =====
 
@@ -44,2010 +44,398 @@ computing gzip size...
 
 TAP version 13
 # Subtest: final visual system keeps the shared black, white and blue palette
-not ok 1 - final visual system keeps the shared black, white and blue palette
+ok 1 - final visual system keeps the shared black, white and blue palette
   ---
-  duration_ms: 8.869617
+  duration_ms: 10.10751
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:7:1'
-  failureType: 'testCodeFailure'
-  error: |-
-    The input did not match the regular expression /#c6e1ff/i. Input:
-    
-    '/* Final Apple-inspired liquid controls for the AI Assistant. */\n' +
-      '@property --cw-professional-trace {\n' +
-      '  syntax: "<percentage>";\n' +
-      '  inherits: false;\n' +
-      '  initial-value: 0%;\n' +
-      '}\n' +
-      '\n' +
-      '@keyframes cw-professional-border-trace {\n' +
-      '  from {\n' +
-      '    --cw-professional-trace: 0%;\n' +
-      '  }\n' +
-      '  to {\n' +
-      '    --cw-professional-trace: 100%;\n' +
-      '  }\n' +
-      '}\n' +
-      '\n' +
-      '@keyframes cw-professional-centre-fill {\n' +
-      '  0%,\n' +
-      '  58% {\n' +
-      '    background-size: 0% 0%, 100% 100%, 100% 100%;\n' +
-      '  }\n' +
-      '  100% {\n' +
-      '    background-size: 235% 235%, 100% 100%, 100% 100%;\n' +
-      '  }\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget {\n' +
-      '  --cw-chip-rgb: 52, 120, 246;\n' +
-      '  --cw-chip-light-rgb: 137, 198, 255;\n' +
-      '  --cw-chip-line: rgba(185, 214, 255, 0.27);\n' +
-      '  --cw-chip-surface: rgba(9, 14, 23, 0.76);\n' +
-      '  --cw-chip-surface-strong: rgba(8, 15, 27, 0.91);\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-calculator {\n' +
-      '  --cw-chip-rgb: 35, 196, 181;\n' +
-      '  --cw-chip-light-rgb: 115, 246, 229;\n' +
-      '}\n' +
-      '\n' +
-      '/* Draggable mode switch with a slow, elastic settling motion. */\n' +
-      '.cw-widget .cw-tabs {\n' +
-      '  position: relative !important;\n' +
-      '  isolation: isolate !important;\n' +
-      '  overflow: hidden !important;\n' +
-      '  gap: 6px !important;\n' +
-      '  padding: 6px !important;\n' +
-      '  border: 1px solid rgba(185, 214, 255, 0.28) !important;\n' +
-      '  border-radius: 999px !important;\n' +
-      '  background:\n' +
-      '    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.012)),\n' +
-      '    rgba(6, 10, 17, 0.8) !important;\n' +
-      '  box-shadow:\n' +
-      '    inset 0 1px 0 rgba(255, 255, 255, 0.11),\n' +
-      '    0 18px 42px -34px rgba(52, 120, 246, 0.78) !important;\n' +
-      '  -webkit-backdrop-filter: blur(24px) saturate(150%) !important;\n' +
-      '  backdrop-filter: blur(24px) saturate(150%) !important;\n' +
-      '  touch-action: pan-y;\n' +
-      '  --cw-segment-x: 0px;\n' +
-      '  --cw-segment-stretch: 1;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-tabs[data-mode="assistant"] {\n' +
-      '  --cw-segment-x: calc(100% + 6px);\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-tabs__glass {\n' +
-      '  display: block !important;\n' +
-      '  position: absolute !important;\n' +
-      '  z-index: 0 !important;\n' +
-      '  top: 6px !important;\n' +
-      '  left: 6px !important;\n' +
-      '  width: calc((100% - 18px) / 2) !important;\n' +
-      '  height: calc(100% - 12px) !important;\n' +
-      '  border: 1px solid rgba(152, 222, 255, 0.72) !important;\n' +
-      '  border-radius: 999px !important;\n' +
-      '  background:\n' +
-      '    radial-gradient(circle at 48% -35%, rgba(255, 255, 255, 0.42), transparent 48%),\n' +
-      '    linear-gradient(145deg, rgba(35, 196, 181, 0.58), rgba(12, 92, 101, 0.52)) !important;\n' +
-      '  box-shadow:\n' +
-      '    inset 0 1px 0 rgba(255, 255, 255, 0.32),\n' +
-      '    inset 0 -10px 24px rgba(3, 39, 45, 0.25),\n' +
-      '    0 14px 34px -20px rgba(35, 196, 181, 0.86) !important;\n' +
-      '  transform: translate3d(var(--cw-segment-x), 0, 0) scaleX(var(--cw-segment-stretch)) !important;\n' +
-      '  transform-origin: center;\n' +
-      '  transition:\n' +
-      '    transform 680ms cubic-bezier(0.16, 1.28, 0.3, 1),\n' +
-      '    background 420ms ease,\n' +
-      '    border-color 420ms ease,\n' +
-      '    box-shadow 420ms ease !important;\n' +
-      '  will-change: transform;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-tabs[data-mode="assistant"] .cw-tabs__glass {\n' +
-      '  border-color: rgba(177, 215, 255, 0.7) !important;\n' +
-      '  background:\n' +
-      '    radial-gradient(circle at 48% -35%, rgba(255, 255, 255, 0.4), transparent 48%),\n' +
-      '    linear-gradient(145deg, rgba(52, 120, 246, 0.62), rgba(22, 67, 157, 0.58)) !important;\n' +
-      '  box-shadow:\n' +
-      '    inset 0 1px 0 rgba(255, 255, 255, 0.3),\n' +
-      '    inset 0 -10px 24px rgba(5, 22, 58, 0.24),\n' +
-      '    0 14px 34px -20px rgba(52, 120, 246, 0.88) !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-tabs[data-liquid-dragging="true"] .cw-tabs__glass {\n' +
-      '  transition: none !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-tabs > button {\n' +
-      '  position: relative !important;\n' +
-      '  z-index: 1 !important;\n' +
-      '  min-height: 44px !important;\n' +
-      '  border: 0 !important;\n' +
-      '  border-radius: 999px !important;\n' +
-      '  color: #aebbd0 !important;\n' +
-      '  background: transparent !important;\n' +
-      '  box-shadow: none !important;\n' +
-      '  transition: color 260ms ease, transform 260ms ease !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-tabs > button:hover,\n' +
-      '.cw-widget .cw-tabs > button:focus-visible {\n' +
-      '  color: #ffffff !important;\n' +
-      '  transform: translateY(-1px) !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-tabs > button[data-active="true"] {\n' +
-      '  color: #ffffff !important;\n' +
-      '}\n' +
-      '\n' +
-      '/* Compact calculator layout: scrolling remains a fallback, not the default. */\n' +
-      '.cw-widget .cw-panel-body {\n' +
-      '  min-height: 0 !important;\n' +
-      '  overflow: hidden !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-calculator {\n' +
-      '  display: flex !important;\n' +
-      '  flex-direction: column !important;\n' +
-      '  min-height: 0 !important;\n' +
-      '  height: 100% !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-calc-body {\n' +
-      '  flex: 1 1 auto !important;\n' +
-      '  min-height: 0 !important;\n' +
-      '  overflow-y: auto !important;\n' +
-      '  overscroll-behavior: contain;\n' +
-      '  scrollbar-width: none;\n' +
-      '  padding: 12px 13px 8px !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-calc-body::-webkit-scrollbar {\n' +
-      '  display: none;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-calc-step {\n' +
-      '  min-height: 100% !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-grid,\n' +
-      '.cw-widget .cw-rows,\n' +
-      '.cw-widget .cw-list {\n' +
-      '  gap: 8px !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-q {\n' +
-      '  margin-bottom: 3px !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-q-sub {\n' +
-      '  margin-bottom: 10px !important;\n' +
-      '}\n' +
-      '\n' +
-      '/* Shared chip and configurator card surface. */\n' +
-      '.cw-widget .cw-quick-replies .cw-chip,\n' +
-      '.cw-widget .cw-rowcard,\n' +
-      '.cw-widget .cw-scard,\n' +
-      '.cw-widget .cw-opt,\n' +
-      '.cw-widget .cw-vcard,\n' +
-      '.cw-widget .cw-feature {\n' +
-      '  position: relative !important;\n' +
-      '  isolation: isolate !important;\n' +
-      '  overflow: hidden !important;\n' +
-      '  border: 1px solid var(--cw-chip-line) !important;\n' +
-      '  color: #dce8f8 !important;\n' +
-      '  background-color: var(--cw-chip-surface) !important;\n' +
-      '  background-image:\n' +
-      '    radial-gradient(\n' +
-      '      circle at 50% 52%,\n' +
-      '      rgba(var(--cw-chip-rgb), 0.36) 0 48%,\n' +
-      '      rgba(var(--cw-chip-rgb), 0.12) 68%,\n' +
-      '      transparent 100%\n' +
-      '    ),\n' +
-      '    linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.018) 50%),\n' +
-      '    linear-gradient(135deg, rgba(16, 23, 36, 0.86), rgba(7, 11, 19, 0.84)) !important;\n' +
-      '  background-position: center !important;\n' +
-      '  background-repeat: no-repeat !important;\n' +
-      '  background-size: 0% 0%, 100% 100%, 100% 100% !important;\n' +
-      '  box-shadow:\n' +
-      '    inset 0 1px 0 rgba(255, 255, 255, 0.14),\n' +
-      '    inset 0 -1px 0 rgba(var(--cw-chip-rgb), 0.05),\n' +
-      '    0 17px 38px -32px rgba(var(--cw-chip-rgb), 0.78) !important;\n' +
-      '  -webkit-backdrop-filter: blur(22px) saturate(148%) !important;\n' +
-      '  backdrop-filter: blur(22px) saturate(148%) !important;\n' +
-      '  transform: translateY(0) translateZ(0) !important;\n' +
-      '  transition:\n' +
-      '    border-color 250ms ease,\n' +
-      '    color 250ms ease,\n' +
-      '    background-size 620ms cubic-bezier(0.16, 1, 0.3, 1),\n' +
-      '    transform 250ms cubic-bezier(0.16, 1, 0.3, 1),\n' +
-      '    box-shadow 330ms ease !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-quick-replies {\n' +
-      '  gap: 8px !important;\n' +
-      '  padding: 10px 13px 12px !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-quick-replies .cw-chip {\n' +
-      '  min-height: 42px !important;\n' +
-      '  padding: 9px 13px !important;\n' +
-      '  border-radius: 999px !important;\n' +
-      '  justify-content: center !important;\n' +
-      '  text-align: center !important;\n' +
-      '  font-size: 0.76rem !important;\n' +
-      '  font-weight: 720 !important;\n' +
-      '  line-height: 1.18 !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-quick-replies .cw-chip--primary {\n' +
-      '  border-color: rgba(143, 198, 255, 0.48) !important;\n' +
-      '  color: #edf6ff !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-rowcard {\n' +
-      '  grid-template-columns: 22px minmax(0, 1fr) !important;\n' +
-      '  gap: 10px !important;\n' +
-      '  min-height: 56px !important;\n' +
-      '  padding: 10px 13px !important;\n' +
-      '  border-radius: 17px !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-scard,\n' +
-      '.cw-widget .cw-vcard {\n' +
-      '  min-height: 72px !important;\n' +
-      '  padding: 10px 11px !important;\n' +
-      '  border-radius: 17px !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-opt,\n' +
-      '.cw-widget .cw-feature {\n' +
-      '  min-height: 54px !important;\n' +
-      '  padding: 10px 13px !important;\n' +
-      '  border-radius: 16px !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-quick-replies .cw-chip:hover,\n' +
-      '.cw-widget .cw-quick-replies .cw-chip:focus-visible,\n' +
-      '.cw-widget .cw-rowcard:hover,\n' +
-      '.cw-widget .cw-rowcard:focus-visible,\n' +
-      '.cw-widget .cw-scard:hover,\n' +
-      '.cw-widget .cw-scard:focus-visible,\n' +
-      '.cw-widget .cw-opt:hover,\n' +
-      '.cw-widget .cw-opt:focus-visible,\n' +
-      '.cw-widget .cw-vcard:hover,\n' +
-      '.cw-widget .cw-vcard:focus-visible,\n' +
-      '.cw-widget .cw-feature:hover,\n' +
-      '.cw-widget .cw-feature:focus-visible {\n' +
-      '  border-color: rgba(var(--cw-chip-light-rgb), 0.62) !important;\n' +
-      '  color: #ffffff !important;\n' +
-      '  background-size: 185% 185%, 100% 100%, 100% 100% !important;\n' +
-      '  box-shadow:\n' +
-      '    inset 0 1px 0 rgba(255, 255, 255, 0.18),\n' +
-      '    inset 0 -1px 0 rgba(var(--cw-chip-rgb), 0.08),\n' +
-      '    0 20px 44px -30px rgba(var(--cw-chip-rgb), 0.9) !important;\n' +
-      '  transform: translateY(-2px) translateZ(0) !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-rowcard[data-selected="true"],\n' +
-      '.cw-widget .cw-scard[data-selected="true"],\n' +
-      '.cw-widget .cw-opt[data-selected="true"],\n' +
-      '.cw-widget .cw-vcard[data-selected="true"],\n' +
-      '.cw-widget .cw-feature[data-selected="true"],\n' +
-      '.cw-widget .cw-feature[aria-pressed="true"] {\n' +
-      '  border-color: rgba(var(--cw-chip-light-rgb), 0.86) !important;\n' +
-      '  color: #ffffff !important;\n' +
-      '  background-color: var(--cw-chip-surface-strong) !important;\n' +
-      '  background-size: 235% 235%, 100% 100%, 100% 100% !important;\n' +
-      '  box-shadow:\n' +
-      '    inset 0 1px 0 rgba(255, 255, 255, 0.2),\n' +
-      '    inset 0 -1px 0 rgba(var(--cw-chip-rgb), 0.12),\n' +
-      '    0 22px 48px -30px rgba(var(--cw-chip-rgb), 0.98) !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-quick-replies .cw-chip.is-border-tracing,\n' +
-      '.cw-widget .cw-rowcard[data-selected="true"].is-border-tracing,\n' +
-      '.cw-widget .cw-scard[data-selected="true"].is-border-tracing,\n' +
-      '.cw-widget .cw-opt[data-selected="true"].is-border-tracing,\n' +
-      '.cw-widget .cw-vcard[data-selected="true"].is-border-tracing,\n' +
-      '.cw-widget .cw-feature[data-selected="true"].is-border-tracing,\n' +
-      '.cw-widget .cw-feature[aria-pressed="true"].is-border-tracing {\n' +
-      '  border-color: var(--cw-chip-line) !important;\n' +
-      '  background-size: 0% 0%, 100% 100%, 100% 100% !important;\n' +
-      '  animation: cw-professional-centre-fill 1160ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-chip::after,\n' +
-      '.cw-widget .cw-rowcard::after,\n' +
-      '.cw-widget .cw-scard::after,\n' +
-      '.cw-widget .cw-opt::after,\n' +
-      '.cw-widget .cw-vcard::after,\n' +
-      '.cw-widget .cw-feature::after {\n' +
-      '  content: "" !important;\n' +
-      '  position: absolute !important;\n' +
-      '  z-index: 8 !important;\n' +
-      '  inset: -1px !important;\n' +
-      '  display: block !important;\n' +
-      '  padding: 2.4px !important;\n' +
-      '  border-radius: inherit !important;\n' +
-      '  pointer-events: none !important;\n' +
-      '  opacity: 0 !important;\n' +
-      '  background: conic-gradient(\n' +
-      '    from -90deg,\n' +
-      '    rgb(var(--cw-chip-light-rgb)) 0 var(--cw-professional-trace),\n' +
-      '    transparent var(--cw-professional-trace) 100%\n' +
-      '  ) !important;\n' +
-      '  -webkit-mask:\n' +
-      '    '... 6736 more characters
-    
-  code: 'ERR_ASSERTION'
-  name: 'AssertionError'
-  expected:
-  actual: |-
-    /* Final Apple-inspired liquid controls for the AI Assistant. */
-    @property --cw-professional-trace {
-      syntax: "<percentage>";
-      inherits: false;
-      initial-value: 0%;
-    }
-    
-    @keyframes cw-professional-border-trace {
-      from {
-        --cw-professional-trace: 0%;
-      }
-      to {
-        --cw-professional-trace: 100%;
-      }
-    }
-    
-    @keyframes cw-professional-centre-fill {
-      0%,
-      58% {
-        background-size: 0% 0%, 100% 100%, 100% 100%;
-      }
-      100% {
-        background-size: 235% 235%, 100% 100%, 100% 100%;
-      }
-    }
-    
-    .cw-widget {
-      --cw-chip-rgb: 52, 120, 246;
-      --cw-chip-light-rgb: 137, 198, 255;
-      --cw-chip-line: rgba(185, 214, 255, 0.27);
-      --cw-chip-surface: rgba(9, 14, 23, 0.76);
-      --cw-chip-surface-strong: rgba(8, 15, 27, 0.91);
-    }
-    
-    .cw-widget .cw-calculator {
-      --cw-chip-rgb: 35, 196, 181;
-      --cw-chip-light-rgb: 115, 246, 229;
-    }
-    
-    /* Draggable mode switch with a slow, elastic settling motion. */
-    .cw-widget .cw-tabs {
-      position: relative !important;
-      isolation: isolate !important;
-      overflow: hidden !important;
-      gap: 6px !important;
-      padding: 6px !important;
-      border: 1px solid rgba(185, 214, 255, 0.28) !important;
-      border-radius: 999px !important;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.012)),
-        rgba(6, 10, 17, 0.8) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.11),
-        0 18px 42px -34px rgba(52, 120, 246, 0.78) !important;
-      -webkit-backdrop-filter: blur(24px) saturate(150%) !important;
-      backdrop-filter: blur(24px) saturate(150%) !important;
-      touch-action: pan-y;
-      --cw-segment-x: 0px;
-      --cw-segment-stretch: 1;
-    }
-    
-    .cw-widget .cw-tabs[data-mode="assistant"] {
-      --cw-segment-x: calc(100% + 6px);
-    }
-    
-    .cw-widget .cw-tabs__glass {
-      display: block !important;
-      position: absolute !important;
-      z-index: 0 !important;
-      top: 6px !important;
-      left: 6px !important;
-      width: calc((100% - 18px) / 2) !important;
-      height: calc(100% - 12px) !important;
-      border: 1px solid rgba(152, 222, 255, 0.72) !important;
-      border-radius: 999px !important;
-      background:
-        radial-gradient(circle at 48% -35%, rgba(255, 255, 255, 0.42), transparent 48%),
-        linear-gradient(145deg, rgba(35, 196, 181, 0.58), rgba(12, 92, 101, 0.52)) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.32),
-        inset 0 -10px 24px rgba(3, 39, 45, 0.25),
-        0 14px 34px -20px rgba(35, 196, 181, 0.86) !important;
-      transform: translate3d(var(--cw-segment-x), 0, 0) scaleX(var(--cw-segment-stretch)) !important;
-      transform-origin: center;
-      transition:
-        transform 680ms cubic-bezier(0.16, 1.28, 0.3, 1),
-        background 420ms ease,
-        border-color 420ms ease,
-        box-shadow 420ms ease !important;
-      will-change: transform;
-    }
-    
-    .cw-widget .cw-tabs[data-mode="assistant"] .cw-tabs__glass {
-      border-color: rgba(177, 215, 255, 0.7) !important;
-      background:
-        radial-gradient(circle at 48% -35%, rgba(255, 255, 255, 0.4), transparent 48%),
-        linear-gradient(145deg, rgba(52, 120, 246, 0.62), rgba(22, 67, 157, 0.58)) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.3),
-        inset 0 -10px 24px rgba(5, 22, 58, 0.24),
-        0 14px 34px -20px rgba(52, 120, 246, 0.88) !important;
-    }
-    
-    .cw-widget .cw-tabs[data-liquid-dragging="true"] .cw-tabs__glass {
-      transition: none !important;
-    }
-    
-    .cw-widget .cw-tabs > button {
-      position: relative !important;
-      z-index: 1 !important;
-      min-height: 44px !important;
-      border: 0 !important;
-      border-radius: 999px !important;
-      color: #aebbd0 !important;
-      background: transparent !important;
-      box-shadow: none !important;
-      transition: color 260ms ease, transform 260ms ease !important;
-    }
-    
-    .cw-widget .cw-tabs > button:hover,
-    .cw-widget .cw-tabs > button:focus-visible {
-      color: #ffffff !important;
-      transform: translateY(-1px) !important;
-    }
-    
-    .cw-widget .cw-tabs > button[data-active="true"] {
-      color: #ffffff !important;
-    }
-    
-    /* Compact calculator layout: scrolling remains a fallback, not the default. */
-    .cw-widget .cw-panel-body {
-      min-height: 0 !important;
-      overflow: hidden !important;
-    }
-    
-    .cw-widget .cw-calculator {
-      display: flex !important;
-      flex-direction: column !important;
-      min-height: 0 !important;
-      height: 100% !important;
-    }
-    
-    .cw-widget .cw-calc-body {
-      flex: 1 1 auto !important;
-      min-height: 0 !important;
-      overflow-y: auto !important;
-      overscroll-behavior: contain;
-      scrollbar-width: none;
-      padding: 12px 13px 8px !important;
-    }
-    
-    .cw-widget .cw-calc-body::-webkit-scrollbar {
-      display: none;
-    }
-    
-    .cw-widget .cw-calc-step {
-      min-height: 100% !important;
-    }
-    
-    .cw-widget .cw-grid,
-    .cw-widget .cw-rows,
-    .cw-widget .cw-list {
-      gap: 8px !important;
-    }
-    
-    .cw-widget .cw-q {
-      margin-bottom: 3px !important;
-    }
-    
-    .cw-widget .cw-q-sub {
-      margin-bottom: 10px !important;
-    }
-    
-    /* Shared chip and configurator card surface. */
-    .cw-widget .cw-quick-replies .cw-chip,
-    .cw-widget .cw-rowcard,
-    .cw-widget .cw-scard,
-    .cw-widget .cw-opt,
-    .cw-widget .cw-vcard,
-    .cw-widget .cw-feature {
-      position: relative !important;
-      isolation: isolate !important;
-      overflow: hidden !important;
-      border: 1px solid var(--cw-chip-line) !important;
-      color: #dce8f8 !important;
-      background-color: var(--cw-chip-surface) !important;
-      background-image:
-        radial-gradient(
-          circle at 50% 52%,
-          rgba(var(--cw-chip-rgb), 0.36) 0 48%,
-          rgba(var(--cw-chip-rgb), 0.12) 68%,
-          transparent 100%
-        ),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.018) 50%),
-        linear-gradient(135deg, rgba(16, 23, 36, 0.86), rgba(7, 11, 19, 0.84)) !important;
-      background-position: center !important;
-      background-repeat: no-repeat !important;
-      background-size: 0% 0%, 100% 100%, 100% 100% !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.14),
-        inset 0 -1px 0 rgba(var(--cw-chip-rgb), 0.05),
-        0 17px 38px -32px rgba(var(--cw-chip-rgb), 0.78) !important;
-      -webkit-backdrop-filter: blur(22px) saturate(148%) !important;
-      backdrop-filter: blur(22px) saturate(148%) !important;
-      transform: translateY(0) translateZ(0) !important;
-      transition:
-        border-color 250ms ease,
-        color 250ms ease,
-        background-size 620ms cubic-bezier(0.16, 1, 0.3, 1),
-        transform 250ms cubic-bezier(0.16, 1, 0.3, 1),
-        box-shadow 330ms ease !important;
-    }
-    
-    .cw-widget .cw-quick-replies {
-      gap: 8px !important;
-      padding: 10px 13px 12px !important;
-    }
-    
-    .cw-widget .cw-quick-replies .cw-chip {
-      min-height: 42px !important;
-      padding: 9px 13px !important;
-      border-radius: 999px !important;
-      justify-content: center !important;
-      text-align: center !important;
-      font-size: 0.76rem !important;
-      font-weight: 720 !important;
-      line-height: 1.18 !important;
-    }
-    
-    .cw-widget .cw-quick-replies .cw-chip--primary {
-      border-color: rgba(143, 198, 255, 0.48) !important;
-      color: #edf6ff !important;
-    }
-    
-    .cw-widget .cw-rowcard {
-      grid-template-columns: 22px minmax(0, 1fr) !important;
-      gap: 10px !important;
-      min-height: 56px !important;
-      padding: 10px 13px !important;
-      border-radius: 17px !important;
-    }
-    
-    .cw-widget .cw-scard,
-    .cw-widget .cw-vcard {
-      min-height: 72px !important;
-      padding: 10px 11px !important;
-      border-radius: 17px !important;
-    }
-    
-    .cw-widget .cw-opt,
-    .cw-widget .cw-feature {
-      min-height: 54px !important;
-      padding: 10px 13px !important;
-      border-radius: 16px !important;
-    }
-    
-    .cw-widget .cw-quick-replies .cw-chip:hover,
-    .cw-widget .cw-quick-replies .cw-chip:focus-visible,
-    .cw-widget .cw-rowcard:hover,
-    .cw-widget .cw-rowcard:focus-visible,
-    .cw-widget .cw-scard:hover,
-    .cw-widget .cw-scard:focus-visible,
-    .cw-widget .cw-opt:hover,
-    .cw-widget .cw-opt:focus-visible,
-    .cw-widget .cw-vcard:hover,
-    .cw-widget .cw-vcard:focus-visible,
-    .cw-widget .cw-feature:hover,
-    .cw-widget .cw-feature:focus-visible {
-      border-color: rgba(var(--cw-chip-light-rgb), 0.62) !important;
-      color: #ffffff !important;
-      background-size: 185% 185%, 100% 100%, 100% 100% !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.18),
-        inset 0 -1px 0 rgba(var(--cw-chip-rgb), 0.08),
-        0 20px 44px -30px rgba(var(--cw-chip-rgb), 0.9) !important;
-      transform: translateY(-2px) translateZ(0) !important;
-    }
-    
-    .cw-widget .cw-rowcard[data-selected="true"],
-    .cw-widget .cw-scard[data-selected="true"],
-    .cw-widget .cw-opt[data-selected="true"],
-    .cw-widget .cw-vcard[data-selected="true"],
-    .cw-widget .cw-feature[data-selected="true"],
-    .cw-widget .cw-feature[aria-pressed="true"] {
-      border-color: rgba(var(--cw-chip-light-rgb), 0.86) !important;
-      color: #ffffff !important;
-      background-color: var(--cw-chip-surface-strong) !important;
-      background-size: 235% 235%, 100% 100%, 100% 100% !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        inset 0 -1px 0 rgba(var(--cw-chip-rgb), 0.12),
-        0 22px 48px -30px rgba(var(--cw-chip-rgb), 0.98) !important;
-    }
-    
-    .cw-widget .cw-quick-replies .cw-chip.is-border-tracing,
-    .cw-widget .cw-rowcard[data-selected="true"].is-border-tracing,
-    .cw-widget .cw-scard[data-selected="true"].is-border-tracing,
-    .cw-widget .cw-opt[data-selected="true"].is-border-tracing,
-    .cw-widget .cw-vcard[data-selected="true"].is-border-tracing,
-    .cw-widget .cw-feature[data-selected="true"].is-border-tracing,
-    .cw-widget .cw-feature[aria-pressed="true"].is-border-tracing {
-      border-color: var(--cw-chip-line) !important;
-      background-size: 0% 0%, 100% 100%, 100% 100% !important;
-      animation: cw-professional-centre-fill 1160ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
-    }
-    
-    .cw-widget .cw-chip::after,
-    .cw-widget .cw-rowcard::after,
-    .cw-widget .cw-scard::after,
-    .cw-widget .cw-opt::after,
-    .cw-widget .cw-vcard::after,
-    .cw-widget .cw-feature::after {
-      content: "" !important;
-      position: absolute !important;
-      z-index: 8 !important;
-      inset: -1px !important;
-      display: block !important;
-      padding: 2.4px !important;
-      border-radius: inherit !important;
-      pointer-events: none !important;
-      opacity: 0 !important;
-      background: conic-gradient(
-        from -90deg,
-        rgb(var(--cw-chip-light-rgb)) 0 var(--cw-professional-trace),
-        transparent var(--cw-professional-trace) 100%
-      ) !important;
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0) !important;
-      -webkit-mask-composite: xor !important;
-      mask-composite: exclude !important;
-      transition: opacity 140ms ease !important;
-      animation: none !important;
-    }
-    
-    .cw-widget .cw-chip.is-border-tracing::after,
-    .cw-widget .cw-rowcard.is-border-tracing::after,
-    .cw-widget .cw-scard.is-border-tracing::after,
-    .cw-widget .cw-opt.is-border-tracing::after,
-    .cw-widget .cw-vcard.is-border-tracing::after,
-    .cw-widget .cw-feature.is-border-tracing::after {
-      opacity: 1 !important;
-      filter: drop-shadow(0 0 4px rgba(var(--cw-chip-light-rgb), 0.82))
-        drop-shadow(0 0 11px rgba(var(--cw-chip-rgb), 0.45)) !important;
-      animation: cw-professional-border-trace 690ms linear forwards !important;
-    }
-    
-    /* Clean icons: no bubbles, no stray radio controls, only a crisp check when selected. */
-    .cw-widget .cw-rowcard__icon,
-    .cw-widget .cw-scard__icon,
-    .cw-widget .cw-vcard__icon {
-      display: grid !important;
-      place-items: center !important;
-      width: 22px !important;
-      height: 22px !important;
-      padding: 0 !important;
-      border: 0 !important;
-      border-radius: 0 !important;
-      color: rgb(var(--cw-chip-light-rgb)) !important;
-      background: transparent !important;
-      box-shadow: none !important;
-    }
-    
-    .cw-widget .cw-rowcard__icon svg,
-    .cw-widget .cw-scard__icon svg,
-    .cw-widget .cw-vcard__icon svg {
-      width: 19px !important;
-      height: 19px !important;
-      stroke-width: 1.9 !important;
-      shape-rendering: geometricPrecision;
-    }
-    
-    .cw-widget .cw-opt__radio,
-    .cw-widget .cw-opt__radio--square {
-      display: none !important;
-    }
-    
-    .cw-widget .cw-rowcard::before,
-    .cw-widget .cw-scard::before,
-    .cw-widget .cw-opt::before,
-    .cw-widget .cw-vcard::before,
-    .cw-widget .cw-feature::before {
-      content: none !important;
-    }
-    
-    .cw-widget .cw-rowcard[data-selected="true"]::before,
-    .cw-widget .cw-scard[data-selected="true"]::before,
-    .cw-widget .cw-opt[data-selected="true"]::before,
-    .cw-widget .cw-vcard[data-selected="true"]::before,
-    .cw-widget .cw-feature[data-selected="true"]::before,
-    .cw-widget .cw-feature[aria-pressed="true"]::before {
-      content: "" !important;
-      position: absolute !important;
-      z-index: 9 !important;
-      top: 10px !important;
-      right: 10px !important;
-      width: 19px !important;
-      height: 19px !important;
-      border: 0 !important;
-      border-radius: 0 !important;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23eafffb' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round' d='M5 12.5l4.2 4.2L19 7.2'/%3E%3C/svg%3E") center / 18px 18px no-repeat !important;
-      box-shadow: none !important;
-    }
-    
-    .cw-widget .cw-opt__body,
-    .cw-widget .cw-rowcard__body {
-      min-width: 0 !important;
-      padding-right: 22px !important;
-    }
-    
-    /* Liquid CTA buttons inside the calculator. */
-    .cw-widget .cw-next,
-    .cw-widget .cw-submit,
-    .cw-widget .cw-thanks__actions button,
-    .cw-widget .cw-inputbar button {
-      position: relative !important;
-      isolation: isolate !important;
-      overflow: hidden !important;
-      border: 1px solid rgba(170, 220, 255, 0.58) !important;
-      border-radius: 999px !important;
-      color: #ffffff !important;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.025)),
-        linear-gradient(145deg, rgba(52, 120, 246, 0.76), rgba(22, 67, 157, 0.78)) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.24),
-        inset 0 -12px 26px rgba(5, 22, 58, 0.24),
-        0 20px 46px -27px rgba(52, 120, 246, 0.94) !important;
-      -webkit-backdrop-filter: blur(18px) saturate(155%) !important;
-      backdrop-filter: blur(18px) saturate(155%) !important;
-      transition:
-        border-color 280ms ease,
-        transform 280ms cubic-bezier(0.16, 1, 0.3, 1),
-        box-shadow 340ms ease,
-        filter 280ms ease !important;
-    }
-    
-    .cw-widget .cw-calculator .cw-next,
-    .cw-widget .cw-calculator .cw-submit {
-      border-color: rgba(137, 255, 235, 0.62) !important;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.025)),
-        linear-gradient(145deg, rgba(35, 196, 181, 0.78), rgba(11, 112, 108, 0.82)) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.25),
-        inset 0 -12px 26px rgba(3, 43, 45, 0.24),
-        0 20px 46px -27px rgba(35, 196, 181, 0.94) !important;
-    }
-    
-    .cw-widget .cw-next:hover:not(:disabled),
-    .cw-widget .cw-next:focus-visible:not(:disabled),
-    .cw-widget .cw-submit:hover:not(:disabled),
-    .cw-widget .cw-submit:focus-visible:not(:disabled),
-    .cw-widget .cw-thanks__actions button:hover,
-    .cw-widget .cw-thanks__actions button:focus-visible,
-    .cw-widget .cw-inputbar button:hover:not(:disabled),
-    .cw-widget .cw-inputbar button:focus-visible:not(:disabled) {
-      border-color: rgba(222, 240, 255, 0.86) !important;
-      filter: brightness(1.08) saturate(1.08);
-      transform: translateY(-2px) scale(1.01) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.31),
-        0 25px 54px -25px rgba(var(--cw-chip-rgb), 0.98) !important;
-    }
-    
-    @media (max-width: 520px) {
-      .cw-widget .cw-calc-body {
-        padding: 10px 9px 7px !important;
-      }
-    
-      .cw-widget .cw-grid,
-      .cw-widget .cw-rows,
-      .cw-widget .cw-list {
-        gap: 7px !important;
-      }
-    
-      .cw-widget .cw-rowcard {
-        min-height: 54px !important;
-      }
-    
-      .cw-widget .cw-scard,
-      .cw-widget .cw-vcard {
-        min-height: 68px !important;
-      }
-    
-      .cw-widget .cw-opt,
-      .cw-widget .cw-feature {
-        min-height: 52px !important;
-      }
-    
-      .cw-widget .cw-quick-replies .cw-chip {
-        min-height: 40px !important;
-      }
-    }
-    
-    @media (prefers-reduced-motion: reduce) {
-      .cw-widget .cw-tabs__glass,
-      .cw-widget .cw-quick-replies .cw-chip,
-      .cw-widget .cw-rowcard,
-      .cw-widget .cw-scard,
-      .cw-widget .cw-opt,
-      .cw-widget .cw-vcard,
-      .cw-widget .cw-feature,
-      .cw-widget .cw-next,
-      .cw-widget .cw-submit,
-      .cw-widget .cw-thanks__actions button,
-      .cw-widget .cw-inputbar button {
-        transition-duration: 0.01ms !important;
-      }
-    
-      .cw-widget .cw-rowcard[data-selected="true"].is-border-tracing,
-      .cw-widget .cw-scard[data-selected="true"].is-border-tracing,
-      .cw-widget .cw-opt[data-selected="true"].is-border-tracing,
-      .cw-widget .cw-vcard[data-selected="true"].is-border-tracing,
-      .cw-widget .cw-feature[data-selected="true"].is-border-tracing,
-      .cw-widget .cw-feature[aria-pressed="true"].is-border-tracing {
-        animation: none !important;
-        background-size: 235% 235%, 100% 100%, 100% 100% !important;
-      }
-    
-      .cw-widget .cw-chip.is-border-tracing::after,
-      .cw-widget .cw-rowcard.is-border-tracing::after,
-      .cw-widget .cw-scard.is-border-tracing::after,
-      .cw-widget .cw-opt.is-border-tracing::after,
-      .cw-widget .cw-vcard.is-border-tracing::after,
-      .cw-widget .cw-feature.is-border-tracing::after {
-        --cw-professional-trace: 100%;
-        animation: none !important;
-      }
-    }
-    
-  operator: 'match'
-  stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:16:10)
-    async Test.run (node:internal/test_runner/test:1054:7)
-    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
   ...
 # Subtest: demo and embedded builds import the identical final style stack
 not ok 2 - demo and embedded builds import the identical final style stack
   ---
-  duration_ms: 2.78683
+  duration_ms: 3.346381
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:23:1'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:24:1'
   failureType: 'testCodeFailure'
   error: |-
-    The input did not match the regular expression /professional-chips-20260723/. Input:
+    The input did not match the regular expression /apple-liquid-controls-20260723/. Input:
     
-    'import { createRoot } from "react-dom/client";\n' +
-      'import { AssistantWidget } from "./components/widget/AssistantWidget";\n' +
-      'import { installLiquidSegmentedDrag } from "./lib/liquidSegmentedDrag";\n' +
-      'import "./widget.css";\n' +
-      'import "./interaction.css";\n' +
-      'import "./requested-polish.css";\n' +
-      'import "./world-class-polish.css";\n' +
-      'import "./competition-widget.css";\n' +
-      'import "./flow-content-polish.css";\n' +
-      'import "./black-blue-refresh.css";\n' +
-      'import "./premium-liquid-final.css";\n' +
-      'import "./chip-refinement-final.css";\n' +
-      'import "./apple-liquid-fixes.css";\n' +
+    'name: Deploy and verify chatbot\n' +
       '\n' +
-      'const HOST_ID = "dv-assistant-root";\n' +
-      'const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";\n' +
+      'on:\n' +
+      '  push:\n' +
+      '    branches: [main]\n' +
+      '  workflow_dispatch:\n' +
       '\n' +
-      'function ensureStylesheet(): void {\n' +
-      '  if (!scriptSrc) return;\n' +
-      '  const href = scriptSrc.replace(/widget\\.js(\\?.*)?$/, "widget.css$1");\n' +
-      '  if (href === scriptSrc) return;\n' +
-      '  if (document.querySelector(`link[data-dv-assistant-styles="true"]`)) return;\n' +
+      'permissions:\n' +
+      '  contents: write\n' +
+      '  pages: write\n' +
+      '  id-token: write\n' +
       '\n' +
-      '  const link = document.createElement("link");\n' +
-      '  link.rel = "stylesheet";\n' +
-      '  link.href = href;\n' +
-      '  link.crossOrigin = "anonymous";\n' +
-      '  link.referrerPolicy = "strict-origin-when-cross-origin";\n' +
-      '  link.dataset.dvAssistantStyles = "true";\n' +
-      '  document.head.appendChild(link);\n' +
-      '}\n' +
+      'concurrency:\n' +
+      '  group: pages\n' +
+      '  cancel-in-progress: false\n' +
       '\n' +
-      'function mount(): void {\n' +
-      '  const existing = document.getElementById(HOST_ID);\n' +
-      '  if (existing?.childElementCount) return;\n' +
+      'jobs:\n' +
+      '  build:\n' +
+      "    if: ${{ github.actor != 'github-actions[bot]' }}\n" +
+      '    runs-on: ubuntu-latest\n' +
+      '    steps:\n' +
+      '      - name: Checkout\n' +
+      '        uses: actions/checkout@v4\n' +
       '\n' +
-      '  ensureStylesheet();\n' +
-      '  installLiquidSegmentedDrag();\n' +
-      '  const host = existing ?? document.createElement("div");\n' +
-      '  host.id = HOST_ID;\n' +
-      '  host.setAttribute("data-dv-assistant-version", "apple-liquid-controls-20260723");\n' +
+      '      - name: Install pnpm\n' +
+      '        uses: pnpm/action-setup@v4\n' +
+      '        with:\n' +
+      '          version: 10\n' +
       '\n' +
-      '  const siteFont = window.getComputedStyle(document.body).fontFamily;\n' +
-      '  if (siteFont) host.style.setProperty("--cw-font", siteFont);\n' +
-      '  if (!existing) document.body.appendChild(host);\n' +
+      '      - name: Set up Node.js\n' +
+      '        uses: actions/setup-node@v4\n' +
+      '        with:\n' +
+      '          node-version: 22\n' +
+      '          cache: pnpm\n' +
       '\n' +
-      '  createRoot(host).render(<AssistantWidget />);\n' +
-      '}\n' +
+      '      - name: Install dependencies\n' +
+      '        run: pnpm install --frozen-lockfile\n' +
       '\n' +
-      'if (document.readyState === "loading") {\n' +
-      '  document.addEventListener("DOMContentLoaded", mount, { once: true });\n' +
-      '} else {\n' +
-      '  mount();\n' +
-      '}\n'
+      '      - name: Audit production dependencies\n' +
+      '        run: pnpm audit --prod --audit-level high\n' +
+      '\n' +
+      '      - name: TypeScript check\n' +
+      '        run: pnpm lint\n' +
+      '\n' +
+      '      - name: Run visual and security contracts\n' +
+      '        run: pnpm test -- --run\n' +
+      '\n' +
+      '      - name: Build demo and embedded widget\n' +
+      '        run: pnpm build\n' +
+      '\n' +
+      '      - name: Create immutable build metadata\n' +
+      '        shell: bash\n' +
+      '        run: |\n' +
+      `          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"professional-chips-20260723"},null,2))'\n` +
+      '\n' +
+      '      - name: Validate production artifacts\n' +
+      '        shell: bash\n' +
+      '        run: |\n' +
+      '          set -euo pipefail\n' +
+      '          test -f dist/index.html\n' +
+      '          test -f dist/widget.js\n' +
+      '          test -f dist/widget.css\n' +
+      '          test -f dist/build-meta.json\n' +
+      '          grep -Fq "professional-chips-20260723" dist/widget.js\n' +
+      '          grep -Fqi "3478f6" dist/widget.css\n' +
+      '          grep -Fq "cw-professional-centre-fill" dist/widget.css\n' +
+      '          ! grep -Fq "REPLACE-ME" dist/widget.js\n' +
+      '          grep -Fq "${GITHUB_SHA}" dist/build-meta.json\n' +
+      '\n' +
+      '      - name: Configure GitHub Pages\n' +
+      '        uses: actions/configure-pages@v5\n' +
+      '\n' +
+      '      - name: Upload Pages artifact\n' +
+      '        uses: actions/upload-pages-artifact@v3\n' +
+      '        with:\n' +
+      '          path: dist\n' +
+      '\n' +
+      '  deploy:\n' +
+      '    needs: build\n' +
+      '    runs-on: ubuntu-latest\n' +
+      '    environment:\n' +
+      '      name: github-pages\n' +
+      '      url: ${{ steps.deployment.outputs.page_url }}\n' +
+      '    steps:\n' +
+      '      - name: Deploy to GitHub Pages\n' +
+      '        id: deployment\n' +
+      '        uses: actions/deploy-pages@v5\n' +
+      '\n' +
+      '      - name: Verify live demo and embedded assets\n' +
+      '        shell: bash\n' +
+      '        env:\n' +
+      '          PAGE_URL: ${{ steps.deployment.outputs.page_url }}\n' +
+      '          SOURCE_SHA: ${{ github.sha }}\n' +
+      '        run: |\n' +
+      '          set -euo pipefail\n' +
+      '          BASE="${PAGE_URL%/}"\n' +
+      '\n' +
+      '          verify() {\n' +
+      '            local path="$1"\n' +
+      '            local expected="$2"\n' +
+      `            local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"\n` +
+      '\n' +
+      '            for attempt in {1..24}; do\n' +
+      '              if curl --location --fail --silent --show-error \\\n' +
+      '                --header "Cache-Control: no-cache" \\\n' +
+      '                "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then\n' +
+      '                if grep -Fqi "$expected" "$body"; then\n' +
+      '                  echo "verified ${path}"\n' +
+      '                  return 0\n' +
+      '                fi\n' +
+      '              fi\n' +
+      '              sleep 5\n' +
+      '            done\n' +
+      '\n' +
+      '            echo "Live verification failed for ${path}"\n' +
+      '            head -c 1000 "$body" 2>/dev/null || true\n' +
+      '            return 1\n' +
+      '          }\n' +
+      '\n' +
+      '          verify "/" "AI Assistant"\n' +
+      '          verify "/widget.js" "professional-chips-20260723"\n' +
+      '          verify "/widget.css" "cw-professional-centre-fill"\n' +
+      '          verify "/build-meta.json" "$SOURCE_SHA"\n' +
+      '\n' +
+      '      - name: Checkout latest main for deployment record\n' +
+      '        uses: actions/checkout@v4\n' +
+      '        with:\n' +
+      '          ref: main\n' +
+      '\n' +
+      '      - name: Record verified widget deployment\n' +
+      '        shell: bash\n' +
+      '        env:\n' +
+      '          PAGE_URL: ${{ steps.deployment.outputs.page_url }}\n' +
+      '          SOURCE_SHA: ${{ github.sha }}\n' +
+      '        run: |\n' +
+      '          {\n' +
+      '            echo "deployment=success"\n' +
+      '            echo "dependency_audit=success"\n' +
+      '            echo "live_smoke=success"\n' +
+      '            echo "source_sha=${SOURCE_SHA}"\n' +
+      '            echo "page_url=${PAGE_URL}"\n' +
+      '            echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"\n' +
+      '          } > PAGES_DEPLOY_AUDIT.txt\n' +
+      '          git config user.name "github-actions[bot]"\n' +
+      '          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"\n' +
+      '          git add PAGES_DEPLOY_AUDIT.txt\n' +
+      '          git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0\n' +
+      '          git pull --rebase origin main\n' +
+      '          git push origin HEAD:main\n'
     
   code: 'ERR_ASSERTION'
   name: 'AssertionError'
   expected:
   actual: |-
-    import { createRoot } from "react-dom/client";
-    import { AssistantWidget } from "./components/widget/AssistantWidget";
-    import { installLiquidSegmentedDrag } from "./lib/liquidSegmentedDrag";
-    import "./widget.css";
-    import "./interaction.css";
-    import "./requested-polish.css";
-    import "./world-class-polish.css";
-    import "./competition-widget.css";
-    import "./flow-content-polish.css";
-    import "./black-blue-refresh.css";
-    import "./premium-liquid-final.css";
-    import "./chip-refinement-final.css";
-    import "./apple-liquid-fixes.css";
+    name: Deploy and verify chatbot
     
-    const HOST_ID = "dv-assistant-root";
-    const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
+    on:
+      push:
+        branches: [main]
+      workflow_dispatch:
     
-    function ensureStylesheet(): void {
-      if (!scriptSrc) return;
-      const href = scriptSrc.replace(/widget\.js(\?.*)?$/, "widget.css$1");
-      if (href === scriptSrc) return;
-      if (document.querySelector(`link[data-dv-assistant-styles="true"]`)) return;
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = href;
-      link.crossOrigin = "anonymous";
-      link.referrerPolicy = "strict-origin-when-cross-origin";
-      link.dataset.dvAssistantStyles = "true";
-      document.head.appendChild(link);
-    }
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     
-    function mount(): void {
-      const existing = document.getElementById(HOST_ID);
-      if (existing?.childElementCount) return;
+    jobs:
+      build:
+        if: ${{ github.actor != 'github-actions[bot]' }}
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v4
     
-      ensureStylesheet();
-      installLiquidSegmentedDrag();
-      const host = existing ?? document.createElement("div");
-      host.id = HOST_ID;
-      host.setAttribute("data-dv-assistant-version", "apple-liquid-controls-20260723");
+          - name: Install pnpm
+            uses: pnpm/action-setup@v4
+            with:
+              version: 10
     
-      const siteFont = window.getComputedStyle(document.body).fontFamily;
-      if (siteFont) host.style.setProperty("--cw-font", siteFont);
-      if (!existing) document.body.appendChild(host);
+          - name: Set up Node.js
+            uses: actions/setup-node@v4
+            with:
+              node-version: 22
+              cache: pnpm
     
-      createRoot(host).render(<AssistantWidget />);
-    }
+          - name: Install dependencies
+            run: pnpm install --frozen-lockfile
     
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", mount, { once: true });
-    } else {
-      mount();
-    }
+          - name: Audit production dependencies
+            run: pnpm audit --prod --audit-level high
+    
+          - name: TypeScript check
+            run: pnpm lint
+    
+          - name: Run visual and security contracts
+            run: pnpm test -- --run
+    
+          - name: Build demo and embedded widget
+            run: pnpm build
+    
+          - name: Create immutable build metadata
+            shell: bash
+            run: |
+              node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"professional-chips-20260723"},null,2))'
+    
+          - name: Validate production artifacts
+            shell: bash
+            run: |
+              set -euo pipefail
+              test -f dist/index.html
+              test -f dist/widget.js
+              test -f dist/widget.css
+              test -f dist/build-meta.json
+              grep -Fq "professional-chips-20260723" dist/widget.js
+              grep -Fqi "3478f6" dist/widget.css
+              grep -Fq "cw-professional-centre-fill" dist/widget.css
+              ! grep -Fq "REPLACE-ME" dist/widget.js
+              grep -Fq "${GITHUB_SHA}" dist/build-meta.json
+    
+          - name: Configure GitHub Pages
+            uses: actions/configure-pages@v5
+    
+          - name: Upload Pages artifact
+            uses: actions/upload-pages-artifact@v3
+            with:
+              path: dist
+    
+      deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        environment:
+          name: github-pages
+          url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+          - name: Deploy to GitHub Pages
+            id: deployment
+            uses: actions/deploy-pages@v5
+    
+          - name: Verify live demo and embedded assets
+            shell: bash
+            env:
+              PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+              SOURCE_SHA: ${{ github.sha }}
+            run: |
+              set -euo pipefail
+              BASE="${PAGE_URL%/}"
+    
+              verify() {
+                local path="$1"
+                local expected="$2"
+                local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"
+    
+                for attempt in {1..24}; do
+                  if curl --location --fail --silent --show-error \
+                    --header "Cache-Control: no-cache" \
+                    "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then
+                    if grep -Fqi "$expected" "$body"; then
+                      echo "verified ${path}"
+                      return 0
+                    fi
+                  fi
+                  sleep 5
+                done
+    
+                echo "Live verification failed for ${path}"
+                head -c 1000 "$body" 2>/dev/null || true
+                return 1
+              }
+    
+              verify "/" "AI Assistant"
+              verify "/widget.js" "professional-chips-20260723"
+              verify "/widget.css" "cw-professional-centre-fill"
+              verify "/build-meta.json" "$SOURCE_SHA"
+    
+          - name: Checkout latest main for deployment record
+            uses: actions/checkout@v4
+            with:
+              ref: main
+    
+          - name: Record verified widget deployment
+            shell: bash
+            env:
+              PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+              SOURCE_SHA: ${{ github.sha }}
+            run: |
+              {
+                echo "deployment=success"
+                echo "dependency_audit=success"
+                echo "live_smoke=success"
+                echo "source_sha=${SOURCE_SHA}"
+                echo "page_url=${PAGE_URL}"
+                echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+              } > PAGES_DEPLOY_AUDIT.txt
+              git config user.name "github-actions[bot]"
+              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+              git add PAGES_DEPLOY_AUDIT.txt
+              git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0
+              git pull --rebase origin main
+              git push origin HEAD:main
     
   operator: 'match'
   stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:50:10)
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:53:10)
     async Test.run (node:internal/test_runner/test:1054:7)
     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 # Subtest: AI Assistant identity and vector mascot are consistent
 ok 3 - AI Assistant identity and vector mascot are consistent
   ---
-  duration_ms: 2.048961
+  duration_ms: 3.936225
   type: 'test'
   ...
-# Subtest: mode tabs switch directly and use a liquid glass indicator
-ok 4 - mode tabs switch directly and use a liquid glass indicator
+# Subtest: mode tabs switch directly and use a draggable liquid glass indicator
+ok 4 - mode tabs switch directly and use a draggable liquid glass indicator
   ---
-  duration_ms: 1.811732
+  duration_ms: 4.066034
   type: 'test'
   ...
 # Subtest: builder flow omits priority and keeps contact as final step
 ok 5 - builder flow omits priority and keeps contact as final step
   ---
-  duration_ms: 0.880278
+  duration_ms: 1.364512
   type: 'test'
   ...
 # Subtest: final screen visually orders contact before summary
 ok 6 - final screen visually orders contact before summary
   ---
-  duration_ms: 0.636959
+  duration_ms: 1.061229
   type: 'test'
   ...
 # Subtest: quick replies never drag sideways and mobile inputs prevent browser zoom
 ok 7 - quick replies never drag sideways and mobile inputs prevent browser zoom
   ---
-  duration_ms: 1.286968
+  duration_ms: 1.886501
   type: 'test'
   ...
 # Subtest: chips trace the full border before filling from the centre
-not ok 8 - chips trace the full border before filling from the centre
+ok 8 - chips trace the full border before filling from the centre
   ---
-  duration_ms: 1.556886
+  duration_ms: 2.269482
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:114:1'
-  failureType: 'testCodeFailure'
-  error: |-
-    The input did not match the regular expression /1260/. Input:
-    
-    'const timers = new WeakMap<HTMLElement, number>();\n' +
-      '\n' +
-      '/** Replays the click-only border trace, then leaves enough time for the centre fill. */\n' +
-      'export function replayBorderTrace(element: HTMLElement): void {\n' +
-      '  const previousTimer = timers.get(element);\n' +
-      '  if (previousTimer) window.clearTimeout(previousTimer);\n' +
-      '\n' +
-      '  element.classList.remove("is-border-tracing");\n' +
-      '  void element.offsetWidth;\n' +
-      '  element.classList.add("is-border-tracing");\n' +
-      '\n' +
-      '  timers.set(\n' +
-      '    element,\n' +
-      '    window.setTimeout(() => {\n' +
-      '      element.classList.remove("is-border-tracing");\n' +
-      '      timers.delete(element);\n' +
-      '    }, 1420),\n' +
-      '  );\n' +
-      '}\n'
-    
-  code: 'ERR_ASSERTION'
-  name: 'AssertionError'
-  expected:
-  actual: |-
-    const timers = new WeakMap<HTMLElement, number>();
-    
-    /** Replays the click-only border trace, then leaves enough time for the centre fill. */
-    export function replayBorderTrace(element: HTMLElement): void {
-      const previousTimer = timers.get(element);
-      if (previousTimer) window.clearTimeout(previousTimer);
-    
-      element.classList.remove("is-border-tracing");
-      void element.offsetWidth;
-      element.classList.add("is-border-tracing");
-    
-      timers.set(
-        element,
-        window.setTimeout(() => {
-          element.classList.remove("is-border-tracing");
-          timers.delete(element);
-        }, 1420),
-      );
-    }
-    
-  operator: 'match'
-  stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:121:10)
-    async Test.run (node:internal/test_runner/test:1054:7)
-    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 # Subtest: nested chip bubbles are removed while icons remain sharp
-not ok 9 - nested chip bubbles are removed while icons remain sharp
+ok 9 - nested chip bubbles are removed while icons remain sharp
   ---
-  duration_ms: 1.875556
+  duration_ms: 1.953525
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:130:1'
-  failureType: 'testCodeFailure'
-  error: |-
-    The input did not match the regular expression /\.cw-opt__radio[\s\S]*width:\s*4px !important/. Input:
-    
-    '/* Final Apple-inspired liquid controls for the AI Assistant. */\n' +
-      '@property --cw-professional-trace {\n' +
-      '  syntax: "<percentage>";\n' +
-      '  inherits: false;\n' +
-      '  initial-value: 0%;\n' +
-      '}\n' +
-      '\n' +
-      '@keyframes cw-professional-border-trace {\n' +
-      '  from {\n' +
-      '    --cw-professional-trace: 0%;\n' +
-      '  }\n' +
-      '  to {\n' +
-      '    --cw-professional-trace: 100%;\n' +
-      '  }\n' +
-      '}\n' +
-      '\n' +
-      '@keyframes cw-professional-centre-fill {\n' +
-      '  0%,\n' +
-      '  58% {\n' +
-      '    background-size: 0% 0%, 100% 100%, 100% 100%;\n' +
-      '  }\n' +
-      '  100% {\n' +
-      '    background-size: 235% 235%, 100% 100%, 100% 100%;\n' +
-      '  }\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget {\n' +
-      '  --cw-chip-rgb: 52, 120, 246;\n' +
-      '  --cw-chip-light-rgb: 137, 198, 255;\n' +
-      '  --cw-chip-line: rgba(185, 214, 255, 0.27);\n' +
-      '  --cw-chip-surface: rgba(9, 14, 23, 0.76);\n' +
-      '  --cw-chip-surface-strong: rgba(8, 15, 27, 0.91);\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-calculator {\n' +
-      '  --cw-chip-rgb: 35, 196, 181;\n' +
-      '  --cw-chip-light-rgb: 115, 246, 229;\n' +
-      '}\n' +
-      '\n' +
-      '/* Draggable mode switch with a slow, elastic settling motion. */\n' +
-      '.cw-widget .cw-tabs {\n' +
-      '  position: relative !important;\n' +
-      '  isolation: isolate !important;\n' +
-      '  overflow: hidden !important;\n' +
-      '  gap: 6px !important;\n' +
-      '  padding: 6px !important;\n' +
-      '  border: 1px solid rgba(185, 214, 255, 0.28) !important;\n' +
-      '  border-radius: 999px !important;\n' +
-      '  background:\n' +
-      '    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.012)),\n' +
-      '    rgba(6, 10, 17, 0.8) !important;\n' +
-      '  box-shadow:\n' +
-      '    inset 0 1px 0 rgba(255, 255, 255, 0.11),\n' +
-      '    0 18px 42px -34px rgba(52, 120, 246, 0.78) !important;\n' +
-      '  -webkit-backdrop-filter: blur(24px) saturate(150%) !important;\n' +
-      '  backdrop-filter: blur(24px) saturate(150%) !important;\n' +
-      '  touch-action: pan-y;\n' +
-      '  --cw-segment-x: 0px;\n' +
-      '  --cw-segment-stretch: 1;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-tabs[data-mode="assistant"] {\n' +
-      '  --cw-segment-x: calc(100% + 6px);\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-tabs__glass {\n' +
-      '  display: block !important;\n' +
-      '  position: absolute !important;\n' +
-      '  z-index: 0 !important;\n' +
-      '  top: 6px !important;\n' +
-      '  left: 6px !important;\n' +
-      '  width: calc((100% - 18px) / 2) !important;\n' +
-      '  height: calc(100% - 12px) !important;\n' +
-      '  border: 1px solid rgba(152, 222, 255, 0.72) !important;\n' +
-      '  border-radius: 999px !important;\n' +
-      '  background:\n' +
-      '    radial-gradient(circle at 48% -35%, rgba(255, 255, 255, 0.42), transparent 48%),\n' +
-      '    linear-gradient(145deg, rgba(35, 196, 181, 0.58), rgba(12, 92, 101, 0.52)) !important;\n' +
-      '  box-shadow:\n' +
-      '    inset 0 1px 0 rgba(255, 255, 255, 0.32),\n' +
-      '    inset 0 -10px 24px rgba(3, 39, 45, 0.25),\n' +
-      '    0 14px 34px -20px rgba(35, 196, 181, 0.86) !important;\n' +
-      '  transform: translate3d(var(--cw-segment-x), 0, 0) scaleX(var(--cw-segment-stretch)) !important;\n' +
-      '  transform-origin: center;\n' +
-      '  transition:\n' +
-      '    transform 680ms cubic-bezier(0.16, 1.28, 0.3, 1),\n' +
-      '    background 420ms ease,\n' +
-      '    border-color 420ms ease,\n' +
-      '    box-shadow 420ms ease !important;\n' +
-      '  will-change: transform;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-tabs[data-mode="assistant"] .cw-tabs__glass {\n' +
-      '  border-color: rgba(177, 215, 255, 0.7) !important;\n' +
-      '  background:\n' +
-      '    radial-gradient(circle at 48% -35%, rgba(255, 255, 255, 0.4), transparent 48%),\n' +
-      '    linear-gradient(145deg, rgba(52, 120, 246, 0.62), rgba(22, 67, 157, 0.58)) !important;\n' +
-      '  box-shadow:\n' +
-      '    inset 0 1px 0 rgba(255, 255, 255, 0.3),\n' +
-      '    inset 0 -10px 24px rgba(5, 22, 58, 0.24),\n' +
-      '    0 14px 34px -20px rgba(52, 120, 246, 0.88) !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-tabs[data-liquid-dragging="true"] .cw-tabs__glass {\n' +
-      '  transition: none !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-tabs > button {\n' +
-      '  position: relative !important;\n' +
-      '  z-index: 1 !important;\n' +
-      '  min-height: 44px !important;\n' +
-      '  border: 0 !important;\n' +
-      '  border-radius: 999px !important;\n' +
-      '  color: #aebbd0 !important;\n' +
-      '  background: transparent !important;\n' +
-      '  box-shadow: none !important;\n' +
-      '  transition: color 260ms ease, transform 260ms ease !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-tabs > button:hover,\n' +
-      '.cw-widget .cw-tabs > button:focus-visible {\n' +
-      '  color: #ffffff !important;\n' +
-      '  transform: translateY(-1px) !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-tabs > button[data-active="true"] {\n' +
-      '  color: #ffffff !important;\n' +
-      '}\n' +
-      '\n' +
-      '/* Compact calculator layout: scrolling remains a fallback, not the default. */\n' +
-      '.cw-widget .cw-panel-body {\n' +
-      '  min-height: 0 !important;\n' +
-      '  overflow: hidden !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-calculator {\n' +
-      '  display: flex !important;\n' +
-      '  flex-direction: column !important;\n' +
-      '  min-height: 0 !important;\n' +
-      '  height: 100% !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-calc-body {\n' +
-      '  flex: 1 1 auto !important;\n' +
-      '  min-height: 0 !important;\n' +
-      '  overflow-y: auto !important;\n' +
-      '  overscroll-behavior: contain;\n' +
-      '  scrollbar-width: none;\n' +
-      '  padding: 12px 13px 8px !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-calc-body::-webkit-scrollbar {\n' +
-      '  display: none;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-calc-step {\n' +
-      '  min-height: 100% !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-grid,\n' +
-      '.cw-widget .cw-rows,\n' +
-      '.cw-widget .cw-list {\n' +
-      '  gap: 8px !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-q {\n' +
-      '  margin-bottom: 3px !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-q-sub {\n' +
-      '  margin-bottom: 10px !important;\n' +
-      '}\n' +
-      '\n' +
-      '/* Shared chip and configurator card surface. */\n' +
-      '.cw-widget .cw-quick-replies .cw-chip,\n' +
-      '.cw-widget .cw-rowcard,\n' +
-      '.cw-widget .cw-scard,\n' +
-      '.cw-widget .cw-opt,\n' +
-      '.cw-widget .cw-vcard,\n' +
-      '.cw-widget .cw-feature {\n' +
-      '  position: relative !important;\n' +
-      '  isolation: isolate !important;\n' +
-      '  overflow: hidden !important;\n' +
-      '  border: 1px solid var(--cw-chip-line) !important;\n' +
-      '  color: #dce8f8 !important;\n' +
-      '  background-color: var(--cw-chip-surface) !important;\n' +
-      '  background-image:\n' +
-      '    radial-gradient(\n' +
-      '      circle at 50% 52%,\n' +
-      '      rgba(var(--cw-chip-rgb), 0.36) 0 48%,\n' +
-      '      rgba(var(--cw-chip-rgb), 0.12) 68%,\n' +
-      '      transparent 100%\n' +
-      '    ),\n' +
-      '    linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.018) 50%),\n' +
-      '    linear-gradient(135deg, rgba(16, 23, 36, 0.86), rgba(7, 11, 19, 0.84)) !important;\n' +
-      '  background-position: center !important;\n' +
-      '  background-repeat: no-repeat !important;\n' +
-      '  background-size: 0% 0%, 100% 100%, 100% 100% !important;\n' +
-      '  box-shadow:\n' +
-      '    inset 0 1px 0 rgba(255, 255, 255, 0.14),\n' +
-      '    inset 0 -1px 0 rgba(var(--cw-chip-rgb), 0.05),\n' +
-      '    0 17px 38px -32px rgba(var(--cw-chip-rgb), 0.78) !important;\n' +
-      '  -webkit-backdrop-filter: blur(22px) saturate(148%) !important;\n' +
-      '  backdrop-filter: blur(22px) saturate(148%) !important;\n' +
-      '  transform: translateY(0) translateZ(0) !important;\n' +
-      '  transition:\n' +
-      '    border-color 250ms ease,\n' +
-      '    color 250ms ease,\n' +
-      '    background-size 620ms cubic-bezier(0.16, 1, 0.3, 1),\n' +
-      '    transform 250ms cubic-bezier(0.16, 1, 0.3, 1),\n' +
-      '    box-shadow 330ms ease !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-quick-replies {\n' +
-      '  gap: 8px !important;\n' +
-      '  padding: 10px 13px 12px !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-quick-replies .cw-chip {\n' +
-      '  min-height: 42px !important;\n' +
-      '  padding: 9px 13px !important;\n' +
-      '  border-radius: 999px !important;\n' +
-      '  justify-content: center !important;\n' +
-      '  text-align: center !important;\n' +
-      '  font-size: 0.76rem !important;\n' +
-      '  font-weight: 720 !important;\n' +
-      '  line-height: 1.18 !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-quick-replies .cw-chip--primary {\n' +
-      '  border-color: rgba(143, 198, 255, 0.48) !important;\n' +
-      '  color: #edf6ff !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-rowcard {\n' +
-      '  grid-template-columns: 22px minmax(0, 1fr) !important;\n' +
-      '  gap: 10px !important;\n' +
-      '  min-height: 56px !important;\n' +
-      '  padding: 10px 13px !important;\n' +
-      '  border-radius: 17px !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-scard,\n' +
-      '.cw-widget .cw-vcard {\n' +
-      '  min-height: 72px !important;\n' +
-      '  padding: 10px 11px !important;\n' +
-      '  border-radius: 17px !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-opt,\n' +
-      '.cw-widget .cw-feature {\n' +
-      '  min-height: 54px !important;\n' +
-      '  padding: 10px 13px !important;\n' +
-      '  border-radius: 16px !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-quick-replies .cw-chip:hover,\n' +
-      '.cw-widget .cw-quick-replies .cw-chip:focus-visible,\n' +
-      '.cw-widget .cw-rowcard:hover,\n' +
-      '.cw-widget .cw-rowcard:focus-visible,\n' +
-      '.cw-widget .cw-scard:hover,\n' +
-      '.cw-widget .cw-scard:focus-visible,\n' +
-      '.cw-widget .cw-opt:hover,\n' +
-      '.cw-widget .cw-opt:focus-visible,\n' +
-      '.cw-widget .cw-vcard:hover,\n' +
-      '.cw-widget .cw-vcard:focus-visible,\n' +
-      '.cw-widget .cw-feature:hover,\n' +
-      '.cw-widget .cw-feature:focus-visible {\n' +
-      '  border-color: rgba(var(--cw-chip-light-rgb), 0.62) !important;\n' +
-      '  color: #ffffff !important;\n' +
-      '  background-size: 185% 185%, 100% 100%, 100% 100% !important;\n' +
-      '  box-shadow:\n' +
-      '    inset 0 1px 0 rgba(255, 255, 255, 0.18),\n' +
-      '    inset 0 -1px 0 rgba(var(--cw-chip-rgb), 0.08),\n' +
-      '    0 20px 44px -30px rgba(var(--cw-chip-rgb), 0.9) !important;\n' +
-      '  transform: translateY(-2px) translateZ(0) !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-rowcard[data-selected="true"],\n' +
-      '.cw-widget .cw-scard[data-selected="true"],\n' +
-      '.cw-widget .cw-opt[data-selected="true"],\n' +
-      '.cw-widget .cw-vcard[data-selected="true"],\n' +
-      '.cw-widget .cw-feature[data-selected="true"],\n' +
-      '.cw-widget .cw-feature[aria-pressed="true"] {\n' +
-      '  border-color: rgba(var(--cw-chip-light-rgb), 0.86) !important;\n' +
-      '  color: #ffffff !important;\n' +
-      '  background-color: var(--cw-chip-surface-strong) !important;\n' +
-      '  background-size: 235% 235%, 100% 100%, 100% 100% !important;\n' +
-      '  box-shadow:\n' +
-      '    inset 0 1px 0 rgba(255, 255, 255, 0.2),\n' +
-      '    inset 0 -1px 0 rgba(var(--cw-chip-rgb), 0.12),\n' +
-      '    0 22px 48px -30px rgba(var(--cw-chip-rgb), 0.98) !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-quick-replies .cw-chip.is-border-tracing,\n' +
-      '.cw-widget .cw-rowcard[data-selected="true"].is-border-tracing,\n' +
-      '.cw-widget .cw-scard[data-selected="true"].is-border-tracing,\n' +
-      '.cw-widget .cw-opt[data-selected="true"].is-border-tracing,\n' +
-      '.cw-widget .cw-vcard[data-selected="true"].is-border-tracing,\n' +
-      '.cw-widget .cw-feature[data-selected="true"].is-border-tracing,\n' +
-      '.cw-widget .cw-feature[aria-pressed="true"].is-border-tracing {\n' +
-      '  border-color: var(--cw-chip-line) !important;\n' +
-      '  background-size: 0% 0%, 100% 100%, 100% 100% !important;\n' +
-      '  animation: cw-professional-centre-fill 1160ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;\n' +
-      '}\n' +
-      '\n' +
-      '.cw-widget .cw-chip::after,\n' +
-      '.cw-widget .cw-rowcard::after,\n' +
-      '.cw-widget .cw-scard::after,\n' +
-      '.cw-widget .cw-opt::after,\n' +
-      '.cw-widget .cw-vcard::after,\n' +
-      '.cw-widget .cw-feature::after {\n' +
-      '  content: "" !important;\n' +
-      '  position: absolute !important;\n' +
-      '  z-index: 8 !important;\n' +
-      '  inset: -1px !important;\n' +
-      '  display: block !important;\n' +
-      '  padding: 2.4px !important;\n' +
-      '  border-radius: inherit !important;\n' +
-      '  pointer-events: none !important;\n' +
-      '  opacity: 0 !important;\n' +
-      '  background: conic-gradient(\n' +
-      '    from -90deg,\n' +
-      '    rgb(var(--cw-chip-light-rgb)) 0 var(--cw-professional-trace),\n' +
-      '    transparent var(--cw-professional-trace) 100%\n' +
-      '  ) !important;\n' +
-      '  -webkit-mask:\n' +
-      '    '... 6736 more characters
-    
-  code: 'ERR_ASSERTION'
-  name: 'AssertionError'
-  expected:
-  actual: |-
-    /* Final Apple-inspired liquid controls for the AI Assistant. */
-    @property --cw-professional-trace {
-      syntax: "<percentage>";
-      inherits: false;
-      initial-value: 0%;
-    }
-    
-    @keyframes cw-professional-border-trace {
-      from {
-        --cw-professional-trace: 0%;
-      }
-      to {
-        --cw-professional-trace: 100%;
-      }
-    }
-    
-    @keyframes cw-professional-centre-fill {
-      0%,
-      58% {
-        background-size: 0% 0%, 100% 100%, 100% 100%;
-      }
-      100% {
-        background-size: 235% 235%, 100% 100%, 100% 100%;
-      }
-    }
-    
-    .cw-widget {
-      --cw-chip-rgb: 52, 120, 246;
-      --cw-chip-light-rgb: 137, 198, 255;
-      --cw-chip-line: rgba(185, 214, 255, 0.27);
-      --cw-chip-surface: rgba(9, 14, 23, 0.76);
-      --cw-chip-surface-strong: rgba(8, 15, 27, 0.91);
-    }
-    
-    .cw-widget .cw-calculator {
-      --cw-chip-rgb: 35, 196, 181;
-      --cw-chip-light-rgb: 115, 246, 229;
-    }
-    
-    /* Draggable mode switch with a slow, elastic settling motion. */
-    .cw-widget .cw-tabs {
-      position: relative !important;
-      isolation: isolate !important;
-      overflow: hidden !important;
-      gap: 6px !important;
-      padding: 6px !important;
-      border: 1px solid rgba(185, 214, 255, 0.28) !important;
-      border-radius: 999px !important;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.012)),
-        rgba(6, 10, 17, 0.8) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.11),
-        0 18px 42px -34px rgba(52, 120, 246, 0.78) !important;
-      -webkit-backdrop-filter: blur(24px) saturate(150%) !important;
-      backdrop-filter: blur(24px) saturate(150%) !important;
-      touch-action: pan-y;
-      --cw-segment-x: 0px;
-      --cw-segment-stretch: 1;
-    }
-    
-    .cw-widget .cw-tabs[data-mode="assistant"] {
-      --cw-segment-x: calc(100% + 6px);
-    }
-    
-    .cw-widget .cw-tabs__glass {
-      display: block !important;
-      position: absolute !important;
-      z-index: 0 !important;
-      top: 6px !important;
-      left: 6px !important;
-      width: calc((100% - 18px) / 2) !important;
-      height: calc(100% - 12px) !important;
-      border: 1px solid rgba(152, 222, 255, 0.72) !important;
-      border-radius: 999px !important;
-      background:
-        radial-gradient(circle at 48% -35%, rgba(255, 255, 255, 0.42), transparent 48%),
-        linear-gradient(145deg, rgba(35, 196, 181, 0.58), rgba(12, 92, 101, 0.52)) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.32),
-        inset 0 -10px 24px rgba(3, 39, 45, 0.25),
-        0 14px 34px -20px rgba(35, 196, 181, 0.86) !important;
-      transform: translate3d(var(--cw-segment-x), 0, 0) scaleX(var(--cw-segment-stretch)) !important;
-      transform-origin: center;
-      transition:
-        transform 680ms cubic-bezier(0.16, 1.28, 0.3, 1),
-        background 420ms ease,
-        border-color 420ms ease,
-        box-shadow 420ms ease !important;
-      will-change: transform;
-    }
-    
-    .cw-widget .cw-tabs[data-mode="assistant"] .cw-tabs__glass {
-      border-color: rgba(177, 215, 255, 0.7) !important;
-      background:
-        radial-gradient(circle at 48% -35%, rgba(255, 255, 255, 0.4), transparent 48%),
-        linear-gradient(145deg, rgba(52, 120, 246, 0.62), rgba(22, 67, 157, 0.58)) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.3),
-        inset 0 -10px 24px rgba(5, 22, 58, 0.24),
-        0 14px 34px -20px rgba(52, 120, 246, 0.88) !important;
-    }
-    
-    .cw-widget .cw-tabs[data-liquid-dragging="true"] .cw-tabs__glass {
-      transition: none !important;
-    }
-    
-    .cw-widget .cw-tabs > button {
-      position: relative !important;
-      z-index: 1 !important;
-      min-height: 44px !important;
-      border: 0 !important;
-      border-radius: 999px !important;
-      color: #aebbd0 !important;
-      background: transparent !important;
-      box-shadow: none !important;
-      transition: color 260ms ease, transform 260ms ease !important;
-    }
-    
-    .cw-widget .cw-tabs > button:hover,
-    .cw-widget .cw-tabs > button:focus-visible {
-      color: #ffffff !important;
-      transform: translateY(-1px) !important;
-    }
-    
-    .cw-widget .cw-tabs > button[data-active="true"] {
-      color: #ffffff !important;
-    }
-    
-    /* Compact calculator layout: scrolling remains a fallback, not the default. */
-    .cw-widget .cw-panel-body {
-      min-height: 0 !important;
-      overflow: hidden !important;
-    }
-    
-    .cw-widget .cw-calculator {
-      display: flex !important;
-      flex-direction: column !important;
-      min-height: 0 !important;
-      height: 100% !important;
-    }
-    
-    .cw-widget .cw-calc-body {
-      flex: 1 1 auto !important;
-      min-height: 0 !important;
-      overflow-y: auto !important;
-      overscroll-behavior: contain;
-      scrollbar-width: none;
-      padding: 12px 13px 8px !important;
-    }
-    
-    .cw-widget .cw-calc-body::-webkit-scrollbar {
-      display: none;
-    }
-    
-    .cw-widget .cw-calc-step {
-      min-height: 100% !important;
-    }
-    
-    .cw-widget .cw-grid,
-    .cw-widget .cw-rows,
-    .cw-widget .cw-list {
-      gap: 8px !important;
-    }
-    
-    .cw-widget .cw-q {
-      margin-bottom: 3px !important;
-    }
-    
-    .cw-widget .cw-q-sub {
-      margin-bottom: 10px !important;
-    }
-    
-    /* Shared chip and configurator card surface. */
-    .cw-widget .cw-quick-replies .cw-chip,
-    .cw-widget .cw-rowcard,
-    .cw-widget .cw-scard,
-    .cw-widget .cw-opt,
-    .cw-widget .cw-vcard,
-    .cw-widget .cw-feature {
-      position: relative !important;
-      isolation: isolate !important;
-      overflow: hidden !important;
-      border: 1px solid var(--cw-chip-line) !important;
-      color: #dce8f8 !important;
-      background-color: var(--cw-chip-surface) !important;
-      background-image:
-        radial-gradient(
-          circle at 50% 52%,
-          rgba(var(--cw-chip-rgb), 0.36) 0 48%,
-          rgba(var(--cw-chip-rgb), 0.12) 68%,
-          transparent 100%
-        ),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.018) 50%),
-        linear-gradient(135deg, rgba(16, 23, 36, 0.86), rgba(7, 11, 19, 0.84)) !important;
-      background-position: center !important;
-      background-repeat: no-repeat !important;
-      background-size: 0% 0%, 100% 100%, 100% 100% !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.14),
-        inset 0 -1px 0 rgba(var(--cw-chip-rgb), 0.05),
-        0 17px 38px -32px rgba(var(--cw-chip-rgb), 0.78) !important;
-      -webkit-backdrop-filter: blur(22px) saturate(148%) !important;
-      backdrop-filter: blur(22px) saturate(148%) !important;
-      transform: translateY(0) translateZ(0) !important;
-      transition:
-        border-color 250ms ease,
-        color 250ms ease,
-        background-size 620ms cubic-bezier(0.16, 1, 0.3, 1),
-        transform 250ms cubic-bezier(0.16, 1, 0.3, 1),
-        box-shadow 330ms ease !important;
-    }
-    
-    .cw-widget .cw-quick-replies {
-      gap: 8px !important;
-      padding: 10px 13px 12px !important;
-    }
-    
-    .cw-widget .cw-quick-replies .cw-chip {
-      min-height: 42px !important;
-      padding: 9px 13px !important;
-      border-radius: 999px !important;
-      justify-content: center !important;
-      text-align: center !important;
-      font-size: 0.76rem !important;
-      font-weight: 720 !important;
-      line-height: 1.18 !important;
-    }
-    
-    .cw-widget .cw-quick-replies .cw-chip--primary {
-      border-color: rgba(143, 198, 255, 0.48) !important;
-      color: #edf6ff !important;
-    }
-    
-    .cw-widget .cw-rowcard {
-      grid-template-columns: 22px minmax(0, 1fr) !important;
-      gap: 10px !important;
-      min-height: 56px !important;
-      padding: 10px 13px !important;
-      border-radius: 17px !important;
-    }
-    
-    .cw-widget .cw-scard,
-    .cw-widget .cw-vcard {
-      min-height: 72px !important;
-      padding: 10px 11px !important;
-      border-radius: 17px !important;
-    }
-    
-    .cw-widget .cw-opt,
-    .cw-widget .cw-feature {
-      min-height: 54px !important;
-      padding: 10px 13px !important;
-      border-radius: 16px !important;
-    }
-    
-    .cw-widget .cw-quick-replies .cw-chip:hover,
-    .cw-widget .cw-quick-replies .cw-chip:focus-visible,
-    .cw-widget .cw-rowcard:hover,
-    .cw-widget .cw-rowcard:focus-visible,
-    .cw-widget .cw-scard:hover,
-    .cw-widget .cw-scard:focus-visible,
-    .cw-widget .cw-opt:hover,
-    .cw-widget .cw-opt:focus-visible,
-    .cw-widget .cw-vcard:hover,
-    .cw-widget .cw-vcard:focus-visible,
-    .cw-widget .cw-feature:hover,
-    .cw-widget .cw-feature:focus-visible {
-      border-color: rgba(var(--cw-chip-light-rgb), 0.62) !important;
-      color: #ffffff !important;
-      background-size: 185% 185%, 100% 100%, 100% 100% !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.18),
-        inset 0 -1px 0 rgba(var(--cw-chip-rgb), 0.08),
-        0 20px 44px -30px rgba(var(--cw-chip-rgb), 0.9) !important;
-      transform: translateY(-2px) translateZ(0) !important;
-    }
-    
-    .cw-widget .cw-rowcard[data-selected="true"],
-    .cw-widget .cw-scard[data-selected="true"],
-    .cw-widget .cw-opt[data-selected="true"],
-    .cw-widget .cw-vcard[data-selected="true"],
-    .cw-widget .cw-feature[data-selected="true"],
-    .cw-widget .cw-feature[aria-pressed="true"] {
-      border-color: rgba(var(--cw-chip-light-rgb), 0.86) !important;
-      color: #ffffff !important;
-      background-color: var(--cw-chip-surface-strong) !important;
-      background-size: 235% 235%, 100% 100%, 100% 100% !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        inset 0 -1px 0 rgba(var(--cw-chip-rgb), 0.12),
-        0 22px 48px -30px rgba(var(--cw-chip-rgb), 0.98) !important;
-    }
-    
-    .cw-widget .cw-quick-replies .cw-chip.is-border-tracing,
-    .cw-widget .cw-rowcard[data-selected="true"].is-border-tracing,
-    .cw-widget .cw-scard[data-selected="true"].is-border-tracing,
-    .cw-widget .cw-opt[data-selected="true"].is-border-tracing,
-    .cw-widget .cw-vcard[data-selected="true"].is-border-tracing,
-    .cw-widget .cw-feature[data-selected="true"].is-border-tracing,
-    .cw-widget .cw-feature[aria-pressed="true"].is-border-tracing {
-      border-color: var(--cw-chip-line) !important;
-      background-size: 0% 0%, 100% 100%, 100% 100% !important;
-      animation: cw-professional-centre-fill 1160ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
-    }
-    
-    .cw-widget .cw-chip::after,
-    .cw-widget .cw-rowcard::after,
-    .cw-widget .cw-scard::after,
-    .cw-widget .cw-opt::after,
-    .cw-widget .cw-vcard::after,
-    .cw-widget .cw-feature::after {
-      content: "" !important;
-      position: absolute !important;
-      z-index: 8 !important;
-      inset: -1px !important;
-      display: block !important;
-      padding: 2.4px !important;
-      border-radius: inherit !important;
-      pointer-events: none !important;
-      opacity: 0 !important;
-      background: conic-gradient(
-        from -90deg,
-        rgb(var(--cw-chip-light-rgb)) 0 var(--cw-professional-trace),
-        transparent var(--cw-professional-trace) 100%
-      ) !important;
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0) !important;
-      -webkit-mask-composite: xor !important;
-      mask-composite: exclude !important;
-      transition: opacity 140ms ease !important;
-      animation: none !important;
-    }
-    
-    .cw-widget .cw-chip.is-border-tracing::after,
-    .cw-widget .cw-rowcard.is-border-tracing::after,
-    .cw-widget .cw-scard.is-border-tracing::after,
-    .cw-widget .cw-opt.is-border-tracing::after,
-    .cw-widget .cw-vcard.is-border-tracing::after,
-    .cw-widget .cw-feature.is-border-tracing::after {
-      opacity: 1 !important;
-      filter: drop-shadow(0 0 4px rgba(var(--cw-chip-light-rgb), 0.82))
-        drop-shadow(0 0 11px rgba(var(--cw-chip-rgb), 0.45)) !important;
-      animation: cw-professional-border-trace 690ms linear forwards !important;
-    }
-    
-    /* Clean icons: no bubbles, no stray radio controls, only a crisp check when selected. */
-    .cw-widget .cw-rowcard__icon,
-    .cw-widget .cw-scard__icon,
-    .cw-widget .cw-vcard__icon {
-      display: grid !important;
-      place-items: center !important;
-      width: 22px !important;
-      height: 22px !important;
-      padding: 0 !important;
-      border: 0 !important;
-      border-radius: 0 !important;
-      color: rgb(var(--cw-chip-light-rgb)) !important;
-      background: transparent !important;
-      box-shadow: none !important;
-    }
-    
-    .cw-widget .cw-rowcard__icon svg,
-    .cw-widget .cw-scard__icon svg,
-    .cw-widget .cw-vcard__icon svg {
-      width: 19px !important;
-      height: 19px !important;
-      stroke-width: 1.9 !important;
-      shape-rendering: geometricPrecision;
-    }
-    
-    .cw-widget .cw-opt__radio,
-    .cw-widget .cw-opt__radio--square {
-      display: none !important;
-    }
-    
-    .cw-widget .cw-rowcard::before,
-    .cw-widget .cw-scard::before,
-    .cw-widget .cw-opt::before,
-    .cw-widget .cw-vcard::before,
-    .cw-widget .cw-feature::before {
-      content: none !important;
-    }
-    
-    .cw-widget .cw-rowcard[data-selected="true"]::before,
-    .cw-widget .cw-scard[data-selected="true"]::before,
-    .cw-widget .cw-opt[data-selected="true"]::before,
-    .cw-widget .cw-vcard[data-selected="true"]::before,
-    .cw-widget .cw-feature[data-selected="true"]::before,
-    .cw-widget .cw-feature[aria-pressed="true"]::before {
-      content: "" !important;
-      position: absolute !important;
-      z-index: 9 !important;
-      top: 10px !important;
-      right: 10px !important;
-      width: 19px !important;
-      height: 19px !important;
-      border: 0 !important;
-      border-radius: 0 !important;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23eafffb' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round' d='M5 12.5l4.2 4.2L19 7.2'/%3E%3C/svg%3E") center / 18px 18px no-repeat !important;
-      box-shadow: none !important;
-    }
-    
-    .cw-widget .cw-opt__body,
-    .cw-widget .cw-rowcard__body {
-      min-width: 0 !important;
-      padding-right: 22px !important;
-    }
-    
-    /* Liquid CTA buttons inside the calculator. */
-    .cw-widget .cw-next,
-    .cw-widget .cw-submit,
-    .cw-widget .cw-thanks__actions button,
-    .cw-widget .cw-inputbar button {
-      position: relative !important;
-      isolation: isolate !important;
-      overflow: hidden !important;
-      border: 1px solid rgba(170, 220, 255, 0.58) !important;
-      border-radius: 999px !important;
-      color: #ffffff !important;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.025)),
-        linear-gradient(145deg, rgba(52, 120, 246, 0.76), rgba(22, 67, 157, 0.78)) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.24),
-        inset 0 -12px 26px rgba(5, 22, 58, 0.24),
-        0 20px 46px -27px rgba(52, 120, 246, 0.94) !important;
-      -webkit-backdrop-filter: blur(18px) saturate(155%) !important;
-      backdrop-filter: blur(18px) saturate(155%) !important;
-      transition:
-        border-color 280ms ease,
-        transform 280ms cubic-bezier(0.16, 1, 0.3, 1),
-        box-shadow 340ms ease,
-        filter 280ms ease !important;
-    }
-    
-    .cw-widget .cw-calculator .cw-next,
-    .cw-widget .cw-calculator .cw-submit {
-      border-color: rgba(137, 255, 235, 0.62) !important;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.025)),
-        linear-gradient(145deg, rgba(35, 196, 181, 0.78), rgba(11, 112, 108, 0.82)) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.25),
-        inset 0 -12px 26px rgba(3, 43, 45, 0.24),
-        0 20px 46px -27px rgba(35, 196, 181, 0.94) !important;
-    }
-    
-    .cw-widget .cw-next:hover:not(:disabled),
-    .cw-widget .cw-next:focus-visible:not(:disabled),
-    .cw-widget .cw-submit:hover:not(:disabled),
-    .cw-widget .cw-submit:focus-visible:not(:disabled),
-    .cw-widget .cw-thanks__actions button:hover,
-    .cw-widget .cw-thanks__actions button:focus-visible,
-    .cw-widget .cw-inputbar button:hover:not(:disabled),
-    .cw-widget .cw-inputbar button:focus-visible:not(:disabled) {
-      border-color: rgba(222, 240, 255, 0.86) !important;
-      filter: brightness(1.08) saturate(1.08);
-      transform: translateY(-2px) scale(1.01) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.31),
-        0 25px 54px -25px rgba(var(--cw-chip-rgb), 0.98) !important;
-    }
-    
-    @media (max-width: 520px) {
-      .cw-widget .cw-calc-body {
-        padding: 10px 9px 7px !important;
-      }
-    
-      .cw-widget .cw-grid,
-      .cw-widget .cw-rows,
-      .cw-widget .cw-list {
-        gap: 7px !important;
-      }
-    
-      .cw-widget .cw-rowcard {
-        min-height: 54px !important;
-      }
-    
-      .cw-widget .cw-scard,
-      .cw-widget .cw-vcard {
-        min-height: 68px !important;
-      }
-    
-      .cw-widget .cw-opt,
-      .cw-widget .cw-feature {
-        min-height: 52px !important;
-      }
-    
-      .cw-widget .cw-quick-replies .cw-chip {
-        min-height: 40px !important;
-      }
-    }
-    
-    @media (prefers-reduced-motion: reduce) {
-      .cw-widget .cw-tabs__glass,
-      .cw-widget .cw-quick-replies .cw-chip,
-      .cw-widget .cw-rowcard,
-      .cw-widget .cw-scard,
-      .cw-widget .cw-opt,
-      .cw-widget .cw-vcard,
-      .cw-widget .cw-feature,
-      .cw-widget .cw-next,
-      .cw-widget .cw-submit,
-      .cw-widget .cw-thanks__actions button,
-      .cw-widget .cw-inputbar button {
-        transition-duration: 0.01ms !important;
-      }
-    
-      .cw-widget .cw-rowcard[data-selected="true"].is-border-tracing,
-      .cw-widget .cw-scard[data-selected="true"].is-border-tracing,
-      .cw-widget .cw-opt[data-selected="true"].is-border-tracing,
-      .cw-widget .cw-vcard[data-selected="true"].is-border-tracing,
-      .cw-widget .cw-feature[data-selected="true"].is-border-tracing,
-      .cw-widget .cw-feature[aria-pressed="true"].is-border-tracing {
-        animation: none !important;
-        background-size: 235% 235%, 100% 100%, 100% 100% !important;
-      }
-    
-      .cw-widget .cw-chip.is-border-tracing::after,
-      .cw-widget .cw-rowcard.is-border-tracing::after,
-      .cw-widget .cw-scard.is-border-tracing::after,
-      .cw-widget .cw-opt.is-border-tracing::after,
-      .cw-widget .cw-vcard.is-border-tracing::after,
-      .cw-widget .cw-feature.is-border-tracing::after {
-        --cw-professional-trace: 100%;
-        animation: none !important;
-      }
-    }
-    
-  operator: 'match'
-  stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:134:10)
-    async Test.run (node:internal/test_runner/test:1054:7)
-    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 # Subtest: chat client has a real HTTPS endpoint, timeout and deterministic outage fallback
 ok 10 - chat client has a real HTTPS endpoint, timeout and deterministic outage fallback
   ---
-  duration_ms: 1.642101
+  duration_ms: 1.594018
   type: 'test'
   ...
 # Subtest: server API enforces origins, JSON, body limits, rate limits and upstream timeout
 ok 11 - server API enforces origins, JSON, body limits, rate limits and upstream timeout
   ---
-  duration_ms: 0.915309
+  duration_ms: 1.390942
   type: 'test'
   ...
 # Subtest: premium styles cover major surfaces, chips, mobile and reduced motion
 ok 12 - premium styles cover major surfaces, chips, mobile and reduced motion
   ---
-  duration_ms: 2.10904
+  duration_ms: 3.199758
   type: 'test'
   ...
 1..12
 # tests 12
 # suites 0
-# pass 8
-# fail 4
+# pass 11
+# fail 1
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 83.613922
+# duration_ms 94.548573
  ELIFECYCLE  Test failed. See above for more details.
