@@ -1,4 +1,4 @@
-run_id=30025954616
+run_id=30026180448
 install=success
 lint=success
 build=success
@@ -21,21 +21,21 @@ test=failure
 
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 108 modules transformed.
+[32m✓[39m 110 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.38 kB[22m
-[2mdist/[22m[2massets/[22m[35mindex-89CGpi0J.css  [39m[1m[2m197.21 kB[22m[1m[22m[2m │ gzip: 29.16 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-D-rjhD7r.js   [39m[1m[2m219.85 kB[22m[1m[22m[2m │ gzip: 74.35 kB[22m
+[2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.39 kB[22m
+[2mdist/[22m[2massets/[22m[35mindex-vT_vHNFf.css  [39m[1m[2m219.48 kB[22m[1m[22m[2m │ gzip: 32.19 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-zeuHORSn.js   [39m[1m[2m221.08 kB[22m[1m[22m[2m │ gzip: 74.70 kB[22m
 [32m✓ built in 1.24s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 104 modules transformed.
+[32m✓[39m 106 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[35mwidget.css  [39m[1m[2m197.21 kB[22m[1m[22m[2m │ gzip: 29.16 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m217.81 kB[22m[1m[22m[2m │ gzip: 73.72 kB[22m
-[32m✓ built in 1.31s[39m
+[2mdist/[22m[35mwidget.css  [39m[1m[2m219.48 kB[22m[1m[22m[2m │ gzip: 32.19 kB[22m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m219.05 kB[22m[1m[22m[2m │ gzip: 74.07 kB[22m
+[32m✓ built in 1.19s[39m
 
 ===== test =====
 
@@ -44,15 +44,31 @@ computing gzip size...
 
 TAP version 13
 # Subtest: the Derat layout layer loads last in demo and embed builds
-ok 1 - the Derat layout layer loads last in demo and embed builds
+not ok 1 - the Derat layout layer loads last in demo and embed builds
   ---
-  duration_ms: 17.230818
+  duration_ms: 12.816524
   type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    832 !== 797
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 797
+  actual: 832
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:29:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
   ...
 # Subtest: assistant layout follows the Derat order exactly
 not ok 2 - assistant layout follows the Derat order exactly
   ---
-  duration_ms: 4.991062
+  duration_ms: 3.723932
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:35:1'
   failureType: 'testCodeFailure'
@@ -586,7 +602,7 @@ not ok 2 - assistant layout follows the Derat order exactly
 # Subtest: the builder CTA switches immediately without a delayed border trace
 not ok 3 - the builder CTA switches immediately without a delayed border trace
   ---
-  duration_ms: 5.569142
+  duration_ms: 3.663412
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:51:1'
   failureType: 'testCodeFailure'
@@ -1120,13 +1136,13 @@ not ok 3 - the builder CTA switches immediately without a delayed border trace
 # Subtest: mode tabs remain clickable and the indicator starts under the active mode
 ok 4 - mode tabs remain clickable and the indicator starts under the active mode
   ---
-  duration_ms: 5.856174
+  duration_ms: 6.050142
   type: 'test'
   ...
 # Subtest: quick replies are one consistent chip family directly above the input
 not ok 5 - quick replies are one consistent chip family directly above the input
   ---
-  duration_ms: 5.207796
+  duration_ms: 1.432099
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:74:1'
   failureType: 'testCodeFailure'
@@ -1148,31 +1164,31 @@ not ok 5 - quick replies are one consistent chip family directly above the input
 # Subtest: direct contacts use the same three-card bottom bar as Derat
 ok 6 - direct contacts use the same three-card bottom bar as Derat
   ---
-  duration_ms: 2.331387
+  duration_ms: 1.478709
   type: 'test'
   ...
 # Subtest: the configurator fills the available vertical space
 ok 7 - the configurator fills the available vertical space
   ---
-  duration_ms: 1.6141
+  duration_ms: 0.933945
   type: 'test'
   ...
 # Subtest: configuration cards have no selected side line, shake or glow
 ok 8 - configuration cards have no selected side line, shake or glow
   ---
-  duration_ms: 1.664665
+  duration_ms: 0.968436
   type: 'test'
   ...
 # Subtest: selected checks are static, small and correctly aligned
 ok 9 - selected checks are static, small and correctly aligned
   ---
-  duration_ms: 1.61423
+  duration_ms: 1.229697
   type: 'test'
   ...
 # Subtest: builder flow remains short and contact stays final
 not ok 10 - builder flow remains short and contact stays final
   ---
-  duration_ms: 2.114089
+  duration_ms: 1.386672
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:123:1'
   failureType: 'testCodeFailure'
@@ -1194,40 +1210,40 @@ not ok 10 - builder flow remains short and contact stays final
 # Subtest: mobile keeps two-column Derat cards and a full-screen panel
 ok 11 - mobile keeps two-column Derat cards and a full-screen panel
   ---
-  duration_ms: 2.481358
+  duration_ms: 1.983563
   type: 'test'
   ...
 # Subtest: form controls remain mobile-safe and contact is prioritised
 ok 12 - form controls remain mobile-safe and contact is prioritised
   ---
-  duration_ms: 2.135429
+  duration_ms: 1.651958
   type: 'test'
   ...
 # Subtest: chat motion remains calm
 ok 13 - chat motion remains calm
   ---
-  duration_ms: 3.231717
+  duration_ms: 2.119515
   type: 'test'
   ...
 # Subtest: chat API and server protections remain intact
 ok 14 - chat API and server protections remain intact
   ---
-  duration_ms: 2.252188
+  duration_ms: 0.967695
   type: 'test'
   ...
 # Subtest: deployment validates the Derat layout build
 ok 15 - deployment validates the Derat layout build
   ---
-  duration_ms: 2.065177
+  duration_ms: 0.947956
   type: 'test'
   ...
 1..15
 # tests 15
 # suites 0
-# pass 11
-# fail 4
+# pass 10
+# fail 5
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 128.808172
+# duration_ms 117.809347
  ELIFECYCLE  Test failed. See above for more details.
