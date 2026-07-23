@@ -63,7 +63,10 @@ test("choice cards are rounded borderless and never shrink", async () => {
   assert.match(css, /\.cw-rowcard[\s\S]*border-radius: 18px/);
   assert.match(css, /\.cw-rowcard::after[\s\S]*transform: scaleX\(0\)/);
   assert.match(css, /\.cw-rowcard\[data-selected="true"\]::after[\s\S]*scaleX\(1\)/);
-  assert.doesNotMatch(css, /:active[\s\S]*scale\(0\.[0-9]+\)/);
+  assert.doesNotMatch(
+    css,
+    /\.cw-(?:rowcard|scard|opt|vcard):active\s*\{[^}]*scale\(0\.[0-9]+\)/,
+  );
 });
 
 test("selection check is circular and aligned on the right", async () => {
@@ -85,7 +88,8 @@ test("icons form one rounded line family without tile backgrounds", async () => 
   assert.match(icons, /strokeLinejoin="round"/);
   assert.match(icons, /vectorEffect="non-scaling-stroke"/);
   assert.match(css, /\.cw-rowcard__icon,[\s\S]*color: var\(--mc-blue-hover\)/);
-  assert.doesNotMatch(css, /\.cw-rowcard__icon[\s\S]*background:/);
+  assert.doesNotMatch(css, /\.cw-rowcard__icon\s*\{[^}]*background:/);
+  assert.doesNotMatch(css, /\.cw-scard__icon\s*\{[^}]*background:/);
 });
 
 test("configurator remains five steps with simpler business language", async () => {
