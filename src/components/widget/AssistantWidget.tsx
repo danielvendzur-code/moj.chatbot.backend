@@ -6,7 +6,10 @@ import {
 } from "../../lib/siteAssistant";
 import { announceEmbedState, installEmbedBridge } from "../../lib/embedBridge";
 import { track } from "../../lib/analytics";
-import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";
+import type {
+  AssistantPreset,
+  OpenSiteAssistantOptions,
+} from "../../types/assistant";
 import { AssistantConversation } from "./AssistantConversation";
 import { BubbleLogo } from "./BubbleLogo";
 import { ToolCalculator } from "./ToolCalculator";
@@ -19,13 +22,15 @@ type AssistantWidgetProps = {
 };
 
 const isPreset = (value: string | undefined): value is AssistantPreset =>
-  Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));
+  Boolean(
+    value && ["calculator", "inquiry", "advisor", "booking"].includes(value),
+  );
 
-export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JSX.Element {
+export function AssistantWidget({
+  embedMode = false,
+}: AssistantWidgetProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<WidgetMode>("assistant");
-  const [teaserVisible, setTeaserVisible] = useState(false);
-  const [teaserDismissed, setTeaserDismissed] = useState(false);
   const [resetToken, setResetToken] = useState(0);
   const [preset, setPreset] = useState<AssistantPreset | null>(null);
   const panelRef = useRef<HTMLElement>(null);
@@ -36,14 +41,16 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
   }, []);
   useFocusTrap(panelRef, isOpen, close);
 
-  const open = useCallback((nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {
-    setMode(nextMode);
-    setPreset(nextPreset);
-    setResetToken((value) => value + 1);
-    setTeaserVisible(false);
-    setIsOpen(true);
-    track("widget_open", { mode: nextMode });
-  }, []);
+  const open = useCallback(
+    (nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {
+      setMode(nextMode);
+      setPreset(nextPreset);
+      setResetToken((value) => value + 1);
+      setIsOpen(true);
+      track("widget_open", { mode: nextMode });
+    },
+    [],
+  );
 
   const switchMode = useCallback((nextMode: WidgetMode) => {
     setMode(nextMode);
@@ -53,7 +60,8 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
   const openFromOptions = useCallback(
     (options: OpenSiteAssistantOptions) => {
       const directPreset =
-        options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);
+        options?.preset ??
+        (isPreset(options?.entry) ? options.entry : undefined);
       const calculatorEntry =
         options?.entry === "builder" ||
         options?.entry === "calculator" ||
@@ -85,18 +93,6 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
   }, [embedMode, isOpen]);
 
   useEffect(() => {
-    if (embedMode || teaserDismissed || isOpen) return;
-
-    const showTimer = window.setTimeout(() => setTeaserVisible(true), 3_000);
-    const hideTimer = window.setTimeout(() => setTeaserVisible(false), 11_500);
-
-    return () => {
-      window.clearTimeout(showTimer);
-      window.clearTimeout(hideTimer);
-    };
-  }, [embedMode, isOpen, teaserDismissed]);
-
-  useEffect(() => {
     if (!isOpen || !window.matchMedia("(max-width: 520px)").matches) return;
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -107,28 +103,6 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
 
   return (
     <div className="cw-widget">
-      {!embedMode && teaserVisible && !isOpen ? (
-        <aside className="cw-teaser" data-testid="widget-teaser">
-          <button
-            type="button"
-            className="cw-teaser__close"
-            aria-label="Zavrieť tip"
-            onClick={() => {
-              setTeaserVisible(false);
-              setTeaserDismissed(true);
-            }}
-          >
-            ×
-          </button>
-          <button type="button" className="cw-teaser__content" onClick={() => open("calculator")}>
-            <strong>Aký chatbot by pomohol vášmu webu?</strong>
-            <span className="cw-teaser__copy">
-              Za minútu si vyskladáte riešenie aj s funkciami.
-            </span>
-          </button>
-        </aside>
-      ) : null}
-
       <button
         id="chameleon-widget-launcher"
         data-testid="widget-launcher"
@@ -160,7 +134,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
               <BubbleLogo size="header" />
             </span>
             <div className="cw-panel-head__title">
-              <b>Webový asistent</b>
+              <b>Danielov webový asistent</b>
               <span className="cw-panel-head__context cw-panel-head__online">
                 <i aria-hidden="true" /> Online
               </span>
@@ -192,7 +166,11 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
             <span className="cw-panel-head__beam" aria-hidden="true" />
           </header>
 
-          <nav className="cw-tabs" aria-label="Režim asistenta" data-mode={mode}>
+          <nav
+            className="cw-tabs"
+            aria-label="Režim asistenta"
+            data-mode={mode}
+          >
             <span className="cw-tabs__glass" aria-hidden="true" />
             <button
               type="button"

@@ -5,12 +5,12 @@ import "./interaction.css";
 import "./requested-polish.css";
 import "./world-class-polish.css";
 import "./competition-widget.css";
-import "./selection-border-polish.css";
 import "./flow-content-polish.css";
 import "./black-blue-refresh.css";
 
 const HOST_ID = "dv-assistant-root";
-const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
+const scriptSrc =
+  (document.currentScript as HTMLScriptElement | null)?.src ?? "";
 
 function ensureStylesheet(): void {
   if (!scriptSrc) return;
@@ -34,7 +34,7 @@ function mount(): void {
   ensureStylesheet();
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "black-blue-20260722");
+  host.setAttribute("data-dv-assistant-version", "brand-interactions-20260722");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);

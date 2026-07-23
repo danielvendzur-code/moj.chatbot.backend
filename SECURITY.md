@@ -2,7 +2,7 @@
 
 ## Nahlásenie zraniteľnosti
 
-Bezpečnostný problém neposielajte ako verejný GitHub issue. Pošlite ho súkromne na **daniel.vendzur@gmail.com** s predmetom `SECURITY — chatbot`.
+Bezpečnostný problém neposielajte ako verejný GitHub issue. Pošlite ho súkromne na **daniel@vendzur.sk** s predmetom `SECURITY — chatbot`.
 
 Uveďte dotknutú URL alebo endpoint, postup reprodukcie, možné následky a neškodný dôkaz. Neposielajte skutočné API kľúče, heslá ani osobné údaje tretích strán a nevykonávajte záťažové testy proti verejnému endpointu.
 
