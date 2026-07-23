@@ -21,7 +21,7 @@ const INITIAL_MESSAGES: ChatMessage[] = [
     id: 1,
     from: "bot",
     text:
-      "Dobrý deň. Stačí mi napísať, čo dnes na webe vysvetľujete alebo počítate ručne. Odporučím vhodný chatbot, kalkulačku alebo konfigurátor. Jednoduchý chatbot začína od 350 €.",
+      "Napíšte, čo zákazníci na vašom webe najčastejšie riešia. Navrhnem, či je vhodnejší chatbot, kalkulačka alebo konfigurátor. Ceny začínajú od 350 €.",
   },
 ];
 
@@ -29,19 +29,19 @@ type QuickReply = { label: string; question: string };
 
 const QUICK_REPLIES: QuickReply[] = [
   {
-    label: "Čo chatbot vyrieši",
+    label: "Čo môže vyriešiť",
     question: "Čo môže chatbot reálne vyriešiť na webe mojej firmy?",
   },
   {
-    label: "Ako prebieha spolupráca",
+    label: "Ako to prebieha",
     question: "Ako prebieha návrh, príprava a nasadenie riešenia?",
   },
   {
-    label: "Čo budete potrebovať",
+    label: "Čo potrebujete dodať",
     question: "Aké podklady odo mňa potrebujete na prípravu chatbota alebo kalkulačky?",
   },
   {
-    label: "Pozrieť živé ukážky",
+    label: "Pozrieť ukážky",
     question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",
   },
 ];
@@ -153,11 +153,8 @@ export function AssistantConversation({
             <WidgetIcon name="calculator" />
           </span>
           <span className="cw-chat-builder__copy">
-            <b>Vyskladať riešenie krok za krokom</b>
-            <small>Odpovedzte na 5 jednoduchých otázok. Na konci odošlete kontakt.</small>
-          </span>
-          <span className="cw-chat-builder__arrow" aria-hidden="true">
-            →
+            <b>Vyskladať vhodné riešenie</b>
+            <small>Odpovedzte na 5 krátkych otázok. Na konci odošlete kontakt.</small>
           </span>
         </button>
       </div>
@@ -194,7 +191,7 @@ export function AssistantConversation({
         {QUICK_REPLIES.map(({ label, question }) => (
           <button
             type="button"
-            className="cw-chip cw-spotlight"
+            className="cw-chip"
             key={label}
             title={question}
             onClick={() => void ask(question)}
@@ -229,21 +226,21 @@ export function AssistantConversation({
       </div>
 
       <nav className="cw-direct-actions" aria-label="Priamy kontakt">
-        <span className="cw-direct-actions__label">Potrebujete radšej hovoriť priamo?</span>
+        <span className="cw-direct-actions__label">Alebo ma kontaktujte priamo</span>
         <div className="cw-direct-actions__grid">
-          <a className="cw-spotlight" href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
+          <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
             <span className="cw-direct-actions__icon">
               <WidgetIcon name="chat" />
             </span>
             <span>WhatsApp</span>
           </a>
-          <a className="cw-spotlight" href="tel:+421948699433">
+          <a href="tel:+421948699433">
             <span className="cw-direct-actions__icon">
               <WidgetIcon name="phone" />
             </span>
             <span>Zavolať</span>
           </a>
-          <a className="cw-spotlight" href="mailto:daniel@vendzur.sk">
+          <a href="mailto:daniel@vendzur.sk">
             <span className="cw-direct-actions__icon">
               <WidgetIcon name="mail" />
             </span>
