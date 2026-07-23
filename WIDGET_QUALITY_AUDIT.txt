@@ -1,4 +1,4 @@
-run_id=30010484805
+run_id=30012642285
 install=success
 lint=success
 build=success
@@ -26,16 +26,16 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.38 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-BDnd_9tJ.css  [39m[1m[2m118.72 kB[22m[1m[22m[2m │ gzip: 19.07 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-s3KB39mP.js   [39m[1m[2m222.75 kB[22m[1m[22m[2m │ gzip: 75.52 kB[22m
-[32m✓ built in 923ms[39m
+[2mdist/[22m[2massets/[22m[36mindex-gtrDFvX3.js   [39m[1m[2m222.89 kB[22m[1m[22m[2m │ gzip: 75.55 kB[22m
+[32m✓ built in 912ms[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 101 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m118.72 kB[22m[1m[22m[2m │ gzip: 19.07 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m220.72 kB[22m[1m[22m[2m │ gzip: 74.88 kB[22m
-[32m✓ built in 936ms[39m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m220.86 kB[22m[1m[22m[2m │ gzip: 74.92 kB[22m
+[32m✓ built in 896ms[39m
 
 ===== test =====
 
@@ -46,73 +46,73 @@ TAP version 13
 # Subtest: final visual system keeps the shared black, white and blue palette
 ok 1 - final visual system keeps the shared black, white and blue palette
   ---
-  duration_ms: 6.188567
+  duration_ms: 6.246363
   type: 'test'
   ...
 # Subtest: demo and embedded builds import the identical final style stack
 ok 2 - demo and embedded builds import the identical final style stack
   ---
-  duration_ms: 1.185779
+  duration_ms: 1.438232
   type: 'test'
   ...
 # Subtest: AI Assistant identity and vector mascot are consistent
 ok 3 - AI Assistant identity and vector mascot are consistent
   ---
-  duration_ms: 1.221062
+  duration_ms: 1.462235
   type: 'test'
   ...
 # Subtest: mode tabs switch directly and use a draggable liquid glass indicator
 ok 4 - mode tabs switch directly and use a draggable liquid glass indicator
   ---
-  duration_ms: 1.502783
+  duration_ms: 1.594898
   type: 'test'
   ...
 # Subtest: builder flow omits priority and keeps contact as final step
 ok 5 - builder flow omits priority and keeps contact as final step
   ---
-  duration_ms: 1.387
+  duration_ms: 1.323554
   type: 'test'
   ...
 # Subtest: final screen visually orders contact before summary
 ok 6 - final screen visually orders contact before summary
   ---
-  duration_ms: 0.526116
+  duration_ms: 0.586982
   type: 'test'
   ...
 # Subtest: quick replies never drag sideways and mobile inputs prevent browser zoom
 ok 7 - quick replies never drag sideways and mobile inputs prevent browser zoom
   ---
-  duration_ms: 1.067714
+  duration_ms: 1.215159
   type: 'test'
   ...
 # Subtest: chips trace the full border before filling from the centre
 ok 8 - chips trace the full border before filling from the centre
   ---
-  duration_ms: 1.175034
+  duration_ms: 1.253266
   type: 'test'
   ...
 # Subtest: nested chip bubbles are removed while icons remain sharp
 ok 9 - nested chip bubbles are removed while icons remain sharp
   ---
-  duration_ms: 1.129045
+  duration_ms: 1.179816
   type: 'test'
   ...
 # Subtest: chat client has a real HTTPS endpoint, timeout and deterministic outage fallback
 ok 10 - chat client has a real HTTPS endpoint, timeout and deterministic outage fallback
   ---
-  duration_ms: 0.872802
+  duration_ms: 0.897153
   type: 'test'
   ...
 # Subtest: server API enforces origins, JSON, body limits, rate limits and upstream timeout
 ok 11 - server API enforces origins, JSON, body limits, rate limits and upstream timeout
   ---
-  duration_ms: 0.739534
+  duration_ms: 0.797073
   type: 'test'
   ...
 # Subtest: premium styles cover major surfaces, chips, mobile and reduced motion
 ok 12 - premium styles cover major surfaces, chips, mobile and reduced motion
   ---
-  duration_ms: 1.143417
+  duration_ms: 1.131478
   type: 'test'
   ...
 1..12
@@ -123,4 +123,4 @@ ok 12 - premium styles cover major surfaces, chips, mobile and reduced motion
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 62.689901
+# duration_ms 61.8076
