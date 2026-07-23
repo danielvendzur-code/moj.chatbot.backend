@@ -48,6 +48,7 @@ function mount(): void {
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
   host.setAttribute("data-dv-assistant-version", "web-palette-20260723-v8");
+  host.setAttribute("data-dv-assistant-theme", "website-palette");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);
