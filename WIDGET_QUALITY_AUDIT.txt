@@ -1,4 +1,4 @@
-run_id=30026332088
+run_id=30026584870
 install=success
 lint=success
 build=success
@@ -27,7 +27,7 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.38 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-vT_vHNFf.css  [39m[1m[2m219.48 kB[22m[1m[22m[2m │ gzip: 32.19 kB[22m
 [2mdist/[22m[2massets/[22m[36mindex-DfT5ro4m.js   [39m[1m[2m221.00 kB[22m[1m[22m[2m │ gzip: 74.69 kB[22m
-[32m✓ built in 1.27s[39m
+[32m✓ built in 1.33s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 106 modules transformed.
@@ -35,7 +35,7 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m219.48 kB[22m[1m[22m[2m │ gzip: 32.19 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m218.97 kB[22m[1m[22m[2m │ gzip: 74.07 kB[22m
-[32m✓ built in 1.24s[39m
+[32m✓ built in 1.28s[39m
 
 ===== test =====
 
@@ -43,1643 +43,1167 @@ computing gzip size...
 > node --test tests/widget-contract.test.mjs -- --run
 
 TAP version 13
-# Subtest: the Derat layout layer loads last in demo and embed builds
-not ok 1 - the Derat layout layer loads last in demo and embed builds
+# Subtest: the competition layer loads last in demo and embed builds
+ok 1 - the competition layer loads last in demo and embed builds
   ---
-  duration_ms: 7.780493
+  duration_ms: 8.23433
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:7:1'
-  failureType: 'testCodeFailure'
-  error: |-
-    Expected values to be strictly equal:
-    
-    832 !== 797
-    
-  code: 'ERR_ASSERTION'
-  name: 'AssertionError'
-  expected: 797
-  actual: 832
-  operator: 'strictEqual'
-  stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:29:10)
-    async Test.run (node:internal/test_runner/test:1054:7)
-    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
   ...
-# Subtest: assistant layout follows the Derat order exactly
-not ok 2 - assistant layout follows the Derat order exactly
+# Subtest: assistant order remains builder messages chips input contacts
+ok 2 - assistant order remains builder messages chips input contacts
   ---
-  duration_ms: 3.491867
+  duration_ms: 1.043389
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:35:1'
+  ...
+# Subtest: mode tabs switch immediately and glass cannot block clicks
+ok 3 - mode tabs switch immediately and glass cannot block clicks
+  ---
+  duration_ms: 1.713103
+  type: 'test'
+  ...
+# Subtest: spotlight uses one pointer tracker and restrained radial light
+not ok 4 - spotlight uses one pointer tracker and restrained radial light
+  ---
+  duration_ms: 2.851616
+  type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:50:1'
   failureType: 'testCodeFailure'
   error: |-
-    The input did not match the regular expression /Vyskladať riešenie/. Input:
+    The input did not match the regular expression /data\.cwSpotlight/. Input:
     
-    'import { useEffect, useRef, useState } from "react";\n' +
-      'import { animateSentMessage } from "../../lib/motion";\n' +
-      'import { sendChat, type ChatTurn } from "../../lib/assistantApi";\n' +
-      'import { track } from "../../lib/analytics";\n' +
-      'import { BubbleLogo } from "./BubbleLogo";\n' +
-      'import { WidgetIcon } from "./WidgetIcon";\n' +
+    'const SELECTOR = ".cw-spotlight";\n' +
       '\n' +
-      'type AssistantConversationProps = {\n' +
-      '  resetToken: number;\n' +
-      '  onOpenCalculator: () => void;\n' +
-      '};\n' +
+      'export function installWidgetSpotlight(): () => void {\n' +
+      '  if (\n' +
+      '    typeof window === "undefined" ||\n' +
+      '    !window.matchMedia("(hover: hover) and (pointer: fine)").matches ||\n' +
+      '    window.matchMedia("(prefers-reduced-motion: reduce)").matches\n' +
+      '  ) {\n' +
+      '    return () => undefined;\n' +
+      '  }\n' +
       '\n' +
-      'type ChatMessage = {\n' +
-      '  id: number;\n' +
-      '  from: "bot" | "me";\n' +
-      '  text: string;\n' +
-      '};\n' +
+      '  let active: HTMLElement | null = null;\n' +
+      '  let frame = 0;\n' +
+      '  let clientX = 0;\n' +
+      '  let clientY = 0;\n' +
       '\n' +
-      'const INITIAL_MESSAGES: ChatMessage[] = [\n' +
-      '  {\n' +
-      '    id: 1,\n' +
-      '    from: "bot",\n' +
-      '    text: "Dobrý deň. Pomôžem vám vybrať chatbot, kalkulačku alebo konfigurátor podľa vášho webu. Jednoduché riešenie začína od 350 €. Čo potrebujete zjednodušiť?",\n' +
-      '  },\n' +
-      '];\n' +
-      '\n' +
-      'type QuickReply = { label: string; question: string };\n' +
-      '\n' +
-      'const QUICK_REPLIES: QuickReply[] = [\n' +
-      '  {\n' +
-      '    label: "Cena od 350 €",\n' +
-      '    question: "Čo dostanem v jednoduchom riešení od 350 €?",\n' +
-      '  },\n' +
-      '  {\n' +
-      '    label: "Ako to funguje",\n' +
-      '    question: "Ako prebieha návrh a nasadenie chatbota na web?",\n' +
-      '  },\n' +
-      '  {\n' +
-      '    label: "Čo potrebujete odo mňa",\n' +
-      '    question: "Aké podklady potrebujete na prípravu chatbota alebo kalkulačky?",\n' +
-      '  },\n' +
-      '  {\n' +
-      '    label: "Ukážky riešení",\n' +
-      '    question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",\n' +
-      '  },\n' +
-      '];\n' +
-      '\n' +
-      'const CHAT_FALLBACK =\n' +
-      '  "Teraz sa neviem spojiť. Otvorte konfigurátor alebo použite priamy kontakt nižšie a ozvem sa s konkrétnym návrhom.";\n' +
-      '\n' +
-      'export function AssistantConversation({\n' +
-      '  resetToken,\n' +
-      '  onOpenCalculator,\n' +
-      '}: AssistantConversationProps): JSX.Element {\n' +
-      '  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);\n' +
-      '  const [input, setInput] = useState("");\n' +
-      '  const [typing, setTyping] = useState(false);\n' +
-      '  const nextIdRef = useRef(2);\n' +
-      '  const messagesRef = useRef<HTMLDivElement>(null);\n' +
-      '  const [planeFx, setPlaneFx] = useState(false);\n' +
-      '  const planeTimerRef = useRef<number | null>(null);\n' +
-      '\n' +
-      '  useEffect(() => {\n' +
-      '    const last = messages[messages.length - 1];\n' +
-      '    if (!last || last.from !== "me") return;\n' +
-      '    const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");\n' +
-      '    animateSentMessage(rows?.[rows.length - 1] ?? null);\n' +
-      '  }, [messages]);\n' +
-      '\n' +
-      '  useEffect(\n' +
-      '    () => () => {\n' +
-      '      if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);\n' +
-      '    },\n' +
-      '    [],\n' +
-      '  );\n' +
-      '\n' +
-      '  const launchPlane = () => {\n' +
-      '    setPlaneFx(false);\n' +
-      '    requestAnimationFrame(() => setPlaneFx(true));\n' +
-      '    if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);\n' +
-      '    planeTimerRef.current = window.setTimeout(() => setPlaneFx(false), 700);\n' +
+      '  const clear = () => {\n' +
+      '    if (!active) return;\n' +
+      '    active.removeAttribute("data-cw-spotlight");\n' +
+      '    active.style.removeProperty("--cw-spot-x");\n' +
+      '    active.style.removeProperty("--cw-spot-y");\n' +
+      '    active = null;\n' +
       '  };\n' +
       '\n' +
-      '  useEffect(() => {\n' +
-      '    setMessages(INITIAL_MESSAGES);\n' +
-      '    setInput("");\n' +
-      '    setTyping(false);\n' +
-      '    nextIdRef.current = 2;\n' +
-      '  }, [resetToken]);\n' +
+      '  const paint = () => {\n' +
+      '    frame = 0;\n' +
+      '    if (!active) return;\n' +
+      '    const rect = active.getBoundingClientRect();\n' +
+      '    const x = Math.min(100, Math.max(0, ((clientX - rect.left) / Math.max(rect.width, 1)) * 100));\n' +
+      '    const y = Math.min(100, Math.max(0, ((clientY - rect.top) / Math.max(rect.height, 1)) * 100));\n' +
+      '    active.style.setProperty("--cw-spot-x", `${x}%`);\n' +
+      '    active.style.setProperty("--cw-spot-y", `${y}%`);\n' +
+      '    active.dataset.cwSpotlight = "true";\n' +
+      '  };\n' +
       '\n' +
-      '  useEffect(() => {\n' +
-      '    const container = messagesRef.current;\n' +
-      '    if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });\n' +
-      '  }, [messages, typing]);\n' +
-      '\n' +
-      '  const ask = async (question: string) => {\n' +
-      '    if (typing) return;\n' +
-      '    const userMessage = {\n' +
-      '      id: nextIdRef.current++,\n' +
-      '      from: "me" as const,\n' +
-      '      text: question,\n' +
-      '    };\n' +
-      '    setMessages((current) => [...current, userMessage]);\n' +
-      '    setTyping(true);\n' +
-      '    track("chat_message_sent", { length: question.length });\n' +
-      '\n' +
-      '    const turns: ChatTurn[] = [...messages, userMessage].map((message) => ({\n' +
-      '      role: message.from === "me" ? "user" : "assistant",\n' +
-      '      text: message.text,\n' +
-      '    }));\n' +
-      '    const firstUser = turns.findIndex((turn) => turn.role === "user");\n' +
-      '    const history = firstUser === -1 ? [] : turns.slice(firstUser);\n' +
-      '\n' +
-      '    try {\n' +
-      '      const reply = await sendChat(history);\n' +
-      '      setMessages((current) => [\n' +
-      '        ...current,\n' +
-      '        { id: nextIdRef.current++, from: "bot", text: reply },\n' +
-      '      ]);\n' +
-      '      track("chat_reply_received");\n' +
-      '    } catch (error) {\n' +
-      '      setMessages((current) => [\n' +
-      '        ...current,\n' +
-      '        { id: nextIdRef.current++, from: "bot", text: CHAT_FALLBACK },\n' +
-      '      ]);\n' +
-      '      track("chat_error", {\n' +
-      '        reason: error instanceof Error ? error.message : "unknown",\n' +
-      '      });\n' +
-      '    } finally {\n' +
-      '      setTyping(false);\n' +
+      '  const onPointerMove = (event: PointerEvent) => {\n' +
+      '    if (event.pointerType === "touch") return;\n' +
+      '    const next =\n' +
+      '      event.target instanceof Element ? event.target.closest<HTMLElement>(SELECTOR) : null;\n' +
+      '    if (next !== active) {\n' +
+      '      clear();\n' +
+      '      active = next;\n' +
       '    }\n' +
+      '    if (!active) return;\n' +
+      '    clientX = event.clientX;\n' +
+      '    clientY = event.clientY;\n' +
+      '    if (!frame) frame = window.requestAnimationFrame(paint);\n' +
       '  };\n' +
       '\n' +
-      '  const submit = () => {\n' +
-      '    const value = input.trim();\n' +
-      '    if (!value || typing) return;\n' +
-      '    setInput("");\n' +
-      '    launchPlane();\n' +
-      '    void ask(value);\n' +
+      '  const onPointerOut = (event: PointerEvent) => {\n' +
+      '    if (!event.relatedTarget) clear();\n' +
       '  };\n' +
       '\n' +
-      '  const openCalculator = () => {\n' +
-      '    track("chat_builder_open");\n' +
-      '    onOpenCalculator();\n' +
+      '  document.addEventListener("pointermove", onPointerMove, { capture: true, passive: true });\n' +
+      '  document.addEventListener("pointerout", onPointerOut, { capture: true, passive: true });\n' +
+      '  window.addEventListener("blur", clear);\n' +
+      '\n' +
+      '  return () => {\n' +
+      '    document.removeEventListener("pointermove", onPointerMove, true);\n' +
+      '    document.removeEventListener("pointerout", onPointerOut, true);\n' +
+      '    window.removeEventListener("blur", clear);\n' +
+      '    if (frame) window.cancelAnimationFrame(frame);\n' +
+      '    clear();\n' +
       '  };\n' +
-      '\n' +
-      '  return (\n' +
-      '    <div className="cw-conversation" data-testid="assistant-view">\n' +
-      '      <div className="cw-chat-top">\n' +
-      '        <button type="button" className="cw-chat-builder cw-spotlight" onClick={openCalculator}>\n' +
-      '          <span className="cw-chat-builder__icon" aria-hidden="true">\n' +
-      '            <WidgetIcon name="calculator" />\n' +
-      '          </span>\n' +
-      '          <span className="cw-chat-builder__copy">\n' +
-      '            <b>Vyskladať konkrétne riešenie</b>\n' +
-      '            <small>5 krátkych krokov · návrh a presná cena po kontrole zadania</small>\n' +
-      '          </span>\n' +
-      '          <span className="cw-chat-builder__arrow" aria-hidden="true">\n' +
-      '            →\n' +
-      '          </span>\n' +
-      '        </button>\n' +
-      '      </div>\n' +
-      '\n' +
-      '      <div className="cw-messages" ref={messagesRef} aria-live="polite">\n' +
-      '        {messages.map((message) => (\n' +
-      '          <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>\n' +
-      '            {message.from === "bot" ? (\n' +
-      '              <span className="cw-avatar">\n' +
-      '                <BubbleLogo size="avatar" />\n' +
-      '              </span>\n' +
-      '            ) : null}\n' +
-      '            <div className="cw-message-wrap">\n' +
-      '              <p>{message.text}</p>\n' +
-      '            </div>\n' +
-      '          </div>\n' +
-      '        ))}\n' +
-      '\n' +
-      '        {typing ? (\n' +
-      '          <div className="cw-message-row cw-message-row--bot">\n' +
-      '            <span className="cw-avatar">\n' +
-      '              <BubbleLogo size="avatar" />\n' +
-      '            </span>\n' +
-      '            <div className="cw-typing" aria-label="AI Assistant odpovedá">\n' +
-      '              <i />\n' +
-      '              <i />\n' +
-      '              <i />\n' +
-      '            </div>\n' +
-      '          </div>\n' +
-      '        ) : null}\n' +
-      '      </div>\n' +
-      '\n' +
-      '      <div className="cw-quick-replies" aria-label="Rýchle možnosti">\n' +
-      '        {QUICK_REPLIES.map(({ label, question }) => (\n' +
-      '          <button\n' +
-      '            type="button"\n' +
-      '            className="cw-chip cw-spotlight"\n' +
-      '            key={label}\n' +
-      '            title={question}\n' +
-      '            onClick={() => void ask(question)}\n' +
-      '          >\n' +
-      '            <span>{label}</span>\n' +
-      '            <span aria-hidden="true">→</span>\n' +
-      '          </button>\n' +
-      '        ))}\n' +
-      '      </div>\n' +
-      '\n' +
-      '      <div className="cw-inputbar">\n' +
-      '        <input\n' +
-      '          value={input}\n' +
-      '          onChange={(event) => setInput(event.target.value)}\n' +
-      '          onKeyDown={(event) => {\n' +
-      '            if (event.key === "Enter") {\n' +
-      '              event.preventDefault();\n' +
-      '              submit();\n' +
-      '            }\n' +
-      '          }}\n' +
-      '          placeholder="Opíšte, čo dnes riešite ručne…"\n' +
-      '          aria-label="Správa pre AI Assistanta"\n' +
-      '        />\n' +
-      '        <button\n' +
-      '          type="button"\n' +
-      '          className={planeFx ? "is-sending" : undefined}\n' +
-      '          onClick={submit}\n' +
-      '          disabled={!input.trim() || typing}\n' +
-      '          aria-label="Odoslať správu"\n' +
-      '        >\n' +
-      '          <WidgetIcon name="send" />\n' +
-      '        </button>\n' +
-      '      </div>\n' +
-      '\n' +
-      '      <nav className="cw-direct-actions" aria-label="Priamy kontakt">\n' +
-      '        <span className="cw-direct-actions__label">Alebo ma kontaktujte priamo</span>\n' +
-      '        <div className="cw-direct-actions__grid">\n' +
-      '          <a className="cw-spotlight" href="https://wa.me/421948699433" target="_blank" rel="noreferrer">\n' +
-      '            <span className="cw-direct-actions__icon">\n' +
-      '              <WidgetIcon name="chat" />\n' +
-      '            </span>\n' +
-      '            <span>WhatsApp</span>\n' +
-      '          </a>\n' +
-      '          <a className="cw-spotlight" href="tel:+421948699433">\n' +
-      '            <span className="cw-direct-actions__icon">\n' +
-      '              <WidgetIcon name="phone" />\n' +
-      '            </span>\n' +
-      '            <span>Zavolať</span>\n' +
-      '          </a>\n' +
-      '          <a className="cw-spotlight" href="mailto:daniel@vendzur.sk">\n' +
-      '            <span className="cw-direct-actions__icon">\n' +
-      '              <WidgetIcon name="mail" />\n' +
-      '            </span>\n' +
-      '            <span>E-mail</span>\n' +
-      '          </a>\n' +
-      '        </div>\n' +
-      '      </nav>\n' +
-      '    </div>\n' +
-      '  );\n' +
       '}\n'
     
   code: 'ERR_ASSERTION'
   name: 'AssertionError'
   expected:
   actual: |-
-    import { useEffect, useRef, useState } from "react";
-    import { animateSentMessage } from "../../lib/motion";
-    import { sendChat, type ChatTurn } from "../../lib/assistantApi";
-    import { track } from "../../lib/analytics";
-    import { BubbleLogo } from "./BubbleLogo";
-    import { WidgetIcon } from "./WidgetIcon";
+    const SELECTOR = ".cw-spotlight";
     
-    type AssistantConversationProps = {
-      resetToken: number;
-      onOpenCalculator: () => void;
-    };
+    export function installWidgetSpotlight(): () => void {
+      if (
+        typeof window === "undefined" ||
+        !window.matchMedia("(hover: hover) and (pointer: fine)").matches ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        return () => undefined;
+      }
     
-    type ChatMessage = {
-      id: number;
-      from: "bot" | "me";
-      text: string;
-    };
+      let active: HTMLElement | null = null;
+      let frame = 0;
+      let clientX = 0;
+      let clientY = 0;
     
-    const INITIAL_MESSAGES: ChatMessage[] = [
-      {
-        id: 1,
-        from: "bot",
-        text: "Dobrý deň. Pomôžem vám vybrať chatbot, kalkulačku alebo konfigurátor podľa vášho webu. Jednoduché riešenie začína od 350 €. Čo potrebujete zjednodušiť?",
-      },
-    ];
-    
-    type QuickReply = { label: string; question: string };
-    
-    const QUICK_REPLIES: QuickReply[] = [
-      {
-        label: "Cena od 350 €",
-        question: "Čo dostanem v jednoduchom riešení od 350 €?",
-      },
-      {
-        label: "Ako to funguje",
-        question: "Ako prebieha návrh a nasadenie chatbota na web?",
-      },
-      {
-        label: "Čo potrebujete odo mňa",
-        question: "Aké podklady potrebujete na prípravu chatbota alebo kalkulačky?",
-      },
-      {
-        label: "Ukážky riešení",
-        question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",
-      },
-    ];
-    
-    const CHAT_FALLBACK =
-      "Teraz sa neviem spojiť. Otvorte konfigurátor alebo použite priamy kontakt nižšie a ozvem sa s konkrétnym návrhom.";
-    
-    export function AssistantConversation({
-      resetToken,
-      onOpenCalculator,
-    }: AssistantConversationProps): JSX.Element {
-      const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
-      const [input, setInput] = useState("");
-      const [typing, setTyping] = useState(false);
-      const nextIdRef = useRef(2);
-      const messagesRef = useRef<HTMLDivElement>(null);
-      const [planeFx, setPlaneFx] = useState(false);
-      const planeTimerRef = useRef<number | null>(null);
-    
-      useEffect(() => {
-        const last = messages[messages.length - 1];
-        if (!last || last.from !== "me") return;
-        const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");
-        animateSentMessage(rows?.[rows.length - 1] ?? null);
-      }, [messages]);
-    
-      useEffect(
-        () => () => {
-          if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
-        },
-        [],
-      );
-    
-      const launchPlane = () => {
-        setPlaneFx(false);
-        requestAnimationFrame(() => setPlaneFx(true));
-        if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
-        planeTimerRef.current = window.setTimeout(() => setPlaneFx(false), 700);
+      const clear = () => {
+        if (!active) return;
+        active.removeAttribute("data-cw-spotlight");
+        active.style.removeProperty("--cw-spot-x");
+        active.style.removeProperty("--cw-spot-y");
+        active = null;
       };
     
-      useEffect(() => {
-        setMessages(INITIAL_MESSAGES);
-        setInput("");
-        setTyping(false);
-        nextIdRef.current = 2;
-      }, [resetToken]);
+      const paint = () => {
+        frame = 0;
+        if (!active) return;
+        const rect = active.getBoundingClientRect();
+        const x = Math.min(100, Math.max(0, ((clientX - rect.left) / Math.max(rect.width, 1)) * 100));
+        const y = Math.min(100, Math.max(0, ((clientY - rect.top) / Math.max(rect.height, 1)) * 100));
+        active.style.setProperty("--cw-spot-x", `${x}%`);
+        active.style.setProperty("--cw-spot-y", `${y}%`);
+        active.dataset.cwSpotlight = "true";
+      };
     
-      useEffect(() => {
-        const container = messagesRef.current;
-        if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
-      }, [messages, typing]);
-    
-      const ask = async (question: string) => {
-        if (typing) return;
-        const userMessage = {
-          id: nextIdRef.current++,
-          from: "me" as const,
-          text: question,
-        };
-        setMessages((current) => [...current, userMessage]);
-        setTyping(true);
-        track("chat_message_sent", { length: question.length });
-    
-        const turns: ChatTurn[] = [...messages, userMessage].map((message) => ({
-          role: message.from === "me" ? "user" : "assistant",
-          text: message.text,
-        }));
-        const firstUser = turns.findIndex((turn) => turn.role === "user");
-        const history = firstUser === -1 ? [] : turns.slice(firstUser);
-    
-        try {
-          const reply = await sendChat(history);
-          setMessages((current) => [
-            ...current,
-            { id: nextIdRef.current++, from: "bot", text: reply },
-          ]);
-          track("chat_reply_received");
-        } catch (error) {
-          setMessages((current) => [
-            ...current,
-            { id: nextIdRef.current++, from: "bot", text: CHAT_FALLBACK },
-          ]);
-          track("chat_error", {
-            reason: error instanceof Error ? error.message : "unknown",
-          });
-        } finally {
-          setTyping(false);
+      const onPointerMove = (event: PointerEvent) => {
+        if (event.pointerType === "touch") return;
+        const next =
+          event.target instanceof Element ? event.target.closest<HTMLElement>(SELECTOR) : null;
+        if (next !== active) {
+          clear();
+          active = next;
         }
+        if (!active) return;
+        clientX = event.clientX;
+        clientY = event.clientY;
+        if (!frame) frame = window.requestAnimationFrame(paint);
       };
     
-      const submit = () => {
-        const value = input.trim();
-        if (!value || typing) return;
-        setInput("");
-        launchPlane();
-        void ask(value);
+      const onPointerOut = (event: PointerEvent) => {
+        if (!event.relatedTarget) clear();
       };
     
-      const openCalculator = () => {
-        track("chat_builder_open");
-        onOpenCalculator();
+      document.addEventListener("pointermove", onPointerMove, { capture: true, passive: true });
+      document.addEventListener("pointerout", onPointerOut, { capture: true, passive: true });
+      window.addEventListener("blur", clear);
+    
+      return () => {
+        document.removeEventListener("pointermove", onPointerMove, true);
+        document.removeEventListener("pointerout", onPointerOut, true);
+        window.removeEventListener("blur", clear);
+        if (frame) window.cancelAnimationFrame(frame);
+        clear();
       };
-    
-      return (
-        <div className="cw-conversation" data-testid="assistant-view">
-          <div className="cw-chat-top">
-            <button type="button" className="cw-chat-builder cw-spotlight" onClick={openCalculator}>
-              <span className="cw-chat-builder__icon" aria-hidden="true">
-                <WidgetIcon name="calculator" />
-              </span>
-              <span className="cw-chat-builder__copy">
-                <b>Vyskladať konkrétne riešenie</b>
-                <small>5 krátkych krokov · návrh a presná cena po kontrole zadania</small>
-              </span>
-              <span className="cw-chat-builder__arrow" aria-hidden="true">
-                →
-              </span>
-            </button>
-          </div>
-    
-          <div className="cw-messages" ref={messagesRef} aria-live="polite">
-            {messages.map((message) => (
-              <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>
-                {message.from === "bot" ? (
-                  <span className="cw-avatar">
-                    <BubbleLogo size="avatar" />
-                  </span>
-                ) : null}
-                <div className="cw-message-wrap">
-                  <p>{message.text}</p>
-                </div>
-              </div>
-            ))}
-    
-            {typing ? (
-              <div className="cw-message-row cw-message-row--bot">
-                <span className="cw-avatar">
-                  <BubbleLogo size="avatar" />
-                </span>
-                <div className="cw-typing" aria-label="AI Assistant odpovedá">
-                  <i />
-                  <i />
-                  <i />
-                </div>
-              </div>
-            ) : null}
-          </div>
-    
-          <div className="cw-quick-replies" aria-label="Rýchle možnosti">
-            {QUICK_REPLIES.map(({ label, question }) => (
-              <button
-                type="button"
-                className="cw-chip cw-spotlight"
-                key={label}
-                title={question}
-                onClick={() => void ask(question)}
-              >
-                <span>{label}</span>
-                <span aria-hidden="true">→</span>
-              </button>
-            ))}
-          </div>
-    
-          <div className="cw-inputbar">
-            <input
-              value={input}
-              onChange={(event) => setInput(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  event.preventDefault();
-                  submit();
-                }
-              }}
-              placeholder="Opíšte, čo dnes riešite ručne…"
-              aria-label="Správa pre AI Assistanta"
-            />
-            <button
-              type="button"
-              className={planeFx ? "is-sending" : undefined}
-              onClick={submit}
-              disabled={!input.trim() || typing}
-              aria-label="Odoslať správu"
-            >
-              <WidgetIcon name="send" />
-            </button>
-          </div>
-    
-          <nav className="cw-direct-actions" aria-label="Priamy kontakt">
-            <span className="cw-direct-actions__label">Alebo ma kontaktujte priamo</span>
-            <div className="cw-direct-actions__grid">
-              <a className="cw-spotlight" href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
-                <span className="cw-direct-actions__icon">
-                  <WidgetIcon name="chat" />
-                </span>
-                <span>WhatsApp</span>
-              </a>
-              <a className="cw-spotlight" href="tel:+421948699433">
-                <span className="cw-direct-actions__icon">
-                  <WidgetIcon name="phone" />
-                </span>
-                <span>Zavolať</span>
-              </a>
-              <a className="cw-spotlight" href="mailto:daniel@vendzur.sk">
-                <span className="cw-direct-actions__icon">
-                  <WidgetIcon name="mail" />
-                </span>
-                <span>E-mail</span>
-              </a>
-            </div>
-          </nav>
-        </div>
-      );
     }
     
   operator: 'match'
   stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:46:10)
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:58:10)
     async Test.run (node:internal/test_runner/test:1054:7)
     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
-# Subtest: the builder CTA switches immediately without a delayed border trace
-not ok 3 - the builder CTA switches immediately without a delayed border trace
+# Subtest: quick replies are balanced two by two above the input
+ok 5 - quick replies are balanced two by two above the input
   ---
-  duration_ms: 2.335589
+  duration_ms: 5.136313
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:51:1'
+  ...
+# Subtest: configurator is five steps and contact remains final
+not ok 6 - configurator is five steps and contact remains final
+  ---
+  duration_ms: 2.00236
+  type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:73:1'
   failureType: 'testCodeFailure'
   error: |-
-    The input did not match the regular expression /className="cw-chat-builder" onClick=\{openCalculator\}/. Input:
+    The input did not match the regular expression /Jednoduchý chatbot/. Input:
     
-    'import { useEffect, useRef, useState } from "react";\n' +
-      'import { animateSentMessage } from "../../lib/motion";\n' +
-      'import { sendChat, type ChatTurn } from "../../lib/assistantApi";\n' +
-      'import { track } from "../../lib/analytics";\n' +
-      'import { BubbleLogo } from "./BubbleLogo";\n' +
-      'import { WidgetIcon } from "./WidgetIcon";\n' +
+    'import type { AssistantPreset, InterestId } from "../types/assistant";\n' +
       '\n' +
-      'type AssistantConversationProps = {\n' +
-      '  resetToken: number;\n' +
-      '  onOpenCalculator: () => void;\n' +
+      'export type StepId =\n' +
+      '  | "interest"\n' +
+      '  | "industry"\n' +
+      '  | "priority"\n' +
+      '  | "features"\n' +
+      '  | "volume"\n' +
+      '  | "timeline"\n' +
+      '  | "contact";\n' +
+      '\n' +
+      '/* The visible flow is intentionally short: solution, company, key functions,\n' +
+      '   timing and contact. Legacy step ids remain exported for saved-state compatibility. */\n' +
+      'export const STEPS: StepId[] = ["interest", "industry", "features", "timeline", "contact"];\n' +
+      '\n' +
+      'export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {\n' +
+      '  interest: [\n' +
+      '    "Čo má zákazník na webe vybaviť?",\n' +
+      '    "Vyberte najbližší typ. Presný rozsah doladíme podľa vašich podkladov.",\n' +
+      '  ],\n' +
+      '  industry: [\n' +
+      '    "Pre aký typ firmy riešenie pripravujeme?",\n' +
+      '    "Pomôže mi to odporučiť správne otázky, výstupy a prepojenia.",\n' +
+      '  ],\n' +
+      '  priority: [\n' +
+      '    "Čo od asistenta očakávate?",\n' +
+      '    "Tento krok sa v skrátenom toku nepoužíva.",\n' +
+      '  ],\n' +
+      '  features: [\n' +
+      '    "Ktoré funkcie sú pre vás dôležité?",\n' +
+      '    "Základ je označený. Vyberte iba to, čo zákazník naozaj potrebuje.",\n' +
+      '  ],\n' +
+      '  volume: [\n' +
+      '    "Koľko dopytov mesačne riešite?",\n' +
+      '    "Tento údaj sa dá doplniť neskôr a nie je samostatným krokom.",\n' +
+      '  ],\n' +
+      '  timeline: [\n' +
+      '    "Kedy chcete riešenie spustiť?",\n' +
+      '    "Podľa termínu pripravím realistický postup a rozsah prvej verzie.",\n' +
+      '  ],\n' +
+      '  contact: [\n' +
+      '    "Kam mám poslať konkrétny návrh?",\n' +
+      '    "Meno a e-mail stačia. Ostatné údaje sú nepovinné.",\n' +
+      '  ],\n' +
       '};\n' +
       '\n' +
-      'type ChatMessage = {\n' +
-      '  id: number;\n' +
-      '  from: "bot" | "me";\n' +
-      '  text: string;\n' +
+      'export type InterestOption = {\n' +
+      '  id: InterestId;\n' +
+      '  label: string;\n' +
+      '  description: string;\n' +
+      '  badge?: string;\n' +
+      '  icon: "chat" | "calculator" | "cart" | "calendar" | "spark";\n' +
       '};\n' +
       '\n' +
-      'const INITIAL_MESSAGES: ChatMessage[] = [\n' +
+      'export const INTERESTS: InterestOption[] = [\n' +
       '  {\n' +
-      '    id: 1,\n' +
-      '    from: "bot",\n' +
-      '    text: "Dobrý deň. Pomôžem vám vybrať chatbot, kalkulačku alebo konfigurátor podľa vášho webu. Jednoduché riešenie začína od 350 €. Čo potrebujete zjednodušiť?",\n' +
+      '    id: "chatbot",\n' +
+      '    label: "AI chatbot",\n' +
+      '    description: "Odpovie, poradí a pripraví dopyt s kontextom.",\n' +
+      '    icon: "chat",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "calcbot",\n' +
+      '    label: "Chatbot s výpočtom",\n' +
+      '    description: "Vypočíta cenu, spotrebu alebo rozsah podľa vašich pravidiel.",\n' +
+      '    icon: "calculator",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "product",\n' +
+      '    label: "Chatbot s konfigurátorom",\n' +
+      '    description: "Prevedie výberom variantov, rozmerov a doplnkov.",\n' +
+      '    icon: "cart",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "custom",\n' +
+      '    label: "Vlastné riešenie",\n' +
+      '    description: "Opíšte proces a navrhnem vhodný postup na mieru.",\n' +
+      '    icon: "spark",\n' +
       '  },\n' +
       '];\n' +
       '\n' +
-      'type QuickReply = { label: string; question: string };\n' +
+      'export type IndustryOption = {\n' +
+      '  id: string;\n' +
+      '  label: string;\n' +
+      '  icon: "tools" | "cart" | "food" | "heart" | "factory" | "spark";\n' +
+      '  examples: string[];\n' +
+      '};\n' +
       '\n' +
-      'const QUICK_REPLIES: QuickReply[] = [\n' +
+      'export const INDUSTRIES: IndustryOption[] = [\n' +
       '  {\n' +
-      '    label: "Cena od 350 €",\n' +
-      '    question: "Čo dostanem v jednoduchom riešení od 350 €?",\n' +
+      '    id: "sluzby",\n' +
+      '    label: "Služby a remeslá",\n' +
+      '    icon: "tools",\n' +
+      '    examples: [\n' +
+      '      "Cenový dopyt s rozsahom a lokalitou",\n' +
+      '      "Fotky ešte pred obhliadkou",\n' +
+      '      "Rezervácia termínu alebo obhliadky",\n' +
+      '    ],\n' +
       '  },\n' +
       '  {\n' +
-      '    label: "Ako to funguje",\n' +
-      '    question: "Ako prebieha návrh a nasadenie chatbota na web?",\n' +
+      '    id: "eshop",\n' +
+      '    label: "E-shop a predaj",\n' +
+      '    icon: "cart",\n' +
+      '    examples: [\n' +
+      '      "Odporúčanie produktu podľa potreby",\n' +
+      '      "Výber variantu a doplnkov",\n' +
+      '      "Kontakt s hotovou konfiguráciou",\n' +
+      '    ],\n' +
       '  },\n' +
       '  {\n' +
-      '    label: "Čo potrebujete odo mňa",\n' +
-      '    question: "Aké podklady potrebujete na prípravu chatbota alebo kalkulačky?",\n' +
+      '    id: "gastro",\n' +
+      '    label: "Gastro a ubytovanie",\n' +
+      '    icon: "food",\n' +
+      '    examples: [\n' +
+      '      "Rezervácia stola alebo pobytu",\n' +
+      '      "Odpovede na časté otázky",\n' +
+      '      "Komunikácia vo viacerých jazykoch",\n' +
+      '    ],\n' +
       '  },\n' +
       '  {\n' +
-      '    label: "Ukážky riešení",\n' +
-      '    question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",\n' +
+      '    id: "zdravie",\n' +
+      '    label: "Zdravie a krása",\n' +
+      '    icon: "heart",\n' +
+      '    examples: [\n' +
+      '      "Výber služby a termínu",\n' +
+      '      "Predpríprava klienta pred návštevou",\n' +
+      '      "Cenník bez opakovaných telefonátov",\n' +
+      '    ],\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "vyroba",\n' +
+      '    label: "Výroba a B2B",\n' +
+      '    icon: "factory",\n' +
+      '    examples: [\n' +
+      '      "Technické parametre dopytu",\n' +
+      '      "Kvalifikácia pred obchodníkom",\n' +
+      '      "Zápis do CRM alebo tabuľky",\n' +
+      '    ],\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "ine",\n' +
+      '    label: "Iné odvetvie",\n' +
+      '    icon: "spark",\n' +
+      '    examples: [\n' +
+      '      "Vlastné otázky a rozhodovanie",\n' +
+      '      "Zber kontaktu s kontextom",\n' +
+      '      "Odovzdanie človeku v správnom momente",\n' +
+      '    ],\n' +
       '  },\n' +
       '];\n' +
       '\n' +
-      'const CHAT_FALLBACK =\n' +
-      '  "Teraz sa neviem spojiť. Otvorte konfigurátor alebo použite priamy kontakt nižšie a ozvem sa s konkrétnym návrhom.";\n' +
-      '\n' +
-      'export function AssistantConversation({\n' +
-      '  resetToken,\n' +
-      '  onOpenCalculator,\n' +
-      '}: AssistantConversationProps): JSX.Element {\n' +
-      '  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);\n' +
-      '  const [input, setInput] = useState("");\n' +
-      '  const [typing, setTyping] = useState(false);\n' +
-      '  const nextIdRef = useRef(2);\n' +
-      '  const messagesRef = useRef<HTMLDivElement>(null);\n' +
-      '  const [planeFx, setPlaneFx] = useState(false);\n' +
-      '  const planeTimerRef = useRef<number | null>(null);\n' +
-      '\n' +
-      '  useEffect(() => {\n' +
-      '    const last = messages[messages.length - 1];\n' +
-      '    if (!last || last.from !== "me") return;\n' +
-      '    const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");\n' +
-      '    animateSentMessage(rows?.[rows.length - 1] ?? null);\n' +
-      '  }, [messages]);\n' +
-      '\n' +
-      '  useEffect(\n' +
-      '    () => () => {\n' +
-      '      if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);\n' +
-      '    },\n' +
-      '    [],\n' +
-      '  );\n' +
-      '\n' +
-      '  const launchPlane = () => {\n' +
-      '    setPlaneFx(false);\n' +
-      '    requestAnimationFrame(() => setPlaneFx(true));\n' +
-      '    if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);\n' +
-      '    planeTimerRef.current = window.setTimeout(() => setPlaneFx(false), 700);\n' +
-      '  };\n' +
-      '\n' +
-      '  useEffect(() => {\n' +
-      '    setMessages(INITIAL_MESSAGES);\n' +
-      '    setInput("");\n' +
-      '    setTyping(false);\n' +
-      '    nextIdRef.current = 2;\n' +
-      '  }, [resetToken]);\n' +
-      '\n' +
-      '  useEffect(() => {\n' +
-      '    const container = messagesRef.current;\n' +
-      '    if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });\n' +
-      '  }, [messages, typing]);\n' +
-      '\n' +
-      '  const ask = async (question: string) => {\n' +
-      '    if (typing) return;\n' +
-      '    const userMessage = {\n' +
-      '      id: nextIdRef.current++,\n' +
-      '      from: "me" as const,\n' +
-      '      text: question,\n' +
-      '    };\n' +
-      '    setMessages((current) => [...current, userMessage]);\n' +
-      '    setTyping(true);\n' +
-      '    track("chat_message_sent", { length: question.length });\n' +
-      '\n' +
-      '    const turns: ChatTurn[] = [...messages, userMessage].map((message) => ({\n' +
-      '      role: message.from === "me" ? "user" : "assistant",\n' +
-      '      text: message.text,\n' +
-      '    }));\n' +
-      '    const firstUser = turns.findIndex((turn) => turn.role === "user");\n' +
-      '    const history = firstUser === -1 ? [] : turns.slice(firstUser);\n' +
-      '\n' +
-      '    try {\n' +
-      '      const reply = await sendChat(history);\n' +
-      '      setMessages((current) => [\n' +
-      '        ...current,\n' +
-      '        { id: nextIdRef.current++, from: "bot", text: reply },\n' +
-      '      ]);\n' +
-      '      track("chat_reply_received");\n' +
-      '    } catch (error) {\n' +
-      '      setMessages((current) => [\n' +
-      '        ...current,\n' +
-      '        { id: nextIdRef.current++, from: "bot", text: CHAT_FALLBACK },\n' +
-      '      ]);\n' +
-      '      track("chat_error", {\n' +
-      '        reason: error instanceof Error ? error.message : "unknown",\n' +
-      '      });\n' +
-      '    } finally {\n' +
-      '      setTyping(false);\n' +
-      '    }\n' +
-      '  };\n' +
-      '\n' +
-      '  const submit = () => {\n' +
-      '    const value = input.trim();\n' +
-      '    if (!value || typing) return;\n' +
-      '    setInput("");\n' +
-      '    launchPlane();\n' +
-      '    void ask(value);\n' +
-      '  };\n' +
-      '\n' +
-      '  const openCalculator = () => {\n' +
-      '    track("chat_builder_open");\n' +
-      '    onOpenCalculator();\n' +
-      '  };\n' +
-      '\n' +
-      '  return (\n' +
-      '    <div className="cw-conversation" data-testid="assistant-view">\n' +
-      '      <div className="cw-chat-top">\n' +
-      '        <button type="button" className="cw-chat-builder cw-spotlight" onClick={openCalculator}>\n' +
-      '          <span className="cw-chat-builder__icon" aria-hidden="true">\n' +
-      '            <WidgetIcon name="calculator" />\n' +
-      '          </span>\n' +
-      '          <span className="cw-chat-builder__copy">\n' +
-      '            <b>Vyskladať konkrétne riešenie</b>\n' +
-      '            <small>5 krátkych krokov · návrh a presná cena po kontrole zadania</small>\n' +
-      '          </span>\n' +
-      '          <span className="cw-chat-builder__arrow" aria-hidden="true">\n' +
-      '            →\n' +
-      '          </span>\n' +
-      '        </button>\n' +
-      '      </div>\n' +
-      '\n' +
-      '      <div className="cw-messages" ref={messagesRef} aria-live="polite">\n' +
-      '        {messages.map((message) => (\n' +
-      '          <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>\n' +
-      '            {message.from === "bot" ? (\n' +
-      '              <span className="cw-avatar">\n' +
-      '                <BubbleLogo size="avatar" />\n' +
-      '              </span>\n' +
-      '            ) : null}\n' +
-      '            <div className="cw-message-wrap">\n' +
-      '              <p>{message.text}</p>\n' +
-      '            </div>\n' +
-      '          </div>\n' +
-      '        ))}\n' +
-      '\n' +
-      '        {typing ? (\n' +
-      '          <div className="cw-message-row cw-message-row--bot">\n' +
-      '            <span className="cw-avatar">\n' +
-      '              <BubbleLogo size="avatar" />\n' +
-      '            </span>\n' +
-      '            <div className="cw-typing" aria-label="AI Assistant odpovedá">\n' +
-      '              <i />\n' +
-      '              <i />\n' +
-      '              <i />\n' +
-      '            </div>\n' +
-      '          </div>\n' +
-      '        ) : null}\n' +
-      '      </div>\n' +
-      '\n' +
-      '      <div className="cw-quick-replies" aria-label="Rýchle možnosti">\n' +
-      '        {QUICK_REPLIES.map(({ label, question }) => (\n' +
-      '          <button\n' +
-      '            type="button"\n' +
-      '            className="cw-chip cw-spotlight"\n' +
-      '            key={label}\n' +
-      '            title={question}\n' +
-      '            onClick={() => void ask(question)}\n' +
-      '          >\n' +
-      '            <span>{label}</span>\n' +
-      '            <span aria-hidden="true">→</span>\n' +
-      '          </button>\n' +
-      '        ))}\n' +
-      '      </div>\n' +
-      '\n' +
-      '      <div className="cw-inputbar">\n' +
-      '        <input\n' +
-      '          value={input}\n' +
-      '          onChange={(event) => setInput(event.target.value)}\n' +
-      '          onKeyDown={(event) => {\n' +
-      '            if (event.key === "Enter") {\n' +
-      '              event.preventDefault();\n' +
-      '              submit();\n' +
-      '            }\n' +
-      '          }}\n' +
-      '          placeholder="Opíšte, čo dnes riešite ručne…"\n' +
-      '          aria-label="Správa pre AI Assistanta"\n' +
-      '        />\n' +
-      '        <button\n' +
-      '          type="button"\n' +
-      '          className={planeFx ? "is-sending" : undefined}\n' +
-      '          onClick={submit}\n' +
-      '          disabled={!input.trim() || typing}\n' +
-      '          aria-label="Odoslať správu"\n' +
-      '        >\n' +
-      '          <WidgetIcon name="send" />\n' +
-      '        </button>\n' +
-      '      </div>\n' +
-      '\n' +
-      '      <nav className="cw-direct-actions" aria-label="Priamy kontakt">\n' +
-      '        <span className="cw-direct-actions__label">Alebo ma kontaktujte priamo</span>\n' +
-      '        <div className="cw-direct-actions__grid">\n' +
-      '          <a className="cw-spotlight" href="https://wa.me/421948699433" target="_blank" rel="noreferrer">\n' +
-      '            <span className="cw-direct-actions__icon">\n' +
-      '              <WidgetIcon name="chat" />\n' +
-      '            </span>\n' +
-      '            <span>WhatsApp</span>\n' +
-      '          </a>\n' +
-      '          <a className="cw-spotlight" href="tel:+421948699433">\n' +
-      '            <span className="cw-direct-actions__icon">\n' +
-      '              <WidgetIcon name="phone" />\n' +
-      '            </span>\n' +
-      '            <span>Zavolať</span>\n' +
-      '          </a>\n' +
-      '          <a className="cw-spotlight" href="mailto:daniel@vendzur.sk">\n' +
-      '            <span className="cw-direct-actions__icon">\n' +
-      '              <WidgetIcon name="mail" />\n' +
-      '            </span>\n' +
-      '            <span>E-mail</span>\n' +
-      '          </a>\n' +
-      '        </div>\n' +
-      '      </nav>\n' +
-      '    </div>\n' +
-      '  );\n' +
-      '}\n'
-    
-  code: 'ERR_ASSERTION'
-  name: 'AssertionError'
-  expected:
-  actual: |-
-    import { useEffect, useRef, useState } from "react";
-    import { animateSentMessage } from "../../lib/motion";
-    import { sendChat, type ChatTurn } from "../../lib/assistantApi";
-    import { track } from "../../lib/analytics";
-    import { BubbleLogo } from "./BubbleLogo";
-    import { WidgetIcon } from "./WidgetIcon";
-    
-    type AssistantConversationProps = {
-      resetToken: number;
-      onOpenCalculator: () => void;
-    };
-    
-    type ChatMessage = {
-      id: number;
-      from: "bot" | "me";
-      text: string;
-    };
-    
-    const INITIAL_MESSAGES: ChatMessage[] = [
-      {
-        id: 1,
-        from: "bot",
-        text: "Dobrý deň. Pomôžem vám vybrať chatbot, kalkulačku alebo konfigurátor podľa vášho webu. Jednoduché riešenie začína od 350 €. Čo potrebujete zjednodušiť?",
-      },
-    ];
-    
-    type QuickReply = { label: string; question: string };
-    
-    const QUICK_REPLIES: QuickReply[] = [
-      {
-        label: "Cena od 350 €",
-        question: "Čo dostanem v jednoduchom riešení od 350 €?",
-      },
-      {
-        label: "Ako to funguje",
-        question: "Ako prebieha návrh a nasadenie chatbota na web?",
-      },
-      {
-        label: "Čo potrebujete odo mňa",
-        question: "Aké podklady potrebujete na prípravu chatbota alebo kalkulačky?",
-      },
-      {
-        label: "Ukážky riešení",
-        question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",
-      },
-    ];
-    
-    const CHAT_FALLBACK =
-      "Teraz sa neviem spojiť. Otvorte konfigurátor alebo použite priamy kontakt nižšie a ozvem sa s konkrétnym návrhom.";
-    
-    export function AssistantConversation({
-      resetToken,
-      onOpenCalculator,
-    }: AssistantConversationProps): JSX.Element {
-      const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
-      const [input, setInput] = useState("");
-      const [typing, setTyping] = useState(false);
-      const nextIdRef = useRef(2);
-      const messagesRef = useRef<HTMLDivElement>(null);
-      const [planeFx, setPlaneFx] = useState(false);
-      const planeTimerRef = useRef<number | null>(null);
-    
-      useEffect(() => {
-        const last = messages[messages.length - 1];
-        if (!last || last.from !== "me") return;
-        const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");
-        animateSentMessage(rows?.[rows.length - 1] ?? null);
-      }, [messages]);
-    
-      useEffect(
-        () => () => {
-          if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
-        },
-        [],
-      );
-    
-      const launchPlane = () => {
-        setPlaneFx(false);
-        requestAnimationFrame(() => setPlaneFx(true));
-        if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
-        planeTimerRef.current = window.setTimeout(() => setPlaneFx(false), 700);
-      };
-    
-      useEffect(() => {
-        setMessages(INITIAL_MESSAGES);
-        setInput("");
-        setTyping(false);
-        nextIdRef.current = 2;
-      }, [resetToken]);
-    
-      useEffect(() => {
-        const container = messagesRef.current;
-        if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
-      }, [messages, typing]);
-    
-      const ask = async (question: string) => {
-        if (typing) return;
-        const userMessage = {
-          id: nextIdRef.current++,
-          from: "me" as const,
-          text: question,
-        };
-        setMessages((current) => [...current, userMessage]);
-        setTyping(true);
-        track("chat_message_sent", { length: question.length });
-    
-        const turns: ChatTurn[] = [...messages, userMessage].map((message) => ({
-          role: message.from === "me" ? "user" : "assistant",
-          text: message.text,
-        }));
-        const firstUser = turns.findIndex((turn) => turn.role === "user");
-        const history = firstUser === -1 ? [] : turns.slice(firstUser);
-    
-        try {
-          const reply = await sendChat(history);
-          setMessages((current) => [
-            ...current,
-            { id: nextIdRef.current++, from: "bot", text: reply },
-          ]);
-          track("chat_reply_received");
-        } catch (error) {
-          setMessages((current) => [
-            ...current,
-            { id: nextIdRef.current++, from: "bot", text: CHAT_FALLBACK },
-          ]);
-          track("chat_error", {
-            reason: error instanceof Error ? error.message : "unknown",
-          });
-        } finally {
-          setTyping(false);
-        }
-      };
-    
-      const submit = () => {
-        const value = input.trim();
-        if (!value || typing) return;
-        setInput("");
-        launchPlane();
-        void ask(value);
-      };
-    
-      const openCalculator = () => {
-        track("chat_builder_open");
-        onOpenCalculator();
-      };
-    
-      return (
-        <div className="cw-conversation" data-testid="assistant-view">
-          <div className="cw-chat-top">
-            <button type="button" className="cw-chat-builder cw-spotlight" onClick={openCalculator}>
-              <span className="cw-chat-builder__icon" aria-hidden="true">
-                <WidgetIcon name="calculator" />
-              </span>
-              <span className="cw-chat-builder__copy">
-                <b>Vyskladať konkrétne riešenie</b>
-                <small>5 krátkych krokov · návrh a presná cena po kontrole zadania</small>
-              </span>
-              <span className="cw-chat-builder__arrow" aria-hidden="true">
-                →
-              </span>
-            </button>
-          </div>
-    
-          <div className="cw-messages" ref={messagesRef} aria-live="polite">
-            {messages.map((message) => (
-              <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>
-                {message.from === "bot" ? (
-                  <span className="cw-avatar">
-                    <BubbleLogo size="avatar" />
-                  </span>
-                ) : null}
-                <div className="cw-message-wrap">
-                  <p>{message.text}</p>
-                </div>
-              </div>
-            ))}
-    
-            {typing ? (
-              <div className="cw-message-row cw-message-row--bot">
-                <span className="cw-avatar">
-                  <BubbleLogo size="avatar" />
-                </span>
-                <div className="cw-typing" aria-label="AI Assistant odpovedá">
-                  <i />
-                  <i />
-                  <i />
-                </div>
-              </div>
-            ) : null}
-          </div>
-    
-          <div className="cw-quick-replies" aria-label="Rýchle možnosti">
-            {QUICK_REPLIES.map(({ label, question }) => (
-              <button
-                type="button"
-                className="cw-chip cw-spotlight"
-                key={label}
-                title={question}
-                onClick={() => void ask(question)}
-              >
-                <span>{label}</span>
-                <span aria-hidden="true">→</span>
-              </button>
-            ))}
-          </div>
-    
-          <div className="cw-inputbar">
-            <input
-              value={input}
-              onChange={(event) => setInput(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  event.preventDefault();
-                  submit();
-                }
-              }}
-              placeholder="Opíšte, čo dnes riešite ručne…"
-              aria-label="Správa pre AI Assistanta"
-            />
-            <button
-              type="button"
-              className={planeFx ? "is-sending" : undefined}
-              onClick={submit}
-              disabled={!input.trim() || typing}
-              aria-label="Odoslať správu"
-            >
-              <WidgetIcon name="send" />
-            </button>
-          </div>
-    
-          <nav className="cw-direct-actions" aria-label="Priamy kontakt">
-            <span className="cw-direct-actions__label">Alebo ma kontaktujte priamo</span>
-            <div className="cw-direct-actions__grid">
-              <a className="cw-spotlight" href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
-                <span className="cw-direct-actions__icon">
-                  <WidgetIcon name="chat" />
-                </span>
-                <span>WhatsApp</span>
-              </a>
-              <a className="cw-spotlight" href="tel:+421948699433">
-                <span className="cw-direct-actions__icon">
-                  <WidgetIcon name="phone" />
-                </span>
-                <span>Zavolať</span>
-              </a>
-              <a className="cw-spotlight" href="mailto:daniel@vendzur.sk">
-                <span className="cw-direct-actions__icon">
-                  <WidgetIcon name="mail" />
-                </span>
-                <span>E-mail</span>
-              </a>
-            </div>
-          </nav>
-        </div>
-      );
-    }
-    
-  operator: 'match'
-  stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:55:10)
-    async Test.run (node:internal/test_runner/test:1054:7)
-    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
-  ...
-# Subtest: mode tabs remain clickable and the indicator starts under the active mode
-not ok 4 - mode tabs remain clickable and the indicator starts under the active mode
-  ---
-  duration_ms: 2.949607
-  type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:60:1'
-  failureType: 'testCodeFailure'
-  error: |-
-    The input did not match the regular expression /mode === "assistant" \? "calc\(100% \+ 6px\)" : "0px"/. Input:
-    
-    'import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";\n' +
-      'import { useFocusTrap } from "../../hooks/useFocusTrap";\n' +
-      'import {\n' +
-      '  installSiteAssistantGlobal,\n' +
-      '  SITE_ASSISTANT_OPEN_EVENT,\n' +
-      '} from "../../lib/siteAssistant";\n' +
-      'import { announceEmbedState, installEmbedBridge } from "../../lib/embedBridge";\n' +
-      'import { track } from "../../lib/analytics";\n' +
-      'import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";\n' +
-      'import { AssistantConversation } from "./AssistantConversation";\n' +
-      'import { BubbleLogo } from "./BubbleLogo";\n' +
-      'import { ToolCalculator } from "./ToolCalculator";\n' +
-      'import { WidgetIcon } from "./WidgetIcon";\n' +
-      '\n' +
-      'type WidgetMode = "assistant" | "calculator";\n' +
-      '\n' +
-      'type AssistantWidgetProps = {\n' +
-      '  embedMode?: boolean;\n' +
+      'export type PriorityOption = {\n' +
+      '  id: string;\n' +
+      '  label: string;\n' +
+      '  description: string;\n' +
       '};\n' +
       '\n' +
-      'const isPreset = (value: string | undefined): value is AssistantPreset =>\n' +
-      '  Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));\n' +
+      'export const PRIORITIES: PriorityOption[] = [\n' +
+      '  { id: "dopyty", label: "Viac pripravených dopytov", description: "Získať kontakt aj relevantné vstupy." },\n' +
+      '  { id: "telefonaty", label: "Menej opakovaných otázok", description: "Bežné otázky vybaví asistent." },\n' +
+      '  { id: "nonstop", label: "Dostupnosť 24/7", description: "Odpovie aj mimo pracovného času." },\n' +
+      '  { id: "rychlost", label: "Okamžitá reakcia", description: "Zákazník nečaká na e-mail." },\n' +
+      '];\n' +
       '\n' +
-      'export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JSX.Element {\n' +
-      '  const [isOpen, setIsOpen] = useState(false);\n' +
-      '  const [mode, setMode] = useState<WidgetMode>("assistant");\n' +
-      '  const [resetToken, setResetToken] = useState(0);\n' +
-      '  const [preset, setPreset] = useState<AssistantPreset | null>(null);\n' +
-      '  const panelRef = useRef<HTMLElement>(null);\n' +
+      'export type FeatureOption = {\n' +
+      '  id: string;\n' +
+      '  label: string;\n' +
+      '  description: string;\n' +
+      '  basic?: boolean;\n' +
+      '};\n' +
       '\n' +
-      '  const close = useCallback(() => {\n' +
-      '    setIsOpen(false);\n' +
-      '    track("widget_close");\n' +
-      '  }, []);\n' +
-      '  useFocusTrap(panelRef, isOpen, close);\n' +
+      'export const FEATURES: FeatureOption[] = [\n' +
+      '  {\n' +
+      '    id: "faq",\n' +
+      '    label: "Odpovede podľa vašich podkladov",\n' +
+      '    description: "Služby, postup, termíny a časté otázky.",\n' +
+      '    basic: true,\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "dopyty",\n' +
+      '    label: "Pripravený dopyt s kontaktom",\n' +
+      '    description: "Odpovede zákazníka prídu spolu v jednom zhrnutí.",\n' +
+      '    basic: true,\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "email",\n' +
+      '    label: "Zhrnutie na e-mail",\n' +
+      '    description: "Firma aj zákazník dostanú jasný výsledok.",\n' +
+      '    basic: true,\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "cena",\n' +
+      '    label: "Výpočet podľa vašich pravidiel",\n' +
+      '    description: "Cena, spotreba, rozsah alebo návratnosť.",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "varianty",\n' +
+      '    label: "Varianty, rozmery a doplnky",\n' +
+      '    description: "Krokový konfigurátor produktu alebo služby.",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "fotky",\n' +
+      '    label: "Fotky a prílohy",\n' +
+      '    description: "Lepší odhad rozsahu ešte pred kontaktom.",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "rezervacie",\n' +
+      '    label: "Kalendár a rezervácie",\n' +
+      '    description: "Výber termínu a potvrdenie bez prepisovania.",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "crm",\n' +
+      '    label: "CRM, tabuľka alebo vlastný systém",\n' +
+      '    description: "Dopyt sa zapíše tam, kde s ním pracujete.",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "jazyky",\n' +
+      '    label: "Viac jazykov",\n' +
+      '    description: "Slovenčina, angličtina, nemčina a ďalšie.",\n' +
+      '  },\n' +
+      '];\n' +
       '\n' +
-      '  const open = useCallback(\n' +
-      '    (nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {\n' +
-      '      setMode(nextMode);\n' +
-      '      setPreset(nextPreset);\n' +
-      '      setResetToken((value) => value + 1);\n' +
-      '      setIsOpen(true);\n' +
-      '      track("widget_open", { mode: nextMode });\n' +
-      '    },\n' +
-      '    [],\n' +
-      '  );\n' +
+      'export const BASIC_FEATURE_IDS: string[] = FEATURES.filter((option) => option.basic).map(\n' +
+      '  (option) => option.id,\n' +
+      ');\n' +
       '\n' +
-      '  const switchMode = useCallback((nextMode: WidgetMode) => {\n' +
-      '    setMode(nextMode);\n' +
-      '    setPreset(null);\n' +
-      '    track("mode_switch", { to: nextMode });\n' +
-      '  }, []);\n' +
+      'export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {\n' +
+      '  chatbot: [],\n' +
+      '  calcbot: ["cena"],\n' +
+      '  product: ["varianty", "cena"],\n' +
+      '  booking: ["rezervacie"],\n' +
+      '  custom: [],\n' +
+      '};\n' +
       '\n' +
-      '  const openFromOptions = useCallback(\n' +
-      '    (options: OpenSiteAssistantOptions) => {\n' +
-      '      const directPreset = options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);\n' +
-      '      const calculatorEntry =\n' +
-      '        options?.entry === "builder" || options?.entry === "calculator" || Boolean(directPreset);\n' +
-      '      open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);\n' +
-      '    },\n' +
-      '    [open],\n' +
-      '  );\n' +
+      'export const defaultFeatures = (interest: InterestId | null): string[] => [\n' +
+      '  ...BASIC_FEATURE_IDS,\n' +
+      '  ...(interest ? RECOMMENDED_FEATURES[interest] : []),\n' +
+      '];\n' +
       '\n' +
-      '  useEffect(() => installSiteAssistantGlobal(), []);\n' +
+      'export type VolumeOption = {\n' +
+      '  id: string;\n' +
+      '  label: string;\n' +
+      '  description: string;\n' +
+      '};\n' +
       '\n' +
-      '  useEffect(() => {\n' +
-      '    const onOpen = (event: Event) => {\n' +
-      '      const options = (event as CustomEvent<OpenSiteAssistantOptions>).detail;\n' +
-      '      openFromOptions(options ?? { entry: "builder" });\n' +
-      '    };\n' +
+      'export const VOLUMES: VolumeOption[] = [\n' +
+      '  { id: "v20", label: "Do 20", description: "Občasné dopyty a osobný prístup." },\n' +
+      '  { id: "v100", label: "20 – 100", description: "Stabilný tok dopytov." },\n' +
+      '  { id: "v500", label: "100 – 500", description: "Vyťažená prevádzka." },\n' +
+      '  { id: "v500plus", label: "Viac než 500", description: "Veľký objem a automatizácia." },\n' +
+      '];\n' +
       '\n' +
-      '    window.addEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);\n' +
-      '    return () => window.removeEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);\n' +
-      '  }, [openFromOptions]);\n' +
+      'export type TimelineOption = {\n' +
+      '  id: string;\n' +
+      '  label: string;\n' +
+      '  description: string;\n' +
+      '};\n' +
       '\n' +
-      '  useEffect(() => {\n' +
-      '    if (!embedMode) return;\n' +
-      '    return installEmbedBridge({ open: openFromOptions, close });\n' +
-      '  }, [close, embedMode, openFromOptions]);\n' +
+      'export const TIMELINES: TimelineOption[] = [\n' +
+      '  {\n' +
+      '    id: "asap",\n' +
+      '    label: "Čo najskôr",\n' +
+      '    description: "Prioritný návrh podľa pripravenosti podkladov.",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "mesiac",\n' +
+      '    label: "Do mesiaca",\n' +
+      '    description: "Čas na doladenie logiky, obsahu a vzhľadu.",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "kvartal",\n' +
+      '    label: "O 1 – 3 mesiace",\n' +
+      '    description: "Pripravíme plán a realistické etapy.",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    id: "rozhliadam",\n' +
+      '    label: "Zatiaľ sa rozhliadam",\n' +
+      '    description: "Nezáväzný návrh na porovnanie možností.",\n' +
+      '  },\n' +
+      '];\n' +
       '\n' +
-      '  useEffect(() => {\n' +
-      '    if (embedMode) announceEmbedState(isOpen);\n' +
-      '  }, [embedMode, isOpen]);\n' +
+      'export const PRESET_TO_INTEREST: Record<AssistantPreset, InterestId> = {\n' +
+      '  calculator: "calcbot",\n' +
+      '  inquiry: "chatbot",\n' +
+      '  advisor: "chatbot",\n' +
+      '  booking: "booking",\n' +
+      '};\n' +
       '\n' +
-      '  useEffect(() => {\n' +
-      '    if (!isOpen || !window.matchMedia("(max-width: 520px)").matches) return;\n' +
-      '    const previous = document.body.style.overflow;\n' +
-      '    document.body.style.overflow = "hidden";\n' +
-      '    return () => {\n' +
-      '      document.body.style.overflow = previous;\n' +
-      '    };\n' +
-      '  }, [isOpen]);\n' +
+      'export const labelOf = (\n' +
+      '  options: ReadonlyArray<{ id: string; label: string }>,\n' +
+      '  id: string | null,\n' +
+      '): string => options.find((option) => option.id === id)?.label ?? "—";\n' +
       '\n' +
-      '  const tabIndicatorStyle = {\n' +
-      '    "--cw-segment-x": mode === "assistant" ? "calc(100% + 5px)" : "0px",\n' +
-      '  } as CSSProperties;\n' +
-      '\n' +
-      '  return (\n' +
-      '    <div className="cw-widget">\n' +
-      '      <button\n' +
-      '        id="chameleon-widget-launcher"\n' +
-      '        data-testid="widget-launcher"\n' +
-      '        className="cw-launcher"\n' +
-      '        type="button"\n' +
-      '        aria-label="Otvoriť Môj Chatbot"\n' +
-      '        aria-expanded={isOpen}\n' +
-      '        aria-controls="chameleon-widget-panel"\n' +
-      '        onClick={() => open("assistant")}\n' +
-      '      >\n' +
-      '        <BubbleLogo size="launcher" />\n' +
-      '      </button>\n' +
-      '\n' +
-      '      {isOpen ? (\n' +
-      '        <section\n' +
-      '          id="chameleon-widget-panel"\n' +
-      '          className="cw-panel"\n' +
-      '          data-mode={mode}\n' +
-      '          ref={panelRef}\n' +
-      '          role="dialog"\n' +
-      '          aria-modal="true"\n' +
-      '          aria-labelledby="chameleon-widget-title"\n' +
-      '          tabIndex={-1}\n' +
-      '        >\n' +
-      '          <header className="cw-panel-head">\n' +
-      '            <h2 id="chameleon-widget-title" className="cw-sr-only">\n' +
-      '              Môj Chatbot — AI asistent a konfigurátor riešenia\n' +
-      '            </h2>\n' +
-      '            <span className="cw-panel-head__mascot">\n' +
-      '              <BubbleLogo size="header" />\n' +
-      '            </span>\n' +
-      '            <div className="cw-panel-head__title">\n' +
-      '              <b>Môj Chatbot</b>\n' +
-      '              <span className="cw-panel-head__context cw-panel-head__online">\n' +
-      '                <i aria-hidden="true" /> AI asistent · online\n' +
-      '              </span>\n' +
-      '            </div>\n' +
-      '            <div className="cw-panel-head__actions">\n' +
-      '              <button\n' +
-      '                type="button"\n' +
-      '                data-testid="widget-reset"\n' +
-      '                aria-label="Resetovať aktuálnu obrazovku"\n' +
-      '                title="Resetovať"\n' +
-      '                onClick={() => {\n' +
-      '                  setPreset(null);\n' +
-      '                  setResetToken((value) => value + 1);\n' +
-      '                }}\n' +
-      '              >\n' +
-      '                <WidgetIcon name="reset" />\n' +
-      '              </button>\n' +
-      '              <button\n' +
-      '                type="button"\n' +
-      '                className="cw-panel-head__close"\n' +
-      '                data-testid="widget-close"\n' +
-      '                aria-label="Zavrieť asistenta"\n' +
-      '                title="Zavrieť"\n' +
-      '                onClick={close}\n' +
-      '              >\n' +
-      '                <WidgetIcon name="close" />\n' +
-      '              </button>\n' +
-      '            </div>\n' +
-      '          </header>\n' +
-      '\n' +
-      '          <nav\n' +
-      '            className="cw-tabs"\n' +
-      '            aria-label="Režim asistenta"\n' +
-      '            data-mode={mode}\n' +
-      '            style={tabIndicatorStyle}\n' +
-      '          >\n' +
-      '            <span className="cw-tabs__glass" aria-hidden="true" />\n' +
-      '            <button\n' +
-      '              type="button"\n' +
-      '              data-testid="tab-calculator"\n' +
-      '              data-active={mode === "calculator"}\n' +
-      '              aria-pressed={mode === "calculator"}\n' +
-      '              onClick={() => switchMode("calculator")}\n' +
-      '            >\n' +
-      '              <WidgetIcon name="calculator" />\n' +
-      '              <span>Vyskladať riešenie</span>\n' +
-      '            </button>\n' +
-      '            <button\n' +
-      '              type="button"\n' +
-      '              data-testid="tab-assistant"\n' +
-      '              data-active={mode === "assistant"}\n' +
-      '              aria-pressed={mode === "assistant"}\n' +
-      '              onClick={() => switchMode("assistant")}\n' +
-      '            >\n' +
-      '              <WidgetIcon name="chat" />\n' +
-      '              <span>Opýtať sa</span>\n' +
-      '            </button>\n' +
-      '          </nav>\n' +
-      '\n' +
-      '          <div className="cw-panel-body" key={mode}>\n' +
-      '            {mode === "assistant" ? (\n' +
-      '              <AssistantConversation\n' +
-      '                resetToken={resetToken}\n' +
-      '                onOpenCalculator={() => switchMode("calculator")}\n' +
-      '              />\n' +
-      '            ) : (\n' +
-      '              <ToolCalculator\n' +
-      '                resetToken={resetToken}\n' +
-      '                initialPreset={preset}\n' +
-      '                onOpenChat={() => switchMode("assistant")}\n' +
-      '              />\n' +
-      '            )}\n' +
-      '          </div>\n' +
-      '        </section>\n' +
-      '      ) : null}\n' +
-      '    </div>\n' +
-      '  );\n' +
+      'export function buildProposalNumber(): string {\n' +
+      '  return `MC-${Date.now().toString(36).toUpperCase().slice(-6)}`;\n' +
       '}\n'
     
   code: 'ERR_ASSERTION'
   name: 'AssertionError'
   expected:
   actual: |-
-    import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
-    import { useFocusTrap } from "../../hooks/useFocusTrap";
-    import {
-      installSiteAssistantGlobal,
-      SITE_ASSISTANT_OPEN_EVENT,
-    } from "../../lib/siteAssistant";
-    import { announceEmbedState, installEmbedBridge } from "../../lib/embedBridge";
-    import { track } from "../../lib/analytics";
-    import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";
-    import { AssistantConversation } from "./AssistantConversation";
-    import { BubbleLogo } from "./BubbleLogo";
-    import { ToolCalculator } from "./ToolCalculator";
-    import { WidgetIcon } from "./WidgetIcon";
+    import type { AssistantPreset, InterestId } from "../types/assistant";
     
-    type WidgetMode = "assistant" | "calculator";
+    export type StepId =
+      | "interest"
+      | "industry"
+      | "priority"
+      | "features"
+      | "volume"
+      | "timeline"
+      | "contact";
     
-    type AssistantWidgetProps = {
-      embedMode?: boolean;
+    /* The visible flow is intentionally short: solution, company, key functions,
+       timing and contact. Legacy step ids remain exported for saved-state compatibility. */
+    export const STEPS: StepId[] = ["interest", "industry", "features", "timeline", "contact"];
+    
+    export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
+      interest: [
+        "Čo má zákazník na webe vybaviť?",
+        "Vyberte najbližší typ. Presný rozsah doladíme podľa vašich podkladov.",
+      ],
+      industry: [
+        "Pre aký typ firmy riešenie pripravujeme?",
+        "Pomôže mi to odporučiť správne otázky, výstupy a prepojenia.",
+      ],
+      priority: [
+        "Čo od asistenta očakávate?",
+        "Tento krok sa v skrátenom toku nepoužíva.",
+      ],
+      features: [
+        "Ktoré funkcie sú pre vás dôležité?",
+        "Základ je označený. Vyberte iba to, čo zákazník naozaj potrebuje.",
+      ],
+      volume: [
+        "Koľko dopytov mesačne riešite?",
+        "Tento údaj sa dá doplniť neskôr a nie je samostatným krokom.",
+      ],
+      timeline: [
+        "Kedy chcete riešenie spustiť?",
+        "Podľa termínu pripravím realistický postup a rozsah prvej verzie.",
+      ],
+      contact: [
+        "Kam mám poslať konkrétny návrh?",
+        "Meno a e-mail stačia. Ostatné údaje sú nepovinné.",
+      ],
     };
     
-    const isPreset = (value: string | undefined): value is AssistantPreset =>
-      Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));
+    export type InterestOption = {
+      id: InterestId;
+      label: string;
+      description: string;
+      badge?: string;
+      icon: "chat" | "calculator" | "cart" | "calendar" | "spark";
+    };
     
-    export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JSX.Element {
-      const [isOpen, setIsOpen] = useState(false);
-      const [mode, setMode] = useState<WidgetMode>("assistant");
-      const [resetToken, setResetToken] = useState(0);
-      const [preset, setPreset] = useState<AssistantPreset | null>(null);
-      const panelRef = useRef<HTMLElement>(null);
+    export const INTERESTS: InterestOption[] = [
+      {
+        id: "chatbot",
+        label: "AI chatbot",
+        description: "Odpovie, poradí a pripraví dopyt s kontextom.",
+        icon: "chat",
+      },
+      {
+        id: "calcbot",
+        label: "Chatbot s výpočtom",
+        description: "Vypočíta cenu, spotrebu alebo rozsah podľa vašich pravidiel.",
+        icon: "calculator",
+      },
+      {
+        id: "product",
+        label: "Chatbot s konfigurátorom",
+        description: "Prevedie výberom variantov, rozmerov a doplnkov.",
+        icon: "cart",
+      },
+      {
+        id: "custom",
+        label: "Vlastné riešenie",
+        description: "Opíšte proces a navrhnem vhodný postup na mieru.",
+        icon: "spark",
+      },
+    ];
     
-      const close = useCallback(() => {
-        setIsOpen(false);
-        track("widget_close");
-      }, []);
-      useFocusTrap(panelRef, isOpen, close);
+    export type IndustryOption = {
+      id: string;
+      label: string;
+      icon: "tools" | "cart" | "food" | "heart" | "factory" | "spark";
+      examples: string[];
+    };
     
-      const open = useCallback(
-        (nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {
-          setMode(nextMode);
-          setPreset(nextPreset);
-          setResetToken((value) => value + 1);
-          setIsOpen(true);
-          track("widget_open", { mode: nextMode });
-        },
-        [],
-      );
+    export const INDUSTRIES: IndustryOption[] = [
+      {
+        id: "sluzby",
+        label: "Služby a remeslá",
+        icon: "tools",
+        examples: [
+          "Cenový dopyt s rozsahom a lokalitou",
+          "Fotky ešte pred obhliadkou",
+          "Rezervácia termínu alebo obhliadky",
+        ],
+      },
+      {
+        id: "eshop",
+        label: "E-shop a predaj",
+        icon: "cart",
+        examples: [
+          "Odporúčanie produktu podľa potreby",
+          "Výber variantu a doplnkov",
+          "Kontakt s hotovou konfiguráciou",
+        ],
+      },
+      {
+        id: "gastro",
+        label: "Gastro a ubytovanie",
+        icon: "food",
+        examples: [
+          "Rezervácia stola alebo pobytu",
+          "Odpovede na časté otázky",
+          "Komunikácia vo viacerých jazykoch",
+        ],
+      },
+      {
+        id: "zdravie",
+        label: "Zdravie a krása",
+        icon: "heart",
+        examples: [
+          "Výber služby a termínu",
+          "Predpríprava klienta pred návštevou",
+          "Cenník bez opakovaných telefonátov",
+        ],
+      },
+      {
+        id: "vyroba",
+        label: "Výroba a B2B",
+        icon: "factory",
+        examples: [
+          "Technické parametre dopytu",
+          "Kvalifikácia pred obchodníkom",
+          "Zápis do CRM alebo tabuľky",
+        ],
+      },
+      {
+        id: "ine",
+        label: "Iné odvetvie",
+        icon: "spark",
+        examples: [
+          "Vlastné otázky a rozhodovanie",
+          "Zber kontaktu s kontextom",
+          "Odovzdanie človeku v správnom momente",
+        ],
+      },
+    ];
     
-      const switchMode = useCallback((nextMode: WidgetMode) => {
-        setMode(nextMode);
-        setPreset(null);
-        track("mode_switch", { to: nextMode });
-      }, []);
+    export type PriorityOption = {
+      id: string;
+      label: string;
+      description: string;
+    };
     
-      const openFromOptions = useCallback(
-        (options: OpenSiteAssistantOptions) => {
-          const directPreset = options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);
-          const calculatorEntry =
-            options?.entry === "builder" || options?.entry === "calculator" || Boolean(directPreset);
-          open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);
-        },
-        [open],
-      );
+    export const PRIORITIES: PriorityOption[] = [
+      { id: "dopyty", label: "Viac pripravených dopytov", description: "Získať kontakt aj relevantné vstupy." },
+      { id: "telefonaty", label: "Menej opakovaných otázok", description: "Bežné otázky vybaví asistent." },
+      { id: "nonstop", label: "Dostupnosť 24/7", description: "Odpovie aj mimo pracovného času." },
+      { id: "rychlost", label: "Okamžitá reakcia", description: "Zákazník nečaká na e-mail." },
+    ];
     
-      useEffect(() => installSiteAssistantGlobal(), []);
+    export type FeatureOption = {
+      id: string;
+      label: string;
+      description: string;
+      basic?: boolean;
+    };
     
-      useEffect(() => {
-        const onOpen = (event: Event) => {
-          const options = (event as CustomEvent<OpenSiteAssistantOptions>).detail;
-          openFromOptions(options ?? { entry: "builder" });
-        };
+    export const FEATURES: FeatureOption[] = [
+      {
+        id: "faq",
+        label: "Odpovede podľa vašich podkladov",
+        description: "Služby, postup, termíny a časté otázky.",
+        basic: true,
+      },
+      {
+        id: "dopyty",
+        label: "Pripravený dopyt s kontaktom",
+        description: "Odpovede zákazníka prídu spolu v jednom zhrnutí.",
+        basic: true,
+      },
+      {
+        id: "email",
+        label: "Zhrnutie na e-mail",
+        description: "Firma aj zákazník dostanú jasný výsledok.",
+        basic: true,
+      },
+      {
+        id: "cena",
+        label: "Výpočet podľa vašich pravidiel",
+        description: "Cena, spotreba, rozsah alebo návratnosť.",
+      },
+      {
+        id: "varianty",
+        label: "Varianty, rozmery a doplnky",
+        description: "Krokový konfigurátor produktu alebo služby.",
+      },
+      {
+        id: "fotky",
+        label: "Fotky a prílohy",
+        description: "Lepší odhad rozsahu ešte pred kontaktom.",
+      },
+      {
+        id: "rezervacie",
+        label: "Kalendár a rezervácie",
+        description: "Výber termínu a potvrdenie bez prepisovania.",
+      },
+      {
+        id: "crm",
+        label: "CRM, tabuľka alebo vlastný systém",
+        description: "Dopyt sa zapíše tam, kde s ním pracujete.",
+      },
+      {
+        id: "jazyky",
+        label: "Viac jazykov",
+        description: "Slovenčina, angličtina, nemčina a ďalšie.",
+      },
+    ];
     
-        window.addEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);
-        return () => window.removeEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);
-      }, [openFromOptions]);
+    export const BASIC_FEATURE_IDS: string[] = FEATURES.filter((option) => option.basic).map(
+      (option) => option.id,
+    );
     
-      useEffect(() => {
-        if (!embedMode) return;
-        return installEmbedBridge({ open: openFromOptions, close });
-      }, [close, embedMode, openFromOptions]);
+    export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
+      chatbot: [],
+      calcbot: ["cena"],
+      product: ["varianty", "cena"],
+      booking: ["rezervacie"],
+      custom: [],
+    };
     
-      useEffect(() => {
-        if (embedMode) announceEmbedState(isOpen);
-      }, [embedMode, isOpen]);
+    export const defaultFeatures = (interest: InterestId | null): string[] => [
+      ...BASIC_FEATURE_IDS,
+      ...(interest ? RECOMMENDED_FEATURES[interest] : []),
+    ];
     
-      useEffect(() => {
-        if (!isOpen || !window.matchMedia("(max-width: 520px)").matches) return;
-        const previous = document.body.style.overflow;
-        document.body.style.overflow = "hidden";
-        return () => {
-          document.body.style.overflow = previous;
-        };
-      }, [isOpen]);
+    export type VolumeOption = {
+      id: string;
+      label: string;
+      description: string;
+    };
     
-      const tabIndicatorStyle = {
-        "--cw-segment-x": mode === "assistant" ? "calc(100% + 5px)" : "0px",
-      } as CSSProperties;
+    export const VOLUMES: VolumeOption[] = [
+      { id: "v20", label: "Do 20", description: "Občasné dopyty a osobný prístup." },
+      { id: "v100", label: "20 – 100", description: "Stabilný tok dopytov." },
+      { id: "v500", label: "100 – 500", description: "Vyťažená prevádzka." },
+      { id: "v500plus", label: "Viac než 500", description: "Veľký objem a automatizácia." },
+    ];
     
-      return (
-        <div className="cw-widget">
-          <button
-            id="chameleon-widget-launcher"
-            data-testid="widget-launcher"
-            className="cw-launcher"
-            type="button"
-            aria-label="Otvoriť Môj Chatbot"
-            aria-expanded={isOpen}
-            aria-controls="chameleon-widget-panel"
-            onClick={() => open("assistant")}
-          >
-            <BubbleLogo size="launcher" />
-          </button>
+    export type TimelineOption = {
+      id: string;
+      label: string;
+      description: string;
+    };
     
-          {isOpen ? (
-            <section
-              id="chameleon-widget-panel"
-              className="cw-panel"
-              data-mode={mode}
-              ref={panelRef}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="chameleon-widget-title"
-              tabIndex={-1}
-            >
-              <header className="cw-panel-head">
-                <h2 id="chameleon-widget-title" className="cw-sr-only">
-                  Môj Chatbot — AI asistent a konfigurátor riešenia
-                </h2>
-                <span className="cw-panel-head__mascot">
-                  <BubbleLogo size="header" />
-                </span>
-                <div className="cw-panel-head__title">
-                  <b>Môj Chatbot</b>
-                  <span className="cw-panel-head__context cw-panel-head__online">
-                    <i aria-hidden="true" /> AI asistent · online
-                  </span>
-                </div>
-                <div className="cw-panel-head__actions">
-                  <button
-                    type="button"
-                    data-testid="widget-reset"
-                    aria-label="Resetovať aktuálnu obrazovku"
-                    title="Resetovať"
-                    onClick={() => {
-                      setPreset(null);
-                      setResetToken((value) => value + 1);
-                    }}
-                  >
-                    <WidgetIcon name="reset" />
-                  </button>
-                  <button
-                    type="button"
-                    className="cw-panel-head__close"
-                    data-testid="widget-close"
-                    aria-label="Zavrieť asistenta"
-                    title="Zavrieť"
-                    onClick={close}
-                  >
-                    <WidgetIcon name="close" />
-                  </button>
-                </div>
-              </header>
+    export const TIMELINES: TimelineOption[] = [
+      {
+        id: "asap",
+        label: "Čo najskôr",
+        description: "Prioritný návrh podľa pripravenosti podkladov.",
+      },
+      {
+        id: "mesiac",
+        label: "Do mesiaca",
+        description: "Čas na doladenie logiky, obsahu a vzhľadu.",
+      },
+      {
+        id: "kvartal",
+        label: "O 1 – 3 mesiace",
+        description: "Pripravíme plán a realistické etapy.",
+      },
+      {
+        id: "rozhliadam",
+        label: "Zatiaľ sa rozhliadam",
+        description: "Nezáväzný návrh na porovnanie možností.",
+      },
+    ];
     
-              <nav
-                className="cw-tabs"
-                aria-label="Režim asistenta"
-                data-mode={mode}
-                style={tabIndicatorStyle}
-              >
-                <span className="cw-tabs__glass" aria-hidden="true" />
-                <button
-                  type="button"
-                  data-testid="tab-calculator"
-                  data-active={mode === "calculator"}
-                  aria-pressed={mode === "calculator"}
-                  onClick={() => switchMode("calculator")}
-                >
-                  <WidgetIcon name="calculator" />
-                  <span>Vyskladať riešenie</span>
-                </button>
-                <button
-                  type="button"
-                  data-testid="tab-assistant"
-                  data-active={mode === "assistant"}
-                  aria-pressed={mode === "assistant"}
-                  onClick={() => switchMode("assistant")}
-                >
-                  <WidgetIcon name="chat" />
-                  <span>Opýtať sa</span>
-                </button>
-              </nav>
+    export const PRESET_TO_INTEREST: Record<AssistantPreset, InterestId> = {
+      calculator: "calcbot",
+      inquiry: "chatbot",
+      advisor: "chatbot",
+      booking: "booking",
+    };
     
-              <div className="cw-panel-body" key={mode}>
-                {mode === "assistant" ? (
-                  <AssistantConversation
-                    resetToken={resetToken}
-                    onOpenCalculator={() => switchMode("calculator")}
-                  />
-                ) : (
-                  <ToolCalculator
-                    resetToken={resetToken}
-                    initialPreset={preset}
-                    onOpenChat={() => switchMode("assistant")}
-                  />
-                )}
-              </div>
-            </section>
-          ) : null}
-        </div>
-      );
+    export const labelOf = (
+      options: ReadonlyArray<{ id: string; label: string }>,
+      id: string | null,
+    ): string => options.find((option) => option.id === id)?.label ?? "—";
+    
+    export function buildProposalNumber(): string {
+      return `MC-${Date.now().toString(36).toUpperCase().slice(-6)}`;
     }
     
   operator: 'match'
   stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:65:10)
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:81:10)
     async Test.run (node:internal/test_runner/test:1054:7)
     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
-# Subtest: quick replies are one consistent chip family directly above the input
-not ok 5 - quick replies are one consistent chip family directly above the input
+# Subtest: configuration cards fill space without forced shake or side stripe
+ok 7 - configuration cards fill space without forced shake or side stripe
   ---
-  duration_ms: 3.44433
+  duration_ms: 3.009852
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:74:1'
+  ...
+# Subtest: selected checks are small static and aligned
+ok 8 - selected checks are small static and aligned
+  ---
+  duration_ms: 1.326568
+  type: 'test'
+  ...
+# Subtest: contact asks for essentials and submits a real lead
+ok 9 - contact asks for essentials and submits a real lead
+  ---
+  duration_ms: 2.151549
+  type: 'test'
+  ...
+# Subtest: assistant knows the verified starting price and brand
+ok 10 - assistant knows the verified starting price and brand
+  ---
+  duration_ms: 1.684626
+  type: 'test'
+  ...
+# Subtest: mobile panel and controls remain safe
+ok 11 - mobile panel and controls remain safe
+  ---
+  duration_ms: 1.430391
+  type: 'test'
+  ...
+# Subtest: chat API protections remain intact
+ok 12 - chat API protections remain intact
+  ---
+  duration_ms: 1.810662
+  type: 'test'
+  ...
+# Subtest: deployment validates the competition build
+not ok 13 - deployment validates the competition build
+  ---
+  duration_ms: 2.429678
+  type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:157:1'
   failureType: 'testCodeFailure'
   error: |-
-    Expected values to be strictly equal:
+    The input did not match the regular expression /competition-winner-20260723-v5/. Input:
     
-    4 !== 3
+    'name: Deploy and verify chatbot\n' +
+      '\n' +
+      'on:\n' +
+      '  push:\n' +
+      '    branches: [main]\n' +
+      '  workflow_dispatch:\n' +
+      '\n' +
+      'permissions:\n' +
+      '  contents: write\n' +
+      '  pages: write\n' +
+      '  id-token: write\n' +
+      '\n' +
+      'concurrency:\n' +
+      '  group: pages\n' +
+      '  cancel-in-progress: false\n' +
+      '\n' +
+      'jobs:\n' +
+      '  build:\n' +
+      "    if: ${{ github.actor != 'github-actions[bot]' }}\n" +
+      '    runs-on: ubuntu-latest\n' +
+      '    steps:\n' +
+      '      - name: Checkout\n' +
+      '        uses: actions/checkout@v4\n' +
+      '\n' +
+      '      - name: Install pnpm\n' +
+      '        uses: pnpm/action-setup@v4\n' +
+      '        with:\n' +
+      '          version: 10\n' +
+      '\n' +
+      '      - name: Set up Node.js\n' +
+      '        uses: actions/setup-node@v4\n' +
+      '        with:\n' +
+      '          node-version: 22\n' +
+      '          cache: pnpm\n' +
+      '\n' +
+      '      - name: Install dependencies\n' +
+      '        run: pnpm install --frozen-lockfile\n' +
+      '\n' +
+      '      - name: Audit production dependencies\n' +
+      '        run: pnpm audit --prod --audit-level high\n' +
+      '\n' +
+      '      - name: TypeScript check\n' +
+      '        run: pnpm lint\n' +
+      '\n' +
+      '      - name: Run visual and security contracts\n' +
+      '        run: pnpm test -- --run\n' +
+      '\n' +
+      '      - name: Build demo and embedded widget\n' +
+      '        run: pnpm build\n' +
+      '\n' +
+      '      - name: Create immutable build metadata\n' +
+      '        shell: bash\n' +
+      '        run: |\n' +
+      `          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"derat-layout-20260723-v3"},null,2))'\n` +
+      '\n' +
+      '      - name: Validate production artifacts\n' +
+      '        shell: bash\n' +
+      '        run: |\n' +
+      '          set -euo pipefail\n' +
+      '          test -f dist/index.html\n' +
+      '          test -f dist/widget.js\n' +
+      '          test -f dist/widget.css\n' +
+      '          test -f dist/build-meta.json\n' +
+      '          grep -Fq "derat-layout-20260723-v3" dist/widget.js\n' +
+      '          grep -Fqi "4e8cff" dist/widget.css\n' +
+      '          grep -Fq "derat-layout-final" src/main.tsx\n' +
+      '          grep -Fq "cw-chat-builder" dist/widget.css\n' +
+      '          grep -Fq "cw-direct-actions__grid" dist/widget.css\n' +
+      '          grep -Fq "data-liquid-dragging" dist/widget.css\n' +
+      '          grep -Fq "cw-calc-step:has" dist/widget.css\n' +
+      '          ! grep -Fq "REPLACE-ME" dist/widget.js\n' +
+      '          grep -Fq "${GITHUB_SHA}" dist/build-meta.json\n' +
+      '\n' +
+      '      - name: Configure GitHub Pages\n' +
+      '        uses: actions/configure-pages@v5\n' +
+      '\n' +
+      '      - name: Upload Pages artifact\n' +
+      '        uses: actions/upload-pages-artifact@v3\n' +
+      '        with:\n' +
+      '          path: dist\n' +
+      '\n' +
+      '  deploy:\n' +
+      '    needs: build\n' +
+      '    runs-on: ubuntu-latest\n' +
+      '    environment:\n' +
+      '      name: github-pages\n' +
+      '      url: ${{ steps.deployment.outputs.page_url }}\n' +
+      '    steps:\n' +
+      '      - name: Deploy to GitHub Pages\n' +
+      '        id: deployment\n' +
+      '        uses: actions/deploy-pages@v5\n' +
+      '\n' +
+      '      - name: Verify live demo and embedded assets\n' +
+      '        shell: bash\n' +
+      '        env:\n' +
+      '          PAGE_URL: ${{ steps.deployment.outputs.page_url }}\n' +
+      '          SOURCE_SHA: ${{ github.sha }}\n' +
+      '        run: |\n' +
+      '          set -euo pipefail\n' +
+      '          BASE="${PAGE_URL%/}"\n' +
+      '\n' +
+      '          verify() {\n' +
+      '            local path="$1"\n' +
+      '            local expected="$2"\n' +
+      `            local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"\n` +
+      '\n' +
+      '            for attempt in {1..24}; do\n' +
+      '              if curl --location --fail --silent --show-error \\\n' +
+      '                --header "Cache-Control: no-cache" \\\n' +
+      '                "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then\n' +
+      '                if grep -Fqi "$expected" "$body"; then\n' +
+      '                  echo "verified ${path}"\n' +
+      '                  return 0\n' +
+      '                fi\n' +
+      '              fi\n' +
+      '              sleep 5\n' +
+      '            done\n' +
+      '\n' +
+      '            echo "Live verification failed for ${path}"\n' +
+      '            head -c 1000 "$body" 2>/dev/null || true\n' +
+      '            return 1\n' +
+      '          }\n' +
+      '\n' +
+      '          verify "/" "AI Assistant"\n' +
+      '          verify "/widget.js" "derat-layout-20260723-v3"\n' +
+      '          verify "/widget.css" "cw-chat-builder"\n' +
+      '          verify "/build-meta.json" "$SOURCE_SHA"\n' +
+      '\n' +
+      '      - name: Checkout latest main for deployment record\n' +
+      '        uses: actions/checkout@v4\n' +
+      '        with:\n' +
+      '          ref: main\n' +
+      '\n' +
+      '      - name: Record verified widget deployment\n' +
+      '        shell: bash\n' +
+      '        env:\n' +
+      '          PAGE_URL: ${{ steps.deployment.outputs.page_url }}\n' +
+      '          SOURCE_SHA: ${{ github.sha }}\n' +
+      '        run: |\n' +
+      '          {\n' +
+      '            echo "deployment=success"\n' +
+      '            echo "dependency_audit=success"\n' +
+      '            echo "live_smoke=success"\n' +
+      '            echo "source_sha=${SOURCE_SHA}"\n' +
+      '            echo "page_url=${PAGE_URL}"\n' +
+      '            echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"\n' +
+      '          } > PAGES_DEPLOY_AUDIT.txt\n' +
+      '          git config user.name "github-actions[bot]"\n' +
+      '          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"\n' +
+      '          git add PAGES_DEPLOY_AUDIT.txt\n' +
+      '          git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0\n' +
+      '          git pull --rebase origin main\n' +
+      '          git push origin HEAD:main\n'
     
   code: 'ERR_ASSERTION'
   name: 'AssertionError'
-  expected: 3
-  actual: 4
-  operator: 'strictEqual'
+  expected:
+  actual: |-
+    name: Deploy and verify chatbot
+    
+    on:
+      push:
+        branches: [main]
+      workflow_dispatch:
+    
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    
+    jobs:
+      build:
+        if: ${{ github.actor != 'github-actions[bot]' }}
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v4
+    
+          - name: Install pnpm
+            uses: pnpm/action-setup@v4
+            with:
+              version: 10
+    
+          - name: Set up Node.js
+            uses: actions/setup-node@v4
+            with:
+              node-version: 22
+              cache: pnpm
+    
+          - name: Install dependencies
+            run: pnpm install --frozen-lockfile
+    
+          - name: Audit production dependencies
+            run: pnpm audit --prod --audit-level high
+    
+          - name: TypeScript check
+            run: pnpm lint
+    
+          - name: Run visual and security contracts
+            run: pnpm test -- --run
+    
+          - name: Build demo and embedded widget
+            run: pnpm build
+    
+          - name: Create immutable build metadata
+            shell: bash
+            run: |
+              node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"derat-layout-20260723-v3"},null,2))'
+    
+          - name: Validate production artifacts
+            shell: bash
+            run: |
+              set -euo pipefail
+              test -f dist/index.html
+              test -f dist/widget.js
+              test -f dist/widget.css
+              test -f dist/build-meta.json
+              grep -Fq "derat-layout-20260723-v3" dist/widget.js
+              grep -Fqi "4e8cff" dist/widget.css
+              grep -Fq "derat-layout-final" src/main.tsx
+              grep -Fq "cw-chat-builder" dist/widget.css
+              grep -Fq "cw-direct-actions__grid" dist/widget.css
+              grep -Fq "data-liquid-dragging" dist/widget.css
+              grep -Fq "cw-calc-step:has" dist/widget.css
+              ! grep -Fq "REPLACE-ME" dist/widget.js
+              grep -Fq "${GITHUB_SHA}" dist/build-meta.json
+    
+          - name: Configure GitHub Pages
+            uses: actions/configure-pages@v5
+    
+          - name: Upload Pages artifact
+            uses: actions/upload-pages-artifact@v3
+            with:
+              path: dist
+    
+      deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        environment:
+          name: github-pages
+          url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+          - name: Deploy to GitHub Pages
+            id: deployment
+            uses: actions/deploy-pages@v5
+    
+          - name: Verify live demo and embedded assets
+            shell: bash
+            env:
+              PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+              SOURCE_SHA: ${{ github.sha }}
+            run: |
+              set -euo pipefail
+              BASE="${PAGE_URL%/}"
+    
+              verify() {
+                local path="$1"
+                local expected="$2"
+                local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"
+    
+                for attempt in {1..24}; do
+                  if curl --location --fail --silent --show-error \
+                    --header "Cache-Control: no-cache" \
+                    "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then
+                    if grep -Fqi "$expected" "$body"; then
+                      echo "verified ${path}"
+                      return 0
+                    fi
+                  fi
+                  sleep 5
+                done
+    
+                echo "Live verification failed for ${path}"
+                head -c 1000 "$body" 2>/dev/null || true
+                return 1
+              }
+    
+              verify "/" "AI Assistant"
+              verify "/widget.js" "derat-layout-20260723-v3"
+              verify "/widget.css" "cw-chat-builder"
+              verify "/build-meta.json" "$SOURCE_SHA"
+    
+          - name: Checkout latest main for deployment record
+            uses: actions/checkout@v4
+            with:
+              ref: main
+    
+          - name: Record verified widget deployment
+            shell: bash
+            env:
+              PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+              SOURCE_SHA: ${{ github.sha }}
+            run: |
+              {
+                echo "deployment=success"
+                echo "dependency_audit=success"
+                echo "live_smoke=success"
+                echo "source_sha=${SOURCE_SHA}"
+                echo "page_url=${PAGE_URL}"
+                echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+              } > PAGES_DEPLOY_AUDIT.txt
+              git config user.name "github-actions[bot]"
+              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+              git add PAGES_DEPLOY_AUDIT.txt
+              git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0
+              git pull --rebase origin main
+              git push origin HEAD:main
+    
+  operator: 'match'
   stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:78:10)
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:159:10)
     async Test.run (node:internal/test_runner/test:1054:7)
     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
-# Subtest: direct contacts use the same three-card bottom bar as Derat
-ok 6 - direct contacts use the same three-card bottom bar as Derat
-  ---
-  duration_ms: 1.702934
-  type: 'test'
-  ...
-# Subtest: the configurator fills the available vertical space
-ok 7 - the configurator fills the available vertical space
-  ---
-  duration_ms: 1.14512
-  type: 'test'
-  ...
-# Subtest: configuration cards have no selected side line, shake or glow
-ok 8 - configuration cards have no selected side line, shake or glow
-  ---
-  duration_ms: 1.092151
-  type: 'test'
-  ...
-# Subtest: selected checks are static, small and correctly aligned
-ok 9 - selected checks are static, small and correctly aligned
-  ---
-  duration_ms: 1.356186
-  type: 'test'
-  ...
-# Subtest: builder flow remains short and contact stays final
-not ok 10 - builder flow remains short and contact stays final
-  ---
-  duration_ms: 1.601102
-  type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:123:1'
-  failureType: 'testCodeFailure'
-  error: |-
-    Expected values to be strictly equal:
-    
-    5 !== 6
-    
-  code: 'ERR_ASSERTION'
-  name: 'AssertionError'
-  expected: 6
-  actual: 5
-  operator: 'strictEqual'
-  stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:130:10)
-    async Test.run (node:internal/test_runner/test:1054:7)
-    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
-  ...
-# Subtest: mobile keeps two-column Derat cards and a full-screen panel
-ok 11 - mobile keeps two-column Derat cards and a full-screen panel
-  ---
-  duration_ms: 1.836444
-  type: 'test'
-  ...
-# Subtest: form controls remain mobile-safe and contact is prioritised
-ok 12 - form controls remain mobile-safe and contact is prioritised
-  ---
-  duration_ms: 1.318891
-  type: 'test'
-  ...
-# Subtest: chat motion remains calm
-ok 13 - chat motion remains calm
-  ---
-  duration_ms: 1.997454
-  type: 'test'
-  ...
-# Subtest: chat API and server protections remain intact
-ok 14 - chat API and server protections remain intact
-  ---
-  duration_ms: 1.282096
-  type: 'test'
-  ...
-# Subtest: deployment validates the Derat layout build
-ok 15 - deployment validates the Derat layout build
-  ---
-  duration_ms: 0.823791
-  type: 'test'
-  ...
-1..15
-# tests 15
+1..13
+# tests 13
 # suites 0
-# pass 9
-# fail 6
+# pass 10
+# fail 3
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 93.037966
+# duration_ms 92.529014
  ELIFECYCLE  Test failed. See above for more details.
