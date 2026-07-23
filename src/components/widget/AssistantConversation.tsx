@@ -207,7 +207,7 @@ export function AssistantConversation({
           className="cw-chip cw-chip--primary"
           onClick={(event) => {
             replayBorderTrace(event.currentTarget);
-            window.setTimeout(onOpenCalculator, 360);
+            window.setTimeout(onOpenCalculator, 1120);
           }}
         >
           Vyskladať riešenie
