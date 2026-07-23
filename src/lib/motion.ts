@@ -3,21 +3,22 @@ import { animate, stagger, svg } from "animejs";
 const prefersReducedMotion = (): boolean =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/* Builder choices use a short, quiet entrance without spring or sideways movement. */
+/* Builder choices arrive as one calm composition, not as independent bouncing tiles. */
 export function animateStepIn(container: HTMLElement | null): void {
   if (!container || prefersReducedMotion()) return;
   const targets = Array.from(
     container.querySelectorAll(
-      ".cw-rows > *:not(.cw-glide), .cw-grid > *:not(.cw-glide), .cw-list > *:not(.cw-glide), .cw-summary, .cw-lead, .cw-industry-tip, .cw-custom",
+      ".cw-choice-grid > *, .cw-summary, .cw-lead, .cw-industry-tip, .cw-custom",
     ),
   ) as HTMLElement[];
   if (targets.length === 0) return;
   animate(targets, {
     opacity: [0, 1],
-    translateY: [4, 0],
-    delay: stagger(16, { start: 18 }),
-    duration: 230,
-    ease: "outCubic",
+    translateY: [7, 0],
+    scale: [0.992, 1],
+    delay: stagger(22, { start: 28 }),
+    duration: 360,
+    ease: "outExpo",
   });
 }
 
@@ -28,26 +29,39 @@ export function animateChipsIn(container: HTMLElement | null): void {
   if (targets.length === 0) return;
   animate(targets, {
     opacity: [0, 1],
-    translateY: [4, 0],
-    delay: stagger(24, { start: 35 }),
-    duration: 230,
+    translateY: [5, 0],
+    delay: stagger(28, { start: 40 }),
+    duration: 300,
     ease: "outCubic",
   });
 }
 
-/* Sent messages move only a few pixels from the composer; no rotation or spring shake. */
+/* A sent message leaves the composer with a controlled pop and settles without bounce. */
 export function animateSentMessage(row: HTMLElement | null): void {
   if (!row || prefersReducedMotion()) return;
   animate(row, {
     opacity: [0, 1],
-    translateY: [8, 0],
-    translateX: [4, 0],
-    duration: 260,
+    translateY: [11, 0],
+    translateX: [7, 0],
+    scale: [0.965, 1],
+    duration: 410,
+    ease: "outExpo",
+  });
+}
+
+/* Replies enter more softly than outgoing messages so the conversation remains calm. */
+export function animateReceivedMessage(row: HTMLElement | null): void {
+  if (!row || prefersReducedMotion()) return;
+  animate(row, {
+    opacity: [0, 1],
+    translateY: [7, 0],
+    scale: [0.985, 1],
+    duration: 360,
     ease: "outCubic",
   });
 }
 
-/* Fajka na poďakovaní sa nakreslí ťahom. */
+/* The success check is drawn once; the static icon remains a safe fallback. */
 export function drawCheck(scope: HTMLElement | null): void {
   if (!scope) return;
   const path = scope.querySelector("path");
@@ -62,6 +76,6 @@ export function drawCheck(scope: HTMLElement | null): void {
       ease: "inOutQuad",
     });
   } catch {
-    /* Kreslenie je len doplnok; bez neho zostane fajka statická. */
+    /* Drawing is enhancement only; the icon remains visible without it. */
   }
 }
