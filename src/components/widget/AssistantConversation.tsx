@@ -20,7 +20,8 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   {
     id: 1,
     from: "bot",
-    text: "Dobrý deň. Pomôžem vám vybrať chatbot, kalkulačku alebo konfigurátor podľa vášho webu. Jednoduché riešenie začína od 350 €. Čo potrebujete zjednodušiť?",
+    text:
+      "Dobrý deň. Stačí mi napísať, čo dnes na webe vysvetľujete alebo počítate ručne. Odporučím vhodný chatbot, kalkulačku alebo konfigurátor. Jednoduchý chatbot začína od 350 €.",
   },
 ];
 
@@ -28,25 +29,25 @@ type QuickReply = { label: string; question: string };
 
 const QUICK_REPLIES: QuickReply[] = [
   {
-    label: "Cena od 350 €",
-    question: "Čo dostanem v jednoduchom riešení od 350 €?",
+    label: "Čo chatbot vyrieši",
+    question: "Čo môže chatbot reálne vyriešiť na webe mojej firmy?",
   },
   {
-    label: "Ako to funguje",
-    question: "Ako prebieha návrh a nasadenie chatbota na web?",
+    label: "Ako prebieha spolupráca",
+    question: "Ako prebieha návrh, príprava a nasadenie riešenia?",
   },
   {
-    label: "Čo potrebujete odo mňa",
-    question: "Aké podklady potrebujete na prípravu chatbota alebo kalkulačky?",
+    label: "Čo budete potrebovať",
+    question: "Aké podklady odo mňa potrebujete na prípravu chatbota alebo kalkulačky?",
   },
   {
-    label: "Ukážky riešení",
+    label: "Pozrieť živé ukážky",
     question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",
   },
 ];
 
 const CHAT_FALLBACK =
-  "Teraz sa neviem spojiť. Otvorte konfigurátor alebo použite priamy kontakt nižšie a ozvem sa s konkrétnym návrhom.";
+  "Teraz sa neviem spojiť. Otvorte krátke zadanie alebo použite priamy kontakt nižšie. Ozvem sa s konkrétnym návrhom.";
 
 export function AssistantConversation({
   resetToken,
@@ -152,8 +153,8 @@ export function AssistantConversation({
             <WidgetIcon name="calculator" />
           </span>
           <span className="cw-chat-builder__copy">
-            <b>Vyskladať konkrétne riešenie</b>
-            <small>5 krátkych krokov · návrh a presná cena po kontrole zadania</small>
+            <b>Vyskladať riešenie krok za krokom</b>
+            <small>Odpovedzte na 5 jednoduchých otázok. Na konci odošlete kontakt.</small>
           </span>
           <span className="cw-chat-builder__arrow" aria-hidden="true">
             →
@@ -180,7 +181,7 @@ export function AssistantConversation({
             <span className="cw-avatar">
               <BubbleLogo size="avatar" />
             </span>
-            <div className="cw-typing" aria-label="AI Assistant odpovedá">
+            <div className="cw-typing" aria-label="Môj Chatbot odpovedá">
               <i />
               <i />
               <i />
@@ -189,7 +190,7 @@ export function AssistantConversation({
         ) : null}
       </div>
 
-      <div className="cw-quick-replies" aria-label="Rýchle možnosti">
+      <div className="cw-quick-replies" aria-label="Časté otázky">
         {QUICK_REPLIES.map(({ label, question }) => (
           <button
             type="button"
@@ -199,7 +200,6 @@ export function AssistantConversation({
             onClick={() => void ask(question)}
           >
             <span>{label}</span>
-            <span aria-hidden="true">→</span>
           </button>
         ))}
       </div>
@@ -214,8 +214,8 @@ export function AssistantConversation({
               submit();
             }
           }}
-          placeholder="Opíšte, čo dnes riešite ručne…"
-          aria-label="Správa pre AI Assistanta"
+          placeholder="Napíšte otázku o vašom webe…"
+          aria-label="Otázka pre Môj Chatbot"
         />
         <button
           type="button"
@@ -229,7 +229,7 @@ export function AssistantConversation({
       </div>
 
       <nav className="cw-direct-actions" aria-label="Priamy kontakt">
-        <span className="cw-direct-actions__label">Alebo ma kontaktujte priamo</span>
+        <span className="cw-direct-actions__label">Potrebujete radšej hovoriť priamo?</span>
         <div className="cw-direct-actions__grid">
           <a className="cw-spotlight" href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
             <span className="cw-direct-actions__icon">
