@@ -8,7 +8,6 @@ import "./interaction.css";
 import "./requested-polish.css";
 import "./world-class-polish.css";
 import "./competition-widget.css";
-import "./selection-border-polish.css";
 import "./flow-content-polish.css";
 import "./black-blue-refresh.css";
 

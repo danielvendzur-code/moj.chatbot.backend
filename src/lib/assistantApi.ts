@@ -18,7 +18,8 @@ function safeEndpoint(value: string | undefined): string | null {
   try {
     const url = new URL(value);
     const local = url.hostname === "localhost" || url.hostname === "127.0.0.1";
-    if (url.protocol !== "https:" && !(local && url.protocol === "http:")) return null;
+    if (url.protocol !== "https:" && !(local && url.protocol === "http:"))
+      return null;
     if (url.username || url.password) return null;
     return url.toString();
   } catch {
@@ -39,7 +40,10 @@ export function isChatConfigured(): boolean {
 }
 
 function cleanText(value: string, limit: number): string {
-  return value.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, " ").trim().slice(0, limit);
+  return value
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, " ")
+    .trim()
+    .slice(0, limit);
 }
 
 export function localAssistantReply(question: string): string {
@@ -64,14 +68,15 @@ export function localAssistantReply(question: string): string {
     return "Widget sa dá vložiť na existujúci web bez kompletnej prerábky. Prispôsobí sa farbám značky, funguje na mobile a dopyty môže posielať na e-mail, kalendár, tabuľku alebo CRM.";
   }
   if (/kontakt|zavola|email|e-mail/.test(normalized)) {
-    return "Daniela môžete kontaktovať na daniel.vendzur@gmail.com alebo +421 948 699 433. Najrýchlejšie je otvoriť „Vyskladať riešenie“ a poslať krátke zadanie.";
+    return "Daniela môžete kontaktovať na daniel@vendzur.sk alebo +421 948 699 433. Najrýchlejšie je otvoriť „Vyskladať riešenie“ a poslať krátke zadanie.";
   }
 
   return "Pomôžem vám vybrať chatbot na mieru, kalkulačku, konfigurátor alebo rezervácie. Otvorte „Vyskladať riešenie“ alebo mi napíšte, čo má zákazník na vašom webe vedieť vybaviť bez telefonátu.";
 }
 
 export async function sendChat(history: ChatTurn[]): Promise<string> {
-  const lastQuestion = [...history].reverse().find((turn) => turn.role === "user")?.text ?? "";
+  const lastQuestion =
+    [...history].reverse().find((turn) => turn.role === "user")?.text ?? "";
   const endpoint = safeEndpoint(chatEndpoint());
   if (!endpoint) return localAssistantReply(lastQuestion);
 
@@ -81,12 +86,18 @@ export async function sendChat(history: ChatTurn[]): Promise<string> {
   }));
 
   const controller = new AbortController();
-  const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  const timeout = window.setTimeout(
+    () => controller.abort(),
+    REQUEST_TIMEOUT_MS,
+  );
 
   try {
     const response = await fetch(endpoint, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
       body: JSON.stringify({ messages }),
       cache: "no-store",
       credentials: "omit",
@@ -97,7 +108,10 @@ export async function sendChat(history: ChatTurn[]): Promise<string> {
     if (!response.ok) return localAssistantReply(lastQuestion);
 
     const data = (await response.json()) as { reply?: unknown };
-    const reply = typeof data.reply === "string" ? cleanText(data.reply, MAX_REPLY_CHARS) : "";
+    const reply =
+      typeof data.reply === "string"
+        ? cleanText(data.reply, MAX_REPLY_CHARS)
+        : "";
     return reply || localAssistantReply(lastQuestion);
   } catch {
     return localAssistantReply(lastQuestion);
