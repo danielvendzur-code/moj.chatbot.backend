@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("the competition layer loads last in demo and embed builds", async () => {
+test("the owner-friendly layer is present in demo and embed builds", async () => {
   const main = await read("src/main.tsx");
   const embed = await read("src/embed.tsx");
   const css = await read("src/competition-winner-final.css");
@@ -20,7 +20,7 @@ test("the competition layer loads last in demo and embed builds", async () => {
     embed.lastIndexOf('import "./'),
     embed.indexOf('import "./competition-winner-final.css"'),
   );
-  assert.match(embed, /competition-winner-20260723-v5/);
+  assert.match(embed, /owner-friendly-20260723-v6/);
   assert.match(css, /Final assistant system/);
 });
 
@@ -179,9 +179,10 @@ test("chat API protections remain intact", async () => {
   assert.doesNotMatch(api, /Access-Control-Allow-Origin["'],\s*["']\*/);
 });
 
-test("deployment validates the competition build", async () => {
+test("deployment validates the owner-friendly build", async () => {
   const deploy = await read(".github/workflows/deploy-pages.yml");
-  assert.match(deploy, /competition-winner-20260723-v5/);
+  assert.match(deploy, /owner-friendly-20260723-v6/);
+  assert.match(deploy, /owner-friendly-final/);
   assert.match(deploy, /competition-winner-final/);
   assert.match(deploy, /installWidgetSpotlight/);
   assert.match(deploy, /api\/lead/);
