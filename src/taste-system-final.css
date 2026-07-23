@@ -1,0 +1,781 @@
+/* Taste-system final layer.
+   Loaded after every historical stylesheet so typography, icons, chips and states
+   are controlled by one coherent system instead of stacked visual patches. */
+
+:root {
+  --cw-font: "Segoe UI Variable", "Aptos", "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --taste-bg: #05080d;
+  --taste-panel: #080d14;
+  --taste-surface: #0e1621;
+  --taste-surface-hover: #151f2d;
+  --taste-surface-selected: #18345d;
+  --taste-text: #f5f7fb;
+  --taste-muted: #94a2b5;
+  --taste-blue: #4d84e8;
+  --taste-blue-soft: #8eb5f6;
+}
+
+html body .cw-widget,
+html body .cw-widget button,
+html body .cw-widget input,
+html body .cw-widget textarea,
+html body .cw-widget select {
+  font-family: var(--cw-font) !important;
+  font-feature-settings: "ss01", "cv02", "cv03", "cv04" !important;
+}
+
+html body .cw-widget h1,
+html body .cw-widget h2,
+html body .cw-widget h3,
+html body .cw-widget h4,
+html body .cw-widget b,
+html body .cw-widget strong {
+  font-family: var(--cw-font) !important;
+  text-wrap: balance;
+}
+
+html body .cw-widget svg {
+  stroke-width: 1.7 !important;
+}
+
+html body .cw-widget .cw-panel {
+  border: 0 !important;
+  background: var(--taste-bg) !important;
+  box-shadow: 0 34px 90px -46px rgba(0, 0, 0, 0.98) !important;
+}
+
+html body .cw-widget .cw-panel-head {
+  border: 0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045) !important;
+  background: #080d14 !important;
+}
+
+html body .cw-widget .cw-panel-head__copy strong {
+  color: var(--taste-text) !important;
+  font-size: 16px !important;
+  font-weight: 690 !important;
+  letter-spacing: -0.025em !important;
+}
+
+html body .cw-widget .cw-panel-head__copy small {
+  color: #8f9daf !important;
+  font-size: 11.5px !important;
+  font-weight: 520 !important;
+}
+
+/* Remove square icon containers from the header. */
+html body .cw-widget .cw-panel-head__mascot {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-panel-head__actions button {
+  width: 38px !important;
+  height: 38px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  color: #8795a8 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition:
+    color 170ms ease,
+    background-color 170ms ease !important;
+}
+
+html body .cw-widget .cw-panel-head__actions button:hover,
+html body .cw-widget .cw-panel-head__actions button:focus-visible {
+  border: 0 !important;
+  color: #ffffff !important;
+  background: #121b27 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* One rounded segmented control without a coloured outline. */
+html body .cw-widget .cw-tabs {
+  min-height: 58px !important;
+  margin: 8px 10px !important;
+  padding: 5px !important;
+  gap: 5px !important;
+  border: 0 !important;
+  border-radius: 18px !important;
+  background: #0d141e !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html body .cw-widget .cw-tabs__glass {
+  border: 0 !important;
+  border-radius: 14px !important;
+  background: #244b87 !important;
+  box-shadow: none !important;
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+html body .cw-widget .cw-tabs > button {
+  min-height: 48px !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  color: #9ca9ba !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 13.5px !important;
+  font-weight: 650 !important;
+  letter-spacing: -0.015em !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-tabs > button[data-active="true"] {
+  color: #ffffff !important;
+}
+
+html body .cw-widget .cw-tabs > button:active {
+  transform: none !important;
+}
+
+html body .cw-widget .cw-panel-body {
+  animation: taste-mode-in 220ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+}
+
+@keyframes taste-mode-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Disable every old border/glow effect on chips and cards. */
+html body .cw-widget .cw-spotlight::before,
+html body .cw-widget .cw-spotlight::after,
+html body .cw-widget .cw-chip::before,
+html body .cw-widget .cw-chip::after,
+html body .cw-widget .cw-rowcard::before,
+html body .cw-widget .cw-rowcard::after,
+html body .cw-widget .cw-scard::before,
+html body .cw-widget .cw-scard::after,
+html body .cw-widget .cw-opt::before,
+html body .cw-widget .cw-opt::after,
+html body .cw-widget .cw-vcard::before,
+html body .cw-widget .cw-vcard::after {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  animation: none !important;
+  box-shadow: none !important;
+}
+
+/* The only flashlight remains on the deliberate builder CTA. */
+html body .cw-widget .cw-chat-builder.cw-spotlight::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  display: block !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  background: radial-gradient(
+    circle 88px at var(--cw-spot-x) var(--cw-spot-y),
+    rgba(255, 255, 255, 0.16),
+    rgba(92, 143, 229, 0.1) 38%,
+    transparent 72%
+  ) !important;
+  transition: opacity 150ms ease !important;
+}
+
+html body .cw-widget .cw-chat-builder.cw-spotlight[data-cw-spotlight="true"]::after,
+html body .cw-widget .cw-chat-builder.cw-spotlight:hover::after,
+html body .cw-widget .cw-chat-builder.cw-spotlight:focus-visible::after {
+  opacity: 1 !important;
+}
+
+html body .cw-widget .cw-chat-builder {
+  min-height: 72px !important;
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  grid-template-columns: 26px minmax(0, 1fr) !important;
+  gap: 12px !important;
+  padding: 14px 16px !important;
+  border: 0 !important;
+  border-radius: 18px !important;
+  color: #eef3fb !important;
+  background: #12213a !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-chat-builder:hover,
+html body .cw-widget .cw-chat-builder:focus-visible {
+  border: 0 !important;
+  background: #182b49 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-chat-builder > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+html body .cw-widget .cw-chat-builder__icon {
+  width: 24px !important;
+  height: 24px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: #91b8f8 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-chat-builder__icon svg {
+  width: 22px !important;
+  height: 22px !important;
+}
+
+html body .cw-widget .cw-chat-builder__copy b {
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 680 !important;
+  letter-spacing: -0.018em !important;
+}
+
+html body .cw-widget .cw-chat-builder__copy small {
+  max-width: 36ch !important;
+  color: #a5b2c4 !important;
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+
+html body .cw-widget .cw-chat-builder__arrow,
+html body .cw-widget .cw-choice-arrow {
+  display: none !important;
+}
+
+/* Conversation typography. */
+html body .cw-widget .cw-messages {
+  background: #060a10 !important;
+}
+
+html body .cw-widget .cw-message-wrap p {
+  border: 0 !important;
+  border-radius: 17px !important;
+  color: #dce4ee !important;
+  background: #101721 !important;
+  box-shadow: none !important;
+  font-size: 13.25px !important;
+  font-weight: 470 !important;
+  letter-spacing: -0.008em !important;
+  line-height: 1.58 !important;
+}
+
+html body .cw-widget .cw-message-row--me .cw-message-wrap p {
+  color: #ffffff !important;
+  background: #3979e6 !important;
+}
+
+html body .cw-widget .cw-avatar {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Quick replies are proper rounded chips, not outlined rectangles. */
+html body .cw-widget .cw-quick-replies {
+  gap: 7px !important;
+  padding: 8px 10px 10px !important;
+  background: #070b11 !important;
+}
+
+html body .cw-widget .cw-quick-replies .cw-chip {
+  min-height: 44px !important;
+  justify-content: center !important;
+  padding: 10px 14px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  color: #cbd5e1 !important;
+  background: #111a26 !important;
+  box-shadow: none !important;
+  font-size: 12.6px !important;
+  font-weight: 620 !important;
+  letter-spacing: -0.012em !important;
+  line-height: 1.2 !important;
+  transform: none !important;
+  transition:
+    color 170ms ease,
+    background-color 170ms ease !important;
+}
+
+html body .cw-widget .cw-quick-replies .cw-chip:hover,
+html body .cw-widget .cw-quick-replies .cw-chip:focus-visible {
+  border: 0 !important;
+  color: #ffffff !important;
+  background: #1a2636 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-quick-replies .cw-chip:active {
+  transform: none !important;
+}
+
+/* One-piece input bar. */
+html body .cw-widget .cw-inputbar {
+  min-height: 60px !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 0 10px 10px !important;
+  padding: 8px 8px 8px 15px !important;
+  border: 0 !important;
+  border-radius: 19px !important;
+  background: #111923 !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-inputbar input {
+  height: 44px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: #f7f9fc !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 16px !important;
+  font-weight: 480 !important;
+  letter-spacing: -0.01em !important;
+}
+
+html body .cw-widget .cw-inputbar input::placeholder {
+  color: #78879a !important;
+  opacity: 1 !important;
+}
+
+html body .cw-widget .cw-inputbar input:focus {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-inputbar > button {
+  width: 44px !important;
+  height: 44px !important;
+  flex: 0 0 44px !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  color: #ffffff !important;
+  background: #3979e6 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-inputbar > button:hover:not(:disabled),
+html body .cw-widget .cw-inputbar > button:focus-visible:not(:disabled) {
+  border: 0 !important;
+  background: #4a87ee !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-inputbar > button:disabled {
+  color: #5e6b7e !important;
+  background: #1a2330 !important;
+  opacity: 1 !important;
+}
+
+/* Direct contacts are quiet text actions, not boxed mini-cards. */
+html body .cw-widget .cw-direct-actions {
+  border-top: 1px solid rgba(255, 255, 255, 0.04) !important;
+}
+
+html body .cw-widget .cw-direct-actions__label {
+  color: #7f8da0 !important;
+  font-size: 10.8px !important;
+  font-weight: 560 !important;
+}
+
+html body .cw-widget .cw-direct-actions__grid a {
+  min-height: 42px !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  color: #aebaca !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-direct-actions__grid a:hover,
+html body .cw-widget .cw-direct-actions__grid a:focus-visible {
+  border: 0 !important;
+  color: #ffffff !important;
+  background: #111923 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-direct-actions__icon {
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: #8eb5f6 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Progress and step typography. */
+html body .cw-widget .cw-progress {
+  border: 0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+  background: #080d14 !important;
+}
+
+html body .cw-widget .cw-progress__back {
+  width: 34px !important;
+  height: 34px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  color: #9aa8ba !important;
+  background: #111923 !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-progress__track {
+  border: 0 !important;
+  background: #15202d !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-progress__fill {
+  background: #4d84e8 !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-progress__count {
+  color: #8c99ab !important;
+  font-variant-numeric: tabular-nums;
+}
+
+html body .cw-widget .cw-q {
+  max-width: 24ch !important;
+  color: #f5f7fb !important;
+  font-size: clamp(1.28rem, 3.2vw, 1.48rem) !important;
+  font-weight: 690 !important;
+  letter-spacing: -0.035em !important;
+  line-height: 1.14 !important;
+  word-spacing: 0.015em !important;
+  text-wrap: balance;
+}
+
+html body .cw-widget .cw-q-sub {
+  max-width: 46ch !important;
+  color: #8f9daf !important;
+  font-size: 11.8px !important;
+  font-weight: 470 !important;
+  line-height: 1.5 !important;
+  text-wrap: pretty;
+}
+
+/* Configurator choices: soft rounded surfaces, no coloured border, no square icons. */
+html body .cw-widget .cw-rowcard,
+html body .cw-widget .cw-scard,
+html body .cw-widget .cw-opt,
+html body .cw-widget .cw-vcard {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  padding-right: 44px !important;
+  border: 0 !important;
+  border-radius: 18px !important;
+  color: #d4dde8 !important;
+  background: #101822 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease !important;
+}
+
+html body .cw-widget .cw-rowcard::after,
+html body .cw-widget .cw-scard::after,
+html body .cw-widget .cw-opt::after,
+html body .cw-widget .cw-vcard::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  display: block !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  opacity: 1 !important;
+  background: #18345d !important;
+  transform: scaleX(0) !important;
+  transform-origin: left center !important;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+html body .cw-widget .cw-rowcard > *,
+html body .cw-widget .cw-scard > *,
+html body .cw-widget .cw-opt > *,
+html body .cw-widget .cw-vcard > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+html body .cw-widget .cw-rowcard:hover,
+html body .cw-widget .cw-rowcard:focus-visible,
+html body .cw-widget .cw-scard:hover,
+html body .cw-widget .cw-scard:focus-visible,
+html body .cw-widget .cw-opt:hover,
+html body .cw-widget .cw-opt:focus-visible,
+html body .cw-widget .cw-vcard:hover,
+html body .cw-widget .cw-vcard:focus-visible {
+  border: 0 !important;
+  color: #ffffff !important;
+  background: #151f2d !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-rowcard[data-selected="true"],
+html body .cw-widget .cw-scard[data-selected="true"],
+html body .cw-widget .cw-opt[data-selected="true"],
+html body .cw-widget .cw-vcard[data-selected="true"] {
+  border: 0 !important;
+  color: #ffffff !important;
+  background: #101822 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-rowcard[data-selected="true"]::after,
+html body .cw-widget .cw-scard[data-selected="true"]::after,
+html body .cw-widget .cw-opt[data-selected="true"]::after,
+html body .cw-widget .cw-vcard[data-selected="true"]::after {
+  transform: scaleX(1) !important;
+}
+
+html body .cw-widget .cw-rowcard[data-selected="true"]::before,
+html body .cw-widget .cw-scard[data-selected="true"]::before,
+html body .cw-widget .cw-opt[data-selected="true"]::before,
+html body .cw-widget .cw-vcard[data-selected="true"]::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 50% !important;
+  right: 14px !important;
+  z-index: 2 !important;
+  display: block !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin-top: -10px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background:
+    #5b8fe8
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='m5.2 10.2 3 3.1 6.7-7'/%3E%3C/svg%3E")
+    center / 14px 14px no-repeat !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-rowcard:active,
+html body .cw-widget .cw-scard:active,
+html body .cw-widget .cw-opt:active,
+html body .cw-widget .cw-vcard:active {
+  transform: none !important;
+}
+
+html body .cw-widget .cw-rowcard {
+  grid-template-columns: 27px minmax(0, 1fr) !important;
+  gap: 13px !important;
+  min-height: 78px !important;
+  padding: 13px 44px 13px 15px !important;
+}
+
+html body .cw-widget .cw-rowcard__icon,
+html body .cw-widget .cw-scard__icon {
+  width: 24px !important;
+  height: 24px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: #8eb5f6 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-rowcard__icon svg,
+html body .cw-widget .cw-scard__icon svg {
+  width: 22px !important;
+  height: 22px !important;
+}
+
+html body .cw-widget .cw-rowcard__body b,
+html body .cw-widget .cw-scard b,
+html body .cw-widget .cw-opt b,
+html body .cw-widget .cw-vcard b {
+  color: inherit !important;
+  font-size: 13.9px !important;
+  font-weight: 660 !important;
+  letter-spacing: -0.018em !important;
+  line-height: 1.25 !important;
+}
+
+html body .cw-widget .cw-rowcard__body small,
+html body .cw-widget .cw-opt__body > span,
+html body .cw-widget .cw-vcard > span {
+  color: #8f9daf !important;
+  font-size: 11px !important;
+  font-weight: 460 !important;
+  line-height: 1.42 !important;
+}
+
+html body .cw-widget .cw-rowcard[data-selected="true"] .cw-rowcard__body small,
+html body .cw-widget .cw-opt[data-selected="true"] .cw-opt__body > span,
+html body .cw-widget .cw-vcard[data-selected="true"] > span {
+  color: #bdcce0 !important;
+}
+
+html body .cw-widget .cw-opt__tag {
+  border: 0 !important;
+  border-radius: 999px !important;
+  color: #a9c7f7 !important;
+  background: rgba(124, 169, 242, 0.12) !important;
+  box-shadow: none !important;
+}
+
+/* Remove square icon tiles in tips, lead forms and success states. */
+html body .cw-widget .cw-industry-tip,
+html body .cw-widget .cw-lead,
+html body .cw-widget .cw-summary,
+html body .cw-widget .cw-thanks,
+html body .cw-widget .cw-lead__optional {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-industry-tip b svg,
+html body .cw-widget .cw-lead__icon,
+html body .cw-widget .cw-thanks__icon {
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: #8eb5f6 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-lead__form input,
+html body .cw-widget .cw-lead__form textarea,
+html body .cw-widget .cw-custom textarea {
+  border: 0 !important;
+  border-radius: 14px !important;
+  color: #edf2f8 !important;
+  background: #111923 !important;
+  box-shadow: none !important;
+  font-size: 15px !important;
+}
+
+html body .cw-widget .cw-lead__form input:focus,
+html body .cw-widget .cw-lead__form textarea:focus,
+html body .cw-widget .cw-custom textarea:focus {
+  border: 0 !important;
+  outline: 2px solid rgba(123, 168, 242, 0.72) !important;
+  outline-offset: 1px !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-submit,
+html body .cw-widget .cw-next {
+  border: 0 !important;
+  border-radius: 15px !important;
+  color: #ffffff !important;
+  background: #3979e6 !important;
+  box-shadow: none !important;
+  font-size: 13.5px !important;
+  font-weight: 660 !important;
+  letter-spacing: -0.012em !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-submit:hover,
+html body .cw-widget .cw-next:hover:not(:disabled),
+html body .cw-widget .cw-submit:focus-visible,
+html body .cw-widget .cw-next:focus-visible:not(:disabled) {
+  border: 0 !important;
+  background: #4a87ee !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-next:disabled {
+  color: #7d8999 !important;
+  background: #151d28 !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+html body .cw-widget .cw-calc-actions {
+  border-top: 1px solid rgba(255, 255, 255, 0.04) !important;
+  background: #080d14 !important;
+}
+
+html body .cw-widget .cw-restart {
+  border: 0 !important;
+  border-radius: 14px !important;
+  color: #9ba9ba !important;
+  background: #111923 !important;
+  box-shadow: none !important;
+}
+
+/* Accessible focus is temporary and never reads as a permanent chip border. */
+html body .cw-widget button:focus-visible,
+html body .cw-widget a:focus-visible {
+  outline: 2px solid rgba(126, 171, 245, 0.86) !important;
+  outline-offset: 3px !important;
+}
+
+@media (max-width: 520px) {
+  html body .cw-widget .cw-tabs > button {
+    font-size: 12.7px !important;
+  }
+
+  html body .cw-widget .cw-quick-replies .cw-chip {
+    min-height: 43px !important;
+    padding: 9px 11px !important;
+    font-size: 11.9px !important;
+  }
+
+  html body .cw-widget .cw-rowcard,
+  html body .cw-widget .cw-scard,
+  html body .cw-widget .cw-opt,
+  html body .cw-widget .cw-vcard {
+    border-radius: 16px !important;
+  }
+
+  html body .cw-widget .cw-q {
+    font-size: 1.28rem !important;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  html body .cw-widget .cw-chat-builder.cw-spotlight::after {
+    content: none !important;
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body .cw-widget .cw-panel-body,
+  html body .cw-widget .cw-tabs__glass,
+  html body .cw-widget .cw-rowcard::after,
+  html body .cw-widget .cw-scard::after,
+  html body .cw-widget .cw-opt::after,
+  html body .cw-widget .cw-vcard::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
