@@ -14,6 +14,7 @@ import "./black-blue-refresh.css";
 import "./premium-liquid-final.css";
 import "./chip-refinement-final.css";
 import "./apple-liquid-fixes.css";
+import "./apple-liquid-system-final.css";
 
 if (isEmbedMode()) {
   document.documentElement.dataset.embed = "true";
