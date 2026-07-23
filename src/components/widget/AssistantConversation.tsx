@@ -21,7 +21,7 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   {
     id: 1,
     from: "bot",
-    text: "Dobrý deň, tu Môj Chatbot. Pomôžem vám vybrať riešenie, ktoré zodpovedá vašej službe a spôsobu predaja.",
+    text: "Dobrý deň, som AI Assistant. Pomôžem vám vybrať riešenie, ktoré zodpovedá vašej službe a spôsobu predaja.",
   },
   {
     id: 2,
@@ -178,7 +178,7 @@ export function AssistantConversation({
             <span className="cw-avatar">
               <BubbleLogo size="avatar" />
             </span>
-            <div className="cw-typing" aria-label="Asistent odpovedá">
+            <div className="cw-typing" aria-label="AI Assistant odpovedá">
               <i />
               <i />
               <i />
@@ -225,7 +225,7 @@ export function AssistantConversation({
             }
           }}
           placeholder="Napíšte svoju otázku…"
-          aria-label="Správa pre asistenta"
+          aria-label="Správa pre AI Assistanta"
         />
         <button
           type="button"
