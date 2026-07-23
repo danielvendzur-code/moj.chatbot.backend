@@ -10,6 +10,7 @@ import "./flow-content-polish.css";
 import "./black-blue-refresh.css";
 import "./premium-liquid-final.css";
 import "./chip-refinement-final.css";
+import "./apple-liquid-fixes.css";
 
 const HOST_ID = "dv-assistant-root";
 const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
