@@ -20,7 +20,7 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   {
     id: 1,
     from: "bot",
-    text: "Dobrý deň 👋 Som AI Assistant. Pomôžem vám vybrať chatbot, kalkulačku alebo konfigurátor a pripraviť stručné zadanie. Čo vás zaujíma?",
+    text: "Dobrý deň. Pomôžem vám vybrať chatbot, kalkulačku alebo konfigurátor podľa vášho webu. Jednoduché riešenie začína od 350 €. Čo potrebujete zjednodušiť?",
   },
 ];
 
@@ -28,18 +28,25 @@ type QuickReply = { label: string; question: string };
 
 const QUICK_REPLIES: QuickReply[] = [
   {
-    label: "Ako funguje chatbot",
-    question: "Ako by chatbot pomohol môjmu webu?",
+    label: "Cena od 350 €",
+    question: "Čo dostanem v jednoduchom riešení od 350 €?",
   },
-  { label: "Výpočet ceny", question: "Ako funguje riešenie s výpočtom ceny?" },
   {
-    label: "Rezervácie",
-    question: "Vie riešenie spracovať aj rezervácie termínov?",
+    label: "Ako to funguje",
+    question: "Ako prebieha návrh a nasadenie chatbota na web?",
+  },
+  {
+    label: "Čo potrebujete odo mňa",
+    question: "Aké podklady potrebujete na prípravu chatbota alebo kalkulačky?",
+  },
+  {
+    label: "Ukážky riešení",
+    question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",
   },
 ];
 
 const CHAT_FALLBACK =
-  "Prepáčte, teraz sa neviem spojiť. Skúste to o chvíľu, otvorte konfigurátor alebo mi nechajte kontakt a ozvem sa.";
+  "Teraz sa neviem spojiť. Otvorte konfigurátor alebo použite priamy kontakt nižšie a ozvem sa s konkrétnym návrhom.";
 
 export function AssistantConversation({
   resetToken,
@@ -49,7 +56,6 @@ export function AssistantConversation({
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const nextIdRef = useRef(2);
-  const replyTimerRef = useRef<number | null>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
   const [planeFx, setPlaneFx] = useState(false);
   const planeTimerRef = useRef<number | null>(null);
@@ -80,20 +86,12 @@ export function AssistantConversation({
     setInput("");
     setTyping(false);
     nextIdRef.current = 2;
-    if (replyTimerRef.current !== null) window.clearTimeout(replyTimerRef.current);
   }, [resetToken]);
 
   useEffect(() => {
     const container = messagesRef.current;
     if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
   }, [messages, typing]);
-
-  useEffect(
-    () => () => {
-      if (replyTimerRef.current !== null) window.clearTimeout(replyTimerRef.current);
-    },
-    [],
-  );
 
   const ask = async (question: string) => {
     if (typing) return;
@@ -149,13 +147,13 @@ export function AssistantConversation({
   return (
     <div className="cw-conversation" data-testid="assistant-view">
       <div className="cw-chat-top">
-        <button type="button" className="cw-chat-builder" onClick={openCalculator}>
+        <button type="button" className="cw-chat-builder cw-spotlight" onClick={openCalculator}>
           <span className="cw-chat-builder__icon" aria-hidden="true">
             <WidgetIcon name="calculator" />
           </span>
           <span className="cw-chat-builder__copy">
-            <b>Vyskladať riešenie</b>
-            <small>Chatbot, kalkulačka alebo konfigurátor podľa vášho webu.</small>
+            <b>Vyskladať konkrétne riešenie</b>
+            <small>5 krátkych krokov · návrh a presná cena po kontrole zadania</small>
           </span>
           <span className="cw-chat-builder__arrow" aria-hidden="true">
             →
@@ -195,12 +193,13 @@ export function AssistantConversation({
         {QUICK_REPLIES.map(({ label, question }) => (
           <button
             type="button"
-            className="cw-chip"
+            className="cw-chip cw-spotlight"
             key={label}
             title={question}
             onClick={() => void ask(question)}
           >
-            {label}
+            <span>{label}</span>
+            <span aria-hidden="true">→</span>
           </button>
         ))}
       </div>
@@ -215,7 +214,7 @@ export function AssistantConversation({
               submit();
             }
           }}
-          placeholder="Napíšte svoju otázku…"
+          placeholder="Opíšte, čo dnes riešite ručne…"
           aria-label="Správa pre AI Assistanta"
         />
         <button
@@ -230,21 +229,21 @@ export function AssistantConversation({
       </div>
 
       <nav className="cw-direct-actions" aria-label="Priamy kontakt">
-        <span className="cw-direct-actions__label">Kontaktujte ma priamo</span>
+        <span className="cw-direct-actions__label">Alebo ma kontaktujte priamo</span>
         <div className="cw-direct-actions__grid">
-          <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
+          <a className="cw-spotlight" href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
             <span className="cw-direct-actions__icon">
               <WidgetIcon name="chat" />
             </span>
             <span>WhatsApp</span>
           </a>
-          <a href="tel:+421948699433">
+          <a className="cw-spotlight" href="tel:+421948699433">
             <span className="cw-direct-actions__icon">
               <WidgetIcon name="phone" />
             </span>
             <span>Zavolať</span>
           </a>
-          <a href="mailto:daniel@vendzur.sk">
+          <a className="cw-spotlight" href="mailto:daniel@vendzur.sk">
             <span className="cw-direct-actions__icon">
               <WidgetIcon name="mail" />
             </span>
