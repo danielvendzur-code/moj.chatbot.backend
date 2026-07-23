@@ -1,4 +1,4 @@
-run_id=30037300799
+run_id=30037394467
 install=success
 lint=success
 build=success
@@ -27,7 +27,7 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-TVr24qNm.css  [39m[1m[2m 58.09 kB[22m[1m[22m[2m │ gzip: 11.67 kB[22m
 [2mdist/[22m[2massets/[22m[36mindex-D80vwSgy.js   [39m[1m[2m216.03 kB[22m[1m[22m[2m │ gzip: 73.14 kB[22m
-[32m✓ built in 1.24s[39m
+[32m✓ built in 1.18s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 92 modules transformed.
@@ -35,7 +35,7 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m 58.09 kB[22m[1m[22m[2m │ gzip: 11.67 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m215.79 kB[22m[1m[22m[2m │ gzip: 73.10 kB[22m
-[32m✓ built in 1.22s[39m
+[32m✓ built in 1.14s[39m
 
 ===== test =====
 
@@ -43,1717 +43,4481 @@ computing gzip size...
 > node --test tests/widget-contract.test.mjs -- --run
 
 TAP version 13
-# Subtest: the website-palette correction loads last in demo and embed builds
-not ok 1 - the website-palette correction loads last in demo and embed builds
+# Subtest: demo and embed use only the base stylesheet and one redesign layer
+ok 1 - demo and embed use only the base stylesheet and one redesign layer
   ---
-  duration_ms: 8.402684
+  duration_ms: 6.956189
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:7:1'
+  ...
+# Subtest: assistant order is clear and designed for non-technical business owners
+ok 2 - assistant order is clear and designed for non-technical business owners
+  ---
+  duration_ms: 1.173603
+  type: 'test'
+  ...
+# Subtest: mode switch is direct React state without legacy drag installers
+ok 3 - mode switch is direct React state without legacy drag installers
+  ---
+  duration_ms: 2.360262
+  type: 'test'
+  ...
+# Subtest: the redesign uses the website palette and no teal or green CTA colours
+ok 4 - the redesign uses the website palette and no teal or green CTA colours
+  ---
+  duration_ms: 1.077642
+  type: 'test'
+  ...
+# Subtest: choice cards are rounded borderless and never shrink
+not ok 5 - choice cards are rounded borderless and never shrink
+  ---
+  duration_ms: 4.015022
+  type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:59:1'
   failureType: 'testCodeFailure'
   error: |-
-    The input did not match the regular expression /taste-system-final\.css/. Input:
+    The input was expected to not match the regular expression /:active[\s\S]*scale\(0\.[0-9]+\)/. Input:
     
-    'import { StrictMode } from "react";\n' +
-      'import { createRoot } from "react-dom/client";\n' +
-      'import App from "./App";\n' +
-      'import { getInitialEmbedViewport, isEmbedMode } from "./lib/embedBridge";\n' +
-      'import "./widget.css";\n' +
-      'import "./assistant-redesign.css";\n' +
+    '/*\n' +
+      ' * Môj Chatbot — single clean design system\n' +
+      ' * Palette is intentionally identical to the website: black, graphite and one blue accent.\n' +
+      ' */\n' +
       '\n' +
-      'if (isEmbedMode()) {\n' +
-      '  document.documentElement.dataset.embed = "true";\n' +
-      '  document.documentElement.dataset.embedViewport = getInitialEmbedViewport();\n' +
+      ':root {\n' +
+      '  --mc-bg: #05070b;\n' +
+      '  --mc-surface: #0a0f17;\n' +
+      '  --mc-surface-2: #0d141f;\n' +
+      '  --mc-surface-3: #111b2a;\n' +
+      '  --mc-surface-hover: #142033;\n' +
+      '  --mc-blue: #3478f6;\n' +
+      '  --mc-blue-hover: #4e8cff;\n' +
+      '  --mc-blue-soft: rgba(52, 120, 246, 0.15);\n' +
+      '  --mc-text: #f6f8fb;\n' +
+      '  --mc-muted: #9eabbc;\n' +
+      '  --mc-faint: #6f7d8f;\n' +
+      '  --mc-success: #70d49a;\n' +
+      '  --mc-danger: #ff7b87;\n' +
+      '  --mc-radius-xl: 26px;\n' +
+      '  --mc-radius-lg: 20px;\n' +
+      '  --mc-radius-md: 16px;\n' +
+      '  --mc-radius-sm: 12px;\n' +
+      '  --mc-ease: cubic-bezier(0.16, 1, 0.3, 1);\n' +
+      '  --mc-font: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;\n' +
       '}\n' +
       '\n' +
-      'createRoot(document.getElementById("root")!).render(\n' +
-      '  <StrictMode>\n' +
-      '    <App />\n' +
-      '  </StrictMode>,\n' +
-      ');\n'
+      '* {\n' +
+      '  box-sizing: border-box;\n' +
+      '}\n' +
+      '\n' +
+      'html,\n' +
+      'body,\n' +
+      '#root,\n' +
+      '.widget-preview {\n' +
+      '  min-height: 100%;\n' +
+      '  margin: 0;\n' +
+      '}\n' +
+      '\n' +
+      'body {\n' +
+      '  color: var(--mc-text);\n' +
+      '  background: var(--mc-bg);\n' +
+      '  font-family: var(--mc-font);\n' +
+      '  -webkit-font-smoothing: antialiased;\n' +
+      '  text-rendering: optimizeLegibility;\n' +
+      '}\n' +
+      '\n' +
+      '.widget-preview {\n' +
+      '  position: relative;\n' +
+      '  min-height: 100dvh;\n' +
+      '  overflow: hidden;\n' +
+      '  background:\n' +
+      '    radial-gradient(circle at 78% 12%, rgba(52, 120, 246, 0.09), transparent 34rem),\n' +
+      '    var(--mc-bg);\n' +
+      '}\n' +
+      '\n' +
+      '.widget-preview__surface {\n' +
+      '  position: absolute;\n' +
+      '  inset: 0;\n' +
+      '  pointer-events: none;\n' +
+      '  background: linear-gradient(180deg, rgba(255, 255, 255, 0.012), transparent 25%);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-widget,\n' +
+      '.cw-widget button,\n' +
+      '.cw-widget input,\n' +
+      '.cw-widget textarea {\n' +
+      '  font-family: var(--mc-font);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-widget button,\n' +
+      '.cw-widget a,\n' +
+      '.cw-widget input,\n' +
+      '.cw-widget textarea,\n' +
+      '.cw-widget summary {\n' +
+      '  -webkit-tap-highlight-color: transparent;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-widget button {\n' +
+      '  appearance: none;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-sr-only {\n' +
+      '  position: absolute;\n' +
+      '  width: 1px;\n' +
+      '  height: 1px;\n' +
+      '  padding: 0;\n' +
+      '  margin: -1px;\n' +
+      '  overflow: hidden;\n' +
+      '  clip: rect(0, 0, 0, 0);\n' +
+      '  white-space: nowrap;\n' +
+      '  border: 0;\n' +
+      '}\n' +
+      '\n' +
+      '/* Launcher */\n' +
+      '.cw-launcher {\n' +
+      '  position: fixed;\n' +
+      '  z-index: 2147483000;\n' +
+      '  right: max(18px, env(safe-area-inset-right));\n' +
+      '  bottom: max(18px, env(safe-area-inset-bottom));\n' +
+      '  width: 66px;\n' +
+      '  height: 66px;\n' +
+      '  display: grid;\n' +
+      '  place-items: center;\n' +
+      '  padding: 0;\n' +
+      '  border: 0;\n' +
+      '  border-radius: 22px;\n' +
+      '  color: white;\n' +
+      '  background: var(--mc-surface-2);\n' +
+      '  box-shadow:\n' +
+      '    0 24px 62px -30px rgba(0, 0, 0, 0.95),\n' +
+      '    0 18px 42px -28px rgba(52, 120, 246, 0.7),\n' +
+      '    inset 0 1px 0 rgba(255, 255, 255, 0.06);\n' +
+      '  cursor: pointer;\n' +
+      '  transition:\n' +
+      '    transform 220ms var(--mc-ease),\n' +
+      '    background-color 180ms ease;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-launcher:hover,\n' +
+      '.cw-launcher:focus-visible {\n' +
+      '  background: var(--mc-surface-3);\n' +
+      '  transform: translateY(-3px);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-launcher:active {\n' +
+      '  transform: translateY(0);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-launcher .bl--launcher {\n' +
+      '  width: 50px;\n' +
+      '  height: 50px;\n' +
+      '}\n' +
+      '\n' +
+      '/* Shell */\n' +
+      '.cw-panel {\n' +
+      '  position: fixed;\n' +
+      '  z-index: 2147483001;\n' +
+      '  right: max(18px, env(safe-area-inset-right));\n' +
+      '  bottom: max(18px, env(safe-area-inset-bottom));\n' +
+      '  width: min(448px, calc(100vw - 36px));\n' +
+      '  height: min(744px, calc(100dvh - 36px));\n' +
+      '  display: flex;\n' +
+      '  flex-direction: column;\n' +
+      '  overflow: hidden;\n' +
+      '  border: 0;\n' +
+      '  border-radius: var(--mc-radius-xl);\n' +
+      '  color: var(--mc-text);\n' +
+      '  background: var(--mc-bg);\n' +
+      '  box-shadow:\n' +
+      '    0 48px 120px -48px rgba(0, 0, 0, 0.98),\n' +
+      '    inset 0 0 0 1px rgba(255, 255, 255, 0.045);\n' +
+      '  outline: none;\n' +
+      '  animation: mc-panel-in 300ms var(--mc-ease) both;\n' +
+      '}\n' +
+      '\n' +
+      '@keyframes mc-panel-in {\n' +
+      '  from {\n' +
+      '    opacity: 0;\n' +
+      '    transform: translateY(12px) scale(0.985);\n' +
+      '  }\n' +
+      '  to {\n' +
+      '    opacity: 1;\n' +
+      '    transform: translateY(0) scale(1);\n' +
+      '  }\n' +
+      '}\n' +
+      '\n' +
+      '/* Header */\n' +
+      '.cw-panel-head {\n' +
+      '  min-height: 74px;\n' +
+      '  display: flex;\n' +
+      '  align-items: center;\n' +
+      '  gap: 11px;\n' +
+      '  padding: 11px 12px 10px 14px;\n' +
+      '  flex: 0 0 auto;\n' +
+      '  background: var(--mc-surface);\n' +
+      '  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.045);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__mascot {\n' +
+      '  width: 48px;\n' +
+      '  height: 48px;\n' +
+      '  flex: 0 0 48px;\n' +
+      '  display: grid;\n' +
+      '  place-items: center;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__mascot .bl--header {\n' +
+      '  width: 45px;\n' +
+      '  height: 45px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__title {\n' +
+      '  min-width: 0;\n' +
+      '  display: grid;\n' +
+      '  gap: 3px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__title b {\n' +
+      '  color: var(--mc-text);\n' +
+      '  font-size: 15.5px;\n' +
+      '  font-weight: 760;\n' +
+      '  letter-spacing: -0.025em;\n' +
+      '  line-height: 1.15;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__context {\n' +
+      '  display: inline-flex;\n' +
+      '  align-items: center;\n' +
+      '  gap: 7px;\n' +
+      '  color: var(--mc-muted);\n' +
+      '  font-size: 11px;\n' +
+      '  font-weight: 560;\n' +
+      '  line-height: 1.2;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__online i {\n' +
+      '  width: 7px;\n' +
+      '  height: 7px;\n' +
+      '  flex: 0 0 7px;\n' +
+      '  border-radius: 50%;\n' +
+      '  background: var(--mc-success);\n' +
+      '  box-shadow: 0 0 0 3px rgba(112, 212, 154, 0.09);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__actions {\n' +
+      '  margin-left: auto;\n' +
+      '  display: flex;\n' +
+      '  gap: 4px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__actions button {\n' +
+      '  width: 40px;\n' +
+      '  height: 40px;\n' +
+      '  display: grid;\n' +
+      '  place-items: center;\n' +
+      '  padding: 0;\n' +
+      '  border: 0;\n' +
+      '  border-radius: 13px;\n' +
+      '  color: var(--mc-muted);\n' +
+      '  background: transparent;\n' +
+      '  cursor: pointer;\n' +
+      '  transition:\n' +
+      '    color 160ms ease,\n' +
+      '    background-color 160ms ease;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__actions button:hover,\n' +
+      '.cw-panel-head__actions button:focus-visible {\n' +
+      '  color: var(--mc-text);\n' +
+      '  background: var(--mc-surface-3);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__actions svg {\n' +
+      '  width: 20px;\n' +
+      '  height: 20px;\n' +
+      '}\n' +
+      '\n' +
+      '/* Mode switch */\n' +
+      '.cw-tabs {\n' +
+      '  position: relative;\n' +
+      '  isolation: isolate;\n' +
+      '  flex: 0 0 auto;\n' +
+      '  display: grid;\n' +
+      '  grid-template-columns: repeat(2, minmax(0, 1fr));\n' +
+      '  gap: 4px;\n' +
+      '  margin: 9px 10px 8px;\n' +
+      '  padding: 5px;\n' +
+      '  border: 0;\n' +
+      '  border-radius: 18px;\n' +
+      '  background: var(--mc-surface);\n' +
+      '  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-tabs__glass {\n' +
+      '  position: absolute;\n' +
+      '  z-index: 0;\n' +
+      '  top: 5px;\n' +
+      '  bottom: 5px;\n' +
+      '  left: 5px;\n' +
+      '  width: calc((100% - 14px) / 2);\n' +
+      '  border-radius: 14px;\n' +
+      '  background: var(--mc-blue);\n' +
+      '  box-shadow:\n' +
+      '    0 12px 28px -22px rgba(52, 120, 246, 0.8),\n' +
+      '    inset 0 1px 0 rgba(255, 255, 255, 0.14);\n' +
+      '  pointer-events: none;\n' +
+      '  transform: translateX(0);\n' +
+      '  transition: transform 320ms var(--mc-ease);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-tabs[data-mode="assistant"] .cw-tabs__glass {\n' +
+      '  transform: translateX(calc(100% + 4px));\n' +
+      '}\n' +
+      '\n' +
+      '.cw-tabs > button {\n' +
+      '  position: relative;\n' +
+      '  z-index: 1;\n' +
+      '  min-height: 46px;\n' +
+      '  display: inline-flex;\n' +
+      '  align-items: center;\n' +
+      '  justify-content: center;\n' +
+      '  gap: 8px;\n' +
+      '  padding: 0 10px;\n' +
+      '  border: 0;\n' +
+      '  border-radius: 14px;\n' +
+      '  color: var(--mc-muted);\n' +
+      '  background: transparent;\n' +
+      '  font-size: 12.5px;\n' +
+      '  font-weight: 700;\n' +
+      '  letter-spacing: -0.015em;\n' +
+      '  cursor: pointer;\n' +
+      '  transition: color 180ms ease;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-tabs > button[data-active="true"] {\n' +
+      '  color: white;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-tabs > button svg {\n' +
+      '  width: 18px;\n' +
+      '  height: 18px;\n' +
+      '}\n' +
+      '\n' +
+      '/* Shared body */\n' +
+      '.cw-panel-body {\n' +
+      '  min-height: 0;\n' +
+      '  flex: 1 1 auto;\n' +
+      '  overflow: hidden;\n' +
+      '  background: var(--mc-bg);\n' +
+      '  animation: mc-view-in 220ms var(--mc-ease) both;\n' +
+      '}\n' +
+      '\n' +
+      '@keyframes mc-view-in {\n' +
+      '  from {\n' +
+      '    opacity: 0;\n' +
+      '    transform: translateY(4px);\n' +
+      '  }\n' +
+      '  to {\n' +
+      '    opacity: 1;\n' +
+      '    transform: translateY(0);\n' +
+      '  }\n' +
+      '}\n' +
+      '\n' +
+      '/* Conversation */\n' +
+      '.cw-conversation {\n' +
+      '  height: 100%;\n' +
+      '  min-height: 0;\n' +
+      '  display: flex;\n' +
+      '  flex-direction: column;\n' +
+      '  overflow: hidden;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-top {\n' +
+      '  flex: 0 0 auto;\n' +
+      '  padding: 3px 10px 9px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder {\n' +
+      '  width: 100%;\n' +
+      '  min-height: 70px;\n' +
+      '  display: grid;\n' +
+      '  grid-template-columns: 24px minmax(0, 1fr) auto;\n' +
+      '  align-items: center;\n' +
+      '  gap: 12px;\n' +
+      '  padding: 13px 15px;\n' +
+      '  border: 0;\n' +
+      '  border-radius: 18px;\n' +
+      '  color: var(--mc-text);\n' +
+      '  text-align: left;\n' +
+      '  background: var(--mc-surface-2);\n' +
+      '  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);\n' +
+      '  cursor: pointer;\n' +
+      '  transition: background-color 180ms ease;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder:hover,\n' +
+      '.cw-chat-builder:focus-visible {\n' +
+      '  background: var(--mc-surface-hover);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder__icon {\n' +
+      '  display: grid;\n' +
+      '  place-items: center;\n' +
+      '  color: var(--mc-blue-hover);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder__icon svg {\n' +
+      '  width: 22px;\n' +
+      '  height: 22px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder__copy {\n' +
+      '  min-width: 0;\n' +
+      '  display: grid;\n' +
+      '  gap: 3px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder__copy b {\n' +
+      '  font-size: 13.5px;\n' +
+      '  font-weight: 740;\n' +
+      '  letter-spacing: -0.018em;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder__copy small {\n' +
+      '  color: var(--mc-muted);\n' +
+      '  font-size: 10.8px;\n' +
+      '  font-weight: 500;\n' +
+      '  line-height: 1.42;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder__arrow {\n' +
+      '  color: var(--mc-faint);\n' +
+      '  font-size: 17px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-messages {\n' +
+      '  min-height: 0;\n' +
+      '  flex: 1 1 auto;\n' +
+      '  display: flex;\n' +
+      '  flex-direction: column;\n' +
+      '  gap: 10px;\n' +
+      '  overflow-y: auto;\n' +
+      '  padding: 8px 12px 10px;\n' +
+      '  scrollbar-width: thin;\n' +
+      '  scrollbar-color: #243247 transparent;\n' +
+      '  overscroll-behavior: contain;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-message-row {\n' +
+      '  display: flex;\n' +
+      '  align-items: flex-end;\n' +
+      '  gap: 7px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-message-row--me {\n' +
+      '  justify-content: flex-end;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-avatar {\n' +
+      '  width: 29px;\n' +
+      '  height: 29px;\n' +
+      '  flex: 0 0 29px;\n' +
+      '  display: grid;\n' +
+      '  place-items: center;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-avatar .bl--avatar {\n' +
+      '  width: 26px;\n' +
+      '  height: 26px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-message-wrap {\n' +
+      '  max-width: 84%;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-message-wrap p {\n' +
+      '  margin: 0;\n' +
+      '  padding: 11px 13px;\n' +
+      '  border: 0;\n' +
+      '  border-radius: 16px 16px 16px 6px;\n' +
+      '  color: #d9e1eb;\n' +
+      '  background: var(--mc-surface-2);\n' +
+      '  font-size: 12.8px;\n' +
+      '  font-weight: 470;\n' +
+      '  line-height: 1.52;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-message-row--me .cw-message-wrap p {\n' +
+      '  border-radius: 16px 16px 6px 16px;\n' +
+      '  color: white;\n' +
+      '  background: var(--mc-blue);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-typing {\n' +
+      '  display: inline-flex;\n' +
+      '  gap: 5px;\n' +
+      '  padding: 12px 14px;\n' +
+      '  border-radius: 16px 16px 16px 6px;\n' +
+      '  background: var(--mc-surface-2);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-typing i {\n' +
+      '  width: 6px;\n' +
+      '  height: 6px;\n' +
+      '  border-radius: 50%;\n' +
+      '  background: var(--mc-blue-hover);\n' +
+      '  animation: mc-typing 1s ease-in-out infinite;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-typing i:nth-child(2) { animation-delay: 100ms; }\n' +
+      '.cw-typing i:nth-child(3) { animation-delay: 200ms; }\n' +
+      '\n' +
+      '@keyframes mc-typing {\n' +
+      '  0%, 60%, 100% { opacity: 0.35; transform: translateY(0); }\n' +
+      '  30% { opacity: 1; transform: translateY(-2px); }\n' +
+      '}\n' +
+      '\n' +
+      '.cw-quick-replies {\n' +
+      '  flex: 0 0 auto;\n' +
+      '  display: grid;\n' +
+      '  grid-template-columns: repeat(2, minmax(0, 1fr));\n' +
+      '  gap: 7px;\n' +
+      '  padding: 8px 10px;\n' +
+      '  background: var(--mc-bg);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-quick-replies .cw-chip {\n' +
+      '  min-height: 43px;\n' +
+      '  display: flex;\n' +
+      '  align-items: center;\n' +
+      '  justify-content: center;\n' +
+      '  padding: 9px 11px;\n' +
+      '  border: 0;\n' +
+      '  border-radius: 14px;\n' +
+      '  color: #cbd4df;\n' +
+      '  background: var(--mc-surface-2);\n' +
+      '  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);\n' +
+      '  font-size: 11.5px;\n' +
+      '  font-weight: 650;\n' +
+      '  line-height: 1.25;\n' +
+      '  text-align: center;\n' +
+      '  cursor: pointer;\n' +
+      '  transition:\n' +
+      '    color 160ms eas'... 16678 more characters
     
   code: 'ERR_ASSERTION'
   name: 'AssertionError'
   expected:
   actual: |-
-    import { StrictMode } from "react";
-    import { createRoot } from "react-dom/client";
-    import App from "./App";
-    import { getInitialEmbedViewport, isEmbedMode } from "./lib/embedBridge";
-    import "./widget.css";
-    import "./assistant-redesign.css";
+    /*
+     * Môj Chatbot — single clean design system
+     * Palette is intentionally identical to the website: black, graphite and one blue accent.
+     */
     
-    if (isEmbedMode()) {
-      document.documentElement.dataset.embed = "true";
-      document.documentElement.dataset.embedViewport = getInitialEmbedViewport();
+    :root {
+      --mc-bg: #05070b;
+      --mc-surface: #0a0f17;
+      --mc-surface-2: #0d141f;
+      --mc-surface-3: #111b2a;
+      --mc-surface-hover: #142033;
+      --mc-blue: #3478f6;
+      --mc-blue-hover: #4e8cff;
+      --mc-blue-soft: rgba(52, 120, 246, 0.15);
+      --mc-text: #f6f8fb;
+      --mc-muted: #9eabbc;
+      --mc-faint: #6f7d8f;
+      --mc-success: #70d49a;
+      --mc-danger: #ff7b87;
+      --mc-radius-xl: 26px;
+      --mc-radius-lg: 20px;
+      --mc-radius-md: 16px;
+      --mc-radius-sm: 12px;
+      --mc-ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --mc-font: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     
-    createRoot(document.getElementById("root")!).render(
-      <StrictMode>
-        <App />
-      </StrictMode>,
-    );
-    
-  operator: 'match'
-  stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:12:10)
-    async Test.run (node:internal/test_runner/test:1054:7)
-    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
-  ...
-# Subtest: assistant order remains builder messages chips input contacts
-not ok 2 - assistant order remains builder messages chips input contacts
-  ---
-  duration_ms: 3.340695
-  type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:28:1'
-  failureType: 'testCodeFailure'
-  error: |-
-    The input did not match the regular expression /5 krátkych otázok/. Input:
-    
-    'import { useEffect, useRef, useState } from "react";\n' +
-      'import { animateSentMessage } from "../../lib/motion";\n' +
-      'import { sendChat, type ChatTurn } from "../../lib/assistantApi";\n' +
-      'import { track } from "../../lib/analytics";\n' +
-      'import { BubbleLogo } from "./BubbleLogo";\n' +
-      'import { WidgetIcon } from "./WidgetIcon";\n' +
-      '\n' +
-      'type AssistantConversationProps = {\n' +
-      '  resetToken: number;\n' +
-      '  onOpenCalculator: () => void;\n' +
-      '};\n' +
-      '\n' +
-      'type ChatMessage = {\n' +
-      '  id: number;\n' +
-      '  from: "bot" | "me";\n' +
-      '  text: string;\n' +
-      '};\n' +
-      '\n' +
-      'const INITIAL_MESSAGES: ChatMessage[] = [\n' +
-      '  {\n' +
-      '    id: 1,\n' +
-      '    from: "bot",\n' +
-      '    text:\n' +
-      '      "Dobrý deň. Napíšte mi, čo zákazníci na vašom webe najčastejšie riešia. Poviem vám, či je vhodnejší chatbot, kalkulačka alebo konfigurátor.",\n' +
-      '  },\n' +
-      '];\n' +
-      '\n' +
-      'type QuickReply = { label: string; question: string };\n' +
-      '\n' +
-      'const QUICK_REPLIES: QuickReply[] = [\n' +
-      '  {\n' +
-      '    label: "Čo mi to ušetrí?",\n' +
-      '    question: "Čo môže chatbot ušetriť majiteľovi firmy a jeho zákazníkom?",\n' +
-      '  },\n' +
-      '  {\n' +
-      '    label: "Ako prebieha spolupráca?",\n' +
-      '    question: "Ako prebieha návrh, príprava a nasadenie riešenia?",\n' +
-      '  },\n' +
-      '  {\n' +
-      '    label: "Čo treba pripraviť?",\n' +
-      '    question: "Aké podklady odo mňa potrebujete na prípravu chatbota alebo kalkulačky?",\n' +
-      '  },\n' +
-      '  {\n' +
-      '    label: "Ukážky riešení",\n' +
-      '    question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",\n' +
-      '  },\n' +
-      '];\n' +
-      '\n' +
-      'const CHAT_FALLBACK =\n' +
-      '  "Teraz sa neviem spojiť. Môžete skúsiť otázku znova alebo použiť priamy kontakt nižšie.";\n' +
-      '\n' +
-      'export function AssistantConversation({\n' +
-      '  resetToken,\n' +
-      '  onOpenCalculator,\n' +
-      '}: AssistantConversationProps): JSX.Element {\n' +
-      '  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);\n' +
-      '  const [input, setInput] = useState("");\n' +
-      '  const [typing, setTyping] = useState(false);\n' +
-      '  const nextIdRef = useRef(2);\n' +
-      '  const messagesRef = useRef<HTMLDivElement>(null);\n' +
-      '\n' +
-      '  useEffect(() => {\n' +
-      '    const last = messages[messages.length - 1];\n' +
-      '    if (!last || last.from !== "me") return;\n' +
-      '    const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");\n' +
-      '    animateSentMessage(rows?.[rows.length - 1] ?? null);\n' +
-      '  }, [messages]);\n' +
-      '\n' +
-      '  useEffect(() => {\n' +
-      '    setMessages(INITIAL_MESSAGES);\n' +
-      '    setInput("");\n' +
-      '    setTyping(false);\n' +
-      '    nextIdRef.current = 2;\n' +
-      '  }, [resetToken]);\n' +
-      '\n' +
-      '  useEffect(() => {\n' +
-      '    const container = messagesRef.current;\n' +
-      '    if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });\n' +
-      '  }, [messages, typing]);\n' +
-      '\n' +
-      '  const ask = async (question: string) => {\n' +
-      '    if (typing) return;\n' +
-      '    const userMessage = {\n' +
-      '      id: nextIdRef.current++,\n' +
-      '      from: "me" as const,\n' +
-      '      text: question,\n' +
-      '    };\n' +
-      '    setMessages((current) => [...current, userMessage]);\n' +
-      '    setTyping(true);\n' +
-      '    track("chat_message_sent", { length: question.length });\n' +
-      '\n' +
-      '    const turns: ChatTurn[] = [...messages, userMessage].map((message) => ({\n' +
-      '      role: message.from === "me" ? "user" : "assistant",\n' +
-      '      text: message.text,\n' +
-      '    }));\n' +
-      '    const firstUser = turns.findIndex((turn) => turn.role === "user");\n' +
-      '    const history = firstUser === -1 ? [] : turns.slice(firstUser);\n' +
-      '\n' +
-      '    try {\n' +
-      '      const reply = await sendChat(history);\n' +
-      '      setMessages((current) => [\n' +
-      '        ...current,\n' +
-      '        { id: nextIdRef.current++, from: "bot", text: reply },\n' +
-      '      ]);\n' +
-      '      track("chat_reply_received");\n' +
-      '    } catch (error) {\n' +
-      '      setMessages((current) => [\n' +
-      '        ...current,\n' +
-      '        { id: nextIdRef.current++, from: "bot", text: CHAT_FALLBACK },\n' +
-      '      ]);\n' +
-      '      track("chat_error", {\n' +
-      '        reason: error instanceof Error ? error.message : "unknown",\n' +
-      '      });\n' +
-      '    } finally {\n' +
-      '      setTyping(false);\n' +
-      '    }\n' +
-      '  };\n' +
-      '\n' +
-      '  const submit = () => {\n' +
-      '    const value = input.trim();\n' +
-      '    if (!value || typing) return;\n' +
-      '    setInput("");\n' +
-      '    void ask(value);\n' +
-      '  };\n' +
-      '\n' +
-      '  const openCalculator = () => {\n' +
-      '    track("chat_builder_open");\n' +
-      '    onOpenCalculator();\n' +
-      '  };\n' +
-      '\n' +
-      '  return (\n' +
-      '    <div className="cw-conversation" data-testid="assistant-view">\n' +
-      '      <div className="cw-chat-top">\n' +
-      '        <button type="button" className="cw-chat-builder" onClick={openCalculator}>\n' +
-      '          <span className="cw-chat-builder__icon" aria-hidden="true">\n' +
-      '            <WidgetIcon name="calculator" />\n' +
-      '          </span>\n' +
-      '          <span className="cw-chat-builder__copy">\n' +
-      '            <b>Nechať sa previesť výberom</b>\n' +
-      '            <small>Odpoviete na 5 jednoduchých otázok a získate jasný návrh ďalšieho kroku.</small>\n' +
-      '          </span>\n' +
-      '          <span className="cw-chat-builder__arrow" aria-hidden="true">\n' +
-      '            →\n' +
-      '          </span>\n' +
-      '        </button>\n' +
-      '      </div>\n' +
-      '\n' +
-      '      <div className="cw-messages" ref={messagesRef} aria-live="polite">\n' +
-      '        {messages.map((message) => (\n' +
-      '          <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>\n' +
-      '            {message.from === "bot" ? (\n' +
-      '              <span className="cw-avatar">\n' +
-      '                <BubbleLogo size="avatar" />\n' +
-      '              </span>\n' +
-      '            ) : null}\n' +
-      '            <div className="cw-message-wrap">\n' +
-      '              <p>{message.text}</p>\n' +
-      '            </div>\n' +
-      '          </div>\n' +
-      '        ))}\n' +
-      '\n' +
-      '        {typing ? (\n' +
-      '          <div className="cw-message-row cw-message-row--bot">\n' +
-      '            <span className="cw-avatar">\n' +
-      '              <BubbleLogo size="avatar" />\n' +
-      '            </span>\n' +
-      '            <div className="cw-typing" aria-label="Môj Chatbot odpovedá">\n' +
-      '              <i />\n' +
-      '              <i />\n' +
-      '              <i />\n' +
-      '            </div>\n' +
-      '          </div>\n' +
-      '        ) : null}\n' +
-      '      </div>\n' +
-      '\n' +
-      '      <div className="cw-quick-replies" aria-label="Časté otázky">\n' +
-      '        {QUICK_REPLIES.map(({ label, question }) => (\n' +
-      '          <button\n' +
-      '            type="button"\n' +
-      '            className="cw-chip"\n' +
-      '            key={label}\n' +
-      '            title={question}\n' +
-      '            onClick={() => void ask(question)}\n' +
-      '          >\n' +
-      '            <span>{label}</span>\n' +
-      '          </button>\n' +
-      '        ))}\n' +
-      '      </div>\n' +
-      '\n' +
-      '      <div className="cw-inputbar">\n' +
-      '        <input\n' +
-      '          value={input}\n' +
-      '          onChange={(event) => setInput(event.target.value)}\n' +
-      '          onKeyDown={(event) => {\n' +
-      '            if (event.key === "Enter") {\n' +
-      '              event.preventDefault();\n' +
-      '              submit();\n' +
-      '            }\n' +
-      '          }}\n' +
-      '          placeholder="Napíšte, čo riešite…"\n' +
-      '          aria-label="Otázka pre Môj Chatbot"\n' +
-      '        />\n' +
-      '        <button\n' +
-      '          type="button"\n' +
-      '          onClick={submit}\n' +
-      '          disabled={!input.trim() || typing}\n' +
-      '          aria-label="Odoslať správu"\n' +
-      '        >\n' +
-      '          <WidgetIcon name="send" />\n' +
-      '        </button>\n' +
-      '      </div>\n' +
-      '\n' +
-      '      <nav className="cw-direct-actions" aria-label="Priamy kontakt">\n' +
-      '        <span className="cw-direct-actions__label">Alebo ma kontaktujte priamo</span>\n' +
-      '        <div className="cw-direct-actions__grid">\n' +
-      '          <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">\n' +
-      '            <span className="cw-direct-actions__icon">\n' +
-      '              <WidgetIcon name="chat" />\n' +
-      '            </span>\n' +
-      '            <span>WhatsApp</span>\n' +
-      '          </a>\n' +
-      '          <a href="tel:+421948699433">\n' +
-      '            <span className="cw-direct-actions__icon">\n' +
-      '              <WidgetIcon name="phone" />\n' +
-      '            </span>\n' +
-      '            <span>Zavolať</span>\n' +
-      '          </a>\n' +
-      '          <a href="mailto:daniel@vendzur.sk">\n' +
-      '            <span className="cw-direct-actions__icon">\n' +
-      '              <WidgetIcon name="mail" />\n' +
-      '            </span>\n' +
-      '            <span>E-mail</span>\n' +
-      '          </a>\n' +
-      '        </div>\n' +
-      '      </nav>\n' +
-      '    </div>\n' +
-      '  );\n' +
-      '}\n'
-    
-  code: 'ERR_ASSERTION'
-  name: 'AssertionError'
-  expected:
-  actual: |-
-    import { useEffect, useRef, useState } from "react";
-    import { animateSentMessage } from "../../lib/motion";
-    import { sendChat, type ChatTurn } from "../../lib/assistantApi";
-    import { track } from "../../lib/analytics";
-    import { BubbleLogo } from "./BubbleLogo";
-    import { WidgetIcon } from "./WidgetIcon";
-    
-    type AssistantConversationProps = {
-      resetToken: number;
-      onOpenCalculator: () => void;
-    };
-    
-    type ChatMessage = {
-      id: number;
-      from: "bot" | "me";
-      text: string;
-    };
-    
-    const INITIAL_MESSAGES: ChatMessage[] = [
-      {
-        id: 1,
-        from: "bot",
-        text:
-          "Dobrý deň. Napíšte mi, čo zákazníci na vašom webe najčastejšie riešia. Poviem vám, či je vhodnejší chatbot, kalkulačka alebo konfigurátor.",
-      },
-    ];
-    
-    type QuickReply = { label: string; question: string };
-    
-    const QUICK_REPLIES: QuickReply[] = [
-      {
-        label: "Čo mi to ušetrí?",
-        question: "Čo môže chatbot ušetriť majiteľovi firmy a jeho zákazníkom?",
-      },
-      {
-        label: "Ako prebieha spolupráca?",
-        question: "Ako prebieha návrh, príprava a nasadenie riešenia?",
-      },
-      {
-        label: "Čo treba pripraviť?",
-        question: "Aké podklady odo mňa potrebujete na prípravu chatbota alebo kalkulačky?",
-      },
-      {
-        label: "Ukážky riešení",
-        question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",
-      },
-    ];
-    
-    const CHAT_FALLBACK =
-      "Teraz sa neviem spojiť. Môžete skúsiť otázku znova alebo použiť priamy kontakt nižšie.";
-    
-    export function AssistantConversation({
-      resetToken,
-      onOpenCalculator,
-    }: AssistantConversationProps): JSX.Element {
-      const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
-      const [input, setInput] = useState("");
-      const [typing, setTyping] = useState(false);
-      const nextIdRef = useRef(2);
-      const messagesRef = useRef<HTMLDivElement>(null);
-    
-      useEffect(() => {
-        const last = messages[messages.length - 1];
-        if (!last || last.from !== "me") return;
-        const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");
-        animateSentMessage(rows?.[rows.length - 1] ?? null);
-      }, [messages]);
-    
-      useEffect(() => {
-        setMessages(INITIAL_MESSAGES);
-        setInput("");
-        setTyping(false);
-        nextIdRef.current = 2;
-      }, [resetToken]);
-    
-      useEffect(() => {
-        const container = messagesRef.current;
-        if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
-      }, [messages, typing]);
-    
-      const ask = async (question: string) => {
-        if (typing) return;
-        const userMessage = {
-          id: nextIdRef.current++,
-          from: "me" as const,
-          text: question,
-        };
-        setMessages((current) => [...current, userMessage]);
-        setTyping(true);
-        track("chat_message_sent", { length: question.length });
-    
-        const turns: ChatTurn[] = [...messages, userMessage].map((message) => ({
-          role: message.from === "me" ? "user" : "assistant",
-          text: message.text,
-        }));
-        const firstUser = turns.findIndex((turn) => turn.role === "user");
-        const history = firstUser === -1 ? [] : turns.slice(firstUser);
-    
-        try {
-          const reply = await sendChat(history);
-          setMessages((current) => [
-            ...current,
-            { id: nextIdRef.current++, from: "bot", text: reply },
-          ]);
-          track("chat_reply_received");
-        } catch (error) {
-          setMessages((current) => [
-            ...current,
-            { id: nextIdRef.current++, from: "bot", text: CHAT_FALLBACK },
-          ]);
-          track("chat_error", {
-            reason: error instanceof Error ? error.message : "unknown",
-          });
-        } finally {
-          setTyping(false);
-        }
-      };
-    
-      const submit = () => {
-        const value = input.trim();
-        if (!value || typing) return;
-        setInput("");
-        void ask(value);
-      };
-    
-      const openCalculator = () => {
-        track("chat_builder_open");
-        onOpenCalculator();
-      };
-    
-      return (
-        <div className="cw-conversation" data-testid="assistant-view">
-          <div className="cw-chat-top">
-            <button type="button" className="cw-chat-builder" onClick={openCalculator}>
-              <span className="cw-chat-builder__icon" aria-hidden="true">
-                <WidgetIcon name="calculator" />
-              </span>
-              <span className="cw-chat-builder__copy">
-                <b>Nechať sa previesť výberom</b>
-                <small>Odpoviete na 5 jednoduchých otázok a získate jasný návrh ďalšieho kroku.</small>
-              </span>
-              <span className="cw-chat-builder__arrow" aria-hidden="true">
-                →
-              </span>
-            </button>
-          </div>
-    
-          <div className="cw-messages" ref={messagesRef} aria-live="polite">
-            {messages.map((message) => (
-              <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>
-                {message.from === "bot" ? (
-                  <span className="cw-avatar">
-                    <BubbleLogo size="avatar" />
-                  </span>
-                ) : null}
-                <div className="cw-message-wrap">
-                  <p>{message.text}</p>
-                </div>
-              </div>
-            ))}
-    
-            {typing ? (
-              <div className="cw-message-row cw-message-row--bot">
-                <span className="cw-avatar">
-                  <BubbleLogo size="avatar" />
-                </span>
-                <div className="cw-typing" aria-label="Môj Chatbot odpovedá">
-                  <i />
-                  <i />
-                  <i />
-                </div>
-              </div>
-            ) : null}
-          </div>
-    
-          <div className="cw-quick-replies" aria-label="Časté otázky">
-            {QUICK_REPLIES.map(({ label, question }) => (
-              <button
-                type="button"
-                className="cw-chip"
-                key={label}
-                title={question}
-                onClick={() => void ask(question)}
-              >
-                <span>{label}</span>
-              </button>
-            ))}
-          </div>
-    
-          <div className="cw-inputbar">
-            <input
-              value={input}
-              onChange={(event) => setInput(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  event.preventDefault();
-                  submit();
-                }
-              }}
-              placeholder="Napíšte, čo riešite…"
-              aria-label="Otázka pre Môj Chatbot"
-            />
-            <button
-              type="button"
-              onClick={submit}
-              disabled={!input.trim() || typing}
-              aria-label="Odoslať správu"
-            >
-              <WidgetIcon name="send" />
-            </button>
-          </div>
-    
-          <nav className="cw-direct-actions" aria-label="Priamy kontakt">
-            <span className="cw-direct-actions__label">Alebo ma kontaktujte priamo</span>
-            <div className="cw-direct-actions__grid">
-              <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
-                <span className="cw-direct-actions__icon">
-                  <WidgetIcon name="chat" />
-                </span>
-                <span>WhatsApp</span>
-              </a>
-              <a href="tel:+421948699433">
-                <span className="cw-direct-actions__icon">
-                  <WidgetIcon name="phone" />
-                </span>
-                <span>Zavolať</span>
-              </a>
-              <a href="mailto:daniel@vendzur.sk">
-                <span className="cw-direct-actions__icon">
-                  <WidgetIcon name="mail" />
-                </span>
-                <span>E-mail</span>
-              </a>
-            </div>
-          </nav>
-        </div>
-      );
+    * {
+      box-sizing: border-box;
     }
     
-  operator: 'match'
+    html,
+    body,
+    #root,
+    .widget-preview {
+      min-height: 100%;
+      margin: 0;
+    }
+    
+    body {
+      color: var(--mc-text);
+      background: var(--mc-bg);
+      font-family: var(--mc-font);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    
+    .widget-preview {
+      position: relative;
+      min-height: 100dvh;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 78% 12%, rgba(52, 120, 246, 0.09), transparent 34rem),
+        var(--mc-bg);
+    }
+    
+    .widget-preview__surface {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.012), transparent 25%);
+    }
+    
+    .cw-widget,
+    .cw-widget button,
+    .cw-widget input,
+    .cw-widget textarea {
+      font-family: var(--mc-font);
+    }
+    
+    .cw-widget button,
+    .cw-widget a,
+    .cw-widget input,
+    .cw-widget textarea,
+    .cw-widget summary {
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .cw-widget button {
+      appearance: none;
+    }
+    
+    .cw-sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    
+    /* Launcher */
+    .cw-launcher {
+      position: fixed;
+      z-index: 2147483000;
+      right: max(18px, env(safe-area-inset-right));
+      bottom: max(18px, env(safe-area-inset-bottom));
+      width: 66px;
+      height: 66px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 0;
+      border-radius: 22px;
+      color: white;
+      background: var(--mc-surface-2);
+      box-shadow:
+        0 24px 62px -30px rgba(0, 0, 0, 0.95),
+        0 18px 42px -28px rgba(52, 120, 246, 0.7),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      cursor: pointer;
+      transition:
+        transform 220ms var(--mc-ease),
+        background-color 180ms ease;
+    }
+    
+    .cw-launcher:hover,
+    .cw-launcher:focus-visible {
+      background: var(--mc-surface-3);
+      transform: translateY(-3px);
+    }
+    
+    .cw-launcher:active {
+      transform: translateY(0);
+    }
+    
+    .cw-launcher .bl--launcher {
+      width: 50px;
+      height: 50px;
+    }
+    
+    /* Shell */
+    .cw-panel {
+      position: fixed;
+      z-index: 2147483001;
+      right: max(18px, env(safe-area-inset-right));
+      bottom: max(18px, env(safe-area-inset-bottom));
+      width: min(448px, calc(100vw - 36px));
+      height: min(744px, calc(100dvh - 36px));
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 0;
+      border-radius: var(--mc-radius-xl);
+      color: var(--mc-text);
+      background: var(--mc-bg);
+      box-shadow:
+        0 48px 120px -48px rgba(0, 0, 0, 0.98),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.045);
+      outline: none;
+      animation: mc-panel-in 300ms var(--mc-ease) both;
+    }
+    
+    @keyframes mc-panel-in {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    /* Header */
+    .cw-panel-head {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 11px 12px 10px 14px;
+      flex: 0 0 auto;
+      background: var(--mc-surface);
+      box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.045);
+    }
+    
+    .cw-panel-head__mascot {
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      display: grid;
+      place-items: center;
+    }
+    
+    .cw-panel-head__mascot .bl--header {
+      width: 45px;
+      height: 45px;
+    }
+    
+    .cw-panel-head__title {
+      min-width: 0;
+      display: grid;
+      gap: 3px;
+    }
+    
+    .cw-panel-head__title b {
+      color: var(--mc-text);
+      font-size: 15.5px;
+      font-weight: 760;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+    }
+    
+    .cw-panel-head__context {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--mc-muted);
+      font-size: 11px;
+      font-weight: 560;
+      line-height: 1.2;
+    }
+    
+    .cw-panel-head__online i {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 7px;
+      border-radius: 50%;
+      background: var(--mc-success);
+      box-shadow: 0 0 0 3px rgba(112, 212, 154, 0.09);
+    }
+    
+    .cw-panel-head__actions {
+      margin-left: auto;
+      display: flex;
+      gap: 4px;
+    }
+    
+    .cw-panel-head__actions button {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 0;
+      border-radius: 13px;
+      color: var(--mc-muted);
+      background: transparent;
+      cursor: pointer;
+      transition:
+        color 160ms ease,
+        background-color 160ms ease;
+    }
+    
+    .cw-panel-head__actions button:hover,
+    .cw-panel-head__actions button:focus-visible {
+      color: var(--mc-text);
+      background: var(--mc-surface-3);
+    }
+    
+    .cw-panel-head__actions svg {
+      width: 20px;
+      height: 20px;
+    }
+    
+    /* Mode switch */
+    .cw-tabs {
+      position: relative;
+      isolation: isolate;
+      flex: 0 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px;
+      margin: 9px 10px 8px;
+      padding: 5px;
+      border: 0;
+      border-radius: 18px;
+      background: var(--mc-surface);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+    }
+    
+    .cw-tabs__glass {
+      position: absolute;
+      z-index: 0;
+      top: 5px;
+      bottom: 5px;
+      left: 5px;
+      width: calc((100% - 14px) / 2);
+      border-radius: 14px;
+      background: var(--mc-blue);
+      box-shadow:
+        0 12px 28px -22px rgba(52, 120, 246, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      pointer-events: none;
+      transform: translateX(0);
+      transition: transform 320ms var(--mc-ease);
+    }
+    
+    .cw-tabs[data-mode="assistant"] .cw-tabs__glass {
+      transform: translateX(calc(100% + 4px));
+    }
+    
+    .cw-tabs > button {
+      position: relative;
+      z-index: 1;
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 14px;
+      color: var(--mc-muted);
+      background: transparent;
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      cursor: pointer;
+      transition: color 180ms ease;
+    }
+    
+    .cw-tabs > button[data-active="true"] {
+      color: white;
+    }
+    
+    .cw-tabs > button svg {
+      width: 18px;
+      height: 18px;
+    }
+    
+    /* Shared body */
+    .cw-panel-body {
+      min-height: 0;
+      flex: 1 1 auto;
+      overflow: hidden;
+      background: var(--mc-bg);
+      animation: mc-view-in 220ms var(--mc-ease) both;
+    }
+    
+    @keyframes mc-view-in {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Conversation */
+    .cw-conversation {
+      height: 100%;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    .cw-chat-top {
+      flex: 0 0 auto;
+      padding: 3px 10px 9px;
+    }
+    
+    .cw-chat-builder {
+      width: 100%;
+      min-height: 70px;
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 15px;
+      border: 0;
+      border-radius: 18px;
+      color: var(--mc-text);
+      text-align: left;
+      background: var(--mc-surface-2);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+      cursor: pointer;
+      transition: background-color 180ms ease;
+    }
+    
+    .cw-chat-builder:hover,
+    .cw-chat-builder:focus-visible {
+      background: var(--mc-surface-hover);
+    }
+    
+    .cw-chat-builder__icon {
+      display: grid;
+      place-items: center;
+      color: var(--mc-blue-hover);
+    }
+    
+    .cw-chat-builder__icon svg {
+      width: 22px;
+      height: 22px;
+    }
+    
+    .cw-chat-builder__copy {
+      min-width: 0;
+      display: grid;
+      gap: 3px;
+    }
+    
+    .cw-chat-builder__copy b {
+      font-size: 13.5px;
+      font-weight: 740;
+      letter-spacing: -0.018em;
+    }
+    
+    .cw-chat-builder__copy small {
+      color: var(--mc-muted);
+      font-size: 10.8px;
+      font-weight: 500;
+      line-height: 1.42;
+    }
+    
+    .cw-chat-builder__arrow {
+      color: var(--mc-faint);
+      font-size: 17px;
+    }
+    
+    .cw-messages {
+      min-height: 0;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      padding: 8px 12px 10px;
+      scrollbar-width: thin;
+      scrollbar-color: #243247 transparent;
+      overscroll-behavior: contain;
+    }
+    
+    .cw-message-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 7px;
+    }
+    
+    .cw-message-row--me {
+      justify-content: flex-end;
+    }
+    
+    .cw-avatar {
+      width: 29px;
+      height: 29px;
+      flex: 0 0 29px;
+      display: grid;
+      place-items: center;
+    }
+    
+    .cw-avatar .bl--avatar {
+      width: 26px;
+      height: 26px;
+    }
+    
+    .cw-message-wrap {
+      max-width: 84%;
+    }
+    
+    .cw-message-wrap p {
+      margin: 0;
+      padding: 11px 13px;
+      border: 0;
+      border-radius: 16px 16px 16px 6px;
+      color: #d9e1eb;
+      background: var(--mc-surface-2);
+      font-size: 12.8px;
+      font-weight: 470;
+      line-height: 1.52;
+    }
+    
+    .cw-message-row--me .cw-message-wrap p {
+      border-radius: 16px 16px 6px 16px;
+      color: white;
+      background: var(--mc-blue);
+    }
+    
+    .cw-typing {
+      display: inline-flex;
+      gap: 5px;
+      padding: 12px 14px;
+      border-radius: 16px 16px 16px 6px;
+      background: var(--mc-surface-2);
+    }
+    
+    .cw-typing i {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--mc-blue-hover);
+      animation: mc-typing 1s ease-in-out infinite;
+    }
+    
+    .cw-typing i:nth-child(2) { animation-delay: 100ms; }
+    .cw-typing i:nth-child(3) { animation-delay: 200ms; }
+    
+    @keyframes mc-typing {
+      0%, 60%, 100% { opacity: 0.35; transform: translateY(0); }
+      30% { opacity: 1; transform: translateY(-2px); }
+    }
+    
+    .cw-quick-replies {
+      flex: 0 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      padding: 8px 10px;
+      background: var(--mc-bg);
+    }
+    
+    .cw-quick-replies .cw-chip {
+      min-height: 43px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 11px;
+      border: 0;
+      border-radius: 14px;
+      color: #cbd4df;
+      background: var(--mc-surface-2);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+      font-size: 11.5px;
+      font-weight: 650;
+      line-height: 1.25;
+      text-align: center;
+      cursor: pointer;
+      transition:
+        color 160ms ease,
+        background-color 160ms ease;
+    }
+    
+    .cw-quick-replies .cw-chip:hover,
+    .cw-quick-replies .cw-chip:focus-visible {
+      color: white;
+      background: var(--mc-surface-hover);
+    }
+    
+    .cw-inputbar {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 10px 8px;
+      padding: 7px 7px 7px 14px;
+      border: 0;
+      border-radius: 17px;
+      background: var(--mc-surface-2);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+    }
+    
+    .cw-inputbar input {
+      min-width: 0;
+      height: 42px;
+      flex: 1 1 auto;
+      padding: 0;
+      border: 0;
+      outline: none;
+      color: var(--mc-text);
+      background: transparent;
+      font-size: 16px;
+    }
+    
+    .cw-inputbar input::placeholder {
+      color: var(--mc-faint);
+    }
+    
+    .cw-inputbar > button {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 0;
+      border-radius: 13px;
+      color: white;
+      background: var(--mc-blue);
+      cursor: pointer;
+      transition: background-color 160ms ease;
+    }
+    
+    .cw-inputbar > button:hover:not(:disabled),
+    .cw-inputbar > button:focus-visible:not(:disabled) {
+      background: var(--mc-blue-hover);
+    }
+    
+    .cw-inputbar > button:disabled {
+      color: #677486;
+      background: #18212d;
+      cursor: default;
+    }
+    
+    .cw-inputbar > button svg {
+      width: 18px;
+      height: 18px;
+    }
+    
+    .cw-direct-actions {
+      flex: 0 0 auto;
+      display: grid;
+      gap: 6px;
+      padding: 0 10px max(10px, env(safe-area-inset-bottom));
+    }
+    
+    .cw-direct-actions__label {
+      display: none;
+    }
+    
+    .cw-direct-actions__grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+    
+    .cw-direct-actions__grid a {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 7px 8px;
+      border: 0;
+      border-radius: 12px;
+      color: var(--mc-muted);
+      background: #090e15;
+      font-size: 10.5px;
+      font-weight: 620;
+      text-decoration: none;
+      transition:
+        color 160ms ease,
+        background-color 160ms ease;
+    }
+    
+    .cw-direct-actions__grid a:hover,
+    .cw-direct-actions__grid a:focus-visible {
+      color: white;
+      background: var(--mc-surface-2);
+    }
+    
+    .cw-direct-actions__icon {
+      display: grid;
+      place-items: center;
+      color: var(--mc-blue-hover);
+    }
+    
+    .cw-direct-actions__icon svg {
+      width: 15px;
+      height: 15px;
+    }
+    
+    /* Configurator */
+    .cw-calculator {
+      height: 100%;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--mc-bg);
+    }
+    
+    .cw-progress {
+      min-height: 48px;
+      flex: 0 0 auto;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 11px;
+      box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+    }
+    
+    .cw-progress__back {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 0;
+      border-radius: 11px;
+      color: var(--mc-muted);
+      background: var(--mc-surface);
+      font-size: 20px;
+      cursor: pointer;
+    }
+    
+    .cw-progress__back:disabled {
+      opacity: 0.28;
+      cursor: default;
+    }
+    
+    .cw-progress__track {
+      height: 6px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #172131;
+    }
+    
+    .cw-progress__fill {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--mc-blue);
+      transition: width 320ms var(--mc-ease);
+    }
+    
+    .cw-progress__count {
+      min-width: 28px;
+      color: var(--mc-faint);
+      font-size: 10.5px;
+      font-weight: 700;
+      text-align: right;
+    }
+    
+    .cw-calc-body {
+      min-height: 0;
+      flex: 1 1 auto;
+      overflow-y: auto;
+      padding: 15px 14px 12px;
+      scrollbar-width: thin;
+      scrollbar-color: #243247 transparent;
+      overscroll-behavior: contain;
+    }
+    
+    .cw-calc-step {
+      min-height: 100%;
+    }
+    
+    .cw-step-head {
+      margin-bottom: 14px;
+    }
+    
+    .cw-q {
+      max-width: 20ch;
+      margin: 0 0 6px;
+      color: var(--mc-text);
+      font-size: clamp(1.35rem, 4.2vw, 1.62rem);
+      font-weight: 760;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+    }
+    
+    .cw-q-sub {
+      max-width: 44ch;
+      margin: 0;
+      color: var(--mc-muted);
+      font-size: 11.5px;
+      font-weight: 480;
+      line-height: 1.48;
+    }
+    
+    .cw-rows,
+    .cw-grid,
+    .cw-list,
+    .cw-grid--volume {
+      display: grid;
+      gap: 9px;
+    }
+    
+    .cw-rows {
+      grid-template-columns: 1fr;
+    }
+    
+    .cw-grid,
+    .cw-list,
+    .cw-grid--volume {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    
+    .cw-rowcard,
+    .cw-scard,
+    .cw-opt,
+    .cw-vcard {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      border: 0;
+      color: #d6deea;
+      background: var(--mc-surface-2);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+      cursor: pointer;
+      transition:
+        color 170ms ease,
+        background-color 170ms ease;
+    }
+    
+    .cw-rowcard {
+      min-height: 76px;
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) 25px;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 14px;
+      border-radius: 18px;
+      text-align: left;
+    }
+    
+    .cw-scard {
+      min-height: 70px;
+      display: grid;
+      grid-template-columns: 21px minmax(0, 1fr) 22px;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 17px;
+      text-align: left;
+    }
+    
+    .cw-opt,
+    .cw-vcard {
+      min-height: 78px;
+      display: grid;
+      align-content: center;
+      gap: 5px;
+      padding: 13px 38px 13px 13px;
+      border-radius: 17px;
+      text-align: left;
+    }
+    
+    .cw-rowcard:hover,
+    .cw-rowcard:focus-visible,
+    .cw-scard:hover,
+    .cw-scard:focus-visible,
+    .cw-opt:hover,
+    .cw-opt:focus-visible,
+    .cw-vcard:hover,
+    .cw-vcard:focus-visible {
+      color: white;
+      background: var(--mc-surface-hover);
+    }
+    
+    .cw-rowcard::after,
+    .cw-scard::after,
+    .cw-opt::after,
+    .cw-vcard::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background: linear-gradient(110deg, rgba(52, 120, 246, 0.24), rgba(52, 120, 246, 0.08));
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 320ms var(--mc-ease);
+    }
+    
+    .cw-rowcard[data-selected="true"]::after,
+    .cw-scard[data-selected="true"]::after,
+    .cw-opt[data-selected="true"]::after,
+    .cw-vcard[data-selected="true"]::after {
+      transform: scaleX(1);
+    }
+    
+    .cw-rowcard[data-selected="true"],
+    .cw-scard[data-selected="true"],
+    .cw-opt[data-selected="true"],
+    .cw-vcard[data-selected="true"] {
+      color: white;
+      background: var(--mc-surface-2);
+    }
+    
+    .cw-rowcard[data-selected="true"]::before,
+    .cw-scard[data-selected="true"]::before,
+    .cw-opt[data-selected="true"]::before,
+    .cw-vcard[data-selected="true"]::before {
+      content: "";
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      right: 13px;
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      background:
+        var(--mc-blue)
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23fff' stroke-width='2.7' stroke-linecap='round' stroke-linejoin='round' d='m6.5 12.5 3.2 3.2 7.8-8'/%3E%3C/svg%3E")
+        center / 14px 14px no-repeat;
+      box-shadow: 0 8px 20px -12px rgba(52, 120, 246, 0.9);
+      transform: translateY(-50%);
+    }
+    
+    .cw-rowcard__icon,
+    .cw-scard__icon {
+      display: grid;
+      place-items: center;
+      color: var(--mc-blue-hover);
+    }
+    
+    .cw-rowcard__icon svg,
+    .cw-scard__icon svg {
+      width: 22px;
+      height: 22px;
+    }
+    
+    .cw-rowcard__body,
+    .cw-opt__body {
+      min-width: 0;
+      display: grid;
+      gap: 4px;
+    }
+    
+    .cw-rowcard__body b,
+    .cw-scard b,
+    .cw-opt__body b,
+    .cw-vcard b {
+      color: inherit;
+      font-size: 13px;
+      font-weight: 720;
+      letter-spacing: -0.015em;
+      line-height: 1.25;
+    }
+    
+    .cw-rowcard__body small,
+    .cw-opt__body > span,
+    .cw-vcard > span {
+      color: var(--mc-muted);
+      font-size: 10.6px;
+      font-weight: 480;
+      line-height: 1.42;
+    }
+    
+    .cw-choice-arrow {
+      display: none;
+    }
+    
+    .cw-opt__tag {
+      display: inline-flex;
+      margin-left: 5px;
+      color: #8db6ff;
+      font-size: 8.5px;
+      font-style: normal;
+      font-weight: 760;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    
+    .cw-custom {
+      margin-top: 9px;
+    }
+    
+    .cw-custom textarea,
+    .cw-lead__form input,
+    .cw-lead__form textarea {
+      width: 100%;
+      border: 0;
+      outline: none;
+      color: var(--mc-text);
+      background: var(--mc-surface-2);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+      font-size: 16px;
+    }
+    
+    .cw-custom textarea {
+      min-height: 90px;
+      resize: vertical;
+      padding: 13px;
+      border-radius: 16px;
+    }
+    
+    .cw-custom textarea::placeholder,
+    .cw-lead__form input::placeholder,
+    .cw-lead__form textarea::placeholder {
+      color: var(--mc-faint);
+    }
+    
+    .cw-custom textarea:focus,
+    .cw-lead__form input:focus,
+    .cw-lead__form textarea:focus {
+      box-shadow:
+        inset 0 0 0 1px rgba(78, 140, 255, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+    
+    .cw-industry-tip {
+      margin-top: 10px;
+      padding: 12px 13px;
+      border: 0;
+      border-radius: 16px;
+      color: #cbd5e2;
+      background: #09101a;
+    }
+    
+    .cw-industry-tip > b {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--mc-text);
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+    
+    .cw-industry-tip > b svg {
+      width: 16px;
+      height: 16px;
+      color: var(--mc-blue-hover);
+    }
+    
+    .cw-industry-tip ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+    
+    .cw-industry-tip li {
+      margin: 4px 0;
+      color: var(--mc-muted);
+      font-size: 10.7px;
+      line-height: 1.4;
+    }
+    
+    .cw-calc-actions {
+      min-height: 66px;
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      padding: 9px 11px max(10px, env(safe-area-inset-bottom));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      background: var(--mc-bg);
+    }
+    
+    .cw-next,
+    .cw-submit {
+      width: 100%;
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 15px;
+      color: white;
+      background: var(--mc-blue);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      font-size: 12.5px;
+      font-weight: 740;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      transition: background-color 170ms ease;
+    }
+    
+    .cw-next:hover:not(:disabled),
+    .cw-next:focus-visible:not(:disabled),
+    .cw-submit:hover:not(:disabled),
+    .cw-submit:focus-visible:not(:disabled) {
+      background: var(--mc-blue-hover);
+    }
+    
+    .cw-next:disabled,
+    .cw-submit:disabled {
+      color: #6e7b8d;
+      background: #151c26;
+      box-shadow: none;
+      cursor: default;
+    }
+    
+    .cw-next svg,
+    .cw-submit svg {
+      width: 17px;
+      height: 17px;
+    }
+    
+    .cw-contact-stage {
+      display: grid;
+      gap: 10px;
+    }
+    
+    .cw-lead,
+    .cw-summary,
+    .cw-thanks {
+      border: 0;
+      border-radius: 19px;
+      background: var(--mc-surface);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    }
+    
+    .cw-lead {
+      padding: 13px;
+    }
+    
+    .cw-lead__head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 11px;
+    }
+    
+    .cw-lead__icon {
+      display: grid;
+      place-items: center;
+      color: var(--mc-blue-hover);
+    }
+    
+    .cw-lead__icon svg {
+      width: 20px;
+      height: 20px;
+    }
+    
+    .cw-lead__head > span:last-child {
+      display: grid;
+      gap: 2px;
+    }
+    
+    .cw-lead__head b {
+      font-size: 13px;
+      font-weight: 730;
+    }
+    
+    .cw-lead__head small {
+      color: var(--mc-muted);
+      font-size: 10.4px;
+    }
+    
+    .cw-lead__form {
+      display: grid;
+      gap: 8px;
+    }
+    
+    .cw-lead__row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    
+    .cw-lead__form input {
+      min-height: 46px;
+      padding: 0 12px;
+      border-radius: 13px;
+    }
+    
+    .cw-lead__form textarea {
+      min-height: 76px;
+      resize: vertical;
+      padding: 12px;
+      border-radius: 13px;
+    }
+    
+    .cw-lead__optional {
+      border: 0;
+      border-radius: 13px;
+      background: #09101a;
+    }
+    
+    .cw-lead__optional summary {
+      padding: 11px 12px;
+      color: var(--mc-muted);
+      font-size: 10.8px;
+      font-weight: 620;
+      cursor: pointer;
+    }
+    
+    .cw-lead__optional-body {
+      display: grid;
+      gap: 8px;
+      padding: 0 9px 9px;
+    }
+    
+    .cw-consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      color: var(--mc-muted);
+      font-size: 10px;
+      line-height: 1.4;
+    }
+    
+    .cw-consent input {
+      margin-top: 1px;
+      accent-color: var(--mc-blue);
+    }
+    
+    .cw-lead__status {
+      margin: 0;
+      color: var(--mc-danger);
+      font-size: 10.5px;
+      line-height: 1.4;
+    }
+    
+    .cw-local-note {
+      margin: 0;
+      color: var(--mc-faint);
+      font-size: 9.8px;
+      text-align: center;
+    }
+    
+    .cw-summary {
+      padding: 12px;
+    }
+    
+    .cw-summary__label {
+      display: block;
+      margin-bottom: 7px;
+      color: #8db6ff;
+      font-size: 9.5px;
+      font-weight: 760;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    
+    .cw-summary__row {
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+      gap: 10px;
+      padding: 8px 0;
+      box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.035);
+    }
+    
+    .cw-summary__row:last-child {
+      box-shadow: none;
+    }
+    
+    .cw-summary__row span {
+      color: var(--mc-faint);
+      font-size: 9.8px;
+    }
+    
+    .cw-summary__row b {
+      color: #dce4ef;
+      font-size: 10.2px;
+      font-weight: 620;
+      line-height: 1.35;
+    }
+    
+    .cw-restart {
+      width: 100%;
+      min-height: 44px;
+      border: 0;
+      border-radius: 14px;
+      color: var(--mc-muted);
+      background: var(--mc-surface-2);
+      font-size: 11.5px;
+      font-weight: 650;
+      cursor: pointer;
+    }
+    
+    .cw-thanks {
+      margin: 13px;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .cw-thanks__icon {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      color: white;
+      background: var(--mc-blue);
+    }
+    
+    .cw-thanks__icon svg {
+      width: 24px;
+      height: 24px;
+    }
+    
+    .cw-thanks__eyebrow {
+      color: #8db6ff;
+      font-size: 9.5px;
+      font-weight: 760;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    
+    .cw-thanks h3 {
+      margin: 7px 0;
+      font-size: 1.4rem;
+    }
+    
+    .cw-thanks > p {
+      margin: 0 auto 14px;
+      max-width: 34ch;
+      color: var(--mc-muted);
+      font-size: 11.5px;
+      line-height: 1.5;
+    }
+    
+    .cw-thanks__grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+    }
+    
+    .cw-thanks__grid > div {
+      display: grid;
+      gap: 4px;
+      padding: 10px;
+      border-radius: 13px;
+      color: #dce4ef;
+      background: var(--mc-surface-2);
+      font-size: 10.5px;
+    }
+    
+    .cw-thanks__grid span {
+      color: var(--mc-faint);
+      font-size: 9px;
+    }
+    
+    .cw-thanks__actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 11px;
+    }
+    
+    .cw-thanks__actions button {
+      min-height: 43px;
+      border: 0;
+      border-radius: 13px;
+      color: white;
+      background: var(--mc-blue);
+      font-size: 10.8px;
+      font-weight: 680;
+      cursor: pointer;
+    }
+    
+    .cw-thanks__actions button.ghost {
+      color: var(--mc-muted);
+      background: var(--mc-surface-2);
+    }
+    
+    .cw-spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: mc-spin 0.8s linear infinite;
+    }
+    
+    @keyframes mc-spin { to { transform: rotate(360deg); } }
+    
+    .cw-widget :where(button, a, input, textarea, summary):focus-visible {
+      outline: 2px solid rgba(78, 140, 255, 0.82);
+      outline-offset: 2px;
+    }
+    
+    /* Mobile */
+    @media (max-width: 520px) {
+      .cw-launcher {
+        right: max(12px, env(safe-area-inset-right));
+        bottom: max(12px, env(safe-area-inset-bottom));
+        width: 62px;
+        height: 62px;
+        border-radius: 20px;
+      }
+    
+      .cw-panel {
+        inset: 0;
+        width: 100vw;
+        height: 100dvh;
+        max-width: none;
+        max-height: none;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    
+      .cw-panel-head {
+        min-height: calc(66px + env(safe-area-inset-top));
+        padding: max(8px, env(safe-area-inset-top)) 10px 8px 12px;
+      }
+    
+      .cw-panel-head__mascot {
+        width: 43px;
+        height: 43px;
+        flex-basis: 43px;
+      }
+    
+      .cw-panel-head__mascot .bl--header {
+        width: 40px;
+        height: 40px;
+      }
+    
+      .cw-tabs {
+        margin: 7px 9px 7px;
+      }
+    
+      .cw-tabs > button {
+        min-height: 44px;
+        padding-inline: 6px;
+        font-size: 11.7px;
+      }
+    
+      .cw-chat-top {
+        padding: 2px 9px 7px;
+      }
+    
+      .cw-chat-builder {
+        min-height: 64px;
+        padding: 11px 13px;
+      }
+    
+      .cw-messages {
+        padding: 7px 10px 8px;
+      }
+    
+      .cw-message-wrap {
+        max-width: 87%;
+      }
+    
+      .cw-quick-replies {
+        gap: 6px;
+        padding: 7px 9px;
+      }
+    
+      .cw-quick-replies .cw-chip {
+        min-height: 41px;
+        padding: 8px;
+        font-size: 10.8px;
+      }
+    
+      .cw-inputbar {
+        margin: 0 9px 7px;
+      }
+    
+      .cw-direct-actions {
+        padding-inline: 9px;
+      }
+    
+      .cw-progress {
+        padding-inline: 9px;
+      }
+    
+      .cw-calc-body {
+        padding: 13px 11px 10px;
+      }
+    
+      .cw-q {
+        font-size: 1.35rem;
+      }
+    
+      .cw-grid,
+      .cw-list,
+      .cw-grid--volume {
+        grid-template-columns: 1fr;
+      }
+    
+      .cw-rowcard,
+      .cw-scard,
+      .cw-opt,
+      .cw-vcard {
+        min-height: 68px;
+      }
+    
+      .cw-scard {
+        grid-template-columns: 21px minmax(0, 1fr) 22px;
+      }
+    
+      .cw-lead__row,
+      .cw-thanks__grid,
+      .cw-thanks__actions {
+        grid-template-columns: 1fr;
+      }
+    
+      .cw-calc-actions {
+        min-height: 64px;
+        padding-inline: 9px;
+      }
+    }
+    
+    @media (max-height: 690px) and (min-width: 521px) {
+      .cw-panel {
+        height: calc(100dvh - 20px);
+        bottom: 10px;
+      }
+    
+      .cw-panel-head {
+        min-height: 64px;
+        padding-block: 7px;
+      }
+    
+      .cw-tabs > button {
+        min-height: 40px;
+      }
+    
+      .cw-chat-builder {
+        min-height: 60px;
+        padding-block: 10px;
+      }
+    
+      .cw-quick-replies .cw-chip {
+        min-height: 38px;
+      }
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      .cw-widget *,
+      .cw-widget *::before,
+      .cw-widget *::after {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    
+  operator: 'doesNotMatch'
   stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:38:10)
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:66:10)
     async Test.run (node:internal/test_runner/test:1054:7)
     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
-# Subtest: mode tabs switch immediately and use the website blue
-not ok 3 - mode tabs switch immediately and use the website blue
+# Subtest: selection check is circular and aligned on the right
+ok 6 - selection check is circular and aligned on the right
   ---
-  duration_ms: 3.551135
+  duration_ms: 3.168526
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:43:1'
+  ...
+# Subtest: icons form one rounded line family without tile backgrounds
+not ok 7 - icons form one rounded line family without tile backgrounds
+  ---
+  duration_ms: 1.699816
+  type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:79:1'
   failureType: 'testCodeFailure'
   error: |-
-    The input did not match the regular expression /mode === "assistant" \? "calc\(100% \+ 5px\)" : "0px"/. Input:
+    The input was expected to not match the regular expression /\.cw-rowcard__icon[\s\S]*background:/. Input:
     
-    'import { useCallback, useEffect, useRef, useState } from "react";\n' +
-      'import { useFocusTrap } from "../../hooks/useFocusTrap";\n' +
-      'import {\n' +
-      '  installSiteAssistantGlobal,\n' +
-      '  SITE_ASSISTANT_OPEN_EVENT,\n' +
-      '} from "../../lib/siteAssistant";\n' +
-      'import { announceEmbedState, installEmbedBridge } from "../../lib/embedBridge";\n' +
-      'import { track } from "../../lib/analytics";\n' +
-      'import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";\n' +
-      'import { AssistantConversation } from "./AssistantConversation";\n' +
-      'import { BubbleLogo } from "./BubbleLogo";\n' +
-      'import { ToolCalculator } from "./ToolCalculator";\n' +
-      'import { WidgetIcon } from "./WidgetIcon";\n' +
+    '/*\n' +
+      ' * Môj Chatbot — single clean design system\n' +
+      ' * Palette is intentionally identical to the website: black, graphite and one blue accent.\n' +
+      ' */\n' +
       '\n' +
-      'type WidgetMode = "assistant" | "calculator";\n' +
+      ':root {\n' +
+      '  --mc-bg: #05070b;\n' +
+      '  --mc-surface: #0a0f17;\n' +
+      '  --mc-surface-2: #0d141f;\n' +
+      '  --mc-surface-3: #111b2a;\n' +
+      '  --mc-surface-hover: #142033;\n' +
+      '  --mc-blue: #3478f6;\n' +
+      '  --mc-blue-hover: #4e8cff;\n' +
+      '  --mc-blue-soft: rgba(52, 120, 246, 0.15);\n' +
+      '  --mc-text: #f6f8fb;\n' +
+      '  --mc-muted: #9eabbc;\n' +
+      '  --mc-faint: #6f7d8f;\n' +
+      '  --mc-success: #70d49a;\n' +
+      '  --mc-danger: #ff7b87;\n' +
+      '  --mc-radius-xl: 26px;\n' +
+      '  --mc-radius-lg: 20px;\n' +
+      '  --mc-radius-md: 16px;\n' +
+      '  --mc-radius-sm: 12px;\n' +
+      '  --mc-ease: cubic-bezier(0.16, 1, 0.3, 1);\n' +
+      '  --mc-font: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;\n' +
+      '}\n' +
       '\n' +
-      'type AssistantWidgetProps = {\n' +
-      '  embedMode?: boolean;\n' +
-      '};\n' +
+      '* {\n' +
+      '  box-sizing: border-box;\n' +
+      '}\n' +
       '\n' +
-      'const isPreset = (value: string | undefined): value is AssistantPreset =>\n' +
-      '  Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));\n' +
+      'html,\n' +
+      'body,\n' +
+      '#root,\n' +
+      '.widget-preview {\n' +
+      '  min-height: 100%;\n' +
+      '  margin: 0;\n' +
+      '}\n' +
       '\n' +
-      'export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JSX.Element {\n' +
-      '  const [isOpen, setIsOpen] = useState(false);\n' +
-      '  const [mode, setMode] = useState<WidgetMode>("assistant");\n' +
-      '  const [resetToken, setResetToken] = useState(0);\n' +
-      '  const [preset, setPreset] = useState<AssistantPreset | null>(null);\n' +
-      '  const panelRef = useRef<HTMLElement>(null);\n' +
+      'body {\n' +
+      '  color: var(--mc-text);\n' +
+      '  background: var(--mc-bg);\n' +
+      '  font-family: var(--mc-font);\n' +
+      '  -webkit-font-smoothing: antialiased;\n' +
+      '  text-rendering: optimizeLegibility;\n' +
+      '}\n' +
       '\n' +
-      '  const close = useCallback(() => {\n' +
-      '    setIsOpen(false);\n' +
-      '    track("widget_close");\n' +
-      '  }, []);\n' +
-      '  useFocusTrap(panelRef, isOpen, close);\n' +
+      '.widget-preview {\n' +
+      '  position: relative;\n' +
+      '  min-height: 100dvh;\n' +
+      '  overflow: hidden;\n' +
+      '  background:\n' +
+      '    radial-gradient(circle at 78% 12%, rgba(52, 120, 246, 0.09), transparent 34rem),\n' +
+      '    var(--mc-bg);\n' +
+      '}\n' +
       '\n' +
-      '  const open = useCallback(\n' +
-      '    (nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {\n' +
-      '      setMode(nextMode);\n' +
-      '      setPreset(nextPreset);\n' +
-      '      setResetToken((value) => value + 1);\n' +
-      '      setIsOpen(true);\n' +
-      '      track("widget_open", { mode: nextMode });\n' +
-      '    },\n' +
-      '    [],\n' +
-      '  );\n' +
+      '.widget-preview__surface {\n' +
+      '  position: absolute;\n' +
+      '  inset: 0;\n' +
+      '  pointer-events: none;\n' +
+      '  background: linear-gradient(180deg, rgba(255, 255, 255, 0.012), transparent 25%);\n' +
+      '}\n' +
       '\n' +
-      '  const switchMode = useCallback((nextMode: WidgetMode) => {\n' +
-      '    setMode(nextMode);\n' +
-      '    setPreset(null);\n' +
-      '    track("mode_switch", { to: nextMode });\n' +
-      '  }, []);\n' +
+      '.cw-widget,\n' +
+      '.cw-widget button,\n' +
+      '.cw-widget input,\n' +
+      '.cw-widget textarea {\n' +
+      '  font-family: var(--mc-font);\n' +
+      '}\n' +
       '\n' +
-      '  const openFromOptions = useCallback(\n' +
-      '    (options: OpenSiteAssistantOptions) => {\n' +
-      '      const directPreset = options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);\n' +
-      '      const calculatorEntry =\n' +
-      '        options?.entry === "builder" || options?.entry === "calculator" || Boolean(directPreset);\n' +
-      '      open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);\n' +
-      '    },\n' +
-      '    [open],\n' +
-      '  );\n' +
+      '.cw-widget button,\n' +
+      '.cw-widget a,\n' +
+      '.cw-widget input,\n' +
+      '.cw-widget textarea,\n' +
+      '.cw-widget summary {\n' +
+      '  -webkit-tap-highlight-color: transparent;\n' +
+      '}\n' +
       '\n' +
-      '  useEffect(() => installSiteAssistantGlobal(), []);\n' +
+      '.cw-widget button {\n' +
+      '  appearance: none;\n' +
+      '}\n' +
       '\n' +
-      '  useEffect(() => {\n' +
-      '    const onOpen = (event: Event) => {\n' +
-      '      const options = (event as CustomEvent<OpenSiteAssistantOptions>).detail;\n' +
-      '      openFromOptions(options ?? { entry: "builder" });\n' +
-      '    };\n' +
+      '.cw-sr-only {\n' +
+      '  position: absolute;\n' +
+      '  width: 1px;\n' +
+      '  height: 1px;\n' +
+      '  padding: 0;\n' +
+      '  margin: -1px;\n' +
+      '  overflow: hidden;\n' +
+      '  clip: rect(0, 0, 0, 0);\n' +
+      '  white-space: nowrap;\n' +
+      '  border: 0;\n' +
+      '}\n' +
       '\n' +
-      '    window.addEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);\n' +
-      '    return () => window.removeEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);\n' +
-      '  }, [openFromOptions]);\n' +
+      '/* Launcher */\n' +
+      '.cw-launcher {\n' +
+      '  position: fixed;\n' +
+      '  z-index: 2147483000;\n' +
+      '  right: max(18px, env(safe-area-inset-right));\n' +
+      '  bottom: max(18px, env(safe-area-inset-bottom));\n' +
+      '  width: 66px;\n' +
+      '  height: 66px;\n' +
+      '  display: grid;\n' +
+      '  place-items: center;\n' +
+      '  padding: 0;\n' +
+      '  border: 0;\n' +
+      '  border-radius: 22px;\n' +
+      '  color: white;\n' +
+      '  background: var(--mc-surface-2);\n' +
+      '  box-shadow:\n' +
+      '    0 24px 62px -30px rgba(0, 0, 0, 0.95),\n' +
+      '    0 18px 42px -28px rgba(52, 120, 246, 0.7),\n' +
+      '    inset 0 1px 0 rgba(255, 255, 255, 0.06);\n' +
+      '  cursor: pointer;\n' +
+      '  transition:\n' +
+      '    transform 220ms var(--mc-ease),\n' +
+      '    background-color 180ms ease;\n' +
+      '}\n' +
       '\n' +
-      '  useEffect(() => {\n' +
-      '    if (!embedMode) return;\n' +
-      '    return installEmbedBridge({ open: openFromOptions, close });\n' +
-      '  }, [close, embedMode, openFromOptions]);\n' +
+      '.cw-launcher:hover,\n' +
+      '.cw-launcher:focus-visible {\n' +
+      '  background: var(--mc-surface-3);\n' +
+      '  transform: translateY(-3px);\n' +
+      '}\n' +
       '\n' +
-      '  useEffect(() => {\n' +
-      '    if (embedMode) announceEmbedState(isOpen);\n' +
-      '  }, [embedMode, isOpen]);\n' +
+      '.cw-launcher:active {\n' +
+      '  transform: translateY(0);\n' +
+      '}\n' +
       '\n' +
-      '  useEffect(() => {\n' +
-      '    if (!isOpen || !window.matchMedia("(max-width: 520px)").matches) return;\n' +
-      '    const previous = document.body.style.overflow;\n' +
-      '    document.body.style.overflow = "hidden";\n' +
-      '    return () => {\n' +
-      '      document.body.style.overflow = previous;\n' +
-      '    };\n' +
-      '  }, [isOpen]);\n' +
+      '.cw-launcher .bl--launcher {\n' +
+      '  width: 50px;\n' +
+      '  height: 50px;\n' +
+      '}\n' +
       '\n' +
-      '  return (\n' +
-      '    <div className="cw-widget">\n' +
-      '      <button\n' +
-      '        id="chameleon-widget-launcher"\n' +
-      '        data-testid="widget-launcher"\n' +
-      '        className="cw-launcher"\n' +
-      '        type="button"\n' +
-      '        aria-label="Otvoriť Môj Chatbot"\n' +
-      '        aria-expanded={isOpen}\n' +
-      '        aria-controls="chameleon-widget-panel"\n' +
-      '        onClick={() => open("assistant")}\n' +
-      '      >\n' +
-      '        <BubbleLogo size="launcher" />\n' +
-      '      </button>\n' +
+      '/* Shell */\n' +
+      '.cw-panel {\n' +
+      '  position: fixed;\n' +
+      '  z-index: 2147483001;\n' +
+      '  right: max(18px, env(safe-area-inset-right));\n' +
+      '  bottom: max(18px, env(safe-area-inset-bottom));\n' +
+      '  width: min(448px, calc(100vw - 36px));\n' +
+      '  height: min(744px, calc(100dvh - 36px));\n' +
+      '  display: flex;\n' +
+      '  flex-direction: column;\n' +
+      '  overflow: hidden;\n' +
+      '  border: 0;\n' +
+      '  border-radius: var(--mc-radius-xl);\n' +
+      '  color: var(--mc-text);\n' +
+      '  background: var(--mc-bg);\n' +
+      '  box-shadow:\n' +
+      '    0 48px 120px -48px rgba(0, 0, 0, 0.98),\n' +
+      '    inset 0 0 0 1px rgba(255, 255, 255, 0.045);\n' +
+      '  outline: none;\n' +
+      '  animation: mc-panel-in 300ms var(--mc-ease) both;\n' +
+      '}\n' +
       '\n' +
-      '      {isOpen ? (\n' +
-      '        <section\n' +
-      '          id="chameleon-widget-panel"\n' +
-      '          className="cw-panel"\n' +
-      '          data-mode={mode}\n' +
-      '          ref={panelRef}\n' +
-      '          role="dialog"\n' +
-      '          aria-modal="true"\n' +
-      '          aria-labelledby="chameleon-widget-title"\n' +
-      '          tabIndex={-1}\n' +
-      '        >\n' +
-      '          <header className="cw-panel-head">\n' +
-      '            <h2 id="chameleon-widget-title" className="cw-sr-only">\n' +
-      '              Môj Chatbot — AI asistent a konfigurátor riešenia\n' +
-      '            </h2>\n' +
-      '            <span className="cw-panel-head__mascot">\n' +
-      '              <BubbleLogo size="header" />\n' +
-      '            </span>\n' +
-      '            <div className="cw-panel-head__title">\n' +
-      '              <b>Môj Chatbot</b>\n' +
-      '              <span className="cw-panel-head__context cw-panel-head__online">\n' +
-      '                <i aria-hidden="true" /> Online a pripravený pomôcť\n' +
-      '              </span>\n' +
-      '            </div>\n' +
-      '            <div className="cw-panel-head__actions">\n' +
-      '              <button\n' +
-      '                type="button"\n' +
-      '                data-testid="widget-reset"\n' +
-      '                aria-label="Začať odznova"\n' +
-      '                title="Začať odznova"\n' +
-      '                onClick={() => {\n' +
-      '                  setPreset(null);\n' +
-      '                  setResetToken((value) => value + 1);\n' +
-      '                }}\n' +
-      '              >\n' +
-      '                <WidgetIcon name="reset" />\n' +
-      '              </button>\n' +
-      '              <button\n' +
-      '                type="button"\n' +
-      '                className="cw-panel-head__close"\n' +
-      '                data-testid="widget-close"\n' +
-      '                aria-label="Zavrieť asistenta"\n' +
-      '                title="Zavrieť"\n' +
-      '                onClick={close}\n' +
-      '              >\n' +
-      '                <WidgetIcon name="close" />\n' +
-      '              </button>\n' +
-      '            </div>\n' +
-      '          </header>\n' +
+      '@keyframes mc-panel-in {\n' +
+      '  from {\n' +
+      '    opacity: 0;\n' +
+      '    transform: translateY(12px) scale(0.985);\n' +
+      '  }\n' +
+      '  to {\n' +
+      '    opacity: 1;\n' +
+      '    transform: translateY(0) scale(1);\n' +
+      '  }\n' +
+      '}\n' +
       '\n' +
-      '          <nav className="cw-tabs" aria-label="Vyberte spôsob pomoci" data-mode={mode}>\n' +
-      '            <span className="cw-tabs__glass" aria-hidden="true" />\n' +
-      '            <button\n' +
-      '              type="button"\n' +
-      '              data-testid="tab-calculator"\n' +
-      '              data-active={mode === "calculator"}\n' +
-      '              aria-pressed={mode === "calculator"}\n' +
-      '              onClick={() => switchMode("calculator")}\n' +
-      '            >\n' +
-      '              <WidgetIcon name="calculator" />\n' +
-      '              <span>Vyskladať riešenie</span>\n' +
-      '            </button>\n' +
-      '            <button\n' +
-      '              type="button"\n' +
-      '              data-testid="tab-assistant"\n' +
-      '              data-active={mode === "assistant"}\n' +
-      '              aria-pressed={mode === "assistant"}\n' +
-      '              onClick={() => switchMode("assistant")}\n' +
-      '            >\n' +
-      '              <WidgetIcon name="chat" />\n' +
-      '              <span>Poradiť sa</span>\n' +
-      '            </button>\n' +
-      '          </nav>\n' +
+      '/* Header */\n' +
+      '.cw-panel-head {\n' +
+      '  min-height: 74px;\n' +
+      '  display: flex;\n' +
+      '  align-items: center;\n' +
+      '  gap: 11px;\n' +
+      '  padding: 11px 12px 10px 14px;\n' +
+      '  flex: 0 0 auto;\n' +
+      '  background: var(--mc-surface);\n' +
+      '  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.045);\n' +
+      '}\n' +
       '\n' +
-      '          <div className="cw-panel-body" key={mode}>\n' +
-      '            {mode === "assistant" ? (\n' +
-      '              <AssistantConversation\n' +
-      '                resetToken={resetToken}\n' +
-      '                onOpenCalculator={() => switchMode("calculator")}\n' +
-      '              />\n' +
-      '            ) : (\n' +
-      '              <ToolCalculator\n' +
-      '                resetToken={resetToken}\n' +
-      '                initialPreset={preset}\n' +
-      '                onOpenChat={() => switchMode("assistant")}\n' +
-      '              />\n' +
-      '            )}\n' +
-      '          </div>\n' +
-      '        </section>\n' +
-      '      ) : null}\n' +
-      '    </div>\n' +
-      '  );\n' +
-      '}\n'
+      '.cw-panel-head__mascot {\n' +
+      '  width: 48px;\n' +
+      '  height: 48px;\n' +
+      '  flex: 0 0 48px;\n' +
+      '  display: grid;\n' +
+      '  place-items: center;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__mascot .bl--header {\n' +
+      '  width: 45px;\n' +
+      '  height: 45px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__title {\n' +
+      '  min-width: 0;\n' +
+      '  display: grid;\n' +
+      '  gap: 3px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__title b {\n' +
+      '  color: var(--mc-text);\n' +
+      '  font-size: 15.5px;\n' +
+      '  font-weight: 760;\n' +
+      '  letter-spacing: -0.025em;\n' +
+      '  line-height: 1.15;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__context {\n' +
+      '  display: inline-flex;\n' +
+      '  align-items: center;\n' +
+      '  gap: 7px;\n' +
+      '  color: var(--mc-muted);\n' +
+      '  font-size: 11px;\n' +
+      '  font-weight: 560;\n' +
+      '  line-height: 1.2;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__online i {\n' +
+      '  width: 7px;\n' +
+      '  height: 7px;\n' +
+      '  flex: 0 0 7px;\n' +
+      '  border-radius: 50%;\n' +
+      '  background: var(--mc-success);\n' +
+      '  box-shadow: 0 0 0 3px rgba(112, 212, 154, 0.09);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__actions {\n' +
+      '  margin-left: auto;\n' +
+      '  display: flex;\n' +
+      '  gap: 4px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__actions button {\n' +
+      '  width: 40px;\n' +
+      '  height: 40px;\n' +
+      '  display: grid;\n' +
+      '  place-items: center;\n' +
+      '  padding: 0;\n' +
+      '  border: 0;\n' +
+      '  border-radius: 13px;\n' +
+      '  color: var(--mc-muted);\n' +
+      '  background: transparent;\n' +
+      '  cursor: pointer;\n' +
+      '  transition:\n' +
+      '    color 160ms ease,\n' +
+      '    background-color 160ms ease;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__actions button:hover,\n' +
+      '.cw-panel-head__actions button:focus-visible {\n' +
+      '  color: var(--mc-text);\n' +
+      '  background: var(--mc-surface-3);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-panel-head__actions svg {\n' +
+      '  width: 20px;\n' +
+      '  height: 20px;\n' +
+      '}\n' +
+      '\n' +
+      '/* Mode switch */\n' +
+      '.cw-tabs {\n' +
+      '  position: relative;\n' +
+      '  isolation: isolate;\n' +
+      '  flex: 0 0 auto;\n' +
+      '  display: grid;\n' +
+      '  grid-template-columns: repeat(2, minmax(0, 1fr));\n' +
+      '  gap: 4px;\n' +
+      '  margin: 9px 10px 8px;\n' +
+      '  padding: 5px;\n' +
+      '  border: 0;\n' +
+      '  border-radius: 18px;\n' +
+      '  background: var(--mc-surface);\n' +
+      '  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-tabs__glass {\n' +
+      '  position: absolute;\n' +
+      '  z-index: 0;\n' +
+      '  top: 5px;\n' +
+      '  bottom: 5px;\n' +
+      '  left: 5px;\n' +
+      '  width: calc((100% - 14px) / 2);\n' +
+      '  border-radius: 14px;\n' +
+      '  background: var(--mc-blue);\n' +
+      '  box-shadow:\n' +
+      '    0 12px 28px -22px rgba(52, 120, 246, 0.8),\n' +
+      '    inset 0 1px 0 rgba(255, 255, 255, 0.14);\n' +
+      '  pointer-events: none;\n' +
+      '  transform: translateX(0);\n' +
+      '  transition: transform 320ms var(--mc-ease);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-tabs[data-mode="assistant"] .cw-tabs__glass {\n' +
+      '  transform: translateX(calc(100% + 4px));\n' +
+      '}\n' +
+      '\n' +
+      '.cw-tabs > button {\n' +
+      '  position: relative;\n' +
+      '  z-index: 1;\n' +
+      '  min-height: 46px;\n' +
+      '  display: inline-flex;\n' +
+      '  align-items: center;\n' +
+      '  justify-content: center;\n' +
+      '  gap: 8px;\n' +
+      '  padding: 0 10px;\n' +
+      '  border: 0;\n' +
+      '  border-radius: 14px;\n' +
+      '  color: var(--mc-muted);\n' +
+      '  background: transparent;\n' +
+      '  font-size: 12.5px;\n' +
+      '  font-weight: 700;\n' +
+      '  letter-spacing: -0.015em;\n' +
+      '  cursor: pointer;\n' +
+      '  transition: color 180ms ease;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-tabs > button[data-active="true"] {\n' +
+      '  color: white;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-tabs > button svg {\n' +
+      '  width: 18px;\n' +
+      '  height: 18px;\n' +
+      '}\n' +
+      '\n' +
+      '/* Shared body */\n' +
+      '.cw-panel-body {\n' +
+      '  min-height: 0;\n' +
+      '  flex: 1 1 auto;\n' +
+      '  overflow: hidden;\n' +
+      '  background: var(--mc-bg);\n' +
+      '  animation: mc-view-in 220ms var(--mc-ease) both;\n' +
+      '}\n' +
+      '\n' +
+      '@keyframes mc-view-in {\n' +
+      '  from {\n' +
+      '    opacity: 0;\n' +
+      '    transform: translateY(4px);\n' +
+      '  }\n' +
+      '  to {\n' +
+      '    opacity: 1;\n' +
+      '    transform: translateY(0);\n' +
+      '  }\n' +
+      '}\n' +
+      '\n' +
+      '/* Conversation */\n' +
+      '.cw-conversation {\n' +
+      '  height: 100%;\n' +
+      '  min-height: 0;\n' +
+      '  display: flex;\n' +
+      '  flex-direction: column;\n' +
+      '  overflow: hidden;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-top {\n' +
+      '  flex: 0 0 auto;\n' +
+      '  padding: 3px 10px 9px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder {\n' +
+      '  width: 100%;\n' +
+      '  min-height: 70px;\n' +
+      '  display: grid;\n' +
+      '  grid-template-columns: 24px minmax(0, 1fr) auto;\n' +
+      '  align-items: center;\n' +
+      '  gap: 12px;\n' +
+      '  padding: 13px 15px;\n' +
+      '  border: 0;\n' +
+      '  border-radius: 18px;\n' +
+      '  color: var(--mc-text);\n' +
+      '  text-align: left;\n' +
+      '  background: var(--mc-surface-2);\n' +
+      '  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);\n' +
+      '  cursor: pointer;\n' +
+      '  transition: background-color 180ms ease;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder:hover,\n' +
+      '.cw-chat-builder:focus-visible {\n' +
+      '  background: var(--mc-surface-hover);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder__icon {\n' +
+      '  display: grid;\n' +
+      '  place-items: center;\n' +
+      '  color: var(--mc-blue-hover);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder__icon svg {\n' +
+      '  width: 22px;\n' +
+      '  height: 22px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder__copy {\n' +
+      '  min-width: 0;\n' +
+      '  display: grid;\n' +
+      '  gap: 3px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder__copy b {\n' +
+      '  font-size: 13.5px;\n' +
+      '  font-weight: 740;\n' +
+      '  letter-spacing: -0.018em;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder__copy small {\n' +
+      '  color: var(--mc-muted);\n' +
+      '  font-size: 10.8px;\n' +
+      '  font-weight: 500;\n' +
+      '  line-height: 1.42;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-chat-builder__arrow {\n' +
+      '  color: var(--mc-faint);\n' +
+      '  font-size: 17px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-messages {\n' +
+      '  min-height: 0;\n' +
+      '  flex: 1 1 auto;\n' +
+      '  display: flex;\n' +
+      '  flex-direction: column;\n' +
+      '  gap: 10px;\n' +
+      '  overflow-y: auto;\n' +
+      '  padding: 8px 12px 10px;\n' +
+      '  scrollbar-width: thin;\n' +
+      '  scrollbar-color: #243247 transparent;\n' +
+      '  overscroll-behavior: contain;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-message-row {\n' +
+      '  display: flex;\n' +
+      '  align-items: flex-end;\n' +
+      '  gap: 7px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-message-row--me {\n' +
+      '  justify-content: flex-end;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-avatar {\n' +
+      '  width: 29px;\n' +
+      '  height: 29px;\n' +
+      '  flex: 0 0 29px;\n' +
+      '  display: grid;\n' +
+      '  place-items: center;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-avatar .bl--avatar {\n' +
+      '  width: 26px;\n' +
+      '  height: 26px;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-message-wrap {\n' +
+      '  max-width: 84%;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-message-wrap p {\n' +
+      '  margin: 0;\n' +
+      '  padding: 11px 13px;\n' +
+      '  border: 0;\n' +
+      '  border-radius: 16px 16px 16px 6px;\n' +
+      '  color: #d9e1eb;\n' +
+      '  background: var(--mc-surface-2);\n' +
+      '  font-size: 12.8px;\n' +
+      '  font-weight: 470;\n' +
+      '  line-height: 1.52;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-message-row--me .cw-message-wrap p {\n' +
+      '  border-radius: 16px 16px 6px 16px;\n' +
+      '  color: white;\n' +
+      '  background: var(--mc-blue);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-typing {\n' +
+      '  display: inline-flex;\n' +
+      '  gap: 5px;\n' +
+      '  padding: 12px 14px;\n' +
+      '  border-radius: 16px 16px 16px 6px;\n' +
+      '  background: var(--mc-surface-2);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-typing i {\n' +
+      '  width: 6px;\n' +
+      '  height: 6px;\n' +
+      '  border-radius: 50%;\n' +
+      '  background: var(--mc-blue-hover);\n' +
+      '  animation: mc-typing 1s ease-in-out infinite;\n' +
+      '}\n' +
+      '\n' +
+      '.cw-typing i:nth-child(2) { animation-delay: 100ms; }\n' +
+      '.cw-typing i:nth-child(3) { animation-delay: 200ms; }\n' +
+      '\n' +
+      '@keyframes mc-typing {\n' +
+      '  0%, 60%, 100% { opacity: 0.35; transform: translateY(0); }\n' +
+      '  30% { opacity: 1; transform: translateY(-2px); }\n' +
+      '}\n' +
+      '\n' +
+      '.cw-quick-replies {\n' +
+      '  flex: 0 0 auto;\n' +
+      '  display: grid;\n' +
+      '  grid-template-columns: repeat(2, minmax(0, 1fr));\n' +
+      '  gap: 7px;\n' +
+      '  padding: 8px 10px;\n' +
+      '  background: var(--mc-bg);\n' +
+      '}\n' +
+      '\n' +
+      '.cw-quick-replies .cw-chip {\n' +
+      '  min-height: 43px;\n' +
+      '  display: flex;\n' +
+      '  align-items: center;\n' +
+      '  justify-content: center;\n' +
+      '  padding: 9px 11px;\n' +
+      '  border: 0;\n' +
+      '  border-radius: 14px;\n' +
+      '  color: #cbd4df;\n' +
+      '  background: var(--mc-surface-2);\n' +
+      '  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);\n' +
+      '  font-size: 11.5px;\n' +
+      '  font-weight: 650;\n' +
+      '  line-height: 1.25;\n' +
+      '  text-align: center;\n' +
+      '  cursor: pointer;\n' +
+      '  transition:\n' +
+      '    color 160ms eas'... 16678 more characters
     
   code: 'ERR_ASSERTION'
   name: 'AssertionError'
   expected:
   actual: |-
-    import { useCallback, useEffect, useRef, useState } from "react";
-    import { useFocusTrap } from "../../hooks/useFocusTrap";
-    import {
-      installSiteAssistantGlobal,
-      SITE_ASSISTANT_OPEN_EVENT,
-    } from "../../lib/siteAssistant";
-    import { announceEmbedState, installEmbedBridge } from "../../lib/embedBridge";
-    import { track } from "../../lib/analytics";
-    import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";
-    import { AssistantConversation } from "./AssistantConversation";
-    import { BubbleLogo } from "./BubbleLogo";
-    import { ToolCalculator } from "./ToolCalculator";
-    import { WidgetIcon } from "./WidgetIcon";
+    /*
+     * Môj Chatbot — single clean design system
+     * Palette is intentionally identical to the website: black, graphite and one blue accent.
+     */
     
-    type WidgetMode = "assistant" | "calculator";
-    
-    type AssistantWidgetProps = {
-      embedMode?: boolean;
-    };
-    
-    const isPreset = (value: string | undefined): value is AssistantPreset =>
-      Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));
-    
-    export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JSX.Element {
-      const [isOpen, setIsOpen] = useState(false);
-      const [mode, setMode] = useState<WidgetMode>("assistant");
-      const [resetToken, setResetToken] = useState(0);
-      const [preset, setPreset] = useState<AssistantPreset | null>(null);
-      const panelRef = useRef<HTMLElement>(null);
-    
-      const close = useCallback(() => {
-        setIsOpen(false);
-        track("widget_close");
-      }, []);
-      useFocusTrap(panelRef, isOpen, close);
-    
-      const open = useCallback(
-        (nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {
-          setMode(nextMode);
-          setPreset(nextPreset);
-          setResetToken((value) => value + 1);
-          setIsOpen(true);
-          track("widget_open", { mode: nextMode });
-        },
-        [],
-      );
-    
-      const switchMode = useCallback((nextMode: WidgetMode) => {
-        setMode(nextMode);
-        setPreset(null);
-        track("mode_switch", { to: nextMode });
-      }, []);
-    
-      const openFromOptions = useCallback(
-        (options: OpenSiteAssistantOptions) => {
-          const directPreset = options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);
-          const calculatorEntry =
-            options?.entry === "builder" || options?.entry === "calculator" || Boolean(directPreset);
-          open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);
-        },
-        [open],
-      );
-    
-      useEffect(() => installSiteAssistantGlobal(), []);
-    
-      useEffect(() => {
-        const onOpen = (event: Event) => {
-          const options = (event as CustomEvent<OpenSiteAssistantOptions>).detail;
-          openFromOptions(options ?? { entry: "builder" });
-        };
-    
-        window.addEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);
-        return () => window.removeEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);
-      }, [openFromOptions]);
-    
-      useEffect(() => {
-        if (!embedMode) return;
-        return installEmbedBridge({ open: openFromOptions, close });
-      }, [close, embedMode, openFromOptions]);
-    
-      useEffect(() => {
-        if (embedMode) announceEmbedState(isOpen);
-      }, [embedMode, isOpen]);
-    
-      useEffect(() => {
-        if (!isOpen || !window.matchMedia("(max-width: 520px)").matches) return;
-        const previous = document.body.style.overflow;
-        document.body.style.overflow = "hidden";
-        return () => {
-          document.body.style.overflow = previous;
-        };
-      }, [isOpen]);
-    
-      return (
-        <div className="cw-widget">
-          <button
-            id="chameleon-widget-launcher"
-            data-testid="widget-launcher"
-            className="cw-launcher"
-            type="button"
-            aria-label="Otvoriť Môj Chatbot"
-            aria-expanded={isOpen}
-            aria-controls="chameleon-widget-panel"
-            onClick={() => open("assistant")}
-          >
-            <BubbleLogo size="launcher" />
-          </button>
-    
-          {isOpen ? (
-            <section
-              id="chameleon-widget-panel"
-              className="cw-panel"
-              data-mode={mode}
-              ref={panelRef}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="chameleon-widget-title"
-              tabIndex={-1}
-            >
-              <header className="cw-panel-head">
-                <h2 id="chameleon-widget-title" className="cw-sr-only">
-                  Môj Chatbot — AI asistent a konfigurátor riešenia
-                </h2>
-                <span className="cw-panel-head__mascot">
-                  <BubbleLogo size="header" />
-                </span>
-                <div className="cw-panel-head__title">
-                  <b>Môj Chatbot</b>
-                  <span className="cw-panel-head__context cw-panel-head__online">
-                    <i aria-hidden="true" /> Online a pripravený pomôcť
-                  </span>
-                </div>
-                <div className="cw-panel-head__actions">
-                  <button
-                    type="button"
-                    data-testid="widget-reset"
-                    aria-label="Začať odznova"
-                    title="Začať odznova"
-                    onClick={() => {
-                      setPreset(null);
-                      setResetToken((value) => value + 1);
-                    }}
-                  >
-                    <WidgetIcon name="reset" />
-                  </button>
-                  <button
-                    type="button"
-                    className="cw-panel-head__close"
-                    data-testid="widget-close"
-                    aria-label="Zavrieť asistenta"
-                    title="Zavrieť"
-                    onClick={close}
-                  >
-                    <WidgetIcon name="close" />
-                  </button>
-                </div>
-              </header>
-    
-              <nav className="cw-tabs" aria-label="Vyberte spôsob pomoci" data-mode={mode}>
-                <span className="cw-tabs__glass" aria-hidden="true" />
-                <button
-                  type="button"
-                  data-testid="tab-calculator"
-                  data-active={mode === "calculator"}
-                  aria-pressed={mode === "calculator"}
-                  onClick={() => switchMode("calculator")}
-                >
-                  <WidgetIcon name="calculator" />
-                  <span>Vyskladať riešenie</span>
-                </button>
-                <button
-                  type="button"
-                  data-testid="tab-assistant"
-                  data-active={mode === "assistant"}
-                  aria-pressed={mode === "assistant"}
-                  onClick={() => switchMode("assistant")}
-                >
-                  <WidgetIcon name="chat" />
-                  <span>Poradiť sa</span>
-                </button>
-              </nav>
-    
-              <div className="cw-panel-body" key={mode}>
-                {mode === "assistant" ? (
-                  <AssistantConversation
-                    resetToken={resetToken}
-                    onOpenCalculator={() => switchMode("calculator")}
-                  />
-                ) : (
-                  <ToolCalculator
-                    resetToken={resetToken}
-                    initialPreset={preset}
-                    onOpenChat={() => switchMode("assistant")}
-                  />
-                )}
-              </div>
-            </section>
-          ) : null}
-        </div>
-      );
+    :root {
+      --mc-bg: #05070b;
+      --mc-surface: #0a0f17;
+      --mc-surface-2: #0d141f;
+      --mc-surface-3: #111b2a;
+      --mc-surface-hover: #142033;
+      --mc-blue: #3478f6;
+      --mc-blue-hover: #4e8cff;
+      --mc-blue-soft: rgba(52, 120, 246, 0.15);
+      --mc-text: #f6f8fb;
+      --mc-muted: #9eabbc;
+      --mc-faint: #6f7d8f;
+      --mc-success: #70d49a;
+      --mc-danger: #ff7b87;
+      --mc-radius-xl: 26px;
+      --mc-radius-lg: 20px;
+      --mc-radius-md: 16px;
+      --mc-radius-sm: 12px;
+      --mc-ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --mc-font: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     
-  operator: 'match'
+    * {
+      box-sizing: border-box;
+    }
+    
+    html,
+    body,
+    #root,
+    .widget-preview {
+      min-height: 100%;
+      margin: 0;
+    }
+    
+    body {
+      color: var(--mc-text);
+      background: var(--mc-bg);
+      font-family: var(--mc-font);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    
+    .widget-preview {
+      position: relative;
+      min-height: 100dvh;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 78% 12%, rgba(52, 120, 246, 0.09), transparent 34rem),
+        var(--mc-bg);
+    }
+    
+    .widget-preview__surface {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.012), transparent 25%);
+    }
+    
+    .cw-widget,
+    .cw-widget button,
+    .cw-widget input,
+    .cw-widget textarea {
+      font-family: var(--mc-font);
+    }
+    
+    .cw-widget button,
+    .cw-widget a,
+    .cw-widget input,
+    .cw-widget textarea,
+    .cw-widget summary {
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .cw-widget button {
+      appearance: none;
+    }
+    
+    .cw-sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    
+    /* Launcher */
+    .cw-launcher {
+      position: fixed;
+      z-index: 2147483000;
+      right: max(18px, env(safe-area-inset-right));
+      bottom: max(18px, env(safe-area-inset-bottom));
+      width: 66px;
+      height: 66px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 0;
+      border-radius: 22px;
+      color: white;
+      background: var(--mc-surface-2);
+      box-shadow:
+        0 24px 62px -30px rgba(0, 0, 0, 0.95),
+        0 18px 42px -28px rgba(52, 120, 246, 0.7),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      cursor: pointer;
+      transition:
+        transform 220ms var(--mc-ease),
+        background-color 180ms ease;
+    }
+    
+    .cw-launcher:hover,
+    .cw-launcher:focus-visible {
+      background: var(--mc-surface-3);
+      transform: translateY(-3px);
+    }
+    
+    .cw-launcher:active {
+      transform: translateY(0);
+    }
+    
+    .cw-launcher .bl--launcher {
+      width: 50px;
+      height: 50px;
+    }
+    
+    /* Shell */
+    .cw-panel {
+      position: fixed;
+      z-index: 2147483001;
+      right: max(18px, env(safe-area-inset-right));
+      bottom: max(18px, env(safe-area-inset-bottom));
+      width: min(448px, calc(100vw - 36px));
+      height: min(744px, calc(100dvh - 36px));
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 0;
+      border-radius: var(--mc-radius-xl);
+      color: var(--mc-text);
+      background: var(--mc-bg);
+      box-shadow:
+        0 48px 120px -48px rgba(0, 0, 0, 0.98),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.045);
+      outline: none;
+      animation: mc-panel-in 300ms var(--mc-ease) both;
+    }
+    
+    @keyframes mc-panel-in {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    /* Header */
+    .cw-panel-head {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 11px 12px 10px 14px;
+      flex: 0 0 auto;
+      background: var(--mc-surface);
+      box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.045);
+    }
+    
+    .cw-panel-head__mascot {
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      display: grid;
+      place-items: center;
+    }
+    
+    .cw-panel-head__mascot .bl--header {
+      width: 45px;
+      height: 45px;
+    }
+    
+    .cw-panel-head__title {
+      min-width: 0;
+      display: grid;
+      gap: 3px;
+    }
+    
+    .cw-panel-head__title b {
+      color: var(--mc-text);
+      font-size: 15.5px;
+      font-weight: 760;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+    }
+    
+    .cw-panel-head__context {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--mc-muted);
+      font-size: 11px;
+      font-weight: 560;
+      line-height: 1.2;
+    }
+    
+    .cw-panel-head__online i {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 7px;
+      border-radius: 50%;
+      background: var(--mc-success);
+      box-shadow: 0 0 0 3px rgba(112, 212, 154, 0.09);
+    }
+    
+    .cw-panel-head__actions {
+      margin-left: auto;
+      display: flex;
+      gap: 4px;
+    }
+    
+    .cw-panel-head__actions button {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 0;
+      border-radius: 13px;
+      color: var(--mc-muted);
+      background: transparent;
+      cursor: pointer;
+      transition:
+        color 160ms ease,
+        background-color 160ms ease;
+    }
+    
+    .cw-panel-head__actions button:hover,
+    .cw-panel-head__actions button:focus-visible {
+      color: var(--mc-text);
+      background: var(--mc-surface-3);
+    }
+    
+    .cw-panel-head__actions svg {
+      width: 20px;
+      height: 20px;
+    }
+    
+    /* Mode switch */
+    .cw-tabs {
+      position: relative;
+      isolation: isolate;
+      flex: 0 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px;
+      margin: 9px 10px 8px;
+      padding: 5px;
+      border: 0;
+      border-radius: 18px;
+      background: var(--mc-surface);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+    }
+    
+    .cw-tabs__glass {
+      position: absolute;
+      z-index: 0;
+      top: 5px;
+      bottom: 5px;
+      left: 5px;
+      width: calc((100% - 14px) / 2);
+      border-radius: 14px;
+      background: var(--mc-blue);
+      box-shadow:
+        0 12px 28px -22px rgba(52, 120, 246, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      pointer-events: none;
+      transform: translateX(0);
+      transition: transform 320ms var(--mc-ease);
+    }
+    
+    .cw-tabs[data-mode="assistant"] .cw-tabs__glass {
+      transform: translateX(calc(100% + 4px));
+    }
+    
+    .cw-tabs > button {
+      position: relative;
+      z-index: 1;
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 14px;
+      color: var(--mc-muted);
+      background: transparent;
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      cursor: pointer;
+      transition: color 180ms ease;
+    }
+    
+    .cw-tabs > button[data-active="true"] {
+      color: white;
+    }
+    
+    .cw-tabs > button svg {
+      width: 18px;
+      height: 18px;
+    }
+    
+    /* Shared body */
+    .cw-panel-body {
+      min-height: 0;
+      flex: 1 1 auto;
+      overflow: hidden;
+      background: var(--mc-bg);
+      animation: mc-view-in 220ms var(--mc-ease) both;
+    }
+    
+    @keyframes mc-view-in {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Conversation */
+    .cw-conversation {
+      height: 100%;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    .cw-chat-top {
+      flex: 0 0 auto;
+      padding: 3px 10px 9px;
+    }
+    
+    .cw-chat-builder {
+      width: 100%;
+      min-height: 70px;
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 15px;
+      border: 0;
+      border-radius: 18px;
+      color: var(--mc-text);
+      text-align: left;
+      background: var(--mc-surface-2);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+      cursor: pointer;
+      transition: background-color 180ms ease;
+    }
+    
+    .cw-chat-builder:hover,
+    .cw-chat-builder:focus-visible {
+      background: var(--mc-surface-hover);
+    }
+    
+    .cw-chat-builder__icon {
+      display: grid;
+      place-items: center;
+      color: var(--mc-blue-hover);
+    }
+    
+    .cw-chat-builder__icon svg {
+      width: 22px;
+      height: 22px;
+    }
+    
+    .cw-chat-builder__copy {
+      min-width: 0;
+      display: grid;
+      gap: 3px;
+    }
+    
+    .cw-chat-builder__copy b {
+      font-size: 13.5px;
+      font-weight: 740;
+      letter-spacing: -0.018em;
+    }
+    
+    .cw-chat-builder__copy small {
+      color: var(--mc-muted);
+      font-size: 10.8px;
+      font-weight: 500;
+      line-height: 1.42;
+    }
+    
+    .cw-chat-builder__arrow {
+      color: var(--mc-faint);
+      font-size: 17px;
+    }
+    
+    .cw-messages {
+      min-height: 0;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      padding: 8px 12px 10px;
+      scrollbar-width: thin;
+      scrollbar-color: #243247 transparent;
+      overscroll-behavior: contain;
+    }
+    
+    .cw-message-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 7px;
+    }
+    
+    .cw-message-row--me {
+      justify-content: flex-end;
+    }
+    
+    .cw-avatar {
+      width: 29px;
+      height: 29px;
+      flex: 0 0 29px;
+      display: grid;
+      place-items: center;
+    }
+    
+    .cw-avatar .bl--avatar {
+      width: 26px;
+      height: 26px;
+    }
+    
+    .cw-message-wrap {
+      max-width: 84%;
+    }
+    
+    .cw-message-wrap p {
+      margin: 0;
+      padding: 11px 13px;
+      border: 0;
+      border-radius: 16px 16px 16px 6px;
+      color: #d9e1eb;
+      background: var(--mc-surface-2);
+      font-size: 12.8px;
+      font-weight: 470;
+      line-height: 1.52;
+    }
+    
+    .cw-message-row--me .cw-message-wrap p {
+      border-radius: 16px 16px 6px 16px;
+      color: white;
+      background: var(--mc-blue);
+    }
+    
+    .cw-typing {
+      display: inline-flex;
+      gap: 5px;
+      padding: 12px 14px;
+      border-radius: 16px 16px 16px 6px;
+      background: var(--mc-surface-2);
+    }
+    
+    .cw-typing i {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--mc-blue-hover);
+      animation: mc-typing 1s ease-in-out infinite;
+    }
+    
+    .cw-typing i:nth-child(2) { animation-delay: 100ms; }
+    .cw-typing i:nth-child(3) { animation-delay: 200ms; }
+    
+    @keyframes mc-typing {
+      0%, 60%, 100% { opacity: 0.35; transform: translateY(0); }
+      30% { opacity: 1; transform: translateY(-2px); }
+    }
+    
+    .cw-quick-replies {
+      flex: 0 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      padding: 8px 10px;
+      background: var(--mc-bg);
+    }
+    
+    .cw-quick-replies .cw-chip {
+      min-height: 43px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 11px;
+      border: 0;
+      border-radius: 14px;
+      color: #cbd4df;
+      background: var(--mc-surface-2);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+      font-size: 11.5px;
+      font-weight: 650;
+      line-height: 1.25;
+      text-align: center;
+      cursor: pointer;
+      transition:
+        color 160ms ease,
+        background-color 160ms ease;
+    }
+    
+    .cw-quick-replies .cw-chip:hover,
+    .cw-quick-replies .cw-chip:focus-visible {
+      color: white;
+      background: var(--mc-surface-hover);
+    }
+    
+    .cw-inputbar {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 10px 8px;
+      padding: 7px 7px 7px 14px;
+      border: 0;
+      border-radius: 17px;
+      background: var(--mc-surface-2);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+    }
+    
+    .cw-inputbar input {
+      min-width: 0;
+      height: 42px;
+      flex: 1 1 auto;
+      padding: 0;
+      border: 0;
+      outline: none;
+      color: var(--mc-text);
+      background: transparent;
+      font-size: 16px;
+    }
+    
+    .cw-inputbar input::placeholder {
+      color: var(--mc-faint);
+    }
+    
+    .cw-inputbar > button {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 0;
+      border-radius: 13px;
+      color: white;
+      background: var(--mc-blue);
+      cursor: pointer;
+      transition: background-color 160ms ease;
+    }
+    
+    .cw-inputbar > button:hover:not(:disabled),
+    .cw-inputbar > button:focus-visible:not(:disabled) {
+      background: var(--mc-blue-hover);
+    }
+    
+    .cw-inputbar > button:disabled {
+      color: #677486;
+      background: #18212d;
+      cursor: default;
+    }
+    
+    .cw-inputbar > button svg {
+      width: 18px;
+      height: 18px;
+    }
+    
+    .cw-direct-actions {
+      flex: 0 0 auto;
+      display: grid;
+      gap: 6px;
+      padding: 0 10px max(10px, env(safe-area-inset-bottom));
+    }
+    
+    .cw-direct-actions__label {
+      display: none;
+    }
+    
+    .cw-direct-actions__grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+    
+    .cw-direct-actions__grid a {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 7px 8px;
+      border: 0;
+      border-radius: 12px;
+      color: var(--mc-muted);
+      background: #090e15;
+      font-size: 10.5px;
+      font-weight: 620;
+      text-decoration: none;
+      transition:
+        color 160ms ease,
+        background-color 160ms ease;
+    }
+    
+    .cw-direct-actions__grid a:hover,
+    .cw-direct-actions__grid a:focus-visible {
+      color: white;
+      background: var(--mc-surface-2);
+    }
+    
+    .cw-direct-actions__icon {
+      display: grid;
+      place-items: center;
+      color: var(--mc-blue-hover);
+    }
+    
+    .cw-direct-actions__icon svg {
+      width: 15px;
+      height: 15px;
+    }
+    
+    /* Configurator */
+    .cw-calculator {
+      height: 100%;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--mc-bg);
+    }
+    
+    .cw-progress {
+      min-height: 48px;
+      flex: 0 0 auto;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 11px;
+      box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+    }
+    
+    .cw-progress__back {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 0;
+      border-radius: 11px;
+      color: var(--mc-muted);
+      background: var(--mc-surface);
+      font-size: 20px;
+      cursor: pointer;
+    }
+    
+    .cw-progress__back:disabled {
+      opacity: 0.28;
+      cursor: default;
+    }
+    
+    .cw-progress__track {
+      height: 6px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #172131;
+    }
+    
+    .cw-progress__fill {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--mc-blue);
+      transition: width 320ms var(--mc-ease);
+    }
+    
+    .cw-progress__count {
+      min-width: 28px;
+      color: var(--mc-faint);
+      font-size: 10.5px;
+      font-weight: 700;
+      text-align: right;
+    }
+    
+    .cw-calc-body {
+      min-height: 0;
+      flex: 1 1 auto;
+      overflow-y: auto;
+      padding: 15px 14px 12px;
+      scrollbar-width: thin;
+      scrollbar-color: #243247 transparent;
+      overscroll-behavior: contain;
+    }
+    
+    .cw-calc-step {
+      min-height: 100%;
+    }
+    
+    .cw-step-head {
+      margin-bottom: 14px;
+    }
+    
+    .cw-q {
+      max-width: 20ch;
+      margin: 0 0 6px;
+      color: var(--mc-text);
+      font-size: clamp(1.35rem, 4.2vw, 1.62rem);
+      font-weight: 760;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+    }
+    
+    .cw-q-sub {
+      max-width: 44ch;
+      margin: 0;
+      color: var(--mc-muted);
+      font-size: 11.5px;
+      font-weight: 480;
+      line-height: 1.48;
+    }
+    
+    .cw-rows,
+    .cw-grid,
+    .cw-list,
+    .cw-grid--volume {
+      display: grid;
+      gap: 9px;
+    }
+    
+    .cw-rows {
+      grid-template-columns: 1fr;
+    }
+    
+    .cw-grid,
+    .cw-list,
+    .cw-grid--volume {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    
+    .cw-rowcard,
+    .cw-scard,
+    .cw-opt,
+    .cw-vcard {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      border: 0;
+      color: #d6deea;
+      background: var(--mc-surface-2);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+      cursor: pointer;
+      transition:
+        color 170ms ease,
+        background-color 170ms ease;
+    }
+    
+    .cw-rowcard {
+      min-height: 76px;
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) 25px;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 14px;
+      border-radius: 18px;
+      text-align: left;
+    }
+    
+    .cw-scard {
+      min-height: 70px;
+      display: grid;
+      grid-template-columns: 21px minmax(0, 1fr) 22px;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 17px;
+      text-align: left;
+    }
+    
+    .cw-opt,
+    .cw-vcard {
+      min-height: 78px;
+      display: grid;
+      align-content: center;
+      gap: 5px;
+      padding: 13px 38px 13px 13px;
+      border-radius: 17px;
+      text-align: left;
+    }
+    
+    .cw-rowcard:hover,
+    .cw-rowcard:focus-visible,
+    .cw-scard:hover,
+    .cw-scard:focus-visible,
+    .cw-opt:hover,
+    .cw-opt:focus-visible,
+    .cw-vcard:hover,
+    .cw-vcard:focus-visible {
+      color: white;
+      background: var(--mc-surface-hover);
+    }
+    
+    .cw-rowcard::after,
+    .cw-scard::after,
+    .cw-opt::after,
+    .cw-vcard::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background: linear-gradient(110deg, rgba(52, 120, 246, 0.24), rgba(52, 120, 246, 0.08));
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 320ms var(--mc-ease);
+    }
+    
+    .cw-rowcard[data-selected="true"]::after,
+    .cw-scard[data-selected="true"]::after,
+    .cw-opt[data-selected="true"]::after,
+    .cw-vcard[data-selected="true"]::after {
+      transform: scaleX(1);
+    }
+    
+    .cw-rowcard[data-selected="true"],
+    .cw-scard[data-selected="true"],
+    .cw-opt[data-selected="true"],
+    .cw-vcard[data-selected="true"] {
+      color: white;
+      background: var(--mc-surface-2);
+    }
+    
+    .cw-rowcard[data-selected="true"]::before,
+    .cw-scard[data-selected="true"]::before,
+    .cw-opt[data-selected="true"]::before,
+    .cw-vcard[data-selected="true"]::before {
+      content: "";
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      right: 13px;
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      background:
+        var(--mc-blue)
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23fff' stroke-width='2.7' stroke-linecap='round' stroke-linejoin='round' d='m6.5 12.5 3.2 3.2 7.8-8'/%3E%3C/svg%3E")
+        center / 14px 14px no-repeat;
+      box-shadow: 0 8px 20px -12px rgba(52, 120, 246, 0.9);
+      transform: translateY(-50%);
+    }
+    
+    .cw-rowcard__icon,
+    .cw-scard__icon {
+      display: grid;
+      place-items: center;
+      color: var(--mc-blue-hover);
+    }
+    
+    .cw-rowcard__icon svg,
+    .cw-scard__icon svg {
+      width: 22px;
+      height: 22px;
+    }
+    
+    .cw-rowcard__body,
+    .cw-opt__body {
+      min-width: 0;
+      display: grid;
+      gap: 4px;
+    }
+    
+    .cw-rowcard__body b,
+    .cw-scard b,
+    .cw-opt__body b,
+    .cw-vcard b {
+      color: inherit;
+      font-size: 13px;
+      font-weight: 720;
+      letter-spacing: -0.015em;
+      line-height: 1.25;
+    }
+    
+    .cw-rowcard__body small,
+    .cw-opt__body > span,
+    .cw-vcard > span {
+      color: var(--mc-muted);
+      font-size: 10.6px;
+      font-weight: 480;
+      line-height: 1.42;
+    }
+    
+    .cw-choice-arrow {
+      display: none;
+    }
+    
+    .cw-opt__tag {
+      display: inline-flex;
+      margin-left: 5px;
+      color: #8db6ff;
+      font-size: 8.5px;
+      font-style: normal;
+      font-weight: 760;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    
+    .cw-custom {
+      margin-top: 9px;
+    }
+    
+    .cw-custom textarea,
+    .cw-lead__form input,
+    .cw-lead__form textarea {
+      width: 100%;
+      border: 0;
+      outline: none;
+      color: var(--mc-text);
+      background: var(--mc-surface-2);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+      font-size: 16px;
+    }
+    
+    .cw-custom textarea {
+      min-height: 90px;
+      resize: vertical;
+      padding: 13px;
+      border-radius: 16px;
+    }
+    
+    .cw-custom textarea::placeholder,
+    .cw-lead__form input::placeholder,
+    .cw-lead__form textarea::placeholder {
+      color: var(--mc-faint);
+    }
+    
+    .cw-custom textarea:focus,
+    .cw-lead__form input:focus,
+    .cw-lead__form textarea:focus {
+      box-shadow:
+        inset 0 0 0 1px rgba(78, 140, 255, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+    
+    .cw-industry-tip {
+      margin-top: 10px;
+      padding: 12px 13px;
+      border: 0;
+      border-radius: 16px;
+      color: #cbd5e2;
+      background: #09101a;
+    }
+    
+    .cw-industry-tip > b {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--mc-text);
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+    
+    .cw-industry-tip > b svg {
+      width: 16px;
+      height: 16px;
+      color: var(--mc-blue-hover);
+    }
+    
+    .cw-industry-tip ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+    
+    .cw-industry-tip li {
+      margin: 4px 0;
+      color: var(--mc-muted);
+      font-size: 10.7px;
+      line-height: 1.4;
+    }
+    
+    .cw-calc-actions {
+      min-height: 66px;
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      padding: 9px 11px max(10px, env(safe-area-inset-bottom));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      background: var(--mc-bg);
+    }
+    
+    .cw-next,
+    .cw-submit {
+      width: 100%;
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 15px;
+      color: white;
+      background: var(--mc-blue);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      font-size: 12.5px;
+      font-weight: 740;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      transition: background-color 170ms ease;
+    }
+    
+    .cw-next:hover:not(:disabled),
+    .cw-next:focus-visible:not(:disabled),
+    .cw-submit:hover:not(:disabled),
+    .cw-submit:focus-visible:not(:disabled) {
+      background: var(--mc-blue-hover);
+    }
+    
+    .cw-next:disabled,
+    .cw-submit:disabled {
+      color: #6e7b8d;
+      background: #151c26;
+      box-shadow: none;
+      cursor: default;
+    }
+    
+    .cw-next svg,
+    .cw-submit svg {
+      width: 17px;
+      height: 17px;
+    }
+    
+    .cw-contact-stage {
+      display: grid;
+      gap: 10px;
+    }
+    
+    .cw-lead,
+    .cw-summary,
+    .cw-thanks {
+      border: 0;
+      border-radius: 19px;
+      background: var(--mc-surface);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    }
+    
+    .cw-lead {
+      padding: 13px;
+    }
+    
+    .cw-lead__head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 11px;
+    }
+    
+    .cw-lead__icon {
+      display: grid;
+      place-items: center;
+      color: var(--mc-blue-hover);
+    }
+    
+    .cw-lead__icon svg {
+      width: 20px;
+      height: 20px;
+    }
+    
+    .cw-lead__head > span:last-child {
+      display: grid;
+      gap: 2px;
+    }
+    
+    .cw-lead__head b {
+      font-size: 13px;
+      font-weight: 730;
+    }
+    
+    .cw-lead__head small {
+      color: var(--mc-muted);
+      font-size: 10.4px;
+    }
+    
+    .cw-lead__form {
+      display: grid;
+      gap: 8px;
+    }
+    
+    .cw-lead__row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    
+    .cw-lead__form input {
+      min-height: 46px;
+      padding: 0 12px;
+      border-radius: 13px;
+    }
+    
+    .cw-lead__form textarea {
+      min-height: 76px;
+      resize: vertical;
+      padding: 12px;
+      border-radius: 13px;
+    }
+    
+    .cw-lead__optional {
+      border: 0;
+      border-radius: 13px;
+      background: #09101a;
+    }
+    
+    .cw-lead__optional summary {
+      padding: 11px 12px;
+      color: var(--mc-muted);
+      font-size: 10.8px;
+      font-weight: 620;
+      cursor: pointer;
+    }
+    
+    .cw-lead__optional-body {
+      display: grid;
+      gap: 8px;
+      padding: 0 9px 9px;
+    }
+    
+    .cw-consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      color: var(--mc-muted);
+      font-size: 10px;
+      line-height: 1.4;
+    }
+    
+    .cw-consent input {
+      margin-top: 1px;
+      accent-color: var(--mc-blue);
+    }
+    
+    .cw-lead__status {
+      margin: 0;
+      color: var(--mc-danger);
+      font-size: 10.5px;
+      line-height: 1.4;
+    }
+    
+    .cw-local-note {
+      margin: 0;
+      color: var(--mc-faint);
+      font-size: 9.8px;
+      text-align: center;
+    }
+    
+    .cw-summary {
+      padding: 12px;
+    }
+    
+    .cw-summary__label {
+      display: block;
+      margin-bottom: 7px;
+      color: #8db6ff;
+      font-size: 9.5px;
+      font-weight: 760;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    
+    .cw-summary__row {
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+      gap: 10px;
+      padding: 8px 0;
+      box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.035);
+    }
+    
+    .cw-summary__row:last-child {
+      box-shadow: none;
+    }
+    
+    .cw-summary__row span {
+      color: var(--mc-faint);
+      font-size: 9.8px;
+    }
+    
+    .cw-summary__row b {
+      color: #dce4ef;
+      font-size: 10.2px;
+      font-weight: 620;
+      line-height: 1.35;
+    }
+    
+    .cw-restart {
+      width: 100%;
+      min-height: 44px;
+      border: 0;
+      border-radius: 14px;
+      color: var(--mc-muted);
+      background: var(--mc-surface-2);
+      font-size: 11.5px;
+      font-weight: 650;
+      cursor: pointer;
+    }
+    
+    .cw-thanks {
+      margin: 13px;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .cw-thanks__icon {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      color: white;
+      background: var(--mc-blue);
+    }
+    
+    .cw-thanks__icon svg {
+      width: 24px;
+      height: 24px;
+    }
+    
+    .cw-thanks__eyebrow {
+      color: #8db6ff;
+      font-size: 9.5px;
+      font-weight: 760;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    
+    .cw-thanks h3 {
+      margin: 7px 0;
+      font-size: 1.4rem;
+    }
+    
+    .cw-thanks > p {
+      margin: 0 auto 14px;
+      max-width: 34ch;
+      color: var(--mc-muted);
+      font-size: 11.5px;
+      line-height: 1.5;
+    }
+    
+    .cw-thanks__grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+    }
+    
+    .cw-thanks__grid > div {
+      display: grid;
+      gap: 4px;
+      padding: 10px;
+      border-radius: 13px;
+      color: #dce4ef;
+      background: var(--mc-surface-2);
+      font-size: 10.5px;
+    }
+    
+    .cw-thanks__grid span {
+      color: var(--mc-faint);
+      font-size: 9px;
+    }
+    
+    .cw-thanks__actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 11px;
+    }
+    
+    .cw-thanks__actions button {
+      min-height: 43px;
+      border: 0;
+      border-radius: 13px;
+      color: white;
+      background: var(--mc-blue);
+      font-size: 10.8px;
+      font-weight: 680;
+      cursor: pointer;
+    }
+    
+    .cw-thanks__actions button.ghost {
+      color: var(--mc-muted);
+      background: var(--mc-surface-2);
+    }
+    
+    .cw-spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: mc-spin 0.8s linear infinite;
+    }
+    
+    @keyframes mc-spin { to { transform: rotate(360deg); } }
+    
+    .cw-widget :where(button, a, input, textarea, summary):focus-visible {
+      outline: 2px solid rgba(78, 140, 255, 0.82);
+      outline-offset: 2px;
+    }
+    
+    /* Mobile */
+    @media (max-width: 520px) {
+      .cw-launcher {
+        right: max(12px, env(safe-area-inset-right));
+        bottom: max(12px, env(safe-area-inset-bottom));
+        width: 62px;
+        height: 62px;
+        border-radius: 20px;
+      }
+    
+      .cw-panel {
+        inset: 0;
+        width: 100vw;
+        height: 100dvh;
+        max-width: none;
+        max-height: none;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    
+      .cw-panel-head {
+        min-height: calc(66px + env(safe-area-inset-top));
+        padding: max(8px, env(safe-area-inset-top)) 10px 8px 12px;
+      }
+    
+      .cw-panel-head__mascot {
+        width: 43px;
+        height: 43px;
+        flex-basis: 43px;
+      }
+    
+      .cw-panel-head__mascot .bl--header {
+        width: 40px;
+        height: 40px;
+      }
+    
+      .cw-tabs {
+        margin: 7px 9px 7px;
+      }
+    
+      .cw-tabs > button {
+        min-height: 44px;
+        padding-inline: 6px;
+        font-size: 11.7px;
+      }
+    
+      .cw-chat-top {
+        padding: 2px 9px 7px;
+      }
+    
+      .cw-chat-builder {
+        min-height: 64px;
+        padding: 11px 13px;
+      }
+    
+      .cw-messages {
+        padding: 7px 10px 8px;
+      }
+    
+      .cw-message-wrap {
+        max-width: 87%;
+      }
+    
+      .cw-quick-replies {
+        gap: 6px;
+        padding: 7px 9px;
+      }
+    
+      .cw-quick-replies .cw-chip {
+        min-height: 41px;
+        padding: 8px;
+        font-size: 10.8px;
+      }
+    
+      .cw-inputbar {
+        margin: 0 9px 7px;
+      }
+    
+      .cw-direct-actions {
+        padding-inline: 9px;
+      }
+    
+      .cw-progress {
+        padding-inline: 9px;
+      }
+    
+      .cw-calc-body {
+        padding: 13px 11px 10px;
+      }
+    
+      .cw-q {
+        font-size: 1.35rem;
+      }
+    
+      .cw-grid,
+      .cw-list,
+      .cw-grid--volume {
+        grid-template-columns: 1fr;
+      }
+    
+      .cw-rowcard,
+      .cw-scard,
+      .cw-opt,
+      .cw-vcard {
+        min-height: 68px;
+      }
+    
+      .cw-scard {
+        grid-template-columns: 21px minmax(0, 1fr) 22px;
+      }
+    
+      .cw-lead__row,
+      .cw-thanks__grid,
+      .cw-thanks__actions {
+        grid-template-columns: 1fr;
+      }
+    
+      .cw-calc-actions {
+        min-height: 64px;
+        padding-inline: 9px;
+      }
+    }
+    
+    @media (max-height: 690px) and (min-width: 521px) {
+      .cw-panel {
+        height: calc(100dvh - 20px);
+        bottom: 10px;
+      }
+    
+      .cw-panel-head {
+        min-height: 64px;
+        padding-block: 7px;
+      }
+    
+      .cw-tabs > button {
+        min-height: 40px;
+      }
+    
+      .cw-chat-builder {
+        min-height: 60px;
+        padding-block: 10px;
+      }
+    
+      .cw-quick-replies .cw-chip {
+        min-height: 38px;
+      }
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      .cw-widget *,
+      .cw-widget *::before,
+      .cw-widget *::after {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    
+  operator: 'doesNotMatch'
   stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:48:10)
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:88:10)
     async Test.run (node:internal/test_runner/test:1054:7)
     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
-# Subtest: spotlight is restricted to the builder CTA
-ok 4 - spotlight is restricted to the builder CTA
+# Subtest: configurator remains five steps with simpler business language
+ok 8 - configurator remains five steps with simpler business language
   ---
-  duration_ms: 1.990245
+  duration_ms: 2.287835
   type: 'test'
   ...
-# Subtest: configurator keeps five steps and contact remains final
-ok 5 - configurator keeps five steps and contact remains final
+# Subtest: contact submits a real lead and keeps API protections
+ok 9 - contact submits a real lead and keeps API protections
   ---
-  duration_ms: 2.137369
+  duration_ms: 1.690418
   type: 'test'
   ...
-# Subtest: choices have no coloured border, square tile or malformed selection ring
-ok 6 - choices have no coloured border, square tile or malformed selection ring
+# Subtest: mobile full screen and reduced motion are covered
+ok 10 - mobile full screen and reduced motion are covered
   ---
-  duration_ms: 1.055529
+  duration_ms: 1.595389
   type: 'test'
   ...
-# Subtest: selected checks are circular, aligned and use the website blue
-ok 7 - selected checks are circular, aligned and use the website blue
+# Subtest: deployment validates clean redesign v9
+not ok 11 - deployment validates clean redesign v9
   ---
-  duration_ms: 0.822812
+  duration_ms: 1.374873
   type: 'test'
-  ...
-# Subtest: continue button uses only the website CTA palette
-ok 8 - continue button uses only the website CTA palette
-  ---
-  duration_ms: 0.887141
-  type: 'test'
-  ...
-# Subtest: the icon set remains one rounded family
-not ok 9 - the icon set remains one rounded family
-  ---
-  duration_ms: 1.217934
-  type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:118:1'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:130:1'
   failureType: 'testCodeFailure'
   error: |-
-    The input did not match the regular expression /strokeWidth="1\.7"/. Input:
+    The input did not match the regular expression /clean-redesign-20260723-v9/. Input:
     
-    'type WidgetIconName =\n' +
-      '  | "arrow"\n' +
-      '  | "calculator"\n' +
-      '  | "calendar"\n' +
-      '  | "cart"\n' +
-      '  | "chat"\n' +
-      '  | "check"\n' +
-      '  | "close"\n' +
-      '  | "factory"\n' +
-      '  | "food"\n' +
-      '  | "heart"\n' +
-      '  | "mail"\n' +
-      '  | "phone"\n' +
-      '  | "reset"\n' +
-      '  | "send"\n' +
-      '  | "spark"\n' +
-      '  | "tools"\n' +
-      '  | "user";\n' +
+    'name: Deploy and verify chatbot\n' +
       '\n' +
-      'type WidgetIconProps = {\n' +
-      '  name: WidgetIconName;\n' +
-      '  className?: string;\n' +
-      '};\n' +
+      'on:\n' +
+      '  push:\n' +
+      '    branches: [main]\n' +
+      '    paths-ignore:\n' +
+      '      - "WIDGET_QUALITY_AUDIT.txt"\n' +
+      '      - "PAGES_DEPLOY_AUDIT.txt"\n' +
+      '  workflow_dispatch:\n' +
       '\n' +
-      'const PATHS: Record<WidgetIconName, JSX.Element> = {\n' +
-      '  arrow: <path d="M5 12h13m-5-5 5 5-5 5" />,\n' +
-      '  calculator: (\n' +
-      '    <>\n' +
-      '      <rect x="5" y="3.5" width="14" height="17" rx="3.25" />\n' +
-      '      <path d="M8 7.5h8M8.4 12h.1m3.45 0h.1m3.45 0h.1M8.4 16h.1m3.45 0h.1m3.45 0h.1" />\n' +
-      '    </>\n' +
-      '  ),\n' +
-      '  calendar: (\n' +
-      '    <>\n' +
-      '      <rect x="3.75" y="5" width="16.5" height="15.25" rx="3.25" />\n' +
-      '      <path d="M7.5 3.75v3M16.5 3.75v3M3.75 9.25h16.5M8 13h3m2.5 0H16M8 16.5h2" />\n' +
-      '    </>\n' +
-      '  ),\n' +
-      '  cart: (\n' +
-      '    <>\n' +
-      '      <path d="M3.5 5.25h2.15l1.85 8.7a2.2 2.2 0 0 0 2.15 1.75h7a2.2 2.2 0 0 0 2.15-1.72L20.25 8H6.3" />\n' +
-      '      <circle cx="9.5" cy="19" r="1.2" />\n' +
-      '      <circle cx="17" cy="19" r="1.2" />\n' +
-      '    </>\n' +
-      '  ),\n' +
-      '  chat: (\n' +
-      '    <>\n' +
-      '      <path d="M5.5 4.5h13A2.5 2.5 0 0 1 21 7v7.5a2.5 2.5 0 0 1-2.5 2.5H10l-5 3v-3a2 2 0 0 1-2-2V7a2.5 2.5 0 0 1 2.5-2.5Z" />\n' +
-      '      <path d="M7.5 9.25h9M7.5 12.75h6" />\n' +
-      '    </>\n' +
-      '  ),\n' +
-      '  check: <path d="m5.5 12.5 4 4 9-9" />,\n' +
-      '  close: <path d="m6.5 6.5 11 11m0-11-11 11" />,\n' +
-      '  factory: (\n' +
-      '    <>\n' +
-      '      <path d="M4 20V10.75l5 3V10.5l5 3V7.5h5.5V20" />\n' +
-      '      <path d="M3 20h18M8 20v-3.5h3.5V20" />\n' +
-      '    </>\n' +
-      '  ),\n' +
-      '  food: (\n' +
-      '    <>\n' +
-      '      <path d="M5.25 3.5v5a3 3 0 0 0 6 0v-5M8.25 3.5V20.5" />\n' +
-      '      <path d="M17.25 3.5c-1.7 1.25-2.5 3-2.5 5.25 0 2.1.85 3.65 2.5 4.6v7.15" />\n' +
-      '    </>\n' +
-      '  ),\n' +
-      '  heart: <path d="M12 20.25 5.3 13.8a4.7 4.7 0 0 1-.1-6.5 4.4 4.4 0 0 1 6.3 0l.5.5.5-.5a4.4 4.4 0 0 1 6.3 0 4.7 4.7 0 0 1-.1 6.5L12 20.25Z" />,\n' +
-      '  mail: (\n' +
-      '    <>\n' +
-      '      <rect x="3.5" y="5.25" width="17" height="13.5" rx="3" />\n' +
-      '      <path d="m4.75 7 7.25 5.5L19.25 7" />\n' +
-      '    </>\n' +
-      '  ),\n' +
-      '  phone: <path d="M7.1 3.5h2.3l1.35 4-2 1.65a12.4 12.4 0 0 0 6.1 6.1l1.65-2 4 1.35v2.3a3.1 3.1 0 0 1-3.1 3.1A13.4 13.4 0 0 1 4 6.6a3.1 3.1 0 0 1 3.1-3.1Z" />,\n' +
-      '  reset: <path d="M19.5 8.75V4.5m0 0h-4.25m4.25 0-3 3A7.5 7.5 0 1 0 19.25 14" />,\n' +
-      '  send: <path d="m3.75 5.25 16.5 6.75-16.5 6.75 2.2-5.05L14 12 5.95 10.3 3.75 5.25Z" />,\n' +
-      '  spark: (\n' +
-      '    <>\n' +
-      '      <path d="m11.5 3.5 1.35 4.15 4.15 1.35-4.15 1.35-1.35 4.15-1.35-4.15L6 9l4.15-1.35L11.5 3.5Z" />\n' +
-      '      <path d="m18.5 14.5.7 2.1 2.1.7-2.1.7-.7 2.1-.7-2.1-2.1-.7 2.1-.7.7-2.1Z" />\n' +
-      '    </>\n' +
-      '  ),\n' +
-      '  tools: (\n' +
-      '    <>\n' +
-      '      <path d="M14.75 5.25a4.45 4.45 0 0 0-5.3 5.65l-5.5 5.5a2.65 2.65 0 1 0 3.75 3.75l5.5-5.5a4.45 4.45 0 0 0 5.65-5.3l-2.7 2.7-3.2-3.2 2.7-2.7-.9-.9Z" />\n' +
-      '      <path d="m4.75 4.5 3.8 3.8" />\n' +
-      '    </>\n' +
-      '  ),\n' +
-      '  user: (\n' +
-      '    <>\n' +
-      '      <circle cx="12" cy="8" r="3.75" />\n' +
-      '      <path d="M4.5 20.25a7.5 7.5 0 0 1 15 0" />\n' +
-      '    </>\n' +
-      '  ),\n' +
-      '};\n' +
+      'permissions:\n' +
+      '  contents: write\n' +
+      '  pages: write\n' +
+      '  id-token: write\n' +
       '\n' +
-      'export function WidgetIcon({ name, className = "" }: WidgetIconProps): JSX.Element {\n' +
-      '  return (\n' +
-      '    <svg\n' +
-      '      className={className}\n' +
-      '      viewBox="0 0 24 24"\n' +
-      '      fill="none"\n' +
-      '      stroke="currentColor"\n' +
-      '      strokeWidth="1.8"\n' +
-      '      strokeLinecap="round"\n' +
-      '      strokeLinejoin="round"\n' +
-      '      vectorEffect="non-scaling-stroke"\n' +
-      '      focusable="false"\n' +
-      '      aria-hidden="true"\n' +
-      '    >\n' +
-      '      {PATHS[name]}\n' +
-      '    </svg>\n' +
-      '  );\n' +
-      '}\n'
+      'concurrency:\n' +
+      '  group: pages\n' +
+      '  cancel-in-progress: true\n' +
+      '\n' +
+      'jobs:\n' +
+      '  build:\n' +
+      "    if: ${{ github.actor != 'github-actions[bot]' }}\n" +
+      '    runs-on: ubuntu-latest\n' +
+      '    steps:\n' +
+      '      - name: Checkout\n' +
+      '        uses: actions/checkout@v4\n' +
+      '\n' +
+      '      - name: Install pnpm\n' +
+      '        uses: pnpm/action-setup@v4\n' +
+      '        with:\n' +
+      '          version: 10\n' +
+      '\n' +
+      '      - name: Set up Node.js\n' +
+      '        uses: actions/setup-node@v4\n' +
+      '        with:\n' +
+      '          node-version: 22\n' +
+      '          cache: pnpm\n' +
+      '\n' +
+      '      - name: Install dependencies\n' +
+      '        run: pnpm install --frozen-lockfile\n' +
+      '\n' +
+      '      - name: Audit production dependencies\n' +
+      '        run: pnpm audit --prod --audit-level high\n' +
+      '\n' +
+      '      - name: TypeScript check\n' +
+      '        run: pnpm lint\n' +
+      '\n' +
+      '      - name: Run visual security and lead contracts\n' +
+      '        run: pnpm test -- --run\n' +
+      '\n' +
+      '      - name: Build demo and embedded widget\n' +
+      '        run: pnpm build\n' +
+      '\n' +
+      '      - name: Create immutable build metadata\n' +
+      '        shell: bash\n' +
+      '        run: |\n' +
+      `          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"web-palette-20260723-v8"},null,2))'\n` +
+      '\n' +
+      '      - name: Validate production artifacts\n' +
+      '        shell: bash\n' +
+      '        run: |\n' +
+      '          set -euo pipefail\n' +
+      '          test -f dist/index.html\n' +
+      '          test -f dist/widget.js\n' +
+      '          test -f dist/widget.css\n' +
+      '          test -f dist/build-meta.json\n' +
+      '          test -f api/lead.ts\n' +
+      '          grep -Fq "web-palette-20260723-v8" dist/widget.js\n' +
+      '          grep -Fq "Final chatbot-only correction" dist/widget.css\n' +
+      '          grep -Fq "competition-winner-final" src/main.tsx\n' +
+      '          grep -Fq "taste-system-final" src/main.tsx\n' +
+      '          grep -Fq "web-palette-chatbot-final" src/main.tsx\n' +
+      '          grep -Fq "installWidgetSpotlight" src/main.tsx\n' +
+      '          grep -Fq "cw-chat-builder" dist/widget.css\n' +
+      '          grep -Fq "cw-contact-stage" dist/widget.css\n' +
+      '          grep -Fq -- "--cw-site-primary: #3979ec" dist/widget.css\n' +
+      '          grep -Fq "api/lead" src/lib/leadApi.ts\n' +
+      '          grep -Fq "Ceny začínajú od 350 €" src/components/widget/AssistantConversation.tsx\n' +
+      '          ! grep -Fq "className=\\"cw-chip cw-spotlight\\"" src/components/widget/AssistantConversation.tsx\n' +
+      '          ! grep -Fq "label: \\"Cena od 350 €\\"" src/components/widget/AssistantConversation.tsx\n' +
+      '          ! grep -Fq "REPLACE-ME" dist/widget.js\n' +
+      '          grep -Fq "${GITHUB_SHA}" dist/build-meta.json\n' +
+      '\n' +
+      '      - name: Configure GitHub Pages\n' +
+      '        uses: actions/configure-pages@v5\n' +
+      '\n' +
+      '      - name: Upload Pages artifact\n' +
+      '        uses: actions/upload-pages-artifact@v3\n' +
+      '        with:\n' +
+      '          path: dist\n' +
+      '\n' +
+      '  deploy:\n' +
+      '    needs: build\n' +
+      '    runs-on: ubuntu-latest\n' +
+      '    environment:\n' +
+      '      name: github-pages\n' +
+      '      url: ${{ steps.deployment.outputs.page_url }}\n' +
+      '    steps:\n' +
+      '      - name: Deploy to GitHub Pages\n' +
+      '        id: deployment\n' +
+      '        uses: actions/deploy-pages@v5\n' +
+      '\n' +
+      '      - name: Verify live demo and embedded assets\n' +
+      '        shell: bash\n' +
+      '        env:\n' +
+      '          PAGE_URL: ${{ steps.deployment.outputs.page_url }}\n' +
+      '          SOURCE_SHA: ${{ github.sha }}\n' +
+      '        run: |\n' +
+      '          set -euo pipefail\n' +
+      '          BASE="${PAGE_URL%/}"\n' +
+      '\n' +
+      '          verify() {\n' +
+      '            local path="$1"\n' +
+      '            local expected="$2"\n' +
+      `            local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"\n` +
+      '\n' +
+      '            for attempt in {1..24}; do\n' +
+      '              if curl --location --fail --silent --show-error \\\n' +
+      '                --header "Cache-Control: no-cache" \\\n' +
+      '                "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then\n' +
+      '                if grep -Fqi "$expected" "$body"; then\n' +
+      '                  echo "verified ${path}"\n' +
+      '                  return 0\n' +
+      '                fi\n' +
+      '              fi\n' +
+      '              sleep 5\n' +
+      '            done\n' +
+      '\n' +
+      '            echo "Live verification failed for ${path}"\n' +
+      '            head -c 1000 "$body" 2>/dev/null || true\n' +
+      '            return 1\n' +
+      '          }\n' +
+      '\n' +
+      '          verify "/" "Môj Chatbot"\n' +
+      '          verify "/widget.js" "web-palette-20260723-v8"\n' +
+      '          verify "/widget.css" "Final chatbot-only correction"\n' +
+      '          verify "/build-meta.json" "$SOURCE_SHA"\n' +
+      '\n' +
+      '      - name: Checkout latest main for deployment record\n' +
+      '        uses: actions/checkout@v4\n' +
+      '        with:\n' +
+      '          ref: main\n' +
+      '\n' +
+      '      - name: Record verified widget deployment\n' +
+      '        shell: bash\n' +
+      '        env:\n' +
+      '          PAGE_URL: ${{ steps.deployment.outputs.page_url }}\n' +
+      '          SOURCE_SHA: ${{ github.sha }}\n' +
+      '        run: |\n' +
+      '          {\n' +
+      '            echo "deployment=success"\n' +
+      '            echo "dependency_audit=success"\n' +
+      '            echo "live_smoke=success"\n' +
+      '            echo "source_sha=${SOURCE_SHA}"\n' +
+      '            echo "page_url=${PAGE_URL}"\n' +
+      '            echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"\n' +
+      '          } > PAGES_DEPLOY_AUDIT.txt\n' +
+      '          git config user.name "github-actions[bot]"\n' +
+      '          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"\n' +
+      '          git add PAGES_DEPLOY_AUDIT.txt\n' +
+      '          git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0\n' +
+      '          git pull --rebase origin main\n' +
+      '          git push origin HEAD:main\n'
     
   code: 'ERR_ASSERTION'
   name: 'AssertionError'
   expected:
   actual: |-
-    type WidgetIconName =
-      | "arrow"
-      | "calculator"
-      | "calendar"
-      | "cart"
-      | "chat"
-      | "check"
-      | "close"
-      | "factory"
-      | "food"
-      | "heart"
-      | "mail"
-      | "phone"
-      | "reset"
-      | "send"
-      | "spark"
-      | "tools"
-      | "user";
+    name: Deploy and verify chatbot
     
-    type WidgetIconProps = {
-      name: WidgetIconName;
-      className?: string;
-    };
+    on:
+      push:
+        branches: [main]
+        paths-ignore:
+          - "WIDGET_QUALITY_AUDIT.txt"
+          - "PAGES_DEPLOY_AUDIT.txt"
+      workflow_dispatch:
     
-    const PATHS: Record<WidgetIconName, JSX.Element> = {
-      arrow: <path d="M5 12h13m-5-5 5 5-5 5" />,
-      calculator: (
-        <>
-          <rect x="5" y="3.5" width="14" height="17" rx="3.25" />
-          <path d="M8 7.5h8M8.4 12h.1m3.45 0h.1m3.45 0h.1M8.4 16h.1m3.45 0h.1m3.45 0h.1" />
-        </>
-      ),
-      calendar: (
-        <>
-          <rect x="3.75" y="5" width="16.5" height="15.25" rx="3.25" />
-          <path d="M7.5 3.75v3M16.5 3.75v3M3.75 9.25h16.5M8 13h3m2.5 0H16M8 16.5h2" />
-        </>
-      ),
-      cart: (
-        <>
-          <path d="M3.5 5.25h2.15l1.85 8.7a2.2 2.2 0 0 0 2.15 1.75h7a2.2 2.2 0 0 0 2.15-1.72L20.25 8H6.3" />
-          <circle cx="9.5" cy="19" r="1.2" />
-          <circle cx="17" cy="19" r="1.2" />
-        </>
-      ),
-      chat: (
-        <>
-          <path d="M5.5 4.5h13A2.5 2.5 0 0 1 21 7v7.5a2.5 2.5 0 0 1-2.5 2.5H10l-5 3v-3a2 2 0 0 1-2-2V7a2.5 2.5 0 0 1 2.5-2.5Z" />
-          <path d="M7.5 9.25h9M7.5 12.75h6" />
-        </>
-      ),
-      check: <path d="m5.5 12.5 4 4 9-9" />,
-      close: <path d="m6.5 6.5 11 11m0-11-11 11" />,
-      factory: (
-        <>
-          <path d="M4 20V10.75l5 3V10.5l5 3V7.5h5.5V20" />
-          <path d="M3 20h18M8 20v-3.5h3.5V20" />
-        </>
-      ),
-      food: (
-        <>
-          <path d="M5.25 3.5v5a3 3 0 0 0 6 0v-5M8.25 3.5V20.5" />
-          <path d="M17.25 3.5c-1.7 1.25-2.5 3-2.5 5.25 0 2.1.85 3.65 2.5 4.6v7.15" />
-        </>
-      ),
-      heart: <path d="M12 20.25 5.3 13.8a4.7 4.7 0 0 1-.1-6.5 4.4 4.4 0 0 1 6.3 0l.5.5.5-.5a4.4 4.4 0 0 1 6.3 0 4.7 4.7 0 0 1-.1 6.5L12 20.25Z" />,
-      mail: (
-        <>
-          <rect x="3.5" y="5.25" width="17" height="13.5" rx="3" />
-          <path d="m4.75 7 7.25 5.5L19.25 7" />
-        </>
-      ),
-      phone: <path d="M7.1 3.5h2.3l1.35 4-2 1.65a12.4 12.4 0 0 0 6.1 6.1l1.65-2 4 1.35v2.3a3.1 3.1 0 0 1-3.1 3.1A13.4 13.4 0 0 1 4 6.6a3.1 3.1 0 0 1 3.1-3.1Z" />,
-      reset: <path d="M19.5 8.75V4.5m0 0h-4.25m4.25 0-3 3A7.5 7.5 0 1 0 19.25 14" />,
-      send: <path d="m3.75 5.25 16.5 6.75-16.5 6.75 2.2-5.05L14 12 5.95 10.3 3.75 5.25Z" />,
-      spark: (
-        <>
-          <path d="m11.5 3.5 1.35 4.15 4.15 1.35-4.15 1.35-1.35 4.15-1.35-4.15L6 9l4.15-1.35L11.5 3.5Z" />
-          <path d="m18.5 14.5.7 2.1 2.1.7-2.1.7-.7 2.1-.7-2.1-2.1-.7 2.1-.7.7-2.1Z" />
-        </>
-      ),
-      tools: (
-        <>
-          <path d="M14.75 5.25a4.45 4.45 0 0 0-5.3 5.65l-5.5 5.5a2.65 2.65 0 1 0 3.75 3.75l5.5-5.5a4.45 4.45 0 0 0 5.65-5.3l-2.7 2.7-3.2-3.2 2.7-2.7-.9-.9Z" />
-          <path d="m4.75 4.5 3.8 3.8" />
-        </>
-      ),
-      user: (
-        <>
-          <circle cx="12" cy="8" r="3.75" />
-          <path d="M4.5 20.25a7.5 7.5 0 0 1 15 0" />
-        </>
-      ),
-    };
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     
-    export function WidgetIcon({ name, className = "" }: WidgetIconProps): JSX.Element {
-      return (
-        <svg
-          className={className}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          vectorEffect="non-scaling-stroke"
-          focusable="false"
-          aria-hidden="true"
-        >
-          {PATHS[name]}
-        </svg>
-      );
-    }
+    concurrency:
+      group: pages
+      cancel-in-progress: true
     
-  operator: 'match'
-  stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:121:10)
-    async Test.run (node:internal/test_runner/test:1054:7)
-    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
-  ...
-# Subtest: contact asks for essentials and submits a real lead
-ok 10 - contact asks for essentials and submits a real lead
-  ---
-  duration_ms: 2.186468
-  type: 'test'
-  ...
-# Subtest: assistant knows the verified starting price and brand
-not ok 11 - assistant knows the verified starting price and brand
-  ---
-  duration_ms: 1.94269
-  type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:143:1'
-  failureType: 'testCodeFailure'
-  error: |-
-    The input did not match the regular expression /AI asistent · online/. Input:
+    jobs:
+      build:
+        if: ${{ github.actor != 'github-actions[bot]' }}
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v4
     
-    'import { useCallback, useEffect, useRef, useState } from "react";\n' +
-      'import { useFocusTrap } from "../../hooks/useFocusTrap";\n' +
-      'import {\n' +
-      '  installSiteAssistantGlobal,\n' +
-      '  SITE_ASSISTANT_OPEN_EVENT,\n' +
-      '} from "../../lib/siteAssistant";\n' +
-      'import { announceEmbedState, installEmbedBridge } from "../../lib/embedBridge";\n' +
-      'import { track } from "../../lib/analytics";\n' +
-      'import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";\n' +
-      'import { AssistantConversation } from "./AssistantConversation";\n' +
-      'import { BubbleLogo } from "./BubbleLogo";\n' +
-      'import { ToolCalculator } from "./ToolCalculator";\n' +
-      'import { WidgetIcon } from "./WidgetIcon";\n' +
-      '\n' +
-      'type WidgetMode = "assistant" | "calculator";\n' +
-      '\n' +
-      'type AssistantWidgetProps = {\n' +
-      '  embedMode?: boolean;\n' +
-      '};\n' +
-      '\n' +
-      'const isPreset = (value: string | undefined): value is AssistantPreset =>\n' +
-      '  Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));\n' +
-      '\n' +
-      'export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JSX.Element {\n' +
-      '  const [isOpen, setIsOpen] = useState(false);\n' +
-      '  const [mode, setMode] = useState<WidgetMode>("assistant");\n' +
-      '  const [resetToken, setResetToken] = useState(0);\n' +
-      '  const [preset, setPreset] = useState<AssistantPreset | null>(null);\n' +
-      '  const panelRef = useRef<HTMLElement>(null);\n' +
-      '\n' +
-      '  const close = useCallback(() => {\n' +
-      '    setIsOpen(false);\n' +
-      '    track("widget_close");\n' +
-      '  }, []);\n' +
-      '  useFocusTrap(panelRef, isOpen, close);\n' +
-      '\n' +
-      '  const open = useCallback(\n' +
-      '    (nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {\n' +
-      '      setMode(nextMode);\n' +
-      '      setPreset(nextPreset);\n' +
-      '      setResetToken((value) => value + 1);\n' +
-      '      setIsOpen(true);\n' +
-      '      track("widget_open", { mode: nextMode });\n' +
-      '    },\n' +
-      '    [],\n' +
-      '  );\n' +
-      '\n' +
-      '  const switchMode = useCallback((nextMode: WidgetMode) => {\n' +
-      '    setMode(nextMode);\n' +
-      '    setPreset(null);\n' +
-      '    track("mode_switch", { to: nextMode });\n' +
-      '  }, []);\n' +
-      '\n' +
-      '  const openFromOptions = useCallback(\n' +
-      '    (options: OpenSiteAssistantOptions) => {\n' +
-      '      const directPreset = options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);\n' +
-      '      const calculatorEntry =\n' +
-      '        options?.entry === "builder" || options?.entry === "calculator" || Boolean(directPreset);\n' +
-      '      open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);\n' +
-      '    },\n' +
-      '    [open],\n' +
-      '  );\n' +
-      '\n' +
-      '  useEffect(() => installSiteAssistantGlobal(), []);\n' +
-      '\n' +
-      '  useEffect(() => {\n' +
-      '    const onOpen = (event: Event) => {\n' +
-      '      const options = (event as CustomEvent<OpenSiteAssistantOptions>).detail;\n' +
-      '      openFromOptions(options ?? { entry: "builder" });\n' +
-      '    };\n' +
-      '\n' +
-      '    window.addEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);\n' +
-      '    return () => window.removeEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);\n' +
-      '  }, [openFromOptions]);\n' +
-      '\n' +
-      '  useEffect(() => {\n' +
-      '    if (!embedMode) return;\n' +
-      '    return installEmbedBridge({ open: openFromOptions, close });\n' +
-      '  }, [close, embedMode, openFromOptions]);\n' +
-      '\n' +
-      '  useEffect(() => {\n' +
-      '    if (embedMode) announceEmbedState(isOpen);\n' +
-      '  }, [embedMode, isOpen]);\n' +
-      '\n' +
-      '  useEffect(() => {\n' +
-      '    if (!isOpen || !window.matchMedia("(max-width: 520px)").matches) return;\n' +
-      '    const previous = document.body.style.overflow;\n' +
-      '    document.body.style.overflow = "hidden";\n' +
-      '    return () => {\n' +
-      '      document.body.style.overflow = previous;\n' +
-      '    };\n' +
-      '  }, [isOpen]);\n' +
-      '\n' +
-      '  return (\n' +
-      '    <div className="cw-widget">\n' +
-      '      <button\n' +
-      '        id="chameleon-widget-launcher"\n' +
-      '        data-testid="widget-launcher"\n' +
-      '        className="cw-launcher"\n' +
-      '        type="button"\n' +
-      '        aria-label="Otvoriť Môj Chatbot"\n' +
-      '        aria-expanded={isOpen}\n' +
-      '        aria-controls="chameleon-widget-panel"\n' +
-      '        onClick={() => open("assistant")}\n' +
-      '      >\n' +
-      '        <BubbleLogo size="launcher" />\n' +
-      '      </button>\n' +
-      '\n' +
-      '      {isOpen ? (\n' +
-      '        <section\n' +
-      '          id="chameleon-widget-panel"\n' +
-      '          className="cw-panel"\n' +
-      '          data-mode={mode}\n' +
-      '          ref={panelRef}\n' +
-      '          role="dialog"\n' +
-      '          aria-modal="true"\n' +
-      '          aria-labelledby="chameleon-widget-title"\n' +
-      '          tabIndex={-1}\n' +
-      '        >\n' +
-      '          <header className="cw-panel-head">\n' +
-      '            <h2 id="chameleon-widget-title" className="cw-sr-only">\n' +
-      '              Môj Chatbot — AI asistent a konfigurátor riešenia\n' +
-      '            </h2>\n' +
-      '            <span className="cw-panel-head__mascot">\n' +
-      '              <BubbleLogo size="header" />\n' +
-      '            </span>\n' +
-      '            <div className="cw-panel-head__title">\n' +
-      '              <b>Môj Chatbot</b>\n' +
-      '              <span className="cw-panel-head__context cw-panel-head__online">\n' +
-      '                <i aria-hidden="true" /> Online a pripravený pomôcť\n' +
-      '              </span>\n' +
-      '            </div>\n' +
-      '            <div className="cw-panel-head__actions">\n' +
-      '              <button\n' +
-      '                type="button"\n' +
-      '                data-testid="widget-reset"\n' +
-      '                aria-label="Začať odznova"\n' +
-      '                title="Začať odznova"\n' +
-      '                onClick={() => {\n' +
-      '                  setPreset(null);\n' +
-      '                  setResetToken((value) => value + 1);\n' +
-      '                }}\n' +
-      '              >\n' +
-      '                <WidgetIcon name="reset" />\n' +
-      '              </button>\n' +
-      '              <button\n' +
-      '                type="button"\n' +
-      '                className="cw-panel-head__close"\n' +
-      '                data-testid="widget-close"\n' +
-      '                aria-label="Zavrieť asistenta"\n' +
-      '                title="Zavrieť"\n' +
-      '                onClick={close}\n' +
-      '              >\n' +
-      '                <WidgetIcon name="close" />\n' +
-      '              </button>\n' +
-      '            </div>\n' +
-      '          </header>\n' +
-      '\n' +
-      '          <nav className="cw-tabs" aria-label="Vyberte spôsob pomoci" data-mode={mode}>\n' +
-      '            <span className="cw-tabs__glass" aria-hidden="true" />\n' +
-      '            <button\n' +
-      '              type="button"\n' +
-      '              data-testid="tab-calculator"\n' +
-      '              data-active={mode === "calculator"}\n' +
-      '              aria-pressed={mode === "calculator"}\n' +
-      '              onClick={() => switchMode("calculator")}\n' +
-      '            >\n' +
-      '              <WidgetIcon name="calculator" />\n' +
-      '              <span>Vyskladať riešenie</span>\n' +
-      '            </button>\n' +
-      '            <button\n' +
-      '              type="button"\n' +
-      '              data-testid="tab-assistant"\n' +
-      '              data-active={mode === "assistant"}\n' +
-      '              aria-pressed={mode === "assistant"}\n' +
-      '              onClick={() => switchMode("assistant")}\n' +
-      '            >\n' +
-      '              <WidgetIcon name="chat" />\n' +
-      '              <span>Poradiť sa</span>\n' +
-      '            </button>\n' +
-      '          </nav>\n' +
-      '\n' +
-      '          <div className="cw-panel-body" key={mode}>\n' +
-      '            {mode === "assistant" ? (\n' +
-      '              <AssistantConversation\n' +
-      '                resetToken={resetToken}\n' +
-      '                onOpenCalculator={() => switchMode("calculator")}\n' +
-      '              />\n' +
-      '            ) : (\n' +
-      '              <ToolCalculator\n' +
-      '                resetToken={resetToken}\n' +
-      '                initialPreset={preset}\n' +
-      '                onOpenChat={() => switchMode("assistant")}\n' +
-      '              />\n' +
-      '            )}\n' +
-      '          </div>\n' +
-      '        </section>\n' +
-      '      ) : null}\n' +
-      '    </div>\n' +
-      '  );\n' +
-      '}\n'
+          - name: Install pnpm
+            uses: pnpm/action-setup@v4
+            with:
+              version: 10
     
-  code: 'ERR_ASSERTION'
-  name: 'AssertionError'
-  expected:
-  actual: |-
-    import { useCallback, useEffect, useRef, useState } from "react";
-    import { useFocusTrap } from "../../hooks/useFocusTrap";
-    import {
-      installSiteAssistantGlobal,
-      SITE_ASSISTANT_OPEN_EVENT,
-    } from "../../lib/siteAssistant";
-    import { announceEmbedState, installEmbedBridge } from "../../lib/embedBridge";
-    import { track } from "../../lib/analytics";
-    import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";
-    import { AssistantConversation } from "./AssistantConversation";
-    import { BubbleLogo } from "./BubbleLogo";
-    import { ToolCalculator } from "./ToolCalculator";
-    import { WidgetIcon } from "./WidgetIcon";
+          - name: Set up Node.js
+            uses: actions/setup-node@v4
+            with:
+              node-version: 22
+              cache: pnpm
     
-    type WidgetMode = "assistant" | "calculator";
+          - name: Install dependencies
+            run: pnpm install --frozen-lockfile
     
-    type AssistantWidgetProps = {
-      embedMode?: boolean;
-    };
+          - name: Audit production dependencies
+            run: pnpm audit --prod --audit-level high
     
-    const isPreset = (value: string | undefined): value is AssistantPreset =>
-      Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));
+          - name: TypeScript check
+            run: pnpm lint
     
-    export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JSX.Element {
-      const [isOpen, setIsOpen] = useState(false);
-      const [mode, setMode] = useState<WidgetMode>("assistant");
-      const [resetToken, setResetToken] = useState(0);
-      const [preset, setPreset] = useState<AssistantPreset | null>(null);
-      const panelRef = useRef<HTMLElement>(null);
+          - name: Run visual security and lead contracts
+            run: pnpm test -- --run
     
-      const close = useCallback(() => {
-        setIsOpen(false);
-        track("widget_close");
-      }, []);
-      useFocusTrap(panelRef, isOpen, close);
+          - name: Build demo and embedded widget
+            run: pnpm build
     
-      const open = useCallback(
-        (nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {
-          setMode(nextMode);
-          setPreset(nextPreset);
-          setResetToken((value) => value + 1);
-          setIsOpen(true);
-          track("widget_open", { mode: nextMode });
-        },
-        [],
-      );
+          - name: Create immutable build metadata
+            shell: bash
+            run: |
+              node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"web-palette-20260723-v8"},null,2))'
     
-      const switchMode = useCallback((nextMode: WidgetMode) => {
-        setMode(nextMode);
-        setPreset(null);
-        track("mode_switch", { to: nextMode });
-      }, []);
+          - name: Validate production artifacts
+            shell: bash
+            run: |
+              set -euo pipefail
+              test -f dist/index.html
+              test -f dist/widget.js
+              test -f dist/widget.css
+              test -f dist/build-meta.json
+              test -f api/lead.ts
+              grep -Fq "web-palette-20260723-v8" dist/widget.js
+              grep -Fq "Final chatbot-only correction" dist/widget.css
+              grep -Fq "competition-winner-final" src/main.tsx
+              grep -Fq "taste-system-final" src/main.tsx
+              grep -Fq "web-palette-chatbot-final" src/main.tsx
+              grep -Fq "installWidgetSpotlight" src/main.tsx
+              grep -Fq "cw-chat-builder" dist/widget.css
+              grep -Fq "cw-contact-stage" dist/widget.css
+              grep -Fq -- "--cw-site-primary: #3979ec" dist/widget.css
+              grep -Fq "api/lead" src/lib/leadApi.ts
+              grep -Fq "Ceny začínajú od 350 €" src/components/widget/AssistantConversation.tsx
+              ! grep -Fq "className=\"cw-chip cw-spotlight\"" src/components/widget/AssistantConversation.tsx
+              ! grep -Fq "label: \"Cena od 350 €\"" src/components/widget/AssistantConversation.tsx
+              ! grep -Fq "REPLACE-ME" dist/widget.js
+              grep -Fq "${GITHUB_SHA}" dist/build-meta.json
     
-      const openFromOptions = useCallback(
-        (options: OpenSiteAssistantOptions) => {
-          const directPreset = options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);
-          const calculatorEntry =
-            options?.entry === "builder" || options?.entry === "calculator" || Boolean(directPreset);
-          open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);
-        },
-        [open],
-      );
+          - name: Configure GitHub Pages
+            uses: actions/configure-pages@v5
     
-      useEffect(() => installSiteAssistantGlobal(), []);
+          - name: Upload Pages artifact
+            uses: actions/upload-pages-artifact@v3
+            with:
+              path: dist
     
-      useEffect(() => {
-        const onOpen = (event: Event) => {
-          const options = (event as CustomEvent<OpenSiteAssistantOptions>).detail;
-          openFromOptions(options ?? { entry: "builder" });
-        };
+      deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        environment:
+          name: github-pages
+          url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+          - name: Deploy to GitHub Pages
+            id: deployment
+            uses: actions/deploy-pages@v5
     
-        window.addEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);
-        return () => window.removeEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);
-      }, [openFromOptions]);
+          - name: Verify live demo and embedded assets
+            shell: bash
+            env:
+              PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+              SOURCE_SHA: ${{ github.sha }}
+            run: |
+              set -euo pipefail
+              BASE="${PAGE_URL%/}"
     
-      useEffect(() => {
-        if (!embedMode) return;
-        return installEmbedBridge({ open: openFromOptions, close });
-      }, [close, embedMode, openFromOptions]);
+              verify() {
+                local path="$1"
+                local expected="$2"
+                local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"
     
-      useEffect(() => {
-        if (embedMode) announceEmbedState(isOpen);
-      }, [embedMode, isOpen]);
+                for attempt in {1..24}; do
+                  if curl --location --fail --silent --show-error \
+                    --header "Cache-Control: no-cache" \
+                    "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then
+                    if grep -Fqi "$expected" "$body"; then
+                      echo "verified ${path}"
+                      return 0
+                    fi
+                  fi
+                  sleep 5
+                done
     
-      useEffect(() => {
-        if (!isOpen || !window.matchMedia("(max-width: 520px)").matches) return;
-        const previous = document.body.style.overflow;
-        document.body.style.overflow = "hidden";
-        return () => {
-          document.body.style.overflow = previous;
-        };
-      }, [isOpen]);
+                echo "Live verification failed for ${path}"
+                head -c 1000 "$body" 2>/dev/null || true
+                return 1
+              }
     
-      return (
-        <div className="cw-widget">
-          <button
-            id="chameleon-widget-launcher"
-            data-testid="widget-launcher"
-            className="cw-launcher"
-            type="button"
-            aria-label="Otvoriť Môj Chatbot"
-            aria-expanded={isOpen}
-            aria-controls="chameleon-widget-panel"
-            onClick={() => open("assistant")}
-          >
-            <BubbleLogo size="launcher" />
-          </button>
+              verify "/" "Môj Chatbot"
+              verify "/widget.js" "web-palette-20260723-v8"
+              verify "/widget.css" "Final chatbot-only correction"
+              verify "/build-meta.json" "$SOURCE_SHA"
     
-          {isOpen ? (
-            <section
-              id="chameleon-widget-panel"
-              className="cw-panel"
-              data-mode={mode}
-              ref={panelRef}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="chameleon-widget-title"
-              tabIndex={-1}
-            >
-              <header className="cw-panel-head">
-                <h2 id="chameleon-widget-title" className="cw-sr-only">
-                  Môj Chatbot — AI asistent a konfigurátor riešenia
-                </h2>
-                <span className="cw-panel-head__mascot">
-                  <BubbleLogo size="header" />
-                </span>
-                <div className="cw-panel-head__title">
-                  <b>Môj Chatbot</b>
-                  <span className="cw-panel-head__context cw-panel-head__online">
-                    <i aria-hidden="true" /> Online a pripravený pomôcť
-                  </span>
-                </div>
-                <div className="cw-panel-head__actions">
-                  <button
-                    type="button"
-                    data-testid="widget-reset"
-                    aria-label="Začať odznova"
-                    title="Začať odznova"
-                    onClick={() => {
-                      setPreset(null);
-                      setResetToken((value) => value + 1);
-                    }}
-                  >
-                    <WidgetIcon name="reset" />
-                  </button>
-                  <button
-                    type="button"
-                    className="cw-panel-head__close"
-                    data-testid="widget-close"
-                    aria-label="Zavrieť asistenta"
-                    title="Zavrieť"
-                    onClick={close}
-                  >
-                    <WidgetIcon name="close" />
-                  </button>
-                </div>
-              </header>
+          - name: Checkout latest main for deployment record
+            uses: actions/checkout@v4
+            with:
+              ref: main
     
-              <nav className="cw-tabs" aria-label="Vyberte spôsob pomoci" data-mode={mode}>
-                <span className="cw-tabs__glass" aria-hidden="true" />
-                <button
-                  type="button"
-                  data-testid="tab-calculator"
-                  data-active={mode === "calculator"}
-                  aria-pressed={mode === "calculator"}
-                  onClick={() => switchMode("calculator")}
-                >
-                  <WidgetIcon name="calculator" />
-                  <span>Vyskladať riešenie</span>
-                </button>
-                <button
-                  type="button"
-                  data-testid="tab-assistant"
-                  data-active={mode === "assistant"}
-                  aria-pressed={mode === "assistant"}
-                  onClick={() => switchMode("assistant")}
-                >
-                  <WidgetIcon name="chat" />
-                  <span>Poradiť sa</span>
-                </button>
-              </nav>
-    
-              <div className="cw-panel-body" key={mode}>
-                {mode === "assistant" ? (
-                  <AssistantConversation
-                    resetToken={resetToken}
-                    onOpenCalculator={() => switchMode("calculator")}
-                  />
-                ) : (
-                  <ToolCalculator
-                    resetToken={resetToken}
-                    initialPreset={preset}
-                    onOpenChat={() => switchMode("assistant")}
-                  />
-                )}
-              </div>
-            </section>
-          ) : null}
-        </div>
-      );
-    }
+          - name: Record verified widget deployment
+            shell: bash
+            env:
+              PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+              SOURCE_SHA: ${{ github.sha }}
+            run: |
+              {
+                echo "deployment=success"
+                echo "dependency_audit=success"
+                echo "live_smoke=success"
+                echo "source_sha=${SOURCE_SHA}"
+                echo "page_url=${PAGE_URL}"
+                echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+              } > PAGES_DEPLOY_AUDIT.txt
+              git config user.name "github-actions[bot]"
+              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+              git add PAGES_DEPLOY_AUDIT.txt
+              git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0
+              git pull --rebase origin main
+              git push origin HEAD:main
     
   operator: 'match'
   stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:149:10)
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:133:10)
     async Test.run (node:internal/test_runner/test:1054:7)
     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
-# Subtest: mobile panel and reduced motion remain safe
-ok 12 - mobile panel and reduced motion remain safe
-  ---
-  duration_ms: 1.979484
-  type: 'test'
-  ...
-# Subtest: chat API protections remain intact
-ok 13 - chat API protections remain intact
-  ---
-  duration_ms: 2.55563
-  type: 'test'
-  ...
-# Subtest: deployment validates the website-palette build
-ok 14 - deployment validates the website-palette build
-  ---
-  duration_ms: 1.00105
-  type: 'test'
-  ...
-1..14
-# tests 14
+1..11
+# tests 11
 # suites 0
-# pass 9
-# fail 5
+# pass 8
+# fail 3
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 90.765593
+# duration_ms 86.296052
  ELIFECYCLE  Test failed. See above for more details.
