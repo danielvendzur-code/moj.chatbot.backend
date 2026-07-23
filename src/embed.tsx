@@ -18,6 +18,7 @@ import "./derat-layout-final.css";
 import "./owner-friendly-final.css";
 import "./competition-winner-final.css";
 import "./taste-system-final.css";
+import "./web-palette-chatbot-final.css";
 
 const HOST_ID = "dv-assistant-root";
 const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
@@ -46,7 +47,7 @@ function mount(): void {
   installWidgetSpotlight();
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "taste-system-20260723-v7");
+  host.setAttribute("data-dv-assistant-version", "web-palette-20260723-v8");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);
