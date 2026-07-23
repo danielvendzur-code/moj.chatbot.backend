@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { AssistantWidget } from "./components/widget/AssistantWidget";
 import { installLiquidSegmentedDrag } from "./lib/liquidSegmentedDrag";
+import { installWidgetSpotlight } from "./lib/widgetSpotlight";
 import "./widget.css";
 import "./interaction.css";
 import "./requested-polish.css";
@@ -14,6 +15,7 @@ import "./apple-liquid-fixes.css";
 import "./apple-liquid-system-final.css";
 import "./restrained-widget-final.css";
 import "./derat-layout-final.css";
+import "./competition-winner-final.css";
 
 const HOST_ID = "dv-assistant-root";
 const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
@@ -39,9 +41,10 @@ function mount(): void {
 
   ensureStylesheet();
   installLiquidSegmentedDrag();
+  installWidgetSpotlight();
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "derat-layout-20260723-v3");
+  host.setAttribute("data-dv-assistant-version", "competition-winner-20260723-v5");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);
