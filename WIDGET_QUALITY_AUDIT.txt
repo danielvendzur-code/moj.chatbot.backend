@@ -1,4 +1,4 @@
-run_id=30035294415
+run_id=30035557977
 install=success
 lint=success
 build=success
@@ -27,7 +27,7 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-DizjAY-I.css  [39m[1m[2m261.34 kB[22m[1m[22m[2m │ gzip: 37.01 kB[22m
 [2mdist/[22m[2massets/[22m[36mindex-DMEi9Olc.js   [39m[1m[2m220.22 kB[22m[1m[22m[2m │ gzip: 74.51 kB[22m
-[32m✓ built in 1.34s[39m
+[32m✓ built in 1.36s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 109 modules transformed.
@@ -35,7 +35,7 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m261.34 kB[22m[1m[22m[2m │ gzip: 37.01 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m218.18 kB[22m[1m[22m[2m │ gzip: 73.83 kB[22m
-[32m✓ built in 1.34s[39m
+[32m✓ built in 1.30s[39m
 
 ===== test =====
 
@@ -46,85 +46,85 @@ TAP version 13
 # Subtest: the website-palette correction loads last in demo and embed builds
 ok 1 - the website-palette correction loads last in demo and embed builds
   ---
-  duration_ms: 7.890746
+  duration_ms: 7.817978
   type: 'test'
   ...
 # Subtest: assistant order remains builder messages chips input contacts
 ok 2 - assistant order remains builder messages chips input contacts
   ---
-  duration_ms: 2.013615
+  duration_ms: 2.172964
   type: 'test'
   ...
 # Subtest: mode tabs switch immediately and use the website blue
 ok 3 - mode tabs switch immediately and use the website blue
   ---
-  duration_ms: 1.561813
+  duration_ms: 1.443947
   type: 'test'
   ...
 # Subtest: spotlight is restricted to the builder CTA
 ok 4 - spotlight is restricted to the builder CTA
   ---
-  duration_ms: 1.266642
+  duration_ms: 1.274119
   type: 'test'
   ...
 # Subtest: configurator keeps five steps and contact remains final
 ok 5 - configurator keeps five steps and contact remains final
   ---
-  duration_ms: 2.69838
+  duration_ms: 1.985814
   type: 'test'
   ...
 # Subtest: choices have no coloured border, square tile or malformed selection ring
 ok 6 - choices have no coloured border, square tile or malformed selection ring
   ---
-  duration_ms: 1.30833
+  duration_ms: 1.020504
   type: 'test'
   ...
 # Subtest: selected checks are circular, aligned and use the website blue
 ok 7 - selected checks are circular, aligned and use the website blue
   ---
-  duration_ms: 1.814414
+  duration_ms: 1.492088
   type: 'test'
   ...
 # Subtest: continue button uses only the website CTA palette
 ok 8 - continue button uses only the website CTA palette
   ---
-  duration_ms: 1.222129
+  duration_ms: 1.00791
   type: 'test'
   ...
 # Subtest: the icon set remains one rounded family
 ok 9 - the icon set remains one rounded family
   ---
-  duration_ms: 1.286309
+  duration_ms: 1.033097
   type: 'test'
   ...
 # Subtest: contact asks for essentials and submits a real lead
 ok 10 - contact asks for essentials and submits a real lead
   ---
-  duration_ms: 1.915302
+  duration_ms: 1.675742
   type: 'test'
   ...
 # Subtest: assistant knows the verified starting price and brand
 ok 11 - assistant knows the verified starting price and brand
   ---
-  duration_ms: 1.69405
+  duration_ms: 1.547612
   type: 'test'
   ...
 # Subtest: mobile panel and reduced motion remain safe
 ok 12 - mobile panel and reduced motion remain safe
   ---
-  duration_ms: 1.569838
+  duration_ms: 1.372533
   type: 'test'
   ...
 # Subtest: chat API protections remain intact
 ok 13 - chat API protections remain intact
   ---
-  duration_ms: 1.45907
+  duration_ms: 1.232431
   type: 'test'
   ...
 # Subtest: deployment validates the website-palette build
 ok 14 - deployment validates the website-palette build
   ---
-  duration_ms: 1.132302
+  duration_ms: 0.831399
   type: 'test'
   ...
 1..14
@@ -135,4 +135,4 @@ ok 14 - deployment validates the website-palette build
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 91.303495
+# duration_ms 87.330167
