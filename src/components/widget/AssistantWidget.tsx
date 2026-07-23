@@ -6,10 +6,7 @@ import {
 } from "../../lib/siteAssistant";
 import { announceEmbedState, installEmbedBridge } from "../../lib/embedBridge";
 import { track } from "../../lib/analytics";
-import type {
-  AssistantPreset,
-  OpenSiteAssistantOptions,
-} from "../../types/assistant";
+import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";
 import { AssistantConversation } from "./AssistantConversation";
 import { BubbleLogo } from "./BubbleLogo";
 import { ToolCalculator } from "./ToolCalculator";
@@ -50,17 +47,15 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
 
   const switchMode = useCallback((nextMode: WidgetMode) => {
     setMode(nextMode);
+    setPreset(null);
     track("mode_switch", { to: nextMode });
   }, []);
 
   const openFromOptions = useCallback(
     (options: OpenSiteAssistantOptions) => {
-      const directPreset =
-        options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);
+      const directPreset = options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);
       const calculatorEntry =
-        options?.entry === "builder" ||
-        options?.entry === "calculator" ||
-        Boolean(directPreset);
+        options?.entry === "builder" || options?.entry === "calculator" || Boolean(directPreset);
       open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);
     },
     [open],
@@ -97,7 +92,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
   }, [isOpen]);
 
   const tabIndicatorStyle = {
-    "--cw-segment-x": mode === "assistant" ? "calc(100% + 6px)" : "0px",
+    "--cw-segment-x": mode === "assistant" ? "calc(100% + 5px)" : "0px",
   } as CSSProperties;
 
   return (
@@ -107,7 +102,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
         data-testid="widget-launcher"
         className="cw-launcher"
         type="button"
-        aria-label="Otvoriť AI Assistanta"
+        aria-label="Otvoriť Môj Chatbot"
         aria-expanded={isOpen}
         aria-controls="chameleon-widget-panel"
         onClick={() => open("assistant")}
@@ -128,15 +123,15 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
         >
           <header className="cw-panel-head">
             <h2 id="chameleon-widget-title" className="cw-sr-only">
-              AI Assistant a konfigurátor riešenia
+              Môj Chatbot — AI asistent a konfigurátor riešenia
             </h2>
             <span className="cw-panel-head__mascot">
               <BubbleLogo size="header" />
             </span>
             <div className="cw-panel-head__title">
-              <b>AI Assistant</b>
+              <b>Môj Chatbot</b>
               <span className="cw-panel-head__context cw-panel-head__online">
-                <i aria-hidden="true" /> Online · odpoviem hneď
+                <i aria-hidden="true" /> AI asistent · online
               </span>
             </div>
             <div className="cw-panel-head__actions">
@@ -163,7 +158,6 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
                 <WidgetIcon name="close" />
               </button>
             </div>
-            <span className="cw-panel-head__beam" aria-hidden="true" />
           </header>
 
           <nav
@@ -177,7 +171,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
               type="button"
               data-testid="tab-calculator"
               data-active={mode === "calculator"}
-              aria-current={mode === "calculator" ? "page" : undefined}
+              aria-pressed={mode === "calculator"}
               onClick={() => switchMode("calculator")}
             >
               <WidgetIcon name="calculator" />
@@ -187,11 +181,11 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
               type="button"
               data-testid="tab-assistant"
               data-active={mode === "assistant"}
-              aria-current={mode === "assistant" ? "page" : undefined}
+              aria-pressed={mode === "assistant"}
               onClick={() => switchMode("assistant")}
             >
               <WidgetIcon name="chat" />
-              <span>Poradiť sa</span>
+              <span>Opýtať sa</span>
             </button>
           </nav>
 
