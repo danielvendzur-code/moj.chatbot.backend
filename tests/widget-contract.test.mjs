@@ -55,7 +55,7 @@ test("spotlight uses one pointer tracker and restrained radial light", async () 
   assert.match(main, /installWidgetSpotlight\(\)/);
   assert.match(embed, /installWidgetSpotlight\(\)/);
   assert.match(tracker, /--cw-spot-x/);
-  assert.match(tracker, /data\.cwSpotlight/);
+  assert.match(tracker, /dataset\.cwSpotlight/);
   assert.match(tracker, /requestAnimationFrame/);
   assert.match(css, /circle at var\(--cw-spot-x\) var\(--cw-spot-y\)/);
   assert.match(css, /\.cw-spotlight\[data-cw-spotlight="true"\]::after/);
@@ -72,14 +72,19 @@ test("quick replies are balanced two by two above the input", async () => {
 
 test("configurator is five steps and contact remains final", async () => {
   const flow = await read("src/lib/assistantFlow.ts");
+  const calculator = await read("src/components/widget/ToolCalculator.tsx");
   const stepsMatch = flow.match(/export const STEPS:[\s\S]*?= \[([\s\S]*?)\];/);
   assert.ok(stepsMatch);
   const steps = stepsMatch[1];
   assert.equal((steps.match(/"(interest|industry|features|timeline|contact)"/g) ?? []).length, 5);
   assert.doesNotMatch(steps, /"volume"/);
   assert.match(steps, /"contact"/);
-  assert.match(flow, /Jednoduchý chatbot/);
-  assert.equal((flow.match(/id: "(faq|dopyty|email|cena|varianty|fotky|rezervacie|crm|jazyky)"/g) ?? []).length, 9);
+  assert.match(calculator, /Jednoduchý chatbot začína od 350 €/);
+  assert.equal(
+    (flow.match(/id: "(faq|dopyty|email|cena|varianty|fotky|rezervacie|crm|jazyky)"/g) ?? [])
+      .length,
+    9,
+  );
 });
 
 test("configuration cards fill space without forced shake or side stripe", async () => {
