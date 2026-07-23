@@ -54,7 +54,7 @@ jobs:
       - name: Create immutable build metadata
         shell: bash
         run: |
-          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"web-palette-20260723-v8"},null,2))'
+          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"clean-redesign-20260723-v9"},null,2))'
 
       - name: Validate production artifacts
         shell: bash
@@ -65,19 +65,20 @@ jobs:
           test -f dist/widget.css
           test -f dist/build-meta.json
           test -f api/lead.ts
-          grep -Fq "web-palette-20260723-v8" dist/widget.js
-          grep -Fq "Final chatbot-only correction" dist/widget.css
-          grep -Fq "competition-winner-final" src/main.tsx
-          grep -Fq "taste-system-final" src/main.tsx
-          grep -Fq "web-palette-chatbot-final" src/main.tsx
-          grep -Fq "installWidgetSpotlight" src/main.tsx
+          grep -Fq "clean-redesign-20260723-v9" dist/widget.js
+          grep -Fq "Môj Chatbot — single clean design system" dist/widget.css
+          grep -Fq "assistant-redesign" src/main.tsx
+          grep -Fq "assistant-redesign" src/embed.tsx
+          ! grep -Fq "taste-system-final" src/main.tsx
+          ! grep -Fq "web-palette-chatbot-final" src/main.tsx
+          ! grep -Fq "installWidgetSpotlight" src/main.tsx
           grep -Fq "cw-chat-builder" dist/widget.css
           grep -Fq "cw-contact-stage" dist/widget.css
-          grep -Fq -- "--cw-site-primary: #3979ec" dist/widget.css
+          grep -Fq -- "--mc-blue: #3478f6" dist/widget.css
           grep -Fq "api/lead" src/lib/leadApi.ts
-          grep -Fq "Ceny začínajú od 350 €" src/components/widget/AssistantConversation.tsx
-          ! grep -Fq "className=\"cw-chip cw-spotlight\"" src/components/widget/AssistantConversation.tsx
-          ! grep -Fq "label: \"Cena od 350 €\"" src/components/widget/AssistantConversation.tsx
+          grep -Fq "Nechať sa previesť výberom" src/components/widget/AssistantConversation.tsx
+          grep -Fq "Čo má váš web vybaviť za vás?" src/lib/assistantFlow.ts
+          ! grep -Eqi "#2aa|#1fa|teal|turquoise" dist/widget.css
           ! grep -Fq "REPLACE-ME" dist/widget.js
           grep -Fq "${GITHUB_SHA}" dist/build-meta.json
 
@@ -132,8 +133,8 @@ jobs:
           }
 
           verify "/" "Môj Chatbot"
-          verify "/widget.js" "web-palette-20260723-v8"
-          verify "/widget.css" "Final chatbot-only correction"
+          verify "/widget.js" "clean-redesign-20260723-v9"
+          verify "/widget.css" "single clean design system"
           verify "/build-meta.json" "$SOURCE_SHA"
 
       - name: Checkout latest main for deployment record
