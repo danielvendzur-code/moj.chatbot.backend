@@ -21,7 +21,7 @@ const INITIAL_MESSAGES: ChatMessage[] = [
     id: 1,
     from: "bot",
     text:
-      "Napíšte, čo zákazníci na vašom webe najčastejšie riešia. Navrhnem, či je vhodnejší chatbot, kalkulačka alebo konfigurátor. Ceny začínajú od 350 €.",
+      "Dobrý deň. Napíšte mi, čo zákazníci na vašom webe najčastejšie riešia. Poviem vám, či je vhodnejší chatbot, kalkulačka alebo konfigurátor.",
   },
 ];
 
@@ -29,25 +29,25 @@ type QuickReply = { label: string; question: string };
 
 const QUICK_REPLIES: QuickReply[] = [
   {
-    label: "Čo môže vyriešiť",
-    question: "Čo môže chatbot reálne vyriešiť na webe mojej firmy?",
+    label: "Čo mi to ušetrí?",
+    question: "Čo môže chatbot ušetriť majiteľovi firmy a jeho zákazníkom?",
   },
   {
-    label: "Ako to prebieha",
+    label: "Ako prebieha spolupráca?",
     question: "Ako prebieha návrh, príprava a nasadenie riešenia?",
   },
   {
-    label: "Čo potrebujete dodať",
+    label: "Čo treba pripraviť?",
     question: "Aké podklady odo mňa potrebujete na prípravu chatbota alebo kalkulačky?",
   },
   {
-    label: "Pozrieť ukážky",
+    label: "Ukážky riešení",
     question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",
   },
 ];
 
 const CHAT_FALLBACK =
-  "Teraz sa neviem spojiť. Otvorte krátke zadanie alebo použite priamy kontakt nižšie. Ozvem sa s konkrétnym návrhom.";
+  "Teraz sa neviem spojiť. Môžete skúsiť otázku znova alebo použiť priamy kontakt nižšie.";
 
 export function AssistantConversation({
   resetToken,
@@ -58,8 +58,6 @@ export function AssistantConversation({
   const [typing, setTyping] = useState(false);
   const nextIdRef = useRef(2);
   const messagesRef = useRef<HTMLDivElement>(null);
-  const [planeFx, setPlaneFx] = useState(false);
-  const planeTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const last = messages[messages.length - 1];
@@ -67,20 +65,6 @@ export function AssistantConversation({
     const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");
     animateSentMessage(rows?.[rows.length - 1] ?? null);
   }, [messages]);
-
-  useEffect(
-    () => () => {
-      if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
-    },
-    [],
-  );
-
-  const launchPlane = () => {
-    setPlaneFx(false);
-    requestAnimationFrame(() => setPlaneFx(true));
-    if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
-    planeTimerRef.current = window.setTimeout(() => setPlaneFx(false), 700);
-  };
 
   useEffect(() => {
     setMessages(INITIAL_MESSAGES);
@@ -136,7 +120,6 @@ export function AssistantConversation({
     const value = input.trim();
     if (!value || typing) return;
     setInput("");
-    launchPlane();
     void ask(value);
   };
 
@@ -148,13 +131,16 @@ export function AssistantConversation({
   return (
     <div className="cw-conversation" data-testid="assistant-view">
       <div className="cw-chat-top">
-        <button type="button" className="cw-chat-builder cw-spotlight" onClick={openCalculator}>
+        <button type="button" className="cw-chat-builder" onClick={openCalculator}>
           <span className="cw-chat-builder__icon" aria-hidden="true">
             <WidgetIcon name="calculator" />
           </span>
           <span className="cw-chat-builder__copy">
-            <b>Vyskladať vhodné riešenie</b>
-            <small>Odpovedzte na 5 krátkych otázok. Na konci odošlete kontakt.</small>
+            <b>Nechať sa previesť výberom</b>
+            <small>Odpoviete na 5 jednoduchých otázok a získate jasný návrh ďalšieho kroku.</small>
+          </span>
+          <span className="cw-chat-builder__arrow" aria-hidden="true">
+            →
           </span>
         </button>
       </div>
@@ -211,12 +197,11 @@ export function AssistantConversation({
               submit();
             }
           }}
-          placeholder="Napíšte otázku o vašom webe…"
+          placeholder="Napíšte, čo riešite…"
           aria-label="Otázka pre Môj Chatbot"
         />
         <button
           type="button"
-          className={planeFx ? "is-sending" : undefined}
           onClick={submit}
           disabled={!input.trim() || typing}
           aria-label="Odoslať správu"
