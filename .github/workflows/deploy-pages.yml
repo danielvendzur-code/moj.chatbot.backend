@@ -73,7 +73,7 @@ jobs:
           grep -Fq "installWidgetSpotlight" src/main.tsx
           grep -Fq "cw-chat-builder" dist/widget.css
           grep -Fq "cw-contact-stage" dist/widget.css
-          grep -Fq "--cw-site-primary: #3979ec" dist/widget.css
+          grep -Fq -- "--cw-site-primary: #3979ec" dist/widget.css
           grep -Fq "api/lead" src/lib/leadApi.ts
           grep -Fq "Ceny začínajú od 350 €" src/components/widget/AssistantConversation.tsx
           ! grep -Fq "className=\"cw-chip cw-spotlight\"" src/components/widget/AssistantConversation.tsx
