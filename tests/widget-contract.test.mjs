@@ -74,6 +74,7 @@ test("configurator is five steps and contact remains final", async () => {
   const flow = await read("src/lib/assistantFlow.ts");
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
   const stepsMatch = flow.match(/export const STEPS:[\s\S]*?= \[([\s\S]*?)\];/);
+  const featureBlock = flow.match(/export const FEATURES:[\s\S]*?= \[([\s\S]*?)\n\];/)?.[1] ?? "";
   assert.ok(stepsMatch);
   const steps = stepsMatch[1];
   assert.equal((steps.match(/"(interest|industry|features|timeline|contact)"/g) ?? []).length, 5);
@@ -81,7 +82,7 @@ test("configurator is five steps and contact remains final", async () => {
   assert.match(steps, /"contact"/);
   assert.match(calculator, /Jednoduchý chatbot začína od 350 €/);
   assert.equal(
-    (flow.match(/id: "(faq|dopyty|email|cena|varianty|fotky|rezervacie|crm|jazyky)"/g) ?? [])
+    (featureBlock.match(/id: "(faq|dopyty|email|cena|varianty|fotky|rezervacie|crm|jazyky)"/g) ?? [])
       .length,
     9,
   );
