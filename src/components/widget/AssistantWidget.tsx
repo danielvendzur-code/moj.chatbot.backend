@@ -134,7 +134,7 @@ export function AssistantWidget({
               <BubbleLogo size="header" />
             </span>
             <div className="cw-panel-head__title">
-              <b>Danielov webový asistent</b>
+              <b>Môj Chatbot</b>
               <span className="cw-panel-head__context cw-panel-head__online">
                 <i aria-hidden="true" /> Online
               </span>

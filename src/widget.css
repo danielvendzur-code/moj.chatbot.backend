@@ -51,6 +51,9 @@
 
   --cw-font: Inter, ui-sans-serif, system-ui, sans-serif;
 
+  /* fajka centrovaná v symetrickom viewBoxe — sadne do stredu bubliny na každej platforme */
+  --cw-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%2306120e' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round' d='M5 12.6l4.4 4.4L19 7.1'/%3E%3C/svg%3E");
+
   /* jednotné zaoblenia — obmedzená sada */
   --cw-r-pill: 999px;
   --cw-r-lg: 20px;
@@ -1202,19 +1205,16 @@ html[data-embed="true"] .widget-preview__surface {
 }
 
 .cw-rowcard[data-selected="true"]::before {
-  content: "✓";
+  content: "";
   right: 15px;
   top: 50%;
   transform: translateY(-50%);
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: var(--cw-sage);
-  color: var(--cw-bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font: 900 12px var(--cw-font);
+  background:
+    var(--cw-check) center / 13px 13px no-repeat,
+    var(--cw-sage);
   animation: cw-check-in 0.3s ease both;
 }
 
@@ -1364,19 +1364,16 @@ html[data-embed="true"] .widget-preview__surface {
 }
 
 .cw-scard[data-selected="true"]::after {
-  content: "✓";
+  content: "";
   position: absolute;
   right: 6px;
   top: 6px;
   width: 19px;
   height: 19px;
   border-radius: 50%;
-  background: var(--cw-sage);
-  color: var(--cw-bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font: 900 11px var(--cw-font);
+  background:
+    var(--cw-check) center / 11px 11px no-repeat,
+    var(--cw-sage);
   animation: cw-pop 0.3s ease;
 }
 
@@ -1598,19 +1595,16 @@ html[data-embed="true"] .widget-preview__surface {
 }
 
 .cw-vcard[data-selected="true"]::after {
-  content: "✓";
+  content: "";
   position: absolute;
   right: 7px;
   top: 7px;
   width: 19px;
   height: 19px;
   border-radius: 50%;
-  background: var(--cw-sage);
-  color: var(--cw-bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font: 900 11px var(--cw-font);
+  background:
+    var(--cw-check) center / 11px 11px no-repeat,
+    var(--cw-sage);
   animation: cw-pop 0.3s ease;
 }
 
