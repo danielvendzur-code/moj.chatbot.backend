@@ -1,4 +1,4 @@
-run_id=30040462063
+run_id=30044625220
 install=success
 lint=success
 build=success
@@ -25,17 +25,17 @@ transforming...
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
-[2mdist/[22m[2massets/[22m[35mindex-VQOOilfx.css  [39m[1m[2m 59.91 kB[22m[1m[22m[2m │ gzip: 11.93 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-zEgIxL6d.js   [39m[1m[2m217.29 kB[22m[1m[22m[2m │ gzip: 73.40 kB[22m
-[32m✓ built in 904ms[39m
+[2mdist/[22m[2massets/[22m[35mindex-obm8WVM8.css  [39m[1m[2m 65.52 kB[22m[1m[22m[2m │ gzip: 12.74 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-DqCXbe2m.js   [39m[1m[2m215.05 kB[22m[1m[22m[2m │ gzip: 72.67 kB[22m
+[32m✓ built in 1.29s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 93 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[35mwidget.css  [39m[1m[2m 59.91 kB[22m[1m[22m[2m │ gzip: 11.93 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m217.06 kB[22m[1m[22m[2m │ gzip: 73.36 kB[22m
-[32m✓ built in 876ms[39m
+[2mdist/[22m[35mwidget.css  [39m[1m[2m 65.52 kB[22m[1m[22m[2m │ gzip: 12.74 kB[22m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m214.82 kB[22m[1m[22m[2m │ gzip: 72.60 kB[22m
+[32m✓ built in 1.17s[39m
 
 ===== test =====
 
@@ -46,73 +46,73 @@ TAP version 13
 # Subtest: demo and embed use one redesign layer with the restrained builder spotlight
 ok 1 - demo and embed use one redesign layer with the restrained builder spotlight
   ---
-  duration_ms: 5.049983
+  duration_ms: 7.249735
   type: 'test'
   ...
 # Subtest: assistant order is clear for non-technical business owners
 ok 2 - assistant order is clear for non-technical business owners
   ---
-  duration_ms: 1.442924
+  duration_ms: 1.043834
   type: 'test'
   ...
 # Subtest: mode switch stays direct React state and visually moves as one oval
 ok 3 - mode switch stays direct React state and visually moves as one oval
   ---
-  duration_ms: 1.209003
+  duration_ms: 2.551951
   type: 'test'
   ...
 # Subtest: the redesign uses only the website black and blue palette
 ok 4 - the redesign uses only the website black and blue palette
   ---
-  duration_ms: 0.896605
+  duration_ms: 1.795048
   type: 'test'
   ...
 # Subtest: primary actions are equal ovals and never shrink
 ok 5 - primary actions are equal ovals and never shrink
   ---
-  duration_ms: 1.459008
+  duration_ms: 1.668162
   type: 'test'
   ...
 # Subtest: calculator choices use balanced grids instead of full width rows
 ok 6 - calculator choices use balanced grids instead of full width rows
   ---
-  duration_ms: 1.287641
+  duration_ms: 1.763702
   type: 'test'
   ...
 # Subtest: selection state uses one aligned circular check
 ok 7 - selection state uses one aligned circular check
   ---
-  duration_ms: 0.81306
+  duration_ms: 1.23116
   type: 'test'
   ...
 # Subtest: icons form one rounded line family without tile backgrounds
 ok 8 - icons form one rounded line family without tile backgrounds
   ---
-  duration_ms: 0.812758
+  duration_ms: 1.450782
   type: 'test'
   ...
 # Subtest: configurator remains five short steps with six essential features
 ok 9 - configurator remains five short steps with six essential features
   ---
-  duration_ms: 0.937907
+  duration_ms: 1.535637
   type: 'test'
   ...
 # Subtest: contact submits a real lead and keeps API protections
 ok 10 - contact submits a real lead and keeps API protections
   ---
-  duration_ms: 1.219979
+  duration_ms: 1.855547
   type: 'test'
   ...
 # Subtest: mobile full screen and reduced motion remain safe
 ok 11 - mobile full screen and reduced motion remain safe
   ---
-  duration_ms: 0.678707
+  duration_ms: 1.233763
   type: 'test'
   ...
 # Subtest: deployment validates competition redesign v10
 ok 12 - deployment validates competition redesign v10
   ---
-  duration_ms: 0.745177
+  duration_ms: 1.602075
   type: 'test'
   ...
 1..12
@@ -123,4 +123,4 @@ ok 12 - deployment validates competition redesign v10
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 61.156722
+# duration_ms 87.428171
