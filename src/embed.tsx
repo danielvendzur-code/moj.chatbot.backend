@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { AssistantWidget } from "./components/widget/AssistantWidget";
+import { installWidgetSpotlight } from "./lib/widgetSpotlight";
 import "./widget.css";
 import "./assistant-redesign.css";
 
@@ -26,9 +27,10 @@ function mount(): void {
   if (existing?.childElementCount) return;
 
   ensureStylesheet();
+  installWidgetSpotlight();
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "clean-redesign-20260723-v9");
+  host.setAttribute("data-dv-assistant-version", "competition-redesign-20260723-v10");
   host.setAttribute("data-dv-assistant-theme", "website-palette");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
