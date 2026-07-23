@@ -48,6 +48,14 @@ type SendState = "idle" | "sending" | "done";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+function SelectionIndicator({ selected }: { selected: boolean }): JSX.Element {
+  return (
+    <span className="cw-selection-indicator" aria-hidden="true" data-visible={selected}>
+      <WidgetIcon name="check" />
+    </span>
+  );
+}
+
 export function ToolCalculator({
   resetToken,
   initialPreset,
@@ -176,7 +184,9 @@ export function ToolCalculator({
         web: lead.web.trim(),
         note: [
           lead.note.trim(),
-          interest === "custom" && customText.trim() ? `Vlastná predstava: ${customText.trim()}` : "",
+          interest === "custom" && customText.trim()
+            ? `Vlastná predstava: ${customText.trim()}`
+            : "",
           `Číslo návrhu: ${nextProposalNumber}`,
         ]
           .filter(Boolean)
@@ -209,8 +219,7 @@ export function ToolCalculator({
           <span className="cw-thanks__eyebrow">Zadanie je pripravené</span>
           <h3>Ďakujem, {lead.name.trim()}.</h3>
           <p>
-            Dopyt mám pripravený. Ozvem sa s odporúčaným rozsahom a konkrétnou cenou zvyčajne do
-            jedného pracovného dňa.
+            Ozvem sa s odporúčaným rozsahom a konkrétnou cenou zvyčajne do jedného pracovného dňa.
           </p>
           <div className="cw-thanks__grid">
             <div>
@@ -253,7 +262,7 @@ export function ToolCalculator({
           disabled={step === 0}
           aria-label="Späť"
         >
-          ‹
+          <WidgetIcon name="arrow" className="cw-back-icon" />
         </button>
         <div className="cw-progress__track">
           <span
@@ -275,13 +284,13 @@ export function ToolCalculator({
 
           {stepId === "interest" ? (
             <>
-              <div className="cw-rows">
+              <div className="cw-choice-grid cw-choice-grid--interest">
                 {INTERESTS.map((option) => {
                   const selected = interest === option.id;
                   return (
                     <button
                       type="button"
-                      className="cw-rowcard cw-spotlight"
+                      className="cw-rowcard"
                       data-testid={`interest-${option.id}`}
                       data-selected={selected}
                       aria-pressed={selected}
@@ -295,7 +304,7 @@ export function ToolCalculator({
                         <b>{option.label}</b>
                         <small>{option.description}</small>
                       </span>
-                      <span className="cw-choice-arrow" aria-hidden="true">→</span>
+                      <SelectionIndicator selected={selected} />
                     </button>
                   );
                 })}
@@ -305,7 +314,7 @@ export function ToolCalculator({
                   <textarea
                     value={customText}
                     onChange={(event) => setCustomText(event.target.value)}
-                    placeholder="Napíšte pár viet o tom, čo má nástroj robiť…"
+                    placeholder="Stručne napíšte, čo dnes riešite ručne…"
                     aria-label="Vlastná predstava"
                     rows={3}
                   />
@@ -316,13 +325,13 @@ export function ToolCalculator({
 
           {stepId === "industry" ? (
             <>
-              <div className="cw-grid">
+              <div className="cw-choice-grid cw-choice-grid--industry">
                 {INDUSTRIES.map((option) => {
                   const selected = industry === option.id;
                   return (
                     <button
                       type="button"
-                      className="cw-scard cw-spotlight"
+                      className="cw-scard"
                       data-testid={`industry-${option.id}`}
                       data-selected={selected}
                       aria-pressed={selected}
@@ -333,6 +342,7 @@ export function ToolCalculator({
                         <WidgetIcon name={option.icon} />
                       </span>
                       <b>{option.label}</b>
+                      <SelectionIndicator selected={selected} />
                     </button>
                   );
                 })}
@@ -340,7 +350,7 @@ export function ToolCalculator({
               {selectedIndustry ? (
                 <aside className="cw-industry-tip" key={selectedIndustry.id} data-testid="industry-tip">
                   <b>
-                    <WidgetIcon name="spark" /> Vhodné použitie
+                    <WidgetIcon name="spark" /> Čo sa hodí pre váš typ firmy
                   </b>
                   <ul>
                     {selectedIndustry.examples.map((example) => (
@@ -353,13 +363,13 @@ export function ToolCalculator({
           ) : null}
 
           {stepId === "features" ? (
-            <div className="cw-list">
+            <div className="cw-choice-grid cw-choice-grid--features">
               {FEATURES.map((option) => {
                 const selected = features.includes(option.id);
                 return (
                   <button
                     type="button"
-                    className="cw-opt cw-spotlight"
+                    className="cw-opt"
                     data-testid={`feature-${option.id}`}
                     data-selected={selected}
                     aria-pressed={selected}
@@ -369,10 +379,11 @@ export function ToolCalculator({
                     <span className="cw-opt__body">
                       <b>
                         {option.label}
-                        {option.basic ? <em className="cw-opt__tag">V základe</em> : null}
+                        {option.basic ? <em className="cw-opt__tag">Základ</em> : null}
                       </b>
                       <span>{option.description}</span>
                     </span>
+                    <SelectionIndicator selected={selected} />
                   </button>
                 );
               })}
@@ -380,13 +391,13 @@ export function ToolCalculator({
           ) : null}
 
           {stepId === "timeline" ? (
-            <div className="cw-grid cw-grid--volume">
+            <div className="cw-choice-grid cw-choice-grid--timeline">
               {TIMELINES.map((option) => {
                 const selected = timeline === option.id;
                 return (
                   <button
                     type="button"
-                    className="cw-vcard cw-spotlight"
+                    className="cw-vcard"
                     data-testid={`timeline-${option.id}`}
                     data-selected={selected}
                     aria-pressed={selected}
@@ -395,6 +406,7 @@ export function ToolCalculator({
                   >
                     <b>{option.label}</b>
                     <span>{option.description}</span>
+                    <SelectionIndicator selected={selected} />
                   </button>
                 );
               })}
@@ -409,7 +421,7 @@ export function ToolCalculator({
                     <WidgetIcon name="mail" />
                   </span>
                   <span>
-                    <b>Získať návrh a presnú cenu</b>
+                    <b>Získať konkrétny návrh</b>
                     <small>Jednoduchý chatbot začína od 350 €.</small>
                   </span>
                 </div>
@@ -461,7 +473,7 @@ export function ToolCalculator({
                       <textarea
                         value={lead.note}
                         onChange={(event) => setLead({ ...lead, note: event.target.value })}
-                        placeholder="Poznámka, špecifiká alebo dôležitý termín…"
+                        placeholder="Poznámka alebo dôležitý termín…"
                         aria-label="Poznámka"
                         rows={2}
                       />
@@ -493,7 +505,7 @@ export function ToolCalculator({
                       </>
                     ) : (
                       <>
-                        <WidgetIcon name="send" /> Získať konkrétny návrh
+                        <WidgetIcon name="send" /> Poslať zadanie
                       </>
                     )}
                   </button>
@@ -530,13 +542,14 @@ export function ToolCalculator({
             disabled={!canContinue}
             onClick={() => setStep((value) => Math.min(STEPS.length - 1, value + 1))}
           >
-            Pokračovať <span aria-hidden="true">→</span>
+            <span>Pokračovať</span>
+            <WidgetIcon name="arrow" />
           </button>
         </footer>
       ) : (
         <footer className="cw-calc-actions cw-calc-actions--final">
           <button type="button" className="cw-restart" onClick={() => restart(null)}>
-            ↺ Začať odznova
+            <WidgetIcon name="reset" /> Začať odznova
           </button>
         </footer>
       )}
