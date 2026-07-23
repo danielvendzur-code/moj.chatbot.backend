@@ -1,4 +1,4 @@
-run_id=30019081899
+run_id=30020375366
 install=success
 lint=success
 build=success
@@ -24,18 +24,18 @@ transforming...
 [32m✓[39m 107 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.39 kB[22m
+[2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.38 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-qafCY914.css  [39m[1m[2m183.76 kB[22m[1m[22m[2m │ gzip: 27.72 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-B5Xy8716.js   [39m[1m[2m220.68 kB[22m[1m[22m[2m │ gzip: 74.71 kB[22m
-[32m✓ built in 1.31s[39m
+[2mdist/[22m[2massets/[22m[36mindex-Dp-ucAbU.js   [39m[1m[2m220.76 kB[22m[1m[22m[2m │ gzip: 74.74 kB[22m
+[32m✓ built in 1.29s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 103 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m183.76 kB[22m[1m[22m[2m │ gzip: 27.72 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m218.65 kB[22m[1m[22m[2m │ gzip: 74.09 kB[22m
-[32m✓ built in 1.26s[39m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m218.73 kB[22m[1m[22m[2m │ gzip: 74.14 kB[22m
+[32m✓ built in 1.36s[39m
 
 ===== test =====
 
@@ -46,85 +46,85 @@ TAP version 13
 # Subtest: the restrained assistant layer loads last in both builds
 ok 1 - the restrained assistant layer loads last in both builds
   ---
-  duration_ms: 8.504064
+  duration_ms: 11.169944
   type: 'test'
   ...
 # Subtest: restrained coverage includes every visible assistant surface
 ok 2 - restrained coverage includes every visible assistant surface
   ---
-  duration_ms: 2.251364
+  duration_ms: 1.724464
   type: 'test'
   ...
 # Subtest: mode switch matches the website liquid segmented control
 ok 3 - mode switch matches the website liquid segmented control
   ---
-  duration_ms: 1.520733
+  duration_ms: 2.129582
   type: 'test'
   ...
 # Subtest: the original vector mascot stays crisp and restrained
 ok 4 - the original vector mascot stays crisp and restrained
   ---
-  duration_ms: 1.353139
+  duration_ms: 1.811978
   type: 'test'
   ...
 # Subtest: conversation chips are ordered directly above the input
 ok 5 - conversation chips are ordered directly above the input
   ---
-  duration_ms: 2.150234
+  duration_ms: 3.653071
   type: 'test'
   ...
 # Subtest: builder flow remains short and contact stays final
 ok 6 - builder flow remains short and contact stays final
   ---
-  duration_ms: 1.638724
+  duration_ms: 2.015318
   type: 'test'
   ...
 # Subtest: configuration cards have static selection without glow or shake
 ok 7 - configuration cards have static selection without glow or shake
   ---
-  duration_ms: 1.46575
+  duration_ms: 1.812388
   type: 'test'
   ...
 # Subtest: legacy border trace is visually disabled
 ok 8 - legacy border trace is visually disabled
   ---
-  duration_ms: 1.302373
+  duration_ms: 1.880115
   type: 'test'
   ...
 # Subtest: contact is visually prioritised and all form controls are mobile safe
 ok 9 - contact is visually prioritised and all form controls are mobile safe
   ---
-  duration_ms: 1.635819
+  duration_ms: 2.054672
   type: 'test'
   ...
 # Subtest: mobile assistant is full screen and builder cards stack cleanly
 ok 10 - mobile assistant is full screen and builder cards stack cleanly
   ---
-  duration_ms: 1.381903
+  duration_ms: 1.794965
   type: 'test'
   ...
 # Subtest: chat motion no longer rotates or springs sent messages
 ok 11 - chat motion no longer rotates or springs sent messages
   ---
-  duration_ms: 0.941988
+  duration_ms: 1.255748
   type: 'test'
   ...
 # Subtest: chat client has a real HTTPS endpoint and deterministic fallback
 ok 12 - chat client has a real HTTPS endpoint and deterministic fallback
   ---
-  duration_ms: 1.469246
+  duration_ms: 1.352228
   type: 'test'
   ...
 # Subtest: server API enforces origins, JSON, body limits, rate limits and timeout
 ok 13 - server API enforces origins, JSON, body limits, rate limits and timeout
   ---
-  duration_ms: 1.275062
+  duration_ms: 2.041958
   type: 'test'
   ...
 # Subtest: deployment validates the restrained assistant build
 ok 14 - deployment validates the restrained assistant build
   ---
-  duration_ms: 1.22094
+  duration_ms: 1.100127
   type: 'test'
   ...
 1..14
@@ -135,4 +135,4 @@ ok 14 - deployment validates the restrained assistant build
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 88.507203
+# duration_ms 96.034385
