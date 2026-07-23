@@ -4,24 +4,24 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("the owner-friendly layer is present in demo and embed builds", async () => {
+test("the Taste layer loads last in demo and embed builds", async () => {
   const main = await read("src/main.tsx");
   const embed = await read("src/embed.tsx");
-  const css = await read("src/competition-winner-final.css");
-  assert.match(main, /owner-friendly-final\.css/);
-  assert.match(embed, /owner-friendly-final\.css/);
+  const tasteCss = await read("src/taste-system-final.css");
   assert.match(main, /competition-winner-final\.css/);
   assert.match(embed, /competition-winner-final\.css/);
+  assert.match(main, /taste-system-final\.css/);
+  assert.match(embed, /taste-system-final\.css/);
   assert.equal(
     main.lastIndexOf('import "./'),
-    main.indexOf('import "./competition-winner-final.css"'),
+    main.indexOf('import "./taste-system-final.css"'),
   );
   assert.equal(
     embed.lastIndexOf('import "./'),
-    embed.indexOf('import "./competition-winner-final.css"'),
+    embed.indexOf('import "./taste-system-final.css"'),
   );
-  assert.match(embed, /owner-friendly-20260723-v6/);
-  assert.match(css, /Final assistant system/);
+  assert.match(embed, /taste-system-20260723-v7/);
+  assert.match(tasteCss, /Taste-system final layer/);
 });
 
 test("assistant order remains builder messages chips input contacts", async () => {
@@ -33,8 +33,9 @@ test("assistant order remains builder messages chips input contacts", async () =
   const contacts = conversation.indexOf('className="cw-direct-actions"');
   assert.ok(top > -1 && top < messages);
   assert.ok(messages < chips && chips < input && input < contacts);
-  assert.match(conversation, /5 jednoduchých otázok/);
-  assert.match(conversation, /Čo chatbot vyrieši/);
+  assert.match(conversation, /5 krátkych otázok/);
+  assert.match(conversation, /Čo môže vyriešiť/);
+  assert.doesNotMatch(conversation, /className="cw-chip cw-spotlight"/);
   assert.doesNotMatch(conversation, /label: "Cena od 350 €/);
 });
 
@@ -42,7 +43,7 @@ test("mode tabs switch immediately without pointer capture", async () => {
   const widget = await read("src/components/widget/AssistantWidget.tsx");
   const drag = await read("src/lib/liquidSegmentedDrag.ts");
   const css = await read("src/competition-winner-final.css");
-  const ownerCss = await read("src/owner-friendly-final.css");
+  const tasteCss = await read("src/taste-system-final.css");
   assert.match(widget, /mode === "assistant" \? "calc\(100% \+ 5px\)" : "0px"/);
   assert.match(widget, /onClick=\{\(\) => switchMode\("calculator"\)\}/);
   assert.match(widget, /onClick=\{\(\) => switchMode\("assistant"\)\}/);
@@ -50,33 +51,37 @@ test("mode tabs switch immediately without pointer capture", async () => {
   assert.match(drag, /requestAnimationFrame/);
   assert.match(css, /\.cw-tabs__glass[\s\S]*pointer-events:\s*none !important/);
   assert.match(css, /\.cw-tabs > button[\s\S]*pointer-events:\s*auto !important/);
-  assert.match(ownerCss, /transition: transform 420ms/);
+  assert.match(tasteCss, /transition: transform 420ms/);
+  assert.match(tasteCss, /\.cw-tabs[\s\S]*border: 0 !important/);
 });
 
-test("spotlight stays compact and only the builder CTA displays it", async () => {
+test("spotlight is removed from chips and reserved for the builder CTA", async () => {
   const main = await read("src/main.tsx");
   const embed = await read("src/embed.tsx");
   const tracker = await read("src/lib/widgetSpotlight.ts");
-  const ownerCss = await read("src/owner-friendly-final.css");
+  const tasteCss = await read("src/taste-system-final.css");
   assert.match(main, /installWidgetSpotlight\(\)/);
   assert.match(embed, /installWidgetSpotlight\(\)/);
   assert.match(tracker, /--cw-spot-x/);
   assert.match(tracker, /dataset\.cwSpotlight/);
   assert.match(tracker, /requestAnimationFrame/);
-  assert.match(ownerCss, /circle 96px at var\(--cw-spot-x\) var\(--cw-spot-y\)/);
-  assert.match(ownerCss, /\.cw-chat-builder\.cw-spotlight/);
-  assert.match(ownerCss, /\.cw-spotlight::after[\s\S]*content: none !important/);
+  assert.match(tasteCss, /\.cw-spotlight::before/);
+  assert.match(tasteCss, /\.cw-spotlight::after/);
+  assert.match(tasteCss, /content: none !important/);
+  assert.match(tasteCss, /\.cw-chat-builder\.cw-spotlight::after/);
+  assert.match(tasteCss, /circle 88px at var\(--cw-spot-x\) var\(--cw-spot-y\)/);
 });
 
-test("quick replies are readable two by two above the input", async () => {
+test("quick replies are rounded borderless chips above a clean input", async () => {
   const conversation = await read("src/components/widget/AssistantConversation.tsx");
   const css = await read("src/competition-winner-final.css");
-  const ownerCss = await read("src/owner-friendly-final.css");
+  const tasteCss = await read("src/taste-system-final.css");
   const replies = conversation.match(/const QUICK_REPLIES[\s\S]*?\n\];/)?.[0] ?? "";
   assert.equal((replies.match(/label:/g) ?? []).length, 4);
   assert.match(css, /\.cw-quick-replies[\s\S]*repeat\(2, minmax\(0, 1fr\)\)/);
-  assert.match(ownerCss, /font-size: 12\.5px !important/);
-  assert.match(ownerCss, /\.cw-inputbar input[\s\S]*font-size: 16px !important/);
+  assert.match(tasteCss, /\.cw-quick-replies \.cw-chip[\s\S]*border-radius: 999px !important/);
+  assert.match(tasteCss, /\.cw-quick-replies \.cw-chip[\s\S]*border: 0 !important/);
+  assert.match(tasteCss, /\.cw-inputbar input[\s\S]*font-size: 16px !important/);
   assert.doesNotMatch(replies, /Cena od 350 €/);
 });
 
@@ -98,30 +103,41 @@ test("configurator is five steps and contact remains final", async () => {
   );
 });
 
-test("configuration cards fill smoothly without shrink arrows or hover blobs", async () => {
+test("configuration choices are rounded borderless and fill without shrinking", async () => {
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
   const css = await read("src/competition-winner-final.css");
-  const ownerCss = await read("src/owner-friendly-final.css");
+  const tasteCss = await read("src/taste-system-final.css");
   assert.doesNotMatch(calculator, /replayBorderTrace/);
   assert.match(calculator, /data-step=\{stepId\}/);
   assert.match(css, /data-step="interest"[\s\S]*repeat\(4, minmax\(62px, 1fr\)\)/);
   assert.match(css, /data-step="industry"[\s\S]*repeat\(3, minmax\(70px, 1fr\)\)/);
   assert.match(css, /data-step="features"[\s\S]*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(css, /data-step="timeline"[\s\S]*repeat\(2, minmax\(105px, 1fr\)\)/);
-  assert.doesNotMatch(css, /inset 3px 0 0/);
-  assert.match(ownerCss, /transform: scaleX\(0\) !important/);
-  assert.match(ownerCss, /data-selected="true"[\s\S]*transform: scaleX\(1\) !important/);
-  assert.match(ownerCss, /\.cw-choice-arrow[\s\S]*display: none !important/);
-  assert.match(ownerCss, /:active[\s\S]*transform: none !important/);
+  assert.match(tasteCss, /\.cw-rowcard,[\s\S]*border-radius: 18px !important/);
+  assert.match(tasteCss, /\.cw-rowcard,[\s\S]*border: 0 !important/);
+  assert.match(tasteCss, /transform: scaleX\(0\) !important/);
+  assert.match(tasteCss, /data-selected="true"[\s\S]*transform: scaleX\(1\) !important/);
+  assert.match(tasteCss, /\.cw-choice-arrow[\s\S]*display: none !important/);
+  assert.match(tasteCss, /:active[\s\S]*transform: none !important/);
 });
 
-test("selected checks are compact square and aligned", async () => {
-  const ownerCss = await read("src/owner-friendly-final.css");
-  assert.match(ownerCss, /\.cw-rowcard\[data-selected="true"\]::before/);
-  assert.match(ownerCss, /width: 20px !important/);
-  assert.match(ownerCss, /border-radius: 7px !important/);
-  assert.match(ownerCss, /stroke='%23fff'/);
-  assert.match(ownerCss, /transform: none !important/);
+test("selected checks are circular and icon tiles are removed", async () => {
+  const tasteCss = await read("src/taste-system-final.css");
+  assert.match(tasteCss, /\.cw-rowcard\[data-selected="true"\]::before/);
+  assert.match(tasteCss, /width: 20px !important/);
+  assert.match(tasteCss, /border-radius: 999px !important/);
+  assert.match(tasteCss, /\.cw-rowcard__icon,[\s\S]*background: transparent !important/);
+  assert.match(tasteCss, /\.cw-chat-builder__icon[\s\S]*background: transparent !important/);
+  assert.match(tasteCss, /stroke='%23fff'/);
+});
+
+test("the icon set is one refined rounded family", async () => {
+  const icons = await read("src/components/widget/WidgetIcon.tsx");
+  assert.match(icons, /strokeWidth="1\.7"/);
+  assert.match(icons, /strokeLinecap="round"/);
+  assert.match(icons, /strokeLinejoin="round"/);
+  assert.match(icons, /vectorEffect="non-scaling-stroke"/);
+  assert.match(icons, /focusable="false"/);
 });
 
 test("contact asks for essentials and submits a real lead", async () => {
@@ -148,7 +164,7 @@ test("assistant knows the verified starting price and brand", async () => {
   const chat = await read("api/chat.ts");
   assert.match(widget, /Môj Chatbot/);
   assert.match(widget, /AI asistent · online/);
-  assert.match(conversation, /Jednoduchý chatbot začína od 350 €/);
+  assert.match(conversation, /Ceny začínajú od 350 €/);
   assert.match(chat, /začína od 350 €/);
   assert.match(chat, /značky Môj Chatbot/);
   assert.match(chat, /Nevymýšľaj termíny, referencie, výsledky/);
@@ -156,13 +172,14 @@ test("assistant knows the verified starting price and brand", async () => {
 
 test("mobile panel and controls remain safe", async () => {
   const css = await read("src/competition-winner-final.css");
-  const ownerCss = await read("src/owner-friendly-final.css");
+  const tasteCss = await read("src/taste-system-final.css");
   assert.match(css, /@media \(max-width:\s*520px\)/);
   assert.match(css, /height:\s*100dvh !important/);
   assert.match(css, /env\(safe-area-inset-top\)/);
   assert.match(css, /env\(safe-area-inset-bottom\)/);
   assert.match(css, /\.cw-lead__row[\s\S]*grid-template-columns:\s*1fr !important/);
-  assert.match(ownerCss, /@media \(max-width: 520px\)/);
+  assert.match(tasteCss, /@media \(max-width: 520px\)/);
+  assert.match(tasteCss, /prefers-reduced-motion/);
 });
 
 test("chat API protections remain intact", async () => {
@@ -179,10 +196,10 @@ test("chat API protections remain intact", async () => {
   assert.doesNotMatch(api, /Access-Control-Allow-Origin["'],\s*["']\*/);
 });
 
-test("deployment validates the owner-friendly build", async () => {
+test("deployment validates the Taste build", async () => {
   const deploy = await read(".github/workflows/deploy-pages.yml");
-  assert.match(deploy, /owner-friendly-20260723-v6/);
-  assert.match(deploy, /owner-friendly-final/);
+  assert.match(deploy, /taste-system-20260723-v7/);
+  assert.match(deploy, /taste-system-final/);
   assert.match(deploy, /competition-winner-final/);
   assert.match(deploy, /installWidgetSpotlight/);
   assert.match(deploy, /api\/lead/);
