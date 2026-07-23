@@ -1,4 +1,4 @@
-run_id=30046153921
+run_id=30048048224
 install=success
 lint=success
 build=success
@@ -25,17 +25,17 @@ transforming...
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
-[2mdist/[22m[2massets/[22m[35mindex-DXwGkSgT.css  [39m[1m[2m 61.41 kB[22m[1m[22m[2m │ gzip: 12.18 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-Bjf1spiw.js   [39m[1m[2m214.88 kB[22m[1m[22m[2m │ gzip: 72.63 kB[22m
-[32m✓ built in 921ms[39m
+[2mdist/[22m[2massets/[22m[35mindex-Bx-F-Vrc.css  [39m[1m[2m 24.25 kB[22m[1m[22m[2m │ gzip:  5.46 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-C0dfojsu.js   [39m[1m[2m215.25 kB[22m[1m[22m[2m │ gzip: 72.76 kB[22m
+[32m✓ built in 1.11s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 93 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[35mwidget.css  [39m[1m[2m 61.41 kB[22m[1m[22m[2m │ gzip: 12.18 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m214.65 kB[22m[1m[22m[2m │ gzip: 72.56 kB[22m
-[32m✓ built in 875ms[39m
+[2mdist/[22m[35mwidget.css  [39m[1m[2m 24.25 kB[22m[1m[22m[2m │ gzip:  5.46 kB[22m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m215.02 kB[22m[1m[22m[2m │ gzip: 72.70 kB[22m
+[32m✓ built in 1.06s[39m
 
 ===== test =====
 
@@ -43,84 +43,78 @@ computing gzip size...
 > node --test tests/widget-contract.test.mjs -- --run
 
 TAP version 13
-# Subtest: demo and embed use one redesign layer with the restrained builder spotlight
-ok 1 - demo and embed use one redesign layer with the restrained builder spotlight
+# Subtest: demo and embed load one foundation and one authoritative redesign
+ok 1 - demo and embed load one foundation and one authoritative redesign
   ---
-  duration_ms: 5.581198
+  duration_ms: 6.697741
   type: 'test'
   ...
-# Subtest: assistant order is clear for non-technical business owners
-ok 2 - assistant order is clear for non-technical business owners
+# Subtest: assistant order remains direct for non-technical business owners
+ok 2 - assistant order remains direct for non-technical business owners
   ---
-  duration_ms: 0.805233
+  duration_ms: 1.047478
   type: 'test'
   ...
-# Subtest: mode switch stays direct React state and visually moves as one oval
-ok 3 - mode switch stays direct React state and visually moves as one oval
+# Subtest: mode switch is one rounded segmented control without pill geometry
+ok 3 - mode switch is one rounded segmented control without pill geometry
   ---
-  duration_ms: 1.928721
+  duration_ms: 1.873413
   type: 'test'
   ...
 # Subtest: the redesign uses only the website black and blue palette
 ok 4 - the redesign uses only the website black and blue palette
   ---
-  duration_ms: 0.96426
+  duration_ms: 0.897209
   type: 'test'
   ...
-# Subtest: primary actions are equal ovals and never shrink
-ok 5 - primary actions are equal ovals and never shrink
+# Subtest: only primary CTAs and real quick chips use full oval geometry
+ok 5 - only primary CTAs and real quick chips use full oval geometry
   ---
-  duration_ms: 1.614181
+  duration_ms: 0.921635
   type: 'test'
   ...
-# Subtest: calculator choices use balanced grids instead of full width rows
-ok 6 - calculator choices use balanced grids instead of full width rows
+# Subtest: calculator choices use balanced grids and one selected system
+ok 6 - calculator choices use balanced grids and one selected system
   ---
-  duration_ms: 1.294694
+  duration_ms: 1.802239
   type: 'test'
   ...
-# Subtest: selection state uses one aligned circular check
-ok 7 - selection state uses one aligned circular check
+# Subtest: selection indicator is one real aligned circular check
+ok 7 - selection indicator is one real aligned circular check
   ---
-  duration_ms: 0.83643
+  duration_ms: 1.52219
   type: 'test'
   ...
-# Subtest: icons form one rounded line family without tile backgrounds
-ok 8 - icons form one rounded line family without tile backgrounds
+# Subtest: icons form one custom rounded line family
+ok 8 - icons form one custom rounded line family
   ---
-  duration_ms: 0.80308
+  duration_ms: 1.042591
   type: 'test'
   ...
-# Subtest: configurator remains five short steps with six essential features
-ok 9 - configurator remains five short steps with six essential features
+# Subtest: configurator remains five short steps with explicit selection guidance
+ok 9 - configurator remains five short steps with explicit selection guidance
   ---
-  duration_ms: 0.927155
+  duration_ms: 1.181564
   type: 'test'
   ...
 # Subtest: contact submits a real lead and keeps API protections
 ok 10 - contact submits a real lead and keeps API protections
   ---
-  duration_ms: 1.148576
+  duration_ms: 1.5015
   type: 'test'
   ...
-# Subtest: mobile full screen and reduced motion remain safe
-ok 11 - mobile full screen and reduced motion remain safe
+# Subtest: mobile full screen, safe areas and reduced motion remain safe
+ok 11 - mobile full screen, safe areas and reduced motion remain safe
   ---
-  duration_ms: 0.740145
+  duration_ms: 0.793198
   type: 'test'
   ...
-# Subtest: deployment validates competition redesign v10
-ok 12 - deployment validates competition redesign v10
-  ---
-  duration_ms: 0.747357
-  type: 'test'
-  ...
-1..12
-# tests 12
+1..11
+# tests 11
 # suites 0
-# pass 12
+# pass 11
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 64.320042
+# duration_ms 73.957919
