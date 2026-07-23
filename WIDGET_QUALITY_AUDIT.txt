@@ -1,7 +1,7 @@
-run_id=30038676332
+run_id=30038755581
 install=success
-lint=success
-build=success
+lint=failure
+build=failure
 test=failure
 
 ===== lint =====
@@ -13,29 +13,18 @@ test=failure
 > site-assistant-widget@0.1.0 check
 > tsc -b --pretty false
 
+src/components/widget/ToolCalculator.tsx(292,37): error TS2322: Type '"calculator" | "calendar" | "chat" | "spark" | "options"' is not assignable to type 'WidgetIconName'.
+  Type '"options"' is not assignable to type 'WidgetIconName'.
+ ELIFECYCLE  Command failed with exit code 1.
 
 ===== build =====
 
 > site-assistant-widget@0.1.0 build /home/runner/work/moj.chatbot.backend/moj.chatbot.backend
 > tsc -b && vite build --base=/moj.chatbot.backend/ && vite build --config vite.embed.config.ts
 
-[36mvite v5.4.21 [32mbuilding for production...[36m[39m
-transforming...
-[32m✓[39m 95 modules transformed.
-rendering chunks...
-computing gzip size...
-[2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
-[2mdist/[22m[2massets/[22m[35mindex-TVr24qNm.css  [39m[1m[2m 58.09 kB[22m[1m[22m[2m │ gzip: 11.67 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-DtDUgDtx.js   [39m[1m[2m215.94 kB[22m[1m[22m[2m │ gzip: 73.07 kB[22m
-[32m✓ built in 1.36s[39m
-[36mvite v5.4.21 [32mbuilding for production...[36m[39m
-transforming...
-[32m✓[39m 92 modules transformed.
-rendering chunks...
-computing gzip size...
-[2mdist/[22m[35mwidget.css  [39m[1m[2m 58.09 kB[22m[1m[22m[2m │ gzip: 11.67 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m215.70 kB[22m[1m[22m[2m │ gzip: 73.03 kB[22m
-[32m✓ built in 1.23s[39m
+src/components/widget/ToolCalculator.tsx(292,37): error TS2322: Type '"calculator" | "calendar" | "chat" | "spark" | "options"' is not assignable to type 'WidgetIconName'.
+  Type '"options"' is not assignable to type 'WidgetIconName'.
+ ELIFECYCLE  Command failed with exit code 1.
 
 ===== test =====
 
@@ -46,13 +35,13 @@ TAP version 13
 # Subtest: demo and embed use only the base stylesheet and one redesign layer
 ok 1 - demo and embed use only the base stylesheet and one redesign layer
   ---
-  duration_ms: 7.184774
+  duration_ms: 7.134603
   type: 'test'
   ...
 # Subtest: assistant order is clear and designed for non-technical business owners
 not ok 2 - assistant order is clear and designed for non-technical business owners
   ---
-  duration_ms: 2.71477
+  duration_ms: 3.541433
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:21:1'
   failureType: 'testCodeFailure'
@@ -546,55 +535,55 @@ not ok 2 - assistant order is clear and designed for non-technical business owne
 # Subtest: mode switch is direct React state without legacy drag installers
 ok 3 - mode switch is direct React state without legacy drag installers
   ---
-  duration_ms: 3.819707
+  duration_ms: 5.081457
   type: 'test'
   ...
 # Subtest: the redesign uses the website palette and no teal or green CTA colours
 ok 4 - the redesign uses the website palette and no teal or green CTA colours
   ---
-  duration_ms: 1.346138
+  duration_ms: 1.457342
   type: 'test'
   ...
 # Subtest: choice cards are rounded borderless and never shrink
 ok 5 - choice cards are rounded borderless and never shrink
   ---
-  duration_ms: 1.687257
+  duration_ms: 1.805812
   type: 'test'
   ...
 # Subtest: selection check is circular and aligned on the right
 ok 6 - selection check is circular and aligned on the right
   ---
-  duration_ms: 0.99383
+  duration_ms: 1.273606
   type: 'test'
   ...
 # Subtest: icons form one rounded line family without tile backgrounds
 ok 7 - icons form one rounded line family without tile backgrounds
   ---
-  duration_ms: 1.233237
+  duration_ms: 1.274848
   type: 'test'
   ...
 # Subtest: configurator remains five steps with simpler business language
 ok 8 - configurator remains five steps with simpler business language
   ---
-  duration_ms: 0.848808
+  duration_ms: 0.902319
   type: 'test'
   ...
 # Subtest: contact submits a real lead and keeps API protections
 ok 9 - contact submits a real lead and keeps API protections
   ---
-  duration_ms: 1.596648
+  duration_ms: 1.827132
   type: 'test'
   ...
 # Subtest: mobile full screen and reduced motion are covered
 ok 10 - mobile full screen and reduced motion are covered
   ---
-  duration_ms: 1.162244
+  duration_ms: 1.19606
   type: 'test'
   ...
 # Subtest: deployment validates clean redesign v9
 ok 11 - deployment validates clean redesign v9
   ---
-  duration_ms: 0.858327
+  duration_ms: 0.916817
   type: 'test'
   ...
 1..11
@@ -605,5 +594,5 @@ ok 11 - deployment validates clean redesign v9
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 79.672317
+# duration_ms 89.363989
  ELIFECYCLE  Test failed. See above for more details.
