@@ -1,8 +1,8 @@
-run_id=30033686774
+run_id=30033736735
 install=success
 lint=success
 build=success
-test=failure
+test=success
 
 ===== lint =====
 
@@ -27,7 +27,7 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-XIFJLOFA.css  [39m[1m[2m249.67 kB[22m[1m[22m[2m │ gzip: 35.87 kB[22m
 [2mdist/[22m[2massets/[22m[36mindex-CTPiSBiu.js   [39m[1m[2m220.20 kB[22m[1m[22m[2m │ gzip: 74.51 kB[22m
-[32m✓ built in 958ms[39m
+[32m✓ built in 1.31s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 108 modules transformed.
@@ -35,7 +35,7 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m249.67 kB[22m[1m[22m[2m │ gzip: 35.87 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m218.17 kB[22m[1m[22m[2m │ gzip: 73.83 kB[22m
-[32m✓ built in 959ms[39m
+[32m✓ built in 1.29s[39m
 
 ===== test =====
 
@@ -46,432 +46,93 @@ TAP version 13
 # Subtest: the Taste layer loads last in demo and embed builds
 ok 1 - the Taste layer loads last in demo and embed builds
   ---
-  duration_ms: 5.391359
+  duration_ms: 7.442274
   type: 'test'
   ...
 # Subtest: assistant order remains builder messages chips input contacts
 ok 2 - assistant order remains builder messages chips input contacts
   ---
-  duration_ms: 1.621636
+  duration_ms: 1.918152
   type: 'test'
   ...
 # Subtest: mode tabs switch immediately without pointer capture
 ok 3 - mode tabs switch immediately without pointer capture
   ---
-  duration_ms: 1.506902
+  duration_ms: 1.987411
   type: 'test'
   ...
 # Subtest: spotlight is removed from chips and reserved for the builder CTA
 ok 4 - spotlight is removed from chips and reserved for the builder CTA
   ---
-  duration_ms: 1.639659
+  duration_ms: 2.250125
   type: 'test'
   ...
 # Subtest: quick replies are rounded borderless chips above a clean input
 ok 5 - quick replies are rounded borderless chips above a clean input
   ---
-  duration_ms: 1.912388
+  duration_ms: 2.787073
   type: 'test'
   ...
 # Subtest: configurator is five steps and contact remains final
 ok 6 - configurator is five steps and contact remains final
   ---
-  duration_ms: 0.938307
+  duration_ms: 1.430957
   type: 'test'
   ...
 # Subtest: configuration choices are rounded borderless and fill without shrinking
 ok 7 - configuration choices are rounded borderless and fill without shrinking
   ---
-  duration_ms: 1.359225
+  duration_ms: 2.015194
   type: 'test'
   ...
 # Subtest: selected checks are circular and icon tiles are removed
 ok 8 - selected checks are circular and icon tiles are removed
   ---
-  duration_ms: 0.654485
+  duration_ms: 1.194262
   type: 'test'
   ...
 # Subtest: the icon set is one refined rounded family
 ok 9 - the icon set is one refined rounded family
   ---
-  duration_ms: 0.779375
+  duration_ms: 1.327343
   type: 'test'
   ...
 # Subtest: contact asks for essentials and submits a real lead
 ok 10 - contact asks for essentials and submits a real lead
   ---
-  duration_ms: 1.221285
+  duration_ms: 2.057664
   type: 'test'
   ...
 # Subtest: assistant knows the verified starting price and brand
 ok 11 - assistant knows the verified starting price and brand
   ---
-  duration_ms: 1.225851
+  duration_ms: 2.911498
   type: 'test'
   ...
 # Subtest: mobile panel and controls remain safe
 ok 12 - mobile panel and controls remain safe
   ---
-  duration_ms: 1.062202
+  duration_ms: 1.467516
   type: 'test'
   ...
 # Subtest: chat API protections remain intact
 ok 13 - chat API protections remain intact
   ---
-  duration_ms: 1.562754
+  duration_ms: 1.926227
   type: 'test'
   ...
 # Subtest: deployment validates the Taste build
-not ok 14 - deployment validates the Taste build
+ok 14 - deployment validates the Taste build
   ---
-  duration_ms: 1.495612
+  duration_ms: 0.972396
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:199:1'
-  failureType: 'testCodeFailure'
-  error: |-
-    The input did not match the regular expression /taste-system-20260723-v7/. Input:
-    
-    'name: Deploy and verify chatbot\n' +
-      '\n' +
-      'on:\n' +
-      '  push:\n' +
-      '    branches: [main]\n' +
-      '    paths-ignore:\n' +
-      '      - "WIDGET_QUALITY_AUDIT.txt"\n' +
-      '      - "PAGES_DEPLOY_AUDIT.txt"\n' +
-      '  workflow_dispatch:\n' +
-      '\n' +
-      'permissions:\n' +
-      '  contents: write\n' +
-      '  pages: write\n' +
-      '  id-token: write\n' +
-      '\n' +
-      'concurrency:\n' +
-      '  group: pages\n' +
-      '  cancel-in-progress: false\n' +
-      '\n' +
-      'jobs:\n' +
-      '  build:\n' +
-      "    if: ${{ github.actor != 'github-actions[bot]' }}\n" +
-      '    runs-on: ubuntu-latest\n' +
-      '    steps:\n' +
-      '      - name: Checkout\n' +
-      '        uses: actions/checkout@v4\n' +
-      '\n' +
-      '      - name: Install pnpm\n' +
-      '        uses: pnpm/action-setup@v4\n' +
-      '        with:\n' +
-      '          version: 10\n' +
-      '\n' +
-      '      - name: Set up Node.js\n' +
-      '        uses: actions/setup-node@v4\n' +
-      '        with:\n' +
-      '          node-version: 22\n' +
-      '          cache: pnpm\n' +
-      '\n' +
-      '      - name: Install dependencies\n' +
-      '        run: pnpm install --frozen-lockfile\n' +
-      '\n' +
-      '      - name: Audit production dependencies\n' +
-      '        run: pnpm audit --prod --audit-level high\n' +
-      '\n' +
-      '      - name: TypeScript check\n' +
-      '        run: pnpm lint\n' +
-      '\n' +
-      '      - name: Run visual security and lead contracts\n' +
-      '        run: pnpm test -- --run\n' +
-      '\n' +
-      '      - name: Build demo and embedded widget\n' +
-      '        run: pnpm build\n' +
-      '\n' +
-      '      - name: Create immutable build metadata\n' +
-      '        shell: bash\n' +
-      '        run: |\n' +
-      `          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"owner-friendly-20260723-v6"},null,2))'\n` +
-      '\n' +
-      '      - name: Validate production artifacts\n' +
-      '        shell: bash\n' +
-      '        run: |\n' +
-      '          set -euo pipefail\n' +
-      '          test -f dist/index.html\n' +
-      '          test -f dist/widget.js\n' +
-      '          test -f dist/widget.css\n' +
-      '          test -f dist/build-meta.json\n' +
-      '          test -f api/lead.ts\n' +
-      '          grep -Fq "owner-friendly-20260723-v6" dist/widget.js\n' +
-      '          grep -Fqi "4e8cff" dist/widget.css\n' +
-      '          grep -Fq "competition-winner-final" src/main.tsx\n' +
-      '          grep -Fq "owner-friendly-final" src/main.tsx\n' +
-      '          grep -Fq "installWidgetSpotlight" src/main.tsx\n' +
-      '          grep -Fq "cw-chat-builder" dist/widget.css\n' +
-      '          grep -Fq "cw-contact-stage" dist/widget.css\n' +
-      '          grep -Fq "data-cw-spotlight" dist/widget.css\n' +
-      '          grep -Fq "api/lead" src/lib/leadApi.ts\n' +
-      '          grep -Fq "začína od 350 €" src/components/widget/AssistantConversation.tsx\n' +
-      '          ! grep -Fq "label: \\"Cena od 350 €\\"" src/components/widget/AssistantConversation.tsx\n' +
-      '          ! grep -Fq "REPLACE-ME" dist/widget.js\n' +
-      '          grep -Fq "${GITHUB_SHA}" dist/build-meta.json\n' +
-      '\n' +
-      '      - name: Configure GitHub Pages\n' +
-      '        uses: actions/configure-pages@v5\n' +
-      '\n' +
-      '      - name: Upload Pages artifact\n' +
-      '        uses: actions/upload-pages-artifact@v3\n' +
-      '        with:\n' +
-      '          path: dist\n' +
-      '\n' +
-      '  deploy:\n' +
-      '    needs: build\n' +
-      '    runs-on: ubuntu-latest\n' +
-      '    environment:\n' +
-      '      name: github-pages\n' +
-      '      url: ${{ steps.deployment.outputs.page_url }}\n' +
-      '    steps:\n' +
-      '      - name: Deploy to GitHub Pages\n' +
-      '        id: deployment\n' +
-      '        uses: actions/deploy-pages@v5\n' +
-      '\n' +
-      '      - name: Verify live demo and embedded assets\n' +
-      '        shell: bash\n' +
-      '        env:\n' +
-      '          PAGE_URL: ${{ steps.deployment.outputs.page_url }}\n' +
-      '          SOURCE_SHA: ${{ github.sha }}\n' +
-      '        run: |\n' +
-      '          set -euo pipefail\n' +
-      '          BASE="${PAGE_URL%/}"\n' +
-      '\n' +
-      '          verify() {\n' +
-      '            local path="$1"\n' +
-      '            local expected="$2"\n' +
-      `            local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"\n` +
-      '\n' +
-      '            for attempt in {1..24}; do\n' +
-      '              if curl --location --fail --silent --show-error \\\n' +
-      '                --header "Cache-Control: no-cache" \\\n' +
-      '                "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then\n' +
-      '                if grep -Fqi "$expected" "$body"; then\n' +
-      '                  echo "verified ${path}"\n' +
-      '                  return 0\n' +
-      '                fi\n' +
-      '              fi\n' +
-      '              sleep 5\n' +
-      '            done\n' +
-      '\n' +
-      '            echo "Live verification failed for ${path}"\n' +
-      '            head -c 1000 "$body" 2>/dev/null || true\n' +
-      '            return 1\n' +
-      '          }\n' +
-      '\n' +
-      '          verify "/" "Môj Chatbot"\n' +
-      '          verify "/widget.js" "owner-friendly-20260723-v6"\n' +
-      '          verify "/widget.css" "cw-contact-stage"\n' +
-      '          verify "/build-meta.json" "$SOURCE_SHA"\n' +
-      '\n' +
-      '      - name: Checkout latest main for deployment record\n' +
-      '        uses: actions/checkout@v4\n' +
-      '        with:\n' +
-      '          ref: main\n' +
-      '\n' +
-      '      - name: Record verified widget deployment\n' +
-      '        shell: bash\n' +
-      '        env:\n' +
-      '          PAGE_URL: ${{ steps.deployment.outputs.page_url }}\n' +
-      '          SOURCE_SHA: ${{ github.sha }}\n' +
-      '        run: |\n' +
-      '          {\n' +
-      '            echo "deployment=success"\n' +
-      '            echo "dependency_audit=success"\n' +
-      '            echo "live_smoke=success"\n' +
-      '            echo "source_sha=${SOURCE_SHA}"\n' +
-      '            echo "page_url=${PAGE_URL}"\n' +
-      '            echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"\n' +
-      '          } > PAGES_DEPLOY_AUDIT.txt\n' +
-      '          git config user.name "github-actions[bot]"\n' +
-      '          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"\n' +
-      '          git add PAGES_DEPLOY_AUDIT.txt\n' +
-      '          git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0\n' +
-      '          git pull --rebase origin main\n' +
-      '          git push origin HEAD:main\n'
-    
-  code: 'ERR_ASSERTION'
-  name: 'AssertionError'
-  expected:
-  actual: |-
-    name: Deploy and verify chatbot
-    
-    on:
-      push:
-        branches: [main]
-        paths-ignore:
-          - "WIDGET_QUALITY_AUDIT.txt"
-          - "PAGES_DEPLOY_AUDIT.txt"
-      workflow_dispatch:
-    
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-    
-    concurrency:
-      group: pages
-      cancel-in-progress: false
-    
-    jobs:
-      build:
-        if: ${{ github.actor != 'github-actions[bot]' }}
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v4
-    
-          - name: Install pnpm
-            uses: pnpm/action-setup@v4
-            with:
-              version: 10
-    
-          - name: Set up Node.js
-            uses: actions/setup-node@v4
-            with:
-              node-version: 22
-              cache: pnpm
-    
-          - name: Install dependencies
-            run: pnpm install --frozen-lockfile
-    
-          - name: Audit production dependencies
-            run: pnpm audit --prod --audit-level high
-    
-          - name: TypeScript check
-            run: pnpm lint
-    
-          - name: Run visual security and lead contracts
-            run: pnpm test -- --run
-    
-          - name: Build demo and embedded widget
-            run: pnpm build
-    
-          - name: Create immutable build metadata
-            shell: bash
-            run: |
-              node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"owner-friendly-20260723-v6"},null,2))'
-    
-          - name: Validate production artifacts
-            shell: bash
-            run: |
-              set -euo pipefail
-              test -f dist/index.html
-              test -f dist/widget.js
-              test -f dist/widget.css
-              test -f dist/build-meta.json
-              test -f api/lead.ts
-              grep -Fq "owner-friendly-20260723-v6" dist/widget.js
-              grep -Fqi "4e8cff" dist/widget.css
-              grep -Fq "competition-winner-final" src/main.tsx
-              grep -Fq "owner-friendly-final" src/main.tsx
-              grep -Fq "installWidgetSpotlight" src/main.tsx
-              grep -Fq "cw-chat-builder" dist/widget.css
-              grep -Fq "cw-contact-stage" dist/widget.css
-              grep -Fq "data-cw-spotlight" dist/widget.css
-              grep -Fq "api/lead" src/lib/leadApi.ts
-              grep -Fq "začína od 350 €" src/components/widget/AssistantConversation.tsx
-              ! grep -Fq "label: \"Cena od 350 €\"" src/components/widget/AssistantConversation.tsx
-              ! grep -Fq "REPLACE-ME" dist/widget.js
-              grep -Fq "${GITHUB_SHA}" dist/build-meta.json
-    
-          - name: Configure GitHub Pages
-            uses: actions/configure-pages@v5
-    
-          - name: Upload Pages artifact
-            uses: actions/upload-pages-artifact@v3
-            with:
-              path: dist
-    
-      deploy:
-        needs: build
-        runs-on: ubuntu-latest
-        environment:
-          name: github-pages
-          url: ${{ steps.deployment.outputs.page_url }}
-        steps:
-          - name: Deploy to GitHub Pages
-            id: deployment
-            uses: actions/deploy-pages@v5
-    
-          - name: Verify live demo and embedded assets
-            shell: bash
-            env:
-              PAGE_URL: ${{ steps.deployment.outputs.page_url }}
-              SOURCE_SHA: ${{ github.sha }}
-            run: |
-              set -euo pipefail
-              BASE="${PAGE_URL%/}"
-    
-              verify() {
-                local path="$1"
-                local expected="$2"
-                local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"
-    
-                for attempt in {1..24}; do
-                  if curl --location --fail --silent --show-error \
-                    --header "Cache-Control: no-cache" \
-                    "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then
-                    if grep -Fqi "$expected" "$body"; then
-                      echo "verified ${path}"
-                      return 0
-                    fi
-                  fi
-                  sleep 5
-                done
-    
-                echo "Live verification failed for ${path}"
-                head -c 1000 "$body" 2>/dev/null || true
-                return 1
-              }
-    
-              verify "/" "Môj Chatbot"
-              verify "/widget.js" "owner-friendly-20260723-v6"
-              verify "/widget.css" "cw-contact-stage"
-              verify "/build-meta.json" "$SOURCE_SHA"
-    
-          - name: Checkout latest main for deployment record
-            uses: actions/checkout@v4
-            with:
-              ref: main
-    
-          - name: Record verified widget deployment
-            shell: bash
-            env:
-              PAGE_URL: ${{ steps.deployment.outputs.page_url }}
-              SOURCE_SHA: ${{ github.sha }}
-            run: |
-              {
-                echo "deployment=success"
-                echo "dependency_audit=success"
-                echo "live_smoke=success"
-                echo "source_sha=${SOURCE_SHA}"
-                echo "page_url=${PAGE_URL}"
-                echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-              } > PAGES_DEPLOY_AUDIT.txt
-              git config user.name "github-actions[bot]"
-              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-              git add PAGES_DEPLOY_AUDIT.txt
-              git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0
-              git pull --rebase origin main
-              git push origin HEAD:main
-    
-  operator: 'match'
-  stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:201:10)
-    async Test.run (node:internal/test_runner/test:1054:7)
-    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 1..14
 # tests 14
 # suites 0
-# pass 13
-# fail 1
+# pass 14
+# fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 65.528944
- ELIFECYCLE  Test failed. See above for more details.
+# duration_ms 91.309477
