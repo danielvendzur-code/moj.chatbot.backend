@@ -20,6 +20,7 @@ import "./restrained-widget-final.css";
 import "./derat-layout-final.css";
 import "./owner-friendly-final.css";
 import "./competition-winner-final.css";
+import "./taste-system-final.css";
 
 if (isEmbedMode()) {
   document.documentElement.dataset.embed = "true";
