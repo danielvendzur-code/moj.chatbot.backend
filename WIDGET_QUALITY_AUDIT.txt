@@ -1,4 +1,4 @@
-run_id=30018947215
+run_id=30019031720
 install=success
 lint=success
 build=success
@@ -27,7 +27,7 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.39 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-qafCY914.css  [39m[1m[2m183.76 kB[22m[1m[22m[2m │ gzip: 27.72 kB[22m
 [2mdist/[22m[2massets/[22m[36mindex-B5Xy8716.js   [39m[1m[2m220.68 kB[22m[1m[22m[2m │ gzip: 74.71 kB[22m
-[32m✓ built in 1.16s[39m
+[32m✓ built in 1.28s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 103 modules transformed.
@@ -35,7 +35,7 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m183.76 kB[22m[1m[22m[2m │ gzip: 27.72 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m218.65 kB[22m[1m[22m[2m │ gzip: 74.09 kB[22m
-[32m✓ built in 1.11s[39m
+[32m✓ built in 1.20s[39m
 
 ===== test =====
 
@@ -43,101 +43,417 @@ computing gzip size...
 > node --test tests/widget-contract.test.mjs -- --run
 
 TAP version 13
-# Subtest: one final liquid layer owns the complete assistant
-not ok 1 - one final liquid layer owns the complete assistant
+# Subtest: the restrained assistant layer loads last in both builds
+ok 1 - the restrained assistant layer loads last in both builds
   ---
-  duration_ms: 8.331442
-  type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:7:1'
-  failureType: 'testCodeFailure'
-  error: |-
-    Expected values to be strictly equal:
-    
-    693 !== 651
-    
-  code: 'ERR_ASSERTION'
-  name: 'AssertionError'
-  expected: 651
-  actual: 693
-  operator: 'strictEqual'
-  stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:28:10)
-    async Test.run (node:internal/test_runner/test:1054:7)
-    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
-  ...
-# Subtest: final liquid coverage includes every visible assistant surface
-ok 2 - final liquid coverage includes every visible assistant surface
-  ---
-  duration_ms: 2.055558
+  duration_ms: 7.360928
   type: 'test'
   ...
-# Subtest: AI Assistant shell exposes its active mode and polished tab controls
-ok 3 - AI Assistant shell exposes its active mode and polished tab controls
+# Subtest: restrained coverage includes every visible assistant surface
+ok 2 - restrained coverage includes every visible assistant surface
   ---
-  duration_ms: 1.899053
+  duration_ms: 2.150876
   type: 'test'
   ...
-# Subtest: the original vector mascot is crisp, friendly and blinking
-ok 4 - the original vector mascot is crisp, friendly and blinking
+# Subtest: mode switch matches the website liquid segmented control
+ok 3 - mode switch matches the website liquid segmented control
   ---
-  duration_ms: 2.145771
+  duration_ms: 1.318257
   type: 'test'
   ...
-# Subtest: conversation is concise and provides direct contact without clutter
-ok 5 - conversation is concise and provides direct contact without clutter
+# Subtest: the original vector mascot stays crisp and restrained
+ok 4 - the original vector mascot stays crisp and restrained
   ---
-  duration_ms: 1.875368
+  duration_ms: 1.249674
+  type: 'test'
+  ...
+# Subtest: conversation chips are ordered directly above the input
+ok 5 - conversation chips are ordered directly above the input
+  ---
+  duration_ms: 2.599448
   type: 'test'
   ...
 # Subtest: builder flow remains short and contact stays final
 ok 6 - builder flow remains short and contact stays final
   ---
-  duration_ms: 1.07244
+  duration_ms: 1.574201
   type: 'test'
   ...
-# Subtest: calculator progress, cards and selected state are compact and clear
-ok 7 - calculator progress, cards and selected state are compact and clear
+# Subtest: configuration cards have static selection without glow or shake
+ok 7 - configuration cards have static selection without glow or shake
   ---
-  duration_ms: 1.301152
+  duration_ms: 1.296314
   type: 'test'
   ...
-# Subtest: chips still trace the full border before the centre fill
-ok 8 - chips still trace the full border before the centre fill
+# Subtest: legacy border trace is visually disabled
+ok 8 - legacy border trace is visually disabled
   ---
-  duration_ms: 1.532146
+  duration_ms: 1.198798
   type: 'test'
   ...
-# Subtest: contact form and completion surfaces share the final glass system
-ok 9 - contact form and completion surfaces share the final glass system
+# Subtest: contact is visually prioritised and all form controls are mobile safe
+ok 9 - contact is visually prioritised and all form controls are mobile safe
   ---
-  duration_ms: 1.315973
+  duration_ms: 1.526138
+  type: 'test'
+  ...
+# Subtest: mobile assistant is full screen and builder cards stack cleanly
+ok 10 - mobile assistant is full screen and builder cards stack cleanly
+  ---
+  duration_ms: 1.325437
+  type: 'test'
+  ...
+# Subtest: chat motion no longer rotates or springs sent messages
+ok 11 - chat motion no longer rotates or springs sent messages
+  ---
+  duration_ms: 0.902624
   type: 'test'
   ...
 # Subtest: chat client has a real HTTPS endpoint and deterministic fallback
-ok 10 - chat client has a real HTTPS endpoint and deterministic fallback
+ok 12 - chat client has a real HTTPS endpoint and deterministic fallback
   ---
-  duration_ms: 0.894324
+  duration_ms: 1.503104
   type: 'test'
   ...
 # Subtest: server API enforces origins, JSON, body limits, rate limits and timeout
-ok 11 - server API enforces origins, JSON, body limits, rate limits and timeout
+ok 13 - server API enforces origins, JSON, body limits, rate limits and timeout
   ---
-  duration_ms: 0.708787
+  duration_ms: 0.789955
   type: 'test'
   ...
-# Subtest: deployment validates the complete liquid build
-ok 12 - deployment validates the complete liquid build
+# Subtest: deployment validates the restrained assistant build
+not ok 14 - deployment validates the restrained assistant build
   ---
-  duration_ms: 1.545487
+  duration_ms: 1.788182
   type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:217:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /restrained-assistant-20260723-v2/. Input:
+    
+    'name: Deploy and verify chatbot\n' +
+      '\n' +
+      'on:\n' +
+      '  push:\n' +
+      '    branches: [main]\n' +
+      '  workflow_dispatch:\n' +
+      '\n' +
+      'permissions:\n' +
+      '  contents: write\n' +
+      '  pages: write\n' +
+      '  id-token: write\n' +
+      '\n' +
+      'concurrency:\n' +
+      '  group: pages\n' +
+      '  cancel-in-progress: false\n' +
+      '\n' +
+      'jobs:\n' +
+      '  build:\n' +
+      "    if: ${{ github.actor != 'github-actions[bot]' }}\n" +
+      '    runs-on: ubuntu-latest\n' +
+      '    steps:\n' +
+      '      - name: Checkout\n' +
+      '        uses: actions/checkout@v4\n' +
+      '\n' +
+      '      - name: Install pnpm\n' +
+      '        uses: pnpm/action-setup@v4\n' +
+      '        with:\n' +
+      '          version: 10\n' +
+      '\n' +
+      '      - name: Set up Node.js\n' +
+      '        uses: actions/setup-node@v4\n' +
+      '        with:\n' +
+      '          node-version: 22\n' +
+      '          cache: pnpm\n' +
+      '\n' +
+      '      - name: Install dependencies\n' +
+      '        run: pnpm install --frozen-lockfile\n' +
+      '\n' +
+      '      - name: Audit production dependencies\n' +
+      '        run: pnpm audit --prod --audit-level high\n' +
+      '\n' +
+      '      - name: TypeScript check\n' +
+      '        run: pnpm lint\n' +
+      '\n' +
+      '      - name: Run visual and security contracts\n' +
+      '        run: pnpm test -- --run\n' +
+      '\n' +
+      '      - name: Build demo and embedded widget\n' +
+      '        run: pnpm build\n' +
+      '\n' +
+      '      - name: Create immutable build metadata\n' +
+      '        shell: bash\n' +
+      '        run: |\n' +
+      `          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"complete-liquid-system-20260723"},null,2))'\n` +
+      '\n' +
+      '      - name: Validate production artifacts\n' +
+      '        shell: bash\n' +
+      '        run: |\n' +
+      '          set -euo pipefail\n' +
+      '          test -f dist/index.html\n' +
+      '          test -f dist/widget.js\n' +
+      '          test -f dist/widget.css\n' +
+      '          test -f dist/build-meta.json\n' +
+      '          grep -Fq "complete-liquid-system-20260723" dist/widget.js\n' +
+      '          grep -Fqi "3478f6" dist/widget.css\n' +
+      '          grep -Fq "apple-liquid-system-final" src/main.tsx\n' +
+      '          grep -Fq "cw-final-panel-open" dist/widget.css\n' +
+      '          grep -Fq "cw-professional-centre-fill" dist/widget.css\n' +
+      '          grep -Fq "data-liquid-dragging" dist/widget.css\n' +
+      '          ! grep -Fq "REPLACE-ME" dist/widget.js\n' +
+      '          grep -Fq "${GITHUB_SHA}" dist/build-meta.json\n' +
+      '\n' +
+      '      - name: Configure GitHub Pages\n' +
+      '        uses: actions/configure-pages@v5\n' +
+      '\n' +
+      '      - name: Upload Pages artifact\n' +
+      '        uses: actions/upload-pages-artifact@v3\n' +
+      '        with:\n' +
+      '          path: dist\n' +
+      '\n' +
+      '  deploy:\n' +
+      '    needs: build\n' +
+      '    runs-on: ubuntu-latest\n' +
+      '    environment:\n' +
+      '      name: github-pages\n' +
+      '      url: ${{ steps.deployment.outputs.page_url }}\n' +
+      '    steps:\n' +
+      '      - name: Deploy to GitHub Pages\n' +
+      '        id: deployment\n' +
+      '        uses: actions/deploy-pages@v5\n' +
+      '\n' +
+      '      - name: Verify live demo and embedded assets\n' +
+      '        shell: bash\n' +
+      '        env:\n' +
+      '          PAGE_URL: ${{ steps.deployment.outputs.page_url }}\n' +
+      '          SOURCE_SHA: ${{ github.sha }}\n' +
+      '        run: |\n' +
+      '          set -euo pipefail\n' +
+      '          BASE="${PAGE_URL%/}"\n' +
+      '\n' +
+      '          verify() {\n' +
+      '            local path="$1"\n' +
+      '            local expected="$2"\n' +
+      `            local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"\n` +
+      '\n' +
+      '            for attempt in {1..24}; do\n' +
+      '              if curl --location --fail --silent --show-error \\\n' +
+      '                --header "Cache-Control: no-cache" \\\n' +
+      '                "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then\n' +
+      '                if grep -Fqi "$expected" "$body"; then\n' +
+      '                  echo "verified ${path}"\n' +
+      '                  return 0\n' +
+      '                fi\n' +
+      '              fi\n' +
+      '              sleep 5\n' +
+      '            done\n' +
+      '\n' +
+      '            echo "Live verification failed for ${path}"\n' +
+      '            head -c 1000 "$body" 2>/dev/null || true\n' +
+      '            return 1\n' +
+      '          }\n' +
+      '\n' +
+      '          verify "/" "AI Assistant"\n' +
+      '          verify "/widget.js" "complete-liquid-system-20260723"\n' +
+      '          verify "/widget.css" "cw-final-panel-open"\n' +
+      '          verify "/build-meta.json" "$SOURCE_SHA"\n' +
+      '\n' +
+      '      - name: Checkout latest main for deployment record\n' +
+      '        uses: actions/checkout@v4\n' +
+      '        with:\n' +
+      '          ref: main\n' +
+      '\n' +
+      '      - name: Record verified widget deployment\n' +
+      '        shell: bash\n' +
+      '        env:\n' +
+      '          PAGE_URL: ${{ steps.deployment.outputs.page_url }}\n' +
+      '          SOURCE_SHA: ${{ github.sha }}\n' +
+      '        run: |\n' +
+      '          {\n' +
+      '            echo "deployment=success"\n' +
+      '            echo "dependency_audit=success"\n' +
+      '            echo "live_smoke=success"\n' +
+      '            echo "source_sha=${SOURCE_SHA}"\n' +
+      '            echo "page_url=${PAGE_URL}"\n' +
+      '            echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"\n' +
+      '          } > PAGES_DEPLOY_AUDIT.txt\n' +
+      '          git config user.name "github-actions[bot]"\n' +
+      '          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"\n' +
+      '          git add PAGES_DEPLOY_AUDIT.txt\n' +
+      '          git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0\n' +
+      '          git pull --rebase origin main\n' +
+      '          git push origin HEAD:main\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    name: Deploy and verify chatbot
+    
+    on:
+      push:
+        branches: [main]
+      workflow_dispatch:
+    
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    
+    jobs:
+      build:
+        if: ${{ github.actor != 'github-actions[bot]' }}
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v4
+    
+          - name: Install pnpm
+            uses: pnpm/action-setup@v4
+            with:
+              version: 10
+    
+          - name: Set up Node.js
+            uses: actions/setup-node@v4
+            with:
+              node-version: 22
+              cache: pnpm
+    
+          - name: Install dependencies
+            run: pnpm install --frozen-lockfile
+    
+          - name: Audit production dependencies
+            run: pnpm audit --prod --audit-level high
+    
+          - name: TypeScript check
+            run: pnpm lint
+    
+          - name: Run visual and security contracts
+            run: pnpm test -- --run
+    
+          - name: Build demo and embedded widget
+            run: pnpm build
+    
+          - name: Create immutable build metadata
+            shell: bash
+            run: |
+              node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"complete-liquid-system-20260723"},null,2))'
+    
+          - name: Validate production artifacts
+            shell: bash
+            run: |
+              set -euo pipefail
+              test -f dist/index.html
+              test -f dist/widget.js
+              test -f dist/widget.css
+              test -f dist/build-meta.json
+              grep -Fq "complete-liquid-system-20260723" dist/widget.js
+              grep -Fqi "3478f6" dist/widget.css
+              grep -Fq "apple-liquid-system-final" src/main.tsx
+              grep -Fq "cw-final-panel-open" dist/widget.css
+              grep -Fq "cw-professional-centre-fill" dist/widget.css
+              grep -Fq "data-liquid-dragging" dist/widget.css
+              ! grep -Fq "REPLACE-ME" dist/widget.js
+              grep -Fq "${GITHUB_SHA}" dist/build-meta.json
+    
+          - name: Configure GitHub Pages
+            uses: actions/configure-pages@v5
+    
+          - name: Upload Pages artifact
+            uses: actions/upload-pages-artifact@v3
+            with:
+              path: dist
+    
+      deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        environment:
+          name: github-pages
+          url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+          - name: Deploy to GitHub Pages
+            id: deployment
+            uses: actions/deploy-pages@v5
+    
+          - name: Verify live demo and embedded assets
+            shell: bash
+            env:
+              PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+              SOURCE_SHA: ${{ github.sha }}
+            run: |
+              set -euo pipefail
+              BASE="${PAGE_URL%/}"
+    
+              verify() {
+                local path="$1"
+                local expected="$2"
+                local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"
+    
+                for attempt in {1..24}; do
+                  if curl --location --fail --silent --show-error \
+                    --header "Cache-Control: no-cache" \
+                    "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then
+                    if grep -Fqi "$expected" "$body"; then
+                      echo "verified ${path}"
+                      return 0
+                    fi
+                  fi
+                  sleep 5
+                done
+    
+                echo "Live verification failed for ${path}"
+                head -c 1000 "$body" 2>/dev/null || true
+                return 1
+              }
+    
+              verify "/" "AI Assistant"
+              verify "/widget.js" "complete-liquid-system-20260723"
+              verify "/widget.css" "cw-final-panel-open"
+              verify "/build-meta.json" "$SOURCE_SHA"
+    
+          - name: Checkout latest main for deployment record
+            uses: actions/checkout@v4
+            with:
+              ref: main
+    
+          - name: Record verified widget deployment
+            shell: bash
+            env:
+              PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+              SOURCE_SHA: ${{ github.sha }}
+            run: |
+              {
+                echo "deployment=success"
+                echo "dependency_audit=success"
+                echo "live_smoke=success"
+                echo "source_sha=${SOURCE_SHA}"
+                echo "page_url=${PAGE_URL}"
+                echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+              } > PAGES_DEPLOY_AUDIT.txt
+              git config user.name "github-actions[bot]"
+              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+              git add PAGES_DEPLOY_AUDIT.txt
+              git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0
+              git pull --rebase origin main
+              git push origin HEAD:main
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:219:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
-1..12
-# tests 12
+1..14
+# tests 14
 # suites 0
-# pass 11
+# pass 13
 # fail 1
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 73.296967
+# duration_ms 86.496847
  ELIFECYCLE  Test failed. See above for more details.
