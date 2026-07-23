@@ -14,11 +14,11 @@ export const STEPS: StepId[] = ["interest", "industry", "features", "timeline", 
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
     "Čo má váš web vybaviť za vás?",
-    "Vyberte najbližšiu možnosť. Presný rozsah doladíme spolu.",
+    "Vyberte jednu možnosť. Ak si nie ste istý, zvoľte poslednú.",
   ],
   industry: [
     "Aký typ firmy máte?",
-    "Podľa odvetvia odporučím vhodné otázky, výstupy a prepojenia.",
+    "Podľa odvetvia upravím otázky a odporúčaný postup.",
   ],
   priority: [
     "Čo od asistenta očakávate?",
@@ -26,19 +26,19 @@ export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   ],
   features: [
     "Čo má riešenie vedieť?",
-    "Základné funkcie sú označené. Pridajte iba to, čo naozaj potrebujete.",
+    "Vyberte najdôležitejšie funkcie. Zvyšok doladíme neskôr.",
   ],
   volume: [
     "Koľko dopytov mesačne riešite?",
     "Tento údaj sa dá doplniť neskôr a nie je samostatným krokom.",
   ],
   timeline: [
-    "Kedy ho chcete spustiť?",
-    "Vyberte približný termín. Presný harmonogram pripravím podľa rozsahu.",
+    "Kedy to chcete spustiť?",
+    "Stačí približne. Presný harmonogram pripravím podľa rozsahu.",
   ],
   contact: [
     "Kam mám poslať návrh?",
-    "Meno a e-mail stačia. Ostatné údaje môžete doplniť dobrovoľne.",
+    "Meno a e-mail stačia. Ostatné údaje sú nepovinné.",
   ],
 };
 
@@ -47,32 +47,32 @@ export type InterestOption = {
   label: string;
   description: string;
   badge?: string;
-  icon: "chat" | "calculator" | "cart" | "calendar" | "spark";
+  icon: "chat" | "calculator" | "options" | "calendar" | "spark";
 };
 
 export const INTERESTS: InterestOption[] = [
   {
     id: "chatbot",
     label: "Odpovedať zákazníkom",
-    description: "Asistent vysvetlí služby, poradí a pripraví dopyt.",
+    description: "Vysvetlí služby, poradí a pripraví dopyt.",
     icon: "chat",
   },
   {
     id: "calcbot",
     label: "Počítať cenu",
-    description: "Vypočíta cenu, spotrebu alebo rozsah podľa vašich pravidiel.",
+    description: "Vypočíta cenu alebo rozsah podľa vašich pravidiel.",
     icon: "calculator",
   },
   {
     id: "product",
     label: "Pomôcť s výberom",
-    description: "Prevedie zákazníka variantmi, rozmermi a doplnkami.",
-    icon: "cart",
+    description: "Prevedie zákazníka variantmi a doplnkami.",
+    icon: "options",
   },
   {
     id: "custom",
-    label: "Vlastný proces",
-    description: "Opíšte postup a navrhnem riešenie na mieru.",
+    label: "Nie som si istý",
+    description: "Opíšte situáciu a navrhnem najjednoduchší postup.",
     icon: "spark",
   },
 ];
@@ -137,7 +137,7 @@ export const INDUSTRIES: IndustryOption[] = [
   },
   {
     id: "ine",
-    label: "Iné odvetvie",
+    label: "Iný typ firmy",
     icon: "spark",
     examples: [
       "Vlastné otázky a rozhodovanie",
@@ -170,51 +170,35 @@ export type FeatureOption = {
 export const FEATURES: FeatureOption[] = [
   {
     id: "faq",
-    label: "Odpovede podľa vašich podkladov",
-    description: "Služby, postup, termíny a časté otázky.",
+    label: "Odpovede podľa podkladov",
+    description: "Služby, postup a časté otázky.",
     basic: true,
   },
   {
     id: "dopyty",
-    label: "Pripravený dopyt s kontaktom",
-    description: "Všetky odpovede zákazníka prídu v jednom zhrnutí.",
-    basic: true,
-  },
-  {
-    id: "email",
-    label: "Zhrnutie na e-mail",
-    description: "Firma aj zákazník dostanú jasný výsledok.",
+    label: "Pripravený dopyt",
+    description: "Kontakt aj odpovede v jednom zhrnutí.",
     basic: true,
   },
   {
     id: "cena",
-    label: "Výpočet ceny alebo rozsahu",
-    description: "Výpočet podľa vašich pravidiel a cenníka.",
+    label: "Výpočet ceny",
+    description: "Cena alebo rozsah podľa vašich pravidiel.",
   },
   {
     id: "varianty",
-    label: "Varianty, rozmery a doplnky",
-    description: "Krokový výber produktu alebo služby.",
-  },
-  {
-    id: "fotky",
-    label: "Fotky a prílohy",
-    description: "Lepší odhad ešte pred telefonátom alebo obhliadkou.",
+    label: "Výber variantov",
+    description: "Rozmery, materiály a doplnky.",
   },
   {
     id: "rezervacie",
     label: "Termíny a rezervácie",
-    description: "Výber termínu a potvrdenie bez prepisovania.",
+    description: "Výber termínu bez prepisovania.",
   },
   {
-    id: "crm",
-    label: "Prepojenie na váš systém",
-    description: "E-mail, CRM, tabuľka alebo vlastný systém.",
-  },
-  {
-    id: "jazyky",
-    label: "Viac jazykov",
-    description: "Slovenčina, angličtina, nemčina a ďalšie.",
+    id: "fotky",
+    label: "Fotky a prílohy",
+    description: "Lepší odhad ešte pred kontaktom.",
   },
 ];
 
@@ -258,22 +242,22 @@ export const TIMELINES: TimelineOption[] = [
   {
     id: "asap",
     label: "Čo najskôr",
-    description: "Prioritný návrh podľa pripravenosti podkladov.",
+    description: "Začneme podľa pripravenosti podkladov.",
   },
   {
     id: "mesiac",
     label: "Do mesiaca",
-    description: "Čas na doladenie logiky, obsahu a vzhľadu.",
+    description: "Priestor na doladenie obsahu a logiky.",
   },
   {
     id: "kvartal",
     label: "O 1 – 3 mesiace",
-    description: "Pripravíme plán a realistické etapy.",
+    description: "Pripravíme plán a jednotlivé etapy.",
   },
   {
     id: "rozhliadam",
     label: "Zatiaľ sa rozhliadam",
-    description: "Nezáväzný návrh na porovnanie možností.",
+    description: "Najprv si porovnáte možnosti.",
   },
 ];
 
