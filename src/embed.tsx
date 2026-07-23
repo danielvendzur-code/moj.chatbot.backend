@@ -1,24 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { AssistantWidget } from "./components/widget/AssistantWidget";
-import { installLiquidSegmentedDrag } from "./lib/liquidSegmentedDrag";
-import { installWidgetSpotlight } from "./lib/widgetSpotlight";
 import "./widget.css";
-import "./interaction.css";
-import "./requested-polish.css";
-import "./world-class-polish.css";
-import "./competition-widget.css";
-import "./flow-content-polish.css";
-import "./black-blue-refresh.css";
-import "./premium-liquid-final.css";
-import "./chip-refinement-final.css";
-import "./apple-liquid-fixes.css";
-import "./apple-liquid-system-final.css";
-import "./restrained-widget-final.css";
-import "./derat-layout-final.css";
-import "./owner-friendly-final.css";
-import "./competition-winner-final.css";
-import "./taste-system-final.css";
-import "./web-palette-chatbot-final.css";
+import "./assistant-redesign.css";
 
 const HOST_ID = "dv-assistant-root";
 const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
@@ -43,11 +26,9 @@ function mount(): void {
   if (existing?.childElementCount) return;
 
   ensureStylesheet();
-  installLiquidSegmentedDrag();
-  installWidgetSpotlight();
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "web-palette-20260723-v8");
+  host.setAttribute("data-dv-assistant-version", "clean-redesign-20260723-v9");
   host.setAttribute("data-dv-assistant-theme", "website-palette");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
