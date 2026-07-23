@@ -7,6 +7,7 @@ import "./world-class-polish.css";
 import "./competition-widget.css";
 import "./flow-content-polish.css";
 import "./black-blue-refresh.css";
+import "./premium-liquid-final.css";
 
 const HOST_ID = "dv-assistant-root";
 const scriptSrc =
@@ -34,7 +35,7 @@ function mount(): void {
   ensureStylesheet();
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "brand-interactions-20260722");
+  host.setAttribute("data-dv-assistant-version", "ai-assistant-liquid-20260723");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);
