@@ -51,7 +51,7 @@ jobs:
       - name: Create immutable build metadata
         shell: bash
         run: |
-          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"ai-assistant-liquid-20260723"},null,2))'
+          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"professional-chips-20260723"},null,2))'
 
       - name: Validate production artifacts
         shell: bash
@@ -61,9 +61,9 @@ jobs:
           test -f dist/widget.js
           test -f dist/widget.css
           test -f dist/build-meta.json
-          grep -Fq "ai-assistant-liquid-20260723" dist/widget.js
+          grep -Fq "professional-chips-20260723" dist/widget.js
           grep -Fqi "3478f6" dist/widget.css
-          grep -Fqi "75b8ff" dist/widget.css
+          grep -Fq "cw-professional-centre-fill" dist/widget.css
           ! grep -Fq "REPLACE-ME" dist/widget.js
           grep -Fq "${GITHUB_SHA}" dist/build-meta.json
 
@@ -118,8 +118,8 @@ jobs:
           }
 
           verify "/" "AI Assistant"
-          verify "/widget.js" "ai-assistant-liquid-20260723"
-          verify "/widget.css" "75b8ff"
+          verify "/widget.js" "professional-chips-20260723"
+          verify "/widget.css" "cw-professional-centre-fill"
           verify "/build-meta.json" "$SOURCE_SHA"
 
       - name: Checkout latest main for deployment record
