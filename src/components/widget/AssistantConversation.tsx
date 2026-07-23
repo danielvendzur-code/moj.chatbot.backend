@@ -21,7 +21,7 @@ const INITIAL_MESSAGES: ChatMessage[] = [
     id: 1,
     from: "bot",
     text:
-      "Dobrý deň. Napíšte mi, čo zákazníci na vašom webe najčastejšie riešia. Poviem vám, či je vhodnejší chatbot, kalkulačka alebo konfigurátor.",
+      "Napíšte, čo dnes zákazníkom opakovane vysvetľujete, počítate alebo zisťujete. Pomôžem vybrať najjednoduchšie riešenie pre váš web.",
   },
 ];
 
@@ -30,24 +30,24 @@ type QuickReply = { label: string; question: string };
 const QUICK_REPLIES: QuickReply[] = [
   {
     label: "Čo mi to ušetrí?",
-    question: "Čo môže chatbot ušetriť majiteľovi firmy a jeho zákazníkom?",
+    question: "Čo mi môže chatbot alebo kalkulačka ušetriť v bežnej prevádzke firmy?",
   },
   {
-    label: "Ako prebieha spolupráca?",
-    question: "Ako prebieha návrh, príprava a nasadenie riešenia?",
+    label: "Ako to funguje?",
+    question: "Ako chatbot funguje na existujúcom webe a čo vidí zákazník?",
   },
   {
     label: "Čo treba pripraviť?",
-    question: "Aké podklady odo mňa potrebujete na prípravu chatbota alebo kalkulačky?",
+    question: "Aké podklady odo mňa potrebujete na prípravu riešenia?",
   },
   {
-    label: "Ukážky riešení",
+    label: "Pozrieť ukážky",
     question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",
   },
 ];
 
 const CHAT_FALLBACK =
-  "Teraz sa neviem spojiť. Môžete skúsiť otázku znova alebo použiť priamy kontakt nižšie.";
+  "Teraz sa neviem spojiť. Skúste otázku znova alebo použite priamy kontakt nižšie.";
 
 export function AssistantConversation({
   resetToken,
@@ -131,16 +131,14 @@ export function AssistantConversation({
   return (
     <div className="cw-conversation" data-testid="assistant-view">
       <div className="cw-chat-top">
-        <button type="button" className="cw-chat-builder" onClick={openCalculator}>
+        <span className="cw-chat-top__label">Neviete, kde začať?</span>
+        <button type="button" className="cw-chat-builder cw-spotlight" onClick={openCalculator}>
           <span className="cw-chat-builder__icon" aria-hidden="true">
-            <WidgetIcon name="calculator" />
+            <WidgetIcon name="spark" />
           </span>
           <span className="cw-chat-builder__copy">
-            <b>Nechať sa previesť výberom</b>
-            <small>Odpoviete na 5 jednoduchých otázok a získate jasný návrh ďalšieho kroku.</small>
-          </span>
-          <span className="cw-chat-builder__arrow" aria-hidden="true">
-            →
+            <b>Vyskladať riešenie</b>
+            <small>5 krátkych krokov</small>
           </span>
         </button>
       </div>
@@ -211,7 +209,7 @@ export function AssistantConversation({
       </div>
 
       <nav className="cw-direct-actions" aria-label="Priamy kontakt">
-        <span className="cw-direct-actions__label">Alebo ma kontaktujte priamo</span>
+        <span className="cw-direct-actions__label">Radšej priamo?</span>
         <div className="cw-direct-actions__grid">
           <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
             <span className="cw-direct-actions__icon">
