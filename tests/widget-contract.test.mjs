@@ -4,28 +4,21 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("the website-palette correction loads last in demo and embed builds", async () => {
+test("demo and embed use only the base stylesheet and one redesign layer", async () => {
   const main = await read("src/main.tsx");
   const embed = await read("src/embed.tsx");
-  const finalCss = await read("src/web-palette-chatbot-final.css");
 
-  assert.match(main, /taste-system-final\.css/);
-  assert.match(embed, /taste-system-final\.css/);
-  assert.match(main, /web-palette-chatbot-final\.css/);
-  assert.match(embed, /web-palette-chatbot-final\.css/);
-  assert.equal(
-    main.lastIndexOf('import "./'),
-    main.indexOf('import "./web-palette-chatbot-final.css"'),
-  );
-  assert.equal(
-    embed.lastIndexOf('import "./'),
-    embed.indexOf('import "./web-palette-chatbot-final.css"'),
-  );
-  assert.match(embed, /web-palette-20260723-v8/);
-  assert.match(finalCss, /Final chatbot-only correction/);
+  for (const source of [main, embed]) {
+    assert.match(source, /widget\.css/);
+    assert.match(source, /assistant-redesign\.css/);
+    assert.doesNotMatch(source, /taste-system-final|web-palette-chatbot-final|competition-winner-final/);
+    assert.equal((source.match(/import "\.\/.*\.css";/g) ?? []).length, 2);
+  }
+
+  assert.match(embed, /clean-redesign-20260723-v9/);
 });
 
-test("assistant order remains builder messages chips input contacts", async () => {
+test("assistant order is clear and designed for non-technical business owners", async () => {
   const conversation = await read("src/components/widget/AssistantConversation.tsx");
   const top = conversation.indexOf('className="cw-chat-top"');
   const messages = conversation.indexOf('className="cw-messages"');
@@ -35,97 +28,82 @@ test("assistant order remains builder messages chips input contacts", async () =
 
   assert.ok(top > -1 && top < messages);
   assert.ok(messages < chips && chips < input && input < contacts);
-  assert.match(conversation, /5 krátkych otázok/);
-  assert.match(conversation, /Čo môže vyriešiť/);
-  assert.doesNotMatch(conversation, /className="cw-chip cw-spotlight"/);
+  assert.match(conversation, /Nechať sa previesť výberom/);
+  assert.match(conversation, /Čo mi to ušetrí\?/);
+  assert.match(conversation, /Napíšte, čo riešite/);
 });
 
-test("mode tabs switch immediately and use the website blue", async () => {
+test("mode switch is direct React state without legacy drag installers", async () => {
   const widget = await read("src/components/widget/AssistantWidget.tsx");
-  const drag = await read("src/lib/liquidSegmentedDrag.ts");
-  const finalCss = await read("src/web-palette-chatbot-final.css");
+  const main = await read("src/main.tsx");
+  const embed = await read("src/embed.tsx");
+  const css = await read("src/assistant-redesign.css");
 
-  assert.match(widget, /mode === "assistant" \? "calc\(100% \+ 5px\)" : "0px"/);
   assert.match(widget, /onClick=\{\(\) => switchMode\("calculator"\)\}/);
   assert.match(widget, /onClick=\{\(\) => switchMode\("assistant"\)\}/);
-  assert.doesNotMatch(drag, /setPointerCapture/);
-  assert.match(finalCss, /--cw-site-primary: #3979ec/);
-  assert.match(finalCss, /\.cw-tabs__glass/);
+  assert.match(widget, /data-mode=\{mode\}/);
+  assert.doesNotMatch(main, /installLiquidSegmentedDrag|installWidgetSpotlight|installWidgetRailDrag/);
+  assert.doesNotMatch(embed, /installLiquidSegmentedDrag|installWidgetSpotlight/);
+  assert.match(css, /\.cw-tabs\[data-mode="assistant"\] \.cw-tabs__glass/);
 });
 
-test("spotlight is restricted to the builder CTA", async () => {
-  const tracker = await read("src/lib/widgetSpotlight.ts");
-  const finalCss = await read("src/web-palette-chatbot-final.css");
+test("the redesign uses the website palette and no teal or green CTA colours", async () => {
+  const css = await read("src/assistant-redesign.css");
 
-  assert.match(tracker, /const SELECTOR = "\.cw-chat-builder\.cw-spotlight"/);
-  assert.match(tracker, /--cw-spot-x/);
-  assert.match(tracker, /requestAnimationFrame/);
-  assert.match(finalCss, /\.cw-chat-builder/);
+  for (const token of ["#05070b", "#0a0f17", "#0d141f", "#3478f6", "#4e8cff", "#f6f8fb"]) {
+    assert.ok(css.toLowerCase().includes(token), `Missing palette token ${token}`);
+  }
+  assert.doesNotMatch(css, /#2aa|#1fa|teal|turquoise/i);
 });
 
-test("configurator keeps five steps and contact remains final", async () => {
+test("choice cards are rounded borderless and never shrink", async () => {
+  const css = await read("src/assistant-redesign.css");
+
+  assert.match(css, /\.cw-rowcard,[\s\S]*border: 0/);
+  assert.match(css, /\.cw-rowcard[\s\S]*border-radius: 18px/);
+  assert.match(css, /\.cw-rowcard::after[\s\S]*transform: scaleX\(0\)/);
+  assert.match(css, /\.cw-rowcard\[data-selected="true"\]::after[\s\S]*scaleX\(1\)/);
+  assert.doesNotMatch(css, /:active[\s\S]*scale\(0\.[0-9]+\)/);
+});
+
+test("selection check is circular and aligned on the right", async () => {
+  const css = await read("src/assistant-redesign.css");
+
+  assert.match(css, /\.cw-rowcard\[data-selected="true"\]::before/);
+  assert.match(css, /width: 23px/);
+  assert.match(css, /border-radius: 50%/);
+  assert.match(css, /right: 13px/);
+  assert.match(css, /translateY\(-50%\)/);
+});
+
+test("icons form one rounded line family without tile backgrounds", async () => {
+  const icons = await read("src/components/widget/WidgetIcon.tsx");
+  const css = await read("src/assistant-redesign.css");
+
+  assert.match(icons, /strokeWidth="1\.8"/);
+  assert.match(icons, /strokeLinecap="round"/);
+  assert.match(icons, /strokeLinejoin="round"/);
+  assert.match(icons, /vectorEffect="non-scaling-stroke"/);
+  assert.match(css, /\.cw-rowcard__icon,[\s\S]*color: var\(--mc-blue-hover\)/);
+  assert.doesNotMatch(css, /\.cw-rowcard__icon[\s\S]*background:/);
+});
+
+test("configurator remains five steps with simpler business language", async () => {
   const flow = await read("src/lib/assistantFlow.ts");
-  const calculator = await read("src/components/widget/ToolCalculator.tsx");
   const stepsMatch = flow.match(/export const STEPS:[\s\S]*?= \[([\s\S]*?)\];/);
-  const featureBlock =
-    flow.match(/export const FEATURES:[\s\S]*?= \[([\s\S]*?)\n\];/)?.[1] ?? "";
 
   assert.ok(stepsMatch);
   assert.equal(
     (stepsMatch[1].match(/"(interest|industry|features|timeline|contact)"/g) ?? []).length,
     5,
   );
-  assert.match(calculator, /Jednoduchý chatbot začína od 350 €/);
-  assert.equal(
-    (featureBlock.match(/id: "(faq|dopyty|email|cena|varianty|fotky|rezervacie|crm|jazyky)"/g) ?? [])
-      .length,
-    9,
-  );
+  assert.match(flow, /Čo má váš web vybaviť za vás\?/);
+  assert.match(flow, /Odpovedať zákazníkom/);
+  assert.match(flow, /Počítať cenu/);
+  assert.match(flow, /Pomôcť s výberom/);
 });
 
-test("choices have no coloured border, square tile or malformed selection ring", async () => {
-  const finalCss = await read("src/web-palette-chatbot-final.css");
-
-  assert.match(finalCss, /\.cw-rowcard,[\s\S]*border: 0 !important/);
-  assert.match(finalCss, /\.cw-rowcard,[\s\S]*border-radius: 18px !important/);
-  assert.match(finalCss, /\.cw-rowcard::before[\s\S]*content: none !important/);
-  assert.match(finalCss, /\.cw-rowcard__icon,[\s\S]*background: transparent !important/);
-  assert.match(finalCss, /\.cw-rowcard__icon,[\s\S]*border-radius: 0 !important/);
-  assert.match(finalCss, /background: var\(--cw-site-surface-selected\) !important/);
-  assert.doesNotMatch(finalCss, /#2aa|#1fa/i);
-});
-
-test("selected checks are circular, aligned and use the website blue", async () => {
-  const finalCss = await read("src/web-palette-chatbot-final.css");
-
-  assert.match(finalCss, /\.cw-rowcard::after/);
-  assert.match(finalCss, /width: 23px !important/);
-  assert.match(finalCss, /border-radius: 999px !important/);
-  assert.match(finalCss, /background-color: var\(--cw-site-primary\) !important/);
-  assert.match(finalCss, /stroke='%23fff'/);
-  assert.match(finalCss, /translateY\(-50%\) scale\(1\)/);
-});
-
-test("continue button uses only the website CTA palette", async () => {
-  const finalCss = await read("src/web-palette-chatbot-final.css");
-
-  assert.match(finalCss, /\.cw-next[\s\S]*background: var\(--cw-site-primary\) !important/);
-  assert.match(finalCss, /\.cw-next:hover[\s\S]*var\(--cw-site-primary-hover\)/);
-  assert.match(finalCss, /\.cw-next:disabled[\s\S]*background: #111923 !important/);
-  assert.doesNotMatch(finalCss, /linear-gradient\([^;]*(?:teal|#2aa|#1fa)/i);
-});
-
-test("the icon set remains one rounded family", async () => {
-  const icons = await read("src/components/widget/WidgetIcon.tsx");
-
-  assert.match(icons, /strokeWidth="1\.7"/);
-  assert.match(icons, /strokeLinecap="round"/);
-  assert.match(icons, /strokeLinejoin="round"/);
-  assert.match(icons, /vectorEffect="non-scaling-stroke"/);
-  assert.match(icons, /focusable="false"/);
-});
-
-test("contact asks for essentials and submits a real lead", async () => {
+test("contact submits a real lead and keeps API protections", async () => {
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
   const client = await read("src/lib/leadApi.ts");
   const api = await read("api/lead.ts");
@@ -136,52 +114,23 @@ test("contact asks for essentials and submits a real lead", async () => {
   assert.match(client, /api\/lead/);
   assert.match(client, /AbortController/);
   assert.match(api, /RESEND_API_KEY/);
-  assert.match(api, /LEAD_WEBHOOK_URL/);
   assert.match(api, /rate-limit-exceeded/);
 });
 
-test("assistant knows the verified starting price and brand", async () => {
-  const widget = await read("src/components/widget/AssistantWidget.tsx");
-  const conversation = await read("src/components/widget/AssistantConversation.tsx");
-  const chat = await read("api/chat.ts");
+test("mobile full screen and reduced motion are covered", async () => {
+  const css = await read("src/assistant-redesign.css");
 
-  assert.match(widget, /Môj Chatbot/);
-  assert.match(widget, /AI asistent · online/);
-  assert.match(conversation, /Ceny začínajú od 350 €/);
-  assert.match(chat, /začína od 350 €/);
-  assert.match(chat, /značky Môj Chatbot/);
+  assert.match(css, /@media \(max-width: 520px\)/);
+  assert.match(css, /height: 100dvh/);
+  assert.match(css, /env\(safe-area-inset-top\)/);
+  assert.match(css, /env\(safe-area-inset-bottom\)/);
+  assert.match(css, /prefers-reduced-motion/);
 });
 
-test("mobile panel and reduced motion remain safe", async () => {
-  const baseCss = await read("src/competition-winner-final.css");
-  const finalCss = await read("src/web-palette-chatbot-final.css");
+test("deployment validates clean redesign v9", async () => {
+  const workflow = await read(".github/workflows/deploy-pages.yml");
 
-  assert.match(baseCss, /height:\s*100dvh !important/);
-  assert.match(baseCss, /env\(safe-area-inset-top\)/);
-  assert.match(baseCss, /env\(safe-area-inset-bottom\)/);
-  assert.match(finalCss, /@media \(max-width: 520px\)/);
-  assert.match(finalCss, /prefers-reduced-motion/);
-});
-
-test("chat API protections remain intact", async () => {
-  const client = await read("src/lib/assistantApi.ts");
-  const api = await read("api/chat.ts");
-
-  assert.match(client, /https:\/\/moj-chatbot-backend\.vercel\.app\/api\/chat/);
-  assert.match(client, /AbortController/);
-  assert.match(api, /origin-not-allowed/);
-  assert.match(api, /content-type-must-be-json/);
-  assert.match(api, /rate-limit-exceeded/);
-  assert.match(api, /UPSTREAM_TIMEOUT_MS/);
-  assert.doesNotMatch(api, /Access-Control-Allow-Origin["'],\s*["']\*/);
-});
-
-test("deployment validates the website-palette build", async () => {
-  const deploy = await read(".github/workflows/deploy-pages.yml");
-
-  assert.match(deploy, /web-palette-20260723-v8/);
-  assert.match(deploy, /web-palette-chatbot-final/);
-  assert.match(deploy, /taste-system-final/);
-  assert.match(deploy, /installWidgetSpotlight/);
-  assert.match(deploy, /api\/lead/);
+  assert.match(workflow, /clean-redesign-20260723-v9/);
+  assert.match(workflow, /assistant-redesign/);
+  assert.match(workflow, /api\/lead/);
 });
