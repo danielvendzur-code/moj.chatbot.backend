@@ -22,13 +22,9 @@ type AssistantWidgetProps = {
 };
 
 const isPreset = (value: string | undefined): value is AssistantPreset =>
-  Boolean(
-    value && ["calculator", "inquiry", "advisor", "booking"].includes(value),
-  );
+  Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));
 
-export function AssistantWidget({
-  embedMode = false,
-}: AssistantWidgetProps): JSX.Element {
+export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<WidgetMode>("assistant");
   const [resetToken, setResetToken] = useState(0);
@@ -60,8 +56,7 @@ export function AssistantWidget({
   const openFromOptions = useCallback(
     (options: OpenSiteAssistantOptions) => {
       const directPreset =
-        options?.preset ??
-        (isPreset(options?.entry) ? options.entry : undefined);
+        options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);
       const calculatorEntry =
         options?.entry === "builder" ||
         options?.entry === "calculator" ||
@@ -120,6 +115,7 @@ export function AssistantWidget({
         <section
           id="chameleon-widget-panel"
           className="cw-panel"
+          data-mode={mode}
           ref={panelRef}
           role="dialog"
           aria-modal="true"
@@ -136,7 +132,7 @@ export function AssistantWidget({
             <div className="cw-panel-head__title">
               <b>AI Assistant</b>
               <span className="cw-panel-head__context cw-panel-head__online">
-                <i aria-hidden="true" /> Online
+                <i aria-hidden="true" /> Online · odpoviem hneď
               </span>
             </div>
             <div className="cw-panel-head__actions">
@@ -166,11 +162,7 @@ export function AssistantWidget({
             <span className="cw-panel-head__beam" aria-hidden="true" />
           </header>
 
-          <nav
-            className="cw-tabs"
-            aria-label="Režim asistenta"
-            data-mode={mode}
-          >
+          <nav className="cw-tabs" aria-label="Režim asistenta" data-mode={mode}>
             <span className="cw-tabs__glass" aria-hidden="true" />
             <button
               type="button"
@@ -179,7 +171,8 @@ export function AssistantWidget({
               aria-current={mode === "calculator" ? "page" : undefined}
               onClick={() => switchMode("calculator")}
             >
-              Vyskladať riešenie
+              <WidgetIcon name="calculator" />
+              <span>Vyskladať riešenie</span>
             </button>
             <button
               type="button"
@@ -188,7 +181,8 @@ export function AssistantWidget({
               aria-current={mode === "assistant" ? "page" : undefined}
               onClick={() => switchMode("assistant")}
             >
-              Poradiť sa
+              <WidgetIcon name="chat" />
+              <span>Poradiť sa</span>
             </button>
           </nav>
 
