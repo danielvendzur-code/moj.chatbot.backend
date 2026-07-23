@@ -3,6 +3,9 @@ name: Deploy and verify chatbot
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "WIDGET_QUALITY_AUDIT.txt"
+      - "PAGES_DEPLOY_AUDIT.txt"
   workflow_dispatch:
 
 permissions:
@@ -12,7 +15,7 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
