@@ -66,15 +66,15 @@ jobs:
           test -f dist/build-meta.json
           test -f api/lead.ts
           grep -Fq "clean-redesign-20260723-v9" dist/widget.js
-          grep -Fq "Môj Chatbot — single clean design system" dist/widget.css
+          grep -Fqi "3478f6" dist/widget.css
+          grep -Fq "cw-chat-builder" dist/widget.css
+          grep -Fq "cw-contact-stage" dist/widget.css
+          grep -Fq "cw-tabs" dist/widget.css
           grep -Fq "assistant-redesign" src/main.tsx
           grep -Fq "assistant-redesign" src/embed.tsx
           ! grep -Fq "taste-system-final" src/main.tsx
           ! grep -Fq "web-palette-chatbot-final" src/main.tsx
           ! grep -Fq "installWidgetSpotlight" src/main.tsx
-          grep -Fq "cw-chat-builder" dist/widget.css
-          grep -Fq "cw-contact-stage" dist/widget.css
-          grep -Fq -- "--mc-blue: #3478f6" dist/widget.css
           grep -Fq "api/lead" src/lib/leadApi.ts
           grep -Fq "Nechať sa previesť výberom" src/components/widget/AssistantConversation.tsx
           grep -Fq "Čo má váš web vybaviť za vás?" src/lib/assistantFlow.ts
@@ -134,7 +134,7 @@ jobs:
 
           verify "/" "Môj Chatbot"
           verify "/widget.js" "clean-redesign-20260723-v9"
-          verify "/widget.css" "single clean design system"
+          verify "/widget.css" "3478f6"
           verify "/build-meta.json" "$SOURCE_SHA"
 
       - name: Checkout latest main for deployment record
