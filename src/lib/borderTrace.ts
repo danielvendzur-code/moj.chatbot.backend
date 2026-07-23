@@ -1,6 +1,6 @@
 const timers = new WeakMap<HTMLElement, number>();
 
-/** Replays the click-only border trace without leaving an idle animation behind. */
+/** Replays the click-only border trace, then leaves enough time for the centre fill. */
 export function replayBorderTrace(element: HTMLElement): void {
   const previousTimer = timers.get(element);
   if (previousTimer) window.clearTimeout(previousTimer);
@@ -14,6 +14,6 @@ export function replayBorderTrace(element: HTMLElement): void {
     window.setTimeout(() => {
       element.classList.remove("is-border-tracing");
       timers.delete(element);
-    }, 920),
+    }, 1260),
   );
 }
