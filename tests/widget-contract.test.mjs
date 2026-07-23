@@ -7,13 +7,15 @@ const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 test("final visual system keeps the shared black, white and blue palette", async () => {
   const baseCss = await read("src/black-blue-refresh.css");
   const premiumCss = await read("src/premium-liquid-final.css");
+  const chipCss = await read("src/chip-refinement-final.css");
   assert.match(baseCss, /--cw-bg:\s*#050609/i);
   assert.match(baseCss, /--cw-ink:\s*#f7f9fc/i);
   assert.match(baseCss, /--cw-action:\s*#3478f6/i);
   assert.match(baseCss, /--cw-action-hover:\s*#1f55c9/i);
   assert.match(premiumCss, /--cw-liquid-blue-light:\s*#75b8ff/i);
+  assert.match(chipCss, /#c6e1ff/i);
   assert.doesNotMatch(
-    `${baseCss}\n${premiumCss}`,
+    `${baseCss}\n${premiumCss}\n${chipCss}`,
     /#65e6c1|#83f1d0|#ff6c67|#c9aa70|#c47c5e|#d9bc84/i,
   );
 });
@@ -31,21 +33,23 @@ test("demo and embedded builds import the identical final style stack", async ()
     "flow-content-polish.css",
     "black-blue-refresh.css",
     "premium-liquid-final.css",
+    "chip-refinement-final.css",
   ];
   for (const stylesheet of expected) {
     assert.match(main, new RegExp(stylesheet.replace(".", "\\.")));
     assert.match(embed, new RegExp(stylesheet.replace(".", "\\.")));
   }
   assert.ok(
-    main.indexOf('import "./black-blue-refresh.css"') <
-      main.indexOf('import "./premium-liquid-final.css"'),
+    main.indexOf('import "./premium-liquid-final.css"') <
+      main.indexOf('import "./chip-refinement-final.css"'),
   );
   assert.ok(
-    embed.indexOf('import "./black-blue-refresh.css"') <
-      embed.indexOf('import "./premium-liquid-final.css"'),
+    embed.indexOf('import "./premium-liquid-final.css"') <
+      embed.indexOf('import "./chip-refinement-final.css"'),
   );
-  assert.match(embed, /ai-assistant-liquid-20260723/);
-  assert.match(deploy, /ai-assistant-liquid-20260723/);
+  assert.match(embed, /professional-chips-20260723/);
+  assert.match(deploy, /professional-chips-20260723/);
+  assert.match(deploy, /cw-professional-centre-fill/);
 });
 
 test("AI Assistant identity and vector mascot are consistent", async () => {
@@ -100,24 +104,36 @@ test("quick replies never drag sideways and mobile inputs prevent browser zoom",
     conversation,
     /cw-chip cw-chip--primary[\s\S]*?Vyskladať riešenie/,
   );
+  assert.match(conversation, /setTimeout\(onOpenCalculator, 1120\)/);
   assert.match(css, /grid-template-columns:\s*repeat\(2/i);
   assert.match(css, /touch-action:\s*pan-y/i);
   assert.match(css, /font-size:\s*16px !important/i);
   assert.match(css, /height:\s*100dvh !important/i);
 });
 
-test("configurator chips are sharp liquid-glass controls with click tracing", async () => {
+test("chips trace the full border before filling from the centre", async () => {
   const conversation = await read("src/components/widget/AssistantConversation.tsx");
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
-  const css = await read("src/premium-liquid-final.css");
+  const trace = await read("src/lib/borderTrace.ts");
+  const css = await read("src/chip-refinement-final.css");
   assert.match(conversation, /replayBorderTrace\(event\.currentTarget\)/);
   assert.match(calculator, /replayBorderTrace\(event\.currentTarget\)/);
-  assert.match(css, /\.cw-rowcard__icon svg/);
-  assert.match(css, /shape-rendering:\s*geometricPrecision/);
-  assert.match(css, /backdrop-filter:\s*blur\(16px\)/i);
-  assert.match(css, /@keyframes cw-liquid-border-trace/);
+  assert.match(trace, /1260/);
+  assert.match(css, /@keyframes cw-professional-border-trace/);
+  assert.match(css, /cw-professional-border-trace 720ms/);
+  assert.match(css, /0%,[\s\S]*62%[\s\S]*background-size:\s*0% 0%/);
+  assert.match(css, /cw-professional-centre-fill 1180ms/);
+  assert.match(css, /mask-composite:\s*exclude/);
   assert.match(css, /\.cw-chip\.is-border-tracing::after/);
-  assert.match(css, /\.cw-rowcard\[data-selected="true"\]/);
+});
+
+test("nested chip bubbles are removed while icons remain sharp", async () => {
+  const css = await read("src/chip-refinement-final.css");
+  assert.match(css, /\.cw-rowcard__icon,[\s\S]*border:\s*0 !important/);
+  assert.match(css, /\.cw-rowcard__icon svg[\s\S]*shape-rendering:\s*geometricPrecision/);
+  assert.match(css, /\.cw-opt__radio[\s\S]*width:\s*4px !important/);
+  assert.match(css, /\.cw-opt__tag[\s\S]*background:\s*transparent !important/);
+  assert.match(css, /\.cw-rowcard\[data-selected="true"\]::before[\s\S]*box-shadow:\s*none !important/);
 });
 
 test("chat client has a real HTTPS endpoint, timeout and deterministic outage fallback", async () => {
@@ -146,30 +162,35 @@ test("server API enforces origins, JSON, body limits, rate limits and upstream t
   assert.doesNotMatch(api, /Access-Control-Allow-Origin["'],\s*["']\*/);
 });
 
-test("premium styles cover major surfaces, CTAs, mobile and reduced motion", async () => {
-  const css = await read("src/premium-liquid-final.css");
+test("premium styles cover major surfaces, chips, mobile and reduced motion", async () => {
+  const premiumCss = await read("src/premium-liquid-final.css");
+  const chipCss = await read("src/chip-refinement-final.css");
   for (const selector of [
     ".cw-launcher",
     ".cw-panel",
     ".cw-panel-head",
     ".cw-tabs",
     ".cw-message-wrap p",
-    ".cw-chip",
     ".cw-inputbar",
     ".cw-progress__fill",
-    ".cw-rowcard",
-    ".cw-scard",
-    ".cw-opt",
-    ".cw-vcard",
     ".cw-summary",
     ".cw-lead",
     ".cw-next",
     ".cw-submit",
     ".cw-thanks",
   ]) {
-    assert.ok(css.includes(selector), `Missing premium style for ${selector}`);
+    assert.ok(premiumCss.includes(selector), `Missing premium style for ${selector}`);
   }
-  assert.match(css, /prefers-reduced-motion:\s*reduce/);
-  assert.match(css, /focus-visible/);
-  assert.match(css, /@media \(max-width:\s*520px\)/);
+  for (const selector of [
+    ".cw-chip",
+    ".cw-rowcard",
+    ".cw-scard",
+    ".cw-opt",
+    ".cw-vcard",
+  ]) {
+    assert.ok(chipCss.includes(selector), `Missing final chip style for ${selector}`);
+  }
+  assert.match(chipCss, /prefers-reduced-motion:\s*reduce/);
+  assert.match(chipCss, /focus-visible/);
+  assert.match(chipCss, /@media \(max-width:\s*520px\)/);
 });
