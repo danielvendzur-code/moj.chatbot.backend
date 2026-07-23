@@ -1,4 +1,4 @@
-const SELECTOR = ".cw-spotlight";
+const SELECTOR = ".cw-chat-builder.cw-spotlight";
 
 export function installWidgetSpotlight(): () => void {
   if (
