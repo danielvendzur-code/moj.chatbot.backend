@@ -1,4 +1,4 @@
-run_id=30013236934
+run_id=30013282321
 install=success
 lint=success
 build=success
@@ -27,15 +27,15 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.38 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-KG1f4lVS.css  [39m[1m[2m155.49 kB[22m[1m[22m[2m │ gzip: 24.37 kB[22m
 [2mdist/[22m[2massets/[22m[36mindex-rrhw-IpL.js   [39m[1m[2m223.59 kB[22m[1m[22m[2m │ gzip: 75.71 kB[22m
-[32m✓ built in 1.23s[39m
+[32m✓ built in 1.19s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 101 modules transformed.
+[32m✓[39m 102 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[35mwidget.css  [39m[1m[2m118.72 kB[22m[1m[22m[2m │ gzip: 19.07 kB[22m
+[2mdist/[22m[35mwidget.css  [39m[1m[2m155.49 kB[22m[1m[22m[2m │ gzip: 24.37 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m221.57 kB[22m[1m[22m[2m │ gzip: 75.10 kB[22m
-[32m✓ built in 1.18s[39m
+[32m✓ built in 1.17s[39m
 
 ===== test =====
 
@@ -46,19 +46,145 @@ TAP version 13
 # Subtest: final visual system keeps the shared black, white and blue palette
 ok 1 - final visual system keeps the shared black, white and blue palette
   ---
-  duration_ms: 7.879126
+  duration_ms: 9.031423
   type: 'test'
   ...
 # Subtest: demo and embedded builds import the identical final style stack
-ok 2 - demo and embedded builds import the identical final style stack
+not ok 2 - demo and embedded builds import the identical final style stack
   ---
-  duration_ms: 1.494046
+  duration_ms: 2.779755
   type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:24:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /apple-liquid-controls-20260723/. Input:
+    
+    'import { createRoot } from "react-dom/client";\n' +
+      'import { AssistantWidget } from "./components/widget/AssistantWidget";\n' +
+      'import { installLiquidSegmentedDrag } from "./lib/liquidSegmentedDrag";\n' +
+      'import "./widget.css";\n' +
+      'import "./interaction.css";\n' +
+      'import "./requested-polish.css";\n' +
+      'import "./world-class-polish.css";\n' +
+      'import "./competition-widget.css";\n' +
+      'import "./flow-content-polish.css";\n' +
+      'import "./black-blue-refresh.css";\n' +
+      'import "./premium-liquid-final.css";\n' +
+      'import "./chip-refinement-final.css";\n' +
+      'import "./apple-liquid-fixes.css";\n' +
+      'import "./apple-liquid-system-final.css";\n' +
+      '\n' +
+      'const HOST_ID = "dv-assistant-root";\n' +
+      'const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";\n' +
+      '\n' +
+      'function ensureStylesheet(): void {\n' +
+      '  if (!scriptSrc) return;\n' +
+      '  const href = scriptSrc.replace(/widget\\.js(\\?.*)?$/, "widget.css$1");\n' +
+      '  if (href === scriptSrc) return;\n' +
+      '  if (document.querySelector(`link[data-dv-assistant-styles="true"]`)) return;\n' +
+      '\n' +
+      '  const link = document.createElement("link");\n' +
+      '  link.rel = "stylesheet";\n' +
+      '  link.href = href;\n' +
+      '  link.crossOrigin = "anonymous";\n' +
+      '  link.referrerPolicy = "strict-origin-when-cross-origin";\n' +
+      '  link.dataset.dvAssistantStyles = "true";\n' +
+      '  document.head.appendChild(link);\n' +
+      '}\n' +
+      '\n' +
+      'function mount(): void {\n' +
+      '  const existing = document.getElementById(HOST_ID);\n' +
+      '  if (existing?.childElementCount) return;\n' +
+      '\n' +
+      '  ensureStylesheet();\n' +
+      '  installLiquidSegmentedDrag();\n' +
+      '  const host = existing ?? document.createElement("div");\n' +
+      '  host.id = HOST_ID;\n' +
+      '  host.setAttribute("data-dv-assistant-version", "complete-liquid-system-20260723");\n' +
+      '\n' +
+      '  const siteFont = window.getComputedStyle(document.body).fontFamily;\n' +
+      '  if (siteFont) host.style.setProperty("--cw-font", siteFont);\n' +
+      '  if (!existing) document.body.appendChild(host);\n' +
+      '\n' +
+      '  createRoot(host).render(<AssistantWidget />);\n' +
+      '}\n' +
+      '\n' +
+      'if (document.readyState === "loading") {\n' +
+      '  document.addEventListener("DOMContentLoaded", mount, { once: true });\n' +
+      '} else {\n' +
+      '  mount();\n' +
+      '}\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    import { createRoot } from "react-dom/client";
+    import { AssistantWidget } from "./components/widget/AssistantWidget";
+    import { installLiquidSegmentedDrag } from "./lib/liquidSegmentedDrag";
+    import "./widget.css";
+    import "./interaction.css";
+    import "./requested-polish.css";
+    import "./world-class-polish.css";
+    import "./competition-widget.css";
+    import "./flow-content-polish.css";
+    import "./black-blue-refresh.css";
+    import "./premium-liquid-final.css";
+    import "./chip-refinement-final.css";
+    import "./apple-liquid-fixes.css";
+    import "./apple-liquid-system-final.css";
+    
+    const HOST_ID = "dv-assistant-root";
+    const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
+    
+    function ensureStylesheet(): void {
+      if (!scriptSrc) return;
+      const href = scriptSrc.replace(/widget\.js(\?.*)?$/, "widget.css$1");
+      if (href === scriptSrc) return;
+      if (document.querySelector(`link[data-dv-assistant-styles="true"]`)) return;
+    
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = href;
+      link.crossOrigin = "anonymous";
+      link.referrerPolicy = "strict-origin-when-cross-origin";
+      link.dataset.dvAssistantStyles = "true";
+      document.head.appendChild(link);
+    }
+    
+    function mount(): void {
+      const existing = document.getElementById(HOST_ID);
+      if (existing?.childElementCount) return;
+    
+      ensureStylesheet();
+      installLiquidSegmentedDrag();
+      const host = existing ?? document.createElement("div");
+      host.id = HOST_ID;
+      host.setAttribute("data-dv-assistant-version", "complete-liquid-system-20260723");
+    
+      const siteFont = window.getComputedStyle(document.body).fontFamily;
+      if (siteFont) host.style.setProperty("--cw-font", siteFont);
+      if (!existing) document.body.appendChild(host);
+    
+      createRoot(host).render(<AssistantWidget />);
+    }
+    
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", mount, { once: true });
+    } else {
+      mount();
+    }
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:52:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 # Subtest: AI Assistant identity and vector mascot are consistent
 not ok 3 - AI Assistant identity and vector mascot are consistent
   ---
-  duration_ms: 2.990797
+  duration_ms: 3.815668
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:57:1'
   failureType: 'testCodeFailure'
@@ -564,64 +690,64 @@ not ok 3 - AI Assistant identity and vector mascot are consistent
 # Subtest: mode tabs switch directly and use a draggable liquid glass indicator
 ok 4 - mode tabs switch directly and use a draggable liquid glass indicator
   ---
-  duration_ms: 4.254253
+  duration_ms: 4.031171
   type: 'test'
   ...
 # Subtest: builder flow omits priority and keeps contact as final step
 ok 5 - builder flow omits priority and keeps contact as final step
   ---
-  duration_ms: 0.810457
+  duration_ms: 1.066598
   type: 'test'
   ...
 # Subtest: final screen visually orders contact before summary
 ok 6 - final screen visually orders contact before summary
   ---
-  duration_ms: 0.60287
+  duration_ms: 0.855552
   type: 'test'
   ...
 # Subtest: quick replies never drag sideways and mobile inputs prevent browser zoom
 ok 7 - quick replies never drag sideways and mobile inputs prevent browser zoom
   ---
-  duration_ms: 1.339619
+  duration_ms: 1.580409
   type: 'test'
   ...
 # Subtest: chips trace the full border before filling from the centre
 ok 8 - chips trace the full border before filling from the centre
   ---
-  duration_ms: 1.545733
+  duration_ms: 1.73542
   type: 'test'
   ...
 # Subtest: nested chip bubbles are removed while icons remain sharp
 ok 9 - nested chip bubbles are removed while icons remain sharp
   ---
-  duration_ms: 1.484773
+  duration_ms: 1.571195
   type: 'test'
   ...
 # Subtest: chat client has a real HTTPS endpoint, timeout and deterministic outage fallback
 ok 10 - chat client has a real HTTPS endpoint, timeout and deterministic outage fallback
   ---
-  duration_ms: 1.091252
+  duration_ms: 1.31472
   type: 'test'
   ...
 # Subtest: server API enforces origins, JSON, body limits, rate limits and upstream timeout
 ok 11 - server API enforces origins, JSON, body limits, rate limits and upstream timeout
   ---
-  duration_ms: 1.166503
+  duration_ms: 1.212047
   type: 'test'
   ...
 # Subtest: premium styles cover major surfaces, chips, mobile and reduced motion
 ok 12 - premium styles cover major surfaces, chips, mobile and reduced motion
   ---
-  duration_ms: 1.612361
+  duration_ms: 1.702671
   type: 'test'
   ...
 1..12
 # tests 12
 # suites 0
-# pass 11
-# fail 1
+# pass 10
+# fail 2
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 83.739384
+# duration_ms 90.437524
  ELIFECYCLE  Test failed. See above for more details.
