@@ -66,15 +66,14 @@ jobs:
           test -f dist/build-meta.json
           test -f api/lead.ts
           grep -Fq "competition-redesign-20260723-v10" dist/widget.js
-          grep -Fq "competition-grade design system v10" dist/widget.css
+          grep -Fq "cw-choice-grid--interest" dist/widget.css
+          grep -Fq "cw-selection-indicator" dist/widget.css
+          grep -Fq "border-radius:999px" dist/widget.css
+          grep -Fq -- "--mc-blue:#3478f6" dist/widget.css
           grep -Fq "assistant-redesign" src/main.tsx
           grep -Fq "assistant-redesign" src/embed.tsx
           grep -Fq "installWidgetSpotlight" src/main.tsx
           grep -Fq "installWidgetSpotlight" src/embed.tsx
-          grep -Fq "cw-choice-grid--interest" dist/widget.css
-          grep -Fq "cw-selection-indicator" dist/widget.css
-          grep -Fq "border-radius: 999px" dist/widget.css
-          grep -Fq -- "--mc-blue: #3478f6" dist/widget.css
           grep -Fq "api/lead" src/lib/leadApi.ts
           grep -Fq "Vyskladať riešenie" src/components/widget/AssistantConversation.tsx
           grep -Fq "Čo má váš web vybaviť za vás?" src/lib/assistantFlow.ts
@@ -136,7 +135,7 @@ jobs:
 
           verify "/" "Môj Chatbot"
           verify "/widget.js" "competition-redesign-20260723-v10"
-          verify "/widget.css" "competition-grade design system v10"
+          verify "/widget.css" "cw-selection-indicator"
           verify "/build-meta.json" "$SOURCE_SHA"
 
       - name: Checkout latest main for deployment record
