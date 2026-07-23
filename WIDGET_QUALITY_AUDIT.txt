@@ -1,4 +1,4 @@
-run_id=30033237115
+run_id=30033301088
 install=success
 lint=success
 build=success
@@ -26,16 +26,16 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-XIFJLOFA.css  [39m[1m[2m249.67 kB[22m[1m[22m[2m │ gzip: 35.87 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-Bv-PfHF6.js   [39m[1m[2m220.44 kB[22m[1m[22m[2m │ gzip: 74.55 kB[22m
-[32m✓ built in 1.01s[39m
+[2mdist/[22m[2massets/[22m[36mindex-CTPiSBiu.js   [39m[1m[2m220.20 kB[22m[1m[22m[2m │ gzip: 74.51 kB[22m
+[32m✓ built in 1.29s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 107 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m233.07 kB[22m[1m[22m[2m │ gzip: 34.17 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m218.40 kB[22m[1m[22m[2m │ gzip: 73.88 kB[22m
-[32m✓ built in 963ms[39m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m218.17 kB[22m[1m[22m[2m │ gzip: 73.83 kB[22m
+[32m✓ built in 1.24s[39m
 
 ===== test =====
 
@@ -46,7 +46,7 @@ TAP version 13
 # Subtest: the owner-friendly layer is present in demo and embed builds
 not ok 1 - the owner-friendly layer is present in demo and embed builds
   ---
-  duration_ms: 6.521314
+  duration_ms: 8.619302
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:7:1'
   failureType: 'testCodeFailure'
@@ -66,84 +66,1128 @@ not ok 1 - the owner-friendly layer is present in demo and embed builds
     async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
   ...
 # Subtest: assistant order remains builder messages chips input contacts
-ok 2 - assistant order remains builder messages chips input contacts
+not ok 2 - assistant order remains builder messages chips input contacts
   ---
-  duration_ms: 1.306045
+  duration_ms: 2.920876
   type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:27:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /5 jednoduchých otázok/. Input:
+    
+    'import { useEffect, useRef, useState } from "react";\n' +
+      'import { animateSentMessage } from "../../lib/motion";\n' +
+      'import { sendChat, type ChatTurn } from "../../lib/assistantApi";\n' +
+      'import { track } from "../../lib/analytics";\n' +
+      'import { BubbleLogo } from "./BubbleLogo";\n' +
+      'import { WidgetIcon } from "./WidgetIcon";\n' +
+      '\n' +
+      'type AssistantConversationProps = {\n' +
+      '  resetToken: number;\n' +
+      '  onOpenCalculator: () => void;\n' +
+      '};\n' +
+      '\n' +
+      'type ChatMessage = {\n' +
+      '  id: number;\n' +
+      '  from: "bot" | "me";\n' +
+      '  text: string;\n' +
+      '};\n' +
+      '\n' +
+      'const INITIAL_MESSAGES: ChatMessage[] = [\n' +
+      '  {\n' +
+      '    id: 1,\n' +
+      '    from: "bot",\n' +
+      '    text:\n' +
+      '      "Napíšte, čo zákazníci na vašom webe najčastejšie riešia. Navrhnem, či je vhodnejší chatbot, kalkulačka alebo konfigurátor. Ceny začínajú od 350 €.",\n' +
+      '  },\n' +
+      '];\n' +
+      '\n' +
+      'type QuickReply = { label: string; question: string };\n' +
+      '\n' +
+      'const QUICK_REPLIES: QuickReply[] = [\n' +
+      '  {\n' +
+      '    label: "Čo môže vyriešiť",\n' +
+      '    question: "Čo môže chatbot reálne vyriešiť na webe mojej firmy?",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    label: "Ako to prebieha",\n' +
+      '    question: "Ako prebieha návrh, príprava a nasadenie riešenia?",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    label: "Čo potrebujete dodať",\n' +
+      '    question: "Aké podklady odo mňa potrebujete na prípravu chatbota alebo kalkulačky?",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    label: "Pozrieť ukážky",\n' +
+      '    question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",\n' +
+      '  },\n' +
+      '];\n' +
+      '\n' +
+      'const CHAT_FALLBACK =\n' +
+      '  "Teraz sa neviem spojiť. Otvorte krátke zadanie alebo použite priamy kontakt nižšie. Ozvem sa s konkrétnym návrhom.";\n' +
+      '\n' +
+      'export function AssistantConversation({\n' +
+      '  resetToken,\n' +
+      '  onOpenCalculator,\n' +
+      '}: AssistantConversationProps): JSX.Element {\n' +
+      '  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);\n' +
+      '  const [input, setInput] = useState("");\n' +
+      '  const [typing, setTyping] = useState(false);\n' +
+      '  const nextIdRef = useRef(2);\n' +
+      '  const messagesRef = useRef<HTMLDivElement>(null);\n' +
+      '  const [planeFx, setPlaneFx] = useState(false);\n' +
+      '  const planeTimerRef = useRef<number | null>(null);\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    const last = messages[messages.length - 1];\n' +
+      '    if (!last || last.from !== "me") return;\n' +
+      '    const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");\n' +
+      '    animateSentMessage(rows?.[rows.length - 1] ?? null);\n' +
+      '  }, [messages]);\n' +
+      '\n' +
+      '  useEffect(\n' +
+      '    () => () => {\n' +
+      '      if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);\n' +
+      '    },\n' +
+      '    [],\n' +
+      '  );\n' +
+      '\n' +
+      '  const launchPlane = () => {\n' +
+      '    setPlaneFx(false);\n' +
+      '    requestAnimationFrame(() => setPlaneFx(true));\n' +
+      '    if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);\n' +
+      '    planeTimerRef.current = window.setTimeout(() => setPlaneFx(false), 700);\n' +
+      '  };\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    setMessages(INITIAL_MESSAGES);\n' +
+      '    setInput("");\n' +
+      '    setTyping(false);\n' +
+      '    nextIdRef.current = 2;\n' +
+      '  }, [resetToken]);\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    const container = messagesRef.current;\n' +
+      '    if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });\n' +
+      '  }, [messages, typing]);\n' +
+      '\n' +
+      '  const ask = async (question: string) => {\n' +
+      '    if (typing) return;\n' +
+      '    const userMessage = {\n' +
+      '      id: nextIdRef.current++,\n' +
+      '      from: "me" as const,\n' +
+      '      text: question,\n' +
+      '    };\n' +
+      '    setMessages((current) => [...current, userMessage]);\n' +
+      '    setTyping(true);\n' +
+      '    track("chat_message_sent", { length: question.length });\n' +
+      '\n' +
+      '    const turns: ChatTurn[] = [...messages, userMessage].map((message) => ({\n' +
+      '      role: message.from === "me" ? "user" : "assistant",\n' +
+      '      text: message.text,\n' +
+      '    }));\n' +
+      '    const firstUser = turns.findIndex((turn) => turn.role === "user");\n' +
+      '    const history = firstUser === -1 ? [] : turns.slice(firstUser);\n' +
+      '\n' +
+      '    try {\n' +
+      '      const reply = await sendChat(history);\n' +
+      '      setMessages((current) => [\n' +
+      '        ...current,\n' +
+      '        { id: nextIdRef.current++, from: "bot", text: reply },\n' +
+      '      ]);\n' +
+      '      track("chat_reply_received");\n' +
+      '    } catch (error) {\n' +
+      '      setMessages((current) => [\n' +
+      '        ...current,\n' +
+      '        { id: nextIdRef.current++, from: "bot", text: CHAT_FALLBACK },\n' +
+      '      ]);\n' +
+      '      track("chat_error", {\n' +
+      '        reason: error instanceof Error ? error.message : "unknown",\n' +
+      '      });\n' +
+      '    } finally {\n' +
+      '      setTyping(false);\n' +
+      '    }\n' +
+      '  };\n' +
+      '\n' +
+      '  const submit = () => {\n' +
+      '    const value = input.trim();\n' +
+      '    if (!value || typing) return;\n' +
+      '    setInput("");\n' +
+      '    launchPlane();\n' +
+      '    void ask(value);\n' +
+      '  };\n' +
+      '\n' +
+      '  const openCalculator = () => {\n' +
+      '    track("chat_builder_open");\n' +
+      '    onOpenCalculator();\n' +
+      '  };\n' +
+      '\n' +
+      '  return (\n' +
+      '    <div className="cw-conversation" data-testid="assistant-view">\n' +
+      '      <div className="cw-chat-top">\n' +
+      '        <button type="button" className="cw-chat-builder cw-spotlight" onClick={openCalculator}>\n' +
+      '          <span className="cw-chat-builder__icon" aria-hidden="true">\n' +
+      '            <WidgetIcon name="calculator" />\n' +
+      '          </span>\n' +
+      '          <span className="cw-chat-builder__copy">\n' +
+      '            <b>Vyskladať vhodné riešenie</b>\n' +
+      '            <small>Odpovedzte na 5 krátkych otázok. Na konci odošlete kontakt.</small>\n' +
+      '          </span>\n' +
+      '        </button>\n' +
+      '      </div>\n' +
+      '\n' +
+      '      <div className="cw-messages" ref={messagesRef} aria-live="polite">\n' +
+      '        {messages.map((message) => (\n' +
+      '          <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>\n' +
+      '            {message.from === "bot" ? (\n' +
+      '              <span className="cw-avatar">\n' +
+      '                <BubbleLogo size="avatar" />\n' +
+      '              </span>\n' +
+      '            ) : null}\n' +
+      '            <div className="cw-message-wrap">\n' +
+      '              <p>{message.text}</p>\n' +
+      '            </div>\n' +
+      '          </div>\n' +
+      '        ))}\n' +
+      '\n' +
+      '        {typing ? (\n' +
+      '          <div className="cw-message-row cw-message-row--bot">\n' +
+      '            <span className="cw-avatar">\n' +
+      '              <BubbleLogo size="avatar" />\n' +
+      '            </span>\n' +
+      '            <div className="cw-typing" aria-label="Môj Chatbot odpovedá">\n' +
+      '              <i />\n' +
+      '              <i />\n' +
+      '              <i />\n' +
+      '            </div>\n' +
+      '          </div>\n' +
+      '        ) : null}\n' +
+      '      </div>\n' +
+      '\n' +
+      '      <div className="cw-quick-replies" aria-label="Časté otázky">\n' +
+      '        {QUICK_REPLIES.map(({ label, question }) => (\n' +
+      '          <button\n' +
+      '            type="button"\n' +
+      '            className="cw-chip"\n' +
+      '            key={label}\n' +
+      '            title={question}\n' +
+      '            onClick={() => void ask(question)}\n' +
+      '          >\n' +
+      '            <span>{label}</span>\n' +
+      '          </button>\n' +
+      '        ))}\n' +
+      '      </div>\n' +
+      '\n' +
+      '      <div className="cw-inputbar">\n' +
+      '        <input\n' +
+      '          value={input}\n' +
+      '          onChange={(event) => setInput(event.target.value)}\n' +
+      '          onKeyDown={(event) => {\n' +
+      '            if (event.key === "Enter") {\n' +
+      '              event.preventDefault();\n' +
+      '              submit();\n' +
+      '            }\n' +
+      '          }}\n' +
+      '          placeholder="Napíšte otázku o vašom webe…"\n' +
+      '          aria-label="Otázka pre Môj Chatbot"\n' +
+      '        />\n' +
+      '        <button\n' +
+      '          type="button"\n' +
+      '          className={planeFx ? "is-sending" : undefined}\n' +
+      '          onClick={submit}\n' +
+      '          disabled={!input.trim() || typing}\n' +
+      '          aria-label="Odoslať správu"\n' +
+      '        >\n' +
+      '          <WidgetIcon name="send" />\n' +
+      '        </button>\n' +
+      '      </div>\n' +
+      '\n' +
+      '      <nav className="cw-direct-actions" aria-label="Priamy kontakt">\n' +
+      '        <span className="cw-direct-actions__label">Alebo ma kontaktujte priamo</span>\n' +
+      '        <div className="cw-direct-actions__grid">\n' +
+      '          <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">\n' +
+      '            <span className="cw-direct-actions__icon">\n' +
+      '              <WidgetIcon name="chat" />\n' +
+      '            </span>\n' +
+      '            <span>WhatsApp</span>\n' +
+      '          </a>\n' +
+      '          <a href="tel:+421948699433">\n' +
+      '            <span className="cw-direct-actions__icon">\n' +
+      '              <WidgetIcon name="phone" />\n' +
+      '            </span>\n' +
+      '            <span>Zavolať</span>\n' +
+      '          </a>\n' +
+      '          <a href="mailto:daniel@vendzur.sk">\n' +
+      '            <span className="cw-direct-actions__icon">\n' +
+      '              <WidgetIcon name="mail" />\n' +
+      '            </span>\n' +
+      '            <span>E-mail</span>\n' +
+      '          </a>\n' +
+      '        </div>\n' +
+      '      </nav>\n' +
+      '    </div>\n' +
+      '  );\n' +
+      '}\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    import { useEffect, useRef, useState } from "react";
+    import { animateSentMessage } from "../../lib/motion";
+    import { sendChat, type ChatTurn } from "../../lib/assistantApi";
+    import { track } from "../../lib/analytics";
+    import { BubbleLogo } from "./BubbleLogo";
+    import { WidgetIcon } from "./WidgetIcon";
+    
+    type AssistantConversationProps = {
+      resetToken: number;
+      onOpenCalculator: () => void;
+    };
+    
+    type ChatMessage = {
+      id: number;
+      from: "bot" | "me";
+      text: string;
+    };
+    
+    const INITIAL_MESSAGES: ChatMessage[] = [
+      {
+        id: 1,
+        from: "bot",
+        text:
+          "Napíšte, čo zákazníci na vašom webe najčastejšie riešia. Navrhnem, či je vhodnejší chatbot, kalkulačka alebo konfigurátor. Ceny začínajú od 350 €.",
+      },
+    ];
+    
+    type QuickReply = { label: string; question: string };
+    
+    const QUICK_REPLIES: QuickReply[] = [
+      {
+        label: "Čo môže vyriešiť",
+        question: "Čo môže chatbot reálne vyriešiť na webe mojej firmy?",
+      },
+      {
+        label: "Ako to prebieha",
+        question: "Ako prebieha návrh, príprava a nasadenie riešenia?",
+      },
+      {
+        label: "Čo potrebujete dodať",
+        question: "Aké podklady odo mňa potrebujete na prípravu chatbota alebo kalkulačky?",
+      },
+      {
+        label: "Pozrieť ukážky",
+        question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",
+      },
+    ];
+    
+    const CHAT_FALLBACK =
+      "Teraz sa neviem spojiť. Otvorte krátke zadanie alebo použite priamy kontakt nižšie. Ozvem sa s konkrétnym návrhom.";
+    
+    export function AssistantConversation({
+      resetToken,
+      onOpenCalculator,
+    }: AssistantConversationProps): JSX.Element {
+      const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
+      const [input, setInput] = useState("");
+      const [typing, setTyping] = useState(false);
+      const nextIdRef = useRef(2);
+      const messagesRef = useRef<HTMLDivElement>(null);
+      const [planeFx, setPlaneFx] = useState(false);
+      const planeTimerRef = useRef<number | null>(null);
+    
+      useEffect(() => {
+        const last = messages[messages.length - 1];
+        if (!last || last.from !== "me") return;
+        const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");
+        animateSentMessage(rows?.[rows.length - 1] ?? null);
+      }, [messages]);
+    
+      useEffect(
+        () => () => {
+          if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
+        },
+        [],
+      );
+    
+      const launchPlane = () => {
+        setPlaneFx(false);
+        requestAnimationFrame(() => setPlaneFx(true));
+        if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
+        planeTimerRef.current = window.setTimeout(() => setPlaneFx(false), 700);
+      };
+    
+      useEffect(() => {
+        setMessages(INITIAL_MESSAGES);
+        setInput("");
+        setTyping(false);
+        nextIdRef.current = 2;
+      }, [resetToken]);
+    
+      useEffect(() => {
+        const container = messagesRef.current;
+        if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+      }, [messages, typing]);
+    
+      const ask = async (question: string) => {
+        if (typing) return;
+        const userMessage = {
+          id: nextIdRef.current++,
+          from: "me" as const,
+          text: question,
+        };
+        setMessages((current) => [...current, userMessage]);
+        setTyping(true);
+        track("chat_message_sent", { length: question.length });
+    
+        const turns: ChatTurn[] = [...messages, userMessage].map((message) => ({
+          role: message.from === "me" ? "user" : "assistant",
+          text: message.text,
+        }));
+        const firstUser = turns.findIndex((turn) => turn.role === "user");
+        const history = firstUser === -1 ? [] : turns.slice(firstUser);
+    
+        try {
+          const reply = await sendChat(history);
+          setMessages((current) => [
+            ...current,
+            { id: nextIdRef.current++, from: "bot", text: reply },
+          ]);
+          track("chat_reply_received");
+        } catch (error) {
+          setMessages((current) => [
+            ...current,
+            { id: nextIdRef.current++, from: "bot", text: CHAT_FALLBACK },
+          ]);
+          track("chat_error", {
+            reason: error instanceof Error ? error.message : "unknown",
+          });
+        } finally {
+          setTyping(false);
+        }
+      };
+    
+      const submit = () => {
+        const value = input.trim();
+        if (!value || typing) return;
+        setInput("");
+        launchPlane();
+        void ask(value);
+      };
+    
+      const openCalculator = () => {
+        track("chat_builder_open");
+        onOpenCalculator();
+      };
+    
+      return (
+        <div className="cw-conversation" data-testid="assistant-view">
+          <div className="cw-chat-top">
+            <button type="button" className="cw-chat-builder cw-spotlight" onClick={openCalculator}>
+              <span className="cw-chat-builder__icon" aria-hidden="true">
+                <WidgetIcon name="calculator" />
+              </span>
+              <span className="cw-chat-builder__copy">
+                <b>Vyskladať vhodné riešenie</b>
+                <small>Odpovedzte na 5 krátkych otázok. Na konci odošlete kontakt.</small>
+              </span>
+            </button>
+          </div>
+    
+          <div className="cw-messages" ref={messagesRef} aria-live="polite">
+            {messages.map((message) => (
+              <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>
+                {message.from === "bot" ? (
+                  <span className="cw-avatar">
+                    <BubbleLogo size="avatar" />
+                  </span>
+                ) : null}
+                <div className="cw-message-wrap">
+                  <p>{message.text}</p>
+                </div>
+              </div>
+            ))}
+    
+            {typing ? (
+              <div className="cw-message-row cw-message-row--bot">
+                <span className="cw-avatar">
+                  <BubbleLogo size="avatar" />
+                </span>
+                <div className="cw-typing" aria-label="Môj Chatbot odpovedá">
+                  <i />
+                  <i />
+                  <i />
+                </div>
+              </div>
+            ) : null}
+          </div>
+    
+          <div className="cw-quick-replies" aria-label="Časté otázky">
+            {QUICK_REPLIES.map(({ label, question }) => (
+              <button
+                type="button"
+                className="cw-chip"
+                key={label}
+                title={question}
+                onClick={() => void ask(question)}
+              >
+                <span>{label}</span>
+              </button>
+            ))}
+          </div>
+    
+          <div className="cw-inputbar">
+            <input
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  submit();
+                }
+              }}
+              placeholder="Napíšte otázku o vašom webe…"
+              aria-label="Otázka pre Môj Chatbot"
+            />
+            <button
+              type="button"
+              className={planeFx ? "is-sending" : undefined}
+              onClick={submit}
+              disabled={!input.trim() || typing}
+              aria-label="Odoslať správu"
+            >
+              <WidgetIcon name="send" />
+            </button>
+          </div>
+    
+          <nav className="cw-direct-actions" aria-label="Priamy kontakt">
+            <span className="cw-direct-actions__label">Alebo ma kontaktujte priamo</span>
+            <div className="cw-direct-actions__grid">
+              <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
+                <span className="cw-direct-actions__icon">
+                  <WidgetIcon name="chat" />
+                </span>
+                <span>WhatsApp</span>
+              </a>
+              <a href="tel:+421948699433">
+                <span className="cw-direct-actions__icon">
+                  <WidgetIcon name="phone" />
+                </span>
+                <span>Zavolať</span>
+              </a>
+              <a href="mailto:daniel@vendzur.sk">
+                <span className="cw-direct-actions__icon">
+                  <WidgetIcon name="mail" />
+                </span>
+                <span>E-mail</span>
+              </a>
+            </div>
+          </nav>
+        </div>
+      );
+    }
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:36:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 # Subtest: mode tabs switch immediately without pointer capture
 ok 3 - mode tabs switch immediately without pointer capture
   ---
-  duration_ms: 1.382321
+  duration_ms: 3.858797
   type: 'test'
   ...
 # Subtest: spotlight stays compact and only the builder CTA displays it
 ok 4 - spotlight stays compact and only the builder CTA displays it
   ---
-  duration_ms: 1.700456
+  duration_ms: 2.856118
   type: 'test'
   ...
 # Subtest: quick replies are readable two by two above the input
 ok 5 - quick replies are readable two by two above the input
   ---
-  duration_ms: 1.721607
+  duration_ms: 1.982634
   type: 'test'
   ...
 # Subtest: configurator is five steps and contact remains final
 ok 6 - configurator is five steps and contact remains final
   ---
-  duration_ms: 0.948148
+  duration_ms: 1.722559
   type: 'test'
   ...
 # Subtest: configuration cards fill smoothly without shrink arrows or hover blobs
 ok 7 - configuration cards fill smoothly without shrink arrows or hover blobs
   ---
-  duration_ms: 1.360994
+  duration_ms: 1.796805
   type: 'test'
   ...
 # Subtest: selected checks are compact square and aligned
 ok 8 - selected checks are compact square and aligned
   ---
-  duration_ms: 0.621081
+  duration_ms: 0.799004
   type: 'test'
   ...
 # Subtest: contact asks for essentials and submits a real lead
 ok 9 - contact asks for essentials and submits a real lead
   ---
-  duration_ms: 1.401548
+  duration_ms: 1.561213
   type: 'test'
   ...
 # Subtest: assistant knows the verified starting price and brand
-ok 10 - assistant knows the verified starting price and brand
+not ok 10 - assistant knows the verified starting price and brand
   ---
-  duration_ms: 1.229166
+  duration_ms: 1.88688
   type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:145:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Jednoduchý chatbot začína od 350 €/. Input:
+    
+    'import { useEffect, useRef, useState } from "react";\n' +
+      'import { animateSentMessage } from "../../lib/motion";\n' +
+      'import { sendChat, type ChatTurn } from "../../lib/assistantApi";\n' +
+      'import { track } from "../../lib/analytics";\n' +
+      'import { BubbleLogo } from "./BubbleLogo";\n' +
+      'import { WidgetIcon } from "./WidgetIcon";\n' +
+      '\n' +
+      'type AssistantConversationProps = {\n' +
+      '  resetToken: number;\n' +
+      '  onOpenCalculator: () => void;\n' +
+      '};\n' +
+      '\n' +
+      'type ChatMessage = {\n' +
+      '  id: number;\n' +
+      '  from: "bot" | "me";\n' +
+      '  text: string;\n' +
+      '};\n' +
+      '\n' +
+      'const INITIAL_MESSAGES: ChatMessage[] = [\n' +
+      '  {\n' +
+      '    id: 1,\n' +
+      '    from: "bot",\n' +
+      '    text:\n' +
+      '      "Napíšte, čo zákazníci na vašom webe najčastejšie riešia. Navrhnem, či je vhodnejší chatbot, kalkulačka alebo konfigurátor. Ceny začínajú od 350 €.",\n' +
+      '  },\n' +
+      '];\n' +
+      '\n' +
+      'type QuickReply = { label: string; question: string };\n' +
+      '\n' +
+      'const QUICK_REPLIES: QuickReply[] = [\n' +
+      '  {\n' +
+      '    label: "Čo môže vyriešiť",\n' +
+      '    question: "Čo môže chatbot reálne vyriešiť na webe mojej firmy?",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    label: "Ako to prebieha",\n' +
+      '    question: "Ako prebieha návrh, príprava a nasadenie riešenia?",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    label: "Čo potrebujete dodať",\n' +
+      '    question: "Aké podklady odo mňa potrebujete na prípravu chatbota alebo kalkulačky?",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    label: "Pozrieť ukážky",\n' +
+      '    question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",\n' +
+      '  },\n' +
+      '];\n' +
+      '\n' +
+      'const CHAT_FALLBACK =\n' +
+      '  "Teraz sa neviem spojiť. Otvorte krátke zadanie alebo použite priamy kontakt nižšie. Ozvem sa s konkrétnym návrhom.";\n' +
+      '\n' +
+      'export function AssistantConversation({\n' +
+      '  resetToken,\n' +
+      '  onOpenCalculator,\n' +
+      '}: AssistantConversationProps): JSX.Element {\n' +
+      '  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);\n' +
+      '  const [input, setInput] = useState("");\n' +
+      '  const [typing, setTyping] = useState(false);\n' +
+      '  const nextIdRef = useRef(2);\n' +
+      '  const messagesRef = useRef<HTMLDivElement>(null);\n' +
+      '  const [planeFx, setPlaneFx] = useState(false);\n' +
+      '  const planeTimerRef = useRef<number | null>(null);\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    const last = messages[messages.length - 1];\n' +
+      '    if (!last || last.from !== "me") return;\n' +
+      '    const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");\n' +
+      '    animateSentMessage(rows?.[rows.length - 1] ?? null);\n' +
+      '  }, [messages]);\n' +
+      '\n' +
+      '  useEffect(\n' +
+      '    () => () => {\n' +
+      '      if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);\n' +
+      '    },\n' +
+      '    [],\n' +
+      '  );\n' +
+      '\n' +
+      '  const launchPlane = () => {\n' +
+      '    setPlaneFx(false);\n' +
+      '    requestAnimationFrame(() => setPlaneFx(true));\n' +
+      '    if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);\n' +
+      '    planeTimerRef.current = window.setTimeout(() => setPlaneFx(false), 700);\n' +
+      '  };\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    setMessages(INITIAL_MESSAGES);\n' +
+      '    setInput("");\n' +
+      '    setTyping(false);\n' +
+      '    nextIdRef.current = 2;\n' +
+      '  }, [resetToken]);\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    const container = messagesRef.current;\n' +
+      '    if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });\n' +
+      '  }, [messages, typing]);\n' +
+      '\n' +
+      '  const ask = async (question: string) => {\n' +
+      '    if (typing) return;\n' +
+      '    const userMessage = {\n' +
+      '      id: nextIdRef.current++,\n' +
+      '      from: "me" as const,\n' +
+      '      text: question,\n' +
+      '    };\n' +
+      '    setMessages((current) => [...current, userMessage]);\n' +
+      '    setTyping(true);\n' +
+      '    track("chat_message_sent", { length: question.length });\n' +
+      '\n' +
+      '    const turns: ChatTurn[] = [...messages, userMessage].map((message) => ({\n' +
+      '      role: message.from === "me" ? "user" : "assistant",\n' +
+      '      text: message.text,\n' +
+      '    }));\n' +
+      '    const firstUser = turns.findIndex((turn) => turn.role === "user");\n' +
+      '    const history = firstUser === -1 ? [] : turns.slice(firstUser);\n' +
+      '\n' +
+      '    try {\n' +
+      '      const reply = await sendChat(history);\n' +
+      '      setMessages((current) => [\n' +
+      '        ...current,\n' +
+      '        { id: nextIdRef.current++, from: "bot", text: reply },\n' +
+      '      ]);\n' +
+      '      track("chat_reply_received");\n' +
+      '    } catch (error) {\n' +
+      '      setMessages((current) => [\n' +
+      '        ...current,\n' +
+      '        { id: nextIdRef.current++, from: "bot", text: CHAT_FALLBACK },\n' +
+      '      ]);\n' +
+      '      track("chat_error", {\n' +
+      '        reason: error instanceof Error ? error.message : "unknown",\n' +
+      '      });\n' +
+      '    } finally {\n' +
+      '      setTyping(false);\n' +
+      '    }\n' +
+      '  };\n' +
+      '\n' +
+      '  const submit = () => {\n' +
+      '    const value = input.trim();\n' +
+      '    if (!value || typing) return;\n' +
+      '    setInput("");\n' +
+      '    launchPlane();\n' +
+      '    void ask(value);\n' +
+      '  };\n' +
+      '\n' +
+      '  const openCalculator = () => {\n' +
+      '    track("chat_builder_open");\n' +
+      '    onOpenCalculator();\n' +
+      '  };\n' +
+      '\n' +
+      '  return (\n' +
+      '    <div className="cw-conversation" data-testid="assistant-view">\n' +
+      '      <div className="cw-chat-top">\n' +
+      '        <button type="button" className="cw-chat-builder cw-spotlight" onClick={openCalculator}>\n' +
+      '          <span className="cw-chat-builder__icon" aria-hidden="true">\n' +
+      '            <WidgetIcon name="calculator" />\n' +
+      '          </span>\n' +
+      '          <span className="cw-chat-builder__copy">\n' +
+      '            <b>Vyskladať vhodné riešenie</b>\n' +
+      '            <small>Odpovedzte na 5 krátkych otázok. Na konci odošlete kontakt.</small>\n' +
+      '          </span>\n' +
+      '        </button>\n' +
+      '      </div>\n' +
+      '\n' +
+      '      <div className="cw-messages" ref={messagesRef} aria-live="polite">\n' +
+      '        {messages.map((message) => (\n' +
+      '          <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>\n' +
+      '            {message.from === "bot" ? (\n' +
+      '              <span className="cw-avatar">\n' +
+      '                <BubbleLogo size="avatar" />\n' +
+      '              </span>\n' +
+      '            ) : null}\n' +
+      '            <div className="cw-message-wrap">\n' +
+      '              <p>{message.text}</p>\n' +
+      '            </div>\n' +
+      '          </div>\n' +
+      '        ))}\n' +
+      '\n' +
+      '        {typing ? (\n' +
+      '          <div className="cw-message-row cw-message-row--bot">\n' +
+      '            <span className="cw-avatar">\n' +
+      '              <BubbleLogo size="avatar" />\n' +
+      '            </span>\n' +
+      '            <div className="cw-typing" aria-label="Môj Chatbot odpovedá">\n' +
+      '              <i />\n' +
+      '              <i />\n' +
+      '              <i />\n' +
+      '            </div>\n' +
+      '          </div>\n' +
+      '        ) : null}\n' +
+      '      </div>\n' +
+      '\n' +
+      '      <div className="cw-quick-replies" aria-label="Časté otázky">\n' +
+      '        {QUICK_REPLIES.map(({ label, question }) => (\n' +
+      '          <button\n' +
+      '            type="button"\n' +
+      '            className="cw-chip"\n' +
+      '            key={label}\n' +
+      '            title={question}\n' +
+      '            onClick={() => void ask(question)}\n' +
+      '          >\n' +
+      '            <span>{label}</span>\n' +
+      '          </button>\n' +
+      '        ))}\n' +
+      '      </div>\n' +
+      '\n' +
+      '      <div className="cw-inputbar">\n' +
+      '        <input\n' +
+      '          value={input}\n' +
+      '          onChange={(event) => setInput(event.target.value)}\n' +
+      '          onKeyDown={(event) => {\n' +
+      '            if (event.key === "Enter") {\n' +
+      '              event.preventDefault();\n' +
+      '              submit();\n' +
+      '            }\n' +
+      '          }}\n' +
+      '          placeholder="Napíšte otázku o vašom webe…"\n' +
+      '          aria-label="Otázka pre Môj Chatbot"\n' +
+      '        />\n' +
+      '        <button\n' +
+      '          type="button"\n' +
+      '          className={planeFx ? "is-sending" : undefined}\n' +
+      '          onClick={submit}\n' +
+      '          disabled={!input.trim() || typing}\n' +
+      '          aria-label="Odoslať správu"\n' +
+      '        >\n' +
+      '          <WidgetIcon name="send" />\n' +
+      '        </button>\n' +
+      '      </div>\n' +
+      '\n' +
+      '      <nav className="cw-direct-actions" aria-label="Priamy kontakt">\n' +
+      '        <span className="cw-direct-actions__label">Alebo ma kontaktujte priamo</span>\n' +
+      '        <div className="cw-direct-actions__grid">\n' +
+      '          <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">\n' +
+      '            <span className="cw-direct-actions__icon">\n' +
+      '              <WidgetIcon name="chat" />\n' +
+      '            </span>\n' +
+      '            <span>WhatsApp</span>\n' +
+      '          </a>\n' +
+      '          <a href="tel:+421948699433">\n' +
+      '            <span className="cw-direct-actions__icon">\n' +
+      '              <WidgetIcon name="phone" />\n' +
+      '            </span>\n' +
+      '            <span>Zavolať</span>\n' +
+      '          </a>\n' +
+      '          <a href="mailto:daniel@vendzur.sk">\n' +
+      '            <span className="cw-direct-actions__icon">\n' +
+      '              <WidgetIcon name="mail" />\n' +
+      '            </span>\n' +
+      '            <span>E-mail</span>\n' +
+      '          </a>\n' +
+      '        </div>\n' +
+      '      </nav>\n' +
+      '    </div>\n' +
+      '  );\n' +
+      '}\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    import { useEffect, useRef, useState } from "react";
+    import { animateSentMessage } from "../../lib/motion";
+    import { sendChat, type ChatTurn } from "../../lib/assistantApi";
+    import { track } from "../../lib/analytics";
+    import { BubbleLogo } from "./BubbleLogo";
+    import { WidgetIcon } from "./WidgetIcon";
+    
+    type AssistantConversationProps = {
+      resetToken: number;
+      onOpenCalculator: () => void;
+    };
+    
+    type ChatMessage = {
+      id: number;
+      from: "bot" | "me";
+      text: string;
+    };
+    
+    const INITIAL_MESSAGES: ChatMessage[] = [
+      {
+        id: 1,
+        from: "bot",
+        text:
+          "Napíšte, čo zákazníci na vašom webe najčastejšie riešia. Navrhnem, či je vhodnejší chatbot, kalkulačka alebo konfigurátor. Ceny začínajú od 350 €.",
+      },
+    ];
+    
+    type QuickReply = { label: string; question: string };
+    
+    const QUICK_REPLIES: QuickReply[] = [
+      {
+        label: "Čo môže vyriešiť",
+        question: "Čo môže chatbot reálne vyriešiť na webe mojej firmy?",
+      },
+      {
+        label: "Ako to prebieha",
+        question: "Ako prebieha návrh, príprava a nasadenie riešenia?",
+      },
+      {
+        label: "Čo potrebujete dodať",
+        question: "Aké podklady odo mňa potrebujete na prípravu chatbota alebo kalkulačky?",
+      },
+      {
+        label: "Pozrieť ukážky",
+        question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",
+      },
+    ];
+    
+    const CHAT_FALLBACK =
+      "Teraz sa neviem spojiť. Otvorte krátke zadanie alebo použite priamy kontakt nižšie. Ozvem sa s konkrétnym návrhom.";
+    
+    export function AssistantConversation({
+      resetToken,
+      onOpenCalculator,
+    }: AssistantConversationProps): JSX.Element {
+      const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
+      const [input, setInput] = useState("");
+      const [typing, setTyping] = useState(false);
+      const nextIdRef = useRef(2);
+      const messagesRef = useRef<HTMLDivElement>(null);
+      const [planeFx, setPlaneFx] = useState(false);
+      const planeTimerRef = useRef<number | null>(null);
+    
+      useEffect(() => {
+        const last = messages[messages.length - 1];
+        if (!last || last.from !== "me") return;
+        const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");
+        animateSentMessage(rows?.[rows.length - 1] ?? null);
+      }, [messages]);
+    
+      useEffect(
+        () => () => {
+          if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
+        },
+        [],
+      );
+    
+      const launchPlane = () => {
+        setPlaneFx(false);
+        requestAnimationFrame(() => setPlaneFx(true));
+        if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
+        planeTimerRef.current = window.setTimeout(() => setPlaneFx(false), 700);
+      };
+    
+      useEffect(() => {
+        setMessages(INITIAL_MESSAGES);
+        setInput("");
+        setTyping(false);
+        nextIdRef.current = 2;
+      }, [resetToken]);
+    
+      useEffect(() => {
+        const container = messagesRef.current;
+        if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+      }, [messages, typing]);
+    
+      const ask = async (question: string) => {
+        if (typing) return;
+        const userMessage = {
+          id: nextIdRef.current++,
+          from: "me" as const,
+          text: question,
+        };
+        setMessages((current) => [...current, userMessage]);
+        setTyping(true);
+        track("chat_message_sent", { length: question.length });
+    
+        const turns: ChatTurn[] = [...messages, userMessage].map((message) => ({
+          role: message.from === "me" ? "user" : "assistant",
+          text: message.text,
+        }));
+        const firstUser = turns.findIndex((turn) => turn.role === "user");
+        const history = firstUser === -1 ? [] : turns.slice(firstUser);
+    
+        try {
+          const reply = await sendChat(history);
+          setMessages((current) => [
+            ...current,
+            { id: nextIdRef.current++, from: "bot", text: reply },
+          ]);
+          track("chat_reply_received");
+        } catch (error) {
+          setMessages((current) => [
+            ...current,
+            { id: nextIdRef.current++, from: "bot", text: CHAT_FALLBACK },
+          ]);
+          track("chat_error", {
+            reason: error instanceof Error ? error.message : "unknown",
+          });
+        } finally {
+          setTyping(false);
+        }
+      };
+    
+      const submit = () => {
+        const value = input.trim();
+        if (!value || typing) return;
+        setInput("");
+        launchPlane();
+        void ask(value);
+      };
+    
+      const openCalculator = () => {
+        track("chat_builder_open");
+        onOpenCalculator();
+      };
+    
+      return (
+        <div className="cw-conversation" data-testid="assistant-view">
+          <div className="cw-chat-top">
+            <button type="button" className="cw-chat-builder cw-spotlight" onClick={openCalculator}>
+              <span className="cw-chat-builder__icon" aria-hidden="true">
+                <WidgetIcon name="calculator" />
+              </span>
+              <span className="cw-chat-builder__copy">
+                <b>Vyskladať vhodné riešenie</b>
+                <small>Odpovedzte na 5 krátkych otázok. Na konci odošlete kontakt.</small>
+              </span>
+            </button>
+          </div>
+    
+          <div className="cw-messages" ref={messagesRef} aria-live="polite">
+            {messages.map((message) => (
+              <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>
+                {message.from === "bot" ? (
+                  <span className="cw-avatar">
+                    <BubbleLogo size="avatar" />
+                  </span>
+                ) : null}
+                <div className="cw-message-wrap">
+                  <p>{message.text}</p>
+                </div>
+              </div>
+            ))}
+    
+            {typing ? (
+              <div className="cw-message-row cw-message-row--bot">
+                <span className="cw-avatar">
+                  <BubbleLogo size="avatar" />
+                </span>
+                <div className="cw-typing" aria-label="Môj Chatbot odpovedá">
+                  <i />
+                  <i />
+                  <i />
+                </div>
+              </div>
+            ) : null}
+          </div>
+    
+          <div className="cw-quick-replies" aria-label="Časté otázky">
+            {QUICK_REPLIES.map(({ label, question }) => (
+              <button
+                type="button"
+                className="cw-chip"
+                key={label}
+                title={question}
+                onClick={() => void ask(question)}
+              >
+                <span>{label}</span>
+              </button>
+            ))}
+          </div>
+    
+          <div className="cw-inputbar">
+            <input
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  submit();
+                }
+              }}
+              placeholder="Napíšte otázku o vašom webe…"
+              aria-label="Otázka pre Môj Chatbot"
+            />
+            <button
+              type="button"
+              className={planeFx ? "is-sending" : undefined}
+              onClick={submit}
+              disabled={!input.trim() || typing}
+              aria-label="Odoslať správu"
+            >
+              <WidgetIcon name="send" />
+            </button>
+          </div>
+    
+          <nav className="cw-direct-actions" aria-label="Priamy kontakt">
+            <span className="cw-direct-actions__label">Alebo ma kontaktujte priamo</span>
+            <div className="cw-direct-actions__grid">
+              <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
+                <span className="cw-direct-actions__icon">
+                  <WidgetIcon name="chat" />
+                </span>
+                <span>WhatsApp</span>
+              </a>
+              <a href="tel:+421948699433">
+                <span className="cw-direct-actions__icon">
+                  <WidgetIcon name="phone" />
+                </span>
+                <span>Zavolať</span>
+              </a>
+              <a href="mailto:daniel@vendzur.sk">
+                <span className="cw-direct-actions__icon">
+                  <WidgetIcon name="mail" />
+                </span>
+                <span>E-mail</span>
+              </a>
+            </div>
+          </nav>
+        </div>
+      );
+    }
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:151:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 # Subtest: mobile panel and controls remain safe
 ok 11 - mobile panel and controls remain safe
   ---
-  duration_ms: 1.092888
+  duration_ms: 3.993654
   type: 'test'
   ...
 # Subtest: chat API protections remain intact
 ok 12 - chat API protections remain intact
   ---
-  duration_ms: 1.803
+  duration_ms: 1.214465
   type: 'test'
   ...
 # Subtest: deployment validates the owner-friendly build
 ok 13 - deployment validates the owner-friendly build
   ---
-  duration_ms: 0.784769
+  duration_ms: 1.259683
   type: 'test'
   ...
 1..13
 # tests 13
 # suites 0
-# pass 12
-# fail 1
+# pass 10
+# fail 3
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 69.01086
+# duration_ms 94.330257
  ELIFECYCLE  Test failed. See above for more details.
