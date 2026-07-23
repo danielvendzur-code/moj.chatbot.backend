@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useFocusTrap } from "../../hooks/useFocusTrap";
 import {
   installSiteAssistantGlobal,
@@ -91,10 +91,6 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
     };
   }, [isOpen]);
 
-  const tabIndicatorStyle = {
-    "--cw-segment-x": mode === "assistant" ? "calc(100% + 5px)" : "0px",
-  } as CSSProperties;
-
   return (
     <div className="cw-widget">
       <button
@@ -131,15 +127,15 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
             <div className="cw-panel-head__title">
               <b>Môj Chatbot</b>
               <span className="cw-panel-head__context cw-panel-head__online">
-                <i aria-hidden="true" /> AI asistent · online
+                <i aria-hidden="true" /> Online a pripravený pomôcť
               </span>
             </div>
             <div className="cw-panel-head__actions">
               <button
                 type="button"
                 data-testid="widget-reset"
-                aria-label="Resetovať aktuálnu obrazovku"
-                title="Resetovať"
+                aria-label="Začať odznova"
+                title="Začať odznova"
                 onClick={() => {
                   setPreset(null);
                   setResetToken((value) => value + 1);
@@ -160,12 +156,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
             </div>
           </header>
 
-          <nav
-            className="cw-tabs"
-            aria-label="Režim asistenta"
-            data-mode={mode}
-            style={tabIndicatorStyle}
-          >
+          <nav className="cw-tabs" aria-label="Vyberte spôsob pomoci" data-mode={mode}>
             <span className="cw-tabs__glass" aria-hidden="true" />
             <button
               type="button"
@@ -185,7 +176,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
               onClick={() => switchMode("assistant")}
             >
               <WidgetIcon name="chat" />
-              <span>Opýtať sa</span>
+              <span>Poradiť sa</span>
             </button>
           </nav>
 
