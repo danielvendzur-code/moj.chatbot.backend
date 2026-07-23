@@ -1,4 +1,4 @@
-run_id=30026584870
+run_id=30026641733
 install=success
 lint=success
 build=success
@@ -27,7 +27,7 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.38 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-vT_vHNFf.css  [39m[1m[2m219.48 kB[22m[1m[22m[2m │ gzip: 32.19 kB[22m
 [2mdist/[22m[2massets/[22m[36mindex-DfT5ro4m.js   [39m[1m[2m221.00 kB[22m[1m[22m[2m │ gzip: 74.69 kB[22m
-[32m✓ built in 1.33s[39m
+[32m✓ built in 1.32s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 106 modules transformed.
@@ -35,7 +35,7 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m219.48 kB[22m[1m[22m[2m │ gzip: 32.19 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m218.97 kB[22m[1m[22m[2m │ gzip: 74.07 kB[22m
-[32m✓ built in 1.28s[39m
+[32m✓ built in 1.35s[39m
 
 ===== test =====
 
@@ -46,25 +46,25 @@ TAP version 13
 # Subtest: the competition layer loads last in demo and embed builds
 ok 1 - the competition layer loads last in demo and embed builds
   ---
-  duration_ms: 8.23433
+  duration_ms: 7.288813
   type: 'test'
   ...
 # Subtest: assistant order remains builder messages chips input contacts
 ok 2 - assistant order remains builder messages chips input contacts
   ---
-  duration_ms: 1.043389
+  duration_ms: 2.213646
   type: 'test'
   ...
 # Subtest: mode tabs switch immediately and glass cannot block clicks
 ok 3 - mode tabs switch immediately and glass cannot block clicks
   ---
-  duration_ms: 1.713103
+  duration_ms: 1.516298
   type: 'test'
   ...
 # Subtest: spotlight uses one pointer tracker and restrained radial light
 not ok 4 - spotlight uses one pointer tracker and restrained radial light
   ---
-  duration_ms: 2.851616
+  duration_ms: 2.492781
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:50:1'
   failureType: 'testCodeFailure'
@@ -216,13 +216,13 @@ not ok 4 - spotlight uses one pointer tracker and restrained radial light
 # Subtest: quick replies are balanced two by two above the input
 ok 5 - quick replies are balanced two by two above the input
   ---
-  duration_ms: 5.136313
+  duration_ms: 3.832656
   type: 'test'
   ...
 # Subtest: configurator is five steps and contact remains final
 not ok 6 - configurator is five steps and contact remains final
   ---
-  duration_ms: 2.00236
+  duration_ms: 1.986848
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:73:1'
   failureType: 'testCodeFailure'
@@ -836,374 +836,52 @@ not ok 6 - configurator is five steps and contact remains final
 # Subtest: configuration cards fill space without forced shake or side stripe
 ok 7 - configuration cards fill space without forced shake or side stripe
   ---
-  duration_ms: 3.009852
+  duration_ms: 2.885336
   type: 'test'
   ...
 # Subtest: selected checks are small static and aligned
 ok 8 - selected checks are small static and aligned
   ---
-  duration_ms: 1.326568
+  duration_ms: 1.109932
   type: 'test'
   ...
 # Subtest: contact asks for essentials and submits a real lead
 ok 9 - contact asks for essentials and submits a real lead
   ---
-  duration_ms: 2.151549
+  duration_ms: 2.193356
   type: 'test'
   ...
 # Subtest: assistant knows the verified starting price and brand
 ok 10 - assistant knows the verified starting price and brand
   ---
-  duration_ms: 1.684626
+  duration_ms: 1.74626
   type: 'test'
   ...
 # Subtest: mobile panel and controls remain safe
 ok 11 - mobile panel and controls remain safe
   ---
-  duration_ms: 1.430391
+  duration_ms: 1.249029
   type: 'test'
   ...
 # Subtest: chat API protections remain intact
 ok 12 - chat API protections remain intact
   ---
-  duration_ms: 1.810662
+  duration_ms: 1.560244
   type: 'test'
   ...
 # Subtest: deployment validates the competition build
-not ok 13 - deployment validates the competition build
+ok 13 - deployment validates the competition build
   ---
-  duration_ms: 2.429678
+  duration_ms: 0.981011
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:157:1'
-  failureType: 'testCodeFailure'
-  error: |-
-    The input did not match the regular expression /competition-winner-20260723-v5/. Input:
-    
-    'name: Deploy and verify chatbot\n' +
-      '\n' +
-      'on:\n' +
-      '  push:\n' +
-      '    branches: [main]\n' +
-      '  workflow_dispatch:\n' +
-      '\n' +
-      'permissions:\n' +
-      '  contents: write\n' +
-      '  pages: write\n' +
-      '  id-token: write\n' +
-      '\n' +
-      'concurrency:\n' +
-      '  group: pages\n' +
-      '  cancel-in-progress: false\n' +
-      '\n' +
-      'jobs:\n' +
-      '  build:\n' +
-      "    if: ${{ github.actor != 'github-actions[bot]' }}\n" +
-      '    runs-on: ubuntu-latest\n' +
-      '    steps:\n' +
-      '      - name: Checkout\n' +
-      '        uses: actions/checkout@v4\n' +
-      '\n' +
-      '      - name: Install pnpm\n' +
-      '        uses: pnpm/action-setup@v4\n' +
-      '        with:\n' +
-      '          version: 10\n' +
-      '\n' +
-      '      - name: Set up Node.js\n' +
-      '        uses: actions/setup-node@v4\n' +
-      '        with:\n' +
-      '          node-version: 22\n' +
-      '          cache: pnpm\n' +
-      '\n' +
-      '      - name: Install dependencies\n' +
-      '        run: pnpm install --frozen-lockfile\n' +
-      '\n' +
-      '      - name: Audit production dependencies\n' +
-      '        run: pnpm audit --prod --audit-level high\n' +
-      '\n' +
-      '      - name: TypeScript check\n' +
-      '        run: pnpm lint\n' +
-      '\n' +
-      '      - name: Run visual and security contracts\n' +
-      '        run: pnpm test -- --run\n' +
-      '\n' +
-      '      - name: Build demo and embedded widget\n' +
-      '        run: pnpm build\n' +
-      '\n' +
-      '      - name: Create immutable build metadata\n' +
-      '        shell: bash\n' +
-      '        run: |\n' +
-      `          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"derat-layout-20260723-v3"},null,2))'\n` +
-      '\n' +
-      '      - name: Validate production artifacts\n' +
-      '        shell: bash\n' +
-      '        run: |\n' +
-      '          set -euo pipefail\n' +
-      '          test -f dist/index.html\n' +
-      '          test -f dist/widget.js\n' +
-      '          test -f dist/widget.css\n' +
-      '          test -f dist/build-meta.json\n' +
-      '          grep -Fq "derat-layout-20260723-v3" dist/widget.js\n' +
-      '          grep -Fqi "4e8cff" dist/widget.css\n' +
-      '          grep -Fq "derat-layout-final" src/main.tsx\n' +
-      '          grep -Fq "cw-chat-builder" dist/widget.css\n' +
-      '          grep -Fq "cw-direct-actions__grid" dist/widget.css\n' +
-      '          grep -Fq "data-liquid-dragging" dist/widget.css\n' +
-      '          grep -Fq "cw-calc-step:has" dist/widget.css\n' +
-      '          ! grep -Fq "REPLACE-ME" dist/widget.js\n' +
-      '          grep -Fq "${GITHUB_SHA}" dist/build-meta.json\n' +
-      '\n' +
-      '      - name: Configure GitHub Pages\n' +
-      '        uses: actions/configure-pages@v5\n' +
-      '\n' +
-      '      - name: Upload Pages artifact\n' +
-      '        uses: actions/upload-pages-artifact@v3\n' +
-      '        with:\n' +
-      '          path: dist\n' +
-      '\n' +
-      '  deploy:\n' +
-      '    needs: build\n' +
-      '    runs-on: ubuntu-latest\n' +
-      '    environment:\n' +
-      '      name: github-pages\n' +
-      '      url: ${{ steps.deployment.outputs.page_url }}\n' +
-      '    steps:\n' +
-      '      - name: Deploy to GitHub Pages\n' +
-      '        id: deployment\n' +
-      '        uses: actions/deploy-pages@v5\n' +
-      '\n' +
-      '      - name: Verify live demo and embedded assets\n' +
-      '        shell: bash\n' +
-      '        env:\n' +
-      '          PAGE_URL: ${{ steps.deployment.outputs.page_url }}\n' +
-      '          SOURCE_SHA: ${{ github.sha }}\n' +
-      '        run: |\n' +
-      '          set -euo pipefail\n' +
-      '          BASE="${PAGE_URL%/}"\n' +
-      '\n' +
-      '          verify() {\n' +
-      '            local path="$1"\n' +
-      '            local expected="$2"\n' +
-      `            local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"\n` +
-      '\n' +
-      '            for attempt in {1..24}; do\n' +
-      '              if curl --location --fail --silent --show-error \\\n' +
-      '                --header "Cache-Control: no-cache" \\\n' +
-      '                "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then\n' +
-      '                if grep -Fqi "$expected" "$body"; then\n' +
-      '                  echo "verified ${path}"\n' +
-      '                  return 0\n' +
-      '                fi\n' +
-      '              fi\n' +
-      '              sleep 5\n' +
-      '            done\n' +
-      '\n' +
-      '            echo "Live verification failed for ${path}"\n' +
-      '            head -c 1000 "$body" 2>/dev/null || true\n' +
-      '            return 1\n' +
-      '          }\n' +
-      '\n' +
-      '          verify "/" "AI Assistant"\n' +
-      '          verify "/widget.js" "derat-layout-20260723-v3"\n' +
-      '          verify "/widget.css" "cw-chat-builder"\n' +
-      '          verify "/build-meta.json" "$SOURCE_SHA"\n' +
-      '\n' +
-      '      - name: Checkout latest main for deployment record\n' +
-      '        uses: actions/checkout@v4\n' +
-      '        with:\n' +
-      '          ref: main\n' +
-      '\n' +
-      '      - name: Record verified widget deployment\n' +
-      '        shell: bash\n' +
-      '        env:\n' +
-      '          PAGE_URL: ${{ steps.deployment.outputs.page_url }}\n' +
-      '          SOURCE_SHA: ${{ github.sha }}\n' +
-      '        run: |\n' +
-      '          {\n' +
-      '            echo "deployment=success"\n' +
-      '            echo "dependency_audit=success"\n' +
-      '            echo "live_smoke=success"\n' +
-      '            echo "source_sha=${SOURCE_SHA}"\n' +
-      '            echo "page_url=${PAGE_URL}"\n' +
-      '            echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"\n' +
-      '          } > PAGES_DEPLOY_AUDIT.txt\n' +
-      '          git config user.name "github-actions[bot]"\n' +
-      '          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"\n' +
-      '          git add PAGES_DEPLOY_AUDIT.txt\n' +
-      '          git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0\n' +
-      '          git pull --rebase origin main\n' +
-      '          git push origin HEAD:main\n'
-    
-  code: 'ERR_ASSERTION'
-  name: 'AssertionError'
-  expected:
-  actual: |-
-    name: Deploy and verify chatbot
-    
-    on:
-      push:
-        branches: [main]
-      workflow_dispatch:
-    
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-    
-    concurrency:
-      group: pages
-      cancel-in-progress: false
-    
-    jobs:
-      build:
-        if: ${{ github.actor != 'github-actions[bot]' }}
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v4
-    
-          - name: Install pnpm
-            uses: pnpm/action-setup@v4
-            with:
-              version: 10
-    
-          - name: Set up Node.js
-            uses: actions/setup-node@v4
-            with:
-              node-version: 22
-              cache: pnpm
-    
-          - name: Install dependencies
-            run: pnpm install --frozen-lockfile
-    
-          - name: Audit production dependencies
-            run: pnpm audit --prod --audit-level high
-    
-          - name: TypeScript check
-            run: pnpm lint
-    
-          - name: Run visual and security contracts
-            run: pnpm test -- --run
-    
-          - name: Build demo and embedded widget
-            run: pnpm build
-    
-          - name: Create immutable build metadata
-            shell: bash
-            run: |
-              node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"derat-layout-20260723-v3"},null,2))'
-    
-          - name: Validate production artifacts
-            shell: bash
-            run: |
-              set -euo pipefail
-              test -f dist/index.html
-              test -f dist/widget.js
-              test -f dist/widget.css
-              test -f dist/build-meta.json
-              grep -Fq "derat-layout-20260723-v3" dist/widget.js
-              grep -Fqi "4e8cff" dist/widget.css
-              grep -Fq "derat-layout-final" src/main.tsx
-              grep -Fq "cw-chat-builder" dist/widget.css
-              grep -Fq "cw-direct-actions__grid" dist/widget.css
-              grep -Fq "data-liquid-dragging" dist/widget.css
-              grep -Fq "cw-calc-step:has" dist/widget.css
-              ! grep -Fq "REPLACE-ME" dist/widget.js
-              grep -Fq "${GITHUB_SHA}" dist/build-meta.json
-    
-          - name: Configure GitHub Pages
-            uses: actions/configure-pages@v5
-    
-          - name: Upload Pages artifact
-            uses: actions/upload-pages-artifact@v3
-            with:
-              path: dist
-    
-      deploy:
-        needs: build
-        runs-on: ubuntu-latest
-        environment:
-          name: github-pages
-          url: ${{ steps.deployment.outputs.page_url }}
-        steps:
-          - name: Deploy to GitHub Pages
-            id: deployment
-            uses: actions/deploy-pages@v5
-    
-          - name: Verify live demo and embedded assets
-            shell: bash
-            env:
-              PAGE_URL: ${{ steps.deployment.outputs.page_url }}
-              SOURCE_SHA: ${{ github.sha }}
-            run: |
-              set -euo pipefail
-              BASE="${PAGE_URL%/}"
-    
-              verify() {
-                local path="$1"
-                local expected="$2"
-                local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"
-    
-                for attempt in {1..24}; do
-                  if curl --location --fail --silent --show-error \
-                    --header "Cache-Control: no-cache" \
-                    "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then
-                    if grep -Fqi "$expected" "$body"; then
-                      echo "verified ${path}"
-                      return 0
-                    fi
-                  fi
-                  sleep 5
-                done
-    
-                echo "Live verification failed for ${path}"
-                head -c 1000 "$body" 2>/dev/null || true
-                return 1
-              }
-    
-              verify "/" "AI Assistant"
-              verify "/widget.js" "derat-layout-20260723-v3"
-              verify "/widget.css" "cw-chat-builder"
-              verify "/build-meta.json" "$SOURCE_SHA"
-    
-          - name: Checkout latest main for deployment record
-            uses: actions/checkout@v4
-            with:
-              ref: main
-    
-          - name: Record verified widget deployment
-            shell: bash
-            env:
-              PAGE_URL: ${{ steps.deployment.outputs.page_url }}
-              SOURCE_SHA: ${{ github.sha }}
-            run: |
-              {
-                echo "deployment=success"
-                echo "dependency_audit=success"
-                echo "live_smoke=success"
-                echo "source_sha=${SOURCE_SHA}"
-                echo "page_url=${PAGE_URL}"
-                echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-              } > PAGES_DEPLOY_AUDIT.txt
-              git config user.name "github-actions[bot]"
-              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-              git add PAGES_DEPLOY_AUDIT.txt
-              git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0
-              git pull --rebase origin main
-              git push origin HEAD:main
-    
-  operator: 'match'
-  stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:159:10)
-    async Test.run (node:internal/test_runner/test:1054:7)
-    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 1..13
 # tests 13
 # suites 0
-# pass 10
-# fail 3
+# pass 11
+# fail 2
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 92.529014
+# duration_ms 91.636574
  ELIFECYCLE  Test failed. See above for more details.
