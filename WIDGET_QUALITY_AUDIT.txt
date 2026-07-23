@@ -1,4 +1,4 @@
-run_id=30028265534
+run_id=30028656654
 install=success
 lint=success
 build=success
@@ -27,7 +27,7 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.39 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-vT_vHNFf.css  [39m[1m[2m219.48 kB[22m[1m[22m[2m │ gzip: 32.19 kB[22m
 [2mdist/[22m[2massets/[22m[36mindex-CRfGcEQf.js   [39m[1m[2m221.55 kB[22m[1m[22m[2m │ gzip: 74.89 kB[22m
-[32m✓ built in 1.31s[39m
+[32m✓ built in 1.37s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 106 modules transformed.
@@ -35,7 +35,7 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m219.48 kB[22m[1m[22m[2m │ gzip: 32.19 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m219.52 kB[22m[1m[22m[2m │ gzip: 74.30 kB[22m
-[32m✓ built in 1.25s[39m
+[32m✓ built in 1.41s[39m
 
 ===== test =====
 
@@ -46,79 +46,79 @@ TAP version 13
 # Subtest: the competition layer loads last in demo and embed builds
 ok 1 - the competition layer loads last in demo and embed builds
   ---
-  duration_ms: 14.119817
+  duration_ms: 8.345817
   type: 'test'
   ...
 # Subtest: assistant order remains builder messages chips input contacts
 ok 2 - assistant order remains builder messages chips input contacts
   ---
-  duration_ms: 0.960818
+  duration_ms: 2.113716
   type: 'test'
   ...
 # Subtest: mode tabs switch immediately and glass cannot block clicks
 ok 3 - mode tabs switch immediately and glass cannot block clicks
   ---
-  duration_ms: 1.441443
+  duration_ms: 1.643005
   type: 'test'
   ...
 # Subtest: spotlight uses one pointer tracker and restrained radial light
 ok 4 - spotlight uses one pointer tracker and restrained radial light
   ---
-  duration_ms: 1.590314
+  duration_ms: 2.133613
   type: 'test'
   ...
 # Subtest: quick replies are balanced two by two above the input
 ok 5 - quick replies are balanced two by two above the input
   ---
-  duration_ms: 2.090818
+  duration_ms: 2.093057
   type: 'test'
   ...
 # Subtest: configurator is five steps and contact remains final
 ok 6 - configurator is five steps and contact remains final
   ---
-  duration_ms: 1.139824
+  duration_ms: 2.081836
   type: 'test'
   ...
 # Subtest: configuration cards fill space without forced shake or side stripe
 ok 7 - configuration cards fill space without forced shake or side stripe
   ---
-  duration_ms: 1.309126
+  duration_ms: 1.375724
   type: 'test'
   ...
 # Subtest: selected checks are small static and aligned
 ok 8 - selected checks are small static and aligned
   ---
-  duration_ms: 0.790015
+  duration_ms: 0.848267
   type: 'test'
   ...
 # Subtest: contact asks for essentials and submits a real lead
 ok 9 - contact asks for essentials and submits a real lead
   ---
-  duration_ms: 1.888947
+  duration_ms: 1.795109
   type: 'test'
   ...
 # Subtest: assistant knows the verified starting price and brand
 ok 10 - assistant knows the verified starting price and brand
   ---
-  duration_ms: 1.535092
+  duration_ms: 1.817811
   type: 'test'
   ...
 # Subtest: mobile panel and controls remain safe
 ok 11 - mobile panel and controls remain safe
   ---
-  duration_ms: 1.221135
+  duration_ms: 1.486462
   type: 'test'
   ...
 # Subtest: chat API protections remain intact
 ok 12 - chat API protections remain intact
   ---
-  duration_ms: 1.465167
+  duration_ms: 2.493997
   type: 'test'
   ...
 # Subtest: deployment validates the competition build
 ok 13 - deployment validates the competition build
   ---
-  duration_ms: 0.991314
+  duration_ms: 1.242024
   type: 'test'
   ...
 1..13
@@ -129,4 +129,4 @@ ok 13 - deployment validates the competition build
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 92.255362
+# duration_ms 91.879957
