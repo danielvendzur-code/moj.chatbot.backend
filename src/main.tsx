@@ -4,6 +4,7 @@ import App from "./App";
 import { getInitialEmbedViewport, isEmbedMode } from "./lib/embedBridge";
 import { installLiquidSegmentedDrag } from "./lib/liquidSegmentedDrag";
 import { installWidgetRailDrag } from "./lib/widgetRailDrag";
+import { installWidgetSpotlight } from "./lib/widgetSpotlight";
 import "./widget.css";
 import "./interaction.css";
 import "./requested-polish.css";
@@ -17,6 +18,7 @@ import "./apple-liquid-fixes.css";
 import "./apple-liquid-system-final.css";
 import "./restrained-widget-final.css";
 import "./derat-layout-final.css";
+import "./competition-winner-final.css";
 
 if (isEmbedMode()) {
   document.documentElement.dataset.embed = "true";
@@ -25,6 +27,7 @@ if (isEmbedMode()) {
 
 installWidgetRailDrag();
 installLiquidSegmentedDrag();
+installWidgetSpotlight();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
