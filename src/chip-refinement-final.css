@@ -1,4 +1,4 @@
-/* Chip-only final layer: restrained glass, no nested bubbles, border trace first and centre fill second. */
+/* Final Apple-inspired liquid controls for the AI Assistant. */
 @property --cw-professional-trace {
   syntax: "<percentage>";
   inherits: false;
@@ -16,14 +16,162 @@
 
 @keyframes cw-professional-centre-fill {
   0%,
-  62% {
-    background-size: 0% 0%, 100% 100%;
+  58% {
+    background-size: 0% 0%, 100% 100%, 100% 100%;
   }
   100% {
-    background-size: 240% 240%, 100% 100%;
+    background-size: 235% 235%, 100% 100%, 100% 100%;
   }
 }
 
+.cw-widget {
+  --cw-chip-rgb: 52, 120, 246;
+  --cw-chip-light-rgb: 137, 198, 255;
+  --cw-chip-line: rgba(185, 214, 255, 0.27);
+  --cw-chip-surface: rgba(9, 14, 23, 0.76);
+  --cw-chip-surface-strong: rgba(8, 15, 27, 0.91);
+}
+
+.cw-widget .cw-calculator {
+  --cw-chip-rgb: 35, 196, 181;
+  --cw-chip-light-rgb: 115, 246, 229;
+}
+
+/* Draggable mode switch with a slow, elastic settling motion. */
+.cw-widget .cw-tabs {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  gap: 6px !important;
+  padding: 6px !important;
+  border: 1px solid rgba(185, 214, 255, 0.28) !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.012)),
+    rgba(6, 10, 17, 0.8) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    0 18px 42px -34px rgba(52, 120, 246, 0.78) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(150%) !important;
+  backdrop-filter: blur(24px) saturate(150%) !important;
+  touch-action: pan-y;
+  --cw-segment-x: 0px;
+  --cw-segment-stretch: 1;
+}
+
+.cw-widget .cw-tabs[data-mode="assistant"] {
+  --cw-segment-x: calc(100% + 6px);
+}
+
+.cw-widget .cw-tabs__glass {
+  display: block !important;
+  position: absolute !important;
+  z-index: 0 !important;
+  top: 6px !important;
+  left: 6px !important;
+  width: calc((100% - 18px) / 2) !important;
+  height: calc(100% - 12px) !important;
+  border: 1px solid rgba(152, 222, 255, 0.72) !important;
+  border-radius: 999px !important;
+  background:
+    radial-gradient(circle at 48% -35%, rgba(255, 255, 255, 0.42), transparent 48%),
+    linear-gradient(145deg, rgba(35, 196, 181, 0.58), rgba(12, 92, 101, 0.52)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    inset 0 -10px 24px rgba(3, 39, 45, 0.25),
+    0 14px 34px -20px rgba(35, 196, 181, 0.86) !important;
+  transform: translate3d(var(--cw-segment-x), 0, 0) scaleX(var(--cw-segment-stretch)) !important;
+  transform-origin: center;
+  transition:
+    transform 680ms cubic-bezier(0.16, 1.28, 0.3, 1),
+    background 420ms ease,
+    border-color 420ms ease,
+    box-shadow 420ms ease !important;
+  will-change: transform;
+}
+
+.cw-widget .cw-tabs[data-mode="assistant"] .cw-tabs__glass {
+  border-color: rgba(177, 215, 255, 0.7) !important;
+  background:
+    radial-gradient(circle at 48% -35%, rgba(255, 255, 255, 0.4), transparent 48%),
+    linear-gradient(145deg, rgba(52, 120, 246, 0.62), rgba(22, 67, 157, 0.58)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -10px 24px rgba(5, 22, 58, 0.24),
+    0 14px 34px -20px rgba(52, 120, 246, 0.88) !important;
+}
+
+.cw-widget .cw-tabs[data-liquid-dragging="true"] .cw-tabs__glass {
+  transition: none !important;
+}
+
+.cw-widget .cw-tabs > button {
+  position: relative !important;
+  z-index: 1 !important;
+  min-height: 44px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  color: #aebbd0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transition: color 260ms ease, transform 260ms ease !important;
+}
+
+.cw-widget .cw-tabs > button:hover,
+.cw-widget .cw-tabs > button:focus-visible {
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+}
+
+.cw-widget .cw-tabs > button[data-active="true"] {
+  color: #ffffff !important;
+}
+
+/* Compact calculator layout: scrolling remains a fallback, not the default. */
+.cw-widget .cw-panel-body {
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.cw-widget .cw-calculator {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  height: 100% !important;
+}
+
+.cw-widget .cw-calc-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  padding: 12px 13px 8px !important;
+}
+
+.cw-widget .cw-calc-body::-webkit-scrollbar {
+  display: none;
+}
+
+.cw-widget .cw-calc-step {
+  min-height: 100% !important;
+}
+
+.cw-widget .cw-grid,
+.cw-widget .cw-rows,
+.cw-widget .cw-list {
+  gap: 8px !important;
+}
+
+.cw-widget .cw-q {
+  margin-bottom: 3px !important;
+}
+
+.cw-widget .cw-q-sub {
+  margin-bottom: 10px !important;
+}
+
+/* Shared chip and configurator card surface. */
 .cw-widget .cw-quick-replies .cw-chip,
 .cw-widget .cw-rowcard,
 .cw-widget .cw-scard,
@@ -33,32 +181,44 @@
   position: relative !important;
   isolation: isolate !important;
   overflow: hidden !important;
-  border: 1px solid rgba(178, 207, 255, 0.24) !important;
-  color: #dce7f8 !important;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.016) 50%),
-    rgba(8, 12, 20, 0.76) !important;
+  border: 1px solid var(--cw-chip-line) !important;
+  color: #dce8f8 !important;
+  background-color: var(--cw-chip-surface) !important;
+  background-image:
+    radial-gradient(
+      circle at 50% 52%,
+      rgba(var(--cw-chip-rgb), 0.36) 0 48%,
+      rgba(var(--cw-chip-rgb), 0.12) 68%,
+      transparent 100%
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.018) 50%),
+    linear-gradient(135deg, rgba(16, 23, 36, 0.86), rgba(7, 11, 19, 0.84)) !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
-  background-size: 100% 100% !important;
+  background-size: 0% 0%, 100% 100%, 100% 100% !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.125),
-    inset 0 -1px 0 rgba(117, 184, 255, 0.03),
-    0 13px 30px -27px rgba(52, 120, 246, 0.75) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(148%) !important;
-  backdrop-filter: blur(20px) saturate(148%) !important;
-  transform: translateY(0) !important;
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(var(--cw-chip-rgb), 0.05),
+    0 17px 38px -32px rgba(var(--cw-chip-rgb), 0.78) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(148%) !important;
+  backdrop-filter: blur(22px) saturate(148%) !important;
+  transform: translateY(0) translateZ(0) !important;
   transition:
-    border-color 180ms ease,
-    color 180ms ease,
-    transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 180ms ease,
-    filter 180ms ease !important;
+    border-color 250ms ease,
+    color 250ms ease,
+    background-size 620ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 250ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 330ms ease !important;
+}
+
+.cw-widget .cw-quick-replies {
+  gap: 8px !important;
+  padding: 10px 13px 12px !important;
 }
 
 .cw-widget .cw-quick-replies .cw-chip {
-  min-height: 46px !important;
-  padding: 10px 13px !important;
+  min-height: 42px !important;
+  padding: 9px 13px !important;
   border-radius: 999px !important;
   justify-content: center !important;
   text-align: center !important;
@@ -68,32 +228,29 @@
 }
 
 .cw-widget .cw-quick-replies .cw-chip--primary {
-  border-color: rgba(137, 190, 255, 0.48) !important;
-  color: #e9f2ff !important;
-  background:
-    linear-gradient(180deg, rgba(117, 184, 255, 0.105), rgba(255, 255, 255, 0.018) 52%),
-    rgba(9, 14, 24, 0.8) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    0 15px 32px -26px rgba(52, 120, 246, 0.86) !important;
+  border-color: rgba(143, 198, 255, 0.48) !important;
+  color: #edf6ff !important;
 }
 
 .cw-widget .cw-rowcard {
-  grid-template-columns: 24px minmax(0, 1fr) 18px !important;
+  grid-template-columns: 22px minmax(0, 1fr) !important;
   gap: 10px !important;
-  min-height: 58px !important;
+  min-height: 56px !important;
   padding: 10px 13px !important;
   border-radius: 17px !important;
 }
 
 .cw-widget .cw-scard,
 .cw-widget .cw-vcard {
-  min-height: 76px !important;
+  min-height: 72px !important;
+  padding: 10px 11px !important;
   border-radius: 17px !important;
 }
 
 .cw-widget .cw-opt,
 .cw-widget .cw-feature {
+  min-height: 54px !important;
+  padding: 10px 13px !important;
   border-radius: 16px !important;
 }
 
@@ -109,16 +266,14 @@
 .cw-widget .cw-vcard:focus-visible,
 .cw-widget .cw-feature:hover,
 .cw-widget .cw-feature:focus-visible {
-  border-color: rgba(190, 216, 255, 0.54) !important;
+  border-color: rgba(var(--cw-chip-light-rgb), 0.62) !important;
   color: #ffffff !important;
-  background:
-    radial-gradient(circle at 22% -25%, rgba(255, 255, 255, 0.14), transparent 46%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.022) 52%),
-    rgba(10, 15, 25, 0.84) !important;
+  background-size: 185% 185%, 100% 100%, 100% 100% !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    0 17px 36px -28px rgba(52, 120, 246, 0.9) !important;
-  transform: translateY(-1px) !important;
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(var(--cw-chip-rgb), 0.08),
+    0 20px 44px -30px rgba(var(--cw-chip-rgb), 0.9) !important;
+  transform: translateY(-2px) translateZ(0) !important;
 }
 
 .cw-widget .cw-rowcard[data-selected="true"],
@@ -127,23 +282,14 @@
 .cw-widget .cw-vcard[data-selected="true"],
 .cw-widget .cw-feature[data-selected="true"],
 .cw-widget .cw-feature[aria-pressed="true"] {
-  border-color: rgba(137, 190, 255, 0.72) !important;
+  border-color: rgba(var(--cw-chip-light-rgb), 0.86) !important;
   color: #ffffff !important;
-  background-image:
-    radial-gradient(
-      circle at 50% 50%,
-      rgba(71, 137, 255, 0.3) 0 52%,
-      rgba(52, 120, 246, 0.16) 70%,
-      transparent 100%
-    ),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.018) 52%) !important;
-  background-color: rgba(8, 13, 23, 0.86) !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  background-size: 240% 240%, 100% 100% !important;
+  background-color: var(--cw-chip-surface-strong) !important;
+  background-size: 235% 235%, 100% 100%, 100% 100% !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    0 16px 36px -27px rgba(52, 120, 246, 0.92) !important;
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(var(--cw-chip-rgb), 0.12),
+    0 22px 48px -30px rgba(var(--cw-chip-rgb), 0.98) !important;
 }
 
 .cw-widget .cw-quick-replies .cw-chip.is-border-tracing,
@@ -153,20 +299,9 @@
 .cw-widget .cw-vcard[data-selected="true"].is-border-tracing,
 .cw-widget .cw-feature[data-selected="true"].is-border-tracing,
 .cw-widget .cw-feature[aria-pressed="true"].is-border-tracing {
-  border-color: rgba(178, 207, 255, 0.24) !important;
-  background-image:
-    radial-gradient(
-      circle at 50% 50%,
-      rgba(71, 137, 255, 0.3) 0 52%,
-      rgba(52, 120, 246, 0.16) 70%,
-      transparent 100%
-    ),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.018) 52%) !important;
-  background-color: rgba(8, 13, 23, 0.84) !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  background-size: 0% 0%, 100% 100% !important;
-  animation: cw-professional-centre-fill 1180ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  border-color: var(--cw-chip-line) !important;
+  background-size: 0% 0%, 100% 100%, 100% 100% !important;
+  animation: cw-professional-centre-fill 1160ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
 }
 
 .cw-widget .cw-chip::after,
@@ -180,13 +315,13 @@
   z-index: 8 !important;
   inset: -1px !important;
   display: block !important;
-  padding: 2px !important;
+  padding: 2.4px !important;
   border-radius: inherit !important;
   pointer-events: none !important;
   opacity: 0 !important;
   background: conic-gradient(
     from -90deg,
-    #c6e1ff 0 var(--cw-professional-trace),
+    rgb(var(--cw-chip-light-rgb)) 0 var(--cw-professional-trace),
     transparent var(--cw-professional-trace) 100%
   ) !important;
   -webkit-mask:
@@ -194,7 +329,7 @@
     linear-gradient(#000 0 0) !important;
   -webkit-mask-composite: xor !important;
   mask-composite: exclude !important;
-  transition: opacity 150ms ease !important;
+  transition: opacity 140ms ease !important;
   animation: none !important;
 }
 
@@ -205,12 +340,12 @@
 .cw-widget .cw-vcard.is-border-tracing::after,
 .cw-widget .cw-feature.is-border-tracing::after {
   opacity: 1 !important;
-  filter: drop-shadow(0 0 4px rgba(198, 225, 255, 0.74))
-    drop-shadow(0 0 9px rgba(52, 120, 246, 0.4)) !important;
-  animation: cw-professional-border-trace 720ms linear forwards !important;
+  filter: drop-shadow(0 0 4px rgba(var(--cw-chip-light-rgb), 0.82))
+    drop-shadow(0 0 11px rgba(var(--cw-chip-rgb), 0.45)) !important;
+  animation: cw-professional-border-trace 690ms linear forwards !important;
 }
 
-/* Remove nested icon capsules and circular selection bubbles. */
+/* Clean icons: no bubbles, no stray radio controls, only a crisp check when selected. */
 .cw-widget .cw-rowcard__icon,
 .cw-widget .cw-scard__icon,
 .cw-widget .cw-vcard__icon {
@@ -221,7 +356,7 @@
   padding: 0 !important;
   border: 0 !important;
   border-radius: 0 !important;
-  color: #8fc6ff !important;
+  color: rgb(var(--cw-chip-light-rgb)) !important;
   background: transparent !important;
   box-shadow: none !important;
 }
@@ -231,106 +366,148 @@
 .cw-widget .cw-vcard__icon svg {
   width: 19px !important;
   height: 19px !important;
-  stroke-width: 1.85 !important;
+  stroke-width: 1.9 !important;
   shape-rendering: geometricPrecision;
-}
-
-.cw-widget .cw-rowcard::before {
-  content: "→" !important;
-  width: 18px !important;
-  height: 18px !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  color: #8496ad !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  font: 620 15px/1 var(--cw-font) !important;
-}
-
-.cw-widget .cw-rowcard[data-selected="true"]::before {
-  content: "" !important;
-  border: 0 !important;
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23dcecff' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round' d='M5 12.5l4.2 4.2L19 7.2'/%3E%3C/svg%3E")
-      center / 15px 15px no-repeat !important;
-  box-shadow: none !important;
-}
-
-.cw-widget .cw-scard[data-selected="true"]::before,
-.cw-widget .cw-vcard[data-selected="true"]::before {
-  content: "" !important;
-  position: absolute !important;
-  z-index: 9 !important;
-  top: 9px !important;
-  right: 9px !important;
-  width: 17px !important;
-  height: 17px !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23dcecff' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round' d='M5 12.5l4.2 4.2L19 7.2'/%3E%3C/svg%3E")
-      center / 15px 15px no-repeat !important;
-  box-shadow: none !important;
 }
 
 .cw-widget .cw-opt__radio,
 .cw-widget .cw-opt__radio--square {
-  width: 4px !important;
-  height: 26px !important;
-  border: 0 !important;
-  border-radius: 999px !important;
-  color: transparent !important;
-  background: rgba(143, 182, 255, 0.2) !important;
-  box-shadow: none !important;
+  display: none !important;
 }
 
-.cw-widget .cw-opt[data-selected="true"] .cw-opt__radio,
-.cw-widget .cw-opt[data-selected="true"] .cw-opt__radio--square {
-  border: 0 !important;
-  background: linear-gradient(180deg, #9fd1ff, #3478f6) !important;
-  box-shadow: 0 0 12px rgba(52, 120, 246, 0.45) !important;
+.cw-widget .cw-rowcard::before,
+.cw-widget .cw-scard::before,
+.cw-widget .cw-opt::before,
+.cw-widget .cw-vcard::before,
+.cw-widget .cw-feature::before {
+  content: none !important;
 }
 
-.cw-widget .cw-opt__tag {
-  margin-left: 0.45rem !important;
-  padding: 0 !important;
+.cw-widget .cw-rowcard[data-selected="true"]::before,
+.cw-widget .cw-scard[data-selected="true"]::before,
+.cw-widget .cw-opt[data-selected="true"]::before,
+.cw-widget .cw-vcard[data-selected="true"]::before,
+.cw-widget .cw-feature[data-selected="true"]::before,
+.cw-widget .cw-feature[aria-pressed="true"]::before {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 9 !important;
+  top: 10px !important;
+  right: 10px !important;
+  width: 19px !important;
+  height: 19px !important;
   border: 0 !important;
   border-radius: 0 !important;
-  color: #8fc6ff !important;
-  background: transparent !important;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23eafffb' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round' d='M5 12.5l4.2 4.2L19 7.2'/%3E%3C/svg%3E") center / 18px 18px no-repeat !important;
   box-shadow: none !important;
-  font-size: 0.64rem !important;
-  font-weight: 720 !important;
 }
 
-.cw-widget .cw-summary__pills span {
-  border: 1px solid rgba(178, 207, 255, 0.2) !important;
+.cw-widget .cw-opt__body,
+.cw-widget .cw-rowcard__body {
+  min-width: 0 !important;
+  padding-right: 22px !important;
+}
+
+/* Liquid CTA buttons inside the calculator. */
+.cw-widget .cw-next,
+.cw-widget .cw-submit,
+.cw-widget .cw-thanks__actions button,
+.cw-widget .cw-inputbar button {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(170, 220, 255, 0.58) !important;
   border-radius: 999px !important;
-  color: #cbd9ed !important;
+  color: #ffffff !important;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015)),
-    rgba(10, 15, 24, 0.72) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-  backdrop-filter: blur(14px) saturate(140%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.025)),
+    linear-gradient(145deg, rgba(52, 120, 246, 0.76), rgba(22, 67, 157, 0.78)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -12px 26px rgba(5, 22, 58, 0.24),
+    0 20px 46px -27px rgba(52, 120, 246, 0.94) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(155%) !important;
+  backdrop-filter: blur(18px) saturate(155%) !important;
+  transition:
+    border-color 280ms ease,
+    transform 280ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 340ms ease,
+    filter 280ms ease !important;
+}
+
+.cw-widget .cw-calculator .cw-next,
+.cw-widget .cw-calculator .cw-submit {
+  border-color: rgba(137, 255, 235, 0.62) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.025)),
+    linear-gradient(145deg, rgba(35, 196, 181, 0.78), rgba(11, 112, 108, 0.82)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -12px 26px rgba(3, 43, 45, 0.24),
+    0 20px 46px -27px rgba(35, 196, 181, 0.94) !important;
+}
+
+.cw-widget .cw-next:hover:not(:disabled),
+.cw-widget .cw-next:focus-visible:not(:disabled),
+.cw-widget .cw-submit:hover:not(:disabled),
+.cw-widget .cw-submit:focus-visible:not(:disabled),
+.cw-widget .cw-thanks__actions button:hover,
+.cw-widget .cw-thanks__actions button:focus-visible,
+.cw-widget .cw-inputbar button:hover:not(:disabled),
+.cw-widget .cw-inputbar button:focus-visible:not(:disabled) {
+  border-color: rgba(222, 240, 255, 0.86) !important;
+  filter: brightness(1.08) saturate(1.08);
+  transform: translateY(-2px) scale(1.01) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.31),
+    0 25px 54px -25px rgba(var(--cw-chip-rgb), 0.98) !important;
 }
 
 @media (max-width: 520px) {
-  .cw-widget .cw-quick-replies .cw-chip {
-    min-height: 44px !important;
-    padding: 9px 11px !important;
-    font-size: 0.74rem !important;
+  .cw-widget .cw-calc-body {
+    padding: 10px 9px 7px !important;
+  }
+
+  .cw-widget .cw-grid,
+  .cw-widget .cw-rows,
+  .cw-widget .cw-list {
+    gap: 7px !important;
   }
 
   .cw-widget .cw-rowcard {
-    grid-template-columns: 22px minmax(0, 1fr) 17px !important;
-    min-height: 56px !important;
-    padding: 9px 11px !important;
+    min-height: 54px !important;
+  }
+
+  .cw-widget .cw-scard,
+  .cw-widget .cw-vcard {
+    min-height: 68px !important;
+  }
+
+  .cw-widget .cw-opt,
+  .cw-widget .cw-feature {
+    min-height: 52px !important;
+  }
+
+  .cw-widget .cw-quick-replies .cw-chip {
+    min-height: 40px !important;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cw-widget .cw-quick-replies .cw-chip.is-border-tracing,
+  .cw-widget .cw-tabs__glass,
+  .cw-widget .cw-quick-replies .cw-chip,
+  .cw-widget .cw-rowcard,
+  .cw-widget .cw-scard,
+  .cw-widget .cw-opt,
+  .cw-widget .cw-vcard,
+  .cw-widget .cw-feature,
+  .cw-widget .cw-next,
+  .cw-widget .cw-submit,
+  .cw-widget .cw-thanks__actions button,
+  .cw-widget .cw-inputbar button {
+    transition-duration: 0.01ms !important;
+  }
+
   .cw-widget .cw-rowcard[data-selected="true"].is-border-tracing,
   .cw-widget .cw-scard[data-selected="true"].is-border-tracing,
   .cw-widget .cw-opt[data-selected="true"].is-border-tracing,
@@ -338,7 +515,7 @@
   .cw-widget .cw-feature[data-selected="true"].is-border-tracing,
   .cw-widget .cw-feature[aria-pressed="true"].is-border-tracing {
     animation: none !important;
-    background-size: 240% 240%, 100% 100% !important;
+    background-size: 235% 235%, 100% 100%, 100% 100% !important;
   }
 
   .cw-widget .cw-chip.is-border-tracing::after,
