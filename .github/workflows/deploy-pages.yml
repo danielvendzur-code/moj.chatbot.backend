@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -42,7 +42,7 @@ jobs:
       - name: TypeScript check
         run: pnpm lint
 
-      - name: Run visual and security contracts
+      - name: Run visual security and lead contracts
         run: pnpm test -- --run
 
       - name: Build demo and embedded widget
@@ -51,7 +51,7 @@ jobs:
       - name: Create immutable build metadata
         shell: bash
         run: |
-          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"derat-layout-20260723-v3"},null,2))'
+          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"competition-winner-20260723-v5"},null,2))'
 
       - name: Validate production artifacts
         shell: bash
@@ -61,13 +61,16 @@ jobs:
           test -f dist/widget.js
           test -f dist/widget.css
           test -f dist/build-meta.json
-          grep -Fq "derat-layout-20260723-v3" dist/widget.js
+          test -f api/lead.ts
+          grep -Fq "competition-winner-20260723-v5" dist/widget.js
           grep -Fqi "4e8cff" dist/widget.css
-          grep -Fq "derat-layout-final" src/main.tsx
+          grep -Fq "competition-winner-final" src/main.tsx
+          grep -Fq "installWidgetSpotlight" src/main.tsx
           grep -Fq "cw-chat-builder" dist/widget.css
-          grep -Fq "cw-direct-actions__grid" dist/widget.css
-          grep -Fq "data-liquid-dragging" dist/widget.css
-          grep -Fq "cw-calc-step:has" dist/widget.css
+          grep -Fq "cw-contact-stage" dist/widget.css
+          grep -Fq "data-cw-spotlight" dist/widget.css
+          grep -Fq "api/lead" src/lib/leadApi.ts
+          grep -Fq "od 350 €" src/components/widget/AssistantConversation.tsx
           ! grep -Fq "REPLACE-ME" dist/widget.js
           grep -Fq "${GITHUB_SHA}" dist/build-meta.json
 
@@ -121,9 +124,9 @@ jobs:
             return 1
           }
 
-          verify "/" "AI Assistant"
-          verify "/widget.js" "derat-layout-20260723-v3"
-          verify "/widget.css" "cw-chat-builder"
+          verify "/" "Môj Chatbot"
+          verify "/widget.js" "competition-winner-20260723-v5"
+          verify "/widget.css" "cw-contact-stage"
           verify "/build-meta.json" "$SOURCE_SHA"
 
       - name: Checkout latest main for deployment record
