@@ -66,23 +66,38 @@ jobs:
           test -f dist/widget.css
           test -f dist/build-meta.json
           test -f api/lead.ts
-          grep -Fq "competition-redesign-20260723-v10" dist/widget.js
-          grep -Fq "cw-choice-grid--interest" dist/widget.css
-          grep -Fq "cw-selection-indicator" dist/widget.css
-          grep -Fq "border-radius:999px" dist/widget.css
-          grep -Fq -- "--mc-blue:#3478f6" dist/widget.css
-          grep -Fq "assistant-redesign" src/main.tsx
-          grep -Fq "assistant-redesign" src/embed.tsx
-          grep -Fq "installWidgetSpotlight" src/main.tsx
-          grep -Fq "installWidgetSpotlight" src/embed.tsx
-          grep -Fq "api/lead" src/lib/leadApi.ts
-          grep -Fq "Vyskladať riešenie" src/components/widget/AssistantConversation.tsx
-          grep -Fq "Čo má váš web vybaviť za vás?" src/lib/assistantFlow.ts
-          grep -Fq "Nie som si istý" src/lib/assistantFlow.ts
-          ! grep -Eqi "#2aa|#1fa|teal|turquoise" dist/widget.css
-          ! grep -Fq "cw-choice-arrow" src/components/widget/ToolCalculator.tsx
-          ! grep -Fq "REPLACE-ME" dist/widget.js
-          grep -Fq "${GITHUB_SHA}" dist/build-meta.json
+          node <<'NODE'
+          const fs = require('fs');
+          const css = fs.readFileSync('dist/widget.css', 'utf8');
+          const js = fs.readFileSync('dist/widget.js', 'utf8');
+          const main = fs.readFileSync('src/main.tsx', 'utf8');
+          const embed = fs.readFileSync('src/embed.tsx', 'utf8');
+          const conversation = fs.readFileSync('src/components/widget/AssistantConversation.tsx', 'utf8');
+          const calculator = fs.readFileSync('src/components/widget/ToolCalculator.tsx', 'utf8');
+          const flow = fs.readFileSync('src/lib/assistantFlow.ts', 'utf8');
+          const lead = fs.readFileSync('src/lib/leadApi.ts', 'utf8');
+          const meta = JSON.parse(fs.readFileSync('dist/build-meta.json', 'utf8'));
+
+          const must = (condition, message) => {
+            if (!condition) throw new Error(message);
+          };
+
+          must(js.includes('competition-redesign-20260723-v10'), 'widget version missing');
+          must(css.includes('cw-choice-grid--interest'), 'interest grid missing');
+          must(css.includes('cw-selection-indicator'), 'selection indicator missing');
+          must(/border-radius:\s*999px/.test(css), 'oval geometry missing');
+          must(/--mc-blue:\s*#3478f6/i.test(css), 'website blue missing');
+          must(main.includes('assistant-redesign') && embed.includes('assistant-redesign'), 'redesign import missing');
+          must(main.includes('installWidgetSpotlight') && embed.includes('installWidgetSpotlight'), 'builder spotlight missing');
+          must(lead.includes('api/lead'), 'lead API missing');
+          must(conversation.includes('Vyskladať riešenie'), 'builder CTA missing');
+          must(flow.includes('Čo má váš web vybaviť za vás?'), 'first question missing');
+          must(flow.includes('Nie som si istý'), 'safe fallback option missing');
+          must(!/(#2aa|#1fa|teal|turquoise)/i.test(css), 'forbidden colour remains');
+          must(!calculator.includes('cw-choice-arrow'), 'legacy choice arrow remains');
+          must(!js.includes('REPLACE-ME'), 'placeholder remains');
+          must(meta.sourceSha === process.env.GITHUB_SHA, 'build metadata SHA mismatch');
+          NODE
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
