@@ -76,6 +76,7 @@ test("AI Assistant shell exposes its active mode and polished tab controls", asy
   const widget = await read("src/components/widget/AssistantWidget.tsx");
   const drag = await read("src/lib/liquidSegmentedDrag.ts");
   const css = await read("src/apple-liquid-system-final.css");
+  const dragCss = await read("src/chip-refinement-final.css");
   assert.match(widget, /className="cw-panel"[\s\S]*data-mode=\{mode\}/);
   assert.match(widget, /Online · odpoviem hneď/);
   assert.match(widget, /<WidgetIcon name="calculator" \/>/);
@@ -85,7 +86,7 @@ test("AI Assistant shell exposes its active mode and polished tab controls", asy
   assert.match(drag, /setPointerCapture/);
   assert.match(drag, /--cw-segment-x/);
   assert.match(drag, /liquidSettling/);
-  assert.match(css, /data-liquid-dragging/);
+  assert.match(dragCss, /data-liquid-dragging/);
   assert.match(css, /cubic-bezier\(0\.16, 1\.28, 0\.3, 1\)/);
 });
 
