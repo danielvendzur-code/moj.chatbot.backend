@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import { getInitialEmbedViewport, isEmbedMode } from "./lib/embedBridge";
+import { installLiquidSegmentedDrag } from "./lib/liquidSegmentedDrag";
 import { installWidgetRailDrag } from "./lib/widgetRailDrag";
 import "./widget.css";
 import "./interaction.css";
@@ -19,6 +20,7 @@ if (isEmbedMode()) {
 }
 
 installWidgetRailDrag();
+installLiquidSegmentedDrag();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
