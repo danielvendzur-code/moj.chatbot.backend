@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { animateSentMessage } from "../../lib/motion";
 import { sendChat, type ChatTurn } from "../../lib/assistantApi";
 import { track } from "../../lib/analytics";
-import { replayBorderTrace } from "../../lib/borderTrace";
 import { BubbleLogo } from "./BubbleLogo";
 import { WidgetIcon } from "./WidgetIcon";
 
@@ -142,8 +141,28 @@ export function AssistantConversation({
     void ask(value);
   };
 
+  const openCalculator = () => {
+    track("chat_builder_open");
+    onOpenCalculator();
+  };
+
   return (
     <div className="cw-conversation" data-testid="assistant-view">
+      <div className="cw-chat-top">
+        <button type="button" className="cw-chat-builder" onClick={openCalculator}>
+          <span className="cw-chat-builder__icon" aria-hidden="true">
+            <WidgetIcon name="calculator" />
+          </span>
+          <span className="cw-chat-builder__copy">
+            <b>Vyskladať riešenie</b>
+            <small>Chatbot, kalkulačka alebo konfigurátor podľa vášho webu.</small>
+          </span>
+          <span className="cw-chat-builder__arrow" aria-hidden="true">
+            →
+          </span>
+        </button>
+      </div>
+
       <div className="cw-messages" ref={messagesRef} aria-live="polite">
         {messages.map((message) => (
           <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>
@@ -179,24 +198,11 @@ export function AssistantConversation({
             className="cw-chip"
             key={label}
             title={question}
-            onClick={(event) => {
-              replayBorderTrace(event.currentTarget);
-              void ask(question);
-            }}
+            onClick={() => void ask(question)}
           >
             {label}
           </button>
         ))}
-        <button
-          type="button"
-          className="cw-chip cw-chip--primary"
-          onClick={(event) => {
-            replayBorderTrace(event.currentTarget);
-            window.setTimeout(onOpenCalculator, 1120);
-          }}
-        >
-          Vyskladať riešenie
-        </button>
       </div>
 
       <div className="cw-inputbar">
@@ -224,18 +230,27 @@ export function AssistantConversation({
       </div>
 
       <nav className="cw-direct-actions" aria-label="Priamy kontakt">
-        <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
-          <WidgetIcon name="chat" />
-          <span>WhatsApp</span>
-        </a>
-        <a href="tel:+421948699433">
-          <WidgetIcon name="phone" />
-          <span>Zavolať</span>
-        </a>
-        <a href="mailto:daniel@vendzur.sk">
-          <WidgetIcon name="mail" />
-          <span>E-mail</span>
-        </a>
+        <span className="cw-direct-actions__label">Kontaktujte ma priamo</span>
+        <div className="cw-direct-actions__grid">
+          <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
+            <span className="cw-direct-actions__icon">
+              <WidgetIcon name="chat" />
+            </span>
+            <span>WhatsApp</span>
+          </a>
+          <a href="tel:+421948699433">
+            <span className="cw-direct-actions__icon">
+              <WidgetIcon name="phone" />
+            </span>
+            <span>Zavolať</span>
+          </a>
+          <a href="mailto:daniel@vendzur.sk">
+            <span className="cw-direct-actions__icon">
+              <WidgetIcon name="mail" />
+            </span>
+            <span>E-mail</span>
+          </a>
+        </div>
       </nav>
     </div>
   );
