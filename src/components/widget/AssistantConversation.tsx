@@ -21,12 +21,7 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   {
     id: 1,
     from: "bot",
-    text: "Dobrý deň, som AI Assistant. Pomôžem vám vybrať riešenie, ktoré zodpovedá vašej službe a spôsobu predaja.",
-  },
-  {
-    id: 2,
-    from: "bot",
-    text: "Môžete sa ma niečo opýtať alebo si cez „Vyskladať riešenie“ pripraviť stručné zadanie.",
+    text: "Dobrý deň 👋 Som AI Assistant. Pomôžem vám vybrať chatbot, kalkulačku alebo konfigurátor a pripraviť stručné zadanie. Čo vás zaujíma?",
   },
 ];
 
@@ -45,7 +40,7 @@ const QUICK_REPLIES: QuickReply[] = [
 ];
 
 const CHAT_FALLBACK =
-  "Prepáčte, teraz sa neviem spojiť. Skúste to o chvíľu, otvorte konfigurátor („Vyskladať riešenie“) alebo mi nechajte kontakt a ozvem sa.";
+  "Prepáčte, teraz sa neviem spojiť. Skúste to o chvíľu, otvorte konfigurátor alebo mi nechajte kontakt a ozvem sa.";
 
 export function AssistantConversation({
   resetToken,
@@ -54,7 +49,7 @@ export function AssistantConversation({
   const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
-  const nextIdRef = useRef(3);
+  const nextIdRef = useRef(2);
   const replyTimerRef = useRef<number | null>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
   const [planeFx, setPlaneFx] = useState(false);
@@ -63,16 +58,13 @@ export function AssistantConversation({
   useEffect(() => {
     const last = messages[messages.length - 1];
     if (!last || last.from !== "me") return;
-    const rows = messagesRef.current?.querySelectorAll<HTMLElement>(
-      ".cw-message-row--me",
-    );
+    const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");
     animateSentMessage(rows?.[rows.length - 1] ?? null);
   }, [messages]);
 
   useEffect(
     () => () => {
-      if (planeTimerRef.current !== null)
-        window.clearTimeout(planeTimerRef.current);
+      if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
     },
     [],
   );
@@ -80,8 +72,7 @@ export function AssistantConversation({
   const launchPlane = () => {
     setPlaneFx(false);
     requestAnimationFrame(() => setPlaneFx(true));
-    if (planeTimerRef.current !== null)
-      window.clearTimeout(planeTimerRef.current);
+    if (planeTimerRef.current !== null) window.clearTimeout(planeTimerRef.current);
     planeTimerRef.current = window.setTimeout(() => setPlaneFx(false), 700);
   };
 
@@ -89,21 +80,18 @@ export function AssistantConversation({
     setMessages(INITIAL_MESSAGES);
     setInput("");
     setTyping(false);
-    nextIdRef.current = 3;
-    if (replyTimerRef.current !== null)
-      window.clearTimeout(replyTimerRef.current);
+    nextIdRef.current = 2;
+    if (replyTimerRef.current !== null) window.clearTimeout(replyTimerRef.current);
   }, [resetToken]);
 
   useEffect(() => {
     const container = messagesRef.current;
-    if (container)
-      container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+    if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
   }, [messages, typing]);
 
   useEffect(
     () => () => {
-      if (replyTimerRef.current !== null)
-        window.clearTimeout(replyTimerRef.current);
+      if (replyTimerRef.current !== null) window.clearTimeout(replyTimerRef.current);
     },
     [],
   );
@@ -158,10 +146,7 @@ export function AssistantConversation({
     <div className="cw-conversation" data-testid="assistant-view">
       <div className="cw-messages" ref={messagesRef} aria-live="polite">
         {messages.map((message) => (
-          <div
-            className={`cw-message-row cw-message-row--${message.from}`}
-            key={message.id}
-          >
+          <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>
             {message.from === "bot" ? (
               <span className="cw-avatar">
                 <BubbleLogo size="avatar" />
@@ -237,6 +222,21 @@ export function AssistantConversation({
           <WidgetIcon name="send" />
         </button>
       </div>
+
+      <nav className="cw-direct-actions" aria-label="Priamy kontakt">
+        <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
+          <WidgetIcon name="chat" />
+          <span>WhatsApp</span>
+        </a>
+        <a href="tel:+421948699433">
+          <WidgetIcon name="phone" />
+          <span>Zavolať</span>
+        </a>
+        <a href="mailto:daniel@vendzur.sk">
+          <WidgetIcon name="mail" />
+          <span>E-mail</span>
+        </a>
+      </nav>
     </div>
   );
 }
