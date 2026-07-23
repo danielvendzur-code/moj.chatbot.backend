@@ -51,7 +51,7 @@ jobs:
       - name: Create immutable build metadata
         shell: bash
         run: |
-          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"restrained-assistant-20260723-v2"},null,2))'
+          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"derat-layout-20260723-v3"},null,2))'
 
       - name: Validate production artifacts
         shell: bash
@@ -61,12 +61,13 @@ jobs:
           test -f dist/widget.js
           test -f dist/widget.css
           test -f dist/build-meta.json
-          grep -Fq "restrained-assistant-20260723-v2" dist/widget.js
+          grep -Fq "derat-layout-20260723-v3" dist/widget.js
           grep -Fqi "4e8cff" dist/widget.css
-          grep -Fq "restrained-widget-final" src/main.tsx
-          grep -Fq "rw-panel-open" dist/widget.css
+          grep -Fq "derat-layout-final" src/main.tsx
+          grep -Fq "cw-chat-builder" dist/widget.css
+          grep -Fq "cw-direct-actions__grid" dist/widget.css
           grep -Fq "data-liquid-dragging" dist/widget.css
-          grep -Fq "cw-quick-replies" dist/widget.css
+          grep -Fq "cw-calc-step:has" dist/widget.css
           ! grep -Fq "REPLACE-ME" dist/widget.js
           grep -Fq "${GITHUB_SHA}" dist/build-meta.json
 
@@ -121,8 +122,8 @@ jobs:
           }
 
           verify "/" "AI Assistant"
-          verify "/widget.js" "restrained-assistant-20260723-v2"
-          verify "/widget.css" "rw-panel-open"
+          verify "/widget.js" "derat-layout-20260723-v3"
+          verify "/widget.css" "cw-chat-builder"
           verify "/build-meta.json" "$SOURCE_SHA"
 
       - name: Checkout latest main for deployment record
