@@ -45,7 +45,7 @@ function mount(): void {
   installWidgetSpotlight();
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "competition-winner-20260723-v5");
+  host.setAttribute("data-dv-assistant-version", "owner-friendly-20260723-v6");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);
