@@ -131,7 +131,6 @@ export function AssistantConversation({
   return (
     <div className="cw-conversation" data-testid="assistant-view">
       <div className="cw-chat-top">
-        <span className="cw-chat-top__label">Neviete, kde začať?</span>
         <button type="button" className="cw-chat-builder cw-spotlight" onClick={openCalculator}>
           <span className="cw-chat-builder__icon" aria-hidden="true">
             <WidgetIcon name="spark" />
@@ -209,7 +208,6 @@ export function AssistantConversation({
       </div>
 
       <nav className="cw-direct-actions" aria-label="Priamy kontakt">
-        <span className="cw-direct-actions__label">Radšej priamo?</span>
         <div className="cw-direct-actions__grid">
           <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
             <span className="cw-direct-actions__icon">
