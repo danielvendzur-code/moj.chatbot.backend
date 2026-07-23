@@ -2,62 +2,41 @@ type BubbleLogoProps = {
   size: "launcher" | "header" | "avatar";
 };
 
-/** The same precise robot-in-a-bubble mark used by the portfolio navigation. */
+/** Shared Môj Chatbot mark: the same blue M-bot used by the website. */
 export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
   return (
     <span className={`bl bl--${size}`} aria-hidden="true">
       <svg viewBox="0 0 48 48" focusable="false">
         <path
-          d="M24 7V4.8"
-          stroke="#3478f6"
-          strokeWidth="2.4"
-          strokeLinecap="round"
-        />
-        <circle cx="24" cy="3.2" r="2.35" fill="#3478f6" />
-        <path
-          d="M13.2 7.2h21.6c5.7 0 9 3.4 9 9v10.9c0 5.6-3.3 9-9 9h-10l-9.1 7.1v-7.4c-7-.4-11.5-3.9-11.5-9.7V16.2c0-5.6 3.3-9 9-9Z"
-          fill="#090c12"
-          stroke="rgba(247,249,252,.72)"
-          strokeWidth="1.7"
-        />
-        <rect
-          x="9.5"
-          y="12.3"
-          width="29"
-          height="18.8"
-          rx="8"
-          fill="#0d1119"
-          stroke="#3478f6"
-          strokeWidth="2"
-        />
-        <path
-          d="M13.5 15.8h9.2"
-          stroke="#ffffff"
-          strokeOpacity="0.28"
-          strokeWidth="1.3"
-          strokeLinecap="round"
-        />
-        <rect x="15" y="20" width="5.2" height="3.5" rx="1.75" fill="#3478f6" />
-        <rect
-          x="27.8"
-          y="20"
-          width="5.2"
-          height="3.5"
-          rx="1.75"
+          d="M11.2 4.5h25.6c5.1 0 8.7 3.6 8.7 8.7v18.3c0 5.1-3.6 8.7-8.7 8.7H27l-9.6 6.1v-6.1h-6.2c-5.1 0-8.7-3.6-8.7-8.7V13.2c0-5.1 3.6-8.7 8.7-8.7Z"
           fill="#3478f6"
         />
-        <path
-          d="m18.2 26.2 5.8 3 5.8-3"
-          stroke="#f7f9fc"
-          strokeWidth="1.7"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+        <rect
+          x="8"
+          y="10"
+          width="32"
+          height="23.5"
+          rx="9"
+          fill="#090b10"
+          stroke="#ffffff"
+          strokeOpacity="0.22"
+          strokeWidth="1.4"
         />
         <path
-          d="M11 18.5v6.8M37 18.5v6.8"
-          stroke="#3478f6"
-          strokeWidth="2.2"
+          d="M12 13.8h11"
+          stroke="#ffffff"
+          strokeOpacity="0.22"
+          strokeWidth="1.2"
           strokeLinecap="round"
+        />
+        <circle cx="17" cy="21" r="2.15" fill="#ffffff" />
+        <circle cx="31" cy="21" r="2.15" fill="#ffffff" />
+        <path
+          d="M15 28.5v-4.1l9 5.7 9-5.7v4.1"
+          stroke="#3478f6"
+          strokeWidth="2.35"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     </span>

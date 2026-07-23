@@ -31,23 +31,33 @@ test("demo and embedded builds import the identical final style stack", async ()
     "world-class-polish.css",
     "competition-widget.css",
     "black-blue-refresh.css",
+    "conversion-brand.css",
   ];
   for (const stylesheet of expected) {
     assert.match(main, new RegExp(stylesheet.replace(".", "\\.")));
     assert.match(embed, new RegExp(stylesheet.replace(".", "\\.")));
   }
+  assert.match(main, /black-blue-refresh\.css[\s\S]*conversion-brand\.css/);
+  assert.match(embed, /black-blue-refresh\.css[\s\S]*conversion-brand\.css/);
   assert.match(embed, /data-dv-assistant-version/);
-  assert.match(embed, /brand-interactions-20260722/);
-  assert.match(deploy, /brand-interactions-20260722/);
+  assert.match(embed, /conversion-brand-20260723/);
+  assert.match(deploy, /conversion-brand-20260723/);
   assert.doesNotMatch(deploy, /black-blue-20260722/);
 });
 
-test("mode tabs switch directly and expose online state", async () => {
+test("mode tabs switch directly through a branded liquid-glass control", async () => {
   const widget = await read("src/components/widget/AssistantWidget.tsx");
+  const css = await read("src/conversion-brand.css");
   assert.match(widget, /<i aria-hidden="true" \/> Online/);
+  assert.match(widget, />Môj Chatbot</);
+  assert.match(widget, /className="cw-tabs__glass"/);
   assert.match(widget, /onClick=\{\(\) => switchMode\("calculator"\)\}/);
   assert.match(widget, /onClick=\{\(\) => switchMode\("assistant"\)\}/);
   assert.doesNotMatch(widget, /onPointerMove=\{handleTabPointerMove\}/);
+  assert.match(css, /\.cw-widget \.cw-tabs__glass[\s\S]*display:\s*block !important/);
+  assert.match(css, /760ms cubic-bezier\(0\.22,\s*1,\s*0\.36,\s*1\)/);
+  assert.match(css, /cw-glass-shimmer-a/);
+  assert.match(css, /cw-glass-shimmer-b/);
 });
 
 test("builder flow omits priority and keeps contact as final step", async () => {
@@ -89,24 +99,49 @@ test("quick replies never drag sideways and mobile inputs prevent browser zoom",
   assert.match(css, /touch-action:\s*pan-y/i);
   assert.match(css, /font-size:\s*16px !important/i);
   assert.match(css, /height:\s*100dvh !important/i);
-  assert.doesNotMatch(conversation, /animateChipsIn|chipsRef/);
+  assert.match(conversation, /animateChipsIn\(chipsRef\.current\)/);
+  assert.match(conversation, /ref=\{chipsRef\}/);
+  assert.doesNotMatch(conversation, /setTimeout\(onOpenCalculator/);
 });
 
-test("chips use click-only border tracing without filled selection surfaces", async () => {
+test("choices use nested symmetric border tracing, liquid glide and centred SVG states", async () => {
   const conversation = await read(
     "src/components/widget/AssistantConversation.tsx",
   );
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
-  const css = await read("src/black-blue-refresh.css");
+  const css = await read("src/conversion-brand.css");
   assert.match(conversation, /replayBorderTrace\(event\.currentTarget\)/);
   assert.match(calculator, /replayBorderTrace\(event\.currentTarget\)/);
-  assert.doesNotMatch(calculator, /data-glide/);
-  assert.match(css, /@keyframes cw-border-trace/);
-  assert.match(
-    css,
-    /\.cw-rowcard\[data-selected="true"\][\s\S]*?background:\s*#0e1118/i,
+  assert.match(conversation, /className="cw-selection-trace"/);
+  assert.match(calculator, /className="cw-selection-trace"/);
+  assert.match(calculator, /<HoverGlide[\s\S]*?park/);
+  assert.match(calculator, /data-glide/);
+  assert.match(calculator, /className="cw-card-state"/);
+  assert.match(calculator, /name=\{selected \? "check" : "arrow"\}/);
+  assert.match(calculator, /cw-opt__radio[\s\S]*?<WidgetIcon name="check"/);
+  assert.match(css, /@property --cw-trace-sweep/);
+  assert.match(css, /from 270deg/);
+  assert.match(css, /calc\(360deg - var\(--cw-trace-sweep\)\)/);
+  assert.match(css, /padding:\s*2\.5px/);
+  assert.match(css, /\.is-border-tracing > \.cw-selection-trace/);
+  assert.match(css, /\.cw-widget \.cw-glide[\s\S]*display:\s*block !important/);
+});
+
+test("public demo and conversation consistently use the Môj Chatbot brand", async () => {
+  const app = await read("src/App.tsx");
+  const widget = await read("src/components/widget/AssistantWidget.tsx");
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
   );
-  assert.match(css, /\.cw-chip\.is-border-tracing::after/);
+  const page = await read("index.html");
+  const logo = await read("src/components/widget/BubbleLogo.tsx");
+  assert.match(app, /Môj Chatbot/);
+  assert.match(widget, /Môj Chatbot/);
+  assert.match(conversation, /som Môj Chatbot/);
+  assert.match(page, /<title>Môj Chatbot/);
+  assert.match(logo, /#3478f6/);
+  assert.match(logo, /M15 28\.5v-4\.1l9 5\.7 9-5\.7v4\.1/);
+  assert.doesNotMatch(widget, /Danielov webový asistent/);
 });
 
 test("chat client has a real HTTPS endpoint, timeout and deterministic outage fallback", async () => {

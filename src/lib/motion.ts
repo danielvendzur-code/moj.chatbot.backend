@@ -1,4 +1,4 @@
-import { animate, createSpring, stagger, svg } from "animejs";
+import { animate, createSpring, svg } from "animejs";
 
 const prefersReducedMotion = (): boolean =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -6,34 +6,50 @@ const prefersReducedMotion = (): boolean =>
 /* Builder choices use a short, quiet entrance without spring or sideways movement. */
 export function animateStepIn(container: HTMLElement | null): void {
   if (!container || prefersReducedMotion()) return;
+  if (container.dataset.cwStepAnimated === "true") return;
+  container.dataset.cwStepAnimated = "true";
   const targets = Array.from(
     container.querySelectorAll(
       ".cw-rows > *:not(.cw-glide), .cw-grid > *:not(.cw-glide), .cw-list > *:not(.cw-glide), .cw-summary, .cw-lead, .cw-industry-tip, .cw-custom",
     ),
   ) as HTMLElement[];
   if (targets.length === 0) return;
-  animate(targets, {
-    opacity: [0, 1],
-    translateY: [5, 0],
-    scale: [0.99, 1],
-    delay: stagger(18, { start: 20 }),
-    duration: 260,
-    ease: "outCubic",
+  targets.forEach((target, index) => {
+    target.animate(
+      [
+        { opacity: 0, translate: "0 5px", scale: "0.99" },
+        { opacity: 1, translate: "0 0", scale: "1" },
+      ],
+      {
+        delay: 20 + index * 18,
+        duration: 260,
+        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+        fill: "backwards",
+      },
+    );
   });
 }
 
 /* Quick choices arrive quietly; no springy scale or scattered motion. */
 export function animateChipsIn(container: HTMLElement | null): void {
   if (!container || prefersReducedMotion()) return;
+  if (container.dataset.cwChipsAnimated === "true") return;
+  container.dataset.cwChipsAnimated = "true";
   const targets = Array.from(container.querySelectorAll(":scope > .cw-chip")) as HTMLElement[];
   if (targets.length === 0) return;
-  animate(targets, {
-    opacity: [0, 1],
-    translateY: [6, 0],
-    scale: [0.98, 1],
-    delay: stagger(45, { start: 70 }),
-    duration: 320,
-    ease: "outCubic",
+  targets.forEach((target, index) => {
+    target.animate(
+      [
+        { opacity: 0, translate: "0 6px", scale: "0.98" },
+        { opacity: 1, translate: "0 0", scale: "1" },
+      ],
+      {
+        delay: 70 + index * 45,
+        duration: 320,
+        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+        fill: "backwards",
+      },
+    );
   });
 }
 

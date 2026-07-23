@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { animateSentMessage } from "../../lib/motion";
+import { animateChipsIn, animateSentMessage } from "../../lib/motion";
 import { sendChat, type ChatTurn } from "../../lib/assistantApi";
 import { track } from "../../lib/analytics";
 import { replayBorderTrace } from "../../lib/borderTrace";
@@ -21,7 +21,7 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   {
     id: 1,
     from: "bot",
-    text: "Dobrý deň, som Danielov webový asistent. Pomôžem vám vybrať riešenie, ktoré zodpovedá vašej službe a spôsobu predaja.",
+    text: "Dobrý deň, som Môj Chatbot. Pomôžem vám vybrať riešenie, ktoré zodpovedá vašej službe a spôsobu predaja.",
   },
   {
     id: 2,
@@ -57,8 +57,13 @@ export function AssistantConversation({
   const nextIdRef = useRef(3);
   const replyTimerRef = useRef<number | null>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
+  const chipsRef = useRef<HTMLDivElement>(null);
   const [planeFx, setPlaneFx] = useState(false);
   const planeTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    animateChipsIn(chipsRef.current);
+  }, [resetToken]);
 
   useEffect(() => {
     const last = messages[messages.length - 1];
@@ -187,7 +192,11 @@ export function AssistantConversation({
         ) : null}
       </div>
 
-      <div className="cw-quick-replies" aria-label="Rýchle možnosti">
+      <div
+        className="cw-quick-replies"
+        aria-label="Rýchle možnosti"
+        ref={chipsRef}
+      >
         {QUICK_REPLIES.map(({ label, question }) => (
           <button
             type="button"
@@ -199,7 +208,8 @@ export function AssistantConversation({
               void ask(question);
             }}
           >
-            {label}
+            <span className="cw-selection-trace" aria-hidden="true" />
+            <span className="cw-chip__label">{label}</span>
           </button>
         ))}
         <button
@@ -207,10 +217,12 @@ export function AssistantConversation({
           className="cw-chip cw-chip--primary"
           onClick={(event) => {
             replayBorderTrace(event.currentTarget);
-            window.setTimeout(onOpenCalculator, 360);
+            onOpenCalculator();
           }}
         >
-          Vyskladať riešenie
+          <span className="cw-selection-trace" aria-hidden="true" />
+          <span className="cw-chip__label">Vyskladať riešenie</span>
+          <WidgetIcon name="arrow" className="cw-chip__arrow" />
         </button>
       </div>
 

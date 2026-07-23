@@ -7,7 +7,7 @@ export default function App(): JSX.Element {
   return (
     <main
       className="widget-preview"
-      aria-label={embedMode ? "Webový asistent" : "Ukážka webového asistenta"}
+      aria-label={embedMode ? "Môj Chatbot" : "Ukážka chatbota Môj Chatbot"}
     >
       {!embedMode ? <div className="widget-preview__surface" aria-hidden="true" /> : null}
       <AssistantWidget embedMode={embedMode} />

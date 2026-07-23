@@ -18,6 +18,7 @@ import {
   VOLUMES,
 } from "../../lib/assistantFlow";
 import type { AssistantPreset, InterestId } from "../../types/assistant";
+import { HoverGlide } from "./HoverGlide";
 import { WidgetIcon } from "./WidgetIcon";
 
 type ToolCalculatorProps = {
@@ -73,6 +74,7 @@ export function ToolCalculator({
   const [proposalNumber, setProposalNumber] = useState("");
   const bodyRef = useRef<HTMLDivElement>(null);
   const stepRef = useRef<HTMLElement>(null);
+  const optionsRef = useRef<HTMLDivElement>(null);
   const thanksIconRef = useRef<HTMLSpanElement>(null);
   const sendTimerRef = useRef<number | null>(null);
 
@@ -278,13 +280,19 @@ export function ToolCalculator({
 
           {stepId === "interest" ? (
             <>
-              <div className="cw-rows">
+              <div className="cw-rows" ref={optionsRef}>
+                <HoverGlide
+                  containerRef={optionsRef}
+                  park
+                  deps={[stepId, interest]}
+                />
                 {INTERESTS.map((option) => {
                   const selected = interest === option.id;
                   return (
                     <button
                       type="button"
                       className="cw-rowcard"
+                      data-glide
                       data-testid={`interest-${option.id}`}
                       data-selected={selected}
                       aria-pressed={selected}
@@ -300,6 +308,13 @@ export function ToolCalculator({
                       <span className="cw-rowcard__body">
                         <b>{option.label}</b>
                       </span>
+                      <span className="cw-card-state" aria-hidden="true">
+                        <WidgetIcon name={selected ? "check" : "arrow"} />
+                      </span>
+                      <span
+                        className="cw-selection-trace"
+                        aria-hidden="true"
+                      />
                     </button>
                   );
                 })}
@@ -320,13 +335,19 @@ export function ToolCalculator({
 
           {stepId === "industry" ? (
             <>
-              <div className="cw-grid">
+              <div className="cw-grid" ref={optionsRef}>
+                <HoverGlide
+                  containerRef={optionsRef}
+                  park
+                  deps={[stepId, industry]}
+                />
                 {INDUSTRIES.map((option) => {
                   const selected = industry === option.id;
                   return (
                     <button
                       type="button"
                       className="cw-scard"
+                      data-glide
                       data-testid={`industry-${option.id}`}
                       data-selected={selected}
                       aria-pressed={selected}
@@ -340,6 +361,13 @@ export function ToolCalculator({
                         <WidgetIcon name={option.icon} />
                       </span>
                       <b>{option.label}</b>
+                      <span className="cw-card-state" aria-hidden="true">
+                        <WidgetIcon name={selected ? "check" : "arrow"} />
+                      </span>
+                      <span
+                        className="cw-selection-trace"
+                        aria-hidden="true"
+                      />
                     </button>
                   );
                 })}
@@ -365,13 +393,19 @@ export function ToolCalculator({
           ) : null}
 
           {stepId === "priority" ? (
-            <div className="cw-list">
+            <div className="cw-list" ref={optionsRef}>
+              <HoverGlide
+                containerRef={optionsRef}
+                park
+                deps={[stepId, priority]}
+              />
               {PRIORITIES.map((option) => {
                 const selected = priority === option.id;
                 return (
                   <button
                     type="button"
                     className="cw-opt"
+                    data-glide
                     data-testid={`priority-${option.id}`}
                     data-selected={selected}
                     aria-pressed={selected}
@@ -381,11 +415,17 @@ export function ToolCalculator({
                       setPriority(option.id);
                     }}
                   >
-                    <span className="cw-opt__radio" />
+                    <span className="cw-opt__radio" aria-hidden="true">
+                      {selected ? <WidgetIcon name="check" /> : null}
+                    </span>
                     <span className="cw-opt__body">
                       <b>{option.label}</b>
                       <span>{option.description}</span>
                     </span>
+                    <span
+                      className="cw-selection-trace"
+                      aria-hidden="true"
+                    />
                   </button>
                 );
               })}
@@ -393,13 +433,18 @@ export function ToolCalculator({
           ) : null}
 
           {stepId === "features" ? (
-            <div className="cw-list">
+            <div className="cw-list" ref={optionsRef}>
+              <HoverGlide
+                containerRef={optionsRef}
+                deps={[stepId]}
+              />
               {FEATURES.map((option) => {
                 const selected = features.includes(option.id);
                 return (
                   <button
                     type="button"
                     className="cw-opt"
+                    data-glide
                     data-testid={`feature-${option.id}`}
                     data-selected={selected}
                     aria-pressed={selected}
@@ -409,7 +454,12 @@ export function ToolCalculator({
                       toggleFeature(option.id);
                     }}
                   >
-                    <span className="cw-opt__radio cw-opt__radio--square" />
+                    <span
+                      className="cw-opt__radio cw-opt__radio--square"
+                      aria-hidden="true"
+                    >
+                      {selected ? <WidgetIcon name="check" /> : null}
+                    </span>
                     <span className="cw-opt__body">
                       <b>
                         {option.label}
@@ -419,6 +469,10 @@ export function ToolCalculator({
                       </b>
                       <span>{option.description}</span>
                     </span>
+                    <span
+                      className="cw-selection-trace"
+                      aria-hidden="true"
+                    />
                   </button>
                 );
               })}
@@ -426,13 +480,19 @@ export function ToolCalculator({
           ) : null}
 
           {stepId === "volume" ? (
-            <div className="cw-grid cw-grid--volume">
+            <div className="cw-grid cw-grid--volume" ref={optionsRef}>
+              <HoverGlide
+                containerRef={optionsRef}
+                park
+                deps={[stepId, volume]}
+              />
               {VOLUMES.map((option) => {
                 const selected = volume === option.id;
                 return (
                   <button
                     type="button"
                     className="cw-vcard"
+                    data-glide
                     data-testid={`volume-${option.id}`}
                     data-selected={selected}
                     aria-pressed={selected}
@@ -444,6 +504,13 @@ export function ToolCalculator({
                   >
                     <b>{option.label}</b>
                     <span>{option.description}</span>
+                    <span className="cw-card-state" aria-hidden="true">
+                      <WidgetIcon name={selected ? "check" : "arrow"} />
+                    </span>
+                    <span
+                      className="cw-selection-trace"
+                      aria-hidden="true"
+                    />
                   </button>
                 );
               })}
@@ -451,13 +518,19 @@ export function ToolCalculator({
           ) : null}
 
           {stepId === "timeline" ? (
-            <div className="cw-grid cw-grid--volume">
+            <div className="cw-grid cw-grid--volume" ref={optionsRef}>
+              <HoverGlide
+                containerRef={optionsRef}
+                park
+                deps={[stepId, timeline]}
+              />
               {TIMELINES.map((option) => {
                 const selected = timeline === option.id;
                 return (
                   <button
                     type="button"
                     className="cw-vcard"
+                    data-glide
                     data-testid={`timeline-${option.id}`}
                     data-selected={selected}
                     aria-pressed={selected}
@@ -469,6 +542,13 @@ export function ToolCalculator({
                   >
                     <b>{option.label}</b>
                     <span>{option.description}</span>
+                    <span className="cw-card-state" aria-hidden="true">
+                      <WidgetIcon name={selected ? "check" : "arrow"} />
+                    </span>
+                    <span
+                      className="cw-selection-trace"
+                      aria-hidden="true"
+                    />
                   </button>
                 );
               })}
