@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { AssistantWidget } from "./components/widget/AssistantWidget";
+import { installLiquidSegmentedDrag } from "./lib/liquidSegmentedDrag";
 import "./widget.css";
 import "./interaction.css";
 import "./requested-polish.css";
@@ -11,8 +12,7 @@ import "./premium-liquid-final.css";
 import "./chip-refinement-final.css";
 
 const HOST_ID = "dv-assistant-root";
-const scriptSrc =
-  (document.currentScript as HTMLScriptElement | null)?.src ?? "";
+const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
 
 function ensureStylesheet(): void {
   if (!scriptSrc) return;
@@ -34,9 +34,10 @@ function mount(): void {
   if (existing?.childElementCount) return;
 
   ensureStylesheet();
+  installLiquidSegmentedDrag();
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "professional-chips-20260723");
+  host.setAttribute("data-dv-assistant-version", "apple-liquid-controls-20260723");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);
