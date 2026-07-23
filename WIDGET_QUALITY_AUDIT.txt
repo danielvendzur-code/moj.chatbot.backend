@@ -1,4 +1,4 @@
-run_id=30038863359
+run_id=30038979168
 install=success
 lint=success
 build=success
@@ -26,16 +26,16 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-TVr24qNm.css  [39m[1m[2m 58.09 kB[22m[1m[22m[2m │ gzip: 11.67 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-03jHyV0i.js   [39m[1m[2m215.77 kB[22m[1m[22m[2m │ gzip: 72.96 kB[22m
-[32m✓ built in 1.20s[39m
+[2mdist/[22m[2massets/[22m[36mindex-Bje2iWzG.js   [39m[1m[2m216.04 kB[22m[1m[22m[2m │ gzip: 72.97 kB[22m
+[32m✓ built in 1.17s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 92 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m 58.09 kB[22m[1m[22m[2m │ gzip: 11.67 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m215.54 kB[22m[1m[22m[2m │ gzip: 72.91 kB[22m
-[32m✓ built in 1.16s[39m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m215.80 kB[22m[1m[22m[2m │ gzip: 72.93 kB[22m
+[32m✓ built in 1.17s[39m
 
 ===== test =====
 
@@ -46,13 +46,13 @@ TAP version 13
 # Subtest: demo and embed use only the base stylesheet and one redesign layer
 ok 1 - demo and embed use only the base stylesheet and one redesign layer
   ---
-  duration_ms: 7.122543
+  duration_ms: 6.984602
   type: 'test'
   ...
 # Subtest: assistant order is clear and designed for non-technical business owners
 not ok 2 - assistant order is clear and designed for non-technical business owners
   ---
-  duration_ms: 2.527518
+  duration_ms: 2.468941
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:21:1'
   failureType: 'testCodeFailure'
@@ -546,31 +546,31 @@ not ok 2 - assistant order is clear and designed for non-technical business owne
 # Subtest: mode switch is direct React state without legacy drag installers
 ok 3 - mode switch is direct React state without legacy drag installers
   ---
-  duration_ms: 3.735058
+  duration_ms: 3.986832
   type: 'test'
   ...
 # Subtest: the redesign uses the website palette and no teal or green CTA colours
 ok 4 - the redesign uses the website palette and no teal or green CTA colours
   ---
-  duration_ms: 1.222527
+  duration_ms: 1.178776
   type: 'test'
   ...
 # Subtest: choice cards are rounded borderless and never shrink
 ok 5 - choice cards are rounded borderless and never shrink
   ---
-  duration_ms: 2.468588
+  duration_ms: 1.593553
   type: 'test'
   ...
 # Subtest: selection check is circular and aligned on the right
 ok 6 - selection check is circular and aligned on the right
   ---
-  duration_ms: 1.496001
+  duration_ms: 0.949998
   type: 'test'
   ...
 # Subtest: icons form one rounded line family without tile backgrounds
 not ok 7 - icons form one rounded line family without tile backgrounds
   ---
-  duration_ms: 1.92636
+  duration_ms: 1.341591
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:82:1'
   failureType: 'testCodeFailure'
@@ -836,25 +836,25 @@ not ok 7 - icons form one rounded line family without tile backgrounds
 # Subtest: configurator remains five steps with simpler business language
 ok 8 - configurator remains five steps with simpler business language
   ---
-  duration_ms: 1.71377
+  duration_ms: 1.19699
   type: 'test'
   ...
 # Subtest: contact submits a real lead and keeps API protections
 ok 9 - contact submits a real lead and keeps API protections
   ---
-  duration_ms: 2.141434
+  duration_ms: 1.599162
   type: 'test'
   ...
 # Subtest: mobile full screen and reduced motion are covered
 ok 10 - mobile full screen and reduced motion are covered
   ---
-  duration_ms: 1.672963
+  duration_ms: 1.080883
   type: 'test'
   ...
 # Subtest: deployment validates clean redesign v9
 ok 11 - deployment validates clean redesign v9
   ---
-  duration_ms: 1.228057
+  duration_ms: 0.814345
   type: 'test'
   ...
 1..11
@@ -865,5 +865,5 @@ ok 11 - deployment validates clean redesign v9
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 88.818096
+# duration_ms 78.131447
  ELIFECYCLE  Test failed. See above for more details.
