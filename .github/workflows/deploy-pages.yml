@@ -54,7 +54,7 @@ jobs:
       - name: Create immutable build metadata
         shell: bash
         run: |
-          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"owner-friendly-20260723-v6"},null,2))'
+          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"taste-system-20260723-v7"},null,2))'
 
       - name: Validate production artifacts
         shell: bash
@@ -65,16 +65,17 @@ jobs:
           test -f dist/widget.css
           test -f dist/build-meta.json
           test -f api/lead.ts
-          grep -Fq "owner-friendly-20260723-v6" dist/widget.js
-          grep -Fqi "4e8cff" dist/widget.css
+          grep -Fq "taste-system-20260723-v7" dist/widget.js
+          grep -Fq "Taste-system final layer" dist/widget.css
           grep -Fq "competition-winner-final" src/main.tsx
-          grep -Fq "owner-friendly-final" src/main.tsx
+          grep -Fq "taste-system-final" src/main.tsx
           grep -Fq "installWidgetSpotlight" src/main.tsx
           grep -Fq "cw-chat-builder" dist/widget.css
           grep -Fq "cw-contact-stage" dist/widget.css
           grep -Fq "data-cw-spotlight" dist/widget.css
           grep -Fq "api/lead" src/lib/leadApi.ts
-          grep -Fq "začína od 350 €" src/components/widget/AssistantConversation.tsx
+          grep -Fq "Ceny začínajú od 350 €" src/components/widget/AssistantConversation.tsx
+          ! grep -Fq "className=\"cw-chip cw-spotlight\"" src/components/widget/AssistantConversation.tsx
           ! grep -Fq "label: \"Cena od 350 €\"" src/components/widget/AssistantConversation.tsx
           ! grep -Fq "REPLACE-ME" dist/widget.js
           grep -Fq "${GITHUB_SHA}" dist/build-meta.json
@@ -130,8 +131,8 @@ jobs:
           }
 
           verify "/" "Môj Chatbot"
-          verify "/widget.js" "owner-friendly-20260723-v6"
-          verify "/widget.css" "cw-contact-stage"
+          verify "/widget.js" "taste-system-20260723-v7"
+          verify "/widget.css" "Taste-system final layer"
           verify "/build-meta.json" "$SOURCE_SHA"
 
       - name: Checkout latest main for deployment record
