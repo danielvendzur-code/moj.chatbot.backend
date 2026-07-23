@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { useFocusTrap } from "../../hooks/useFocusTrap";
 import {
   installSiteAssistantGlobal,
@@ -96,6 +96,10 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
     };
   }, [isOpen]);
 
+  const tabIndicatorStyle = {
+    "--cw-segment-x": mode === "assistant" ? "calc(100% + 6px)" : "0px",
+  } as CSSProperties;
+
   return (
     <div className="cw-widget">
       <button
@@ -162,7 +166,12 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
             <span className="cw-panel-head__beam" aria-hidden="true" />
           </header>
 
-          <nav className="cw-tabs" aria-label="Režim asistenta" data-mode={mode}>
+          <nav
+            className="cw-tabs"
+            aria-label="Režim asistenta"
+            data-mode={mode}
+            style={tabIndicatorStyle}
+          >
             <span className="cw-tabs__glass" aria-hidden="true" />
             <button
               type="button"
