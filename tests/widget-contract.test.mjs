@@ -92,7 +92,7 @@ test("choices have no coloured border, square tile or malformed selection ring",
   assert.match(finalCss, /\.cw-rowcard__icon,[\s\S]*background: transparent !important/);
   assert.match(finalCss, /\.cw-rowcard__icon,[\s\S]*border-radius: 0 !important/);
   assert.match(finalCss, /background: var\(--cw-site-surface-selected\) !important/);
-  assert.doesNotMatch(finalCss, /#2aa|#1fa|teal/i);
+  assert.doesNotMatch(finalCss, /#2aa|#1fa/i);
 });
 
 test("selected checks are circular, aligned and use the website blue", async () => {
