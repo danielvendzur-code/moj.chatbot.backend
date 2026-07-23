@@ -1,4 +1,4 @@
-run_id=30037030357
+run_id=30037079630
 install=success
 lint=success
 build=success
@@ -26,16 +26,16 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-TVr24qNm.css  [39m[1m[2m 58.09 kB[22m[1m[22m[2m │ gzip: 11.67 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-DRGW-SHm.js   [39m[1m[2m216.45 kB[22m[1m[22m[2m │ gzip: 73.22 kB[22m
-[32m✓ built in 1.19s[39m
+[2mdist/[22m[2massets/[22m[36mindex-Z-4vPN5n.js   [39m[1m[2m216.38 kB[22m[1m[22m[2m │ gzip: 73.17 kB[22m
+[32m✓ built in 1.17s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 92 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m 58.09 kB[22m[1m[22m[2m │ gzip: 11.67 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m216.22 kB[22m[1m[22m[2m │ gzip: 73.19 kB[22m
-[32m✓ built in 1.15s[39m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m216.14 kB[22m[1m[22m[2m │ gzip: 73.14 kB[22m
+[32m✓ built in 1.17s[39m
 
 ===== test =====
 
@@ -46,7 +46,7 @@ TAP version 13
 # Subtest: the website-palette correction loads last in demo and embed builds
 not ok 1 - the website-palette correction loads last in demo and embed builds
   ---
-  duration_ms: 8.107408
+  duration_ms: 8.850615
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:7:1'
   failureType: 'testCodeFailure'
@@ -102,88 +102,924 @@ not ok 1 - the website-palette correction loads last in demo and embed builds
 # Subtest: assistant order remains builder messages chips input contacts
 ok 2 - assistant order remains builder messages chips input contacts
   ---
-  duration_ms: 1.581265
+  duration_ms: 2.682297
   type: 'test'
   ...
 # Subtest: mode tabs switch immediately and use the website blue
-ok 3 - mode tabs switch immediately and use the website blue
+not ok 3 - mode tabs switch immediately and use the website blue
   ---
-  duration_ms: 1.186808
+  duration_ms: 2.040766
   type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:43:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /mode === "assistant" \? "calc\(100% \+ 5px\)" : "0px"/. Input:
+    
+    'import { useCallback, useEffect, useRef, useState } from "react";\n' +
+      'import { useFocusTrap } from "../../hooks/useFocusTrap";\n' +
+      'import {\n' +
+      '  installSiteAssistantGlobal,\n' +
+      '  SITE_ASSISTANT_OPEN_EVENT,\n' +
+      '} from "../../lib/siteAssistant";\n' +
+      'import { announceEmbedState, installEmbedBridge } from "../../lib/embedBridge";\n' +
+      'import { track } from "../../lib/analytics";\n' +
+      'import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";\n' +
+      'import { AssistantConversation } from "./AssistantConversation";\n' +
+      'import { BubbleLogo } from "./BubbleLogo";\n' +
+      'import { ToolCalculator } from "./ToolCalculator";\n' +
+      'import { WidgetIcon } from "./WidgetIcon";\n' +
+      '\n' +
+      'type WidgetMode = "assistant" | "calculator";\n' +
+      '\n' +
+      'type AssistantWidgetProps = {\n' +
+      '  embedMode?: boolean;\n' +
+      '};\n' +
+      '\n' +
+      'const isPreset = (value: string | undefined): value is AssistantPreset =>\n' +
+      '  Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));\n' +
+      '\n' +
+      'export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JSX.Element {\n' +
+      '  const [isOpen, setIsOpen] = useState(false);\n' +
+      '  const [mode, setMode] = useState<WidgetMode>("assistant");\n' +
+      '  const [resetToken, setResetToken] = useState(0);\n' +
+      '  const [preset, setPreset] = useState<AssistantPreset | null>(null);\n' +
+      '  const panelRef = useRef<HTMLElement>(null);\n' +
+      '\n' +
+      '  const close = useCallback(() => {\n' +
+      '    setIsOpen(false);\n' +
+      '    track("widget_close");\n' +
+      '  }, []);\n' +
+      '  useFocusTrap(panelRef, isOpen, close);\n' +
+      '\n' +
+      '  const open = useCallback(\n' +
+      '    (nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {\n' +
+      '      setMode(nextMode);\n' +
+      '      setPreset(nextPreset);\n' +
+      '      setResetToken((value) => value + 1);\n' +
+      '      setIsOpen(true);\n' +
+      '      track("widget_open", { mode: nextMode });\n' +
+      '    },\n' +
+      '    [],\n' +
+      '  );\n' +
+      '\n' +
+      '  const switchMode = useCallback((nextMode: WidgetMode) => {\n' +
+      '    setMode(nextMode);\n' +
+      '    setPreset(null);\n' +
+      '    track("mode_switch", { to: nextMode });\n' +
+      '  }, []);\n' +
+      '\n' +
+      '  const openFromOptions = useCallback(\n' +
+      '    (options: OpenSiteAssistantOptions) => {\n' +
+      '      const directPreset = options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);\n' +
+      '      const calculatorEntry =\n' +
+      '        options?.entry === "builder" || options?.entry === "calculator" || Boolean(directPreset);\n' +
+      '      open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);\n' +
+      '    },\n' +
+      '    [open],\n' +
+      '  );\n' +
+      '\n' +
+      '  useEffect(() => installSiteAssistantGlobal(), []);\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    const onOpen = (event: Event) => {\n' +
+      '      const options = (event as CustomEvent<OpenSiteAssistantOptions>).detail;\n' +
+      '      openFromOptions(options ?? { entry: "builder" });\n' +
+      '    };\n' +
+      '\n' +
+      '    window.addEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);\n' +
+      '    return () => window.removeEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);\n' +
+      '  }, [openFromOptions]);\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    if (!embedMode) return;\n' +
+      '    return installEmbedBridge({ open: openFromOptions, close });\n' +
+      '  }, [close, embedMode, openFromOptions]);\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    if (embedMode) announceEmbedState(isOpen);\n' +
+      '  }, [embedMode, isOpen]);\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    if (!isOpen || !window.matchMedia("(max-width: 520px)").matches) return;\n' +
+      '    const previous = document.body.style.overflow;\n' +
+      '    document.body.style.overflow = "hidden";\n' +
+      '    return () => {\n' +
+      '      document.body.style.overflow = previous;\n' +
+      '    };\n' +
+      '  }, [isOpen]);\n' +
+      '\n' +
+      '  return (\n' +
+      '    <div className="cw-widget">\n' +
+      '      <button\n' +
+      '        id="chameleon-widget-launcher"\n' +
+      '        data-testid="widget-launcher"\n' +
+      '        className="cw-launcher"\n' +
+      '        type="button"\n' +
+      '        aria-label="Otvoriť Môj Chatbot"\n' +
+      '        aria-expanded={isOpen}\n' +
+      '        aria-controls="chameleon-widget-panel"\n' +
+      '        onClick={() => open("assistant")}\n' +
+      '      >\n' +
+      '        <BubbleLogo size="launcher" />\n' +
+      '      </button>\n' +
+      '\n' +
+      '      {isOpen ? (\n' +
+      '        <section\n' +
+      '          id="chameleon-widget-panel"\n' +
+      '          className="cw-panel"\n' +
+      '          data-mode={mode}\n' +
+      '          ref={panelRef}\n' +
+      '          role="dialog"\n' +
+      '          aria-modal="true"\n' +
+      '          aria-labelledby="chameleon-widget-title"\n' +
+      '          tabIndex={-1}\n' +
+      '        >\n' +
+      '          <header className="cw-panel-head">\n' +
+      '            <h2 id="chameleon-widget-title" className="cw-sr-only">\n' +
+      '              Môj Chatbot — AI asistent a konfigurátor riešenia\n' +
+      '            </h2>\n' +
+      '            <span className="cw-panel-head__mascot">\n' +
+      '              <BubbleLogo size="header" />\n' +
+      '            </span>\n' +
+      '            <div className="cw-panel-head__title">\n' +
+      '              <b>Môj Chatbot</b>\n' +
+      '              <span className="cw-panel-head__context cw-panel-head__online">\n' +
+      '                <i aria-hidden="true" /> Online a pripravený pomôcť\n' +
+      '              </span>\n' +
+      '            </div>\n' +
+      '            <div className="cw-panel-head__actions">\n' +
+      '              <button\n' +
+      '                type="button"\n' +
+      '                data-testid="widget-reset"\n' +
+      '                aria-label="Začať odznova"\n' +
+      '                title="Začať odznova"\n' +
+      '                onClick={() => {\n' +
+      '                  setPreset(null);\n' +
+      '                  setResetToken((value) => value + 1);\n' +
+      '                }}\n' +
+      '              >\n' +
+      '                <WidgetIcon name="reset" />\n' +
+      '              </button>\n' +
+      '              <button\n' +
+      '                type="button"\n' +
+      '                className="cw-panel-head__close"\n' +
+      '                data-testid="widget-close"\n' +
+      '                aria-label="Zavrieť asistenta"\n' +
+      '                title="Zavrieť"\n' +
+      '                onClick={close}\n' +
+      '              >\n' +
+      '                <WidgetIcon name="close" />\n' +
+      '              </button>\n' +
+      '            </div>\n' +
+      '          </header>\n' +
+      '\n' +
+      '          <nav className="cw-tabs" aria-label="Vyberte spôsob pomoci" data-mode={mode}>\n' +
+      '            <span className="cw-tabs__glass" aria-hidden="true" />\n' +
+      '            <button\n' +
+      '              type="button"\n' +
+      '              data-testid="tab-calculator"\n' +
+      '              data-active={mode === "calculator"}\n' +
+      '              aria-pressed={mode === "calculator"}\n' +
+      '              onClick={() => switchMode("calculator")}\n' +
+      '            >\n' +
+      '              <WidgetIcon name="calculator" />\n' +
+      '              <span>Vyskladať riešenie</span>\n' +
+      '            </button>\n' +
+      '            <button\n' +
+      '              type="button"\n' +
+      '              data-testid="tab-assistant"\n' +
+      '              data-active={mode === "assistant"}\n' +
+      '              aria-pressed={mode === "assistant"}\n' +
+      '              onClick={() => switchMode("assistant")}\n' +
+      '            >\n' +
+      '              <WidgetIcon name="chat" />\n' +
+      '              <span>Poradiť sa</span>\n' +
+      '            </button>\n' +
+      '          </nav>\n' +
+      '\n' +
+      '          <div className="cw-panel-body" key={mode}>\n' +
+      '            {mode === "assistant" ? (\n' +
+      '              <AssistantConversation\n' +
+      '                resetToken={resetToken}\n' +
+      '                onOpenCalculator={() => switchMode("calculator")}\n' +
+      '              />\n' +
+      '            ) : (\n' +
+      '              <ToolCalculator\n' +
+      '                resetToken={resetToken}\n' +
+      '                initialPreset={preset}\n' +
+      '                onOpenChat={() => switchMode("assistant")}\n' +
+      '              />\n' +
+      '            )}\n' +
+      '          </div>\n' +
+      '        </section>\n' +
+      '      ) : null}\n' +
+      '    </div>\n' +
+      '  );\n' +
+      '}\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    import { useCallback, useEffect, useRef, useState } from "react";
+    import { useFocusTrap } from "../../hooks/useFocusTrap";
+    import {
+      installSiteAssistantGlobal,
+      SITE_ASSISTANT_OPEN_EVENT,
+    } from "../../lib/siteAssistant";
+    import { announceEmbedState, installEmbedBridge } from "../../lib/embedBridge";
+    import { track } from "../../lib/analytics";
+    import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";
+    import { AssistantConversation } from "./AssistantConversation";
+    import { BubbleLogo } from "./BubbleLogo";
+    import { ToolCalculator } from "./ToolCalculator";
+    import { WidgetIcon } from "./WidgetIcon";
+    
+    type WidgetMode = "assistant" | "calculator";
+    
+    type AssistantWidgetProps = {
+      embedMode?: boolean;
+    };
+    
+    const isPreset = (value: string | undefined): value is AssistantPreset =>
+      Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));
+    
+    export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JSX.Element {
+      const [isOpen, setIsOpen] = useState(false);
+      const [mode, setMode] = useState<WidgetMode>("assistant");
+      const [resetToken, setResetToken] = useState(0);
+      const [preset, setPreset] = useState<AssistantPreset | null>(null);
+      const panelRef = useRef<HTMLElement>(null);
+    
+      const close = useCallback(() => {
+        setIsOpen(false);
+        track("widget_close");
+      }, []);
+      useFocusTrap(panelRef, isOpen, close);
+    
+      const open = useCallback(
+        (nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {
+          setMode(nextMode);
+          setPreset(nextPreset);
+          setResetToken((value) => value + 1);
+          setIsOpen(true);
+          track("widget_open", { mode: nextMode });
+        },
+        [],
+      );
+    
+      const switchMode = useCallback((nextMode: WidgetMode) => {
+        setMode(nextMode);
+        setPreset(null);
+        track("mode_switch", { to: nextMode });
+      }, []);
+    
+      const openFromOptions = useCallback(
+        (options: OpenSiteAssistantOptions) => {
+          const directPreset = options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);
+          const calculatorEntry =
+            options?.entry === "builder" || options?.entry === "calculator" || Boolean(directPreset);
+          open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);
+        },
+        [open],
+      );
+    
+      useEffect(() => installSiteAssistantGlobal(), []);
+    
+      useEffect(() => {
+        const onOpen = (event: Event) => {
+          const options = (event as CustomEvent<OpenSiteAssistantOptions>).detail;
+          openFromOptions(options ?? { entry: "builder" });
+        };
+    
+        window.addEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);
+        return () => window.removeEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);
+      }, [openFromOptions]);
+    
+      useEffect(() => {
+        if (!embedMode) return;
+        return installEmbedBridge({ open: openFromOptions, close });
+      }, [close, embedMode, openFromOptions]);
+    
+      useEffect(() => {
+        if (embedMode) announceEmbedState(isOpen);
+      }, [embedMode, isOpen]);
+    
+      useEffect(() => {
+        if (!isOpen || !window.matchMedia("(max-width: 520px)").matches) return;
+        const previous = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        return () => {
+          document.body.style.overflow = previous;
+        };
+      }, [isOpen]);
+    
+      return (
+        <div className="cw-widget">
+          <button
+            id="chameleon-widget-launcher"
+            data-testid="widget-launcher"
+            className="cw-launcher"
+            type="button"
+            aria-label="Otvoriť Môj Chatbot"
+            aria-expanded={isOpen}
+            aria-controls="chameleon-widget-panel"
+            onClick={() => open("assistant")}
+          >
+            <BubbleLogo size="launcher" />
+          </button>
+    
+          {isOpen ? (
+            <section
+              id="chameleon-widget-panel"
+              className="cw-panel"
+              data-mode={mode}
+              ref={panelRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="chameleon-widget-title"
+              tabIndex={-1}
+            >
+              <header className="cw-panel-head">
+                <h2 id="chameleon-widget-title" className="cw-sr-only">
+                  Môj Chatbot — AI asistent a konfigurátor riešenia
+                </h2>
+                <span className="cw-panel-head__mascot">
+                  <BubbleLogo size="header" />
+                </span>
+                <div className="cw-panel-head__title">
+                  <b>Môj Chatbot</b>
+                  <span className="cw-panel-head__context cw-panel-head__online">
+                    <i aria-hidden="true" /> Online a pripravený pomôcť
+                  </span>
+                </div>
+                <div className="cw-panel-head__actions">
+                  <button
+                    type="button"
+                    data-testid="widget-reset"
+                    aria-label="Začať odznova"
+                    title="Začať odznova"
+                    onClick={() => {
+                      setPreset(null);
+                      setResetToken((value) => value + 1);
+                    }}
+                  >
+                    <WidgetIcon name="reset" />
+                  </button>
+                  <button
+                    type="button"
+                    className="cw-panel-head__close"
+                    data-testid="widget-close"
+                    aria-label="Zavrieť asistenta"
+                    title="Zavrieť"
+                    onClick={close}
+                  >
+                    <WidgetIcon name="close" />
+                  </button>
+                </div>
+              </header>
+    
+              <nav className="cw-tabs" aria-label="Vyberte spôsob pomoci" data-mode={mode}>
+                <span className="cw-tabs__glass" aria-hidden="true" />
+                <button
+                  type="button"
+                  data-testid="tab-calculator"
+                  data-active={mode === "calculator"}
+                  aria-pressed={mode === "calculator"}
+                  onClick={() => switchMode("calculator")}
+                >
+                  <WidgetIcon name="calculator" />
+                  <span>Vyskladať riešenie</span>
+                </button>
+                <button
+                  type="button"
+                  data-testid="tab-assistant"
+                  data-active={mode === "assistant"}
+                  aria-pressed={mode === "assistant"}
+                  onClick={() => switchMode("assistant")}
+                >
+                  <WidgetIcon name="chat" />
+                  <span>Poradiť sa</span>
+                </button>
+              </nav>
+    
+              <div className="cw-panel-body" key={mode}>
+                {mode === "assistant" ? (
+                  <AssistantConversation
+                    resetToken={resetToken}
+                    onOpenCalculator={() => switchMode("calculator")}
+                  />
+                ) : (
+                  <ToolCalculator
+                    resetToken={resetToken}
+                    initialPreset={preset}
+                    onOpenChat={() => switchMode("assistant")}
+                  />
+                )}
+              </div>
+            </section>
+          ) : null}
+        </div>
+      );
+    }
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:48:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 # Subtest: spotlight is restricted to the builder CTA
 ok 4 - spotlight is restricted to the builder CTA
   ---
-  duration_ms: 1.107711
+  duration_ms: 1.947347
   type: 'test'
   ...
 # Subtest: configurator keeps five steps and contact remains final
 ok 5 - configurator keeps five steps and contact remains final
   ---
-  duration_ms: 1.950976
+  duration_ms: 1.781358
   type: 'test'
   ...
 # Subtest: choices have no coloured border, square tile or malformed selection ring
 ok 6 - choices have no coloured border, square tile or malformed selection ring
   ---
-  duration_ms: 1.487005
+  duration_ms: 1.608449
   type: 'test'
   ...
 # Subtest: selected checks are circular, aligned and use the website blue
 ok 7 - selected checks are circular, aligned and use the website blue
   ---
-  duration_ms: 0.773442
+  duration_ms: 0.739928
   type: 'test'
   ...
 # Subtest: continue button uses only the website CTA palette
 ok 8 - continue button uses only the website CTA palette
   ---
-  duration_ms: 0.783768
+  duration_ms: 0.82826
   type: 'test'
   ...
 # Subtest: the icon set remains one rounded family
 ok 9 - the icon set remains one rounded family
   ---
-  duration_ms: 0.956335
+  duration_ms: 0.974269
   type: 'test'
   ...
 # Subtest: contact asks for essentials and submits a real lead
 ok 10 - contact asks for essentials and submits a real lead
   ---
-  duration_ms: 1.471582
+  duration_ms: 1.588499
   type: 'test'
   ...
 # Subtest: assistant knows the verified starting price and brand
-ok 11 - assistant knows the verified starting price and brand
+not ok 11 - assistant knows the verified starting price and brand
   ---
-  duration_ms: 1.356621
+  duration_ms: 2.151867
   type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:143:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /AI asistent · online/. Input:
+    
+    'import { useCallback, useEffect, useRef, useState } from "react";\n' +
+      'import { useFocusTrap } from "../../hooks/useFocusTrap";\n' +
+      'import {\n' +
+      '  installSiteAssistantGlobal,\n' +
+      '  SITE_ASSISTANT_OPEN_EVENT,\n' +
+      '} from "../../lib/siteAssistant";\n' +
+      'import { announceEmbedState, installEmbedBridge } from "../../lib/embedBridge";\n' +
+      'import { track } from "../../lib/analytics";\n' +
+      'import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";\n' +
+      'import { AssistantConversation } from "./AssistantConversation";\n' +
+      'import { BubbleLogo } from "./BubbleLogo";\n' +
+      'import { ToolCalculator } from "./ToolCalculator";\n' +
+      'import { WidgetIcon } from "./WidgetIcon";\n' +
+      '\n' +
+      'type WidgetMode = "assistant" | "calculator";\n' +
+      '\n' +
+      'type AssistantWidgetProps = {\n' +
+      '  embedMode?: boolean;\n' +
+      '};\n' +
+      '\n' +
+      'const isPreset = (value: string | undefined): value is AssistantPreset =>\n' +
+      '  Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));\n' +
+      '\n' +
+      'export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JSX.Element {\n' +
+      '  const [isOpen, setIsOpen] = useState(false);\n' +
+      '  const [mode, setMode] = useState<WidgetMode>("assistant");\n' +
+      '  const [resetToken, setResetToken] = useState(0);\n' +
+      '  const [preset, setPreset] = useState<AssistantPreset | null>(null);\n' +
+      '  const panelRef = useRef<HTMLElement>(null);\n' +
+      '\n' +
+      '  const close = useCallback(() => {\n' +
+      '    setIsOpen(false);\n' +
+      '    track("widget_close");\n' +
+      '  }, []);\n' +
+      '  useFocusTrap(panelRef, isOpen, close);\n' +
+      '\n' +
+      '  const open = useCallback(\n' +
+      '    (nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {\n' +
+      '      setMode(nextMode);\n' +
+      '      setPreset(nextPreset);\n' +
+      '      setResetToken((value) => value + 1);\n' +
+      '      setIsOpen(true);\n' +
+      '      track("widget_open", { mode: nextMode });\n' +
+      '    },\n' +
+      '    [],\n' +
+      '  );\n' +
+      '\n' +
+      '  const switchMode = useCallback((nextMode: WidgetMode) => {\n' +
+      '    setMode(nextMode);\n' +
+      '    setPreset(null);\n' +
+      '    track("mode_switch", { to: nextMode });\n' +
+      '  }, []);\n' +
+      '\n' +
+      '  const openFromOptions = useCallback(\n' +
+      '    (options: OpenSiteAssistantOptions) => {\n' +
+      '      const directPreset = options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);\n' +
+      '      const calculatorEntry =\n' +
+      '        options?.entry === "builder" || options?.entry === "calculator" || Boolean(directPreset);\n' +
+      '      open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);\n' +
+      '    },\n' +
+      '    [open],\n' +
+      '  );\n' +
+      '\n' +
+      '  useEffect(() => installSiteAssistantGlobal(), []);\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    const onOpen = (event: Event) => {\n' +
+      '      const options = (event as CustomEvent<OpenSiteAssistantOptions>).detail;\n' +
+      '      openFromOptions(options ?? { entry: "builder" });\n' +
+      '    };\n' +
+      '\n' +
+      '    window.addEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);\n' +
+      '    return () => window.removeEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);\n' +
+      '  }, [openFromOptions]);\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    if (!embedMode) return;\n' +
+      '    return installEmbedBridge({ open: openFromOptions, close });\n' +
+      '  }, [close, embedMode, openFromOptions]);\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    if (embedMode) announceEmbedState(isOpen);\n' +
+      '  }, [embedMode, isOpen]);\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    if (!isOpen || !window.matchMedia("(max-width: 520px)").matches) return;\n' +
+      '    const previous = document.body.style.overflow;\n' +
+      '    document.body.style.overflow = "hidden";\n' +
+      '    return () => {\n' +
+      '      document.body.style.overflow = previous;\n' +
+      '    };\n' +
+      '  }, [isOpen]);\n' +
+      '\n' +
+      '  return (\n' +
+      '    <div className="cw-widget">\n' +
+      '      <button\n' +
+      '        id="chameleon-widget-launcher"\n' +
+      '        data-testid="widget-launcher"\n' +
+      '        className="cw-launcher"\n' +
+      '        type="button"\n' +
+      '        aria-label="Otvoriť Môj Chatbot"\n' +
+      '        aria-expanded={isOpen}\n' +
+      '        aria-controls="chameleon-widget-panel"\n' +
+      '        onClick={() => open("assistant")}\n' +
+      '      >\n' +
+      '        <BubbleLogo size="launcher" />\n' +
+      '      </button>\n' +
+      '\n' +
+      '      {isOpen ? (\n' +
+      '        <section\n' +
+      '          id="chameleon-widget-panel"\n' +
+      '          className="cw-panel"\n' +
+      '          data-mode={mode}\n' +
+      '          ref={panelRef}\n' +
+      '          role="dialog"\n' +
+      '          aria-modal="true"\n' +
+      '          aria-labelledby="chameleon-widget-title"\n' +
+      '          tabIndex={-1}\n' +
+      '        >\n' +
+      '          <header className="cw-panel-head">\n' +
+      '            <h2 id="chameleon-widget-title" className="cw-sr-only">\n' +
+      '              Môj Chatbot — AI asistent a konfigurátor riešenia\n' +
+      '            </h2>\n' +
+      '            <span className="cw-panel-head__mascot">\n' +
+      '              <BubbleLogo size="header" />\n' +
+      '            </span>\n' +
+      '            <div className="cw-panel-head__title">\n' +
+      '              <b>Môj Chatbot</b>\n' +
+      '              <span className="cw-panel-head__context cw-panel-head__online">\n' +
+      '                <i aria-hidden="true" /> Online a pripravený pomôcť\n' +
+      '              </span>\n' +
+      '            </div>\n' +
+      '            <div className="cw-panel-head__actions">\n' +
+      '              <button\n' +
+      '                type="button"\n' +
+      '                data-testid="widget-reset"\n' +
+      '                aria-label="Začať odznova"\n' +
+      '                title="Začať odznova"\n' +
+      '                onClick={() => {\n' +
+      '                  setPreset(null);\n' +
+      '                  setResetToken((value) => value + 1);\n' +
+      '                }}\n' +
+      '              >\n' +
+      '                <WidgetIcon name="reset" />\n' +
+      '              </button>\n' +
+      '              <button\n' +
+      '                type="button"\n' +
+      '                className="cw-panel-head__close"\n' +
+      '                data-testid="widget-close"\n' +
+      '                aria-label="Zavrieť asistenta"\n' +
+      '                title="Zavrieť"\n' +
+      '                onClick={close}\n' +
+      '              >\n' +
+      '                <WidgetIcon name="close" />\n' +
+      '              </button>\n' +
+      '            </div>\n' +
+      '          </header>\n' +
+      '\n' +
+      '          <nav className="cw-tabs" aria-label="Vyberte spôsob pomoci" data-mode={mode}>\n' +
+      '            <span className="cw-tabs__glass" aria-hidden="true" />\n' +
+      '            <button\n' +
+      '              type="button"\n' +
+      '              data-testid="tab-calculator"\n' +
+      '              data-active={mode === "calculator"}\n' +
+      '              aria-pressed={mode === "calculator"}\n' +
+      '              onClick={() => switchMode("calculator")}\n' +
+      '            >\n' +
+      '              <WidgetIcon name="calculator" />\n' +
+      '              <span>Vyskladať riešenie</span>\n' +
+      '            </button>\n' +
+      '            <button\n' +
+      '              type="button"\n' +
+      '              data-testid="tab-assistant"\n' +
+      '              data-active={mode === "assistant"}\n' +
+      '              aria-pressed={mode === "assistant"}\n' +
+      '              onClick={() => switchMode("assistant")}\n' +
+      '            >\n' +
+      '              <WidgetIcon name="chat" />\n' +
+      '              <span>Poradiť sa</span>\n' +
+      '            </button>\n' +
+      '          </nav>\n' +
+      '\n' +
+      '          <div className="cw-panel-body" key={mode}>\n' +
+      '            {mode === "assistant" ? (\n' +
+      '              <AssistantConversation\n' +
+      '                resetToken={resetToken}\n' +
+      '                onOpenCalculator={() => switchMode("calculator")}\n' +
+      '              />\n' +
+      '            ) : (\n' +
+      '              <ToolCalculator\n' +
+      '                resetToken={resetToken}\n' +
+      '                initialPreset={preset}\n' +
+      '                onOpenChat={() => switchMode("assistant")}\n' +
+      '              />\n' +
+      '            )}\n' +
+      '          </div>\n' +
+      '        </section>\n' +
+      '      ) : null}\n' +
+      '    </div>\n' +
+      '  );\n' +
+      '}\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    import { useCallback, useEffect, useRef, useState } from "react";
+    import { useFocusTrap } from "../../hooks/useFocusTrap";
+    import {
+      installSiteAssistantGlobal,
+      SITE_ASSISTANT_OPEN_EVENT,
+    } from "../../lib/siteAssistant";
+    import { announceEmbedState, installEmbedBridge } from "../../lib/embedBridge";
+    import { track } from "../../lib/analytics";
+    import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";
+    import { AssistantConversation } from "./AssistantConversation";
+    import { BubbleLogo } from "./BubbleLogo";
+    import { ToolCalculator } from "./ToolCalculator";
+    import { WidgetIcon } from "./WidgetIcon";
+    
+    type WidgetMode = "assistant" | "calculator";
+    
+    type AssistantWidgetProps = {
+      embedMode?: boolean;
+    };
+    
+    const isPreset = (value: string | undefined): value is AssistantPreset =>
+      Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));
+    
+    export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JSX.Element {
+      const [isOpen, setIsOpen] = useState(false);
+      const [mode, setMode] = useState<WidgetMode>("assistant");
+      const [resetToken, setResetToken] = useState(0);
+      const [preset, setPreset] = useState<AssistantPreset | null>(null);
+      const panelRef = useRef<HTMLElement>(null);
+    
+      const close = useCallback(() => {
+        setIsOpen(false);
+        track("widget_close");
+      }, []);
+      useFocusTrap(panelRef, isOpen, close);
+    
+      const open = useCallback(
+        (nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {
+          setMode(nextMode);
+          setPreset(nextPreset);
+          setResetToken((value) => value + 1);
+          setIsOpen(true);
+          track("widget_open", { mode: nextMode });
+        },
+        [],
+      );
+    
+      const switchMode = useCallback((nextMode: WidgetMode) => {
+        setMode(nextMode);
+        setPreset(null);
+        track("mode_switch", { to: nextMode });
+      }, []);
+    
+      const openFromOptions = useCallback(
+        (options: OpenSiteAssistantOptions) => {
+          const directPreset = options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);
+          const calculatorEntry =
+            options?.entry === "builder" || options?.entry === "calculator" || Boolean(directPreset);
+          open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);
+        },
+        [open],
+      );
+    
+      useEffect(() => installSiteAssistantGlobal(), []);
+    
+      useEffect(() => {
+        const onOpen = (event: Event) => {
+          const options = (event as CustomEvent<OpenSiteAssistantOptions>).detail;
+          openFromOptions(options ?? { entry: "builder" });
+        };
+    
+        window.addEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);
+        return () => window.removeEventListener(SITE_ASSISTANT_OPEN_EVENT, onOpen);
+      }, [openFromOptions]);
+    
+      useEffect(() => {
+        if (!embedMode) return;
+        return installEmbedBridge({ open: openFromOptions, close });
+      }, [close, embedMode, openFromOptions]);
+    
+      useEffect(() => {
+        if (embedMode) announceEmbedState(isOpen);
+      }, [embedMode, isOpen]);
+    
+      useEffect(() => {
+        if (!isOpen || !window.matchMedia("(max-width: 520px)").matches) return;
+        const previous = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        return () => {
+          document.body.style.overflow = previous;
+        };
+      }, [isOpen]);
+    
+      return (
+        <div className="cw-widget">
+          <button
+            id="chameleon-widget-launcher"
+            data-testid="widget-launcher"
+            className="cw-launcher"
+            type="button"
+            aria-label="Otvoriť Môj Chatbot"
+            aria-expanded={isOpen}
+            aria-controls="chameleon-widget-panel"
+            onClick={() => open("assistant")}
+          >
+            <BubbleLogo size="launcher" />
+          </button>
+    
+          {isOpen ? (
+            <section
+              id="chameleon-widget-panel"
+              className="cw-panel"
+              data-mode={mode}
+              ref={panelRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="chameleon-widget-title"
+              tabIndex={-1}
+            >
+              <header className="cw-panel-head">
+                <h2 id="chameleon-widget-title" className="cw-sr-only">
+                  Môj Chatbot — AI asistent a konfigurátor riešenia
+                </h2>
+                <span className="cw-panel-head__mascot">
+                  <BubbleLogo size="header" />
+                </span>
+                <div className="cw-panel-head__title">
+                  <b>Môj Chatbot</b>
+                  <span className="cw-panel-head__context cw-panel-head__online">
+                    <i aria-hidden="true" /> Online a pripravený pomôcť
+                  </span>
+                </div>
+                <div className="cw-panel-head__actions">
+                  <button
+                    type="button"
+                    data-testid="widget-reset"
+                    aria-label="Začať odznova"
+                    title="Začať odznova"
+                    onClick={() => {
+                      setPreset(null);
+                      setResetToken((value) => value + 1);
+                    }}
+                  >
+                    <WidgetIcon name="reset" />
+                  </button>
+                  <button
+                    type="button"
+                    className="cw-panel-head__close"
+                    data-testid="widget-close"
+                    aria-label="Zavrieť asistenta"
+                    title="Zavrieť"
+                    onClick={close}
+                  >
+                    <WidgetIcon name="close" />
+                  </button>
+                </div>
+              </header>
+    
+              <nav className="cw-tabs" aria-label="Vyberte spôsob pomoci" data-mode={mode}>
+                <span className="cw-tabs__glass" aria-hidden="true" />
+                <button
+                  type="button"
+                  data-testid="tab-calculator"
+                  data-active={mode === "calculator"}
+                  aria-pressed={mode === "calculator"}
+                  onClick={() => switchMode("calculator")}
+                >
+                  <WidgetIcon name="calculator" />
+                  <span>Vyskladať riešenie</span>
+                </button>
+                <button
+                  type="button"
+                  data-testid="tab-assistant"
+                  data-active={mode === "assistant"}
+                  aria-pressed={mode === "assistant"}
+                  onClick={() => switchMode("assistant")}
+                >
+                  <WidgetIcon name="chat" />
+                  <span>Poradiť sa</span>
+                </button>
+              </nav>
+    
+              <div className="cw-panel-body" key={mode}>
+                {mode === "assistant" ? (
+                  <AssistantConversation
+                    resetToken={resetToken}
+                    onOpenCalculator={() => switchMode("calculator")}
+                  />
+                ) : (
+                  <ToolCalculator
+                    resetToken={resetToken}
+                    initialPreset={preset}
+                    onOpenChat={() => switchMode("assistant")}
+                  />
+                )}
+              </div>
+            </section>
+          ) : null}
+        </div>
+      );
+    }
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:149:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 # Subtest: mobile panel and reduced motion remain safe
 ok 12 - mobile panel and reduced motion remain safe
   ---
-  duration_ms: 1.183654
+  duration_ms: 4.288247
   type: 'test'
   ...
 # Subtest: chat API protections remain intact
 ok 13 - chat API protections remain intact
   ---
-  duration_ms: 1.028312
+  duration_ms: 1.475079
   type: 'test'
   ...
 # Subtest: deployment validates the website-palette build
 ok 14 - deployment validates the website-palette build
   ---
-  duration_ms: 0.717279
+  duration_ms: 0.64785
   type: 'test'
   ...
 1..14
 # tests 14
 # suites 0
-# pass 13
-# fail 1
+# pass 11
+# fail 3
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 81.375774
+# duration_ms 91.022914
  ELIFECYCLE  Test failed. See above for more details.
