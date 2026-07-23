@@ -1,4 +1,4 @@
-run_id=30037219514
+run_id=30037300799
 install=success
 lint=success
 build=success
@@ -26,16 +26,16 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-TVr24qNm.css  [39m[1m[2m 58.09 kB[22m[1m[22m[2m │ gzip: 11.67 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-DKULvRZf.js   [39m[1m[2m216.08 kB[22m[1m[22m[2m │ gzip: 73.14 kB[22m
-[32m✓ built in 1.21s[39m
+[2mdist/[22m[2massets/[22m[36mindex-D80vwSgy.js   [39m[1m[2m216.03 kB[22m[1m[22m[2m │ gzip: 73.14 kB[22m
+[32m✓ built in 1.24s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 92 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m 58.09 kB[22m[1m[22m[2m │ gzip: 11.67 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m215.84 kB[22m[1m[22m[2m │ gzip: 73.10 kB[22m
-[32m✓ built in 1.16s[39m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m215.79 kB[22m[1m[22m[2m │ gzip: 73.10 kB[22m
+[32m✓ built in 1.22s[39m
 
 ===== test =====
 
@@ -46,7 +46,7 @@ TAP version 13
 # Subtest: the website-palette correction loads last in demo and embed builds
 not ok 1 - the website-palette correction loads last in demo and embed builds
   ---
-  duration_ms: 7.463252
+  duration_ms: 8.402684
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:7:1'
   failureType: 'testCodeFailure'
@@ -102,7 +102,7 @@ not ok 1 - the website-palette correction loads last in demo and embed builds
 # Subtest: assistant order remains builder messages chips input contacts
 not ok 2 - assistant order remains builder messages chips input contacts
   ---
-  duration_ms: 3.292829
+  duration_ms: 3.340695
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:28:1'
   failureType: 'testCodeFailure'
@@ -600,7 +600,7 @@ not ok 2 - assistant order remains builder messages chips input contacts
 # Subtest: mode tabs switch immediately and use the website blue
 not ok 3 - mode tabs switch immediately and use the website blue
   ---
-  duration_ms: 2.900026
+  duration_ms: 3.551135
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:43:1'
   failureType: 'testCodeFailure'
@@ -1024,37 +1024,37 @@ not ok 3 - mode tabs switch immediately and use the website blue
 # Subtest: spotlight is restricted to the builder CTA
 ok 4 - spotlight is restricted to the builder CTA
   ---
-  duration_ms: 2.476918
+  duration_ms: 1.990245
   type: 'test'
   ...
 # Subtest: configurator keeps five steps and contact remains final
 ok 5 - configurator keeps five steps and contact remains final
   ---
-  duration_ms: 2.321142
+  duration_ms: 2.137369
   type: 'test'
   ...
 # Subtest: choices have no coloured border, square tile or malformed selection ring
 ok 6 - choices have no coloured border, square tile or malformed selection ring
   ---
-  duration_ms: 1.273802
+  duration_ms: 1.055529
   type: 'test'
   ...
 # Subtest: selected checks are circular, aligned and use the website blue
 ok 7 - selected checks are circular, aligned and use the website blue
   ---
-  duration_ms: 0.999188
+  duration_ms: 0.822812
   type: 'test'
   ...
 # Subtest: continue button uses only the website CTA palette
 ok 8 - continue button uses only the website CTA palette
   ---
-  duration_ms: 1.034651
+  duration_ms: 0.887141
   type: 'test'
   ...
 # Subtest: the icon set remains one rounded family
 not ok 9 - the icon set remains one rounded family
   ---
-  duration_ms: 1.328815
+  duration_ms: 1.217934
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:118:1'
   failureType: 'testCodeFailure'
@@ -1302,13 +1302,13 @@ not ok 9 - the icon set remains one rounded family
 # Subtest: contact asks for essentials and submits a real lead
 ok 10 - contact asks for essentials and submits a real lead
   ---
-  duration_ms: 2.294382
+  duration_ms: 2.186468
   type: 'test'
   ...
 # Subtest: assistant knows the verified starting price and brand
 not ok 11 - assistant knows the verified starting price and brand
   ---
-  duration_ms: 1.923242
+  duration_ms: 1.94269
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:143:1'
   failureType: 'testCodeFailure'
@@ -1732,19 +1732,19 @@ not ok 11 - assistant knows the verified starting price and brand
 # Subtest: mobile panel and reduced motion remain safe
 ok 12 - mobile panel and reduced motion remain safe
   ---
-  duration_ms: 2.829189
+  duration_ms: 1.979484
   type: 'test'
   ...
 # Subtest: chat API protections remain intact
 ok 13 - chat API protections remain intact
   ---
-  duration_ms: 1.143275
+  duration_ms: 2.55563
   type: 'test'
   ...
 # Subtest: deployment validates the website-palette build
 ok 14 - deployment validates the website-palette build
   ---
-  duration_ms: 0.904555
+  duration_ms: 1.00105
   type: 'test'
   ...
 1..14
@@ -1755,5 +1755,5 @@ ok 14 - deployment validates the website-palette build
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 88.488678
+# duration_ms 90.765593
  ELIFECYCLE  Test failed. See above for more details.
