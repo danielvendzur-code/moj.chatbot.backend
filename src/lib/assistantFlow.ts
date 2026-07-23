@@ -9,38 +9,36 @@ export type StepId =
   | "timeline"
   | "contact";
 
-/* The visible flow is intentionally short: solution, company, key functions,
-   timing and contact. Legacy step ids remain exported for saved-state compatibility. */
 export const STEPS: StepId[] = ["interest", "industry", "features", "timeline", "contact"];
 
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
-    "Čo má zákazník na webe vybaviť?",
-    "Vyberte najbližší typ. Presný rozsah doladíme podľa vašich podkladov.",
+    "Čo má váš web vybaviť za vás?",
+    "Vyberte najbližšiu možnosť. Presný rozsah doladíme spolu.",
   ],
   industry: [
-    "Pre aký typ firmy riešenie pripravujeme?",
-    "Pomôže mi to odporučiť správne otázky, výstupy a prepojenia.",
+    "Aký typ firmy máte?",
+    "Podľa odvetvia odporučím vhodné otázky, výstupy a prepojenia.",
   ],
   priority: [
     "Čo od asistenta očakávate?",
     "Tento krok sa v skrátenom toku nepoužíva.",
   ],
   features: [
-    "Ktoré funkcie sú pre vás dôležité?",
-    "Základ je označený. Vyberte iba to, čo zákazník naozaj potrebuje.",
+    "Čo má riešenie vedieť?",
+    "Základné funkcie sú označené. Pridajte iba to, čo naozaj potrebujete.",
   ],
   volume: [
     "Koľko dopytov mesačne riešite?",
     "Tento údaj sa dá doplniť neskôr a nie je samostatným krokom.",
   ],
   timeline: [
-    "Kedy chcete riešenie spustiť?",
-    "Podľa termínu pripravím realistický postup a rozsah prvej verzie.",
+    "Kedy ho chcete spustiť?",
+    "Vyberte približný termín. Presný harmonogram pripravím podľa rozsahu.",
   ],
   contact: [
-    "Kam mám poslať konkrétny návrh?",
-    "Meno a e-mail stačia. Ostatné údaje sú nepovinné.",
+    "Kam mám poslať návrh?",
+    "Meno a e-mail stačia. Ostatné údaje môžete doplniť dobrovoľne.",
   ],
 };
 
@@ -55,26 +53,26 @@ export type InterestOption = {
 export const INTERESTS: InterestOption[] = [
   {
     id: "chatbot",
-    label: "AI chatbot",
-    description: "Odpovie, poradí a pripraví dopyt s kontextom.",
+    label: "Odpovedať zákazníkom",
+    description: "Asistent vysvetlí služby, poradí a pripraví dopyt.",
     icon: "chat",
   },
   {
     id: "calcbot",
-    label: "Chatbot s výpočtom",
+    label: "Počítať cenu",
     description: "Vypočíta cenu, spotrebu alebo rozsah podľa vašich pravidiel.",
     icon: "calculator",
   },
   {
     id: "product",
-    label: "Chatbot s konfigurátorom",
-    description: "Prevedie výberom variantov, rozmerov a doplnkov.",
+    label: "Pomôcť s výberom",
+    description: "Prevedie zákazníka variantmi, rozmermi a doplnkami.",
     icon: "cart",
   },
   {
     id: "custom",
-    label: "Vlastné riešenie",
-    description: "Opíšte proces a navrhnem vhodný postup na mieru.",
+    label: "Vlastný proces",
+    description: "Opíšte postup a navrhnem riešenie na mieru.",
     icon: "spark",
   },
 ];
@@ -179,7 +177,7 @@ export const FEATURES: FeatureOption[] = [
   {
     id: "dopyty",
     label: "Pripravený dopyt s kontaktom",
-    description: "Odpovede zákazníka prídu spolu v jednom zhrnutí.",
+    description: "Všetky odpovede zákazníka prídu v jednom zhrnutí.",
     basic: true,
   },
   {
@@ -190,28 +188,28 @@ export const FEATURES: FeatureOption[] = [
   },
   {
     id: "cena",
-    label: "Výpočet podľa vašich pravidiel",
-    description: "Cena, spotreba, rozsah alebo návratnosť.",
+    label: "Výpočet ceny alebo rozsahu",
+    description: "Výpočet podľa vašich pravidiel a cenníka.",
   },
   {
     id: "varianty",
     label: "Varianty, rozmery a doplnky",
-    description: "Krokový konfigurátor produktu alebo služby.",
+    description: "Krokový výber produktu alebo služby.",
   },
   {
     id: "fotky",
     label: "Fotky a prílohy",
-    description: "Lepší odhad rozsahu ešte pred kontaktom.",
+    description: "Lepší odhad ešte pred telefonátom alebo obhliadkou.",
   },
   {
     id: "rezervacie",
-    label: "Kalendár a rezervácie",
+    label: "Termíny a rezervácie",
     description: "Výber termínu a potvrdenie bez prepisovania.",
   },
   {
     id: "crm",
-    label: "CRM, tabuľka alebo vlastný systém",
-    description: "Dopyt sa zapíše tam, kde s ním pracujete.",
+    label: "Prepojenie na váš systém",
+    description: "E-mail, CRM, tabuľka alebo vlastný systém.",
   },
   {
     id: "jazyky",
