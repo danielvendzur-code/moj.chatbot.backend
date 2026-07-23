@@ -1,4 +1,4 @@
-run_id=30035050538
+run_id=30035165447
 install=success
 lint=success
 build=success
@@ -27,7 +27,7 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-DizjAY-I.css  [39m[1m[2m261.34 kB[22m[1m[22m[2m │ gzip: 37.01 kB[22m
 [2mdist/[22m[2massets/[22m[36mindex-DMEi9Olc.js   [39m[1m[2m220.22 kB[22m[1m[22m[2m │ gzip: 74.51 kB[22m
-[32m✓ built in 1.22s[39m
+[32m✓ built in 1.24s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 109 modules transformed.
@@ -35,7 +35,7 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m261.34 kB[22m[1m[22m[2m │ gzip: 37.01 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m218.18 kB[22m[1m[22m[2m │ gzip: 73.83 kB[22m
-[32m✓ built in 1.19s[39m
+[32m✓ built in 1.26s[39m
 
 ===== test =====
 
@@ -43,104 +43,913 @@ computing gzip size...
 > node --test tests/widget-contract.test.mjs -- --run
 
 TAP version 13
-# Subtest: the Taste layer loads last in demo and embed builds
-not ok 1 - the Taste layer loads last in demo and embed builds
+# Subtest: the website-palette correction loads last in demo and embed builds
+ok 1 - the website-palette correction loads last in demo and embed builds
   ---
-  duration_ms: 8.203826
+  duration_ms: 6.943467
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:7:1'
-  failureType: 'testCodeFailure'
-  error: |-
-    Expected values to be strictly equal:
-    
-    945 !== 910
-    
-  code: 'ERR_ASSERTION'
-  name: 'AssertionError'
-  expected: 910
-  actual: 945
-  operator: 'strictEqual'
-  stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:15:10)
-    async Test.run (node:internal/test_runner/test:1054:7)
-    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
   ...
 # Subtest: assistant order remains builder messages chips input contacts
 ok 2 - assistant order remains builder messages chips input contacts
   ---
-  duration_ms: 1.504476
+  duration_ms: 1.90649
   type: 'test'
   ...
-# Subtest: mode tabs switch immediately without pointer capture
-ok 3 - mode tabs switch immediately without pointer capture
+# Subtest: mode tabs switch immediately and use the website blue
+ok 3 - mode tabs switch immediately and use the website blue
   ---
-  duration_ms: 1.704788
+  duration_ms: 1.288047
   type: 'test'
   ...
-# Subtest: spotlight is removed from chips and reserved for the builder CTA
-ok 4 - spotlight is removed from chips and reserved for the builder CTA
+# Subtest: spotlight is restricted to the builder CTA
+ok 4 - spotlight is restricted to the builder CTA
   ---
-  duration_ms: 2.105652
+  duration_ms: 1.134715
   type: 'test'
   ...
-# Subtest: quick replies are rounded borderless chips above a clean input
-ok 5 - quick replies are rounded borderless chips above a clean input
+# Subtest: configurator keeps five steps and contact remains final
+ok 5 - configurator keeps five steps and contact remains final
   ---
-  duration_ms: 2.062777
+  duration_ms: 2.065399
   type: 'test'
   ...
-# Subtest: configurator is five steps and contact remains final
-ok 6 - configurator is five steps and contact remains final
+# Subtest: choices have no coloured border, square tile or malformed selection ring
+not ok 6 - choices have no coloured border, square tile or malformed selection ring
   ---
-  duration_ms: 1.0624
+  duration_ms: 2.600026
+  type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:86:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input was expected to not match the regular expression /#2aa|#1fa|teal/i. Input:
+    
+    '/* Final chatbot-only correction.\n' +
+      '   The public website remains unchanged. This layer removes legacy cyan/teal states,\n' +
+      '   icon tiles and selection traces and uses the exact website palette. */\n' +
+      '\n' +
+      ':root {\n' +
+      '  --cw-site-bg: #05070b;\n' +
+      '  --cw-site-panel: #080d14;\n' +
+      '  --cw-site-surface: #0d141e;\n' +
+      '  --cw-site-surface-hover: #121c29;\n' +
+      '  --cw-site-surface-selected: #17325d;\n' +
+      '  --cw-site-primary: #3979ec;\n' +
+      '  --cw-site-primary-hover: #4e8cff;\n' +
+      '  --cw-site-icon: #86aff6;\n' +
+      '  --cw-site-text: #f6f8fb;\n' +
+      '  --cw-site-muted: #9eabbc;\n' +
+      '  --cw-site-muted-2: #748196;\n' +
+      '  --cw-font: "Segoe UI Variable", "Aptos", "Inter Tight", ui-sans-serif, system-ui, sans-serif;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget,\n' +
+      'html body .cw-widget button,\n' +
+      'html body .cw-widget input,\n' +
+      'html body .cw-widget textarea,\n' +
+      'html body .cw-widget select {\n' +
+      '  font-family: var(--cw-font) !important;\n' +
+      '  font-feature-settings: "ss01", "cv02", "cv03", "cv04" !important;\n' +
+      '  text-rendering: optimizeLegibility;\n' +
+      '  -webkit-font-smoothing: antialiased;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-panel,\n' +
+      'html body .cw-widget .cw-calculator,\n' +
+      'html body .cw-widget .cw-calc-body,\n' +
+      'html body .cw-widget .cw-panel-body {\n' +
+      '  color: var(--cw-site-text) !important;\n' +
+      '  background: var(--cw-site-bg) !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-panel-head,\n' +
+      'html body .cw-widget .cw-progress {\n' +
+      '  border-color: rgba(255, 255, 255, 0.045) !important;\n' +
+      '  background: var(--cw-site-panel) !important;\n' +
+      '}\n' +
+      '\n' +
+      '/* Use the same blue as the website everywhere. */\n' +
+      'html body .cw-widget .cw-tabs__glass,\n' +
+      'html body .cw-widget .cw-progress__fill,\n' +
+      'html body .cw-widget .cw-submit,\n' +
+      'html body .cw-widget .cw-thanks__actions button:not(.ghost) {\n' +
+      '  border: 0 !important;\n' +
+      '  background: var(--cw-site-primary) !important;\n' +
+      '  background-image: none !important;\n' +
+      '  box-shadow: none !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-tabs__glass {\n' +
+      '  border-radius: 15px !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-tabs > button {\n' +
+      '  color: var(--cw-site-muted) !important;\n' +
+      '  font-size: 13.5px !important;\n' +
+      '  font-weight: 680 !important;\n' +
+      '  letter-spacing: -0.018em !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-tabs > button[data-active="true"] {\n' +
+      '  color: #ffffff !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-progress__track {\n' +
+      '  border: 0 !important;\n' +
+      '  background: #172131 !important;\n' +
+      '  box-shadow: none !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-progress__back {\n' +
+      '  border: 0 !important;\n' +
+      '  border-radius: 999px !important;\n' +
+      '  color: var(--cw-site-muted) !important;\n' +
+      '  background: #0e1621 !important;\n' +
+      '  box-shadow: none !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-progress__count {\n' +
+      '  color: var(--cw-site-muted-2) !important;\n' +
+      '  font-size: 12px !important;\n' +
+      '  font-weight: 650 !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-q {\n' +
+      '  max-width: 22ch !important;\n' +
+      '  color: var(--cw-site-text) !important;\n' +
+      '  font-size: clamp(1.42rem, 4vw, 1.66rem) !important;\n' +
+      '  font-weight: 720 !important;\n' +
+      '  letter-spacing: -0.045em !important;\n' +
+      '  line-height: 1.08 !important;\n' +
+      '  text-wrap: balance;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-q-sub {\n' +
+      '  max-width: 44ch !important;\n' +
+      '  color: var(--cw-site-muted) !important;\n' +
+      '  font-size: 12.25px !important;\n' +
+      '  font-weight: 480 !important;\n' +
+      '  letter-spacing: -0.006em !important;\n' +
+      '  line-height: 1.48 !important;\n' +
+      '  text-wrap: pretty;\n' +
+      '}\n' +
+      '\n' +
+      '/* Remove every old trace, glow, fill layer and malformed selected ring. */\n' +
+      'html body .cw-widget .cw-rowcard,\n' +
+      'html body .cw-widget .cw-scard,\n' +
+      'html body .cw-widget .cw-opt,\n' +
+      'html body .cw-widget .cw-vcard {\n' +
+      '  position: relative !important;\n' +
+      '  isolation: isolate !important;\n' +
+      '  overflow: hidden !important;\n' +
+      '  border: 0 !important;\n' +
+      '  outline: 0 !important;\n' +
+      '  border-radius: 18px !important;\n' +
+      '  color: #dce4ee !important;\n' +
+      '  background: var(--cw-site-surface) !important;\n' +
+      '  background-image: none !important;\n' +
+      '  box-shadow: none !important;\n' +
+      '  filter: none !important;\n' +
+      '  transform: none !important;\n' +
+      '  transition:\n' +
+      '    color 190ms ease,\n' +
+      '    background-color 190ms ease !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-rowcard::before,\n' +
+      'html body .cw-widget .cw-scard::before,\n' +
+      'html body .cw-widget .cw-opt::before,\n' +
+      'html body .cw-widget .cw-vcard::before {\n' +
+      '  content: none !important;\n' +
+      '  display: none !important;\n' +
+      '  opacity: 0 !important;\n' +
+      '  border: 0 !important;\n' +
+      '  background: none !important;\n' +
+      '  box-shadow: none !important;\n' +
+      '  animation: none !important;\n' +
+      '}\n' +
+      '\n' +
+      '/* One clean check, placed consistently on every selected option. */\n' +
+      'html body .cw-widget .cw-rowcard::after,\n' +
+      'html body .cw-widget .cw-scard::after,\n' +
+      'html body .cw-widget .cw-opt::after,\n' +
+      'html body .cw-widget .cw-vcard::after {\n' +
+      '  content: "" !important;\n' +
+      '  position: absolute !important;\n' +
+      '  top: 50% !important;\n' +
+      '  right: 15px !important;\n' +
+      '  z-index: 3 !important;\n' +
+      '  display: block !important;\n' +
+      '  width: 23px !important;\n' +
+      '  height: 23px !important;\n' +
+      '  border: 0 !important;\n' +
+      '  border-radius: 999px !important;\n' +
+      '  pointer-events: none !important;\n' +
+      '  opacity: 0 !important;\n' +
+      '  background-color: var(--cw-site-primary) !important;\n' +
+      `  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m6.5 12.4 3.4 3.4 7.6-8' fill='none' stroke='%23fff' stroke-width='2.35' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;\n` +
+      '  background-position: center !important;\n' +
+      '  background-size: 15px 15px !important;\n' +
+      '  background-repeat: no-repeat !important;\n' +
+      '  box-shadow: none !important;\n' +
+      '  transform: translateY(-50%) scale(0.72) !important;\n' +
+      '  transform-origin: center !important;\n' +
+      '  transition:\n' +
+      '    opacity 160ms ease,\n' +
+      '    transform 220ms cubic-bezier(0.16, 1, 0.3, 1) !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-rowcard:hover,\n' +
+      'html body .cw-widget .cw-rowcard:focus-visible,\n' +
+      'html body .cw-widget .cw-scard:hover,\n' +
+      'html body .cw-widget .cw-scard:focus-visible,\n' +
+      'html body .cw-widget .cw-opt:hover,\n' +
+      'html body .cw-widget .cw-opt:focus-visible,\n' +
+      'html body .cw-widget .cw-vcard:hover,\n' +
+      'html body .cw-widget .cw-vcard:focus-visible {\n' +
+      '  border: 0 !important;\n' +
+      '  outline: 0 !important;\n' +
+      '  color: #ffffff !important;\n' +
+      '  background: var(--cw-site-surface-hover) !important;\n' +
+      '  box-shadow: none !important;\n' +
+      '  transform: none !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-rowcard[data-selected="true"],\n' +
+      'html body .cw-widget .cw-scard[data-selected="true"],\n' +
+      'html body .cw-widget .cw-opt[data-selected="true"],\n' +
+      'html body .cw-widget .cw-vcard[data-selected="true"] {\n' +
+      '  border: 0 !important;\n' +
+      '  outline: 0 !important;\n' +
+      '  color: #ffffff !important;\n' +
+      '  background: var(--cw-site-surface-selected) !important;\n' +
+      '  background-image: none !important;\n' +
+      '  box-shadow: none !important;\n' +
+      '  transform: none !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-rowcard[data-selected="true"]::after,\n' +
+      'html body .cw-widget .cw-scard[data-selected="true"]::after,\n' +
+      'html body .cw-widget .cw-opt[data-selected="true"]::after,\n' +
+      'html body .cw-widget .cw-vcard[data-selected="true"]::after {\n' +
+      '  opacity: 1 !important;\n' +
+      '  transform: translateY(-50%) scale(1) !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-rowcard:active,\n' +
+      'html body .cw-widget .cw-scard:active,\n' +
+      'html body .cw-widget .cw-opt:active,\n' +
+      'html body .cw-widget .cw-vcard:active {\n' +
+      '  transform: none !important;\n' +
+      '}\n' +
+      '\n' +
+      '/* The icon is a glyph, never a coloured square or tile. */\n' +
+      'html body .cw-widget .cw-rowcard__icon,\n' +
+      'html body .cw-widget .cw-scard__icon,\n' +
+      'html body .cw-widget .cw-chat-builder__icon,\n' +
+      'html body .cw-widget .cw-lead__icon,\n' +
+      'html body .cw-widget .cw-direct-actions__icon {\n' +
+      '  display: inline-grid !important;\n' +
+      '  width: 24px !important;\n' +
+      '  min-width: 24px !important;\n' +
+      '  height: 24px !important;\n' +
+      '  min-height: 24px !important;\n' +
+      '  padding: 0 !important;\n' +
+      '  margin: 0 !important;\n' +
+      '  place-items: center !important;\n' +
+      '  align-self: center !important;\n' +
+      '  border: 0 !important;\n' +
+      '  border-radius: 0 !important;\n' +
+      '  color: var(--cw-site-icon) !important;\n' +
+      '  background: transparent !important;\n' +
+      '  background-image: none !important;\n' +
+      '  box-shadow: none !important;\n' +
+      '  filter: none !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-rowcard__icon::before,\n' +
+      'html body .cw-widget .cw-rowcard__icon::after,\n' +
+      'html body .cw-widget .cw-scard__icon::before,\n' +
+      'html body .cw-widget .cw-scard__icon::after {\n' +
+      '  content: none !important;\n' +
+      '  display: none !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-rowcard__icon svg,\n' +
+      'html body .cw-widget .cw-scard__icon svg,\n' +
+      'html body .cw-widget .cw-chat-builder__icon svg,\n' +
+      'html body .cw-widget .cw-lead__icon svg,\n' +
+      'html body .cw-widget .cw-direct-actions__icon svg {\n' +
+      '  width: 22px !important;\n' +
+      '  height: 22px !important;\n' +
+      '  stroke-width: 1.75 !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-rowcard {\n' +
+      '  grid-template-columns: 24px minmax(0, 1fr) 23px !important;\n' +
+      '  gap: 14px !important;\n' +
+      '  min-height: 78px !important;\n' +
+      '  padding: 14px 15px !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-rowcard__body b,\n' +
+      'html body .cw-widget .cw-scard > b,\n' +
+      'html body .cw-widget .cw-opt__body > b,\n' +
+      'html body .cw-widget .cw-vcard > b {\n' +
+      '  color: #f2f5fa !important;\n' +
+      '  font-size: 14px !important;\n' +
+      '  font-weight: 690 !important;\n' +
+      '  letter-spacing: -0.022em !important;\n' +
+      '  line-height: 1.22 !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-rowcard__body small,\n' +
+      'html body .cw-widget .cw-opt__body > span,\n' +
+      'html body .cw-widget .cw-vcard > span {\n' +
+      '  color: var(--cw-site-muted) !important;\n' +
+      '  font-size: 11.7px !important;\n' +
+      '  font-weight: 470 !important;\n' +
+      '  letter-spacing: -0.006em !important;\n' +
+      '  line-height: 1.42 !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-choice-arrow {\n' +
+      '  display: none !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-scard {\n' +
+      '  min-height: 92px !important;\n' +
+      '  padding: 14px 42px 14px 15px !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-opt,\n' +
+      'html body .cw-widget .cw-vcard {\n' +
+      '  min-height: 66px !important;\n' +
+      '  padding: 13px 46px 13px 15px !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-opt__tag {\n' +
+      '  border: 0 !important;\n' +
+      '  border-radius: 999px !important;\n' +
+      '  color: var(--cw-site-icon) !important;\n' +
+      '  background: rgba(57, 121, 236, 0.16) !important;\n' +
+      '  box-shadow: none !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-industry-tip {\n' +
+      '  border: 0 !important;\n' +
+      '  border-radius: 18px !important;\n' +
+      '  color: #cfd8e4 !important;\n' +
+      '  background: #0b121b !important;\n' +
+      '  box-shadow: none !important;\n' +
+      '}\n' +
+      '\n' +
+      'html body .cw-widget .cw-industry-tip b,\n' +
+      'html body .cw-widget .cw-industry-tip svg {\n' +
+      '  color: var(--cw-site-icon) !important;\n' +
+      '}\n' +
+      '\n' +
+      '/* Replace the teal footer button with the website CTA treatment. */\n' +
+      'html body'... 4274 more characters
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    /* Final chatbot-only correction.
+       The public website remains unchanged. This layer removes legacy cyan/teal states,
+       icon tiles and selection traces and uses the exact website palette. */
+    
+    :root {
+      --cw-site-bg: #05070b;
+      --cw-site-panel: #080d14;
+      --cw-site-surface: #0d141e;
+      --cw-site-surface-hover: #121c29;
+      --cw-site-surface-selected: #17325d;
+      --cw-site-primary: #3979ec;
+      --cw-site-primary-hover: #4e8cff;
+      --cw-site-icon: #86aff6;
+      --cw-site-text: #f6f8fb;
+      --cw-site-muted: #9eabbc;
+      --cw-site-muted-2: #748196;
+      --cw-font: "Segoe UI Variable", "Aptos", "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+    }
+    
+    html body .cw-widget,
+    html body .cw-widget button,
+    html body .cw-widget input,
+    html body .cw-widget textarea,
+    html body .cw-widget select {
+      font-family: var(--cw-font) !important;
+      font-feature-settings: "ss01", "cv02", "cv03", "cv04" !important;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    html body .cw-widget .cw-panel,
+    html body .cw-widget .cw-calculator,
+    html body .cw-widget .cw-calc-body,
+    html body .cw-widget .cw-panel-body {
+      color: var(--cw-site-text) !important;
+      background: var(--cw-site-bg) !important;
+    }
+    
+    html body .cw-widget .cw-panel-head,
+    html body .cw-widget .cw-progress {
+      border-color: rgba(255, 255, 255, 0.045) !important;
+      background: var(--cw-site-panel) !important;
+    }
+    
+    /* Use the same blue as the website everywhere. */
+    html body .cw-widget .cw-tabs__glass,
+    html body .cw-widget .cw-progress__fill,
+    html body .cw-widget .cw-submit,
+    html body .cw-widget .cw-thanks__actions button:not(.ghost) {
+      border: 0 !important;
+      background: var(--cw-site-primary) !important;
+      background-image: none !important;
+      box-shadow: none !important;
+    }
+    
+    html body .cw-widget .cw-tabs__glass {
+      border-radius: 15px !important;
+    }
+    
+    html body .cw-widget .cw-tabs > button {
+      color: var(--cw-site-muted) !important;
+      font-size: 13.5px !important;
+      font-weight: 680 !important;
+      letter-spacing: -0.018em !important;
+    }
+    
+    html body .cw-widget .cw-tabs > button[data-active="true"] {
+      color: #ffffff !important;
+    }
+    
+    html body .cw-widget .cw-progress__track {
+      border: 0 !important;
+      background: #172131 !important;
+      box-shadow: none !important;
+    }
+    
+    html body .cw-widget .cw-progress__back {
+      border: 0 !important;
+      border-radius: 999px !important;
+      color: var(--cw-site-muted) !important;
+      background: #0e1621 !important;
+      box-shadow: none !important;
+    }
+    
+    html body .cw-widget .cw-progress__count {
+      color: var(--cw-site-muted-2) !important;
+      font-size: 12px !important;
+      font-weight: 650 !important;
+    }
+    
+    html body .cw-widget .cw-q {
+      max-width: 22ch !important;
+      color: var(--cw-site-text) !important;
+      font-size: clamp(1.42rem, 4vw, 1.66rem) !important;
+      font-weight: 720 !important;
+      letter-spacing: -0.045em !important;
+      line-height: 1.08 !important;
+      text-wrap: balance;
+    }
+    
+    html body .cw-widget .cw-q-sub {
+      max-width: 44ch !important;
+      color: var(--cw-site-muted) !important;
+      font-size: 12.25px !important;
+      font-weight: 480 !important;
+      letter-spacing: -0.006em !important;
+      line-height: 1.48 !important;
+      text-wrap: pretty;
+    }
+    
+    /* Remove every old trace, glow, fill layer and malformed selected ring. */
+    html body .cw-widget .cw-rowcard,
+    html body .cw-widget .cw-scard,
+    html body .cw-widget .cw-opt,
+    html body .cw-widget .cw-vcard {
+      position: relative !important;
+      isolation: isolate !important;
+      overflow: hidden !important;
+      border: 0 !important;
+      outline: 0 !important;
+      border-radius: 18px !important;
+      color: #dce4ee !important;
+      background: var(--cw-site-surface) !important;
+      background-image: none !important;
+      box-shadow: none !important;
+      filter: none !important;
+      transform: none !important;
+      transition:
+        color 190ms ease,
+        background-color 190ms ease !important;
+    }
+    
+    html body .cw-widget .cw-rowcard::before,
+    html body .cw-widget .cw-scard::before,
+    html body .cw-widget .cw-opt::before,
+    html body .cw-widget .cw-vcard::before {
+      content: none !important;
+      display: none !important;
+      opacity: 0 !important;
+      border: 0 !important;
+      background: none !important;
+      box-shadow: none !important;
+      animation: none !important;
+    }
+    
+    /* One clean check, placed consistently on every selected option. */
+    html body .cw-widget .cw-rowcard::after,
+    html body .cw-widget .cw-scard::after,
+    html body .cw-widget .cw-opt::after,
+    html body .cw-widget .cw-vcard::after {
+      content: "" !important;
+      position: absolute !important;
+      top: 50% !important;
+      right: 15px !important;
+      z-index: 3 !important;
+      display: block !important;
+      width: 23px !important;
+      height: 23px !important;
+      border: 0 !important;
+      border-radius: 999px !important;
+      pointer-events: none !important;
+      opacity: 0 !important;
+      background-color: var(--cw-site-primary) !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m6.5 12.4 3.4 3.4 7.6-8' fill='none' stroke='%23fff' stroke-width='2.35' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+      background-position: center !important;
+      background-size: 15px 15px !important;
+      background-repeat: no-repeat !important;
+      box-shadow: none !important;
+      transform: translateY(-50%) scale(0.72) !important;
+      transform-origin: center !important;
+      transition:
+        opacity 160ms ease,
+        transform 220ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    
+    html body .cw-widget .cw-rowcard:hover,
+    html body .cw-widget .cw-rowcard:focus-visible,
+    html body .cw-widget .cw-scard:hover,
+    html body .cw-widget .cw-scard:focus-visible,
+    html body .cw-widget .cw-opt:hover,
+    html body .cw-widget .cw-opt:focus-visible,
+    html body .cw-widget .cw-vcard:hover,
+    html body .cw-widget .cw-vcard:focus-visible {
+      border: 0 !important;
+      outline: 0 !important;
+      color: #ffffff !important;
+      background: var(--cw-site-surface-hover) !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+    
+    html body .cw-widget .cw-rowcard[data-selected="true"],
+    html body .cw-widget .cw-scard[data-selected="true"],
+    html body .cw-widget .cw-opt[data-selected="true"],
+    html body .cw-widget .cw-vcard[data-selected="true"] {
+      border: 0 !important;
+      outline: 0 !important;
+      color: #ffffff !important;
+      background: var(--cw-site-surface-selected) !important;
+      background-image: none !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+    
+    html body .cw-widget .cw-rowcard[data-selected="true"]::after,
+    html body .cw-widget .cw-scard[data-selected="true"]::after,
+    html body .cw-widget .cw-opt[data-selected="true"]::after,
+    html body .cw-widget .cw-vcard[data-selected="true"]::after {
+      opacity: 1 !important;
+      transform: translateY(-50%) scale(1) !important;
+    }
+    
+    html body .cw-widget .cw-rowcard:active,
+    html body .cw-widget .cw-scard:active,
+    html body .cw-widget .cw-opt:active,
+    html body .cw-widget .cw-vcard:active {
+      transform: none !important;
+    }
+    
+    /* The icon is a glyph, never a coloured square or tile. */
+    html body .cw-widget .cw-rowcard__icon,
+    html body .cw-widget .cw-scard__icon,
+    html body .cw-widget .cw-chat-builder__icon,
+    html body .cw-widget .cw-lead__icon,
+    html body .cw-widget .cw-direct-actions__icon {
+      display: inline-grid !important;
+      width: 24px !important;
+      min-width: 24px !important;
+      height: 24px !important;
+      min-height: 24px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      place-items: center !important;
+      align-self: center !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      color: var(--cw-site-icon) !important;
+      background: transparent !important;
+      background-image: none !important;
+      box-shadow: none !important;
+      filter: none !important;
+    }
+    
+    html body .cw-widget .cw-rowcard__icon::before,
+    html body .cw-widget .cw-rowcard__icon::after,
+    html body .cw-widget .cw-scard__icon::before,
+    html body .cw-widget .cw-scard__icon::after {
+      content: none !important;
+      display: none !important;
+    }
+    
+    html body .cw-widget .cw-rowcard__icon svg,
+    html body .cw-widget .cw-scard__icon svg,
+    html body .cw-widget .cw-chat-builder__icon svg,
+    html body .cw-widget .cw-lead__icon svg,
+    html body .cw-widget .cw-direct-actions__icon svg {
+      width: 22px !important;
+      height: 22px !important;
+      stroke-width: 1.75 !important;
+    }
+    
+    html body .cw-widget .cw-rowcard {
+      grid-template-columns: 24px minmax(0, 1fr) 23px !important;
+      gap: 14px !important;
+      min-height: 78px !important;
+      padding: 14px 15px !important;
+    }
+    
+    html body .cw-widget .cw-rowcard__body b,
+    html body .cw-widget .cw-scard > b,
+    html body .cw-widget .cw-opt__body > b,
+    html body .cw-widget .cw-vcard > b {
+      color: #f2f5fa !important;
+      font-size: 14px !important;
+      font-weight: 690 !important;
+      letter-spacing: -0.022em !important;
+      line-height: 1.22 !important;
+    }
+    
+    html body .cw-widget .cw-rowcard__body small,
+    html body .cw-widget .cw-opt__body > span,
+    html body .cw-widget .cw-vcard > span {
+      color: var(--cw-site-muted) !important;
+      font-size: 11.7px !important;
+      font-weight: 470 !important;
+      letter-spacing: -0.006em !important;
+      line-height: 1.42 !important;
+    }
+    
+    html body .cw-widget .cw-choice-arrow {
+      display: none !important;
+    }
+    
+    html body .cw-widget .cw-scard {
+      min-height: 92px !important;
+      padding: 14px 42px 14px 15px !important;
+    }
+    
+    html body .cw-widget .cw-opt,
+    html body .cw-widget .cw-vcard {
+      min-height: 66px !important;
+      padding: 13px 46px 13px 15px !important;
+    }
+    
+    html body .cw-widget .cw-opt__tag {
+      border: 0 !important;
+      border-radius: 999px !important;
+      color: var(--cw-site-icon) !important;
+      background: rgba(57, 121, 236, 0.16) !important;
+      box-shadow: none !important;
+    }
+    
+    html body .cw-widget .cw-industry-tip {
+      border: 0 !important;
+      border-radius: 18px !important;
+      color: #cfd8e4 !important;
+      background: #0b121b !important;
+      box-shadow: none !important;
+    }
+    
+    html body .cw-widget .cw-industry-tip b,
+    html body .cw-widget .cw-industry-tip svg {
+      color: var(--cw-site-icon) !important;
+    }
+    
+    /* Replace the teal footer button with the website CTA treatment. */
+    html body .cw-widget .cw-calc-actions {
+      border-color: rgba(255, 255, 255, 0.045) !important;
+      background: var(--cw-site-panel) !important;
+    }
+    
+    html body .cw-widget .cw-next {
+      min-height: 58px !important;
+      border: 0 !important;
+      border-radius: 18px !important;
+      color: #ffffff !important;
+      background: var(--cw-site-primary) !important;
+      background-image: none !important;
+      box-shadow: 0 18px 38px -28px rgba(57, 121, 236, 0.95) !important;
+      font-size: 14px !important;
+      font-weight: 720 !important;
+      letter-spacing: -0.018em !important;
+      transform: none !important;
+      transition:
+        background-color 180ms ease,
+        color 180ms ease,
+        opacity 180ms ease !important;
+    }
+    
+    html body .cw-widget .cw-next:hover,
+    html body .cw-widget .cw-next:focus-visible {
+      border: 0 !important;
+      color: #ffffff !important;
+      background: var(--cw-site-primary-hover) !important;
+      box-shadow: 0 18px 38px -26px rgba(78, 140, 255, 0.88) !important;
+      transform: none !important;
+    }
+    
+    html body .cw-widget .cw-next:active {
+      transform: none !important;
+    }
+    
+    html body .cw-widget .cw-next:disabled {
+      color: #667386 !important;
+      background: #111923 !important;
+      box-shadow: none !important;
+      opacity: 1 !important;
+    }
+    
+    html body .cw-widget .cw-next > span {
+      display: inline-grid !important;
+      width: 27px !important;
+      height: 27px !important;
+      margin-left: 3px !important;
+      place-items: center !important;
+      border: 0 !important;
+      border-radius: 999px !important;
+      color: #ffffff !important;
+      background: rgba(255, 255, 255, 0.13) !important;
+      box-shadow: none !important;
+    }
+    
+    /* Keep the rest of the chatbot in the same website palette. */
+    html body .cw-widget .cw-chat-builder {
+      border: 0 !important;
+      color: #ffffff !important;
+      background: #12213a !important;
+      box-shadow: none !important;
+    }
+    
+    html body .cw-widget .cw-chat-builder:hover,
+    html body .cw-widget .cw-chat-builder:focus-visible {
+      border: 0 !important;
+      background: #172b4b !important;
+      box-shadow: none !important;
+    }
+    
+    html body .cw-widget .cw-quick-replies .cw-chip,
+    html body .cw-widget .cw-direct-actions a {
+      border: 0 !important;
+      color: #cbd5e1 !important;
+      background: #111a26 !important;
+      box-shadow: none !important;
+    }
+    
+    html body .cw-widget .cw-quick-replies .cw-chip:hover,
+    html body .cw-widget .cw-quick-replies .cw-chip:focus-visible,
+    html body .cw-widget .cw-direct-actions a:hover,
+    html body .cw-widget .cw-direct-actions a:focus-visible {
+      border: 0 !important;
+      color: #ffffff !important;
+      background: #172231 !important;
+      box-shadow: none !important;
+    }
+    
+    html body .cw-widget .cw-inputbar {
+      border: 0 !important;
+      background: #111923 !important;
+      box-shadow: none !important;
+    }
+    
+    html body .cw-widget .cw-inputbar button,
+    html body .cw-widget .cw-submit {
+      border: 0 !important;
+      color: #ffffff !important;
+      background: var(--cw-site-primary) !important;
+      box-shadow: none !important;
+    }
+    
+    html body .cw-widget .cw-inputbar button:hover,
+    html body .cw-widget .cw-submit:hover {
+      background: var(--cw-site-primary-hover) !important;
+    }
+    
+    html body .cw-widget .cw-consent input {
+      accent-color: var(--cw-site-primary) !important;
+    }
+    
+    html body .cw-widget .cw-lead,
+    html body .cw-widget .cw-summary,
+    html body .cw-widget .cw-thanks__grid > div {
+      border-color: transparent !important;
+      background: var(--cw-site-surface) !important;
+      box-shadow: none !important;
+    }
+    
+    html body .cw-widget .cw-thanks__icon {
+      border: 0 !important;
+      color: #ffffff !important;
+      background: var(--cw-site-primary) !important;
+      box-shadow: none !important;
+    }
+    
+    @media (max-width: 520px) {
+      html body .cw-widget .cw-q {
+        font-size: 1.42rem !important;
+      }
+    
+      html body .cw-widget .cw-rowcard {
+        min-height: 74px !important;
+        padding-block: 12px !important;
+      }
+    
+      html body .cw-widget .cw-next {
+        min-height: 56px !important;
+        border-radius: 17px !important;
+      }
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      html body .cw-widget .cw-rowcard,
+      html body .cw-widget .cw-scard,
+      html body .cw-widget .cw-opt,
+      html body .cw-widget .cw-vcard,
+      html body .cw-widget .cw-rowcard::after,
+      html body .cw-widget .cw-scard::after,
+      html body .cw-widget .cw-opt::after,
+      html body .cw-widget .cw-vcard::after,
+      html body .cw-widget .cw-next {
+        transition: none !important;
+      }
+    }
+    
+  operator: 'doesNotMatch'
+  stack: |-
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:95:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: selected checks are circular, aligned and use the website blue
+ok 7 - selected checks are circular, aligned and use the website blue
+  ---
+  duration_ms: 3.056746
   type: 'test'
   ...
-# Subtest: configuration choices are rounded borderless and fill without shrinking
-ok 7 - configuration choices are rounded borderless and fill without shrinking
+# Subtest: continue button uses only the website CTA palette
+ok 8 - continue button uses only the website CTA palette
   ---
-  duration_ms: 1.636805
+  duration_ms: 0.811439
   type: 'test'
   ...
-# Subtest: selected checks are circular and icon tiles are removed
-ok 8 - selected checks are circular and icon tiles are removed
+# Subtest: the icon set remains one rounded family
+ok 9 - the icon set remains one rounded family
   ---
-  duration_ms: 0.782648
-  type: 'test'
-  ...
-# Subtest: the icon set is one refined rounded family
-ok 9 - the icon set is one refined rounded family
-  ---
-  duration_ms: 1.066457
+  duration_ms: 0.944703
   type: 'test'
   ...
 # Subtest: contact asks for essentials and submits a real lead
 ok 10 - contact asks for essentials and submits a real lead
   ---
-  duration_ms: 1.562113
+  duration_ms: 1.353066
   type: 'test'
   ...
 # Subtest: assistant knows the verified starting price and brand
 ok 11 - assistant knows the verified starting price and brand
   ---
-  duration_ms: 1.556184
+  duration_ms: 1.190271
   type: 'test'
   ...
-# Subtest: mobile panel and controls remain safe
-ok 12 - mobile panel and controls remain safe
+# Subtest: mobile panel and reduced motion remain safe
+ok 12 - mobile panel and reduced motion remain safe
   ---
-  duration_ms: 1.31438
+  duration_ms: 1.323245
   type: 'test'
   ...
 # Subtest: chat API protections remain intact
 ok 13 - chat API protections remain intact
   ---
-  duration_ms: 1.774703
+  duration_ms: 0.995864
   type: 'test'
   ...
-# Subtest: deployment validates the Taste build
-ok 14 - deployment validates the Taste build
+# Subtest: deployment validates the website-palette build
+ok 14 - deployment validates the website-palette build
   ---
-  duration_ms: 0.633795
+  duration_ms: 0.670996
   type: 'test'
   ...
 1..14
@@ -151,5 +960,5 @@ ok 14 - deployment validates the Taste build
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 81.071485
+# duration_ms 83.623165
  ELIFECYCLE  Test failed. See above for more details.
