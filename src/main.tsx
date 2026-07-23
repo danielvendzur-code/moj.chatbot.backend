@@ -15,6 +15,7 @@ import "./premium-liquid-final.css";
 import "./chip-refinement-final.css";
 import "./apple-liquid-fixes.css";
 import "./apple-liquid-system-final.css";
+import "./restrained-widget-final.css";
 
 if (isEmbedMode()) {
   document.documentElement.dataset.embed = "true";
