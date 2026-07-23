@@ -108,7 +108,7 @@ export function AssistantWidget({
         data-testid="widget-launcher"
         className="cw-launcher"
         type="button"
-        aria-label="Otvoriť webového asistenta"
+        aria-label="Otvoriť AI Assistanta"
         aria-expanded={isOpen}
         aria-controls="chameleon-widget-panel"
         onClick={() => open("assistant")}
@@ -128,13 +128,13 @@ export function AssistantWidget({
         >
           <header className="cw-panel-head">
             <h2 id="chameleon-widget-title" className="cw-sr-only">
-              Online chatbot a konfigurátor riešenia
+              AI Assistant a konfigurátor riešenia
             </h2>
             <span className="cw-panel-head__mascot">
               <BubbleLogo size="header" />
             </span>
             <div className="cw-panel-head__title">
-              <b>Môj Chatbot</b>
+              <b>AI Assistant</b>
               <span className="cw-panel-head__context cw-panel-head__online">
                 <i aria-hidden="true" /> Online
               </span>
