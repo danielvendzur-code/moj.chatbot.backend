@@ -1,8 +1,8 @@
-run_id=30010420473
+run_id=30010484805
 install=success
 lint=success
 build=success
-test=failure
+test=success
 
 ===== lint =====
 
@@ -27,7 +27,7 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.38 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-BDnd_9tJ.css  [39m[1m[2m118.72 kB[22m[1m[22m[2m │ gzip: 19.07 kB[22m
 [2mdist/[22m[2massets/[22m[36mindex-s3KB39mP.js   [39m[1m[2m222.75 kB[22m[1m[22m[2m │ gzip: 75.52 kB[22m
-[32m✓ built in 1.37s[39m
+[32m✓ built in 923ms[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 101 modules transformed.
@@ -35,7 +35,7 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m118.72 kB[22m[1m[22m[2m │ gzip: 19.07 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m220.72 kB[22m[1m[22m[2m │ gzip: 74.88 kB[22m
-[32m✓ built in 1.34s[39m
+[32m✓ built in 936ms[39m
 
 ===== test =====
 
@@ -46,396 +46,81 @@ TAP version 13
 # Subtest: final visual system keeps the shared black, white and blue palette
 ok 1 - final visual system keeps the shared black, white and blue palette
   ---
-  duration_ms: 10.10751
+  duration_ms: 6.188567
   type: 'test'
   ...
 # Subtest: demo and embedded builds import the identical final style stack
-not ok 2 - demo and embedded builds import the identical final style stack
+ok 2 - demo and embedded builds import the identical final style stack
   ---
-  duration_ms: 3.346381
+  duration_ms: 1.185779
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:24:1'
-  failureType: 'testCodeFailure'
-  error: |-
-    The input did not match the regular expression /apple-liquid-controls-20260723/. Input:
-    
-    'name: Deploy and verify chatbot\n' +
-      '\n' +
-      'on:\n' +
-      '  push:\n' +
-      '    branches: [main]\n' +
-      '  workflow_dispatch:\n' +
-      '\n' +
-      'permissions:\n' +
-      '  contents: write\n' +
-      '  pages: write\n' +
-      '  id-token: write\n' +
-      '\n' +
-      'concurrency:\n' +
-      '  group: pages\n' +
-      '  cancel-in-progress: false\n' +
-      '\n' +
-      'jobs:\n' +
-      '  build:\n' +
-      "    if: ${{ github.actor != 'github-actions[bot]' }}\n" +
-      '    runs-on: ubuntu-latest\n' +
-      '    steps:\n' +
-      '      - name: Checkout\n' +
-      '        uses: actions/checkout@v4\n' +
-      '\n' +
-      '      - name: Install pnpm\n' +
-      '        uses: pnpm/action-setup@v4\n' +
-      '        with:\n' +
-      '          version: 10\n' +
-      '\n' +
-      '      - name: Set up Node.js\n' +
-      '        uses: actions/setup-node@v4\n' +
-      '        with:\n' +
-      '          node-version: 22\n' +
-      '          cache: pnpm\n' +
-      '\n' +
-      '      - name: Install dependencies\n' +
-      '        run: pnpm install --frozen-lockfile\n' +
-      '\n' +
-      '      - name: Audit production dependencies\n' +
-      '        run: pnpm audit --prod --audit-level high\n' +
-      '\n' +
-      '      - name: TypeScript check\n' +
-      '        run: pnpm lint\n' +
-      '\n' +
-      '      - name: Run visual and security contracts\n' +
-      '        run: pnpm test -- --run\n' +
-      '\n' +
-      '      - name: Build demo and embedded widget\n' +
-      '        run: pnpm build\n' +
-      '\n' +
-      '      - name: Create immutable build metadata\n' +
-      '        shell: bash\n' +
-      '        run: |\n' +
-      `          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"professional-chips-20260723"},null,2))'\n` +
-      '\n' +
-      '      - name: Validate production artifacts\n' +
-      '        shell: bash\n' +
-      '        run: |\n' +
-      '          set -euo pipefail\n' +
-      '          test -f dist/index.html\n' +
-      '          test -f dist/widget.js\n' +
-      '          test -f dist/widget.css\n' +
-      '          test -f dist/build-meta.json\n' +
-      '          grep -Fq "professional-chips-20260723" dist/widget.js\n' +
-      '          grep -Fqi "3478f6" dist/widget.css\n' +
-      '          grep -Fq "cw-professional-centre-fill" dist/widget.css\n' +
-      '          ! grep -Fq "REPLACE-ME" dist/widget.js\n' +
-      '          grep -Fq "${GITHUB_SHA}" dist/build-meta.json\n' +
-      '\n' +
-      '      - name: Configure GitHub Pages\n' +
-      '        uses: actions/configure-pages@v5\n' +
-      '\n' +
-      '      - name: Upload Pages artifact\n' +
-      '        uses: actions/upload-pages-artifact@v3\n' +
-      '        with:\n' +
-      '          path: dist\n' +
-      '\n' +
-      '  deploy:\n' +
-      '    needs: build\n' +
-      '    runs-on: ubuntu-latest\n' +
-      '    environment:\n' +
-      '      name: github-pages\n' +
-      '      url: ${{ steps.deployment.outputs.page_url }}\n' +
-      '    steps:\n' +
-      '      - name: Deploy to GitHub Pages\n' +
-      '        id: deployment\n' +
-      '        uses: actions/deploy-pages@v5\n' +
-      '\n' +
-      '      - name: Verify live demo and embedded assets\n' +
-      '        shell: bash\n' +
-      '        env:\n' +
-      '          PAGE_URL: ${{ steps.deployment.outputs.page_url }}\n' +
-      '          SOURCE_SHA: ${{ github.sha }}\n' +
-      '        run: |\n' +
-      '          set -euo pipefail\n' +
-      '          BASE="${PAGE_URL%/}"\n' +
-      '\n' +
-      '          verify() {\n' +
-      '            local path="$1"\n' +
-      '            local expected="$2"\n' +
-      `            local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"\n` +
-      '\n' +
-      '            for attempt in {1..24}; do\n' +
-      '              if curl --location --fail --silent --show-error \\\n' +
-      '                --header "Cache-Control: no-cache" \\\n' +
-      '                "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then\n' +
-      '                if grep -Fqi "$expected" "$body"; then\n' +
-      '                  echo "verified ${path}"\n' +
-      '                  return 0\n' +
-      '                fi\n' +
-      '              fi\n' +
-      '              sleep 5\n' +
-      '            done\n' +
-      '\n' +
-      '            echo "Live verification failed for ${path}"\n' +
-      '            head -c 1000 "$body" 2>/dev/null || true\n' +
-      '            return 1\n' +
-      '          }\n' +
-      '\n' +
-      '          verify "/" "AI Assistant"\n' +
-      '          verify "/widget.js" "professional-chips-20260723"\n' +
-      '          verify "/widget.css" "cw-professional-centre-fill"\n' +
-      '          verify "/build-meta.json" "$SOURCE_SHA"\n' +
-      '\n' +
-      '      - name: Checkout latest main for deployment record\n' +
-      '        uses: actions/checkout@v4\n' +
-      '        with:\n' +
-      '          ref: main\n' +
-      '\n' +
-      '      - name: Record verified widget deployment\n' +
-      '        shell: bash\n' +
-      '        env:\n' +
-      '          PAGE_URL: ${{ steps.deployment.outputs.page_url }}\n' +
-      '          SOURCE_SHA: ${{ github.sha }}\n' +
-      '        run: |\n' +
-      '          {\n' +
-      '            echo "deployment=success"\n' +
-      '            echo "dependency_audit=success"\n' +
-      '            echo "live_smoke=success"\n' +
-      '            echo "source_sha=${SOURCE_SHA}"\n' +
-      '            echo "page_url=${PAGE_URL}"\n' +
-      '            echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"\n' +
-      '          } > PAGES_DEPLOY_AUDIT.txt\n' +
-      '          git config user.name "github-actions[bot]"\n' +
-      '          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"\n' +
-      '          git add PAGES_DEPLOY_AUDIT.txt\n' +
-      '          git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0\n' +
-      '          git pull --rebase origin main\n' +
-      '          git push origin HEAD:main\n'
-    
-  code: 'ERR_ASSERTION'
-  name: 'AssertionError'
-  expected:
-  actual: |-
-    name: Deploy and verify chatbot
-    
-    on:
-      push:
-        branches: [main]
-      workflow_dispatch:
-    
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-    
-    concurrency:
-      group: pages
-      cancel-in-progress: false
-    
-    jobs:
-      build:
-        if: ${{ github.actor != 'github-actions[bot]' }}
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v4
-    
-          - name: Install pnpm
-            uses: pnpm/action-setup@v4
-            with:
-              version: 10
-    
-          - name: Set up Node.js
-            uses: actions/setup-node@v4
-            with:
-              node-version: 22
-              cache: pnpm
-    
-          - name: Install dependencies
-            run: pnpm install --frozen-lockfile
-    
-          - name: Audit production dependencies
-            run: pnpm audit --prod --audit-level high
-    
-          - name: TypeScript check
-            run: pnpm lint
-    
-          - name: Run visual and security contracts
-            run: pnpm test -- --run
-    
-          - name: Build demo and embedded widget
-            run: pnpm build
-    
-          - name: Create immutable build metadata
-            shell: bash
-            run: |
-              node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"professional-chips-20260723"},null,2))'
-    
-          - name: Validate production artifacts
-            shell: bash
-            run: |
-              set -euo pipefail
-              test -f dist/index.html
-              test -f dist/widget.js
-              test -f dist/widget.css
-              test -f dist/build-meta.json
-              grep -Fq "professional-chips-20260723" dist/widget.js
-              grep -Fqi "3478f6" dist/widget.css
-              grep -Fq "cw-professional-centre-fill" dist/widget.css
-              ! grep -Fq "REPLACE-ME" dist/widget.js
-              grep -Fq "${GITHUB_SHA}" dist/build-meta.json
-    
-          - name: Configure GitHub Pages
-            uses: actions/configure-pages@v5
-    
-          - name: Upload Pages artifact
-            uses: actions/upload-pages-artifact@v3
-            with:
-              path: dist
-    
-      deploy:
-        needs: build
-        runs-on: ubuntu-latest
-        environment:
-          name: github-pages
-          url: ${{ steps.deployment.outputs.page_url }}
-        steps:
-          - name: Deploy to GitHub Pages
-            id: deployment
-            uses: actions/deploy-pages@v5
-    
-          - name: Verify live demo and embedded assets
-            shell: bash
-            env:
-              PAGE_URL: ${{ steps.deployment.outputs.page_url }}
-              SOURCE_SHA: ${{ github.sha }}
-            run: |
-              set -euo pipefail
-              BASE="${PAGE_URL%/}"
-    
-              verify() {
-                local path="$1"
-                local expected="$2"
-                local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"
-    
-                for attempt in {1..24}; do
-                  if curl --location --fail --silent --show-error \
-                    --header "Cache-Control: no-cache" \
-                    "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then
-                    if grep -Fqi "$expected" "$body"; then
-                      echo "verified ${path}"
-                      return 0
-                    fi
-                  fi
-                  sleep 5
-                done
-    
-                echo "Live verification failed for ${path}"
-                head -c 1000 "$body" 2>/dev/null || true
-                return 1
-              }
-    
-              verify "/" "AI Assistant"
-              verify "/widget.js" "professional-chips-20260723"
-              verify "/widget.css" "cw-professional-centre-fill"
-              verify "/build-meta.json" "$SOURCE_SHA"
-    
-          - name: Checkout latest main for deployment record
-            uses: actions/checkout@v4
-            with:
-              ref: main
-    
-          - name: Record verified widget deployment
-            shell: bash
-            env:
-              PAGE_URL: ${{ steps.deployment.outputs.page_url }}
-              SOURCE_SHA: ${{ github.sha }}
-            run: |
-              {
-                echo "deployment=success"
-                echo "dependency_audit=success"
-                echo "live_smoke=success"
-                echo "source_sha=${SOURCE_SHA}"
-                echo "page_url=${PAGE_URL}"
-                echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-              } > PAGES_DEPLOY_AUDIT.txt
-              git config user.name "github-actions[bot]"
-              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-              git add PAGES_DEPLOY_AUDIT.txt
-              git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0
-              git pull --rebase origin main
-              git push origin HEAD:main
-    
-  operator: 'match'
-  stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:53:10)
-    async Test.run (node:internal/test_runner/test:1054:7)
-    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 # Subtest: AI Assistant identity and vector mascot are consistent
 ok 3 - AI Assistant identity and vector mascot are consistent
   ---
-  duration_ms: 3.936225
+  duration_ms: 1.221062
   type: 'test'
   ...
 # Subtest: mode tabs switch directly and use a draggable liquid glass indicator
 ok 4 - mode tabs switch directly and use a draggable liquid glass indicator
   ---
-  duration_ms: 4.066034
+  duration_ms: 1.502783
   type: 'test'
   ...
 # Subtest: builder flow omits priority and keeps contact as final step
 ok 5 - builder flow omits priority and keeps contact as final step
   ---
-  duration_ms: 1.364512
+  duration_ms: 1.387
   type: 'test'
   ...
 # Subtest: final screen visually orders contact before summary
 ok 6 - final screen visually orders contact before summary
   ---
-  duration_ms: 1.061229
+  duration_ms: 0.526116
   type: 'test'
   ...
 # Subtest: quick replies never drag sideways and mobile inputs prevent browser zoom
 ok 7 - quick replies never drag sideways and mobile inputs prevent browser zoom
   ---
-  duration_ms: 1.886501
+  duration_ms: 1.067714
   type: 'test'
   ...
 # Subtest: chips trace the full border before filling from the centre
 ok 8 - chips trace the full border before filling from the centre
   ---
-  duration_ms: 2.269482
+  duration_ms: 1.175034
   type: 'test'
   ...
 # Subtest: nested chip bubbles are removed while icons remain sharp
 ok 9 - nested chip bubbles are removed while icons remain sharp
   ---
-  duration_ms: 1.953525
+  duration_ms: 1.129045
   type: 'test'
   ...
 # Subtest: chat client has a real HTTPS endpoint, timeout and deterministic outage fallback
 ok 10 - chat client has a real HTTPS endpoint, timeout and deterministic outage fallback
   ---
-  duration_ms: 1.594018
+  duration_ms: 0.872802
   type: 'test'
   ...
 # Subtest: server API enforces origins, JSON, body limits, rate limits and upstream timeout
 ok 11 - server API enforces origins, JSON, body limits, rate limits and upstream timeout
   ---
-  duration_ms: 1.390942
+  duration_ms: 0.739534
   type: 'test'
   ...
 # Subtest: premium styles cover major surfaces, chips, mobile and reduced motion
 ok 12 - premium styles cover major surfaces, chips, mobile and reduced motion
   ---
-  duration_ms: 3.199758
+  duration_ms: 1.143417
   type: 'test'
   ...
 1..12
 # tests 12
 # suites 0
-# pass 11
-# fail 1
+# pass 12
+# fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 94.548573
- ELIFECYCLE  Test failed. See above for more details.
+# duration_ms 62.689901
