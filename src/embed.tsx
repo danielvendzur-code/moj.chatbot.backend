@@ -15,6 +15,7 @@ import "./apple-liquid-fixes.css";
 import "./apple-liquid-system-final.css";
 import "./restrained-widget-final.css";
 import "./derat-layout-final.css";
+import "./owner-friendly-final.css";
 import "./competition-winner-final.css";
 
 const HOST_ID = "dv-assistant-root";
