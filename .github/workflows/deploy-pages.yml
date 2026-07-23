@@ -54,7 +54,7 @@ jobs:
       - name: Create immutable build metadata
         shell: bash
         run: |
-          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"clean-redesign-20260723-v9"},null,2))'
+          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"competition-redesign-20260723-v10"},null,2))'
 
       - name: Validate production artifacts
         shell: bash
@@ -65,20 +65,22 @@ jobs:
           test -f dist/widget.css
           test -f dist/build-meta.json
           test -f api/lead.ts
-          grep -Fq "clean-redesign-20260723-v9" dist/widget.js
-          grep -Fqi "3478f6" dist/widget.css
-          grep -Fq "cw-chat-builder" dist/widget.css
-          grep -Fq "cw-contact-stage" dist/widget.css
-          grep -Fq "cw-tabs" dist/widget.css
+          grep -Fq "competition-redesign-20260723-v10" dist/widget.js
+          grep -Fq "competition-grade design system v10" dist/widget.css
           grep -Fq "assistant-redesign" src/main.tsx
           grep -Fq "assistant-redesign" src/embed.tsx
-          ! grep -Fq "taste-system-final" src/main.tsx
-          ! grep -Fq "web-palette-chatbot-final" src/main.tsx
-          ! grep -Fq "installWidgetSpotlight" src/main.tsx
+          grep -Fq "installWidgetSpotlight" src/main.tsx
+          grep -Fq "installWidgetSpotlight" src/embed.tsx
+          grep -Fq "cw-choice-grid--interest" dist/widget.css
+          grep -Fq "cw-selection-indicator" dist/widget.css
+          grep -Fq "border-radius: 999px" dist/widget.css
+          grep -Fq -- "--mc-blue: #3478f6" dist/widget.css
           grep -Fq "api/lead" src/lib/leadApi.ts
-          grep -Fq "Nechať sa previesť výberom" src/components/widget/AssistantConversation.tsx
+          grep -Fq "Vyskladať riešenie" src/components/widget/AssistantConversation.tsx
           grep -Fq "Čo má váš web vybaviť za vás?" src/lib/assistantFlow.ts
+          grep -Fq "Nie som si istý" src/lib/assistantFlow.ts
           ! grep -Eqi "#2aa|#1fa|teal|turquoise" dist/widget.css
+          ! grep -Fq "cw-choice-arrow" src/components/widget/ToolCalculator.tsx
           ! grep -Fq "REPLACE-ME" dist/widget.js
           grep -Fq "${GITHUB_SHA}" dist/build-meta.json
 
@@ -133,8 +135,8 @@ jobs:
           }
 
           verify "/" "Môj Chatbot"
-          verify "/widget.js" "clean-redesign-20260723-v9"
-          verify "/widget.css" "3478f6"
+          verify "/widget.js" "competition-redesign-20260723-v10"
+          verify "/widget.css" "competition-grade design system v10"
           verify "/build-meta.json" "$SOURCE_SHA"
 
       - name: Checkout latest main for deployment record
