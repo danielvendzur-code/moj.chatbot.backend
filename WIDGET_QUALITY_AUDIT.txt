@@ -1,8 +1,8 @@
-run_id=30033145236
+run_id=30033237115
 install=success
 lint=success
 build=success
-test=success
+test=failure
 
 ===== lint =====
 
@@ -21,21 +21,21 @@ test=success
 
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 111 modules transformed.
+[32m✓[39m 112 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
-[2mdist/[22m[2massets/[22m[35mindex-DJEDYu6h.css  [39m[1m[2m233.07 kB[22m[1m[22m[2m │ gzip: 34.17 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-Q2CBmg1P.js   [39m[1m[2m219.78 kB[22m[1m[22m[2m │ gzip: 74.39 kB[22m
-[32m✓ built in 1.30s[39m
+[2mdist/[22m[2massets/[22m[35mindex-XIFJLOFA.css  [39m[1m[2m249.67 kB[22m[1m[22m[2m │ gzip: 35.87 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-Bv-PfHF6.js   [39m[1m[2m220.44 kB[22m[1m[22m[2m │ gzip: 74.55 kB[22m
+[32m✓ built in 1.01s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 107 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m233.07 kB[22m[1m[22m[2m │ gzip: 34.17 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m217.75 kB[22m[1m[22m[2m │ gzip: 73.70 kB[22m
-[32m✓ built in 1.27s[39m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m218.40 kB[22m[1m[22m[2m │ gzip: 73.88 kB[22m
+[32m✓ built in 963ms[39m
 
 ===== test =====
 
@@ -44,89 +44,106 @@ computing gzip size...
 
 TAP version 13
 # Subtest: the owner-friendly layer is present in demo and embed builds
-ok 1 - the owner-friendly layer is present in demo and embed builds
+not ok 1 - the owner-friendly layer is present in demo and embed builds
   ---
-  duration_ms: 7.883344
+  duration_ms: 6.521314
   type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    910 !== 869
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 869
+  actual: 910
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:15:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
   ...
 # Subtest: assistant order remains builder messages chips input contacts
 ok 2 - assistant order remains builder messages chips input contacts
   ---
-  duration_ms: 1.082707
+  duration_ms: 1.306045
   type: 'test'
   ...
 # Subtest: mode tabs switch immediately without pointer capture
 ok 3 - mode tabs switch immediately without pointer capture
   ---
-  duration_ms: 1.753191
+  duration_ms: 1.382321
   type: 'test'
   ...
 # Subtest: spotlight stays compact and only the builder CTA displays it
 ok 4 - spotlight stays compact and only the builder CTA displays it
   ---
-  duration_ms: 2.160714
+  duration_ms: 1.700456
   type: 'test'
   ...
 # Subtest: quick replies are readable two by two above the input
 ok 5 - quick replies are readable two by two above the input
   ---
-  duration_ms: 2.9385
+  duration_ms: 1.721607
   type: 'test'
   ...
 # Subtest: configurator is five steps and contact remains final
 ok 6 - configurator is five steps and contact remains final
   ---
-  duration_ms: 1.575518
+  duration_ms: 0.948148
   type: 'test'
   ...
 # Subtest: configuration cards fill smoothly without shrink arrows or hover blobs
 ok 7 - configuration cards fill smoothly without shrink arrows or hover blobs
   ---
-  duration_ms: 2.426341
+  duration_ms: 1.360994
   type: 'test'
   ...
 # Subtest: selected checks are compact square and aligned
 ok 8 - selected checks are compact square and aligned
   ---
-  duration_ms: 1.204474
+  duration_ms: 0.621081
   type: 'test'
   ...
 # Subtest: contact asks for essentials and submits a real lead
 ok 9 - contact asks for essentials and submits a real lead
   ---
-  duration_ms: 2.505689
+  duration_ms: 1.401548
   type: 'test'
   ...
 # Subtest: assistant knows the verified starting price and brand
 ok 10 - assistant knows the verified starting price and brand
   ---
-  duration_ms: 2.451478
+  duration_ms: 1.229166
   type: 'test'
   ...
 # Subtest: mobile panel and controls remain safe
 ok 11 - mobile panel and controls remain safe
   ---
-  duration_ms: 3.57418
+  duration_ms: 1.092888
   type: 'test'
   ...
 # Subtest: chat API protections remain intact
 ok 12 - chat API protections remain intact
   ---
-  duration_ms: 1.549199
+  duration_ms: 1.803
   type: 'test'
   ...
 # Subtest: deployment validates the owner-friendly build
 ok 13 - deployment validates the owner-friendly build
   ---
-  duration_ms: 2.331844
+  duration_ms: 0.784769
   type: 'test'
   ...
 1..13
 # tests 13
 # suites 0
-# pass 13
-# fail 0
+# pass 12
+# fail 1
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 95.060854
+# duration_ms 69.01086
+ ELIFECYCLE  Test failed. See above for more details.
