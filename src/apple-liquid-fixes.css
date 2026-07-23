@@ -1,0 +1,46 @@
+/* Final small overrides kept separate so legacy widget layers cannot reintroduce bubbles. */
+.cw-widget .cw-opt__tag {
+  display: inline !important;
+  margin-left: 7px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: rgba(151, 226, 215, 0.82) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 0.66rem !important;
+  font-style: normal !important;
+  font-weight: 720 !important;
+}
+
+.cw-widget .cw-opt[data-selected="true"] .cw-opt__tag {
+  color: #dffff9 !important;
+}
+
+.cw-widget .cw-calc-actions {
+  padding: 10px 13px max(10px, env(safe-area-inset-bottom)) !important;
+}
+
+.cw-widget .cw-progress {
+  padding: 8px 13px 4px !important;
+}
+
+@media (max-height: 720px) and (min-width: 521px) {
+  .cw-widget .cw-panel-head {
+    min-height: 64px !important;
+    padding-block: 9px !important;
+  }
+
+  .cw-widget .cw-tabs {
+    margin-block: 8px !important;
+  }
+
+  .cw-widget .cw-calc-body {
+    padding-top: 8px !important;
+  }
+
+  .cw-widget .cw-scard,
+  .cw-widget .cw-vcard {
+    min-height: 64px !important;
+  }
+}
