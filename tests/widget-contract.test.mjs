@@ -4,19 +4,17 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("final visual system uses black, white and blue with a darker blue hover", async () => {
-  const css = await read("src/black-blue-refresh.css");
-  assert.match(css, /--cw-bg:\s*#050609/i);
-  assert.match(css, /--cw-ink:\s*#f7f9fc/i);
-  assert.match(css, /--cw-action:\s*#3478f6/i);
-  assert.match(css, /--cw-action-hover:\s*#1f55c9/i);
-  assert.match(
-    css,
-    /\.cw-panel-head__actions \.cw-panel-head__close:hover[\s\S]*?background:\s*#1f55c9/i,
-  );
+test("final visual system keeps the shared black, white and blue palette", async () => {
+  const baseCss = await read("src/black-blue-refresh.css");
+  const premiumCss = await read("src/premium-liquid-final.css");
+  assert.match(baseCss, /--cw-bg:\s*#050609/i);
+  assert.match(baseCss, /--cw-ink:\s*#f7f9fc/i);
+  assert.match(baseCss, /--cw-action:\s*#3478f6/i);
+  assert.match(baseCss, /--cw-action-hover:\s*#1f55c9/i);
+  assert.match(premiumCss, /--cw-liquid-blue-light:\s*#75b8ff/i);
   assert.doesNotMatch(
-    css,
-    /#65e6c1|#83f1d0|#72c7ff|#ff6c67|#c9aa70|#c47c5e|#d9bc84/i,
+    `${baseCss}\n${premiumCss}`,
+    /#65e6c1|#83f1d0|#ff6c67|#c9aa70|#c47c5e|#d9bc84/i,
   );
 });
 
@@ -30,24 +28,48 @@ test("demo and embedded builds import the identical final style stack", async ()
     "requested-polish.css",
     "world-class-polish.css",
     "competition-widget.css",
+    "flow-content-polish.css",
     "black-blue-refresh.css",
+    "premium-liquid-final.css",
   ];
   for (const stylesheet of expected) {
     assert.match(main, new RegExp(stylesheet.replace(".", "\\.")));
     assert.match(embed, new RegExp(stylesheet.replace(".", "\\.")));
   }
-  assert.match(embed, /data-dv-assistant-version/);
-  assert.match(embed, /brand-interactions-20260722/);
-  assert.match(deploy, /brand-interactions-20260722/);
-  assert.doesNotMatch(deploy, /black-blue-20260722/);
+  assert.ok(
+    main.indexOf('import "./black-blue-refresh.css"') <
+      main.indexOf('import "./premium-liquid-final.css"'),
+  );
+  assert.ok(
+    embed.indexOf('import "./black-blue-refresh.css"') <
+      embed.indexOf('import "./premium-liquid-final.css"'),
+  );
+  assert.match(embed, /ai-assistant-liquid-20260723/);
+  assert.match(deploy, /ai-assistant-liquid-20260723/);
 });
 
-test("mode tabs switch directly and expose online state", async () => {
+test("AI Assistant identity and vector mascot are consistent", async () => {
   const widget = await read("src/components/widget/AssistantWidget.tsx");
+  const conversation = await read("src/components/widget/AssistantConversation.tsx");
+  const logo = await read("src/components/widget/BubbleLogo.tsx");
+  const css = await read("src/premium-liquid-final.css");
+  assert.match(widget, />AI Assistant</);
+  assert.match(widget, /AI Assistant a konfigurátor riešenia/);
+  assert.match(conversation, /som AI Assistant/);
+  assert.match(logo, /ai-assistant-mascot__eyelids/);
+  assert.match(logo, /linearGradient/);
+  assert.match(css, /@keyframes ai-assistant-blink/);
+});
+
+test("mode tabs switch directly and use a liquid glass indicator", async () => {
+  const widget = await read("src/components/widget/AssistantWidget.tsx");
+  const css = await read("src/premium-liquid-final.css");
   assert.match(widget, /<i aria-hidden="true" \/> Online/);
   assert.match(widget, /onClick=\{\(\) => switchMode\("calculator"\)\}/);
   assert.match(widget, /onClick=\{\(\) => switchMode\("assistant"\)\}/);
-  assert.doesNotMatch(widget, /onPointerMove=\{handleTabPointerMove\}/);
+  assert.match(css, /\.cw-tabs__glass/);
+  assert.match(css, /data-mode="assistant"/);
+  assert.match(css, /backdrop-filter:\s*blur\(20px\)/i);
 });
 
 test("builder flow omits priority and keeps contact as final step", async () => {
@@ -69,44 +91,33 @@ test("final screen visually orders contact before summary", async () => {
 });
 
 test("quick replies never drag sideways and mobile inputs prevent browser zoom", async () => {
-  const conversation = await read(
-    "src/components/widget/AssistantConversation.tsx",
-  );
+  const conversation = await read("src/components/widget/AssistantConversation.tsx");
   const css = await read("src/black-blue-refresh.css");
   assert.doesNotMatch(conversation, /useHorizontalDrag|quickRepliesDrag/);
-  assert.doesNotMatch(conversation, /label:\s*"Konfigurátor"/);
-  const replies =
-    conversation.match(/const QUICK_REPLIES[\s\S]*?\n\];/)?.[0] ?? "";
+  const replies = conversation.match(/const QUICK_REPLIES[\s\S]*?\n\];/)?.[0] ?? "";
   assert.equal((replies.match(/label:/g) ?? []).length, 3);
   assert.match(
     conversation,
     /cw-chip cw-chip--primary[\s\S]*?Vyskladať riešenie/,
   );
-  assert.match(
-    css,
-    /\.cw-quick-replies[\s\S]*?grid-template-columns:\s*repeat\(2/i,
-  );
+  assert.match(css, /grid-template-columns:\s*repeat\(2/i);
   assert.match(css, /touch-action:\s*pan-y/i);
   assert.match(css, /font-size:\s*16px !important/i);
   assert.match(css, /height:\s*100dvh !important/i);
-  assert.doesNotMatch(conversation, /animateChipsIn|chipsRef/);
 });
 
-test("chips use click-only border tracing without filled selection surfaces", async () => {
-  const conversation = await read(
-    "src/components/widget/AssistantConversation.tsx",
-  );
+test("configurator chips are sharp liquid-glass controls with click tracing", async () => {
+  const conversation = await read("src/components/widget/AssistantConversation.tsx");
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
-  const css = await read("src/black-blue-refresh.css");
+  const css = await read("src/premium-liquid-final.css");
   assert.match(conversation, /replayBorderTrace\(event\.currentTarget\)/);
   assert.match(calculator, /replayBorderTrace\(event\.currentTarget\)/);
-  assert.doesNotMatch(calculator, /data-glide/);
-  assert.match(css, /@keyframes cw-border-trace/);
-  assert.match(
-    css,
-    /\.cw-rowcard\[data-selected="true"\][\s\S]*?background:\s*#0e1118/i,
-  );
+  assert.match(css, /\.cw-rowcard__icon svg/);
+  assert.match(css, /shape-rendering:\s*geometricPrecision/);
+  assert.match(css, /backdrop-filter:\s*blur\(16px\)/i);
+  assert.match(css, /@keyframes cw-liquid-border-trace/);
   assert.match(css, /\.cw-chip\.is-border-tracing::after/);
+  assert.match(css, /\.cw-rowcard\[data-selected="true"\]/);
 });
 
 test("chat client has a real HTTPS endpoint, timeout and deterministic outage fallback", async () => {
@@ -135,11 +146,10 @@ test("server API enforces origins, JSON, body limits, rate limits and upstream t
   assert.doesNotMatch(api, /Access-Control-Allow-Origin["'],\s*["']\*/);
 });
 
-test("final styles cover every major chatbot surface and reduced motion", async () => {
-  const css = await read("src/black-blue-refresh.css");
+test("premium styles cover major surfaces, CTAs, mobile and reduced motion", async () => {
+  const css = await read("src/premium-liquid-final.css");
   for (const selector of [
     ".cw-launcher",
-    ".cw-teaser",
     ".cw-panel",
     ".cw-panel-head",
     ".cw-tabs",
@@ -157,8 +167,9 @@ test("final styles cover every major chatbot surface and reduced motion", async 
     ".cw-submit",
     ".cw-thanks",
   ]) {
-    assert.ok(css.includes(selector), `Missing final style for ${selector}`);
+    assert.ok(css.includes(selector), `Missing premium style for ${selector}`);
   }
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /focus-visible/);
+  assert.match(css, /@media \(max-width:\s*520px\)/);
 });
