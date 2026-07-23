@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { animateSentMessage } from "../../lib/motion";
+import { animateReceivedMessage, animateSentMessage } from "../../lib/motion";
 import { sendChat, type ChatTurn } from "../../lib/assistantApi";
 import { track } from "../../lib/analytics";
 import { BubbleLogo } from "./BubbleLogo";
@@ -56,30 +56,63 @@ export function AssistantConversation({
   const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
+  const [activeQuickReply, setActiveQuickReply] = useState<string | null>(null);
+  const [sendPulse, setSendPulse] = useState(false);
   const nextIdRef = useRef(2);
   const messagesRef = useRef<HTMLDivElement>(null);
+  const pulseTimerRef = useRef<number | null>(null);
+
+  const triggerSendPulse = () => {
+    setSendPulse(false);
+    window.requestAnimationFrame(() => {
+      setSendPulse(true);
+      if (pulseTimerRef.current !== null) window.clearTimeout(pulseTimerRef.current);
+      pulseTimerRef.current = window.setTimeout(() => setSendPulse(false), 560);
+    });
+  };
 
   useEffect(() => {
     const last = messages[messages.length - 1];
-    if (!last || last.from !== "me") return;
-    const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");
-    animateSentMessage(rows?.[rows.length - 1] ?? null);
+    if (!last) return;
+
+    if (last.from === "me") {
+      const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");
+      animateSentMessage(rows?.[rows.length - 1] ?? null);
+      return;
+    }
+
+    if (last.id > 1) {
+      const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--bot");
+      animateReceivedMessage(rows?.[rows.length - 1] ?? null);
+    }
   }, [messages]);
 
   useEffect(() => {
     setMessages(INITIAL_MESSAGES);
     setInput("");
     setTyping(false);
+    setActiveQuickReply(null);
+    setSendPulse(false);
     nextIdRef.current = 2;
   }, [resetToken]);
+
+  useEffect(
+    () => () => {
+      if (pulseTimerRef.current !== null) window.clearTimeout(pulseTimerRef.current);
+    },
+    [],
+  );
 
   useEffect(() => {
     const container = messagesRef.current;
     if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
   }, [messages, typing]);
 
-  const ask = async (question: string) => {
+  const ask = async (question: string, quickReplyLabel: string | null = null) => {
     if (typing) return;
+    if (quickReplyLabel) setActiveQuickReply(quickReplyLabel);
+    triggerSendPulse();
+
     const userMessage = {
       id: nextIdRef.current++,
       from: "me" as const,
@@ -113,6 +146,7 @@ export function AssistantConversation({
       });
     } finally {
       setTyping(false);
+      setActiveQuickReply(null);
     }
   };
 
@@ -144,7 +178,11 @@ export function AssistantConversation({
 
       <div className="cw-messages" ref={messagesRef} aria-live="polite">
         {messages.map((message) => (
-          <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>
+          <div
+            className={`cw-message-row cw-message-row--${message.from}`}
+            data-message-id={message.id}
+            key={message.id}
+          >
             {message.from === "bot" ? (
               <span className="cw-avatar">
                 <BubbleLogo size="avatar" />
@@ -171,20 +209,28 @@ export function AssistantConversation({
       </div>
 
       <div className="cw-quick-replies" aria-label="Časté otázky">
-        {QUICK_REPLIES.map(({ label, question }) => (
-          <button
-            type="button"
-            className="cw-chip"
-            key={label}
-            title={question}
-            onClick={() => void ask(question)}
-          >
-            <span>{label}</span>
-          </button>
-        ))}
+        {QUICK_REPLIES.map(({ label, question }) => {
+          const sending = activeQuickReply === label;
+          return (
+            <button
+              type="button"
+              className="cw-chip"
+              data-sending={sending}
+              disabled={typing}
+              key={label}
+              title={question}
+              onClick={() => void ask(question, label)}
+            >
+              <span className="cw-chip__label">{label}</span>
+              <span className="cw-chip__send" aria-hidden="true">
+                <WidgetIcon name="send" />
+              </span>
+            </button>
+          );
+        })}
       </div>
 
-      <div className="cw-inputbar">
+      <div className="cw-inputbar" aria-busy={typing}>
         <input
           value={input}
           onChange={(event) => setInput(event.target.value)}
@@ -199,10 +245,14 @@ export function AssistantConversation({
         />
         <button
           type="button"
+          className="cw-send"
+          data-pulse={sendPulse}
+          data-waiting={typing}
           onClick={submit}
           disabled={!input.trim() || typing}
           aria-label="Odoslať správu"
         >
+          <span className="cw-send__halo" aria-hidden="true" />
           <WidgetIcon name="send" />
         </button>
       </div>
