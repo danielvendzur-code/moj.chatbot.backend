@@ -1,4 +1,5 @@
 import type { AssistantPreset, InterestId } from "../types/assistant";
+import type { WidgetIconName } from "../components/widget/WidgetIcon";
 
 export type StepId =
   | "interest"
@@ -14,11 +15,11 @@ export const STEPS: StepId[] = ["interest", "industry", "features", "timeline", 
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
     "Čo má váš web vybaviť za vás?",
-    "Vyberte jednu možnosť. Ak si nie ste istý, zvoľte poslednú.",
+    "Vyberte jednu možnosť. Každá vedie k inému typu riešenia.",
   ],
   industry: [
     "Aký typ firmy máte?",
-    "Podľa odvetvia upravím otázky a odporúčaný postup.",
+    "Vyberte jednu možnosť. Podľa odvetvia spresním odporúčanie.",
   ],
   priority: [
     "Čo od asistenta očakávate?",
@@ -26,7 +27,7 @@ export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   ],
   features: [
     "Čo má riešenie vedieť?",
-    "Vyberte najdôležitejšie funkcie. Zvyšok doladíme neskôr.",
+    "Môžete vybrať viac možností. Označte iba to, čo je pre vás dôležité.",
   ],
   volume: [
     "Koľko dopytov mesačne riešite?",
@@ -34,11 +35,11 @@ export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   ],
   timeline: [
     "Kedy to chcete spustiť?",
-    "Stačí približne. Presný harmonogram pripravím podľa rozsahu.",
+    "Vyberte jednu možnosť. Presný harmonogram pripravím podľa rozsahu.",
   ],
   contact: [
     "Kam mám poslať návrh?",
-    "Meno a e-mail stačia. Ostatné údaje sú nepovinné.",
+    "Na základe odpovedí pripravím odporúčaný rozsah a presnú cenu.",
   ],
 };
 
@@ -47,7 +48,7 @@ export type InterestOption = {
   label: string;
   description: string;
   badge?: string;
-  icon: "chat" | "calculator" | "options" | "calendar" | "spark";
+  icon: WidgetIconName;
 };
 
 export const INTERESTS: InterestOption[] = [
@@ -80,7 +81,7 @@ export const INTERESTS: InterestOption[] = [
 export type IndustryOption = {
   id: string;
   label: string;
-  icon: "tools" | "cart" | "food" | "heart" | "factory" | "spark";
+  icon: WidgetIconName;
   examples: string[];
 };
 
@@ -131,7 +132,7 @@ export const INDUSTRIES: IndustryOption[] = [
     icon: "factory",
     examples: [
       "Technické parametre dopytu",
-      "Kvalifikácia pred obchodníkom",
+      "Pripravené zadanie pred obchodníkom",
       "Zápis do CRM alebo tabuľky",
     ],
   },
@@ -239,26 +240,10 @@ export type TimelineOption = {
 };
 
 export const TIMELINES: TimelineOption[] = [
-  {
-    id: "asap",
-    label: "Čo najskôr",
-    description: "Začneme podľa pripravenosti podkladov.",
-  },
-  {
-    id: "mesiac",
-    label: "Do mesiaca",
-    description: "Priestor na doladenie obsahu a logiky.",
-  },
-  {
-    id: "kvartal",
-    label: "O 1 – 3 mesiace",
-    description: "Pripravíme plán a jednotlivé etapy.",
-  },
-  {
-    id: "rozhliadam",
-    label: "Zatiaľ sa rozhliadam",
-    description: "Najprv si porovnáte možnosti.",
-  },
+  { id: "asap", label: "Čo najskôr", description: "Začneme podľa pripravenosti podkladov." },
+  { id: "mesiac", label: "Do mesiaca", description: "Priestor na doladenie obsahu a logiky." },
+  { id: "kvartal", label: "O 1 – 3 mesiace", description: "Pripravíme plán a jednotlivé etapy." },
+  { id: "rozhliadam", label: "Zatiaľ sa rozhliadam", description: "Najprv si porovnáte možnosti." },
 ];
 
 export const PRESET_TO_INTEREST: Record<AssistantPreset, InterestId> = {
