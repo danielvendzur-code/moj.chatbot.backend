@@ -54,7 +54,7 @@ jobs:
       - name: Create immutable build metadata
         shell: bash
         run: |
-          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"competition-winner-20260723-v5"},null,2))'
+          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"owner-friendly-20260723-v6"},null,2))'
 
       - name: Validate production artifacts
         shell: bash
@@ -65,15 +65,17 @@ jobs:
           test -f dist/widget.css
           test -f dist/build-meta.json
           test -f api/lead.ts
-          grep -Fq "competition-winner-20260723-v5" dist/widget.js
+          grep -Fq "owner-friendly-20260723-v6" dist/widget.js
           grep -Fqi "4e8cff" dist/widget.css
           grep -Fq "competition-winner-final" src/main.tsx
+          grep -Fq "owner-friendly-final" src/main.tsx
           grep -Fq "installWidgetSpotlight" src/main.tsx
           grep -Fq "cw-chat-builder" dist/widget.css
           grep -Fq "cw-contact-stage" dist/widget.css
           grep -Fq "data-cw-spotlight" dist/widget.css
           grep -Fq "api/lead" src/lib/leadApi.ts
-          grep -Fq "od 350 €" src/components/widget/AssistantConversation.tsx
+          grep -Fq "začína od 350 €" src/components/widget/AssistantConversation.tsx
+          ! grep -Fq "label: \"Cena od 350 €\"" src/components/widget/AssistantConversation.tsx
           ! grep -Fq "REPLACE-ME" dist/widget.js
           grep -Fq "${GITHUB_SHA}" dist/build-meta.json
 
@@ -128,7 +130,7 @@ jobs:
           }
 
           verify "/" "Môj Chatbot"
-          verify "/widget.js" "competition-winner-20260723-v5"
+          verify "/widget.js" "owner-friendly-20260723-v6"
           verify "/widget.css" "cw-contact-stage"
           verify "/build-meta.json" "$SOURCE_SHA"
 
