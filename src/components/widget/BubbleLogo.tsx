@@ -2,7 +2,7 @@ type BubbleLogoProps = {
   size: "launcher" | "header" | "avatar";
 };
 
-/** Premium vector AI mascot. It stays sharp at every widget size and blinks in CSS. */
+/** Original vector AI mascot. Crisp at every size, friendly and animated without relying on raster art. */
 export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
   const shellId = `ai-shell-${size}`;
   const faceId = `ai-face-${size}`;
@@ -11,24 +11,25 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
 
   return (
     <span className={`bl bl--${size} ai-assistant-mascot`} aria-hidden="true">
-      <svg viewBox="0 0 48 48" focusable="false">
+      <svg viewBox="0 0 56 56" focusable="false">
         <defs>
-          <linearGradient id={shellId} x1="7" y1="5" x2="42" y2="44" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#1B2433" />
-            <stop offset="1" stopColor="#070A10" />
+          <linearGradient id={shellId} x1="8" y1="5" x2="47" y2="51" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#27344A" />
+            <stop offset="0.48" stopColor="#111927" />
+            <stop offset="1" stopColor="#06080D" />
           </linearGradient>
-          <linearGradient id={faceId} x1="14" y1="14" x2="35" y2="34" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#15376D" />
-            <stop offset="0.52" stopColor="#0B1628" />
-            <stop offset="1" stopColor="#080B12" />
+          <linearGradient id={faceId} x1="14" y1="15" x2="42" y2="40" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#163E7B" />
+            <stop offset="0.5" stopColor="#0B1A32" />
+            <stop offset="1" stopColor="#070B13" />
           </linearGradient>
-          <linearGradient id={blueId} x1="12" y1="11" x2="38" y2="37" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#75B8FF" />
-            <stop offset="0.5" stopColor="#3478F6" />
-            <stop offset="1" stopColor="#1F55C9" />
+          <linearGradient id={blueId} x1="13" y1="9" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#9BD6FF" />
+            <stop offset="0.42" stopColor="#4A91FF" />
+            <stop offset="1" stopColor="#245ED6" />
           </linearGradient>
-          <filter id={glowId} x="-35%" y="-35%" width="170%" height="170%">
-            <feGaussianBlur stdDeviation="1.8" result="blur" />
+          <filter id={glowId} x="-45%" y="-45%" width="190%" height="190%">
+            <feGaussianBlur stdDeviation="1.7" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
@@ -37,42 +38,61 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
         </defs>
 
         <path
-          d="M12.8 6.7h22.4c5.4 0 8.7 3.25 8.7 8.65v12.1c0 5.4-3.3 8.65-8.7 8.65H25.1l-9.25 6.15v-6.4C9.1 35.4 5.1 31.85 5.1 26.6V15.35c0-5.4 3.3-8.65 7.7-8.65Z"
-          fill={`url(#${shellId})`}
-          stroke="rgba(247,249,252,.72)"
-          strokeWidth="1.35"
+          className="ai-assistant-mascot__antenna"
+          d="M28 9.4V5.7"
+          stroke={`url(#${blueId})`}
+          strokeWidth="2.6"
+          strokeLinecap="round"
         />
+        <circle cx="28" cy="3.8" r="2.65" fill={`url(#${blueId})`} filter={`url(#${glowId})`} />
+
         <path
-          d="M14.1 11.4h19.8c4.75 0 7.45 2.75 7.45 7.45v7.1c0 4.7-2.7 7.45-7.45 7.45H14.1c-4.75 0-7.45-2.75-7.45-7.45v-7.1c0-4.7 2.7-7.45 7.45-7.45Z"
+          className="ai-assistant-mascot__shell"
+          d="M13.2 9.2h29.6c5.7 0 9.2 3.6 9.2 9.4v17.1c0 5.8-3.5 9.4-9.2 9.4H31.7l-10.4 6.8v-6.95c-10.8-.65-17.3-4.75-17.3-12.6V18.6c0-5.8 3.5-9.4 9.2-9.4Z"
+          fill={`url(#${shellId})`}
+          stroke="rgba(231,242,255,.76)"
+          strokeWidth="1.45"
+        />
+
+        <path
+          className="ai-assistant-mascot__face"
+          d="M14.6 14.1h26.8c4.85 0 7.65 2.9 7.65 7.8v8.95c0 4.9-2.8 7.8-7.65 7.8H14.6c-4.85 0-7.65-2.9-7.65-7.8V21.9c0-4.9 2.8-7.8 7.65-7.8Z"
           fill={`url(#${faceId})`}
           stroke={`url(#${blueId})`}
-          strokeWidth="1.8"
+          strokeWidth="2"
         />
+
         <path
-          d="M12.2 15.25c2.5-1.45 5.15-2.05 8.1-2.05h7.7"
+          d="M12.2 18.3c3.45-2.15 7.25-3.05 11.5-3.05h8.5"
           stroke="#FFFFFF"
-          strokeOpacity=".3"
-          strokeWidth="1.2"
+          strokeOpacity=".34"
+          strokeWidth="1.3"
           strokeLinecap="round"
         />
-        <g className="ai-assistant-mascot__eyes" fill="#75B8FF" filter={`url(#${glowId})`}>
-          <rect x="14" y="20" width="6.3" height="4.6" rx="2.3" />
-          <rect x="27.7" y="20" width="6.3" height="4.6" rx="2.3" />
+
+        <g className="ai-assistant-mascot__eyes" fill="#8ED0FF" filter={`url(#${glowId})`}>
+          <ellipse cx="19.15" cy="26.25" rx="3.15" ry="3.45" />
+          <ellipse cx="36.85" cy="26.25" rx="3.15" ry="3.45" />
         </g>
-        <g className="ai-assistant-mascot__eyelids" fill="#0A101B">
-          <rect x="13.65" y="19.65" width="7" height="5.3" rx="2.6" />
-          <rect x="27.35" y="19.65" width="7" height="5.3" rx="2.6" />
+        <g className="ai-assistant-mascot__eye-shine" fill="#FFFFFF">
+          <circle cx="20.15" cy="25.05" r="0.78" />
+          <circle cx="37.85" cy="25.05" r="0.78" />
         </g>
+        <g className="ai-assistant-mascot__eyelids" fill="#0A1324">
+          <ellipse cx="19.15" cy="26.25" rx="3.5" ry="3.78" />
+          <ellipse cx="36.85" cy="26.25" rx="3.5" ry="3.78" />
+        </g>
+
         <path
-          d="M18.1 27.85c1.55 1.25 3.52 1.88 5.9 1.88 2.38 0 4.35-.63 5.9-1.88"
-          stroke="#F7F9FC"
-          strokeWidth="1.55"
+          className="ai-assistant-mascot__smile"
+          d="M21.2 32.3c1.8 1.65 4.05 2.48 6.8 2.48s5-.83 6.8-2.48"
+          stroke="#F7FAFF"
+          strokeWidth="1.75"
           strokeLinecap="round"
         />
-        <path d="M24 6.7V4.2" stroke="#3478F6" strokeWidth="2" strokeLinecap="round" />
-        <circle cx="24" cy="2.9" r="2.15" fill={`url(#${blueId})`} filter={`url(#${glowId})`} />
-        <circle cx="7.2" cy="22.35" r="1.45" fill="#3478F6" />
-        <circle cx="40.8" cy="22.35" r="1.45" fill="#3478F6" />
+
+        <circle cx="7.5" cy="27" r="1.65" fill={`url(#${blueId})`} />
+        <circle cx="48.5" cy="27" r="1.65" fill={`url(#${blueId})`} />
       </svg>
     </span>
   );
