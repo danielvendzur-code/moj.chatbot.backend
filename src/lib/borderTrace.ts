@@ -14,6 +14,6 @@ export function replayBorderTrace(element: HTMLElement): void {
     window.setTimeout(() => {
       element.classList.remove("is-border-tracing");
       timers.delete(element);
-    }, 1260),
+    }, 1420),
   );
 }
