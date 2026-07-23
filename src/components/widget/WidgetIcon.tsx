@@ -10,6 +10,7 @@ type WidgetIconName =
   | "food"
   | "heart"
   | "mail"
+  | "options"
   | "phone"
   | "reset"
   | "send"
@@ -70,6 +71,14 @@ const PATHS: Record<WidgetIconName, JSX.Element> = {
       <path d="m4.75 7 7.25 5.5L19.25 7" />
     </>
   ),
+  options: (
+    <>
+      <path d="M4.5 7h15M4.5 12h15M4.5 17h15" />
+      <circle cx="9" cy="7" r="1.65" fill="currentColor" stroke="none" />
+      <circle cx="15.5" cy="12" r="1.65" fill="currentColor" stroke="none" />
+      <circle cx="11.5" cy="17" r="1.65" fill="currentColor" stroke="none" />
+    </>
+  ),
   phone: <path d="M7.1 3.5h2.3l1.35 4-2 1.65a12.4 12.4 0 0 0 6.1 6.1l1.65-2 4 1.35v2.3a3.1 3.1 0 0 1-3.1 3.1A13.4 13.4 0 0 1 4 6.6a3.1 3.1 0 0 1 3.1-3.1Z" />,
   reset: <path d="M19.5 8.75V4.5m0 0h-4.25m4.25 0-3 3A7.5 7.5 0 1 0 19.25 14" />,
   send: <path d="m3.75 5.25 16.5 6.75-16.5 6.75 2.2-5.05L14 12 5.95 10.3 3.75 5.25Z" />,
@@ -100,7 +109,7 @@ export function WidgetIcon({ name, className = "" }: WidgetIconProps): JSX.Eleme
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.8"
+      strokeWidth="1.85"
       strokeLinecap="round"
       strokeLinejoin="round"
       vectorEffect="non-scaling-stroke"
