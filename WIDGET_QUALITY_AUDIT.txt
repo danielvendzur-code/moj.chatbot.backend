@@ -1,8 +1,8 @@
-run_id=30037687383
+run_id=30038676332
 install=success
 lint=success
 build=success
-test=success
+test=failure
 
 ===== lint =====
 
@@ -26,16 +26,16 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-TVr24qNm.css  [39m[1m[2m 58.09 kB[22m[1m[22m[2m │ gzip: 11.67 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-D80vwSgy.js   [39m[1m[2m216.03 kB[22m[1m[22m[2m │ gzip: 73.14 kB[22m
-[32m✓ built in 1.13s[39m
+[2mdist/[22m[2massets/[22m[36mindex-DtDUgDtx.js   [39m[1m[2m215.94 kB[22m[1m[22m[2m │ gzip: 73.07 kB[22m
+[32m✓ built in 1.36s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 92 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m 58.09 kB[22m[1m[22m[2m │ gzip: 11.67 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m215.79 kB[22m[1m[22m[2m │ gzip: 73.10 kB[22m
-[32m✓ built in 1.13s[39m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m215.70 kB[22m[1m[22m[2m │ gzip: 73.03 kB[22m
+[32m✓ built in 1.23s[39m
 
 ===== test =====
 
@@ -46,75 +46,564 @@ TAP version 13
 # Subtest: demo and embed use only the base stylesheet and one redesign layer
 ok 1 - demo and embed use only the base stylesheet and one redesign layer
   ---
-  duration_ms: 6.417769
+  duration_ms: 7.184774
   type: 'test'
   ...
 # Subtest: assistant order is clear and designed for non-technical business owners
-ok 2 - assistant order is clear and designed for non-technical business owners
+not ok 2 - assistant order is clear and designed for non-technical business owners
   ---
-  duration_ms: 1.043665
+  duration_ms: 2.71477
   type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:21:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Nechať sa previesť výberom/. Input:
+    
+    'import { useEffect, useRef, useState } from "react";\n' +
+      'import { animateSentMessage } from "../../lib/motion";\n' +
+      'import { sendChat, type ChatTurn } from "../../lib/assistantApi";\n' +
+      'import { track } from "../../lib/analytics";\n' +
+      'import { BubbleLogo } from "./BubbleLogo";\n' +
+      'import { WidgetIcon } from "./WidgetIcon";\n' +
+      '\n' +
+      'type AssistantConversationProps = {\n' +
+      '  resetToken: number;\n' +
+      '  onOpenCalculator: () => void;\n' +
+      '};\n' +
+      '\n' +
+      'type ChatMessage = {\n' +
+      '  id: number;\n' +
+      '  from: "bot" | "me";\n' +
+      '  text: string;\n' +
+      '};\n' +
+      '\n' +
+      'const INITIAL_MESSAGES: ChatMessage[] = [\n' +
+      '  {\n' +
+      '    id: 1,\n' +
+      '    from: "bot",\n' +
+      '    text:\n' +
+      '      "Napíšte, čo dnes zákazníkom opakovane vysvetľujete, počítate alebo zisťujete. Pomôžem vybrať najjednoduchšie riešenie pre váš web.",\n' +
+      '  },\n' +
+      '];\n' +
+      '\n' +
+      'type QuickReply = { label: string; question: string };\n' +
+      '\n' +
+      'const QUICK_REPLIES: QuickReply[] = [\n' +
+      '  {\n' +
+      '    label: "Čo mi to ušetrí?",\n' +
+      '    question: "Čo mi môže chatbot alebo kalkulačka ušetriť v bežnej prevádzke firmy?",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    label: "Ako to funguje?",\n' +
+      '    question: "Ako chatbot funguje na existujúcom webe a čo vidí zákazník?",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    label: "Čo treba pripraviť?",\n' +
+      '    question: "Aké podklady odo mňa potrebujete na prípravu riešenia?",\n' +
+      '  },\n' +
+      '  {\n' +
+      '    label: "Pozrieť ukážky",\n' +
+      '    question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",\n' +
+      '  },\n' +
+      '];\n' +
+      '\n' +
+      'const CHAT_FALLBACK =\n' +
+      '  "Teraz sa neviem spojiť. Skúste otázku znova alebo použite priamy kontakt nižšie.";\n' +
+      '\n' +
+      'export function AssistantConversation({\n' +
+      '  resetToken,\n' +
+      '  onOpenCalculator,\n' +
+      '}: AssistantConversationProps): JSX.Element {\n' +
+      '  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);\n' +
+      '  const [input, setInput] = useState("");\n' +
+      '  const [typing, setTyping] = useState(false);\n' +
+      '  const nextIdRef = useRef(2);\n' +
+      '  const messagesRef = useRef<HTMLDivElement>(null);\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    const last = messages[messages.length - 1];\n' +
+      '    if (!last || last.from !== "me") return;\n' +
+      '    const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");\n' +
+      '    animateSentMessage(rows?.[rows.length - 1] ?? null);\n' +
+      '  }, [messages]);\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    setMessages(INITIAL_MESSAGES);\n' +
+      '    setInput("");\n' +
+      '    setTyping(false);\n' +
+      '    nextIdRef.current = 2;\n' +
+      '  }, [resetToken]);\n' +
+      '\n' +
+      '  useEffect(() => {\n' +
+      '    const container = messagesRef.current;\n' +
+      '    if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });\n' +
+      '  }, [messages, typing]);\n' +
+      '\n' +
+      '  const ask = async (question: string) => {\n' +
+      '    if (typing) return;\n' +
+      '    const userMessage = {\n' +
+      '      id: nextIdRef.current++,\n' +
+      '      from: "me" as const,\n' +
+      '      text: question,\n' +
+      '    };\n' +
+      '    setMessages((current) => [...current, userMessage]);\n' +
+      '    setTyping(true);\n' +
+      '    track("chat_message_sent", { length: question.length });\n' +
+      '\n' +
+      '    const turns: ChatTurn[] = [...messages, userMessage].map((message) => ({\n' +
+      '      role: message.from === "me" ? "user" : "assistant",\n' +
+      '      text: message.text,\n' +
+      '    }));\n' +
+      '    const firstUser = turns.findIndex((turn) => turn.role === "user");\n' +
+      '    const history = firstUser === -1 ? [] : turns.slice(firstUser);\n' +
+      '\n' +
+      '    try {\n' +
+      '      const reply = await sendChat(history);\n' +
+      '      setMessages((current) => [\n' +
+      '        ...current,\n' +
+      '        { id: nextIdRef.current++, from: "bot", text: reply },\n' +
+      '      ]);\n' +
+      '      track("chat_reply_received");\n' +
+      '    } catch (error) {\n' +
+      '      setMessages((current) => [\n' +
+      '        ...current,\n' +
+      '        { id: nextIdRef.current++, from: "bot", text: CHAT_FALLBACK },\n' +
+      '      ]);\n' +
+      '      track("chat_error", {\n' +
+      '        reason: error instanceof Error ? error.message : "unknown",\n' +
+      '      });\n' +
+      '    } finally {\n' +
+      '      setTyping(false);\n' +
+      '    }\n' +
+      '  };\n' +
+      '\n' +
+      '  const submit = () => {\n' +
+      '    const value = input.trim();\n' +
+      '    if (!value || typing) return;\n' +
+      '    setInput("");\n' +
+      '    void ask(value);\n' +
+      '  };\n' +
+      '\n' +
+      '  const openCalculator = () => {\n' +
+      '    track("chat_builder_open");\n' +
+      '    onOpenCalculator();\n' +
+      '  };\n' +
+      '\n' +
+      '  return (\n' +
+      '    <div className="cw-conversation" data-testid="assistant-view">\n' +
+      '      <div className="cw-chat-top">\n' +
+      '        <span className="cw-chat-top__label">Neviete, kde začať?</span>\n' +
+      '        <button type="button" className="cw-chat-builder cw-spotlight" onClick={openCalculator}>\n' +
+      '          <span className="cw-chat-builder__icon" aria-hidden="true">\n' +
+      '            <WidgetIcon name="spark" />\n' +
+      '          </span>\n' +
+      '          <span className="cw-chat-builder__copy">\n' +
+      '            <b>Vyskladať riešenie</b>\n' +
+      '            <small>5 krátkych krokov</small>\n' +
+      '          </span>\n' +
+      '        </button>\n' +
+      '      </div>\n' +
+      '\n' +
+      '      <div className="cw-messages" ref={messagesRef} aria-live="polite">\n' +
+      '        {messages.map((message) => (\n' +
+      '          <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>\n' +
+      '            {message.from === "bot" ? (\n' +
+      '              <span className="cw-avatar">\n' +
+      '                <BubbleLogo size="avatar" />\n' +
+      '              </span>\n' +
+      '            ) : null}\n' +
+      '            <div className="cw-message-wrap">\n' +
+      '              <p>{message.text}</p>\n' +
+      '            </div>\n' +
+      '          </div>\n' +
+      '        ))}\n' +
+      '\n' +
+      '        {typing ? (\n' +
+      '          <div className="cw-message-row cw-message-row--bot">\n' +
+      '            <span className="cw-avatar">\n' +
+      '              <BubbleLogo size="avatar" />\n' +
+      '            </span>\n' +
+      '            <div className="cw-typing" aria-label="Môj Chatbot odpovedá">\n' +
+      '              <i />\n' +
+      '              <i />\n' +
+      '              <i />\n' +
+      '            </div>\n' +
+      '          </div>\n' +
+      '        ) : null}\n' +
+      '      </div>\n' +
+      '\n' +
+      '      <div className="cw-quick-replies" aria-label="Časté otázky">\n' +
+      '        {QUICK_REPLIES.map(({ label, question }) => (\n' +
+      '          <button\n' +
+      '            type="button"\n' +
+      '            className="cw-chip"\n' +
+      '            key={label}\n' +
+      '            title={question}\n' +
+      '            onClick={() => void ask(question)}\n' +
+      '          >\n' +
+      '            <span>{label}</span>\n' +
+      '          </button>\n' +
+      '        ))}\n' +
+      '      </div>\n' +
+      '\n' +
+      '      <div className="cw-inputbar">\n' +
+      '        <input\n' +
+      '          value={input}\n' +
+      '          onChange={(event) => setInput(event.target.value)}\n' +
+      '          onKeyDown={(event) => {\n' +
+      '            if (event.key === "Enter") {\n' +
+      '              event.preventDefault();\n' +
+      '              submit();\n' +
+      '            }\n' +
+      '          }}\n' +
+      '          placeholder="Napíšte, čo riešite…"\n' +
+      '          aria-label="Otázka pre Môj Chatbot"\n' +
+      '        />\n' +
+      '        <button\n' +
+      '          type="button"\n' +
+      '          onClick={submit}\n' +
+      '          disabled={!input.trim() || typing}\n' +
+      '          aria-label="Odoslať správu"\n' +
+      '        >\n' +
+      '          <WidgetIcon name="send" />\n' +
+      '        </button>\n' +
+      '      </div>\n' +
+      '\n' +
+      '      <nav className="cw-direct-actions" aria-label="Priamy kontakt">\n' +
+      '        <span className="cw-direct-actions__label">Radšej priamo?</span>\n' +
+      '        <div className="cw-direct-actions__grid">\n' +
+      '          <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">\n' +
+      '            <span className="cw-direct-actions__icon">\n' +
+      '              <WidgetIcon name="chat" />\n' +
+      '            </span>\n' +
+      '            <span>WhatsApp</span>\n' +
+      '          </a>\n' +
+      '          <a href="tel:+421948699433">\n' +
+      '            <span className="cw-direct-actions__icon">\n' +
+      '              <WidgetIcon name="phone" />\n' +
+      '            </span>\n' +
+      '            <span>Zavolať</span>\n' +
+      '          </a>\n' +
+      '          <a href="mailto:daniel@vendzur.sk">\n' +
+      '            <span className="cw-direct-actions__icon">\n' +
+      '              <WidgetIcon name="mail" />\n' +
+      '            </span>\n' +
+      '            <span>E-mail</span>\n' +
+      '          </a>\n' +
+      '        </div>\n' +
+      '      </nav>\n' +
+      '    </div>\n' +
+      '  );\n' +
+      '}\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    import { useEffect, useRef, useState } from "react";
+    import { animateSentMessage } from "../../lib/motion";
+    import { sendChat, type ChatTurn } from "../../lib/assistantApi";
+    import { track } from "../../lib/analytics";
+    import { BubbleLogo } from "./BubbleLogo";
+    import { WidgetIcon } from "./WidgetIcon";
+    
+    type AssistantConversationProps = {
+      resetToken: number;
+      onOpenCalculator: () => void;
+    };
+    
+    type ChatMessage = {
+      id: number;
+      from: "bot" | "me";
+      text: string;
+    };
+    
+    const INITIAL_MESSAGES: ChatMessage[] = [
+      {
+        id: 1,
+        from: "bot",
+        text:
+          "Napíšte, čo dnes zákazníkom opakovane vysvetľujete, počítate alebo zisťujete. Pomôžem vybrať najjednoduchšie riešenie pre váš web.",
+      },
+    ];
+    
+    type QuickReply = { label: string; question: string };
+    
+    const QUICK_REPLIES: QuickReply[] = [
+      {
+        label: "Čo mi to ušetrí?",
+        question: "Čo mi môže chatbot alebo kalkulačka ušetriť v bežnej prevádzke firmy?",
+      },
+      {
+        label: "Ako to funguje?",
+        question: "Ako chatbot funguje na existujúcom webe a čo vidí zákazník?",
+      },
+      {
+        label: "Čo treba pripraviť?",
+        question: "Aké podklady odo mňa potrebujete na prípravu riešenia?",
+      },
+      {
+        label: "Pozrieť ukážky",
+        question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",
+      },
+    ];
+    
+    const CHAT_FALLBACK =
+      "Teraz sa neviem spojiť. Skúste otázku znova alebo použite priamy kontakt nižšie.";
+    
+    export function AssistantConversation({
+      resetToken,
+      onOpenCalculator,
+    }: AssistantConversationProps): JSX.Element {
+      const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
+      const [input, setInput] = useState("");
+      const [typing, setTyping] = useState(false);
+      const nextIdRef = useRef(2);
+      const messagesRef = useRef<HTMLDivElement>(null);
+    
+      useEffect(() => {
+        const last = messages[messages.length - 1];
+        if (!last || last.from !== "me") return;
+        const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");
+        animateSentMessage(rows?.[rows.length - 1] ?? null);
+      }, [messages]);
+    
+      useEffect(() => {
+        setMessages(INITIAL_MESSAGES);
+        setInput("");
+        setTyping(false);
+        nextIdRef.current = 2;
+      }, [resetToken]);
+    
+      useEffect(() => {
+        const container = messagesRef.current;
+        if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+      }, [messages, typing]);
+    
+      const ask = async (question: string) => {
+        if (typing) return;
+        const userMessage = {
+          id: nextIdRef.current++,
+          from: "me" as const,
+          text: question,
+        };
+        setMessages((current) => [...current, userMessage]);
+        setTyping(true);
+        track("chat_message_sent", { length: question.length });
+    
+        const turns: ChatTurn[] = [...messages, userMessage].map((message) => ({
+          role: message.from === "me" ? "user" : "assistant",
+          text: message.text,
+        }));
+        const firstUser = turns.findIndex((turn) => turn.role === "user");
+        const history = firstUser === -1 ? [] : turns.slice(firstUser);
+    
+        try {
+          const reply = await sendChat(history);
+          setMessages((current) => [
+            ...current,
+            { id: nextIdRef.current++, from: "bot", text: reply },
+          ]);
+          track("chat_reply_received");
+        } catch (error) {
+          setMessages((current) => [
+            ...current,
+            { id: nextIdRef.current++, from: "bot", text: CHAT_FALLBACK },
+          ]);
+          track("chat_error", {
+            reason: error instanceof Error ? error.message : "unknown",
+          });
+        } finally {
+          setTyping(false);
+        }
+      };
+    
+      const submit = () => {
+        const value = input.trim();
+        if (!value || typing) return;
+        setInput("");
+        void ask(value);
+      };
+    
+      const openCalculator = () => {
+        track("chat_builder_open");
+        onOpenCalculator();
+      };
+    
+      return (
+        <div className="cw-conversation" data-testid="assistant-view">
+          <div className="cw-chat-top">
+            <span className="cw-chat-top__label">Neviete, kde začať?</span>
+            <button type="button" className="cw-chat-builder cw-spotlight" onClick={openCalculator}>
+              <span className="cw-chat-builder__icon" aria-hidden="true">
+                <WidgetIcon name="spark" />
+              </span>
+              <span className="cw-chat-builder__copy">
+                <b>Vyskladať riešenie</b>
+                <small>5 krátkych krokov</small>
+              </span>
+            </button>
+          </div>
+    
+          <div className="cw-messages" ref={messagesRef} aria-live="polite">
+            {messages.map((message) => (
+              <div className={`cw-message-row cw-message-row--${message.from}`} key={message.id}>
+                {message.from === "bot" ? (
+                  <span className="cw-avatar">
+                    <BubbleLogo size="avatar" />
+                  </span>
+                ) : null}
+                <div className="cw-message-wrap">
+                  <p>{message.text}</p>
+                </div>
+              </div>
+            ))}
+    
+            {typing ? (
+              <div className="cw-message-row cw-message-row--bot">
+                <span className="cw-avatar">
+                  <BubbleLogo size="avatar" />
+                </span>
+                <div className="cw-typing" aria-label="Môj Chatbot odpovedá">
+                  <i />
+                  <i />
+                  <i />
+                </div>
+              </div>
+            ) : null}
+          </div>
+    
+          <div className="cw-quick-replies" aria-label="Časté otázky">
+            {QUICK_REPLIES.map(({ label, question }) => (
+              <button
+                type="button"
+                className="cw-chip"
+                key={label}
+                title={question}
+                onClick={() => void ask(question)}
+              >
+                <span>{label}</span>
+              </button>
+            ))}
+          </div>
+    
+          <div className="cw-inputbar">
+            <input
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  submit();
+                }
+              }}
+              placeholder="Napíšte, čo riešite…"
+              aria-label="Otázka pre Môj Chatbot"
+            />
+            <button
+              type="button"
+              onClick={submit}
+              disabled={!input.trim() || typing}
+              aria-label="Odoslať správu"
+            >
+              <WidgetIcon name="send" />
+            </button>
+          </div>
+    
+          <nav className="cw-direct-actions" aria-label="Priamy kontakt">
+            <span className="cw-direct-actions__label">Radšej priamo?</span>
+            <div className="cw-direct-actions__grid">
+              <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
+                <span className="cw-direct-actions__icon">
+                  <WidgetIcon name="chat" />
+                </span>
+                <span>WhatsApp</span>
+              </a>
+              <a href="tel:+421948699433">
+                <span className="cw-direct-actions__icon">
+                  <WidgetIcon name="phone" />
+                </span>
+                <span>Zavolať</span>
+              </a>
+              <a href="mailto:daniel@vendzur.sk">
+                <span className="cw-direct-actions__icon">
+                  <WidgetIcon name="mail" />
+                </span>
+                <span>E-mail</span>
+              </a>
+            </div>
+          </nav>
+        </div>
+      );
+    }
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:31:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 # Subtest: mode switch is direct React state without legacy drag installers
 ok 3 - mode switch is direct React state without legacy drag installers
   ---
-  duration_ms: 2.222896
+  duration_ms: 3.819707
   type: 'test'
   ...
 # Subtest: the redesign uses the website palette and no teal or green CTA colours
 ok 4 - the redesign uses the website palette and no teal or green CTA colours
   ---
-  duration_ms: 1.047321
+  duration_ms: 1.346138
   type: 'test'
   ...
 # Subtest: choice cards are rounded borderless and never shrink
 ok 5 - choice cards are rounded borderless and never shrink
   ---
-  duration_ms: 1.870083
+  duration_ms: 1.687257
   type: 'test'
   ...
 # Subtest: selection check is circular and aligned on the right
 ok 6 - selection check is circular and aligned on the right
   ---
-  duration_ms: 1.10577
+  duration_ms: 0.99383
   type: 'test'
   ...
 # Subtest: icons form one rounded line family without tile backgrounds
 ok 7 - icons form one rounded line family without tile backgrounds
   ---
-  duration_ms: 1.242576
+  duration_ms: 1.233237
   type: 'test'
   ...
 # Subtest: configurator remains five steps with simpler business language
 ok 8 - configurator remains five steps with simpler business language
   ---
-  duration_ms: 0.780618
+  duration_ms: 0.848808
   type: 'test'
   ...
 # Subtest: contact submits a real lead and keeps API protections
 ok 9 - contact submits a real lead and keeps API protections
   ---
-  duration_ms: 1.428096
+  duration_ms: 1.596648
   type: 'test'
   ...
 # Subtest: mobile full screen and reduced motion are covered
 ok 10 - mobile full screen and reduced motion are covered
   ---
-  duration_ms: 1.146811
+  duration_ms: 1.162244
   type: 'test'
   ...
 # Subtest: deployment validates clean redesign v9
 ok 11 - deployment validates clean redesign v9
   ---
-  duration_ms: 0.757354
+  duration_ms: 0.858327
   type: 'test'
   ...
 1..11
 # tests 11
 # suites 0
-# pass 11
-# fail 0
+# pass 10
+# fail 1
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 75.257358
+# duration_ms 79.672317
+ ELIFECYCLE  Test failed. See above for more details.
