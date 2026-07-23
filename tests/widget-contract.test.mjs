@@ -13,7 +13,8 @@ test("final visual system keeps the shared black, white and blue palette", async
   assert.match(baseCss, /--cw-action:\s*#3478f6/i);
   assert.match(baseCss, /--cw-action-hover:\s*#1f55c9/i);
   assert.match(premiumCss, /--cw-liquid-blue-light:\s*#75b8ff/i);
-  assert.match(chipCss, /#c6e1ff/i);
+  assert.match(chipCss, /--cw-chip-rgb:\s*52, 120, 246/i);
+  assert.match(chipCss, /--cw-chip-rgb:\s*35, 196, 181/i);
   assert.doesNotMatch(
     `${baseCss}\n${premiumCss}\n${chipCss}`,
     /#65e6c1|#83f1d0|#ff6c67|#c9aa70|#c47c5e|#d9bc84/i,
@@ -34,21 +35,22 @@ test("demo and embedded builds import the identical final style stack", async ()
     "black-blue-refresh.css",
     "premium-liquid-final.css",
     "chip-refinement-final.css",
+    "apple-liquid-fixes.css",
   ];
   for (const stylesheet of expected) {
     assert.match(main, new RegExp(stylesheet.replace(".", "\\.")));
     assert.match(embed, new RegExp(stylesheet.replace(".", "\\.")));
   }
   assert.ok(
-    main.indexOf('import "./premium-liquid-final.css"') <
-      main.indexOf('import "./chip-refinement-final.css"'),
+    main.indexOf('import "./chip-refinement-final.css"') <
+      main.indexOf('import "./apple-liquid-fixes.css"'),
   );
   assert.ok(
-    embed.indexOf('import "./premium-liquid-final.css"') <
-      embed.indexOf('import "./chip-refinement-final.css"'),
+    embed.indexOf('import "./chip-refinement-final.css"') <
+      embed.indexOf('import "./apple-liquid-fixes.css"'),
   );
-  assert.match(embed, /professional-chips-20260723/);
-  assert.match(deploy, /professional-chips-20260723/);
+  assert.match(embed, /apple-liquid-controls-20260723/);
+  assert.match(deploy, /apple-liquid-controls-20260723/);
   assert.match(deploy, /cw-professional-centre-fill/);
 });
 
@@ -65,15 +67,23 @@ test("AI Assistant identity and vector mascot are consistent", async () => {
   assert.match(css, /@keyframes ai-assistant-blink/);
 });
 
-test("mode tabs switch directly and use a liquid glass indicator", async () => {
+test("mode tabs switch directly and use a draggable liquid glass indicator", async () => {
   const widget = await read("src/components/widget/AssistantWidget.tsx");
-  const css = await read("src/premium-liquid-final.css");
+  const main = await read("src/main.tsx");
+  const embed = await read("src/embed.tsx");
+  const drag = await read("src/lib/liquidSegmentedDrag.ts");
+  const css = await read("src/chip-refinement-final.css");
   assert.match(widget, /<i aria-hidden="true" \/> Online/);
   assert.match(widget, /onClick=\{\(\) => switchMode\("calculator"\)\}/);
   assert.match(widget, /onClick=\{\(\) => switchMode\("assistant"\)\}/);
+  assert.match(main, /installLiquidSegmentedDrag/);
+  assert.match(embed, /installLiquidSegmentedDrag/);
+  assert.match(drag, /setPointerCapture/);
+  assert.match(drag, /--cw-segment-x/);
+  assert.match(drag, /liquidSettling/);
   assert.match(css, /\.cw-tabs__glass/);
-  assert.match(css, /data-mode="assistant"/);
-  assert.match(css, /backdrop-filter:\s*blur\(20px\)/i);
+  assert.match(css, /data-liquid-dragging/);
+  assert.match(css, /cubic-bezier\(0\.16, 1\.28, 0\.3, 1\)/);
 });
 
 test("builder flow omits priority and keeps contact as final step", async () => {
@@ -100,10 +110,7 @@ test("quick replies never drag sideways and mobile inputs prevent browser zoom",
   assert.doesNotMatch(conversation, /useHorizontalDrag|quickRepliesDrag/);
   const replies = conversation.match(/const QUICK_REPLIES[\s\S]*?\n\];/)?.[0] ?? "";
   assert.equal((replies.match(/label:/g) ?? []).length, 3);
-  assert.match(
-    conversation,
-    /cw-chip cw-chip--primary[\s\S]*?Vyskladať riešenie/,
-  );
+  assert.match(conversation, /cw-chip cw-chip--primary[\s\S]*?Vyskladať riešenie/);
   assert.match(conversation, /setTimeout\(onOpenCalculator, 1120\)/);
   assert.match(css, /grid-template-columns:\s*repeat\(2/i);
   assert.match(css, /touch-action:\s*pan-y/i);
@@ -118,21 +125,22 @@ test("chips trace the full border before filling from the centre", async () => {
   const css = await read("src/chip-refinement-final.css");
   assert.match(conversation, /replayBorderTrace\(event\.currentTarget\)/);
   assert.match(calculator, /replayBorderTrace\(event\.currentTarget\)/);
-  assert.match(trace, /1260/);
+  assert.match(trace, /1420/);
   assert.match(css, /@keyframes cw-professional-border-trace/);
-  assert.match(css, /cw-professional-border-trace 720ms/);
-  assert.match(css, /0%,[\s\S]*62%[\s\S]*background-size:\s*0% 0%/);
-  assert.match(css, /cw-professional-centre-fill 1180ms/);
+  assert.match(css, /cw-professional-border-trace 690ms/);
+  assert.match(css, /0%,[\s\S]*58%[\s\S]*background-size:\s*0% 0%/);
+  assert.match(css, /cw-professional-centre-fill 1160ms/);
   assert.match(css, /mask-composite:\s*exclude/);
   assert.match(css, /\.cw-chip\.is-border-tracing::after/);
 });
 
 test("nested chip bubbles are removed while icons remain sharp", async () => {
   const css = await read("src/chip-refinement-final.css");
+  const fixes = await read("src/apple-liquid-fixes.css");
   assert.match(css, /\.cw-rowcard__icon,[\s\S]*border:\s*0 !important/);
-  assert.match(css, /\.cw-rowcard__icon svg[\s\S]*shape-rendering:\s*geometricPrecision/);
-  assert.match(css, /\.cw-opt__radio[\s\S]*width:\s*4px !important/);
-  assert.match(css, /\.cw-opt__tag[\s\S]*background:\s*transparent !important/);
+  assert.match(css, /\.cw-rowcard__icon svg,[\s\S]*shape-rendering:\s*geometricPrecision/);
+  assert.match(css, /\.cw-opt__radio,[\s\S]*display:\s*none !important/);
+  assert.match(fixes, /\.cw-opt__tag[\s\S]*background:\s*transparent !important/);
   assert.match(css, /\.cw-rowcard\[data-selected="true"\]::before[\s\S]*box-shadow:\s*none !important/);
 });
 
