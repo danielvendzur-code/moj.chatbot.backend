@@ -1,4 +1,4 @@
-run_id=30010267485
+run_id=30010340668
 install=success
 lint=success
 build=success
@@ -21,21 +21,21 @@ test=failure
 
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 104 modules transformed.
+[32m✓[39m 105 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.39 kB[22m
-[2mdist/[22m[2massets/[22m[35mindex-bpsIeLOf.css  [39m[1m[2m117.89 kB[22m[1m[22m[2m │ gzip: 18.90 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-CHj2N7l9.js   [39m[1m[2m222.75 kB[22m[1m[22m[2m │ gzip: 75.52 kB[22m
-[32m✓ built in 1.13s[39m
+[2mdist/[22m[32mindex.html                 [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:  0.38 kB[22m
+[2mdist/[22m[2massets/[22m[35mindex-BDnd_9tJ.css  [39m[1m[2m118.72 kB[22m[1m[22m[2m │ gzip: 19.07 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-s3KB39mP.js   [39m[1m[2m222.75 kB[22m[1m[22m[2m │ gzip: 75.52 kB[22m
+[32m✓ built in 1.22s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 100 modules transformed.
+[32m✓[39m 101 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[35mwidget.css  [39m[1m[2m117.89 kB[22m[1m[22m[2m │ gzip: 18.90 kB[22m
+[2mdist/[22m[35mwidget.css  [39m[1m[2m118.72 kB[22m[1m[22m[2m │ gzip: 19.07 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m220.72 kB[22m[1m[22m[2m │ gzip: 74.88 kB[22m
-[32m✓ built in 1.20s[39m
+[32m✓ built in 1.16s[39m
 
 ===== test =====
 
@@ -46,7 +46,7 @@ TAP version 13
 # Subtest: final visual system keeps the shared black, white and blue palette
 not ok 1 - final visual system keeps the shared black, white and blue palette
   ---
-  duration_ms: 8.398743
+  duration_ms: 8.869617
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:7:1'
   failureType: 'testCodeFailure'
@@ -926,7 +926,7 @@ not ok 1 - final visual system keeps the shared black, white and blue palette
 # Subtest: demo and embedded builds import the identical final style stack
 not ok 2 - demo and embedded builds import the identical final style stack
   ---
-  duration_ms: 2.38752
+  duration_ms: 2.78683
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:23:1'
   failureType: 'testCodeFailure'
@@ -945,6 +945,7 @@ not ok 2 - demo and embedded builds import the identical final style stack
       'import "./black-blue-refresh.css";\n' +
       'import "./premium-liquid-final.css";\n' +
       'import "./chip-refinement-final.css";\n' +
+      'import "./apple-liquid-fixes.css";\n' +
       '\n' +
       'const HOST_ID = "dv-assistant-root";\n' +
       'const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";\n' +
@@ -1003,6 +1004,7 @@ not ok 2 - demo and embedded builds import the identical final style stack
     import "./black-blue-refresh.css";
     import "./premium-liquid-final.css";
     import "./chip-refinement-final.css";
+    import "./apple-liquid-fixes.css";
     
     const HOST_ID = "dv-assistant-root";
     const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
@@ -1054,37 +1056,37 @@ not ok 2 - demo and embedded builds import the identical final style stack
 # Subtest: AI Assistant identity and vector mascot are consistent
 ok 3 - AI Assistant identity and vector mascot are consistent
   ---
-  duration_ms: 1.857248
+  duration_ms: 2.048961
   type: 'test'
   ...
 # Subtest: mode tabs switch directly and use a liquid glass indicator
 ok 4 - mode tabs switch directly and use a liquid glass indicator
   ---
-  duration_ms: 1.658372
+  duration_ms: 1.811732
   type: 'test'
   ...
 # Subtest: builder flow omits priority and keeps contact as final step
 ok 5 - builder flow omits priority and keeps contact as final step
   ---
-  duration_ms: 0.810402
+  duration_ms: 0.880278
   type: 'test'
   ...
 # Subtest: final screen visually orders contact before summary
 ok 6 - final screen visually orders contact before summary
   ---
-  duration_ms: 0.587249
+  duration_ms: 0.636959
   type: 'test'
   ...
 # Subtest: quick replies never drag sideways and mobile inputs prevent browser zoom
 ok 7 - quick replies never drag sideways and mobile inputs prevent browser zoom
   ---
-  duration_ms: 1.140301
+  duration_ms: 1.286968
   type: 'test'
   ...
 # Subtest: chips trace the full border before filling from the centre
 not ok 8 - chips trace the full border before filling from the centre
   ---
-  duration_ms: 1.346744
+  duration_ms: 1.556886
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:114:1'
   failureType: 'testCodeFailure'
@@ -1144,7 +1146,7 @@ not ok 8 - chips trace the full border before filling from the centre
 # Subtest: nested chip bubbles are removed while icons remain sharp
 not ok 9 - nested chip bubbles are removed while icons remain sharp
   ---
-  duration_ms: 1.618498
+  duration_ms: 1.875556
   type: 'test'
   location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:130:1'
   failureType: 'testCodeFailure'
@@ -2024,19 +2026,19 @@ not ok 9 - nested chip bubbles are removed while icons remain sharp
 # Subtest: chat client has a real HTTPS endpoint, timeout and deterministic outage fallback
 ok 10 - chat client has a real HTTPS endpoint, timeout and deterministic outage fallback
   ---
-  duration_ms: 1.359599
+  duration_ms: 1.642101
   type: 'test'
   ...
 # Subtest: server API enforces origins, JSON, body limits, rate limits and upstream timeout
 ok 11 - server API enforces origins, JSON, body limits, rate limits and upstream timeout
   ---
-  duration_ms: 0.865441
+  duration_ms: 0.915309
   type: 'test'
   ...
 # Subtest: premium styles cover major surfaces, chips, mobile and reduced motion
 ok 12 - premium styles cover major surfaces, chips, mobile and reduced motion
   ---
-  duration_ms: 2.815984
+  duration_ms: 2.10904
   type: 'test'
   ...
 1..12
@@ -2047,5 +2049,5 @@ ok 12 - premium styles cover major surfaces, chips, mobile and reduced motion
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 75.465835
+# duration_ms 83.613922
  ELIFECYCLE  Test failed. See above for more details.
