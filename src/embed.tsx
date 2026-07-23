@@ -12,6 +12,7 @@ import "./premium-liquid-final.css";
 import "./chip-refinement-final.css";
 import "./apple-liquid-fixes.css";
 import "./apple-liquid-system-final.css";
+import "./restrained-widget-final.css";
 
 const HOST_ID = "dv-assistant-root";
 const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
@@ -39,7 +40,7 @@ function mount(): void {
   installLiquidSegmentedDrag();
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "complete-liquid-system-20260723");
+  host.setAttribute("data-dv-assistant-version", "restrained-assistant-20260723-v2");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);
