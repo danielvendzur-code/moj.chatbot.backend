@@ -3,6 +3,7 @@ import { AssistantWidget } from "./components/widget/AssistantWidget";
 import { installWidgetSpotlight } from "./lib/widgetSpotlight";
 import "./widget.css";
 import "./assistant-redesign.css";
+import "./approved-submit-final.css";
 
 const HOST_ID = "dv-assistant-root";
 const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";

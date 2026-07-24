@@ -1,0 +1,185 @@
+/* Approved submit interaction. Imported after assistant-redesign.css. */
+:root {
+  --submit-ink: #08111f;
+  --submit-ink-hover: #0b1829;
+  --submit-blue: #3979e6;
+  --submit-blue-light: #78a9ff;
+  --submit-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html body .cw-widget .cw-submit.cw-submit--approved {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  min-height: 48px !important;
+  height: 48px !important;
+  padding: 0 18px !important;
+  border: 1px solid rgba(104, 160, 255, 0.56) !important;
+  border-radius: 13px !important;
+  color: #ffffff !important;
+  background:
+    radial-gradient(circle at 16% -32%, rgba(120, 169, 255, 0.22), transparent 46%),
+    linear-gradient(145deg, #0d1a2d 0%, var(--submit-ink) 68%, #07101c 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 17px 34px -27px rgba(57, 121, 230, 0.95) !important;
+  opacity: 1 !important;
+  transform: translate3d(0, 0, 0) !important;
+  transition:
+    transform 220ms var(--submit-ease),
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    background-color 220ms ease !important;
+}
+
+html body .cw-widget .cw-submit.cw-submit--approved::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  z-index: 0 !important;
+  width: 225px !important;
+  height: 225px !important;
+  left: -238px !important;
+  top: 50% !important;
+  bottom: auto !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+  opacity: 1 !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 54px rgba(92, 149, 242, 0.5) !important;
+  mix-blend-mode: difference !important;
+  transform: translate3d(0, -50%, 0) !important;
+  transition:
+    transform 500ms var(--submit-ease),
+    border-radius 440ms var(--submit-ease) !important;
+}
+
+html body .cw-widget .cw-submit.cw-submit--approved:is(:hover, :focus-visible):not(:disabled) {
+  border-color: rgba(142, 185, 255, 0.86) !important;
+  background:
+    radial-gradient(circle at 18% -30%, rgba(120, 169, 255, 0.28), transparent 48%),
+    linear-gradient(145deg, #10233d 0%, var(--submit-ink-hover) 70%, #08121f 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    0 21px 40px -29px rgba(78, 140, 255, 1) !important;
+  transform: translateY(-2px) !important;
+}
+
+html body .cw-widget .cw-submit.cw-submit--approved:is(:hover, :focus-visible):not(:disabled)::before {
+  transform: translate3d(208px, -50%, 0) !important;
+  border-radius: 28% !important;
+}
+
+html body .cw-widget .cw-submit.cw-submit--approved:active:not(:disabled) {
+  transform: translate3d(3px, 3px, 0) !important;
+}
+
+html body .cw-widget .cw-submit.cw-submit--approved[data-state="sending"] {
+  border-color: rgba(112, 166, 255, 0.66) !important;
+  color: #ffffff !important;
+  background: linear-gradient(145deg, #10233d, #0a1728) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 18px 34px -28px rgba(57, 121, 230, 0.9) !important;
+  cursor: wait !important;
+}
+
+html body .cw-widget .cw-submit.cw-submit--approved[data-state="sending"]::before {
+  animation: chatbot-submit-sweep 1.2s var(--submit-ease) infinite !important;
+}
+
+html body .cw-widget .cw-submit__content {
+  position: relative !important;
+  z-index: 2 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  color: inherit !important;
+  font-size: 13.2px !important;
+  font-weight: 730 !important;
+  letter-spacing: -0.012em !important;
+}
+
+html body .cw-widget .cw-submit__content > svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* Match the website's calmer, one-layer form hierarchy. */
+html body .cw-widget .cw-contact-stage {
+  gap: 12px !important;
+}
+
+html body .cw-widget .cw-lead,
+html body .cw-widget .cw-summary {
+  border: 1px solid rgba(246, 248, 251, 0.065) !important;
+  border-radius: 18px !important;
+  background: #080d14 !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-lead {
+  position: relative !important;
+  padding: 14px !important;
+  overflow: hidden !important;
+}
+
+html body .cw-widget .cw-lead::before {
+  content: "";
+  position: absolute;
+  inset: 14px auto 14px 0;
+  width: 2px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, transparent, var(--submit-blue), transparent);
+}
+
+html body .cw-widget .cw-lead__icon {
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: #8fb8ff !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-lead__optional {
+  border: 0 !important;
+  border-top: 1px solid rgba(246, 248, 251, 0.065) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-lead__optional summary {
+  padding-inline: 0 !important;
+}
+
+html body .cw-widget .cw-lead__optional-body {
+  padding-inline: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+html body .cw-widget .cw-summary {
+  padding: 12px 14px !important;
+}
+
+html body .cw-widget .cw-summary__row {
+  box-shadow: inset 0 -1px 0 rgba(246, 248, 251, 0.055) !important;
+}
+
+html body .cw-widget .cw-summary__row:last-child {
+  box-shadow: none !important;
+}
+
+@keyframes chatbot-submit-sweep {
+  0% { transform: translate3d(0, -50%, 0); }
+  62%, 100% { transform: translate3d(208px, -50%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body .cw-widget .cw-submit.cw-submit--approved::before {
+    animation: none !important;
+    transition: none !important;
+  }
+}
