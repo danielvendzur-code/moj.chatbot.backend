@@ -171,7 +171,6 @@ export function AssistantConversation({
           </span>
           <span className="cw-chat-builder__copy">
             <b>Vyskladať riešenie</b>
-            <small>5 krátkych krokov</small>
           </span>
         </button>
       </div>
@@ -240,7 +239,7 @@ export function AssistantConversation({
               submit();
             }
           }}
-          placeholder="Napíšte, čo riešite…"
+          placeholder="Napíšte správu…"
           aria-label="Otázka pre Môj Chatbot"
         />
         <button

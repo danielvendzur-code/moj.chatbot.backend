@@ -27,6 +27,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
   const [resetToken, setResetToken] = useState(0);
   const [preset, setPreset] = useState<AssistantPreset | null>(null);
   const panelRef = useRef<HTMLElement>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   const close = useCallback(() => {
     setIsOpen(false);
@@ -127,7 +128,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
             <div className="cw-panel-head__title">
               <b>Môj Chatbot</b>
               <span className="cw-panel-head__context cw-panel-head__online">
-                <i aria-hidden="true" /> Online a pripravený pomôcť
+                <i aria-hidden="true" /> Online
               </span>
             </div>
             <div className="cw-panel-head__actions">
@@ -166,7 +167,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
               onClick={() => switchMode("calculator")}
             >
               <WidgetIcon name="calculator" />
-              <span>Vyskladať riešenie</span>
+              <span>Konfigurátor</span>
             </button>
             <button
               type="button"
@@ -176,11 +177,28 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
               onClick={() => switchMode("assistant")}
             >
               <WidgetIcon name="chat" />
-              <span>Poradiť sa</span>
+              <span>Chatbot</span>
             </button>
           </nav>
 
-          <div className="cw-panel-body" key={mode}>
+          <div
+            className="cw-panel-body"
+            key={mode}
+            onTouchStart={(event) => {
+              const touch = event.touches[0];
+              touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+            }}
+            onTouchEnd={(event) => {
+              const start = touchStartRef.current;
+              touchStartRef.current = null;
+              if (!start) return;
+              const touch = event.changedTouches[0];
+              const dx = touch.clientX - start.x;
+              const dy = touch.clientY - start.y;
+              if (Math.abs(dx) < 55 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
+              switchMode(dx < 0 ? "assistant" : "calculator");
+            }}
+          >
             {mode === "assistant" ? (
               <AssistantConversation
                 resetToken={resetToken}
