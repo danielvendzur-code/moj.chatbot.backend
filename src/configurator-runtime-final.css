@@ -1,0 +1,32 @@
+/* Final runtime overrides for compact single-choice configurator steps. */
+html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard) > .cw-selection-indicator {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+html body .cw-widget :is(.cw-rowcard__icon, .cw-scard__icon),
+html body .cw-widget :is(.cw-rowcard, .cw-scard)[data-selected="true"] :is(.cw-rowcard__icon, .cw-scard__icon),
+html body .cw-widget :is(.cw-rowcard__icon, .cw-scard__icon) svg,
+html body .cw-widget :is(.cw-rowcard, .cw-scard)[data-selected="true"] :is(.cw-rowcard__icon, .cw-scard__icon) svg {
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  clip-path: none !important;
+  mask: none !important;
+  -webkit-mask: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget :is(.cw-rowcard__icon, .cw-scard__icon)::before,
+html body .cw-widget :is(.cw-rowcard__icon, .cw-scard__icon)::after,
+html body .cw-widget :is(.cw-rowcard__icon, .cw-scard__icon) svg::before,
+html body .cw-widget :is(.cw-rowcard__icon, .cw-scard__icon) svg::after {
+  content: none !important;
+  display: none !important;
+}
