@@ -1,9 +1,12 @@
 import { createRoot } from "react-dom/client";
 import { AssistantWidget } from "./components/widget/AssistantWidget";
+import { installConfiguratorAutoAdvance } from "./lib/configuratorAutoAdvance";
 import "./widget.css";
 import "./assistant-redesign.css";
 import "./approved-submit-final.css";
 import "./final-user-correction.css";
+
+installConfiguratorAutoAdvance();
 
 const HOST_ID = "dv-assistant-root";
 const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
