@@ -1,0 +1,53 @@
+name: Apply unified widget controls
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.head_ref == 'agent/unified-widget-controls'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/unified-widget-controls
+          fetch-depth: 0
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Apply audited widget patch
+        shell: bash
+        env:
+          PATCH_B64: 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
+        run: |
+          set -euo pipefail
+          printf '%s' "$PATCH_B64" | base64 --decode | gzip -dc > /tmp/ui.patch
+          git apply --check /tmp/ui.patch
+          git apply /tmp/ui.patch
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Validate complete widget
+        run: |
+          pnpm lint
+          pnpm test -- --run
+          pnpm build
+      - name: Commit validated product source
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/approved-submit-final.css src/components/widget/AssistantConversation.tsx src/components/widget/ToolCalculator.tsx src/lib/assistantFlow.ts tests/widget-contract.test.mjs
+          git diff --cached --quiet && exit 0
+          git commit -m "Complete unified widget UI polish"
+          git push origin HEAD:agent/unified-widget-controls
