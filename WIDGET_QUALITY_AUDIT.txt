@@ -1,4 +1,4 @@
-run_id=30086828438
+run_id=30088996198
 install=success
 lint=success
 build=success
@@ -21,21 +21,21 @@ test=success
 
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 97 modules transformed.
+[32m✓[39m 96 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
-[2mdist/[22m[2massets/[22m[35mindex-7n920GR2.css  [39m[1m[2m 51.75 kB[22m[1m[22m[2m │ gzip:  9.92 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-H9Tw0vLJ.js   [39m[1m[2m216.27 kB[22m[1m[22m[2m │ gzip: 73.06 kB[22m
-[32m✓ built in 1.12s[39m
+[2mdist/[22m[2massets/[22m[35mindex-Djtfmo32.css  [39m[1m[2m 62.33 kB[22m[1m[22m[2m │ gzip: 10.92 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-BhMBqWgQ.js   [39m[1m[2m215.99 kB[22m[1m[22m[2m │ gzip: 72.91 kB[22m
+[32m✓ built in 1.37s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 94 modules transformed.
+[32m✓[39m 93 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[35mwidget.css  [39m[1m[2m 51.75 kB[22m[1m[22m[2m │ gzip:  9.92 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m216.04 kB[22m[1m[22m[2m │ gzip: 73.02 kB[22m
-[32m✓ built in 1.08s[39m
+[2mdist/[22m[35mwidget.css  [39m[1m[2m 62.33 kB[22m[1m[22m[2m │ gzip: 10.92 kB[22m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m215.76 kB[22m[1m[22m[2m │ gzip: 72.88 kB[22m
+[32m✓ built in 1.17s[39m
 
 ===== test =====
 
@@ -46,103 +46,103 @@ TAP version 13
 # Subtest: demo and embed load one foundation and one authoritative redesign
 ok 1 - demo and embed load one foundation and one authoritative redesign
   ---
-  duration_ms: 8.163942
+  duration_ms: 8.773556
   type: 'test'
   ...
 # Subtest: assistant order and interactive send feedback remain explicit
 ok 2 - assistant order and interactive send feedback remain explicit
   ---
-  duration_ms: 0.870386
+  duration_ms: 0.923451
   type: 'test'
   ...
 # Subtest: panel has the corrected premium desktop proportions
 ok 3 - panel has the corrected premium desktop proportions
   ---
-  duration_ms: 1.031055
+  duration_ms: 1.063064
   type: 'test'
   ...
 # Subtest: mode switch is one rounded segmented control without pill geometry
 ok 4 - mode switch is one rounded segmented control without pill geometry
   ---
-  duration_ms: 1.220527
+  duration_ms: 1.332473
   type: 'test'
   ...
 # Subtest: the redesign uses only the website black and blue palette
 ok 5 - the redesign uses only the website black and blue palette
   ---
-  duration_ms: 2.871064
+  duration_ms: 2.790012
   type: 'test'
   ...
 # Subtest: primary actions, quick chips and composer use intentional geometry
 ok 6 - primary actions, quick chips and composer use intentional geometry
   ---
-  duration_ms: 1.287967
+  duration_ms: 1.55874
   type: 'test'
   ...
 # Subtest: chat chips and composer use a crisp non-liquid system
 ok 7 - chat chips and composer use a crisp non-liquid system
   ---
-  duration_ms: 1.24277
+  duration_ms: 1.343975
   type: 'test'
   ...
 # Subtest: calculator choices keep geometry and use one static selected system
 ok 8 - calculator choices keep geometry and use one static selected system
   ---
-  duration_ms: 1.449668
+  duration_ms: 1.678375
   type: 'test'
   ...
 # Subtest: selection indicator is one real aligned circular check
 ok 9 - selection indicator is one real aligned circular check
   ---
-  duration_ms: 1.59913
+  duration_ms: 1.653728
   type: 'test'
   ...
 # Subtest: icons remain one custom rounded line family
 ok 10 - icons remain one custom rounded line family
   ---
-  duration_ms: 0.979017
+  duration_ms: 1.100335
   type: 'test'
   ...
 # Subtest: chat and configurator motion remain reduced-motion safe
 ok 11 - chat and configurator motion remain reduced-motion safe
   ---
-  duration_ms: 1.109341
+  duration_ms: 1.200324
   type: 'test'
   ...
 # Subtest: configurator remains five short steps with explicit selection guidance
 ok 12 - configurator remains five short steps with explicit selection guidance
   ---
-  duration_ms: 0.910626
+  duration_ms: 0.961553
   type: 'test'
   ...
 # Subtest: approved lead submission keeps sweep feedback and website hierarchy
 ok 13 - approved lead submission keeps sweep feedback and website hierarchy
   ---
-  duration_ms: 1.22243
+  duration_ms: 1.561215
   type: 'test'
   ...
 # Subtest: contact submits a real lead and keeps API protections
 ok 14 - contact submits a real lead and keeps API protections
   ---
-  duration_ms: 1.408206
+  duration_ms: 1.831704
   type: 'test'
   ...
 # Subtest: mobile full screen, safe areas and keyboard constraints remain safe
 ok 15 - mobile full screen, safe areas and keyboard constraints remain safe
   ---
-  duration_ms: 1.373214
+  duration_ms: 1.284473
   type: 'test'
   ...
 # Subtest: final contact step scrolls and supports calls or meetings
 ok 16 - final contact step scrolls and supports calls or meetings
   ---
-  duration_ms: 1.301607
+  duration_ms: 1.47399
   type: 'test'
   ...
 # Subtest: messages begin at the top and icon tiles stay transparent
 ok 17 - messages begin at the top and icon tiles stay transparent
   ---
-  duration_ms: 0.800371
+  duration_ms: 1.806466
   type: 'test'
   ...
 1..17
@@ -153,4 +153,4 @@ ok 17 - messages begin at the top and icon tiles stay transparent
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 89.793469
+# duration_ms 91.483235
