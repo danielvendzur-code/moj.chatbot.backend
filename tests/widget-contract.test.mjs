@@ -18,8 +18,9 @@ test("demo and embed load one foundation and one authoritative redesign", async 
     assert.match(source, /widget\.css/);
     assert.match(source, /assistant-redesign\.css/);
     assert.match(source, /approved-submit-final\.css/);
+    assert.match(source, /final-user-correction\.css/);
     assert.doesNotMatch(source, /installWidgetSpotlight/);
-    assert.equal((source.match(/import "\.\/.*\.css";/g) ?? []).length, 3);
+    assert.equal((source.match(/import "\.\/.*\.css";/g) ?? []).length, 4);
   }
 
   for (const selector of [".cw-tabs", ".cw-rowcard", ".cw-inputbar", ".cw-next", ".cw-submit"]) {
@@ -233,4 +234,31 @@ test("messages begin at the top and icon tiles stay transparent", async () => {
   assert.match(css, /background:\s*transparent !important/);
   assert.match(css, /cw-rowcard__body b/);
   assert.match(css, /opacity:\s*1 !important/);
+});
+
+test("final user correction centers quick replies and keeps one input shape", async () => {
+  const css = await read("src/final-user-correction.css");
+  const conversation = await read("src/components/widget/AssistantConversation.tsx");
+
+  for (const label of ["Čo mi to ušetrí?", "Ako to funguje?", "Čo treba pripraviť?", "Pozrieť ukážky"]) {
+    assert.match(conversation, new RegExp(label.replace(/[?]/g, "\\?")));
+  }
+  assert.match(css, /Final correction/);
+  assert.match(css, /transform:\s*scaleX\(0\) !important/);
+  assert.match(css, /transform-origin:\s*center !important/);
+  assert.match(css, /justify-content:\s*center !important/);
+  assert.match(css, /\.cw-inputbar,\s*html body \.cw-widget \.cw-inputbar:focus-within/);
+  assert.match(css, /border-radius:\s*15px !important/);
+});
+
+test("final configurator correction removes clipping, icon tiles and selected stripes", async () => {
+  const css = await read("src/final-user-correction.css");
+
+  assert.match(css, /grid-auto-rows:\s*minmax\(122px, auto\) !important/);
+  assert.match(css, /max-height:\s*none !important/);
+  assert.match(css, /overflow:\s*visible !important/);
+  assert.match(css, /\.cw-rowcard__icon[\s\S]*background:\s*transparent !important/);
+  assert.match(css, /\.cw-selection-indicator svg[\s\S]*transform:\s*none !important/);
+  assert.match(css, /\.cw-next,[\s\S]*background:\s*#3478f6 !important/);
+  assert.doesNotMatch(css, /inset 3px 0 0|#5ee7c4|#82f4d8/);
 });
