@@ -26,16 +26,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Export current source for visual audit
-        uses: actions/upload-artifact@v4
-        with:
-          name: moj-chatbot-current-source
-          path: |
-            .
-            !.git
-          include-hidden-files: true
-          retention-days: 1
-
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
