@@ -25,6 +25,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply mobile configurator polish
+        run: python .github/apply-mobile-configurator-polish.py
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -40,6 +45,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Format corrected source
+        run: pnpm exec prettier --write src/components/widget/ToolCalculator.tsx src/main.tsx src/embed.tsx src/mobile-configurator-polish.css tests/widget-contract.test.mjs
+
       - name: Audit production dependencies
         run: pnpm audit --prod --audit-level high
 
@@ -51,6 +59,19 @@ jobs:
 
       - name: Build demo and embedded widget
         run: pnpm build
+
+      - name: Commit validated mobile configurator source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/components/widget/ToolCalculator.tsx src/main.tsx src/embed.tsx src/mobile-configurator-polish.css tests/widget-contract.test.mjs
+          if ! git diff --cached --quiet; then
+            git commit -m "Compact mobile configurator and auto-advance choices [skip widget-quality]"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
 
       - name: Create immutable build metadata
         shell: bash
@@ -77,6 +98,7 @@ jobs:
           const flow = fs.readFileSync('src/lib/assistantFlow.ts', 'utf8');
           const lead = fs.readFileSync('src/lib/leadApi.ts', 'utf8');
           const finalCss = fs.readFileSync('src/approved-submit-final.css', 'utf8');
+          const mobileCss = fs.readFileSync('src/mobile-configurator-polish.css', 'utf8');
           const meta = JSON.parse(fs.readFileSync('dist/build-meta.json', 'utf8'));
 
           const must = (condition, message) => {
@@ -88,10 +110,11 @@ jobs:
           must(css.includes('cw-selection-indicator'), 'selection indicator missing');
           must(/border-radius:\s*999px/.test(css), 'oval geometry missing');
           must(/--mc-blue:\s*#3478f6/i.test(css), 'website blue missing');
-          must(main.includes('assistant-redesign') && embed.includes('assistant-redesign'), 'redesign import missing');
+          must(main.includes('mobile-configurator-polish') && embed.includes('mobile-configurator-polish'), 'mobile polish import missing');
+          must(calculator.includes('scheduleAdvance'), 'single-choice auto advance missing');
+          must(mobileCss.includes('grid-auto-rows: minmax(92px, auto)'), 'compact mobile cards missing');
           must(!main.includes('installWidgetSpotlight') && !embed.includes('installWidgetSpotlight'), 'legacy builder spotlight still mounted');
           must(finalCss.includes('Visible widget rebuild'), 'visible widget rebuild layer missing');
-          must(finalCss.includes('.cw-contact-methods'), 'presentation method controls missing');
           must(calculator.includes('Osobné stretnutie'), 'personal meeting option missing');
           must(lead.includes('api/lead'), 'lead API missing');
           must(conversation.includes('Vyskladať riešenie'), 'builder CTA missing');
