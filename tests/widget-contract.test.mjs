@@ -40,10 +40,9 @@ test("assistant order and interactive send feedback remain explicit", async () =
   assert.match(conversation, /Vyskladať riešenie/);
   assert.match(conversation, /Čo mi to ušetrí\?/);
   assert.match(conversation, /data-sending=\{sending\}/);
-  assert.match(conversation, /data-pulse=\{sendPulse\}/);
   assert.match(conversation, /aria-busy=\{typing\}/);
   assert.match(conversation, /cw-chip__send/);
-  assert.match(conversation, /cw-send__halo/);
+  assert.doesNotMatch(conversation, /cw-send__halo/);
 });
 
 test("panel has the corrected premium desktop proportions", async () => {
@@ -91,43 +90,42 @@ test("primary actions, quick chips and composer use intentional geometry", async
   assert.match(css, /\.cw-next:active:not\(:disabled\),\s*\.cw-submit:active:not\(:disabled\)\s*\{[^}]*transform:\s*none/s);
 });
 
-test("fillout chips and send button have restrained motion states", async () => {
-  const css = await read("src/assistant-redesign.css");
+test("chat chips and composer use a crisp non-liquid system", async () => {
+  const conversation = await read("src/components/widget/AssistantConversation.tsx");
+  const css = await read("src/approved-submit-final.css");
 
+  assert.doesNotMatch(conversation, /cw-send__halo/);
+  assert.doesNotMatch(conversation, /data-pulse=/);
+  assert.match(css, /Unified widget controls/);
   assert.match(css, /\.cw-quick-replies \.cw-chip::before/);
-  assert.match(css, /data-sending="true"/);
-  assert.match(css, /@keyframes mc-chip-send/);
-  assert.match(css, /@keyframes mc-send-pulse/);
-  assert.match(css, /@keyframes mc-send-flight/);
-  assert.match(css, /\.cw-inputbar > \.cw-send\[data-pulse="true"\]/);
+  assert.match(css, /content:\s*none !important/);
+  assert.match(css, /\.cw-inputbar/);
+  assert.match(css, /background:\s*#0b121c !important/);
 });
 
-test("calculator choices use balanced grids, expressive visuals and one selected system", async () => {
-  const css = await read("src/assistant-redesign.css");
+test("calculator choices keep geometry and use one static selected system", async () => {
+  const baseCss = await read("src/assistant-redesign.css");
+  const finalCss = await read("src/approved-submit-final.css");
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
   const twoColumns = /repeat\(2,\s*minmax\(0,\s*1fr\)\)/;
-  const threeRows = /repeat\(3,\s*minmax\(0,\s*1fr\)\)/;
 
-  assert.match(css.match(/\.cw-choice-grid--interest,[\s\S]*?\}/)?.[0] ?? "", twoColumns);
-  assert.match(css.match(/\.cw-choice-grid--industry,[\s\S]*?\}/)?.[0] ?? "", threeRows);
-  assert.match(rule(css, ".cw-rowcard"), /border-radius:\s*18px/);
-  assert.match(css, /\.cw-rowcard::after,[\s\S]*?transform:\s*scaleX\(0\)/);
-  assert.match(css, /\.cw-rowcard\[data-selected="true"\]::after,[\s\S]*?scaleX\(1\)/);
-  assert.match(css, /interest-chatbot/);
-  assert.match(css, /feature-cena/);
-  assert.match(css, /timeline-asap/);
+  assert.match(baseCss.match(/\.cw-choice-grid--interest,[\s\S]*?\}/)?.[0] ?? "", twoColumns);
+  assert.match(rule(baseCss, ".cw-rowcard"), /border-radius:\s*18px/);
+  assert.match(finalCss, /background:\s*#17365f !important/);
+  assert.match(finalCss, /\.cw-rowcard__icon/);
+  assert.match(finalCss, /content:\s*none !important/);
   assert.match(calculator, /function SelectionIndicator/);
   assert.match(calculator, /className="cw-selection-indicator"/);
   assert.doesNotMatch(calculator, /cw-choice-arrow/);
 });
 
 test("selection indicator is one real aligned circular check", async () => {
-  const css = await read("src/assistant-redesign.css");
-  const indicator = rule(css, ".cw-selection-indicator");
+  const css = await read("src/approved-submit-final.css");
 
-  assert.match(indicator, /width:\s*22px/);
-  assert.match(indicator, /border-radius:\s*50%/);
-  assert.match(css, /\.cw-selection-indicator\[data-visible="true"\]/);
+  assert.match(css, /\.cw-selection-indicator/);
+  assert.match(css, /width:\s*21px !important/);
+  assert.match(css, /background:\s*#3979e6 !important/);
+  assert.match(css, /data-visible="true"/);
   assert.doesNotMatch(css, /\.cw-selection-indicator::(?:before|after)/);
 });
 
@@ -188,7 +186,7 @@ test("contact submits a real lead and keeps API protections", async () => {
   const api = await read("api/lead.ts");
 
   assert.match(calculator, /Meno a priezvisko \*/);
-  assert.match(calculator, /E-mail \*/);
+  assert.match(calculator, /E-mail na potvrdenie \*/);
   assert.match(calculator, /await sendLead/);
   assert.match(client, /api\/lead/);
   assert.match(client, /AbortController/);
@@ -205,4 +203,28 @@ test("mobile full screen, safe areas and keyboard constraints remain safe", asyn
   assert.match(css, /env\(safe-area-inset-bottom\)/);
   assert.match(css, /overscroll-behavior:\s*none/);
   assert.match(rule(css, ".cw-inputbar input"), /font-size:\s*16px/);
+});
+
+test("final contact step scrolls and supports calls or meetings", async () => {
+  const flow = await read("src/lib/assistantFlow.ts");
+  const calculator = await read("src/components/widget/ToolCalculator.tsx");
+  const css = await read("src/approved-submit-final.css");
+
+  assert.match(flow, /Ako sa vám mám ozvať\?/);
+  assert.match(flow, /videohovore, telefonicky/);
+  assert.match(calculator, /Telefón na dohodnutie hovoru/);
+  assert.match(calculator, /Dohodnime ďalší krok/);
+  assert.match(css, /overflow-y:\s*auto !important/);
+  assert.match(css, /scrollbar-gutter:\s*stable !important/);
+  assert.match(css, /cw-calc-step\[data-step="contact"\]/);
+});
+
+test("messages begin at the top and icon tiles stay transparent", async () => {
+  const css = await read("src/approved-submit-final.css");
+
+  assert.match(css, /justify-content:\s*flex-start !important/);
+  assert.match(css, /No emoji tile or square plate/);
+  assert.match(css, /background:\s*transparent !important/);
+  assert.match(css, /cw-rowcard__body b/);
+  assert.match(css, /opacity:\s*1 !important/);
 });

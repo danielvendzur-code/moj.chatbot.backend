@@ -57,19 +57,9 @@ export function AssistantConversation({
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const [activeQuickReply, setActiveQuickReply] = useState<string | null>(null);
-  const [sendPulse, setSendPulse] = useState(false);
   const nextIdRef = useRef(2);
   const messagesRef = useRef<HTMLDivElement>(null);
-  const pulseTimerRef = useRef<number | null>(null);
 
-  const triggerSendPulse = () => {
-    setSendPulse(false);
-    window.requestAnimationFrame(() => {
-      setSendPulse(true);
-      if (pulseTimerRef.current !== null) window.clearTimeout(pulseTimerRef.current);
-      pulseTimerRef.current = window.setTimeout(() => setSendPulse(false), 560);
-    });
-  };
 
   useEffect(() => {
     const last = messages[messages.length - 1];
@@ -92,16 +82,9 @@ export function AssistantConversation({
     setInput("");
     setTyping(false);
     setActiveQuickReply(null);
-    setSendPulse(false);
     nextIdRef.current = 2;
   }, [resetToken]);
 
-  useEffect(
-    () => () => {
-      if (pulseTimerRef.current !== null) window.clearTimeout(pulseTimerRef.current);
-    },
-    [],
-  );
 
   useEffect(() => {
     const container = messagesRef.current;
@@ -111,7 +94,6 @@ export function AssistantConversation({
   const ask = async (question: string, quickReplyLabel: string | null = null) => {
     if (typing) return;
     if (quickReplyLabel) setActiveQuickReply(quickReplyLabel);
-    triggerSendPulse();
 
     const userMessage = {
       id: nextIdRef.current++,
@@ -245,13 +227,11 @@ export function AssistantConversation({
         <button
           type="button"
           className="cw-send"
-          data-pulse={sendPulse}
           data-waiting={typing}
           onClick={submit}
           disabled={!input.trim() || typing}
           aria-label="Odoslať správu"
         >
-          <span className="cw-send__halo" aria-hidden="true" />
           <WidgetIcon name="send" />
         </button>
       </div>

@@ -183,3 +183,351 @@ html body .cw-widget .cw-summary__row:last-child {
     transition: none !important;
   }
 }
+
+/* =============================================================
+   Unified widget controls — no glass stacks, no animated colour fill,
+   no square icon tiles, and a scroll-safe final step.
+   ============================================================= */
+html body .cw-widget .cw-messages {
+  justify-content: flex-start !important;
+  padding-top: 10px !important;
+  scroll-padding-block: 12px !important;
+}
+
+html body .cw-widget .cw-message-row--bot .cw-message-wrap p,
+html body .cw-widget .cw-typing {
+  border: 0 !important;
+  color: #d7e0eb !important;
+  background: #111a27 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-message-row--me .cw-message-wrap p {
+  border: 0 !important;
+  color: #ffffff !important;
+  background: #245fae !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* One-layer composer. */
+html body .cw-widget .cw-inputbar {
+  height: 54px !important;
+  gap: 7px !important;
+  margin: 0 11px 9px !important;
+  padding: 5px 5px 5px 14px !important;
+  border: 1px solid #1a293d !important;
+  border-radius: 16px !important;
+  background: #0b121c !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html body .cw-widget .cw-inputbar:focus-within {
+  border-color: #3979e6 !important;
+  background: #0d1622 !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-inputbar input {
+  height: 42px !important;
+  color: #f4f7fb !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-inputbar > .cw-send {
+  width: 42px !important;
+  height: 42px !important;
+  flex: 0 0 42px !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  color: #ffffff !important;
+  background: #3979e6 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+  transition: background-color 160ms ease, opacity 160ms ease !important;
+}
+
+html body .cw-widget .cw-inputbar > .cw-send:is(:hover, :focus-visible):not(:disabled) {
+  background: #4b87ee !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-inputbar > .cw-send:active:not(:disabled) {
+  background: #326bd0 !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-inputbar > .cw-send:disabled {
+  color: #6f7f93 !important;
+  background: #162130 !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-send__halo {
+  display: none !important;
+}
+
+/* Chat chips: quiet at rest, solid selected/sending state, never liquid. */
+html body .cw-widget .cw-quick-replies .cw-chip {
+  contain: paint !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  color: #c6d0dd !important;
+  background: #111a27 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+  touch-action: manipulation !important;
+  transition: background-color 160ms ease, color 160ms ease !important;
+}
+
+html body .cw-widget .cw-quick-replies .cw-chip::before,
+html body .cw-widget .cw-quick-replies .cw-chip::after {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+html body .cw-widget .cw-quick-replies .cw-chip:is(:hover, :focus-visible):not(:disabled) {
+  color: #ffffff !important;
+  background: #172335 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-quick-replies .cw-chip[data-sending="true"] {
+  color: #ffffff !important;
+  background: #17365f !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-chip__label {
+  position: relative !important;
+  z-index: 2 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+/* Configurator choices keep their existing geometry but share one material. */
+html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
+  contain: paint !important;
+  border: 0 !important;
+  color: #d5deea !important;
+  background: #0f1722 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+  touch-action: manipulation !important;
+  transition: background-color 170ms ease, color 170ms ease !important;
+}
+
+html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)::after {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):is(:hover, :focus-visible):not([data-selected="true"]) {
+  color: #ffffff !important;
+  background: #151f2d !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] {
+  color: #ffffff !important;
+  background: #17365f !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) > * {
+  position: relative !important;
+  z-index: 2 !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+html body .cw-widget :is(.cw-rowcard__body b, .cw-scard b, .cw-opt__body b, .cw-vcard b) {
+  color: inherit !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+html body .cw-widget :is(.cw-rowcard__body small, .cw-opt__body > span, .cw-vcard > span) {
+  color: #91a0b3 !important;
+  opacity: 1 !important;
+}
+
+html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] :is(.cw-rowcard__body small, .cw-opt__body > span, .cw-vcard > span) {
+  color: #c3d3e8 !important;
+}
+
+/* No emoji tile or square plate behind any option icon. */
+html body .cw-widget :is(.cw-rowcard__icon, .cw-scard__icon, .cw-chat-builder__icon) {
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: #79a9ff !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget :is(.cw-rowcard__icon, .cw-scard__icon)::before,
+html body .cw-widget :is(.cw-opt, .cw-vcard)::before {
+  content: none !important;
+  display: none !important;
+}
+
+html body .cw-widget .cw-selection-indicator {
+  width: 21px !important;
+  height: 21px !important;
+  border: 0 !important;
+  color: #ffffff !important;
+  background: #3979e6 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transition: opacity 140ms ease !important;
+}
+
+html body .cw-widget .cw-selection-indicator[data-visible="true"] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+html body .cw-widget .cw-selection-indicator[data-visible="false"] {
+  opacity: 0 !important;
+  transform: none !important;
+}
+
+/* Restore real scrolling for every step, especially contact on desktop. */
+html body .cw-widget .cw-calc-body {
+  min-height: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  scrollbar-gutter: stable !important;
+  scroll-padding-block: 16px !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+html body .cw-widget .cw-calc-step[data-step="contact"] {
+  min-height: max-content !important;
+  padding-bottom: 18px !important;
+}
+
+/* Contact step is one continuous surface, not cards inside cards. */
+html body .cw-widget .cw-contact-stage {
+  display: grid !important;
+  gap: 18px !important;
+  min-height: max-content !important;
+}
+
+html body .cw-widget :is(.cw-lead, .cw-summary) {
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+html body .cw-widget .cw-lead::before {
+  content: none !important;
+  display: none !important;
+}
+
+html body .cw-widget .cw-lead__head {
+  padding: 0 0 14px !important;
+  border-bottom: 1px solid #1a293b !important;
+}
+
+html body .cw-widget .cw-lead__icon {
+  width: 28px !important;
+  height: 28px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: #79a9ff !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-lead__form {
+  gap: 10px !important;
+  padding-top: 14px !important;
+}
+
+html body .cw-widget :is(.cw-lead__form input, .cw-lead__form textarea, .cw-custom textarea) {
+  border: 1px solid #1a293d !important;
+  color: #f4f7fb !important;
+  background: #0d1622 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget :is(.cw-lead__form input, .cw-lead__form textarea, .cw-custom textarea):focus {
+  border-color: #3979e6 !important;
+  background: #101b29 !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-lead__optional {
+  border: 0 !important;
+  border-top: 1px solid #1a293b !important;
+  border-bottom: 1px solid #1a293b !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-summary {
+  padding-top: 16px !important;
+  border-top: 1px solid #1a293b !important;
+}
+
+html body .cw-widget .cw-summary__row {
+  padding: 9px 0 !important;
+  border-bottom: 1px solid #162334 !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget .cw-summary__row:last-child {
+  border-bottom: 0 !important;
+}
+
+html body .cw-widget .cw-local-note {
+  color: #8796aa !important;
+  line-height: 1.45 !important;
+}
+
+@media (hover: none), (pointer: coarse) {
+  html body .cw-widget :is(.cw-quick-replies .cw-chip, .cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):hover {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body .cw-widget :is(.cw-quick-replies .cw-chip, .cw-rowcard, .cw-scard, .cw-opt, .cw-vcard, .cw-selection-indicator, .cw-send) {
+    animation: none !important;
+    transition: none !important;
+  }
+}
