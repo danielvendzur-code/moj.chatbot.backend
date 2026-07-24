@@ -6,7 +6,7 @@ const FALLBACK_RECIPIENT = "daniel@vendzur.sk";
 export type LeadSubmission = {
   source: string;
   name: string;
-  email: string;
+  email?: string;
   phone?: string;
   company?: string;
   web?: string;
@@ -29,7 +29,7 @@ function localFallback(payload: LeadSubmission): string {
   const body = [
     `Zdroj: ${payload.source}`,
     `Meno: ${payload.name}`,
-    `E-mail: ${payload.email}`,
+    `E-mail: ${payload.email || "neuvedený"}`,
     `Telefón: ${payload.phone || "neuvedený"}`,
     `Firma: ${payload.company || "neuvedená"}`,
     `Web: ${payload.web || "neuvedený"}`,

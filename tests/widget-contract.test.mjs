@@ -18,7 +18,7 @@ test("demo and embed load one foundation and one authoritative redesign", async 
     assert.match(source, /widget\.css/);
     assert.match(source, /assistant-redesign\.css/);
     assert.match(source, /approved-submit-final\.css/);
-    assert.match(source, /installWidgetSpotlight/);
+    assert.doesNotMatch(source, /installWidgetSpotlight/);
     assert.equal((source.match(/import "\.\/.*\.css";/g) ?? []).length, 3);
   }
 
@@ -41,7 +41,7 @@ test("assistant order and interactive send feedback remain explicit", async () =
   assert.match(conversation, /Čo mi to ušetrí\?/);
   assert.match(conversation, /data-sending=\{sending\}/);
   assert.match(conversation, /aria-busy=\{typing\}/);
-  assert.match(conversation, /cw-chip__send/);
+  assert.doesNotMatch(conversation, /cw-chip__send/);
   assert.doesNotMatch(conversation, /cw-send__halo/);
 });
 
@@ -58,14 +58,16 @@ test("panel has the corrected premium desktop proportions", async () => {
 
 test("mode switch is one rounded segmented control without pill geometry", async () => {
   const widget = await read("src/components/widget/AssistantWidget.tsx");
-  const css = await read("src/assistant-redesign.css");
+  const css = await read("src/approved-submit-final.css");
 
   assert.match(widget, /onClick=\{\(\) => switchMode\("calculator"\)\}/);
   assert.match(widget, /onClick=\{\(\) => switchMode\("assistant"\)\}/);
   assert.match(widget, /data-mode=\{mode\}/);
-  assert.match(rule(css, ".cw-tabs"), /border-radius:\s*18px/);
-  assert.match(rule(css, ".cw-tabs__glass"), /border-radius:\s*14px/);
-  assert.match(css, /\.cw-tabs\[data-mode="assistant"\]\s+\.cw-tabs__glass/);
+  assert.doesNotMatch(widget, /cw-tabs__glass/);
+  assert.match(css, /Visible widget rebuild/);
+  assert.match(css, /grid-template-columns:\s*1fr 1fr !important/);
+  assert.match(css, /\.cw-tabs > button\[data-active="true"\]/);
+  assert.match(css, /background:\s*#245fae !important/);
 });
 
 test("the redesign uses only the website black and blue palette", async () => {
@@ -186,7 +188,9 @@ test("contact submits a real lead and keeps API protections", async () => {
   const api = await read("api/lead.ts");
 
   assert.match(calculator, /Meno a priezvisko \*/);
-  assert.match(calculator, /E-mail na potvrdenie \*/);
+  assert.match(calculator, /E-mail \(voliteľné\)/);
+  assert.match(calculator, /CONTACT_METHODS/);
+  assert.match(calculator, /Osobné stretnutie/);
   assert.match(calculator, /await sendLead/);
   assert.match(client, /api\/lead/);
   assert.match(client, /AbortController/);
@@ -210,9 +214,11 @@ test("final contact step scrolls and supports calls or meetings", async () => {
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
   const css = await read("src/approved-submit-final.css");
 
-  assert.match(flow, /Ako sa vám mám ozvať\?/);
-  assert.match(flow, /videohovore, telefonicky/);
-  assert.match(calculator, /Telefón na dohodnutie hovoru/);
+  assert.match(flow, /Ako vám návrh najlepšie ukážem\?/);
+  assert.match(flow, /osobné stretnutie/);
+  assert.match(calculator, /Telefón \*/);
+  assert.match(calculator, /cw-contact-methods/);
+  assert.match(calculator, /Videohovor/);
   assert.match(calculator, /Dohodnime ďalší krok/);
   assert.match(css, /overflow-y:\s*auto !important/);
   assert.match(css, /scrollbar-gutter:\s*stable !important/);

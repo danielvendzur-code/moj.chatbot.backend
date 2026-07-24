@@ -147,7 +147,7 @@ export function AssistantConversation({
   return (
     <div className="cw-conversation" data-testid="assistant-view">
       <div className="cw-chat-top">
-        <button type="button" className="cw-chat-builder cw-spotlight" onClick={openCalculator}>
+        <button type="button" className="cw-chat-builder" onClick={openCalculator}>
           <span className="cw-chat-builder__icon" aria-hidden="true">
             <WidgetIcon name="spark" />
           </span>
@@ -203,9 +203,6 @@ export function AssistantConversation({
               onClick={() => void ask(question, label)}
             >
               <span className="cw-chip__label">{label}</span>
-              <span className="cw-chip__send" aria-hidden="true">
-                <WidgetIcon name="send" />
-              </span>
             </button>
           );
         })}

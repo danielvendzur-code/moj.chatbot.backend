@@ -173,7 +173,6 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
           </header>
 
           <nav className="cw-tabs" aria-label="Vyberte spôsob pomoci" data-mode={mode}>
-            <span className="cw-tabs__glass" aria-hidden="true" />
             <button
               type="button"
               data-testid="tab-calculator"

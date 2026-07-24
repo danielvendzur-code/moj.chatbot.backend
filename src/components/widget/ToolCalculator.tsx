@@ -24,7 +24,10 @@ type ToolCalculatorProps = {
   onOpenChat: () => void;
 };
 
+type ContactMethod = "video" | "phone" | "meeting" | "email";
+
 type LeadState = {
+  contactMethod: ContactMethod;
   name: string;
   email: string;
   phone: string;
@@ -35,6 +38,7 @@ type LeadState = {
 };
 
 const EMPTY_LEAD: LeadState = {
+  contactMethod: "video",
   name: "",
   email: "",
   phone: "",
@@ -47,6 +51,13 @@ const EMPTY_LEAD: LeadState = {
 type SendState = "idle" | "sending" | "done";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const CONTACT_METHODS: Array<{ id: ContactMethod; label: string; icon: "chat" | "phone" | "user" | "mail" }> = [
+  { id: "video", label: "Videohovor", icon: "chat" },
+  { id: "phone", label: "Telefonát", icon: "phone" },
+  { id: "meeting", label: "Osobné stretnutie", icon: "user" },
+  { id: "email", label: "E-mail", icon: "mail" },
+];
 
 function SelectionIndicator({ selected }: { selected: boolean }): JSX.Element {
   return (
@@ -159,8 +170,22 @@ export function ToolCalculator({
     if (sendState !== "idle") return;
     const safeName = lead.name.trim();
     const safeEmail = lead.email.trim();
-    if (!safeName || !EMAIL_PATTERN.test(safeEmail)) {
-      setLeadError("Vyplňte prosím meno a platný e-mail.");
+    const safePhone = lead.phone.trim();
+    const hasValidEmail = safeEmail ? EMAIL_PATTERN.test(safeEmail) : false;
+    if (!safeName) {
+      setLeadError("Doplňte prosím meno.");
+      return;
+    }
+    if (safeEmail && !hasValidEmail) {
+      setLeadError("Skontrolujte prosím e-mailovú adresu.");
+      return;
+    }
+    if (lead.contactMethod === "email" && !hasValidEmail) {
+      setLeadError("Pre zaslanie e-mailom doplňte platnú adresu.");
+      return;
+    }
+    if (lead.contactMethod !== "email" && !safePhone && !hasValidEmail) {
+      setLeadError("Doplňte telefón alebo e-mail, aby som si s vami vedel dohodnúť termín.");
       return;
     }
     if (!lead.consent) {
@@ -179,7 +204,7 @@ export function ToolCalculator({
         source: "widget-configurator",
         name: safeName,
         email: safeEmail,
-        phone: lead.phone.trim(),
+        phone: safePhone,
         company: lead.company.trim(),
         web: lead.web.trim(),
         note: [
@@ -187,6 +212,7 @@ export function ToolCalculator({
           interest === "custom" && customText.trim()
             ? `Vlastná predstava: ${customText.trim()}`
             : "",
+          `Preferovaný spôsob prezentácie: ${CONTACT_METHODS.find((item) => item.id === lead.contactMethod)?.label ?? lead.contactMethod}`,
           `Číslo návrhu: ${nextProposalNumber}`,
         ]
           .filter(Boolean)
@@ -416,13 +442,32 @@ export function ToolCalculator({
           {stepId === "contact" ? (
             <div className="cw-contact-stage">
               <div className="cw-lead">
+                <div className="cw-contact-methods" role="group" aria-label="Preferovaný spôsob prezentácie návrhu">
+                  {CONTACT_METHODS.map((method) => {
+                    const selected = lead.contactMethod === method.id;
+                    return (
+                      <button
+                        type="button"
+                        className="cw-contact-method"
+                        data-selected={selected}
+                        aria-pressed={selected}
+                        key={method.id}
+                        onClick={() => setLead({ ...lead, contactMethod: method.id })}
+                      >
+                        <WidgetIcon name={method.icon} />
+                        <span>{method.label}</span>
+                        {selected ? <WidgetIcon name="check" className="cw-contact-method__check" /> : null}
+                      </button>
+                    );
+                  })}
+                </div>
                 <div className="cw-lead__head">
                   <span className="cw-lead__icon">
                     <WidgetIcon name="spark" />
                   </span>
                   <span>
                     <b>Dohodnime ďalší krok</b>
-                    <small>Videohovor, telefonát alebo e-mail — podľa toho, čo vám vyhovuje.</small>
+                    <small>Termín a spôsob prezentácie si dohodneme podľa vašej voľby vyššie.</small>
                   </span>
                 </div>
                 <div className="cw-lead__form">
@@ -437,7 +482,7 @@ export function ToolCalculator({
                     <input
                       value={lead.email}
                       onChange={(event) => setLead({ ...lead, email: event.target.value })}
-                      placeholder="E-mail na potvrdenie *"
+                      placeholder={lead.contactMethod === "email" ? "E-mail *" : "E-mail (voliteľné)"}
                       aria-label="E-mail"
                       type="email"
                       autoComplete="email"
@@ -445,7 +490,7 @@ export function ToolCalculator({
                     <input
                       value={lead.phone}
                       onChange={(event) => setLead({ ...lead, phone: event.target.value })}
-                      placeholder="Telefón na dohodnutie hovoru"
+                      placeholder={lead.contactMethod === "email" ? "Telefón (voliteľné)" : "Telefón *"}
                       aria-label="Telefón"
                       autoComplete="tel"
                     />

@@ -113,7 +113,7 @@ function textLines(payload: Record<string, string>): string {
   ].join("\n");
 }
 
-async function deliverWithResend(subject: string, text: string, replyTo: string): Promise<boolean> {
+async function deliverWithResend(subject: string, text: string, replyTo?: string): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return false;
   const response = await fetch("https://api.resend.com/emails", {
@@ -125,7 +125,7 @@ async function deliverWithResend(subject: string, text: string, replyTo: string)
     body: JSON.stringify({
       from: process.env.LEAD_FROM_EMAIL || "Môj Chatbot <onboarding@resend.dev>",
       to: [RECIPIENT],
-      reply_to: replyTo,
+      ...(replyTo ? { reply_to: replyTo } : {}),
       subject,
       text,
     }),
@@ -202,7 +202,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     timeline: clean(raw.timeline, 160),
   };
 
-  if (!payload.name || !validEmail(payload.email) || raw.consent !== true) {
+  const hasContact = Boolean(payload.phone) || validEmail(payload.email);
+  if (!payload.name || !hasContact || (payload.email && !validEmail(payload.email)) || raw.consent !== true) {
     res.status(400).json({ error: "invalid-lead" });
     return;
   }
@@ -212,7 +213,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
 
   try {
     const delivered =
-      (await deliverWithResend(subject, text, payload.email)) ||
+      (await deliverWithResend(subject, text, validEmail(payload.email) ? payload.email : undefined)) ||
       (await deliverWithWebhook(subject, text));
 
     if (!delivered) {
