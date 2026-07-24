@@ -49,8 +49,8 @@ test("panel has the corrected premium desktop proportions", async () => {
   const css = await read("src/assistant-redesign.css");
   const panel = rule(css, ".cw-panel");
 
-  assert.match(panel, /width:\s*min\(580px,/);
-  assert.match(panel, /height:\s*min\(920px,/);
+  assert.match(panel, /width:\s*min\(440px,/);
+  assert.match(panel, /height:\s*min\(760px,/);
   assert.match(panel, /border-radius:\s*30px/);
   assert.match(panel, /radial-gradient/);
   assert.match(panel, /box-shadow:/);
