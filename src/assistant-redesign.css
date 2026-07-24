@@ -2322,3 +2322,140 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-calc-body {
   touch-action: pan-y;
 }
+
+/* =============================================================
+   Design polish pass — DERAT-inspired quality.
+   Elevates the builder CTA, contact cards, chips, header depth.
+   ============================================================= */
+
+/* --- Builder CTA (Vyskladať riešenie): icon tile + right-side chevron --- */
+.cw-chat-builder {
+  padding: 8px 20px 8px 8px;
+  grid-template-columns: 42px minmax(0, 1fr) 18px;
+  gap: 12px;
+}
+.cw-chat-builder__icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.cw-chat-builder__icon svg {
+  width: 22px;
+  height: 22px;
+}
+.cw-chat-builder__copy {
+  display: grid;
+  gap: 1px;
+  justify-items: start;
+  align-items: center;
+}
+.cw-chat-builder__copy b {
+  font-size: 14px;
+  font-weight: 720;
+}
+.cw-chat-builder::before {
+  content: "→";
+  grid-column: 3;
+  align-self: center;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1;
+  transform: translateX(0);
+  transition: transform 220ms var(--mc-ease);
+}
+.cw-chat-builder:hover::before,
+.cw-chat-builder:focus-visible::before {
+  transform: translateX(4px);
+  color: #fff;
+}
+
+/* --- Contact cards: circular icon background, subtle depth (DERAT feel) --- */
+.cw-direct-actions {
+  padding: 4px 12px max(12px, env(safe-area-inset-bottom));
+}
+.cw-direct-actions__grid {
+  gap: 9px;
+}
+.cw-direct-actions__grid a {
+  height: 60px;
+  flex-direction: column;
+  gap: 4px;
+  border-radius: 16px;
+  padding: 8px 6px;
+  background: linear-gradient(180deg, rgba(15, 24, 39, 0.98), rgba(9, 15, 25, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 0 0 1px rgba(78, 140, 255, 0.14);
+  font-size: 11px;
+  font-weight: 660;
+  letter-spacing: -0.005em;
+}
+.cw-direct-actions__grid a:hover,
+.cw-direct-actions__grid a:focus-visible {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 0 1px rgba(78, 140, 255, 0.34),
+    0 14px 24px -18px rgba(52, 120, 246, 0.6);
+}
+.cw-direct-actions__icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  background: rgba(78, 140, 255, 0.13);
+  box-shadow: inset 0 0 0 1px rgba(78, 140, 255, 0.16);
+  transition:
+    background-color 200ms ease,
+    color 200ms ease,
+    transform 220ms var(--mc-ease);
+}
+.cw-direct-actions__grid a:hover .cw-direct-actions__icon,
+.cw-direct-actions__grid a:focus-visible .cw-direct-actions__icon {
+  color: #fff;
+  background: linear-gradient(140deg, var(--mc-blue-hover), var(--mc-blue) 62%, #245ac8);
+  transform: scale(1.08);
+}
+
+/* --- Chips: cleaner rest state, deeper hover --- */
+.cw-quick-replies .cw-chip {
+  background: linear-gradient(180deg, rgba(21, 33, 52, 0.98), rgba(12, 20, 32, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 0 1px rgba(78, 140, 255, 0.18),
+    0 10px 20px -18px rgba(0, 0, 0, 0.98);
+}
+.cw-quick-replies .cw-chip:hover,
+.cw-quick-replies .cw-chip:focus-visible {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 0 1px rgba(78, 140, 255, 0.36),
+    0 14px 26px -18px rgba(52, 120, 246, 0.55);
+  transform: translateY(-2px);
+}
+
+/* --- Header: tighter, more premium spacing --- */
+.cw-panel-head {
+  min-height: 66px;
+  padding: 10px 12px 10px 14px;
+}
+.cw-panel-head__mascot {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+}
+.cw-panel-head__mascot .bl--header {
+  width: 42px;
+  height: 42px;
+}
+.cw-panel-head__title b {
+  font-size: 15.5px;
+}
+
+/* --- Bot message bubble: crisper --- */
+.cw-message-row--bot .cw-message-wrap p {
+  background: linear-gradient(180deg, rgba(20, 32, 50, 0.94), rgba(13, 21, 33, 0.94));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), inset 0 0 0 1px rgba(78, 140, 255, 0.08);
+}
