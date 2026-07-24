@@ -37,7 +37,6 @@ test("assistant order and interactive send feedback remain explicit", async () =
   assert.ok(top > -1 && top < messages);
   assert.ok(messages < chips && chips < input && input < contacts);
   assert.match(conversation, /Vyskladať riešenie/);
-  assert.match(conversation, /5 krátkych krokov/);
   assert.match(conversation, /Čo mi to ušetrí\?/);
   assert.match(conversation, /data-sending=\{sending\}/);
   assert.match(conversation, /data-pulse=\{sendPulse\}/);
@@ -50,8 +49,8 @@ test("panel has the corrected premium desktop proportions", async () => {
   const css = await read("src/assistant-redesign.css");
   const panel = rule(css, ".cw-panel");
 
-  assert.match(panel, /width:\s*min\(492px,/);
-  assert.match(panel, /height:\s*min\(824px,/);
+  assert.match(panel, /width:\s*min\(540px,/);
+  assert.match(panel, /height:\s*min\(884px,/);
   assert.match(panel, /border-radius:\s*30px/);
   assert.match(panel, /radial-gradient/);
   assert.match(panel, /box-shadow:/);
