@@ -117,6 +117,21 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
           aria-modal="true"
           aria-labelledby="chameleon-widget-title"
           tabIndex={-1}
+          onTouchStart={(event) => {
+            const touch = event.touches[0];
+            touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+          }}
+          onTouchEnd={(event) => {
+            const start = touchStartRef.current;
+            touchStartRef.current = null;
+            if (!start) return;
+            const touch = event.changedTouches[0];
+            const dx = touch.clientX - start.x;
+            const dy = touch.clientY - start.y;
+            if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+            if (dx < 0 && mode === "calculator") switchMode("assistant");
+            else if (dx > 0 && mode === "assistant") switchMode("calculator");
+          }}
         >
           <header className="cw-panel-head">
             <h2 id="chameleon-widget-title" className="cw-sr-only">
@@ -181,24 +196,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
             </button>
           </nav>
 
-          <div
-            className="cw-panel-body"
-            key={mode}
-            onTouchStart={(event) => {
-              const touch = event.touches[0];
-              touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-            }}
-            onTouchEnd={(event) => {
-              const start = touchStartRef.current;
-              touchStartRef.current = null;
-              if (!start) return;
-              const touch = event.changedTouches[0];
-              const dx = touch.clientX - start.x;
-              const dy = touch.clientY - start.y;
-              if (Math.abs(dx) < 55 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
-              switchMode(dx < 0 ? "assistant" : "calculator");
-            }}
-          >
+          <div className="cw-panel-body" key={mode}>
             {mode === "assistant" ? (
               <AssistantConversation
                 resetToken={resetToken}
