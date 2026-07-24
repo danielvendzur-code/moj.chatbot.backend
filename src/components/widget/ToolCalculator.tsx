@@ -232,7 +232,7 @@ export function ToolCalculator({
             </div>
             <div>
               <span>Kontakt</span>
-              {lead.email.trim()}
+              {lead.phone.trim() || lead.email.trim()}
             </div>
             <div>
               <span>Číslo návrhu</span>
@@ -418,11 +418,11 @@ export function ToolCalculator({
               <div className="cw-lead">
                 <div className="cw-lead__head">
                   <span className="cw-lead__icon">
-                    <WidgetIcon name="mail" />
+                    <WidgetIcon name="spark" />
                   </span>
                   <span>
-                    <b>Získať konkrétny návrh</b>
-                    <small>Jednoduchý chatbot začína od 350 €.</small>
+                    <b>Dohodnime ďalší krok</b>
+                    <small>Videohovor, telefonát alebo e-mail — podľa toho, čo vám vyhovuje.</small>
                   </span>
                 </div>
                 <div className="cw-lead__form">
@@ -437,7 +437,7 @@ export function ToolCalculator({
                     <input
                       value={lead.email}
                       onChange={(event) => setLead({ ...lead, email: event.target.value })}
-                      placeholder="E-mail *"
+                      placeholder="E-mail na potvrdenie *"
                       aria-label="E-mail"
                       type="email"
                       autoComplete="email"
@@ -445,7 +445,7 @@ export function ToolCalculator({
                     <input
                       value={lead.phone}
                       onChange={(event) => setLead({ ...lead, phone: event.target.value })}
-                      placeholder="Telefón"
+                      placeholder="Telefón na dohodnutie hovoru"
                       aria-label="Telefón"
                       autoComplete="tel"
                     />
@@ -512,7 +512,7 @@ export function ToolCalculator({
                       )}
                     </span>
                   </button>
-                  <p className="cw-local-note">Odpoveď zvyčajne do 1 pracovného dňa. Bez záväzku.</p>
+                  <p className="cw-local-note">Ozvem sa zvyčajne do 1 pracovného dňa a spôsob prezentácie si dohodneme spolu.</p>
                 </div>
               </div>
 
