@@ -164,8 +164,8 @@ html[data-embed="true"] .widget-preview__surface {
   z-index: 2147483001;
   right: max(14px, env(safe-area-inset-right));
   bottom: max(14px, env(safe-area-inset-bottom));
-  width: min(540px, calc(100vw - 24px));
-  height: min(884px, calc(100dvh - 24px));
+  width: min(580px, calc(100vw - 22px));
+  height: min(920px, calc(100dvh - 22px));
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -860,24 +860,25 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-inputbar > .cw-send {
   position: relative;
   isolation: isolate;
-  width: 43px;
-  height: 43px;
-  flex: 0 0 43px;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
   display: grid;
   place-items: center;
   overflow: hidden;
   padding: 0;
   border: 0;
-  border-radius: 50%;
+  border-radius: 16px;
   color: white;
   background:
-    radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.22), transparent 38%),
-    linear-gradient(145deg, var(--mc-blue-hover), var(--mc-blue) 62%, #285fce);
+    radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.24), transparent 40%),
+    linear-gradient(145deg, var(--mc-blue-hover), var(--mc-blue) 60%, #245ac8);
   box-shadow:
-    0 13px 24px -17px rgba(52, 120, 246, 0.86),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 14px 26px -15px rgba(52, 120, 246, 0.92),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
   cursor: pointer;
   transition:
+    transform 200ms var(--mc-ease),
     filter 170ms ease,
     box-shadow 170ms ease;
 }
@@ -900,10 +901,15 @@ html[data-embed="true"] .widget-preview__surface {
 
 .cw-inputbar > .cw-send:hover:not(:disabled),
 .cw-inputbar > .cw-send:focus-visible:not(:disabled) {
-  filter: brightness(1.08);
+  filter: brightness(1.09);
+  transform: translateY(-2px) scale(1.05);
   box-shadow:
-    0 16px 30px -16px rgba(52, 120, 246, 1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+    0 20px 34px -14px rgba(52, 120, 246, 1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.26);
+}
+
+.cw-inputbar > .cw-send:active:not(:disabled) {
+  transform: translateY(0) scale(0.97);
 }
 
 .cw-inputbar > .cw-send:disabled {
@@ -1220,8 +1226,8 @@ html[data-embed="true"] .widget-preview__surface {
     radial-gradient(circle at 80% 0%, rgba(111, 164, 255, 0.18), transparent 48%),
     linear-gradient(135deg, rgba(20, 47, 84, 0.98), rgba(15, 34, 61, 0.98));
   transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 300ms var(--mc-ease);
+  transform-origin: center;
+  transition: transform 620ms var(--mc-ease);
 }
 
 .cw-rowcard > *,
