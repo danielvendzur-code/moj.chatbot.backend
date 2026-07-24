@@ -76,6 +76,7 @@ jobs:
           const calculator = fs.readFileSync('src/components/widget/ToolCalculator.tsx', 'utf8');
           const flow = fs.readFileSync('src/lib/assistantFlow.ts', 'utf8');
           const lead = fs.readFileSync('src/lib/leadApi.ts', 'utf8');
+          const finalCss = fs.readFileSync('src/approved-submit-final.css', 'utf8');
           const meta = JSON.parse(fs.readFileSync('dist/build-meta.json', 'utf8'));
 
           const must = (condition, message) => {
@@ -88,7 +89,10 @@ jobs:
           must(/border-radius:\s*999px/.test(css), 'oval geometry missing');
           must(/--mc-blue:\s*#3478f6/i.test(css), 'website blue missing');
           must(main.includes('assistant-redesign') && embed.includes('assistant-redesign'), 'redesign import missing');
-          must(main.includes('installWidgetSpotlight') && embed.includes('installWidgetSpotlight'), 'builder spotlight missing');
+          must(!main.includes('installWidgetSpotlight') && !embed.includes('installWidgetSpotlight'), 'legacy builder spotlight still mounted');
+          must(finalCss.includes('Visible widget rebuild'), 'visible widget rebuild layer missing');
+          must(finalCss.includes('.cw-contact-methods'), 'presentation method controls missing');
+          must(calculator.includes('Osobné stretnutie'), 'personal meeting option missing');
           must(lead.includes('api/lead'), 'lead API missing');
           must(conversation.includes('Vyskladať riešenie'), 'builder CTA missing');
           must(flow.includes('Čo má váš web vybaviť za vás?'), 'first question missing');
