@@ -5,12 +5,12 @@ import { getInitialEmbedViewport, isEmbedMode } from "./lib/embedBridge";
 import "./widget.css";
 import "./assistant-redesign.css";
 import "./approved-submit-final.css";
+import "./final-user-correction.css";
 
 if (isEmbedMode()) {
   document.documentElement.dataset.embed = "true";
   document.documentElement.dataset.embedViewport = getInitialEmbedViewport();
 }
-
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
