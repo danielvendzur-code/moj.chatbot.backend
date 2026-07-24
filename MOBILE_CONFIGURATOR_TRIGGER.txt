@@ -1,1 +1,1 @@
-trigger=compact-mobile-configurator-v1
+trigger=compact-mobile-configurator-v2
