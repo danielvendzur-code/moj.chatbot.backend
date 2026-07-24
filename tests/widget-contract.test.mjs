@@ -17,8 +17,9 @@ test("demo and embed load one foundation and one authoritative redesign", async 
   for (const source of [main, embed]) {
     assert.match(source, /widget\.css/);
     assert.match(source, /assistant-redesign\.css/);
+    assert.match(source, /approved-submit-final\.css/);
     assert.match(source, /installWidgetSpotlight/);
-    assert.equal((source.match(/import "\.\/.*\.css";/g) ?? []).length, 2);
+    assert.equal((source.match(/import "\.\/.*\.css";/g) ?? []).length, 3);
   }
 
   for (const selector of [".cw-tabs", ".cw-rowcard", ".cw-inputbar", ".cw-next", ".cw-submit"]) {
@@ -165,6 +166,20 @@ test("configurator remains five short steps with explicit selection guidance", a
   assert.match(flow, /Počítať cenu/);
   assert.match(flow, /Pomôcť s výberom/);
   assert.match(flow, /Nie som si istý/);
+});
+
+test("approved lead submission keeps sweep feedback and website hierarchy", async () => {
+  const calculator = await read("src/components/widget/ToolCalculator.tsx");
+  const css = await read("src/approved-submit-final.css");
+
+  assert.match(calculator, /cw-submit--approved/);
+  assert.match(calculator, /data-state=\{sendState\}/);
+  assert.match(calculator, /Odoslať dopyt/);
+  assert.match(css, /Difference Sweep|Approved submit interaction/);
+  assert.match(css, /data-state="sending"/);
+  assert.match(css, /chatbot-submit-sweep/);
+  assert.match(css, /\.cw-lead__optional/);
+  assert.match(css, /prefers-reduced-motion/);
 });
 
 test("contact submits a real lead and keeps API protections", async () => {

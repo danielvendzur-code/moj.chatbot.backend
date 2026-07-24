@@ -494,20 +494,23 @@ export function ToolCalculator({
                   ) : null}
                   <button
                     type="button"
-                    className="cw-submit"
+                    className="cw-submit cw-submit--approved"
                     data-testid="lead-submit"
+                    data-state={sendState}
                     onClick={() => void submitLead()}
                     disabled={sendState === "sending"}
                   >
-                    {sendState === "sending" ? (
-                      <>
-                        <span className="cw-spinner" aria-hidden="true" /> Odosielam…
-                      </>
-                    ) : (
-                      <>
-                        <WidgetIcon name="send" /> Poslať zadanie
-                      </>
-                    )}
+                    <span className="cw-submit__content">
+                      {sendState === "sending" ? (
+                        <>
+                          <span className="cw-spinner" aria-hidden="true" /> Odosielam…
+                        </>
+                      ) : (
+                        <>
+                          <WidgetIcon name="send" /> Odoslať dopyt
+                        </>
+                      )}
+                    </span>
                   </button>
                   <p className="cw-local-note">Odpoveď zvyčajne do 1 pracovného dňa. Bez záväzku.</p>
                 </div>

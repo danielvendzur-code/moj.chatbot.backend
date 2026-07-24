@@ -5,6 +5,7 @@ import { getInitialEmbedViewport, isEmbedMode } from "./lib/embedBridge";
 import { installWidgetSpotlight } from "./lib/widgetSpotlight";
 import "./widget.css";
 import "./assistant-redesign.css";
+import "./approved-submit-final.css";
 
 if (isEmbedMode()) {
   document.documentElement.dataset.embed = "true";
