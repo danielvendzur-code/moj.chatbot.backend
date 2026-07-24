@@ -2281,3 +2281,44 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-vcard > span {
   grid-column: 1;
 }
+
+/* =============================================================
+   Polish: bottom-align chat, hide chip send arrow, no configurator
+   scroll on desktop, kinder touch behaviour, unified message padding.
+   ============================================================= */
+
+/* Content sits at bottom of the chat area (like real chat apps) —
+   fixes "empty space at bottom" when only the intro is shown. */
+.cw-messages {
+  justify-content: flex-end;
+}
+.cw-messages:not(:has(.cw-message-row--me)):not(:has(.cw-typing)) {
+  flex: 1 1 auto;
+}
+
+/* Hide the little arrow-in-chip; user asked for "no emoji/decor" on chips */
+.cw-chip__send {
+  display: none;
+}
+.cw-quick-replies .cw-chip {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Configurator: no vertical scroll on desktop — steps fit in view */
+.cw-calc-body {
+  overflow: hidden;
+}
+.cw-calc-step {
+  min-height: 0;
+}
+
+/* Enable horizontal swipe between tabs, but keep vertical scroll inside
+   messages/calc-body normal on mobile */
+.cw-panel {
+  touch-action: pan-y;
+}
+.cw-messages,
+.cw-calc-body {
+  touch-action: pan-y;
+}
