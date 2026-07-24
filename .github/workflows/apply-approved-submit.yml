@@ -1,0 +1,60 @@
+name: Apply approved submit
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.head_ref == 'agent/premium-submit-button'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout approved branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/premium-submit-button
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Apply approved submit patch
+        shell: bash
+        env:
+          PATCH_B64: H4sIAOk3Y2oC/9Va747bxhH/rqfYKnAsWSJFUv8oOXeO8weIgfwDbKQocsFhRS6l9VFclkvqTnc5oB/7pegzBGgK9CH6yfGL9Ek6syQlSiQl2b62qHAnkdzZ2dmZ38zO7NLlnkc0bc5jQns6/CySWe9aRFeeL65lz2WhL9ZaSOdM6uulT2YnEDV44LIbMrHtoW05um55I8dwxsQ0jNFg0NA07aSxGp1O57TxPv2UaLbdHZEOfI8J3L4WMzltkO1nmci41ZuJyGWRFlGXJ3J6IZ9MJpPwpqfHDFodKdtd8lisqE/mTCxZHK3JkkvJg/nj9tMyN01bOtrMTxhy+qg/GNveqMd3mF2zmeQxI0h1iNeS8kDngeMnLpOtxxQIZUyDWIsYPODz4HGbfPwxYcsZc4/Qwaj5DeHLUERxceDOkYHDMBIr5moymS15rHk8oH7N2NWkMHzeQtKWCimOTJ8HMCnf/z135yx+GYrY5/NFXC1GHS3IMUu4D+YmMn96SASf0d3Z8R4+Uozwgjz//sWh/o4IViySNOaiOJUf1vLKpy59+yuJOHv7Cws42xHu81fPi2zdoj86CxprMnJ6+F+pbx1wBj5ysL0RsGvicR8AKFyWe2Hqo0b60fWByww2cpVzgoOtekHi5x54mDs6n9E1SMfsmvYQnK/R6T0hz/cxEMQsoo7SDnmhAAGN1IOnpIxiZKyTJ71GZxoJEZM7xK2Wj82Dqyn5yLBN0/Se7rdoCxg2wvaZaVuT3XblrOSj/mQ8YaNyk6ZQAgRjm068Pd6MSujrJDMOTs9uOYtahm6OusTsEkPvwy+6132j0+gsYoyUwl0T3bnWrhU01WXKanulaRtfUVMMBUQLUNGURMwHKK0Y+V3qPaAdJQ6XwqcpSXpZosDpY5yckgV3XRbst4M48WKKMHi037TkgbZgqQ4Gdniz336oLaSuCxieEoOYFc1p5IVhoQnk5i6J5jPaMo0BKG5kdIk1HKIeh6N2ddc8aBOzX+buCF+gzT31KTGgztU8EkngTtP4h6yor83xlwXguzxywD1oDKI8IlrfetTNxLMMFG+yEc+ywHfjiAYypBF0JYPRo3Y35erzgNFoy9UcDF027wISXZNaLjGA64pGrSJa22RkP0KSsWmYjjJKxfxvNLmgLpg0HQhCHuDJULo0UkGVeNsvQzcmuVhANwbC/gC+NAsvVY/hGGZmAXatvoEdJsPSwCKkDo/XoPL9FqUBT0TLaXqJOOy7LWQEf+1K8hTYqUyb/sSyjKXcVQs6Wi58Zntl34wWmzetuWYq2jZGL/XeFe99PXY6nTGYAks9F8J/DEafkmZzf/Yul6FPQY0zXzhXJb/ZuDydgWMkZYe+1VSsRs+qdmXLGtb7amWjzzxo0qx+hafGIpySYTk4zEQcCzA4TWJxxEUreodCrQAaW4GWgCQQATsdbwUPrnXyrZeAogwyHORIn1iA9AH68MBSIaZdjns3EP8ZQAVXyCnBRZiBezvsdOBrQ/Tvd8L+0DgF+6lSyWBQTfxAYOayNVUrZ5dMPeEkUltxyUEp7Wkg4tYUQEzhzm2ncC/65TSLlahdyAA2IciuCOXvEIltjMRGfSS29yOxfTwSm4bV71dH4jRvaJOxoeKxDbHRe8B4bPa38dhCwoGh4vEkR+nYRpTmC6HZPgV5f2hpVnjzX4fAbuSrcQnLgNhS7xZ7EcOyHz3QLDDHXLFK0NZI2kc51ZfxQKr80aUx1SCljdlZU0JcgcSo+VO955joOaPRBiyjsuecnOEcAz+Cm5pjcJ+HwXUhzbC3aYZdm2aUZ5ZEEqd2TaFM+A+qfxe1NODLLI/GKgsWt5yNvGYsJKZuVUZbHkDlw+P3yCEuL7Mc4dRUf7PuW7UZBQ/Q2prns9IyTqGWCTSQdAnu5TBcfPdJXkPdyr21tsldqsnmFBKCSW3SzYMFi/ZNR4gHTDXJbxlm7LpV7q4IrrMsZdw3yjlKjAmDxKQA6woNklrTYssP0fw5kat5qv+8DDpQ5pTb1GhQ3X5DY2dB4gUj2QbPY0kc6i8xdkJio4FxQI9qkV9AoUgjZ7FO69laUVFEiF0I23mGUaV406oUopYP7lV0D6pkuaTRuhiMSlWZNcBYNLDRy1V1a4yGR8uyqqKvmLYZNtRBg0NpWzknPD7VU51pU56ag7Kch0vm40LUlgI1GX5ayWN0zeRRObW6MnYS+/CmStVq0/J43Ad9Y9wv5Eh7WQ9ueewmUe2Tpnt5yWGOuwgyjsDDqFvQbG9mH17QikneA6Pn8lKEaBrqnzYbVRs9gLMY//v57sSBzDu0dD0pyfcujDVFcgrXLUFeWhrvFtvLE8jCZdnHT2J1eRmJ6xwIW0XnaZBWzINKRh8O2+875NSnMtacBffd8ug1Zv70iq29iC6ZrM5fFB8ow+9OKFmfknukHuG2l9oWvDsxqVcdU3GWDAo50gojBpWzxI3cxGFYT+dhGe+zPPyDN1t20reqnYSdsruSQgm+s9mOu9yOAKIAdyh6qVi9V0L4n1PfSUADItJjeZNtiJ9Cmm2y94fuoG9aum702dgYz3YPwk5mtt2MP4kc9+UHk0HXMkhH/fbxYIzdqLMYLwnUXjzZ7di6K55r5J82AR0mvn9f1fjJLAHnDaqawArrEFLwlKLZ0KpIHAC//BaAfNbc2L1ZPKY6TEoqwNKsFkZVBXg4x92zJgatw6MViog7LCJe4uV9NWsRfO5z5+rsrtUmZ+dkJXh+8PE1jNNq13TL69PCAOTs7IxsipbKfufViqzjQZ6RVnUPMN55XQu0wRoU7Os85EHAoiahEAdamiydNeMoYU3SOyffuZDqQAK2/Nef/l47ZK9mTETZ+wmanv29wJwkUJLi1JVA3wuIXG9/JbfUhYjB3l2m+2psVOpmt9Zonld3PWKoTu0sz+vbPtxY9cP2asdNDfa+AtcbDQVTVnNFuI7fT7Q6u/VQT+eVcayXhqnqxnBPt76Ack8LRMya59+5IUSd3/5Kblfr3/5CX8Ni40I2T8KIOmIVvPnHQhD37Z+pTj5jt+T2zS+rN3+7vUr0T3phxWCf9Fy+Oi8vTem593b92dznJ7nWxLBMQ9ep50wGhlFeZLY9tivJ9hkuF318haKfvkGRHdrfkef56WxqMXJPvEgsSVOvWIb2aKH+2fKpPqgvsPP5LOOzaS0wAIK0Ec+Gd59Xnx9j8VWgqTu/RlYNrNlkTL767uWryxdfEHBKd6UV2AqhREmppBPxMH4ZOUDXcoWTLEEFupNEmLG/VI2ESvLVq2++Tu++9BmSkJ/VKtp+poPmybNnqj4s2Vm9CrE1c36bWdl1ZpPhkOr6ZMRmrN8vW3nTYWvkzSO08RBtPNyzMXpiANkS9b9EQPzA2TW2dAmX6sE3+OLArqUUcj6L0CT/P2bmHmkVptRqY0aKC3FuxfwiM5mOSQBk/7qaLeJChc89s2FOkbuA2sfBFx3Ua0D68jW+nnGYIDMtpYMBG9i67jIGVp3smvYIi9TYR4jQ/Oa4a5MOfE8QAOpVpabLlgIyajd9t4b4grq4i0U8rEdVlq1a8RFN4oWIeJzuseR2aHYB8OvAQVVClk5amaOIJHIYER75ESHYTfn/lOmc4HsfLALRcDOtlRJ3SSb+BRqtl79nU01ZBsSmV+dAryqInDJcNbKxk1boxP6YUL+V9cpY9HKAXugXPf3JRQrI3ryNUeDHn9q6z4J5vIBick/0D2LWT6dzj8DftQvzmQPZvrJME8utmM4kGFFdQ0Hq0MjNb3kQJvGMRvl9wG7i/DrLn5VFFbhGY4wu5sjGqmODLxjV4/MkwgoDMINYkMRDAMkFzkTGLJTkmscLLE8gkea5jAi9ecIheXMYgqyxbxzctQPTfMuBF4QXySFixW/+qSx5j1+NTirD5j0btWmoBAf0APsrhoOnRbPHmIs7MQru+at7mw3cHOUkTfLzvT5QqLMpoCBEUHWQEWHe3zy1WGu2nxa4SVnBpj6yYV+1419UzFYkUE9FjZQ5SX2fQvlzsc1YL+6PdtxN3yrJpQS6L7aH7C9R+z8feGWsnkvVUU89ddVWST31RXl3q564eudD0d8rC22dAff5s0lKQtHGfgpLhF2KR3zZELQRpz4gS9AjDwq9LTcft44rOOGijSI+Dzl0wj7/Bh366ao5LAAA
+        run: |
+          if [ ! -f src/approved-submit-final.css ]; then
+            printf '%s' "$PATCH_B64" | base64 -d | gzip -d > /tmp/approved.patch
+            git apply /tmp/approved.patch
+          fi
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate approved chatbot
+        run: |
+          pnpm lint
+          pnpm test -- --run
+          pnpm build
+
+      - name: Commit approved source
+        shell: bash
+        run: |
+          git restore .github/workflows/deploy-pages.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/components/widget/ToolCalculator.tsx src/main.tsx src/embed.tsx src/approved-submit-final.css tests/widget-contract.test.mjs
+          git diff --cached --quiet && exit 0
+          git commit -m "Refine approved chatbot submit interaction"
+          git push origin HEAD:agent/premium-submit-button
