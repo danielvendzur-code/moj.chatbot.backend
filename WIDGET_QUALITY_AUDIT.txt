@@ -1,10 +1,13 @@
-run_id=30094591627
+run_id=30096089932
+transform=success
 install=success
+format=failure
 lint=success
 build=success
 test=success
 
-===== lint =====
+/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/.github/apply-final-widget-correction.py:16: SyntaxWarning: invalid escape sequence '\s'
+  tests += '''\n\ntest("final user correction centers quick replies and keeps one input shape", async () => {\n  const css = await read("src/final-user-correction.css");\n  const conversation = await read("src/components/widget/AssistantConversation.tsx");\n  for (const label of ["Čo mi to ušetrí?", "Ako to funguje?", "Čo treba pripraviť?", "Pozrieť ukážky"]) {\n    assert.ok(conversation.includes(label));\n  }\n  assert.match(css, /transform:\s*scaleX\\(0\\) !important/);\n  assert.match(css, /transform-origin:\s*center !important/);\n  assert.match(css, /justify-content:\s*center !important/);\n  assert.match(css, /\.cw-inputbar,\\s*html body \.cw-widget \.cw-inputbar:focus-within/);\n  assert.match(css, /border-radius:\s*15px !important/);\n});\n\ntest("final configurator correction removes clipping icon tiles and selected stripes", async () => {\n  const css = await read("src/final-user-correction.css");\n  assert.match(css, /grid-auto-rows:\s*minmax\\(122px, auto\\) !important/);\n  assert.match(css, /max-height:\s*none !important/);\n  assert.match(css, /overflow:\s*visible !important/);\n  assert.match(css, /\.cw-rowcard__icon[\\s\\S]*background:\s*transparent !important/);\n  assert.match(css, /\.cw-selection-indicator svg[\\s\\S]*transform:\s*none !important/);\n  assert.match(css, /\.cw-next,[\\s\\S]*background:\s*#3478f6 !important/);\n  assert.doesNotMatch(css, /inset 3px 0 0|#5ee7c4|#82f4d8/);\n});\n'''
 
 > site-assistant-widget@0.1.0 lint /home/runner/work/moj.chatbot.backend/moj.chatbot.backend
 > npm run check
@@ -14,30 +17,26 @@ test=success
 > tsc -b --pretty false
 
 
-===== build =====
-
 > site-assistant-widget@0.1.0 build /home/runner/work/moj.chatbot.backend/moj.chatbot.backend
 > tsc -b && vite build --base=/moj.chatbot.backend/ && vite build --config vite.embed.config.ts
 
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 96 modules transformed.
+[32m✓[39m 97 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
-[2mdist/[22m[2massets/[22m[35mindex-Djtfmo32.css  [39m[1m[2m 62.33 kB[22m[1m[22m[2m │ gzip: 10.92 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-BhMBqWgQ.js   [39m[1m[2m215.99 kB[22m[1m[22m[2m │ gzip: 72.91 kB[22m
-[32m✓ built in 1.07s[39m
+[2mdist/[22m[2massets/[22m[35mindex-DcERiIt6.css  [39m[1m[2m 75.14 kB[22m[1m[22m[2m │ gzip: 12.36 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-DaEGXskn.js   [39m[1m[2m215.99 kB[22m[1m[22m[2m │ gzip: 72.91 kB[22m
+[32m✓ built in 1.18s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 93 modules transformed.
+[32m✓[39m 94 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[35mwidget.css  [39m[1m[2m 62.33 kB[22m[1m[22m[2m │ gzip: 10.92 kB[22m
+[2mdist/[22m[35mwidget.css  [39m[1m[2m 75.14 kB[22m[1m[22m[2m │ gzip: 12.36 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m215.76 kB[22m[1m[22m[2m │ gzip: 72.88 kB[22m
-[32m✓ built in 1.02s[39m
-
-===== test =====
+[32m✓ built in 1.12s[39m
 
 > site-assistant-widget@0.1.0 test /home/runner/work/moj.chatbot.backend/moj.chatbot.backend
 > node --test tests/widget-contract.test.mjs -- --run
@@ -46,111 +45,123 @@ TAP version 13
 # Subtest: demo and embed load one foundation and one authoritative redesign
 ok 1 - demo and embed load one foundation and one authoritative redesign
   ---
-  duration_ms: 8.5637
+  duration_ms: 8.941881
   type: 'test'
   ...
 # Subtest: assistant order and interactive send feedback remain explicit
 ok 2 - assistant order and interactive send feedback remain explicit
   ---
-  duration_ms: 0.954199
+  duration_ms: 0.853436
   type: 'test'
   ...
 # Subtest: panel has the corrected premium desktop proportions
 ok 3 - panel has the corrected premium desktop proportions
   ---
-  duration_ms: 1.384045
+  duration_ms: 1.126166
   type: 'test'
   ...
 # Subtest: mode switch is one rounded segmented control without pill geometry
 ok 4 - mode switch is one rounded segmented control without pill geometry
   ---
-  duration_ms: 1.41101
+  duration_ms: 1.508411
   type: 'test'
   ...
 # Subtest: the redesign uses only the website black and blue palette
 ok 5 - the redesign uses only the website black and blue palette
   ---
-  duration_ms: 2.859826
+  duration_ms: 2.602326
   type: 'test'
   ...
 # Subtest: primary actions, quick chips and composer use intentional geometry
 ok 6 - primary actions, quick chips and composer use intentional geometry
   ---
-  duration_ms: 1.653034
+  duration_ms: 1.337912
   type: 'test'
   ...
 # Subtest: chat chips and composer use a crisp non-liquid system
 ok 7 - chat chips and composer use a crisp non-liquid system
   ---
-  duration_ms: 1.602657
+  duration_ms: 1.511747
   type: 'test'
   ...
 # Subtest: calculator choices keep geometry and use one static selected system
 ok 8 - calculator choices keep geometry and use one static selected system
   ---
-  duration_ms: 1.769442
+  duration_ms: 2.02673
   type: 'test'
   ...
 # Subtest: selection indicator is one real aligned circular check
 ok 9 - selection indicator is one real aligned circular check
   ---
-  duration_ms: 1.820983
+  duration_ms: 1.229879
   type: 'test'
   ...
 # Subtest: icons remain one custom rounded line family
 ok 10 - icons remain one custom rounded line family
   ---
-  duration_ms: 1.122609
+  duration_ms: 1.10732
   type: 'test'
   ...
 # Subtest: chat and configurator motion remain reduced-motion safe
 ok 11 - chat and configurator motion remain reduced-motion safe
   ---
-  duration_ms: 1.254746
+  duration_ms: 1.265386
   type: 'test'
   ...
 # Subtest: configurator remains five short steps with explicit selection guidance
 ok 12 - configurator remains five short steps with explicit selection guidance
   ---
-  duration_ms: 0.95978
+  duration_ms: 0.978089
   type: 'test'
   ...
 # Subtest: approved lead submission keeps sweep feedback and website hierarchy
 ok 13 - approved lead submission keeps sweep feedback and website hierarchy
   ---
-  duration_ms: 1.22737
+  duration_ms: 1.311012
   type: 'test'
   ...
 # Subtest: contact submits a real lead and keeps API protections
 ok 14 - contact submits a real lead and keeps API protections
   ---
-  duration_ms: 1.238256
+  duration_ms: 1.650877
   type: 'test'
   ...
 # Subtest: mobile full screen, safe areas and keyboard constraints remain safe
 ok 15 - mobile full screen, safe areas and keyboard constraints remain safe
   ---
-  duration_ms: 1.223878
+  duration_ms: 1.181409
   type: 'test'
   ...
 # Subtest: final contact step scrolls and supports calls or meetings
 ok 16 - final contact step scrolls and supports calls or meetings
   ---
-  duration_ms: 1.435603
+  duration_ms: 2.282528
   type: 'test'
   ...
 # Subtest: messages begin at the top and icon tiles stay transparent
 ok 17 - messages begin at the top and icon tiles stay transparent
   ---
-  duration_ms: 1.994263
+  duration_ms: 1.226133
   type: 'test'
   ...
-1..17
-# tests 17
+# Subtest: final user correction centers quick replies and keeps one input shape
+ok 18 - final user correction centers quick replies and keeps one input shape
+  ---
+  duration_ms: 1.916895
+  type: 'test'
+  ...
+# Subtest: final configurator correction removes clipping, icon tiles and selected stripes
+ok 19 - final configurator correction removes clipping, icon tiles and selected stripes
+  ---
+  duration_ms: 1.125144
+  type: 'test'
+  ...
+1..19
+# tests 19
 # suites 0
-# pass 17
+# pass 19
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 89.426528
+# duration_ms 93.38872
