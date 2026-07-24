@@ -1,8 +1,6 @@
 name: Widget quality audit
 
 on:
-  pull_request:
-    branches: [main]
   push:
     branches: [main]
 
@@ -10,23 +8,17 @@ permissions:
   contents: write
 
 concurrency:
-  group: widget-quality-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: false
+  group: widget-quality
+  cancel-in-progress: true
 
 jobs:
   quality:
-    if: ${{ github.actor != 'github-actions[bot]' && (github.event_name == 'pull_request' || !contains(github.event.head_commit.message, '[skip widget-quality]')) }}
+    if: ${{ github.actor != 'github-actions[bot]' && !contains(github.event.head_commit.message, '[skip widget-quality]') }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Apply final widget correction
-        id: transform
-        continue-on-error: true
-        run: python .github/apply-final-widget-correction.py > /tmp/transform.log 2>&1
       - uses: pnpm/action-setup@v4
         with:
           version: 10
@@ -39,12 +31,6 @@ jobs:
         id: install
         continue-on-error: true
         run: pnpm install --frozen-lockfile > /tmp/install.log 2>&1
-
-      - name: Format corrected source
-        id: format
-        if: steps.transform.outcome == 'success' && steps.install.outcome == 'success'
-        continue-on-error: true
-        run: pnpm exec prettier --write src/main.tsx src/embed.tsx src/final-user-correction.css tests/widget-contract.test.mjs > /tmp/format.log 2>&1
 
       - name: Lint
         id: lint
@@ -61,45 +47,27 @@ jobs:
         continue-on-error: true
         run: pnpm test -- --run > /tmp/test.log 2>&1
 
-      - name: Commit validated product source
-        if: >-
-          github.event_name == 'push' &&
-          steps.transform.outcome == 'success' &&
-          steps.install.outcome == 'success' &&
-          steps.format.outcome == 'success' &&
-          steps.lint.outcome == 'success' &&
-          steps.build.outcome == 'success' &&
-          steps.test.outcome == 'success'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/main.tsx src/embed.tsx src/final-user-correction.css tests/widget-contract.test.mjs
-          if ! git diff --cached --quiet; then
-            git commit -m "Rebuild configurator and stabilize chatbot controls [skip widget-quality]"
-            git pull --rebase origin main
-            git push origin HEAD:main
-          fi
-
       - name: Save result
-        if: always() && github.event_name == 'push'
+        if: always()
         run: |
           {
             echo "run_id=${{ github.run_id }}"
-            echo "transform=${{ steps.transform.outcome }}"
             echo "install=${{ steps.install.outcome }}"
-            echo "format=${{ steps.format.outcome }}"
             echo "lint=${{ steps.lint.outcome }}"
             echo "build=${{ steps.build.outcome }}"
             echo "test=${{ steps.test.outcome }}"
             echo
-            cat /tmp/transform.log 2>/dev/null || true
+            echo "===== lint ====="
             cat /tmp/lint.log 2>/dev/null || true
+            echo
+            echo "===== build ====="
             cat /tmp/build.log 2>/dev/null || true
+            echo
+            echo "===== test ====="
             cat /tmp/test.log 2>/dev/null || true
           } > WIDGET_QUALITY_AUDIT.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add WIDGET_QUALITY_AUDIT.txt
           git commit -m "chore: ulož widget quality audit [skip widget-quality]" || exit 0
-          git pull --rebase origin main
           git push origin HEAD:main
