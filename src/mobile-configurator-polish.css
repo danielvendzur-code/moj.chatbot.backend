@@ -1,0 +1,161 @@
+/* Compact mobile configurator controls — final authoritative layer. */
+html body .cw-widget :is(.cw-rowcard__icon, .cw-scard__icon),
+html body .cw-widget :is(.cw-rowcard, .cw-scard)[data-selected="true"] :is(.cw-rowcard__icon, .cw-scard__icon),
+html body .cw-widget :is(.cw-rowcard__icon, .cw-scard__icon) > *,
+html body .cw-widget :is(.cw-rowcard, .cw-scard)[data-selected="true"] :is(.cw-rowcard__icon, .cw-scard__icon) > * {
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  clip-path: none !important;
+  mask: none !important;
+  -webkit-mask: none !important;
+  transform: none !important;
+}
+
+html body .cw-widget :is(.cw-rowcard__icon, .cw-scard__icon)::before,
+html body .cw-widget :is(.cw-rowcard__icon, .cw-scard__icon)::after {
+  content: none !important;
+  display: none !important;
+}
+
+html body .cw-widget .cw-quick-replies {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+html body .cw-widget .cw-quick-replies .cw-chip,
+html body .cw-widget .cw-quick-replies .cw-chip:last-child {
+  grid-column: auto !important;
+  width: 100% !important;
+  min-height: 40px !important;
+  margin: 0 !important;
+  padding: 6px 8px !important;
+  border: 0 !important;
+  border-radius: 13px !important;
+  font-size: 10.8px !important;
+  line-height: 1.18 !important;
+}
+
+html body .cw-widget .cw-selection-indicator {
+  border: 0 !important;
+  background: #3478f6 !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 560px) {
+  html body .cw-widget .cw-calc-body {
+    padding: 13px 11px 14px !important;
+  }
+
+  html body .cw-widget .cw-step-head {
+    margin-bottom: 13px !important;
+  }
+
+  html body .cw-widget .cw-q {
+    margin-bottom: 5px !important;
+    font-size: clamp(1.23rem, 5.7vw, 1.52rem) !important;
+    line-height: 1.08 !important;
+  }
+
+  html body .cw-widget .cw-q-sub {
+    font-size: 11.2px !important;
+    line-height: 1.4 !important;
+  }
+
+  html body .cw-widget .cw-choice-grid {
+    gap: 7px !important;
+  }
+
+  html body .cw-widget .cw-choice-grid--interest {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-auto-rows: minmax(92px, auto) !important;
+  }
+
+  html body .cw-widget .cw-choice-grid--industry,
+  html body .cw-widget .cw-choice-grid--features {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-auto-rows: minmax(66px, auto) !important;
+  }
+
+  html body .cw-widget .cw-choice-grid--timeline {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-auto-rows: minmax(76px, auto) !important;
+  }
+
+  html body .cw-widget .cw-rowcard {
+    min-height: 92px !important;
+    grid-template-columns: 23px minmax(0, 1fr) !important;
+    gap: 7px !important;
+    padding: 11px 10px !important;
+    border-radius: 14px !important;
+  }
+
+  html body .cw-widget .cw-rowcard__icon,
+  html body .cw-widget .cw-scard__icon {
+    width: 23px !important;
+    height: 23px !important;
+  }
+
+  html body .cw-widget .cw-rowcard__icon svg,
+  html body .cw-widget .cw-scard__icon svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  html body .cw-widget .cw-rowcard__body {
+    gap: 4px !important;
+  }
+
+  html body .cw-widget .cw-rowcard__body b {
+    font-size: 11.6px !important;
+    line-height: 1.16 !important;
+  }
+
+  html body .cw-widget .cw-rowcard__body small {
+    font-size: 9.7px !important;
+    line-height: 1.32 !important;
+  }
+
+  html body .cw-widget .cw-scard {
+    min-height: 66px !important;
+    grid-template-columns: 23px minmax(0, 1fr) !important;
+    gap: 7px !important;
+    padding: 10px !important;
+    border-radius: 13px !important;
+  }
+
+  html body .cw-widget :is(.cw-opt, .cw-vcard) {
+    padding: 10px 28px 10px 11px !important;
+    border-radius: 13px !important;
+  }
+
+  html body .cw-widget .cw-opt {
+    min-height: 66px !important;
+  }
+
+  html body .cw-widget .cw-vcard {
+    min-height: 76px !important;
+  }
+
+  html body .cw-widget .cw-selection-indicator {
+    top: 8px !important;
+    right: 8px !important;
+    width: 17px !important;
+    height: 17px !important;
+  }
+
+  html body .cw-widget .cw-calc-actions {
+    min-height: 62px !important;
+    padding: 7px 10px max(8px, env(safe-area-inset-bottom)) !important;
+  }
+
+  html body .cw-widget .cw-next,
+  html body .cw-widget .cw-next:is(:hover, :focus-visible, :active):not(:disabled) {
+    height: 48px !important;
+    min-height: 48px !important;
+    border-radius: 14px !important;
+  }
+}
