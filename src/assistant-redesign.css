@@ -2305,9 +2305,9 @@ html[data-embed="true"] .widget-preview__surface {
   padding-right: 15px;
 }
 
-/* Configurator: no vertical scroll on desktop — steps fit in view */
+/* Configurator: content must never be clipped; it scrolls only if needed */
 .cw-calc-body {
-  overflow: hidden;
+  overflow-y: auto;
 }
 .cw-calc-step {
   min-height: 0;
