@@ -28,6 +28,9 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
   const [preset, setPreset] = useState<AssistantPreset | null>(null);
   const panelRef = useRef<HTMLElement>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const tabsRef = useRef<HTMLElement>(null);
+  const thumbRef = useRef<HTMLSpanElement>(null);
+  const dragRef = useRef<{ x: number; moved: boolean } | null>(null);
 
   const close = useCallback(() => {
     setIsOpen(false);
@@ -51,6 +54,40 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
     setPreset(null);
     track("mode_switch", { to: nextMode });
   }, []);
+
+  /* The switch thumb can be dragged, not only tapped. */
+  const startThumbDrag = (clientX: number) => {
+    dragRef.current = { x: clientX, moved: false };
+    tabsRef.current?.setAttribute("data-dragging", "true");
+  };
+
+  const moveThumbDrag = (clientX: number) => {
+    const drag = dragRef.current;
+    const tabs = tabsRef.current;
+    const thumb = thumbRef.current;
+    if (!drag || !tabs || !thumb) return;
+    const travel = tabs.getBoundingClientRect().width / 2;
+    if (travel <= 0) return;
+    const base = mode === "assistant" ? travel : 0;
+    const next = Math.max(0, Math.min(travel, base + (clientX - drag.x)));
+    if (Math.abs(clientX - drag.x) > 3) drag.moved = true;
+    thumb.style.transform = `translateX(${next}px)`;
+  };
+
+  const endThumbDrag = (clientX: number) => {
+    const drag = dragRef.current;
+    const tabs = tabsRef.current;
+    const thumb = thumbRef.current;
+    dragRef.current = null;
+    tabs?.removeAttribute("data-dragging");
+    if (thumb) thumb.style.transform = "";
+    if (!drag || !tabs) return;
+    if (!drag.moved) return;
+    const travel = tabs.getBoundingClientRect().width / 2;
+    const base = mode === "assistant" ? travel : 0;
+    const next = base + (clientX - drag.x);
+    switchMode(next > travel / 2 ? "assistant" : "calculator");
+  };
 
   const openFromOptions = useCallback(
     (options: OpenSiteAssistantOptions) => {
@@ -172,7 +209,22 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
             </div>
           </header>
 
-          <nav className="cw-tabs" aria-label="Vyberte spôsob pomoci" data-mode={mode}>
+          <nav
+            className="cw-tabs"
+            aria-label="Vyberte spôsob pomoci"
+            data-mode={mode}
+            ref={tabsRef}
+            onPointerDown={(event) => {
+              if (event.pointerType === "mouse" && event.button !== 0) return;
+              startThumbDrag(event.clientX);
+            }}
+            onPointerMove={(event) => {
+              if (dragRef.current) moveThumbDrag(event.clientX);
+            }}
+            onPointerUp={(event) => endThumbDrag(event.clientX)}
+            onPointerCancel={(event) => endThumbDrag(event.clientX)}
+          >
+            <span className="cw-tabs__thumb" aria-hidden="true" ref={thumbRef} />
             <button
               type="button"
               data-testid="tab-calculator"

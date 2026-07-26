@@ -543,3 +543,440 @@ html body .cw-widget .cw-industry-tip {
     transition: none !important;
   }
 }
+
+/* =============================================================
+   WEBSITE DESIGN SYSTEM — one family with danielvendzur-code.github.io/vne-n
+   Tokens, shapes and motion copied 1:1 from the site.
+   Only three blues. One line colour. One easing.
+   ============================================================= */
+html body .cw-widget {
+  --w-bg: #050609;
+  --w-bg-alt: #080b12;
+  --w-card: #0b1420;
+  --w-switch: #0f1a28;
+  --w-chip: #111b29;
+  --w-item: #111d2b;
+  --w-text: #f7f9fc;
+  --w-text-2: #aeb6c2;
+  --w-text-3: #747e8d;
+  --w-blue: #3478f6;
+  --w-blue-hover: #1f55c9;
+  --w-blue-soft: #8ab4ff;
+  --w-line: rgba(122, 162, 220, 0.18);
+  --w-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Shell ---------- */
+html body .cw-widget .cw-panel {
+  border-radius: 26px !important;
+  background: var(--w-bg) !important;
+  box-shadow:
+    0 40px 90px -40px rgba(0, 0, 0, 0.9),
+    0 0 0 1px var(--w-line) !important;
+}
+html body .cw-widget .cw-panel::before,
+html body .cw-widget .cw-panel::after {
+  content: none !important;
+}
+html body .cw-widget .cw-panel-head {
+  background: var(--w-bg) !important;
+  box-shadow: inset 0 -1px 0 var(--w-line) !important;
+  backdrop-filter: none !important;
+}
+html body .cw-widget .cw-panel-head__title b {
+  color: var(--w-text) !important;
+}
+html body .cw-widget .cw-panel-head__context {
+  color: var(--w-text-3) !important;
+}
+html body .cw-widget .cw-panel-head__online i {
+  background: var(--w-blue) !important;
+  box-shadow: none !important;
+}
+html body .cw-widget .cw-panel-head__mascot {
+  background: transparent !important;
+  color: var(--w-blue-soft) !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+html body .cw-widget .cw-panel-head__actions button {
+  border-radius: 999px !important;
+  color: var(--w-text-3) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transition: color 200ms var(--w-ease), background-color 200ms var(--w-ease) !important;
+}
+html body .cw-widget .cw-panel-head__actions button:hover {
+  color: var(--w-text) !important;
+  background: var(--w-card) !important;
+}
+
+/* ---------- Tabs: pill container + one sliding thumb ---------- */
+html body .cw-widget .cw-tabs {
+  position: relative !important;
+  height: 54px !important;
+  margin: 10px 12px 8px !important;
+  padding: 4px !important;
+  gap: 0 !important;
+  border-radius: 999px !important;
+  background: var(--w-switch) !important;
+  box-shadow: inset 0 0 0 1px var(--w-line) !important;
+  touch-action: pan-y !important;
+}
+html body .cw-widget .cw-tabs__thumb {
+  position: absolute !important;
+  z-index: 0 !important;
+  top: 4px !important;
+  bottom: 4px !important;
+  left: 4px !important;
+  width: calc(50% - 4px) !important;
+  border-radius: 999px !important;
+  background: var(--w-blue) !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+  transform: translateX(0) !important;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+html body .cw-widget .cw-tabs[data-mode="assistant"] .cw-tabs__thumb {
+  transform: translateX(100%) !important;
+}
+html body .cw-widget .cw-tabs[data-dragging="true"] .cw-tabs__thumb {
+  transition: none !important;
+}
+html body .cw-widget .cw-tabs > button {
+  position: relative !important;
+  z-index: 1 !important;
+  border-radius: 999px !important;
+  color: var(--w-text-3) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-weight: 640 !important;
+  transition: color 260ms var(--w-ease) !important;
+}
+html body .cw-widget .cw-tabs > button[data-active="true"] {
+  color: #ffffff !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ---------- One chip system: quick replies, options, list items ---------- */
+html body .cw-widget .cw-quick-replies {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 6px 12px 10px !important;
+}
+html body .cw-widget .cw-quick-replies .cw-chip {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-height: 46px !important;
+  height: 46px !important;
+  padding: 0 18px !important;
+  border-radius: 999px !important;
+  color: var(--w-text-2) !important;
+  background: var(--w-chip) !important;
+  box-shadow: inset 0 0 0 1px var(--w-line) !important;
+  font-size: 12.5px !important;
+  font-weight: 620 !important;
+  white-space: nowrap !important;
+  transition:
+    transform 260ms var(--w-ease),
+    box-shadow 260ms var(--w-ease),
+    color 260ms var(--w-ease),
+    background-color 260ms var(--w-ease) !important;
+}
+html body .cw-widget .cw-quick-replies .cw-chip:hover,
+html body .cw-widget .cw-quick-replies .cw-chip:focus-visible {
+  color: var(--w-text) !important;
+  transform: translateY(-2px) !important;
+  box-shadow:
+    inset 0 0 0 1px var(--w-line),
+    0 14px 26px -18px rgba(52, 120, 246, 0.75) !important;
+}
+html body .cw-widget .cw-quick-replies .cw-chip[data-sending="true"] {
+  color: #ffffff !important;
+  background: var(--w-blue) !important;
+  box-shadow: none !important;
+}
+
+/* ---------- Primary CTA: builder pill, next, submit ---------- */
+html body .cw-widget .cw-chat-builder,
+html body .cw-widget .cw-next,
+html body .cw-widget .cw-submit {
+  min-height: 46px !important;
+  border-radius: 999px !important;
+  color: #ffffff !important;
+  background: var(--w-blue) !important;
+  box-shadow: none !important;
+  font-weight: 680 !important;
+  transition:
+    background-color 260ms var(--w-ease),
+    transform 260ms var(--w-ease) !important;
+}
+html body .cw-widget .cw-chat-builder:hover,
+html body .cw-widget .cw-next:hover:not(:disabled),
+html body .cw-widget .cw-submit:hover:not(:disabled) {
+  background: var(--w-blue-hover) !important;
+  filter: none !important;
+}
+html body .cw-widget .cw-chat-builder {
+  height: 46px !important;
+  padding: 0 18px !important;
+  gap: 10px !important;
+  grid-template-columns: 20px minmax(0, 1fr) auto !important;
+}
+html body .cw-widget .cw-chat-builder__icon {
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+}
+html body .cw-widget .cw-chat-builder::after,
+html body .cw-widget .cw-chat-builder::before {
+  content: none !important;
+}
+
+/* ---------- Cards: one background, one 1px line, no nesting ---------- */
+html body .cw-widget .cw-rowcard,
+html body .cw-widget .cw-scard,
+html body .cw-widget .cw-vcard {
+  border-radius: 26px !important;
+  color: var(--w-text) !important;
+  background: var(--w-card) !important;
+  box-shadow: inset 0 0 0 1px var(--w-line) !important;
+  transition:
+    transform 260ms var(--w-ease),
+    box-shadow 260ms var(--w-ease),
+    background-color 260ms var(--w-ease) !important;
+}
+html body .cw-widget .cw-rowcard:hover:not([data-selected="true"]),
+html body .cw-widget .cw-scard:hover:not([data-selected="true"]),
+html body .cw-widget .cw-vcard:hover:not([data-selected="true"]) {
+  transform: translateY(-2px) !important;
+  box-shadow:
+    inset 0 0 0 1px var(--w-line),
+    0 14px 26px -18px rgba(52, 120, 246, 0.75) !important;
+}
+html body .cw-widget .cw-rowcard[data-selected="true"],
+html body .cw-widget .cw-scard[data-selected="true"],
+html body .cw-widget .cw-vcard[data-selected="true"] {
+  background: var(--w-card) !important;
+  box-shadow: inset 0 0 0 1px var(--w-blue) !important;
+}
+html body .cw-widget .cw-rowcard__icon,
+html body .cw-widget .cw-scard__icon {
+  color: var(--w-blue-soft) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html body .cw-widget .cw-rowcard__body b,
+html body .cw-widget .cw-scard b,
+html body .cw-widget .cw-vcard b {
+  color: var(--w-text) !important;
+}
+html body .cw-widget .cw-rowcard__body small,
+html body .cw-widget .cw-vcard span {
+  color: var(--w-text-3) !important;
+}
+/* list-style rows keep the smaller 14px radius */
+html body .cw-widget .cw-opt {
+  border-radius: 14px !important;
+  color: var(--w-text) !important;
+  background: var(--w-item) !important;
+  box-shadow: inset 0 0 0 1px var(--w-line) !important;
+}
+html body .cw-widget .cw-opt[data-selected="true"] {
+  box-shadow: inset 0 0 0 1px var(--w-blue) !important;
+}
+
+/* ---------- Message bubbles ---------- */
+html body .cw-widget .cw-message-row--bot .cw-message-wrap p {
+  border-radius: 18px 18px 18px 6px !important;
+  color: var(--w-text-2) !important;
+  background: #0e1118 !important;
+  box-shadow: inset 0 0 0 1px var(--w-line) !important;
+}
+html body .cw-widget .cw-message-row--me .cw-message-wrap p {
+  border-radius: 18px 18px 6px 18px !important;
+  color: #ffffff !important;
+  background: var(--w-blue) !important;
+  box-shadow: none !important;
+}
+html body .cw-widget .cw-avatar {
+  color: var(--w-blue-soft) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+/* typing: three dots as a wave */
+html body .cw-widget .cw-typing {
+  border-radius: 18px 18px 18px 6px !important;
+  background: #0e1118 !important;
+  box-shadow: inset 0 0 0 1px var(--w-line) !important;
+}
+html body .cw-widget .cw-typing i {
+  background: var(--w-blue-soft) !important;
+  animation: w-dot 1.25s var(--w-ease) infinite !important;
+}
+html body .cw-widget .cw-typing i:nth-child(2) {
+  animation-delay: 0.15s !important;
+}
+html body .cw-widget .cw-typing i:nth-child(3) {
+  animation-delay: 0.3s !important;
+}
+@keyframes w-dot {
+  0%, 70%, 100% { transform: translateY(0); opacity: 0.45; }
+  35% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* ---------- Composer + contact tiles ---------- */
+html body .cw-widget .cw-inputbar input {
+  color: var(--w-text) !important;
+  background: transparent !important;
+}
+html body .cw-widget .cw-send {
+  border-radius: 999px !important;
+  color: #ffffff !important;
+  background: var(--w-blue) !important;
+  box-shadow: none !important;
+  transition: background-color 260ms var(--w-ease), transform 260ms var(--w-ease) !important;
+}
+html body .cw-widget .cw-send:hover:not(:disabled) {
+  background: var(--w-blue-hover) !important;
+}
+html body .cw-widget .cw-direct-actions__grid a {
+  border-radius: 14px !important;
+  color: var(--w-text-2) !important;
+  background: var(--w-item) !important;
+  box-shadow: inset 0 0 0 1px var(--w-line) !important;
+  transition: transform 260ms var(--w-ease), box-shadow 260ms var(--w-ease), color 260ms var(--w-ease) !important;
+}
+html body .cw-widget .cw-direct-actions__grid a:hover {
+  color: var(--w-text) !important;
+  transform: translateY(-2px) !important;
+  box-shadow:
+    inset 0 0 0 1px var(--w-line),
+    0 14px 26px -18px rgba(52, 120, 246, 0.75) !important;
+}
+html body .cw-widget .cw-direct-actions__icon {
+  color: var(--w-blue-soft) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ---------- Type scale: nothing oversized ---------- */
+html body .cw-widget .cw-q {
+  max-width: 26ch !important;
+  color: var(--w-text) !important;
+  font-size: 19px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.2 !important;
+}
+html body .cw-widget .cw-q-sub {
+  color: var(--w-text-3) !important;
+  font-size: 12px !important;
+}
+
+/* ---------- Launcher ---------- */
+html body .cw-widget .cw-launcher {
+  border-radius: 22px !important;
+  color: var(--w-blue-soft) !important;
+  background: var(--w-card) !important;
+  box-shadow:
+    inset 0 0 0 1px var(--w-line),
+    0 18px 40px -22px rgba(0, 0, 0, 0.9) !important;
+  animation: w-idle 2.6s var(--w-ease) infinite !important;
+}
+html body .cw-widget .cw-launcher:hover {
+  background: var(--w-switch) !important;
+}
+@keyframes w-idle {
+  0%, 100% { box-shadow: inset 0 0 0 1px var(--w-line), 0 18px 40px -22px rgba(0, 0, 0, 0.9), 0 0 0 0 rgba(52, 120, 246, 0.4); }
+  55% { box-shadow: inset 0 0 0 1px var(--w-line), 0 18px 40px -22px rgba(0, 0, 0, 0.9), 0 0 0 14px rgba(52, 120, 246, 0); }
+}
+
+/* ---------- Focus + reduced motion ---------- */
+html body .cw-widget button:focus-visible,
+html body .cw-widget a:focus-visible,
+html body .cw-widget input:focus-visible,
+html body .cw-widget textarea:focus-visible {
+  outline: 3px solid rgba(52, 120, 246, 0.86) !important;
+  outline-offset: 4px !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html body .cw-widget *,
+  html body .cw-widget *::before,
+  html body .cw-widget *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Conversation always fills the panel so the composer and contact tiles sit at
+   the bottom edge — no floating block with a void underneath. */
+html body .cw-widget .cw-panel-body {
+  display: flex !important;
+  flex-direction: column !important;
+}
+html body .cw-widget .cw-conversation {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+}
+html body .cw-widget .cw-messages {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+}
+
+/* ---------- Blue normalisation: exactly three blues, nothing between ----------
+   Anything that previously used an off-palette blue (#4e8cff, #7faeff,
+   #9bc4ff, #3979e6, #76a7ff, #91b8ff) is mapped onto the site's three. */
+html body .cw-widget .cw-selection-indicator,
+html body .cw-widget .cw-progress__fill,
+html body .cw-widget .cw-tabs__thumb,
+html body .cw-widget .cw-send,
+html body .cw-widget .cw-chat-builder,
+html body .cw-widget .cw-next,
+html body .cw-widget .cw-submit,
+html body .cw-widget .cw-message-row--me .cw-message-wrap p,
+html body .cw-widget .cw-quick-replies .cw-chip[data-sending="true"],
+html body .cw-widget .cw-panel-head__online i {
+  background: var(--w-blue) !important;
+  background-image: none !important;
+  border-color: var(--w-blue) !important;
+}
+html body .cw-widget .cw-rowcard__icon,
+html body .cw-widget .cw-scard__icon,
+html body .cw-widget .cw-direct-actions__icon,
+html body .cw-widget .cw-panel-head__mascot,
+html body .cw-widget .cw-avatar,
+html body .cw-widget .cw-typing i,
+html body .cw-widget .cw-progress__count,
+html body .cw-widget .cw-step-head .cw-q em,
+html body .cw-widget .cw-chat-builder__icon {
+  color: var(--w-blue-soft) !important;
+}
+html body .cw-widget .cw-typing i {
+  background: var(--w-blue-soft) !important;
+}
+html body .cw-widget .cw-rowcard[data-selected="true"],
+html body .cw-widget .cw-scard[data-selected="true"],
+html body .cw-widget .cw-vcard[data-selected="true"],
+html body .cw-widget .cw-opt[data-selected="true"] {
+  border-color: var(--w-blue) !important;
+}
+html body .cw-widget .cw-selection-indicator svg {
+  color: #ffffff !important;
+}
+
+/* last stray decorative blue -> the soft token */
+html body .cw-widget .cw-lead__icon,
+html body .cw-widget .cw-contact-methods svg,
+html body .cw-widget .cw-summary svg,
+html body .cw-widget .cw-industry-tip svg,
+html body .cw-widget .cw-opt svg,
+html body .cw-widget .cw-vcard svg {
+  color: var(--w-blue-soft) !important;
+}
