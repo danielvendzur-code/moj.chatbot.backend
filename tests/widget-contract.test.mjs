@@ -163,10 +163,10 @@ test("configurator remains five short steps with explicit selection guidance", a
   assert.equal((featureBlock.match(/id:/g) ?? []).length, 6);
   assert.match(flow, /Vyberte jednu možnosť/);
   assert.match(flow, /Môžete vybrať viac možností/);
-  assert.match(flow, /Odpovedať zákazníkom/);
-  assert.match(flow, /Počítať cenu/);
-  assert.match(flow, /Pomôcť s výberom/);
-  assert.match(flow, /Nie som si istý/);
+  assert.match(flow, /AI chatbot/);
+  assert.match(flow, /Chatbot s kalkulačkou/);
+  assert.match(flow, /Chatbot s konfigurátorom/);
+  assert.match(flow, /Neviem, poraďte mi/);
 });
 
 test("approved lead submission keeps sweep feedback and website hierarchy", async () => {
