@@ -1173,3 +1173,76 @@ html body .cw-widget .cw-rowcard__body small {
   font-size: 10.6px !important;
   line-height: 1.4 !important;
 }
+
+/* =============================================================
+   Configurator fills the step, plus an orbiting selection ring.
+   ============================================================= */
+
+/* ---- Choice cards stretch to fill the available step height ---- */
+html body .cw-widget .cw-calc-step {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 100% !important;
+}
+html body .cw-widget .cw-choice-grid {
+  flex: 1 1 auto !important;
+  align-content: center !important;
+  grid-auto-rows: minmax(112px, auto) !important;
+}
+html body .cw-widget .cw-choice-grid--industry,
+html body .cw-widget .cw-choice-grid--features,
+html body .cw-widget .cw-choice-grid--timeline {
+  grid-auto-rows: minmax(84px, auto) !important;
+}
+/* content sits evenly inside the card, never clustered at the top */
+html body .cw-widget .cw-rowcard {
+  align-content: center !important;
+  gap: 9px !important;
+  padding: 15px 14px !important;
+}
+
+/* ---- Selected card: a light orbits the whole edge ---- */
+@property --w-orbit {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  z-index: 2 !important;
+  inset: 0 !important;
+  padding: 1.6px !important;
+  border: 0 !important;
+  border-radius: inherit !important;
+  background: conic-gradient(
+    from var(--w-orbit),
+    rgba(52, 120, 246, 0.22) 0deg,
+    rgba(52, 120, 246, 0.22) 210deg,
+    rgba(138, 180, 255, 0.55) 288deg,
+    #8ab4ff 330deg,
+    #ffffff 352deg,
+    #8ab4ff 358deg,
+    rgba(52, 120, 246, 0.22) 360deg
+  ) !important;
+  filter: drop-shadow(0 0 6px rgba(52, 120, 246, 0.55)) !important;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0) !important;
+  -webkit-mask-composite: xor !important;
+  mask-composite: exclude !important;
+  pointer-events: none !important;
+  animation: w-orbit 2.6s linear infinite !important;
+}
+@keyframes w-orbit {
+  to {
+    --w-orbit: 360deg;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]::before {
+    animation: none !important;
+    background: var(--w-blue) !important;
+  }
+}
