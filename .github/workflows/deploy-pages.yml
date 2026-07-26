@@ -96,7 +96,7 @@ jobs:
           must(lead.includes('api/lead'), 'lead API missing');
           must(conversation.includes('Vyskladať riešenie'), 'builder CTA missing');
           must(flow.includes('Čo má váš web vybaviť za vás?'), 'first question missing');
-          must(flow.includes('Nie som si istý'), 'safe fallback option missing');
+          must(flow.includes('Neviem, poraďte mi'), 'safe fallback option missing');
           must(!/(#2aa|#1fa|teal|turquoise)/i.test(css), 'forbidden colour remains');
           must(!calculator.includes('cw-choice-arrow'), 'legacy choice arrow remains');
           must(!js.includes('REPLACE-ME'), 'placeholder remains');
