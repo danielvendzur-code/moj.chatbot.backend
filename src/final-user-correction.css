@@ -980,3 +980,196 @@ html body .cw-widget .cw-opt svg,
 html body .cw-widget .cw-vcard svg {
   color: var(--w-blue-soft) !important;
 }
+
+/* =============================================================
+   Polish: quick-reply proportions, no square artefacts, soft shapes,
+   and motion on chips + selection.
+   ============================================================= */
+
+/* ---- Quick replies: lighter than the primary CTA, evenly balanced ---- */
+html body .cw-widget .cw-quick-replies {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-content: center !important;
+  gap: 8px !important;
+  padding: 8px 14px 12px !important;
+}
+html body .cw-widget .cw-quick-replies .cw-chip {
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 0 16px !important;
+  font-size: 12.2px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.005em !important;
+  transform: translateY(0) scale(1) !important;
+  transition:
+    transform 320ms var(--w-ease),
+    box-shadow 320ms var(--w-ease),
+    color 320ms var(--w-ease),
+    background-color 320ms var(--w-ease) !important;
+}
+/* soft blue wash grows from the centre on hover */
+html body .cw-widget .cw-quick-replies .cw-chip::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  z-index: -1 !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  background: var(--w-blue) !important;
+  opacity: 0 !important;
+  transform: scale(0.6) !important;
+  transition:
+    transform 520ms var(--w-ease),
+    opacity 400ms var(--w-ease) !important;
+}
+html body .cw-widget .cw-quick-replies .cw-chip:hover::before,
+html body .cw-widget .cw-quick-replies .cw-chip:focus-visible::before,
+html body .cw-widget .cw-quick-replies .cw-chip[data-sending="true"]::before {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}
+html body .cw-widget .cw-quick-replies .cw-chip:hover,
+html body .cw-widget .cw-quick-replies .cw-chip:focus-visible {
+  color: #ffffff !important;
+  transform: translateY(-2px) scale(1.015) !important;
+  box-shadow: 0 14px 26px -18px rgba(52, 120, 246, 0.75) !important;
+}
+html body .cw-widget .cw-quick-replies .cw-chip:active {
+  transform: translateY(0) scale(0.975) !important;
+}
+
+/* ---- No square artefacts: rounded hit areas, no tap/focus rectangles ---- */
+html body .cw-widget *,
+html body .cw-widget *::before,
+html body .cw-widget *::after {
+  -webkit-tap-highlight-color: transparent !important;
+}
+html body .cw-widget .cw-panel-head__mascot,
+html body .cw-widget .cw-avatar,
+html body .cw-widget .cw-panel-head__actions button,
+html body .cw-widget .cw-progress__back,
+html body .cw-widget .cw-send,
+html body .cw-widget .cw-selection-indicator,
+html body .cw-widget .cw-launcher .bl,
+html body .cw-widget .cw-panel-head__mascot .bl,
+html body .cw-widget .cw-avatar .bl {
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  background-clip: padding-box !important;
+}
+html body .cw-widget .cw-rowcard__icon,
+html body .cw-widget .cw-scard__icon,
+html body .cw-widget .cw-direct-actions__icon,
+html body .cw-widget .cw-chat-builder__icon,
+html body .cw-widget .cw-lead__icon {
+  border-radius: 999px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+/* focus ring follows the real shape, never a rectangle */
+html body .cw-widget button:focus-visible,
+html body .cw-widget a:focus-visible,
+html body .cw-widget input:focus-visible,
+html body .cw-widget textarea:focus-visible,
+html body .cw-widget [role="button"]:focus-visible {
+  outline: 3px solid rgba(52, 120, 246, 0.86) !important;
+  outline-offset: 4px !important;
+  border-radius: inherit;
+}
+html body .cw-widget .cw-launcher:focus-visible {
+  border-radius: 22px !important;
+}
+html body .cw-widget svg {
+  overflow: visible !important;
+  background: transparent !important;
+}
+
+/* ---- Soft shapes everywhere: nothing sharp ---- */
+html body .cw-widget .cw-progress__track,
+html body .cw-widget .cw-progress__fill {
+  border-radius: 999px !important;
+}
+html body .cw-widget .cw-custom textarea,
+html body .cw-widget .cw-lead__form input,
+html body .cw-widget .cw-lead__form textarea,
+html body .cw-widget .cw-contact-methods > * {
+  border-radius: 16px !important;
+}
+html body .cw-widget .cw-summary,
+html body .cw-widget .cw-lead,
+html body .cw-widget .cw-industry-tip,
+html body .cw-widget .cw-custom {
+  border-radius: 20px !important;
+}
+
+/* ---- Selection motion on configurator cards ---- */
+html body .cw-widget .cw-rowcard,
+html body .cw-widget .cw-scard,
+html body .cw-widget .cw-vcard,
+html body .cw-widget .cw-opt {
+  transition:
+    transform 320ms var(--w-ease),
+    box-shadow 320ms var(--w-ease),
+    border-color 320ms var(--w-ease),
+    background-color 320ms var(--w-ease) !important;
+}
+html body .cw-widget .cw-rowcard[data-selected="true"],
+html body .cw-widget .cw-scard[data-selected="true"],
+html body .cw-widget .cw-vcard[data-selected="true"],
+html body .cw-widget .cw-opt[data-selected="true"] {
+  animation: w-pick 460ms var(--w-ease) both !important;
+}
+@keyframes w-pick {
+  0% { transform: scale(1); }
+  42% { transform: scale(1.022); }
+  100% { transform: scale(1); }
+}
+html body .cw-widget .cw-selection-indicator[data-visible="true"] {
+  animation: w-check 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both !important;
+}
+@keyframes w-check {
+  0% { opacity: 0; transform: scale(0.4); }
+  60% { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body .cw-widget .cw-rowcard[data-selected="true"],
+  html body .cw-widget .cw-scard[data-selected="true"],
+  html body .cw-widget .cw-vcard[data-selected="true"],
+  html body .cw-widget .cw-opt[data-selected="true"],
+  html body .cw-widget .cw-selection-indicator[data-visible="true"] {
+    animation: none !important;
+  }
+}
+
+/* Quick replies read best as a balanced 2 x 2 block rather than a ragged wrap */
+html body .cw-widget .cw-quick-replies {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+html body .cw-widget .cw-quick-replies .cw-chip {
+  width: 100% !important;
+  padding: 0 12px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+html body .cw-widget .cw-quick-replies .cw-chip .cw-chip__label {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+/* longer product names must stay on one line in the choice cards */
+html body .cw-widget .cw-rowcard__body b {
+  font-size: 13.2px !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.25 !important;
+  text-wrap: balance !important;
+}
+html body .cw-widget .cw-rowcard__body small {
+  font-size: 10.6px !important;
+  line-height: 1.4 !important;
+}

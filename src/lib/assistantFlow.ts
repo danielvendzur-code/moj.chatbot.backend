@@ -54,25 +54,25 @@ export type InterestOption = {
 export const INTERESTS: InterestOption[] = [
   {
     id: "chatbot",
-    label: "Odpovedať zákazníkom",
+    label: "AI chatbot",
     description: "Vysvetlí služby, poradí a pripraví dopyt.",
     icon: "chat",
   },
   {
     id: "calcbot",
-    label: "Počítať cenu",
+    label: "Chatbot s kalkulačkou",
     description: "Vypočíta cenu alebo rozsah podľa vašich pravidiel.",
     icon: "calculator",
   },
   {
     id: "product",
-    label: "Pomôcť s výberom",
+    label: "Chatbot s konfigurátorom",
     description: "Prevedie zákazníka variantmi a doplnkami.",
     icon: "options",
   },
   {
     id: "custom",
-    label: "Nie som si istý",
+    label: "Neviem, poraďte mi",
     description: "Opíšte situáciu a navrhnem najjednoduchší postup.",
     icon: "spark",
   },
