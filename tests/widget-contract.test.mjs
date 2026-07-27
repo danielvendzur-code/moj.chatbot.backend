@@ -215,8 +215,8 @@ test("final contact step scrolls and supports calls or meetings", async () => {
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
   const css = await read("src/approved-submit-final.css");
 
-  assert.match(flow, /Ako vám návrh najlepšie ukážem\?/);
-  assert.match(flow, /osobné stretnutie/);
+  assert.match(flow, /Kam vám mám poslať návrh\?/);
+  assert.match(calculator, /Osobné stretnutie/);
   assert.match(calculator, /Telefón \*/);
   assert.match(calculator, /cw-contact-methods/);
   assert.match(calculator, /Videohovor/);

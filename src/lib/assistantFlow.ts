@@ -38,8 +38,8 @@ export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
     "Vyberte jednu možnosť. Presný harmonogram pripravím podľa rozsahu.",
   ],
   contact: [
-    "Ako vám návrh najlepšie ukážem?",
-    "Vyberte videohovor, telefonát, osobné stretnutie alebo e-mail a nechajte kontakt.",
+    "Kam vám mám poslať návrh?",
+    "Stačí meno a telefón.",
   ],
 };
 

@@ -1789,3 +1789,99 @@ html body .cw-widget .cw-consent:has(input:not(:checked)) {
   background: none !important;
   box-shadow: none !important;
 }
+
+/* =============================================================
+   GDPR box fix + one smooth motion system.
+   ============================================================= */
+
+/* The form-field rule was also hitting the consent checkbox and stretching it
+   into a tall rounded box. Text fields only. */
+html body .cw-widget .cw-lead__form input:not([type="checkbox"]):not([type="radio"]) {
+  height: 42px !important;
+  padding: 0 14px !important;
+  border-radius: 14px !important;
+  font-size: 13px !important;
+}
+html body .cw-widget .cw-lead__form input[type="checkbox"],
+html body .cw-widget .cw-consent input[type="checkbox"] {
+  width: 17px !important;
+  height: 17px !important;
+  min-height: 0 !important;
+  flex: 0 0 17px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 4px !important;
+  background: none !important;
+  box-shadow: none !important;
+  appearance: auto !important;
+  -webkit-appearance: checkbox !important;
+  accent-color: var(--w-blue) !important;
+}
+
+/* ---- One Apple-like motion system for everything ---- */
+html body .cw-widget {
+  --w-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --w-fast: 240ms;
+  --w-base: 360ms;
+  --w-slow: 520ms;
+}
+html body .cw-widget .cw-quick-replies .cw-chip,
+html body .cw-widget .cw-chat-builder,
+html body .cw-widget .cw-submit,
+html body .cw-widget .cw-next,
+html body .cw-widget .cw-send,
+html body .cw-widget .cw-direct-actions__grid a,
+html body .cw-widget .cw-contact-method,
+html body .cw-widget .cw-rowcard,
+html body .cw-widget .cw-scard,
+html body .cw-widget .cw-vcard,
+html body .cw-widget .cw-opt,
+html body .cw-widget .cw-panel-head__actions button,
+html body .cw-widget .cw-progress__back,
+html body .cw-widget .cw-tabs > button {
+  transition:
+    transform var(--w-base) var(--w-ease),
+    box-shadow var(--w-base) var(--w-ease),
+    background-color var(--w-base) var(--w-ease),
+    border-color var(--w-base) var(--w-ease),
+    color var(--w-fast) var(--w-ease),
+    opacity var(--w-fast) var(--w-ease) !important;
+  will-change: transform !important;
+}
+/* press feedback is quick, release is soft — the Apple feel */
+html body .cw-widget .cw-quick-replies .cw-chip:active,
+html body .cw-widget .cw-chat-builder:active,
+html body .cw-widget .cw-submit:active:not(:disabled),
+html body .cw-widget .cw-next:active:not(:disabled),
+html body .cw-widget .cw-direct-actions__grid a:active,
+html body .cw-widget .cw-contact-method:active,
+html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):active {
+  transform: scale(0.975) !important;
+  transition-duration: 90ms !important;
+}
+html body .cw-widget .cw-quick-replies .cw-chip::before {
+  transition:
+    transform var(--w-slow) var(--w-ease),
+    opacity var(--w-base) var(--w-ease) !important;
+}
+html body .cw-widget .cw-tabs__thumb {
+  transition: transform var(--w-slow) var(--w-ease) !important;
+}
+html body .cw-widget .cw-progress__fill {
+  transition: width var(--w-slow) var(--w-ease) !important;
+}
+html body .cw-widget .cw-panel {
+  animation: w-panel-in var(--w-slow) var(--w-ease) both !important;
+}
+@keyframes w-panel-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body .cw-widget *,
+  html body .cw-widget *::before,
+  html body .cw-widget *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
