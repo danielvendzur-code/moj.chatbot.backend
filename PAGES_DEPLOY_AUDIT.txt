@@ -1,6 +1,6 @@
 deployment=success
 dependency_audit=success
 live_smoke=success
-source_sha=e35736afc28410740caf3e5c42aa515501bfaf4d
+source_sha=0db05f9d83a79a853e6437106bfa6f4bf459c867
 page_url=https://danielvendzur-code.github.io/moj.chatbot.backend/
-deployed_at=2026-07-27T12:14:18Z
+deployed_at=2026-07-27T13:08:05Z
