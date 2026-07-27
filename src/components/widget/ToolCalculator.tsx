@@ -461,15 +461,6 @@ export function ToolCalculator({
                     );
                   })}
                 </div>
-                <div className="cw-lead__head">
-                  <span className="cw-lead__icon">
-                    <WidgetIcon name="spark" />
-                  </span>
-                  <span>
-                    <b>Dohodnime ďalší krok</b>
-                    <small>Termín a spôsob prezentácie si dohodneme podľa vašej voľby vyššie.</small>
-                  </span>
-                </div>
                 <div className="cw-lead__form">
                   <input
                     value={lead.name}
@@ -532,32 +523,6 @@ export function ToolCalculator({
                     />
                     <span>Súhlasím so spracovaním údajov na prípravu návrhu.</span>
                   </label>
-                  {leadError ? (
-                    <p className="cw-lead__status" role="alert">
-                      {leadError}
-                    </p>
-                  ) : null}
-                  <button
-                    type="button"
-                    className="cw-submit cw-submit--approved"
-                    data-testid="lead-submit"
-                    data-state={sendState}
-                    onClick={() => void submitLead()}
-                    disabled={sendState === "sending"}
-                  >
-                    <span className="cw-submit__content">
-                      {sendState === "sending" ? (
-                        <>
-                          <span className="cw-spinner" aria-hidden="true" /> Odosielam…
-                        </>
-                      ) : (
-                        <>
-                          <WidgetIcon name="send" /> Odoslať dopyt
-                        </>
-                      )}
-                    </span>
-                  </button>
-                  <p className="cw-local-note">Ozvem sa zvyčajne do 1 pracovného dňa a spôsob prezentácie si dohodneme spolu.</p>
                 </div>
               </div>
 
@@ -595,9 +560,34 @@ export function ToolCalculator({
           </button>
         </footer>
       ) : (
+        /* The sticky slot carries the action that finishes the flow. Restart
+           stays one tap away in the panel header, so it does not need to sit
+           here pushing the submit button below the fold. */
         <footer className="cw-calc-actions cw-calc-actions--final">
-          <button type="button" className="cw-restart" onClick={() => restart(null)}>
-            <WidgetIcon name="reset" /> Začať odznova
+          {leadError ? (
+            <p className="cw-lead__status" role="alert">
+              {leadError}
+            </p>
+          ) : null}
+          <button
+            type="button"
+            className="cw-submit cw-submit--approved"
+            data-testid="lead-submit"
+            data-state={sendState}
+            onClick={() => void submitLead()}
+            disabled={sendState === "sending"}
+          >
+            <span className="cw-submit__content">
+              {sendState === "sending" ? (
+                <>
+                  <span className="cw-spinner" aria-hidden="true" /> Odosielam…
+                </>
+              ) : (
+                <>
+                  <WidgetIcon name="send" /> Odoslať dopyt
+                </>
+              )}
+            </span>
           </button>
         </footer>
       )}

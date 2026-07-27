@@ -1789,3 +1789,190 @@ html body .cw-widget .cw-consent:has(input:not(:checked)) {
   background: none !important;
   box-shadow: none !important;
 }
+
+/* =============================================================
+   GDPR box fix + one smooth motion system.
+   ============================================================= */
+
+/* The form-field rule was also hitting the consent checkbox and stretching it
+   into a tall rounded box. Text fields only. */
+html body .cw-widget .cw-lead__form input:not([type="checkbox"]):not([type="radio"]) {
+  height: 42px !important;
+  padding: 0 14px !important;
+  border-radius: 14px !important;
+  font-size: 13px !important;
+}
+/* The checkbox itself is sized and drawn near the end of this file, next to
+   the rules for the sticky submit slot. */
+
+/* ---- One Apple-like motion system for everything ---- */
+html body .cw-widget {
+  --w-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --w-fast: 240ms;
+  --w-base: 360ms;
+  --w-slow: 520ms;
+}
+html body .cw-widget .cw-quick-replies .cw-chip,
+html body .cw-widget .cw-chat-builder,
+html body .cw-widget .cw-submit,
+html body .cw-widget .cw-next,
+html body .cw-widget .cw-send,
+html body .cw-widget .cw-direct-actions__grid a,
+html body .cw-widget .cw-contact-method,
+html body .cw-widget .cw-rowcard,
+html body .cw-widget .cw-scard,
+html body .cw-widget .cw-vcard,
+html body .cw-widget .cw-opt,
+html body .cw-widget .cw-panel-head__actions button,
+html body .cw-widget .cw-progress__back,
+html body .cw-widget .cw-tabs > button {
+  transition:
+    transform var(--w-base) var(--w-ease),
+    box-shadow var(--w-base) var(--w-ease),
+    background-color var(--w-base) var(--w-ease),
+    border-color var(--w-base) var(--w-ease),
+    color var(--w-fast) var(--w-ease),
+    opacity var(--w-fast) var(--w-ease) !important;
+  will-change: transform !important;
+}
+/* press feedback is quick, release is soft — the Apple feel */
+html body .cw-widget .cw-quick-replies .cw-chip:active,
+html body .cw-widget .cw-chat-builder:active,
+html body .cw-widget .cw-submit:active:not(:disabled),
+html body .cw-widget .cw-next:active:not(:disabled),
+html body .cw-widget .cw-direct-actions__grid a:active,
+html body .cw-widget .cw-contact-method:active,
+html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):active {
+  transform: scale(0.975) !important;
+  transition-duration: 90ms !important;
+}
+html body .cw-widget .cw-quick-replies .cw-chip::before {
+  transition:
+    transform var(--w-slow) var(--w-ease),
+    opacity var(--w-base) var(--w-ease) !important;
+}
+html body .cw-widget .cw-tabs__thumb {
+  transition: transform var(--w-slow) var(--w-ease) !important;
+}
+html body .cw-widget .cw-progress__fill {
+  transition: width var(--w-slow) var(--w-ease) !important;
+}
+html body .cw-widget .cw-panel {
+  animation: w-panel-in var(--w-slow) var(--w-ease) both !important;
+}
+@keyframes w-panel-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body .cw-widget *,
+  html body .cw-widget *::before,
+  html body .cw-widget *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =============================================================
+   Submit takes the sticky slot; consent stops looking like a box.
+   ============================================================= */
+
+/* The final step used to park "Začať odznova" here while the real action sat
+   below the fold. Restart lives in the panel header, so this slot is the
+   submit button — full width, always on screen. */
+html body .cw-widget .cw-calc-actions--final {
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 6px !important;
+}
+html body .cw-widget .cw-calc-actions--final .cw-submit,
+html body .cw-widget .cw-calc-actions--final .cw-submit:is(:hover, :focus-visible, :active):not(:disabled) {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 54px !important;
+  min-height: 54px !important;
+  margin: 0 !important;
+  border-radius: 999px !important;
+}
+html body .cw-widget .cw-calc-actions--final .cw-lead__status {
+  margin: 0 !important;
+  padding: 0 4px !important;
+  font-size: 11.5px !important;
+  line-height: 1.35 !important;
+  text-align: center !important;
+}
+
+/* Now that the intro card and the closing note are gone, the fields own the
+   full width of the step instead of sitting in a narrower column. */
+html body .cw-widget .cw-lead__form,
+html body .cw-widget .cw-lead__form > * {
+  width: 100% !important;
+  max-width: none !important;
+}
+html body .cw-widget .cw-lead__row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+}
+
+/* A native checkbox paints an opaque white square that reads as a stray
+   artifact on this dark panel. Same semantics, drawn to match the theme. */
+html body .cw-widget .cw-lead__form input[type="checkbox"],
+html body .cw-widget .cw-consent input[type="checkbox"] {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 18px !important;
+  height: 18px !important;
+  min-height: 0 !important;
+  flex: 0 0 18px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid var(--w-line) !important;
+  border-radius: 5px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  position: relative !important;
+  transition: background-color var(--w-fast) var(--w-ease),
+    border-color var(--w-fast) var(--w-ease) !important;
+}
+html body .cw-widget .cw-consent input[type="checkbox"]:hover {
+  border-color: rgba(138, 180, 255, 0.5) !important;
+}
+html body .cw-widget .cw-consent input[type="checkbox"]:checked {
+  border-color: var(--w-blue) !important;
+  background: var(--w-blue) !important;
+}
+html body .cw-widget .cw-consent input[type="checkbox"]::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 5px !important;
+  top: 1px !important;
+  width: 5px !important;
+  height: 10px !important;
+  border: solid #ffffff !important;
+  border-width: 0 2px 2px 0 !important;
+  border-radius: 1px !important;
+  transform: rotate(45deg) scale(0.4) !important;
+  opacity: 0 !important;
+  transition: opacity var(--w-fast) var(--w-ease),
+    transform var(--w-fast) var(--w-ease) !important;
+}
+html body .cw-widget .cw-consent input[type="checkbox"]:checked::after {
+  opacity: 1 !important;
+  transform: rotate(45deg) scale(1) !important;
+}
+html body .cw-widget .cw-consent input[type="checkbox"]:focus-visible {
+  outline: 3px solid rgba(52, 120, 246, 0.86) !important;
+  outline-offset: 3px !important;
+}
+html body .cw-widget .cw-consent {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+}
+html body .cw-widget .cw-consent > span {
+  font-size: 11.5px !important;
+  line-height: 1.4 !important;
+  color: var(--w-text-dim, #aeb6c2) !important;
+}
