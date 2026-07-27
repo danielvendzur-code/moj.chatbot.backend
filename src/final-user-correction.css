@@ -1430,3 +1430,117 @@ html body .cw-widget .cw-submit {
     opacity: 0 !important;
   }
 }
+
+/* =============================================================
+   Chip cleanup, configurator hover, submit above the fold, GDPR.
+   ============================================================= */
+
+/* ---- No stray glyph (+, arrow) on quick chips, ever ---- */
+html body .cw-widget .cw-quick-replies .cw-chip::after {
+  content: none !important;
+  display: none !important;
+}
+html body .cw-widget .cw-quick-replies .cw-chip .cw-chip__send {
+  display: none !important;
+}
+/* every quick chip is exactly the same shape, including the last one */
+html body .cw-widget .cw-quick-replies .cw-chip {
+  width: 100% !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+}
+
+/* ---- Configurator: richer hover glow, no orbiting on selection ---- */
+html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]::before {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+}
+html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard)[data-selected="true"] {
+  animation: none !important;
+  background: rgba(52, 120, 246, 0.1) !important;
+  box-shadow:
+    inset 0 0 0 1.5px var(--w-blue),
+    0 0 26px -10px rgba(52, 120, 246, 0.55) !important;
+}
+html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):hover:not([data-selected="true"]) {
+  transform: translateY(-2px) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(52, 120, 246, 0.5),
+    0 16px 30px -18px rgba(52, 120, 246, 0.85),
+    0 0 28px -8px rgba(52, 120, 246, 0.45) !important;
+}
+
+/* ---- Contact step: the submit is visible without scrolling ---- */
+html body .cw-widget .cw-calc-step[data-step="contact"] .cw-lead__head,
+html body .cw-widget .cw-calc-step[data-step="contact"] .cw-contact-methods {
+  margin-bottom: 2px !important;
+}
+html body .cw-widget .cw-calc-step[data-step="contact"] .cw-lead__form {
+  gap: 8px !important;
+}
+html body .cw-widget .cw-lead__form input {
+  height: 44px !important;
+  font-size: 13.5px !important;
+}
+html body .cw-widget .cw-submit {
+  position: sticky !important;
+  bottom: 0 !important;
+  z-index: 6 !important;
+  height: 50px !important;
+  margin-top: 4px !important;
+}
+html body .cw-widget .cw-calc-step[data-step="contact"] .cw-summary {
+  order: 3 !important;
+}
+
+/* ---- GDPR consent: a real, legible, tappable row ---- */
+html body .cw-widget .cw-consent {
+  display: grid !important;
+  grid-template-columns: 22px minmax(0, 1fr) !important;
+  align-items: start !important;
+  gap: 10px !important;
+  padding: 12px 14px !important;
+  border-radius: 16px !important;
+  background: rgba(17, 29, 43, 0.6) !important;
+  box-shadow: inset 0 0 0 1px var(--w-line) !important;
+  color: var(--w-text-2) !important;
+  font-size: 11.6px !important;
+  line-height: 1.45 !important;
+  cursor: pointer !important;
+  transition: box-shadow 260ms var(--w-ease), background-color 260ms var(--w-ease) !important;
+}
+html body .cw-widget .cw-consent:hover {
+  background: rgba(23, 39, 58, 0.7) !important;
+  box-shadow: inset 0 0 0 1px rgba(52, 120, 246, 0.35) !important;
+}
+html body .cw-widget .cw-consent input[type="checkbox"] {
+  width: 22px !important;
+  height: 22px !important;
+  margin: 0 !important;
+  border-radius: 7px !important;
+  accent-color: var(--w-blue) !important;
+  cursor: pointer !important;
+}
+html body .cw-widget .cw-consent:has(input:checked) {
+  box-shadow: inset 0 0 0 1px rgba(52, 120, 246, 0.5) !important;
+}
+
+/* ---- Contact tiles: proper glow on hover ---- */
+html body .cw-widget .cw-direct-actions__grid a:hover,
+html body .cw-widget .cw-direct-actions__grid a:focus-visible {
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
+  background: rgba(52, 120, 246, 0.12) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(52, 120, 246, 0.5),
+    0 16px 28px -18px rgba(52, 120, 246, 0.9),
+    0 0 26px -8px rgba(52, 120, 246, 0.5) !important;
+}
+html body .cw-widget .cw-direct-actions__grid a:hover .cw-direct-actions__icon,
+html body .cw-widget .cw-direct-actions__grid a:focus-visible .cw-direct-actions__icon {
+  color: #ffffff !important;
+  transform: scale(1.08) !important;
+}
