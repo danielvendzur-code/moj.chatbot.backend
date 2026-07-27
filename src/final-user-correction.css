@@ -1634,3 +1634,158 @@ html body .cw-widget .cw-send {
   flex: 0 0 44px !important;
   border-radius: 50% !important;
 }
+
+/* =============================================================
+   Requested corrections: identical chips (incl. the last one),
+   hover-only preview, plain buttons, plain GDPR, submit in view.
+   ============================================================= */
+
+/* ---- ALL quick chips identical — must beat the :last-child rule ---- */
+html body .cw-widget .cw-quick-replies .cw-chip,
+html body .cw-widget .cw-quick-replies .cw-chip:last-child,
+html body .cw-widget .cw-quick-replies .cw-chip:first-child,
+html body .cw-widget .cw-quick-replies .cw-chip:nth-child(n) {
+  width: 100% !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  margin: 0 !important;
+  padding: 0 14px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  font-size: 12.2px !important;
+  line-height: 1.15 !important;
+}
+
+/* ---- Preview bubble only on hover ---- */
+@media (min-width: 861px) {
+  html body .cw-widget .cw-launcher::after {
+    opacity: 0 !important;
+    animation: none !important;
+    transform: translateY(-50%) translateX(8px) !important;
+    transition: opacity 260ms var(--w-ease), transform 260ms var(--w-ease) !important;
+  }
+  html body .cw-widget .cw-launcher:hover::after,
+  html body .cw-widget .cw-launcher:focus-visible::after {
+    opacity: 1 !important;
+    transform: translateY(-50%) translateX(0) !important;
+  }
+}
+
+/* ---- Primary buttons are plain chips: no sweep, no shape change ---- */
+html body .cw-widget .cw-submit,
+html body .cw-widget .cw-submit.cw-submit--approved,
+html body .cw-widget .cw-next {
+  height: 46px !important;
+  min-height: 46px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  color: #ffffff !important;
+  background: var(--w-blue) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  font-size: 13.5px !important;
+  font-weight: 680 !important;
+  transition: background-color 220ms var(--w-ease) !important;
+}
+html body .cw-widget .cw-submit::before,
+html body .cw-widget .cw-submit::after,
+html body .cw-widget .cw-submit.cw-submit--approved::before,
+html body .cw-widget .cw-submit.cw-submit--approved::after,
+html body .cw-widget .cw-next::before,
+html body .cw-widget .cw-next::after {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+}
+html body .cw-widget .cw-submit:hover:not(:disabled),
+html body .cw-widget .cw-next:hover:not(:disabled) {
+  background: var(--w-blue-hover) !important;
+  border-radius: 999px !important;
+  transform: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+/* ---- GDPR: a plain checkbox line, nothing more ---- */
+html body .cw-widget .cw-consent {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  padding: 0 2px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  color: var(--w-text-3) !important;
+  font-size: 11.4px !important;
+  line-height: 1.35 !important;
+}
+html body .cw-widget .cw-consent:hover {
+  background: none !important;
+  box-shadow: none !important;
+}
+html body .cw-widget .cw-consent input[type="checkbox"] {
+  width: 17px !important;
+  height: 17px !important;
+  flex: 0 0 17px !important;
+  margin: 0 !important;
+  border-radius: 4px !important;
+  accent-color: var(--w-blue) !important;
+}
+
+/* ---- Contact step fits on one screen, phone and desktop ---- */
+html body .cw-widget .cw-calc-step[data-step="contact"] .cw-lead__head {
+  display: none !important;
+}
+html body .cw-widget .cw-contact-stage {
+  gap: 10px !important;
+}
+html body .cw-widget .cw-contact-methods {
+  gap: 6px !important;
+}
+html body .cw-widget .cw-contact-method {
+  min-height: 40px !important;
+  padding: 0 10px !important;
+  border-radius: 999px !important;
+  font-size: 11.6px !important;
+}
+html body .cw-widget .cw-calc-step[data-step="contact"] .cw-lead {
+  padding: 12px !important;
+}
+html body .cw-widget .cw-calc-step[data-step="contact"] .cw-lead__form {
+  gap: 7px !important;
+}
+html body .cw-widget .cw-lead__form input {
+  height: 42px !important;
+  padding: 0 14px !important;
+  border-radius: 14px !important;
+  font-size: 13px !important;
+}
+html body .cw-widget .cw-lead__optional {
+  margin: 0 !important;
+}
+html body .cw-widget .cw-lead__optional summary {
+  font-size: 11.4px !important;
+}
+/* the recap never pushes the button off screen */
+html body .cw-widget .cw-calc-step[data-step="contact"] .cw-summary {
+  order: 3 !important;
+  padding: 10px 12px !important;
+}
+html body .cw-widget .cw-summary__row {
+  font-size: 11px !important;
+}
+
+/* plain consent in every state — beats the earlier :has(:checked) card */
+html body .cw-widget .cw-consent,
+html body .cw-widget .cw-consent:hover,
+html body .cw-widget .cw-consent:focus-within,
+html body .cw-widget .cw-consent:has(input:checked),
+html body .cw-widget .cw-consent:has(input:not(:checked)) {
+  padding: 2px 2px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+}
