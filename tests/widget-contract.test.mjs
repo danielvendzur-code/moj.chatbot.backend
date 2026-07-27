@@ -220,7 +220,11 @@ test("final contact step scrolls and supports calls or meetings", async () => {
   assert.match(calculator, /Telefón \*/);
   assert.match(calculator, /cw-contact-methods/);
   assert.match(calculator, /Videohovor/);
-  assert.match(calculator, /Dohodnime ďalší krok/);
+  // The sticky footer carries the submit button, not a duplicate restart that
+  // pushed "Odoslať dopyt" below the fold. Restart stays in the panel header.
+  assert.match(calculator, /cw-calc-actions--final[\s\S]*?data-testid="lead-submit"/);
+  assert.doesNotMatch(calculator, /cw-restart/);
+  assert.doesNotMatch(calculator, /Dohodnime ďalší krok/);
   assert.match(css, /overflow-y:\s*auto !important/);
   assert.match(css, /scrollbar-gutter:\s*stable !important/);
   assert.match(css, /cw-calc-step\[data-step="contact"\]/);

@@ -1802,21 +1802,8 @@ html body .cw-widget .cw-lead__form input:not([type="checkbox"]):not([type="radi
   border-radius: 14px !important;
   font-size: 13px !important;
 }
-html body .cw-widget .cw-lead__form input[type="checkbox"],
-html body .cw-widget .cw-consent input[type="checkbox"] {
-  width: 17px !important;
-  height: 17px !important;
-  min-height: 0 !important;
-  flex: 0 0 17px !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 4px !important;
-  background: none !important;
-  box-shadow: none !important;
-  appearance: auto !important;
-  -webkit-appearance: checkbox !important;
-  accent-color: var(--w-blue) !important;
-}
+/* The checkbox itself is sized and drawn near the end of this file, next to
+   the rules for the sticky submit slot. */
 
 /* ---- One Apple-like motion system for everything ---- */
 html body .cw-widget {
@@ -1884,4 +1871,108 @@ html body .cw-widget .cw-panel {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* =============================================================
+   Submit takes the sticky slot; consent stops looking like a box.
+   ============================================================= */
+
+/* The final step used to park "Začať odznova" here while the real action sat
+   below the fold. Restart lives in the panel header, so this slot is the
+   submit button — full width, always on screen. */
+html body .cw-widget .cw-calc-actions--final {
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 6px !important;
+}
+html body .cw-widget .cw-calc-actions--final .cw-submit,
+html body .cw-widget .cw-calc-actions--final .cw-submit:is(:hover, :focus-visible, :active):not(:disabled) {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 54px !important;
+  min-height: 54px !important;
+  margin: 0 !important;
+  border-radius: 999px !important;
+}
+html body .cw-widget .cw-calc-actions--final .cw-lead__status {
+  margin: 0 !important;
+  padding: 0 4px !important;
+  font-size: 11.5px !important;
+  line-height: 1.35 !important;
+  text-align: center !important;
+}
+
+/* Now that the intro card and the closing note are gone, the fields own the
+   full width of the step instead of sitting in a narrower column. */
+html body .cw-widget .cw-lead__form,
+html body .cw-widget .cw-lead__form > * {
+  width: 100% !important;
+  max-width: none !important;
+}
+html body .cw-widget .cw-lead__row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+}
+
+/* A native checkbox paints an opaque white square that reads as a stray
+   artifact on this dark panel. Same semantics, drawn to match the theme. */
+html body .cw-widget .cw-lead__form input[type="checkbox"],
+html body .cw-widget .cw-consent input[type="checkbox"] {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 18px !important;
+  height: 18px !important;
+  min-height: 0 !important;
+  flex: 0 0 18px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid var(--w-line) !important;
+  border-radius: 5px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  position: relative !important;
+  transition: background-color var(--w-fast) var(--w-ease),
+    border-color var(--w-fast) var(--w-ease) !important;
+}
+html body .cw-widget .cw-consent input[type="checkbox"]:hover {
+  border-color: rgba(138, 180, 255, 0.5) !important;
+}
+html body .cw-widget .cw-consent input[type="checkbox"]:checked {
+  border-color: var(--w-blue) !important;
+  background: var(--w-blue) !important;
+}
+html body .cw-widget .cw-consent input[type="checkbox"]::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 5px !important;
+  top: 1px !important;
+  width: 5px !important;
+  height: 10px !important;
+  border: solid #ffffff !important;
+  border-width: 0 2px 2px 0 !important;
+  border-radius: 1px !important;
+  transform: rotate(45deg) scale(0.4) !important;
+  opacity: 0 !important;
+  transition: opacity var(--w-fast) var(--w-ease),
+    transform var(--w-fast) var(--w-ease) !important;
+}
+html body .cw-widget .cw-consent input[type="checkbox"]:checked::after {
+  opacity: 1 !important;
+  transform: rotate(45deg) scale(1) !important;
+}
+html body .cw-widget .cw-consent input[type="checkbox"]:focus-visible {
+  outline: 3px solid rgba(52, 120, 246, 0.86) !important;
+  outline-offset: 3px !important;
+}
+html body .cw-widget .cw-consent {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+}
+html body .cw-widget .cw-consent > span {
+  font-size: 11.5px !important;
+  line-height: 1.4 !important;
+  color: var(--w-text-dim, #aeb6c2) !important;
 }
