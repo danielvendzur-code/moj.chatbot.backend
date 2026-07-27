@@ -38,9 +38,9 @@ html body .cw-widget .cw-submit.cw-submit--approved::before {
   display: block !important;
   position: absolute !important;
   z-index: 0 !important;
-  width: 225px !important;
-  height: 225px !important;
-  left: -238px !important;
+  width: 46% !important;
+  height: 240px !important;
+  left: -50% !important;
   top: 50% !important;
   bottom: auto !important;
   border-radius: 50% !important;
@@ -174,7 +174,7 @@ html body .cw-widget .cw-summary__row:last-child {
 
 @keyframes chatbot-submit-sweep {
   0% { transform: translate3d(0, -50%, 0); }
-  62%, 100% { transform: translate3d(208px, -50%, 0); }
+  62%, 100% { transform: translate3d(240%, -50%, 0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
