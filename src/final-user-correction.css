@@ -1246,3 +1246,187 @@ html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-select
     background: var(--w-blue) !important;
   }
 }
+
+/* =============================================================
+   Chip system, glow, calm multi-select, bare logo.
+   ============================================================= */
+
+/* ---- Logo is the outline itself: no tile, no plate behind it ---- */
+html body .cw-widget .cw-panel-head__mascot,
+html body .cw-widget .cw-avatar,
+html body .cw-widget .cw-launcher .bl {
+  background: none !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  overflow: visible !important;
+}
+html body .cw-widget .cw-panel-head__mascot,
+html body .cw-widget .cw-avatar {
+  color: var(--w-blue-soft) !important;
+}
+
+/* ---- One chip design, slow centre fill, soft blue glow ---- */
+html body .cw-widget .cw-quick-replies .cw-chip {
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 14px !important;
+  border-radius: 999px !important;
+  color: var(--w-text-2) !important;
+  background: var(--w-chip) !important;
+  box-shadow: inset 0 0 0 1px var(--w-line) !important;
+  font-size: 12.2px !important;
+  font-weight: 600 !important;
+  transition:
+    transform 520ms var(--w-ease),
+    box-shadow 520ms var(--w-ease),
+    color 520ms var(--w-ease) !important;
+}
+html body .cw-widget .cw-quick-replies .cw-chip::before {
+  transform: scale(0.55) !important;
+  opacity: 0 !important;
+  transition:
+    transform 900ms var(--w-ease),
+    opacity 640ms var(--w-ease) !important;
+}
+html body .cw-widget .cw-quick-replies .cw-chip:hover::before,
+html body .cw-widget .cw-quick-replies .cw-chip:focus-visible::before,
+html body .cw-widget .cw-quick-replies .cw-chip[data-sending="true"]::before {
+  transform: scale(1) !important;
+  opacity: 1 !important;
+}
+html body .cw-widget .cw-quick-replies .cw-chip:hover,
+html body .cw-widget .cw-quick-replies .cw-chip:focus-visible {
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(52, 120, 246, 0.5),
+    0 10px 20px -12px rgba(52, 120, 246, 0.75),
+    0 0 22px -6px rgba(52, 120, 246, 0.5) !important;
+}
+
+/* ---- Builder CTA: warmer, deeper glow ---- */
+html body .cw-widget .cw-chat-builder {
+  box-shadow:
+    0 12px 26px -14px rgba(52, 120, 246, 0.9),
+    0 0 26px -8px rgba(52, 120, 246, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+  transition:
+    background-color 420ms var(--w-ease),
+    box-shadow 420ms var(--w-ease),
+    transform 420ms var(--w-ease) !important;
+}
+html body .cw-widget .cw-chat-builder:hover,
+html body .cw-widget .cw-chat-builder:focus-visible {
+  transform: translateY(-2px) !important;
+  box-shadow:
+    0 18px 34px -14px rgba(52, 120, 246, 1),
+    0 0 34px -6px rgba(52, 120, 246, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+}
+
+/* ---- Multi-select step (features): calm, no orbiting ring ---- */
+html body .cw-widget .cw-opt[data-selected="true"]::before {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+}
+html body .cw-widget .cw-opt[data-selected="true"] {
+  animation: none !important;
+  background: rgba(52, 120, 246, 0.12) !important;
+  box-shadow: inset 0 0 0 1.5px var(--w-blue) !important;
+}
+
+/* ---- Orbit only on single-choice cards, calmer speed ---- */
+html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard)[data-selected="true"]::before {
+  animation-duration: 3.6s !important;
+}
+
+/* =============================================================
+   Final step: the ask first, a quiet recap underneath.
+   ============================================================= */
+html body .cw-widget .cw-calc-step[data-step="contact"] .cw-lead {
+  order: 1 !important;
+}
+html body .cw-widget .cw-calc-step[data-step="contact"] .cw-summary {
+  order: 2 !important;
+  margin-top: 2px !important;
+  padding: 12px 14px !important;
+  border-radius: 18px !important;
+  background: rgba(17, 29, 43, 0.6) !important;
+  box-shadow: inset 0 0 0 1px var(--w-line) !important;
+}
+html body .cw-widget .cw-summary__label {
+  font-size: 9.5px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: var(--w-text-3) !important;
+}
+html body .cw-widget .cw-summary__row {
+  font-size: 11.4px !important;
+}
+html body .cw-widget .cw-summary__row span {
+  color: var(--w-text-3) !important;
+}
+/* the form itself: fewer, bigger, calmer fields */
+html body .cw-widget .cw-lead__form input,
+html body .cw-widget .cw-lead__form textarea {
+  height: 48px !important;
+  padding: 0 16px !important;
+  border-radius: 16px !important;
+  font-size: 14px !important;
+  background: #0d1725 !important;
+  box-shadow: inset 0 0 0 1px var(--w-line) !important;
+}
+html body .cw-widget .cw-lead__form textarea {
+  height: auto !important;
+  padding: 13px 16px !important;
+}
+html body .cw-widget .cw-lead__form input:focus,
+html body .cw-widget .cw-lead__form textarea:focus {
+  box-shadow: inset 0 0 0 1.5px var(--w-blue) !important;
+}
+html body .cw-widget .cw-lead__optional summary {
+  color: var(--w-text-3) !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+}
+html body .cw-widget .cw-submit {
+  height: 52px !important;
+  font-size: 14.5px !important;
+}
+
+/* ---- Desktop-only preview label beside the launcher ---- */
+@media (min-width: 861px) {
+  html body .cw-widget .cw-launcher::after {
+    content: "Máte otázku? Napíšte mi";
+    position: absolute;
+    right: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%) translateX(6px);
+    padding: 10px 16px;
+    border-radius: 999px;
+    color: var(--w-text-2);
+    background: var(--w-card);
+    box-shadow:
+      inset 0 0 0 1px var(--w-line),
+      0 14px 30px -18px rgba(0, 0, 0, 0.9);
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 420ms var(--w-ease),
+      transform 420ms var(--w-ease);
+  }
+  html body .cw-widget .cw-launcher:hover::after,
+  html body .cw-widget .cw-launcher:focus-visible::after {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+  html body .cw-widget .cw-launcher[aria-expanded="true"]::after {
+    opacity: 0 !important;
+  }
+}

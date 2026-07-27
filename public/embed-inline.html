@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Môj Chatbot — vložený panel</title>
+<style>
+  html, body { margin: 0; height: 100%; background: transparent; }
+  /* The widget renders inline and fills whatever box the iframe gets, so the
+     site controls the layout by sizing the iframe. */
+  #dv-assistant-root .cw-panel {
+    position: static !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+    border-radius: var(--dv-radius, 26px) !important;
+    animation: none !important;
+  }
+  #dv-assistant-root .cw-launcher { display: none !important; }
+  #dv-assistant-root { height: 100%; }
+</style>
+</head>
+<body>
+<div id="dv-assistant-root" data-dv-inline="true"></div>
+<script>
+  /* open straight into the requested mode: ?mode=calculator | assistant */
+  var mode = new URLSearchParams(location.search).get('mode') || 'assistant';
+  var radius = new URLSearchParams(location.search).get('radius');
+  if (radius) document.documentElement.style.setProperty('--dv-radius', radius + 'px');
+  window.addEventListener('load', function () {
+    window.dispatchEvent(
+      new CustomEvent('site-assistant:open', { detail: { entry: mode } })
+    );
+  });
+</script>
+<script src="./widget.js" defer></script>
+</body>
+</html>
