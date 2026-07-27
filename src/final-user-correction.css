@@ -1544,3 +1544,93 @@ html body .cw-widget .cw-direct-actions__grid a:focus-visible .cw-direct-actions
   color: #ffffff !important;
   transform: scale(1.08) !important;
 }
+
+/* =============================================================
+   Circular launcher, a real preview bubble, nicer composer.
+   ============================================================= */
+
+/* ---- Launcher is a circle, not a rounded square ---- */
+html body .cw-widget .cw-launcher {
+  width: 68px !important;
+  height: 68px !important;
+  border-radius: 50% !important;
+  display: grid !important;
+  place-items: center !important;
+}
+html body .cw-widget .cw-launcher:focus-visible {
+  border-radius: 50% !important;
+}
+html body .cw-widget .cw-launcher .bl {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+/* ---- Preview bubble: readable, always there on desktop ---- */
+@media (min-width: 861px) {
+  html body .cw-widget .cw-launcher::after {
+    content: "Napíšte mi — odpoviem hneď" !important;
+    right: calc(100% + 14px) !important;
+    padding: 13px 18px !important;
+    border-radius: 18px 18px 4px 18px !important;
+    color: var(--w-text) !important;
+    background: var(--w-card) !important;
+    box-shadow:
+      inset 0 0 0 1px var(--w-line),
+      0 18px 40px -20px rgba(0, 0, 0, 0.95) !important;
+    font-size: 14px !important;
+    font-weight: 620 !important;
+    letter-spacing: -0.01em !important;
+    opacity: 1 !important;
+    transform: translateY(-50%) translateX(0) !important;
+    animation: w-teaser-in 700ms var(--w-ease) 1.2s both !important;
+  }
+  html body .cw-widget .cw-launcher:hover::after {
+    background: var(--w-switch) !important;
+    box-shadow:
+      inset 0 0 0 1px rgba(52, 120, 246, 0.4),
+      0 20px 44px -20px rgba(52, 120, 246, 0.6) !important;
+  }
+  html body .cw-widget .cw-launcher[aria-expanded="true"]::after {
+    opacity: 0 !important;
+    animation: none !important;
+  }
+}
+@keyframes w-teaser-in {
+  from { opacity: 0; transform: translateY(-50%) translateX(14px); }
+  to { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
+
+/* ---- Composer: calmer, rounder, better focus ---- */
+html body .cw-widget .cw-inputbar {
+  height: auto !important;
+  padding: 7px !important;
+  gap: 8px !important;
+  border-radius: 999px !important;
+  background: var(--w-chip) !important;
+  box-shadow: inset 0 0 0 1px var(--w-line) !important;
+  transition: box-shadow 300ms var(--w-ease) !important;
+}
+html body .cw-widget .cw-inputbar:focus-within {
+  border-radius: 999px !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(52, 120, 246, 0.55),
+    0 0 26px -10px rgba(52, 120, 246, 0.5) !important;
+}
+html body .cw-widget .cw-inputbar input {
+  height: 44px !important;
+  padding: 0 16px !important;
+  border-radius: 999px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--w-text) !important;
+  font-size: 13.5px !important;
+}
+html body .cw-widget .cw-inputbar input::placeholder {
+  color: var(--w-text-3) !important;
+}
+html body .cw-widget .cw-send {
+  width: 44px !important;
+  height: 44px !important;
+  flex: 0 0 44px !important;
+  border-radius: 50% !important;
+}
