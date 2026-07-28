@@ -68,17 +68,23 @@ test("mode switch is one rounded segmented control without pill geometry", async
   assert.match(css, /Visible widget rebuild/);
   assert.match(css, /grid-template-columns:\s*1fr 1fr !important/);
   assert.match(css, /\.cw-tabs > button\[data-active="true"\]/);
-  assert.match(css, /background:\s*#245fae !important/);
+  assert.match(css, /background:\s*#0fa568 !important/);
 });
 
-test("the redesign uses only the website black and blue palette", async () => {
+test("the redesign uses only the website black and green palette", async () => {
   const css = await read("src/assistant-redesign.css");
 
-  for (const token of ["#05070b", "#080d14", "#0d141f", "#111b2a", "#3478f6", "#4e8cff", "#f6f8fb"]) {
+  // dark base stays dark; the accents are the website's three greens
+  for (const token of ["#05070b", "#080d14", "#0d141f", "#111b2a", "#16c47f", "#0fa568", "#7fe0b4", "#f6f8fb"]) {
     assert.ok(css.toLowerCase().includes(token), `Missing palette token ${token}`);
   }
 
-  assert.doesNotMatch(css, /#2aa|#1fa|teal|turquoise|bronze|gold|green/i);
+  // the blues the website moved away from must not come back
+  for (const gone of ["#3478f6", "#1f55c9", "#8ab4ff", "#78a9ff", "#4e8cff", "#2868c8", "#245fae"]) {
+    assert.ok(!css.toLowerCase().includes(gone), `Blue ${gone} is back in the palette`);
+  }
+
+  assert.doesNotMatch(css, /teal|turquoise|bronze|gold/i);
   assert.doesNotMatch(css, /!important/);
 });
 
@@ -127,7 +133,7 @@ test("selection indicator is one real aligned circular check", async () => {
 
   assert.match(css, /\.cw-selection-indicator/);
   assert.match(css, /width:\s*21px !important/);
-  assert.match(css, /background:\s*#3979e6 !important/);
+  assert.match(css, /background:\s*#16c47f !important/);
   assert.match(css, /data-visible="true"/);
   assert.doesNotMatch(css, /\.cw-selection-indicator::(?:before|after)/);
 });
@@ -263,6 +269,59 @@ test("final configurator correction removes clipping, icon tiles and selected st
   assert.match(css, /overflow:\s*visible !important/);
   assert.match(css, /\.cw-rowcard__icon[\s\S]*background:\s*transparent !important/);
   assert.match(css, /\.cw-selection-indicator svg[\s\S]*transform:\s*none !important/);
-  assert.match(css, /\.cw-next,[\s\S]*background:\s*#3478f6 !important/);
+  assert.match(css, /\.cw-next,[\s\S]*background:\s*#16c47f !important/);
   assert.doesNotMatch(css, /inset 3px 0 0|#5ee7c4|#82f4d8/);
+});
+
+test("green palette replaces every blue accent across the shipped layers", async () => {
+  const layers = await Promise.all(
+    [
+      "src/widget.css",
+      "src/assistant-redesign.css",
+      "src/approved-submit-final.css",
+      "src/final-user-correction.css",
+      "src/mobile-configurator-polish.css",
+      "src/configurator-runtime-final.css",
+    ].map(read),
+  );
+  const css = layers.join("\n");
+
+  for (const gone of [
+    "#3478f6", "#1f55c9", "#8ab4ff", "#78a9ff",
+    "#75b8ff", "#4e8cff", "#2868c8", "#245fae",
+  ]) {
+    assert.ok(!css.toLowerCase().includes(gone), `Blue ${gone} is back`);
+  }
+  assert.doesNotMatch(css, /rgba\(\s*52,\s*120,\s*246/);
+  assert.doesNotMatch(css, /rgba\(\s*31,\s*85,\s*201/);
+  assert.doesNotMatch(css, /rgba\(\s*122,\s*162,\s*220/);
+
+  for (const token of ["#16c47f", "#0fa568", "#7fe0b4"]) {
+    assert.ok(css.toLowerCase().includes(token), `Missing green ${token}`);
+  }
+  assert.match(css, /rgba\(122,\s*210,\s*180/);
+});
+
+test("the six reported interaction defects stay fixed", async () => {
+  const css = await read("src/final-user-correction.css");
+
+  // (a) nothing shifts position or border width between states
+  assert.match(css, /transform:\s*none !important;\s*\n\s*border-style:\s*solid !important;\s*\n\s*border-width:\s*1px !important/);
+  // (b) no circular sweep left to half-fill a rectangular button
+  assert.match(css, /\)\[class\]::before\s*\{\s*\n\s*content:\s*none !important/);
+  // (c) neither the card nor the grid row may pin a height
+  assert.match(css, /min-height:\s*0 !important;\s*\n\s*height:\s*auto !important/);
+  assert.match(css, /grid-auto-rows:\s*auto !important/);
+  // (d) icon left, text right
+  assert.match(css, /flex-direction:\s*row !important/);
+  // (e) one pill height for primary actions
+  assert.match(css, /\.cw-submit,\s*\.cw-next,\s*\.cw-chat-builder\)\[class\]\s*\{[\s\S]*?height:\s*50px !important/);
+  // (f) narrow phones may not overflow
+  assert.match(css, /@media \(max-width: 430px\)/);
+
+  // shapes and motion agreed with the website
+  assert.match(css, /--w-ease:\s*cubic-bezier\(0\.22,\s*1,\s*0\.36,\s*1\)/);
+  assert.match(css, /outline:\s*3px solid rgba\(22,\s*196,\s*127,\s*0\.86\) !important/);
+  assert.match(css, /animation-delay:\s*0\.15s !important/);
+  assert.match(css, /prefers-reduced-motion/);
 });
