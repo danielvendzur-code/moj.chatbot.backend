@@ -325,3 +325,37 @@ test("the six reported interaction defects stay fixed", async () => {
   assert.match(css, /animation-delay:\s*0\.15s !important/);
   assert.match(css, /prefers-reduced-motion/);
 });
+
+test("starter chips retire once the conversation begins", async () => {
+  const conversation = await read("src/components/widget/AssistantConversation.tsx");
+
+  assert.match(conversation, /const conversationStarted = messages\.some\(\(message\) => message\.from === "me"\)/);
+  assert.match(conversation, /\{conversationStarted \? null : \(/);
+  // the chip carries only its label — no glyph is appended in any state
+  assert.match(conversation, /<span className="cw-chip__label">\{label\}<\/span>/);
+  assert.doesNotMatch(conversation, /cw-chip__plus|content: "\+"/);
+});
+
+test("auto-advance does not leave a parked pointer lighting up the next step", async () => {
+  const runtime = await read("src/lib/configuratorAutoAdvance.ts");
+  const css = await read("src/final-user-correction.css");
+
+  assert.match(runtime, /widget\.dataset\.pointerParked = "true"/);
+  assert.match(runtime, /widget\.addEventListener\("pointermove", release\)/);
+  assert.match(runtime, /delete widget\.dataset\.pointerParked/);
+  assert.match(css, /\[data-pointer-parked="true"\][\s\S]*?:hover:not\(\[data-selected="true"\]\)/);
+});
+
+test("the contact step lines up on one inset without stray rules", async () => {
+  const css = await read("src/final-user-correction.css");
+
+  // every block in the step shares the step's own inset
+  assert.match(
+    css,
+    /\.cw-calc-step\[data-step="contact"\]\[class\] :is\(\s*\n\s*\.cw-step-head, \.cw-q, \.cw-contact-stage, \.cw-contact-methods,\s*\n\s*\.cw-lead, \.cw-lead__form, \.cw-summary\s*\n\s*\) \{/,
+  );
+  // the hairline above and below the optional-details row is gone
+  assert.match(css, /\.cw-lead__optional\[class\] \{\s*\n\s*border: 0 !important/);
+  // and the summary can scroll clear of the sticky submit bar
+  assert.match(css, /padding-bottom: 18px !important/);
+});
