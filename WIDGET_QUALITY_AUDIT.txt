@@ -1,4 +1,4 @@
-run_id=30332711347
+run_id=30333662217
 install=success
 lint=success
 build=success
@@ -25,17 +25,17 @@ transforming...
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.67 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
-[2mdist/[22m[2massets/[22m[35mindex-C8BjAvOm.css  [39m[1m[2m123.90 kB[22m[1m[22m[2m │ gzip: 17.97 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-BltPeDRr.js   [39m[1m[2m219.01 kB[22m[1m[22m[2m │ gzip: 74.48 kB[22m
-[32m✓ built in 1.31s[39m
+[2mdist/[22m[2massets/[22m[35mindex-DdduJ6lv.css  [39m[1m[2m125.41 kB[22m[1m[22m[2m │ gzip: 18.14 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-Dfy0bBlC.js   [39m[1m[2m219.19 kB[22m[1m[22m[2m │ gzip: 74.54 kB[22m
+[32m✓ built in 1.10s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 97 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[35mwidget.css  [39m[1m[2m123.90 kB[22m[1m[22m[2m │ gzip: 17.97 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m218.78 kB[22m[1m[22m[2m │ gzip: 74.46 kB[22m
-[32m✓ built in 1.26s[39m
+[2mdist/[22m[35mwidget.css  [39m[1m[2m125.41 kB[22m[1m[22m[2m │ gzip: 18.14 kB[22m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m218.96 kB[22m[1m[22m[2m │ gzip: 74.55 kB[22m
+[32m✓ built in 1.02s[39m
 
 ===== test =====
 
@@ -46,135 +46,153 @@ TAP version 13
 # Subtest: demo and embed load one foundation and one authoritative redesign
 ok 1 - demo and embed load one foundation and one authoritative redesign
   ---
-  duration_ms: 8.940074
+  duration_ms: 7.178699
   type: 'test'
   ...
 # Subtest: assistant order and interactive send feedback remain explicit
 ok 2 - assistant order and interactive send feedback remain explicit
   ---
-  duration_ms: 0.799732
+  duration_ms: 0.790044
   type: 'test'
   ...
 # Subtest: panel has the corrected premium desktop proportions
 ok 3 - panel has the corrected premium desktop proportions
   ---
-  duration_ms: 1.037749
+  duration_ms: 1.051775
   type: 'test'
   ...
 # Subtest: mode switch is one rounded segmented control without pill geometry
 ok 4 - mode switch is one rounded segmented control without pill geometry
   ---
-  duration_ms: 1.542608
+  duration_ms: 1.363232
   type: 'test'
   ...
 # Subtest: the redesign uses only the website black and green palette
 ok 5 - the redesign uses only the website black and green palette
   ---
-  duration_ms: 3.93937
+  duration_ms: 3.206745
   type: 'test'
   ...
 # Subtest: primary actions, quick chips and composer use intentional geometry
 ok 6 - primary actions, quick chips and composer use intentional geometry
   ---
-  duration_ms: 1.242086
+  duration_ms: 1.195945
   type: 'test'
   ...
 # Subtest: chat chips and composer use a crisp non-liquid system
 ok 7 - chat chips and composer use a crisp non-liquid system
   ---
-  duration_ms: 1.272913
+  duration_ms: 1.251278
   type: 'test'
   ...
 # Subtest: calculator choices keep geometry and use one static selected system
 ok 8 - calculator choices keep geometry and use one static selected system
   ---
-  duration_ms: 1.473494
+  duration_ms: 1.548253
   type: 'test'
   ...
 # Subtest: selection indicator is one real aligned circular check
 ok 9 - selection indicator is one real aligned circular check
   ---
-  duration_ms: 1.186072
+  duration_ms: 1.138796
   type: 'test'
   ...
 # Subtest: icons remain one custom rounded line family
 ok 10 - icons remain one custom rounded line family
   ---
-  duration_ms: 1.170469
+  duration_ms: 1.098478
   type: 'test'
   ...
 # Subtest: chat and configurator motion remain reduced-motion safe
 ok 11 - chat and configurator motion remain reduced-motion safe
   ---
-  duration_ms: 1.222968
+  duration_ms: 1.462266
   type: 'test'
   ...
 # Subtest: configurator remains five short steps with explicit selection guidance
 ok 12 - configurator remains five short steps with explicit selection guidance
   ---
-  duration_ms: 1.218191
+  duration_ms: 1.896844
   type: 'test'
   ...
 # Subtest: approved lead submission keeps sweep feedback and website hierarchy
 ok 13 - approved lead submission keeps sweep feedback and website hierarchy
   ---
-  duration_ms: 2.453216
+  duration_ms: 1.446741
   type: 'test'
   ...
 # Subtest: contact submits a real lead and keeps API protections
 ok 14 - contact submits a real lead and keeps API protections
   ---
-  duration_ms: 2.776402
+  duration_ms: 1.102848
   type: 'test'
   ...
 # Subtest: mobile full screen, safe areas and keyboard constraints remain safe
 ok 15 - mobile full screen, safe areas and keyboard constraints remain safe
   ---
-  duration_ms: 0.93132
+  duration_ms: 0.916449
   type: 'test'
   ...
 # Subtest: final contact step scrolls and supports calls or meetings
 ok 16 - final contact step scrolls and supports calls or meetings
   ---
-  duration_ms: 1.314345
+  duration_ms: 1.38275
   type: 'test'
   ...
 # Subtest: messages begin at the top and icon tiles stay transparent
 ok 17 - messages begin at the top and icon tiles stay transparent
   ---
-  duration_ms: 3.079368
+  duration_ms: 0.742361
   type: 'test'
   ...
 # Subtest: final user correction centers quick replies and keeps one input shape
 ok 18 - final user correction centers quick replies and keeps one input shape
   ---
-  duration_ms: 1.758753
+  duration_ms: 1.380242
   type: 'test'
   ...
 # Subtest: final configurator correction removes clipping, icon tiles and selected stripes
 ok 19 - final configurator correction removes clipping, icon tiles and selected stripes
   ---
-  duration_ms: 1.343529
+  duration_ms: 1.317232
   type: 'test'
   ...
 # Subtest: green palette replaces every blue accent across the shipped layers
 ok 20 - green palette replaces every blue accent across the shipped layers
   ---
-  duration_ms: 12.259492
+  duration_ms: 8.558847
   type: 'test'
   ...
 # Subtest: the six reported interaction defects stay fixed
 ok 21 - the six reported interaction defects stay fixed
   ---
-  duration_ms: 1.74322
+  duration_ms: 1.410367
   type: 'test'
   ...
-1..21
-# tests 21
+# Subtest: starter chips retire once the conversation begins
+ok 22 - starter chips retire once the conversation begins
+  ---
+  duration_ms: 0.641798
+  type: 'test'
+  ...
+# Subtest: auto-advance does not leave a parked pointer lighting up the next step
+ok 23 - auto-advance does not leave a parked pointer lighting up the next step
+  ---
+  duration_ms: 1.406103
+  type: 'test'
+  ...
+# Subtest: the contact step lines up on one inset without stray rules
+ok 24 - the contact step lines up on one inset without stray rules
+  ---
+  duration_ms: 2.526024
+  type: 'test'
+  ...
+1..24
+# tests 24
 # suites 0
-# pass 21
+# pass 24
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 114.007865
+# duration_ms 105.7683
