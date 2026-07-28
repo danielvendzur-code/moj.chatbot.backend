@@ -2244,3 +2244,76 @@ html body .cw-widget[class] :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[clas
 html body .cw-widget[class] :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[class]:not([data-selected="true"]) p {
   color: var(--w-ink-dim) !important;
 }
+
+/* =============================================================
+   Quick replies, parked-pointer hover, and one tidy contact step.
+   ============================================================= */
+
+/* Auto-advance swaps the step under a pointer that has not moved, so the card
+   that happens to land under the cursor lit up as if it were already picked.
+   While the pointer is parked, hover looks exactly like rest. */
+html body .cw-widget[data-pointer-parked="true"] :is(
+    .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method
+  )[class]:hover:not([data-selected="true"]) {
+  background: var(--w-surface-card) !important;
+  border-color: var(--w-line) !important;
+}
+
+/* ---- the contact step reads as one block -----------------------------
+   The heading sat at 16px, the methods and the form at 28px and the summary
+   back at 16px, and a stray hairline above and below the optional-details
+   row cut the step into strips. One inset, no strips. */
+html body .cw-widget[class] .cw-calc-step[data-step="contact"][class] :is(
+    .cw-step-head, .cw-q, .cw-contact-stage, .cw-contact-methods,
+    .cw-lead, .cw-lead__form, .cw-summary
+  ) {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+html body .cw-widget[class] .cw-calc-step[data-step="contact"][class] {
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+html body .cw-widget[class] .cw-lead__optional[class] {
+  border: 0 !important;
+  padding: 0 !important;
+  margin: 2px 0 !important;
+}
+html body .cw-widget[class] .cw-lead__optional[class] > summary {
+  padding: 0 !important;
+}
+
+/* one rhythm down the step instead of four different gaps */
+html body .cw-widget[class] .cw-contact-stage[class] {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+html body .cw-widget[class] .cw-lead__form[class] {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+html body .cw-widget[class] .cw-contact-methods[class] {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+}
+/* the method tiles are secondary pills, matching the chip language */
+html body .cw-widget[class] .cw-contact-method[class] {
+  height: 46px !important;
+  min-height: 46px !important;
+  border-radius: 999px !important;
+  padding: 0 14px !important;
+}
+
+/* The sticky submit bar overlaps the end of the scroll area, so the summary
+   card was cut off mid-row and looked unfinished. Give the step enough room
+   to scroll clear of it. */
+html body .cw-widget[class] .cw-calc-step[data-step="contact"][class] {
+  padding-bottom: 18px !important;
+}

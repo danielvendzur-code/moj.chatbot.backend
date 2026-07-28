@@ -47,7 +47,20 @@ export function installConfiguratorAutoAdvance(): void {
       pending = window.setTimeout(() => {
         pending = null;
         const widget = target.closest<HTMLElement>(".cw-widget");
-        const next = widget?.querySelector<HTMLButtonElement>(".cw-next:not(:disabled)");
+        if (!widget) return;
+
+        /* Auto-advancing swaps the step under a pointer that has not moved, so
+           whatever lands beneath the cursor picks up :hover and reads as an
+           option you already chose. Mute hover styling until the pointer
+           actually moves again. */
+        widget.dataset.pointerParked = "true";
+        const release = () => {
+          delete widget.dataset.pointerParked;
+          widget.removeEventListener("pointermove", release);
+        };
+        widget.addEventListener("pointermove", release);
+
+        const next = widget.querySelector<HTMLButtonElement>(".cw-next:not(:disabled)");
         next?.click();
       }, 130);
     },

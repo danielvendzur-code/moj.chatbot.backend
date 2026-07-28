@@ -60,6 +60,11 @@ export function AssistantConversation({
   const nextIdRef = useRef(2);
   const messagesRef = useRef<HTMLDivElement>(null);
 
+  /* The starter questions are only useful before the conversation begins. Once
+     you have asked something — by chip or by typing — they stop being an offer
+     and just crowd the thread, so they go away. Reset brings them back. */
+  const conversationStarted = messages.some((message) => message.from === "me");
+
 
   useEffect(() => {
     const last = messages[messages.length - 1];
@@ -189,24 +194,26 @@ export function AssistantConversation({
         ) : null}
       </div>
 
-      <div className="cw-quick-replies" aria-label="Časté otázky">
-        {QUICK_REPLIES.map(({ label, question }) => {
-          const sending = activeQuickReply === label;
-          return (
-            <button
-              type="button"
-              className="cw-chip"
-              data-sending={sending}
-              disabled={typing}
-              key={label}
-              title={question}
-              onClick={() => void ask(question, label)}
-            >
-              <span className="cw-chip__label">{label}</span>
-            </button>
-          );
-        })}
-      </div>
+      {conversationStarted ? null : (
+        <div className="cw-quick-replies" aria-label="Časté otázky">
+          {QUICK_REPLIES.map(({ label, question }) => {
+            const sending = activeQuickReply === label;
+            return (
+              <button
+                type="button"
+                className="cw-chip"
+                data-sending={sending}
+                disabled={typing}
+                key={label}
+                title={question}
+                onClick={() => void ask(question, label)}
+              >
+                <span className="cw-chip__label">{label}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       <div className="cw-inputbar" aria-busy={typing}>
         <input
