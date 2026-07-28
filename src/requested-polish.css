@@ -5,9 +5,9 @@
   --cw-action-ink: #052018;
   --cw-action-soft: rgba(100, 227, 179, 0.13);
   --cw-action-line: rgba(100, 227, 179, 0.42);
-  --cw-cyan: #72d3ea;
-  --cw-cyan-soft: rgba(114, 211, 234, 0.12);
-  --cw-cyan-line: rgba(114, 211, 234, 0.28);
+  --cw-cyan: #16c47f;
+  --cw-cyan-soft: rgba(22, 196, 127, 0.12);
+  --cw-cyan-line: rgba(22, 196, 127, 0.28);
 }
 
 /* Cleaner, more professional panel proportions. */
@@ -15,9 +15,9 @@
   width: min(446px, calc(100vw - 24px)) !important;
   max-height: min(770px, calc(100dvh - 28px)) !important;
   border-radius: 22px !important;
-  border-color: rgba(114,211,234,.2) !important;
+  border-color: rgba(22, 196, 127,.2) !important;
   background:
-    radial-gradient(80% 50% at 50% -10%, rgba(114,211,234,.075), transparent 66%),
+    radial-gradient(80% 50% at 50% -10%, rgba(22, 196, 127,.075), transparent 66%),
     var(--cw-bg-soft) !important;
   box-shadow: 0 32px 78px -28px rgba(0,0,0,.78), inset 0 1px 0 rgba(255,255,255,.045) !important;
 }
@@ -31,7 +31,7 @@
 .cw-panel-head {
   min-height: 68px !important;
   padding: 12px 14px !important;
-  border-bottom-color: rgba(114,211,234,.12) !important;
+  border-bottom-color: rgba(22, 196, 127,.12) !important;
 }
 
 .cw-panel-head__title b {
@@ -129,7 +129,7 @@
 .cw-tabs button[data-active="true"] {
   color: #06171c !important;
   background: var(--cw-cyan) !important;
-  box-shadow: 0 9px 24px rgba(114,211,234,.23), inset 0 1px 0 rgba(255,255,255,.4) !important;
+  box-shadow: 0 9px 24px rgba(22, 196, 127,.23), inset 0 1px 0 rgba(255,255,255,.4) !important;
 }
 
 /* Restore clean rounded chat chips without moving light overlays. */
@@ -241,9 +241,9 @@
 .cw-scard[data-selected="true"],
 .cw-opt[data-selected="true"],
 .cw-vcard[data-selected="true"] {
-  border-color: rgba(114,211,234,.55) !important;
-  background: rgba(114,211,234,.105) !important;
-  box-shadow: 0 0 0 1px rgba(114,211,234,.08) inset, 0 12px 28px rgba(0,0,0,.13) !important;
+  border-color: rgba(22, 196, 127,.55) !important;
+  background: rgba(22, 196, 127,.105) !important;
+  box-shadow: 0 0 0 1px rgba(22, 196, 127,.08) inset, 0 12px 28px rgba(0,0,0,.13) !important;
   animation: cw-clean-select 280ms cubic-bezier(.16,1,.3,1) both !important;
 }
 
@@ -313,7 +313,7 @@
 
 .cw-lead {
   border-color: var(--cw-cyan-line) !important;
-  background: rgba(114,211,234,.055) !important;
+  background: rgba(22, 196, 127,.055) !important;
 }
 
 .cw-lead__head > span:first-child { color: var(--cw-cyan) !important; }

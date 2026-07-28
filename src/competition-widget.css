@@ -14,15 +14,15 @@
   --cw-ink: #f4f8f8;
   --cw-muted: #b3c3c7;
   --cw-faint: #7f969c;
-  --cw-brass: #72c7ff;
-  --cw-brass-hover: #91d4ff;
+  --cw-brass: #7fe0b4;
+  --cw-brass-hover: #7fe0b4;
   --cw-sage: #65e6c1;
   --cw-sage-hover: #83f1d0;
-  --cw-copper: #72c7ff;
-  --cw-copper-hover: #91d4ff;
+  --cw-copper: #7fe0b4;
+  --cw-copper-hover: #7fe0b4;
   --cw-on-copper: #041b17;
-  --cw-line: rgba(222, 242, 245, 0.11);
-  --cw-line-strong: rgba(222, 242, 245, 0.21);
+  --cw-line: rgba(127, 224, 180, 0.11);
+  --cw-line-strong: rgba(127, 224, 180, 0.21);
   --cw-glass: rgba(7, 24, 30, 0.9);
   --cw-glass-blur: blur(26px) saturate(145%);
   --cw-shadow: 0 38px 96px -34px rgba(0, 0, 0, 0.82), 0 14px 34px -20px rgba(0, 0, 0, 0.64);
@@ -31,9 +31,9 @@
   --cw-action-ink: #041b17;
   --cw-action-soft: rgba(101, 230, 193, 0.13);
   --cw-action-line: rgba(101, 230, 193, 0.42);
-  --cw-cyan: #72c7ff;
-  --cw-cyan-soft: rgba(114, 199, 255, 0.12);
-  --cw-cyan-line: rgba(114, 199, 255, 0.34);
+  --cw-cyan: #7fe0b4;
+  --cw-cyan-soft: rgba(127, 224, 180, 0.12);
+  --cw-cyan-line: rgba(127, 224, 180, 0.34);
   --cw-danger: #ff6c67;
   --cw-r-lg: 22px;
   --cw-r-md: 15px;
@@ -56,7 +56,7 @@ html[data-embed="true"] #root {
 
 .widget-preview {
   background:
-    radial-gradient(circle at 88% 7%, rgba(114, 199, 255, 0.1), transparent 30rem),
+    radial-gradient(circle at 88% 7%, rgba(127, 224, 180, 0.1), transparent 30rem),
     radial-gradient(circle at 7% 94%, rgba(101, 230, 193, 0.06), transparent 27rem),
     linear-gradient(135deg, #061216, #081b21 58%, #06161c) !important;
 }
@@ -71,14 +71,14 @@ html[data-embed="true"] #root {
   bottom: max(18px, env(safe-area-inset-bottom)) !important;
   width: 64px !important;
   height: 64px !important;
-  border: 1px solid rgba(114, 199, 255, 0.25) !important;
+  border: 1px solid rgba(127, 224, 180, 0.25) !important;
   border-radius: 20px !important;
   background:
     radial-gradient(circle at 30% 17%, rgba(255, 255, 255, 0.12), transparent 34%),
     linear-gradient(145deg, #14343d, #0b2229) !important;
   box-shadow:
     0 22px 46px -20px rgba(0, 0, 0, 0.8),
-    0 0 0 1px rgba(114, 199, 255, 0.05),
+    0 0 0 1px rgba(127, 224, 180, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
   transition:
     transform 300ms var(--cw-ease),
@@ -103,7 +103,7 @@ html[data-embed="true"] #root {
 .cw-launcher .bl,
 .cw-panel-head__mascot .bl,
 .cw-avatar .bl {
-  filter: drop-shadow(0 8px 18px rgba(114, 199, 255, 0.2));
+  filter: drop-shadow(0 8px 18px rgba(127, 224, 180, 0.2));
 }
 
 .bl__dot {
@@ -111,11 +111,11 @@ html[data-embed="true"] #root {
 }
 
 .cw-teaser {
-  border: 1px solid rgba(114, 199, 255, 0.2) !important;
+  border: 1px solid rgba(127, 224, 180, 0.2) !important;
   border-radius: 18px !important;
   color: var(--cw-ink) !important;
   background:
-    radial-gradient(circle at 92% -20%, rgba(114, 199, 255, 0.12), transparent 50%),
+    radial-gradient(circle at 92% -20%, rgba(127, 224, 180, 0.12), transparent 50%),
     rgba(8, 27, 33, 0.93) !important;
   box-shadow:
     0 28px 64px -34px rgba(0, 0, 0, 0.85),
@@ -135,10 +135,10 @@ html[data-embed="true"] #root {
   width: min(452px, calc(100vw - 36px)) !important;
   height: min(750px, calc(100dvh - 36px)) !important;
   max-height: calc(100dvh - 36px) !important;
-  border: 1px solid rgba(114, 199, 255, 0.2) !important;
+  border: 1px solid rgba(127, 224, 180, 0.2) !important;
   border-radius: 24px !important;
   background:
-    radial-gradient(100% 55% at 50% -8%, rgba(114, 199, 255, 0.09), transparent 61%),
+    radial-gradient(100% 55% at 50% -8%, rgba(127, 224, 180, 0.09), transparent 61%),
     radial-gradient(80% 50% at 94% 108%, rgba(101, 230, 193, 0.055), transparent 64%),
     var(--cw-glass) !important;
   box-shadow:
@@ -152,18 +152,18 @@ html[data-embed="true"] #root {
 .cw-panel-head {
   min-height: 70px !important;
   padding: 12px 14px !important;
-  border-bottom: 1px solid rgba(114, 199, 255, 0.11) !important;
+  border-bottom: 1px solid rgba(127, 224, 180, 0.11) !important;
   background:
-    radial-gradient(180px 80px at 82% -20%, rgba(114, 199, 255, 0.13), transparent 72%),
+    radial-gradient(180px 80px at 82% -20%, rgba(127, 224, 180, 0.13), transparent 72%),
     linear-gradient(180deg, rgba(18, 48, 57, 0.58), rgba(9, 28, 34, 0.3)) !important;
 }
 
 .cw-panel-head__mascot {
   width: 42px !important;
   height: 42px !important;
-  border: 1px solid rgba(114, 199, 255, 0.18) !important;
+  border: 1px solid rgba(127, 224, 180, 0.18) !important;
   border-radius: 14px !important;
-  background: rgba(114, 199, 255, 0.07) !important;
+  background: rgba(127, 224, 180, 0.07) !important;
 }
 
 .cw-panel-head__title b {
@@ -186,10 +186,10 @@ html[data-embed="true"] #root {
 .cw-panel-head__actions button {
   width: 38px !important;
   height: 38px !important;
-  border: 1px solid rgba(222, 242, 245, 0.12) !important;
+  border: 1px solid rgba(127, 224, 180, 0.12) !important;
   border-radius: 12px !important;
   color: var(--cw-muted) !important;
-  background: rgba(222, 242, 245, 0.045) !important;
+  background: rgba(127, 224, 180, 0.045) !important;
 }
 
 .cw-panel-head__actions button:hover,
@@ -215,7 +215,7 @@ html[data-embed="true"] #root {
 .cw-tabs {
   margin: 10px 14px 8px !important;
   padding: 5px !important;
-  border: 1px solid rgba(114, 199, 255, 0.18) !important;
+  border: 1px solid rgba(127, 224, 180, 0.18) !important;
   border-radius: 17px !important;
   background: rgba(2, 14, 18, 0.68) !important;
   box-shadow:
@@ -259,32 +259,32 @@ html[data-embed="true"] #root {
 /* Conversation */
 .cw-messages {
   padding: 14px 14px 5px !important;
-  scrollbar-color: rgba(114, 199, 255, 0.32) transparent;
+  scrollbar-color: rgba(127, 224, 180, 0.32) transparent;
 }
 
 .cw-messages::-webkit-scrollbar-thumb {
-  background: rgba(114, 199, 255, 0.32) !important;
+  background: rgba(127, 224, 180, 0.32) !important;
 }
 
 .cw-avatar {
-  border-color: rgba(114, 199, 255, 0.15) !important;
+  border-color: rgba(127, 224, 180, 0.15) !important;
   border-radius: 11px !important;
   background: var(--cw-cyan-soft) !important;
 }
 
 .cw-message-wrap p {
-  border: 1px solid rgba(222, 242, 245, 0.11) !important;
+  border: 1px solid rgba(127, 224, 180, 0.11) !important;
   border-radius: 16px !important;
   border-bottom-left-radius: 6px !important;
   color: var(--cw-ink) !important;
   background:
-    radial-gradient(circle at 90% 0%, rgba(114, 199, 255, 0.045), transparent 48%),
+    radial-gradient(circle at 90% 0%, rgba(127, 224, 180, 0.045), transparent 48%),
     rgba(15, 40, 48, 0.9) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045) !important;
 }
 
 .cw-message-row--bot:last-child .cw-message-wrap p::after {
-  background: radial-gradient(120% 120% at 20% 0%, rgba(114, 199, 255, 0.2), transparent 70%) !important;
+  background: radial-gradient(120% 120% at 20% 0%, rgba(127, 224, 180, 0.2), transparent 70%) !important;
 }
 
 .cw-message-row--me .cw-message-wrap p {
@@ -292,13 +292,13 @@ html[data-embed="true"] #root {
   border-radius: 16px !important;
   border-bottom-right-radius: 6px !important;
   color: #041b17 !important;
-  background: linear-gradient(135deg, #72c7ff, #65e6c1) !important;
+  background: linear-gradient(135deg, #7fe0b4, #65e6c1) !important;
   box-shadow: 0 12px 28px rgba(101, 230, 193, 0.14) !important;
 }
 
 .cw-typing {
-  border-color: rgba(114, 199, 255, 0.16) !important;
-  background: rgba(114, 199, 255, 0.07) !important;
+  border-color: rgba(127, 224, 180, 0.16) !important;
+  background: rgba(127, 224, 180, 0.07) !important;
 }
 
 .cw-typing i {
@@ -317,11 +317,11 @@ html[data-embed="true"] #root {
 
 .cw-chip {
   min-height: 39px !important;
-  border: 1px solid rgba(222, 242, 245, 0.13) !important;
+  border: 1px solid rgba(127, 224, 180, 0.13) !important;
   border-radius: 999px !important;
   padding: 9px 13px !important;
   color: var(--cw-ink) !important;
-  background: rgba(222, 242, 245, 0.045) !important;
+  background: rgba(127, 224, 180, 0.045) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
   white-space: normal !important;
   transform: none !important;
@@ -356,7 +356,7 @@ html[data-embed="true"] #root {
 .cw-inputbar {
   gap: 8px !important;
   padding: 10px 12px max(12px, env(safe-area-inset-bottom)) !important;
-  border-top: 1px solid rgba(222, 242, 245, 0.09) !important;
+  border-top: 1px solid rgba(127, 224, 180, 0.09) !important;
   background: rgba(5, 19, 24, 0.72) !important;
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
@@ -364,10 +364,10 @@ html[data-embed="true"] #root {
 
 .cw-inputbar input {
   min-height: 48px !important;
-  border: 1px solid rgba(222, 242, 245, 0.13) !important;
+  border: 1px solid rgba(127, 224, 180, 0.13) !important;
   border-radius: 14px !important;
   color: var(--cw-ink) !important;
-  background: rgba(222, 242, 245, 0.045) !important;
+  background: rgba(127, 224, 180, 0.045) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
 }
 
@@ -376,8 +376,8 @@ html[data-embed="true"] #root {
 }
 
 .cw-inputbar input:focus {
-  border-color: rgba(114, 199, 255, 0.5) !important;
-  box-shadow: 0 0 0 4px rgba(114, 199, 255, 0.09) !important;
+  border-color: rgba(127, 224, 180, 0.5) !important;
+  box-shadow: 0 0 0 4px rgba(127, 224, 180, 0.09) !important;
 }
 
 .cw-inputbar button {
@@ -400,7 +400,7 @@ html[data-embed="true"] #root {
 
 .cw-inputbar button:disabled {
   color: var(--cw-faint) !important;
-  background: rgba(222, 242, 245, 0.07) !important;
+  background: rgba(127, 224, 180, 0.07) !important;
   box-shadow: none !important;
 }
 
@@ -410,7 +410,7 @@ html[data-embed="true"] #root {
 }
 
 .cw-progress__track {
-  background: rgba(222, 242, 245, 0.08) !important;
+  background: rgba(127, 224, 180, 0.08) !important;
 }
 
 .cw-progress__fill {
@@ -420,9 +420,9 @@ html[data-embed="true"] #root {
 
 .cw-progress__back,
 .cw-restart {
-  border-color: rgba(222, 242, 245, 0.12) !important;
+  border-color: rgba(127, 224, 180, 0.12) !important;
   color: var(--cw-muted) !important;
-  background: rgba(222, 242, 245, 0.04) !important;
+  background: rgba(127, 224, 180, 0.04) !important;
 }
 
 .cw-progress__back:hover:not(:disabled),
@@ -435,7 +435,7 @@ html[data-embed="true"] #root {
 }
 
 .cw-calc-body {
-  scrollbar-color: rgba(114, 199, 255, 0.32) transparent;
+  scrollbar-color: rgba(127, 224, 180, 0.32) transparent;
 }
 
 .cw-calc-step {
@@ -456,12 +456,12 @@ html[data-embed="true"] #root {
 .cw-scard,
 .cw-opt,
 .cw-vcard {
-  border: 1px solid rgba(222, 242, 245, 0.11) !important;
+  border: 1px solid rgba(127, 224, 180, 0.11) !important;
   border-radius: 15px !important;
   color: var(--cw-ink) !important;
   background:
-    radial-gradient(circle at 95% 0%, rgba(114, 199, 255, 0.04), transparent 45%),
-    rgba(222, 242, 245, 0.035) !important;
+    radial-gradient(circle at 95% 0%, rgba(127, 224, 180, 0.04), transparent 45%),
+    rgba(127, 224, 180, 0.035) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
   transform: none !important;
   transform-style: flat !important;
@@ -501,7 +501,7 @@ html[data-embed="true"] #root {
 .cw-rowcard__icon,
 .cw-scard__icon,
 .cw-lead__icon {
-  border-color: rgba(114, 199, 255, 0.17) !important;
+  border-color: rgba(127, 224, 180, 0.17) !important;
   color: var(--cw-cyan) !important;
   background: var(--cw-cyan-soft) !important;
 }
@@ -514,7 +514,7 @@ html[data-embed="true"] #root {
 }
 
 .cw-opt__radio {
-  border-color: rgba(222, 242, 245, 0.27) !important;
+  border-color: rgba(127, 224, 180, 0.27) !important;
 }
 
 .cw-opt[data-selected="true"] .cw-opt__radio {
@@ -526,27 +526,27 @@ html[data-embed="true"] #root {
 .cw-custom textarea,
 .cw-lead input,
 .cw-lead textarea {
-  border: 1px solid rgba(222, 242, 245, 0.13) !important;
+  border: 1px solid rgba(127, 224, 180, 0.13) !important;
   border-radius: 13px !important;
   color: var(--cw-ink) !important;
-  background: rgba(222, 242, 245, 0.04) !important;
+  background: rgba(127, 224, 180, 0.04) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
 }
 
 .cw-custom textarea:focus,
 .cw-lead input:focus,
 .cw-lead textarea:focus {
-  border-color: rgba(114, 199, 255, 0.5) !important;
-  box-shadow: 0 0 0 4px rgba(114, 199, 255, 0.09) !important;
+  border-color: rgba(127, 224, 180, 0.5) !important;
+  box-shadow: 0 0 0 4px rgba(127, 224, 180, 0.09) !important;
 }
 
 .cw-industry-tip,
 .cw-summary,
 .cw-lead {
-  border: 1px solid rgba(114, 199, 255, 0.14) !important;
+  border: 1px solid rgba(127, 224, 180, 0.14) !important;
   border-radius: 16px !important;
   background:
-    radial-gradient(circle at 95% 0%, rgba(114, 199, 255, 0.055), transparent 46%),
+    radial-gradient(circle at 95% 0%, rgba(127, 224, 180, 0.055), transparent 46%),
     rgba(9, 29, 35, 0.78) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
 }
@@ -581,7 +581,7 @@ html[data-embed="true"] #root {
 
 .cw-calc-actions {
   padding: 10px 14px max(12px, env(safe-area-inset-bottom)) !important;
-  border-top: 1px solid rgba(222, 242, 245, 0.09) !important;
+  border-top: 1px solid rgba(127, 224, 180, 0.09) !important;
   background: rgba(5, 19, 24, 0.74) !important;
 }
 
@@ -612,9 +612,9 @@ html[data-embed="true"] #root {
 
 .cw-next:disabled,
 .cw-submit:disabled {
-  border-color: rgba(222, 242, 245, 0.08) !important;
+  border-color: rgba(127, 224, 180, 0.08) !important;
   color: var(--cw-faint) !important;
-  background: rgba(222, 242, 245, 0.07) !important;
+  background: rgba(127, 224, 180, 0.07) !important;
   box-shadow: none !important;
 }
 
@@ -633,9 +633,9 @@ html[data-embed="true"] #root {
 }
 
 .cw-thanks__grid > div {
-  border-color: rgba(222, 242, 245, 0.1) !important;
+  border-color: rgba(127, 224, 180, 0.1) !important;
   border-radius: 13px !important;
-  background: rgba(222, 242, 245, 0.035) !important;
+  background: rgba(127, 224, 180, 0.035) !important;
 }
 
 .cw-thanks__actions button {
@@ -647,7 +647,7 @@ html[data-embed="true"] #root {
 .cw-widget input:focus-visible,
 .cw-widget textarea:focus-visible,
 .cw-widget a:focus-visible {
-  outline: 3px solid rgba(114, 199, 255, 0.82) !important;
+  outline: 3px solid rgba(127, 224, 180, 0.82) !important;
   outline-offset: 3px !important;
 }
 

@@ -43,7 +43,7 @@ html body .cw-widget .cw-quick-replies .cw-chip::after {
   inset: 0 !important;
   border-radius: inherit !important;
   pointer-events: none !important;
-  background: #2868c8 !important;
+  background: #0fa568 !important;
   opacity: 1 !important;
   transform: scaleX(0) !important;
   transform-origin: center !important;
@@ -91,7 +91,7 @@ html body .cw-widget .cw-inputbar:focus-within {
 }
 
 html body .cw-widget .cw-inputbar:focus-within {
-  border-color: #4e8cff !important;
+  border-color: #16c47f !important;
 }
 
 html body .cw-widget .cw-inputbar::before,
@@ -108,7 +108,7 @@ html body .cw-widget .cw-inputbar input:focus {
   border: 0 !important;
   border-radius: 0 !important;
   outline: 0 !important;
-  color: #f5f8fc !important;
+  color: #7fe0b4 !important;
   background: transparent !important;
   box-shadow: none !important;
   transform: none !important;
@@ -122,7 +122,7 @@ html body .cw-widget .cw-inputbar > .cw-send:is(:hover, :focus-visible, :active)
   border: 0 !important;
   border-radius: 11px !important;
   color: #fff !important;
-  background: #3478f6 !important;
+  background: #16c47f !important;
   box-shadow: none !important;
   filter: none !important;
   transform: none !important;
@@ -144,7 +144,7 @@ html body .cw-widget .cw-progress {
   padding: 7px 13px !important;
   border: 0 !important;
   background: #0a1521 !important;
-  box-shadow: inset 0 -1px 0 rgba(112, 151, 206, 0.08) !important;
+  box-shadow: inset 0 -1px 0 rgba(22, 196, 127, 0.08) !important;
 }
 
 html body .cw-widget .cw-progress__back {
@@ -167,12 +167,12 @@ html body .cw-widget .cw-progress__track {
 
 html body .cw-widget .cw-progress__fill {
   border-radius: inherit !important;
-  background: #4e8cff !important;
+  background: #16c47f !important;
   box-shadow: none !important;
 }
 
 html body .cw-widget .cw-progress__count {
-  color: #9bc4ff !important;
+  color: #7fe0b4 !important;
   font-size: 11px !important;
   font-weight: 730 !important;
 }
@@ -286,7 +286,7 @@ html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-select
   border: 0 !important;
   color: #fff !important;
   background:
-    radial-gradient(circle at 50% 45%, rgba(82, 145, 255, 0.2), transparent 68%),
+    radial-gradient(circle at 50% 45%, rgba(22, 196, 127, 0.2), transparent 68%),
     #18375f !important;
   box-shadow: none !important;
   transform: none !important;
@@ -316,7 +316,7 @@ html body .cw-widget .cw-rowcard__icon {
   padding: 0 !important;
   border: 0 !important;
   border-radius: 0 !important;
-  color: #75a8ff !important;
+  color: #7fe0b4 !important;
   background: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
@@ -386,7 +386,7 @@ html body .cw-widget .cw-scard__icon {
   padding: 0 !important;
   border: 0 !important;
   border-radius: 0 !important;
-  color: #75a8ff !important;
+  color: #7fe0b4 !important;
   background: transparent !important;
   box-shadow: none !important;
   filter: none !important;
@@ -438,7 +438,7 @@ html body .cw-widget .cw-selection-indicator {
   border: 0 !important;
   border-radius: 50% !important;
   color: #fff !important;
-  background: #4e8cff !important;
+  background: #16c47f !important;
   box-shadow: none !important;
   opacity: 0 !important;
   transform: none !important;
@@ -469,7 +469,7 @@ html body .cw-widget .cw-calc-actions {
   padding: 9px 12px max(10px, env(safe-area-inset-bottom)) !important;
   border: 0 !important;
   background: #08121c !important;
-  box-shadow: inset 0 1px 0 rgba(111, 151, 207, 0.08) !important;
+  box-shadow: inset 0 1px 0 rgba(22, 196, 127, 0.08) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
@@ -482,7 +482,7 @@ html body .cw-widget .cw-next:is(:hover, :focus-visible, :active):not(:disabled)
   border: 0 !important;
   border-radius: 16px !important;
   color: #fff !important;
-  background: #3478f6 !important;
+  background: #16c47f !important;
   background-image: none !important;
   box-shadow: none !important;
   filter: none !important;
@@ -556,13 +556,13 @@ html body .cw-widget {
   --w-switch: #0f1a28;
   --w-chip: #111b29;
   --w-item: #111d2b;
-  --w-text: #f7f9fc;
+  --w-text: #7fe0b4;
   --w-text-2: #aeb6c2;
   --w-text-3: #747e8d;
-  --w-blue: #3478f6;
-  --w-blue-hover: #1f55c9;
-  --w-blue-soft: #8ab4ff;
-  --w-line: rgba(122, 162, 220, 0.18);
+  --w-blue: #16c47f;
+  --w-blue-hover: #0fa568;
+  --w-blue-soft: #7fe0b4;
+  --w-line: rgba(122, 210, 180, 0.18);
   --w-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -692,7 +692,7 @@ html body .cw-widget .cw-quick-replies .cw-chip:focus-visible {
   transform: translateY(-2px) !important;
   box-shadow:
     inset 0 0 0 1px var(--w-line),
-    0 14px 26px -18px rgba(52, 120, 246, 0.75) !important;
+    0 14px 26px -18px rgba(22, 196, 127, 0.75) !important;
 }
 html body .cw-widget .cw-quick-replies .cw-chip[data-sending="true"] {
   color: #ffffff !important;
@@ -758,7 +758,7 @@ html body .cw-widget .cw-vcard:hover:not([data-selected="true"]) {
   transform: translateY(-2px) !important;
   box-shadow:
     inset 0 0 0 1px var(--w-line),
-    0 14px 26px -18px rgba(52, 120, 246, 0.75) !important;
+    0 14px 26px -18px rgba(22, 196, 127, 0.75) !important;
 }
 html body .cw-widget .cw-rowcard[data-selected="true"],
 html body .cw-widget .cw-scard[data-selected="true"],
@@ -858,7 +858,7 @@ html body .cw-widget .cw-direct-actions__grid a:hover {
   transform: translateY(-2px) !important;
   box-shadow:
     inset 0 0 0 1px var(--w-line),
-    0 14px 26px -18px rgba(52, 120, 246, 0.75) !important;
+    0 14px 26px -18px rgba(22, 196, 127, 0.75) !important;
 }
 html body .cw-widget .cw-direct-actions__icon {
   color: var(--w-blue-soft) !important;
@@ -894,8 +894,8 @@ html body .cw-widget .cw-launcher:hover {
   background: var(--w-switch) !important;
 }
 @keyframes w-idle {
-  0%, 100% { box-shadow: inset 0 0 0 1px var(--w-line), 0 18px 40px -22px rgba(0, 0, 0, 0.9), 0 0 0 0 rgba(52, 120, 246, 0.4); }
-  55% { box-shadow: inset 0 0 0 1px var(--w-line), 0 18px 40px -22px rgba(0, 0, 0, 0.9), 0 0 0 14px rgba(52, 120, 246, 0); }
+  0%, 100% { box-shadow: inset 0 0 0 1px var(--w-line), 0 18px 40px -22px rgba(0, 0, 0, 0.9), 0 0 0 0 rgba(22, 196, 127, 0.4); }
+  55% { box-shadow: inset 0 0 0 1px var(--w-line), 0 18px 40px -22px rgba(0, 0, 0, 0.9), 0 0 0 14px rgba(22, 196, 127, 0); }
 }
 
 /* ---------- Focus + reduced motion ---------- */
@@ -903,7 +903,7 @@ html body .cw-widget button:focus-visible,
 html body .cw-widget a:focus-visible,
 html body .cw-widget input:focus-visible,
 html body .cw-widget textarea:focus-visible {
-  outline: 3px solid rgba(52, 120, 246, 0.86) !important;
+  outline: 3px solid rgba(22, 196, 127, 0.86) !important;
   outline-offset: 4px !important;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -931,8 +931,8 @@ html body .cw-widget .cw-messages {
 }
 
 /* ---------- Blue normalisation: exactly three blues, nothing between ----------
-   Anything that previously used an off-palette blue (#4e8cff, #7faeff,
-   #9bc4ff, #3979e6, #76a7ff, #91b8ff) is mapped onto the site's three. */
+   Anything that previously used an off-palette blue (#16c47f, #7fe0b4,
+   #7fe0b4, #16c47f, #7fe0b4, #7fe0b4) is mapped onto the site's three. */
 html body .cw-widget .cw-selection-indicator,
 html body .cw-widget .cw-progress__fill,
 html body .cw-widget .cw-tabs__thumb,
@@ -1034,7 +1034,7 @@ html body .cw-widget .cw-quick-replies .cw-chip:hover,
 html body .cw-widget .cw-quick-replies .cw-chip:focus-visible {
   color: #ffffff !important;
   transform: translateY(-2px) scale(1.015) !important;
-  box-shadow: 0 14px 26px -18px rgba(52, 120, 246, 0.75) !important;
+  box-shadow: 0 14px 26px -18px rgba(22, 196, 127, 0.75) !important;
 }
 html body .cw-widget .cw-quick-replies .cw-chip:active {
   transform: translateY(0) scale(0.975) !important;
@@ -1075,7 +1075,7 @@ html body .cw-widget a:focus-visible,
 html body .cw-widget input:focus-visible,
 html body .cw-widget textarea:focus-visible,
 html body .cw-widget [role="button"]:focus-visible {
-  outline: 3px solid rgba(52, 120, 246, 0.86) !important;
+  outline: 3px solid rgba(22, 196, 127, 0.86) !important;
   outline-offset: 4px !important;
   border-radius: inherit;
 }
@@ -1218,15 +1218,15 @@ html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-select
   border-radius: inherit !important;
   background: conic-gradient(
     from var(--w-orbit),
-    rgba(52, 120, 246, 0.22) 0deg,
-    rgba(52, 120, 246, 0.22) 210deg,
-    rgba(138, 180, 255, 0.55) 288deg,
-    #8ab4ff 330deg,
+    rgba(22, 196, 127, 0.22) 0deg,
+    rgba(22, 196, 127, 0.22) 210deg,
+    rgba(127, 224, 180, 0.55) 288deg,
+    #7fe0b4 330deg,
     #ffffff 352deg,
-    #8ab4ff 358deg,
-    rgba(52, 120, 246, 0.22) 360deg
+    #7fe0b4 358deg,
+    rgba(22, 196, 127, 0.22) 360deg
   ) !important;
-  filter: drop-shadow(0 0 6px rgba(52, 120, 246, 0.55)) !important;
+  filter: drop-shadow(0 0 6px rgba(22, 196, 127, 0.55)) !important;
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0) !important;
@@ -1300,16 +1300,16 @@ html body .cw-widget .cw-quick-replies .cw-chip:focus-visible {
   color: #ffffff !important;
   transform: translateY(-2px) !important;
   box-shadow:
-    inset 0 0 0 1px rgba(52, 120, 246, 0.5),
-    0 10px 20px -12px rgba(52, 120, 246, 0.75),
-    0 0 22px -6px rgba(52, 120, 246, 0.5) !important;
+    inset 0 0 0 1px rgba(22, 196, 127, 0.5),
+    0 10px 20px -12px rgba(22, 196, 127, 0.75),
+    0 0 22px -6px rgba(22, 196, 127, 0.5) !important;
 }
 
 /* ---- Builder CTA: warmer, deeper glow ---- */
 html body .cw-widget .cw-chat-builder {
   box-shadow:
-    0 12px 26px -14px rgba(52, 120, 246, 0.9),
-    0 0 26px -8px rgba(52, 120, 246, 0.55),
+    0 12px 26px -14px rgba(22, 196, 127, 0.9),
+    0 0 26px -8px rgba(22, 196, 127, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
   transition:
     background-color 420ms var(--w-ease),
@@ -1320,8 +1320,8 @@ html body .cw-widget .cw-chat-builder:hover,
 html body .cw-widget .cw-chat-builder:focus-visible {
   transform: translateY(-2px) !important;
   box-shadow:
-    0 18px 34px -14px rgba(52, 120, 246, 1),
-    0 0 34px -6px rgba(52, 120, 246, 0.7),
+    0 18px 34px -14px rgba(22, 196, 127, 1),
+    0 0 34px -6px rgba(22, 196, 127, 0.7),
     inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
 }
 
@@ -1333,7 +1333,7 @@ html body .cw-widget .cw-opt[data-selected="true"]::before {
 }
 html body .cw-widget .cw-opt[data-selected="true"] {
   animation: none !important;
-  background: rgba(52, 120, 246, 0.12) !important;
+  background: rgba(22, 196, 127, 0.12) !important;
   box-shadow: inset 0 0 0 1.5px var(--w-blue) !important;
 }
 
@@ -1460,17 +1460,17 @@ html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-select
 }
 html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard)[data-selected="true"] {
   animation: none !important;
-  background: rgba(52, 120, 246, 0.1) !important;
+  background: rgba(22, 196, 127, 0.1) !important;
   box-shadow:
     inset 0 0 0 1.5px var(--w-blue),
-    0 0 26px -10px rgba(52, 120, 246, 0.55) !important;
+    0 0 26px -10px rgba(22, 196, 127, 0.55) !important;
 }
 html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):hover:not([data-selected="true"]) {
   transform: translateY(-2px) !important;
   box-shadow:
-    inset 0 0 0 1px rgba(52, 120, 246, 0.5),
-    0 16px 30px -18px rgba(52, 120, 246, 0.85),
-    0 0 28px -8px rgba(52, 120, 246, 0.45) !important;
+    inset 0 0 0 1px rgba(22, 196, 127, 0.5),
+    0 16px 30px -18px rgba(22, 196, 127, 0.85),
+    0 0 28px -8px rgba(22, 196, 127, 0.45) !important;
 }
 
 /* ---- Contact step: the submit is visible without scrolling ---- */
@@ -1514,7 +1514,7 @@ html body .cw-widget .cw-consent {
 }
 html body .cw-widget .cw-consent:hover {
   background: rgba(23, 39, 58, 0.7) !important;
-  box-shadow: inset 0 0 0 1px rgba(52, 120, 246, 0.35) !important;
+  box-shadow: inset 0 0 0 1px rgba(22, 196, 127, 0.35) !important;
 }
 html body .cw-widget .cw-consent input[type="checkbox"] {
   width: 22px !important;
@@ -1525,7 +1525,7 @@ html body .cw-widget .cw-consent input[type="checkbox"] {
   cursor: pointer !important;
 }
 html body .cw-widget .cw-consent:has(input:checked) {
-  box-shadow: inset 0 0 0 1px rgba(52, 120, 246, 0.5) !important;
+  box-shadow: inset 0 0 0 1px rgba(22, 196, 127, 0.5) !important;
 }
 
 /* ---- Contact tiles: proper glow on hover ---- */
@@ -1533,11 +1533,11 @@ html body .cw-widget .cw-direct-actions__grid a:hover,
 html body .cw-widget .cw-direct-actions__grid a:focus-visible {
   color: #ffffff !important;
   transform: translateY(-2px) !important;
-  background: rgba(52, 120, 246, 0.12) !important;
+  background: rgba(22, 196, 127, 0.12) !important;
   box-shadow:
-    inset 0 0 0 1px rgba(52, 120, 246, 0.5),
-    0 16px 28px -18px rgba(52, 120, 246, 0.9),
-    0 0 26px -8px rgba(52, 120, 246, 0.5) !important;
+    inset 0 0 0 1px rgba(22, 196, 127, 0.5),
+    0 16px 28px -18px rgba(22, 196, 127, 0.9),
+    0 0 26px -8px rgba(22, 196, 127, 0.5) !important;
 }
 html body .cw-widget .cw-direct-actions__grid a:hover .cw-direct-actions__icon,
 html body .cw-widget .cw-direct-actions__grid a:focus-visible .cw-direct-actions__icon {
@@ -1587,8 +1587,8 @@ html body .cw-widget .cw-launcher .bl {
   html body .cw-widget .cw-launcher:hover::after {
     background: var(--w-switch) !important;
     box-shadow:
-      inset 0 0 0 1px rgba(52, 120, 246, 0.4),
-      0 20px 44px -20px rgba(52, 120, 246, 0.6) !important;
+      inset 0 0 0 1px rgba(22, 196, 127, 0.4),
+      0 20px 44px -20px rgba(22, 196, 127, 0.6) !important;
   }
   html body .cw-widget .cw-launcher[aria-expanded="true"]::after {
     opacity: 0 !important;
@@ -1613,8 +1613,8 @@ html body .cw-widget .cw-inputbar {
 html body .cw-widget .cw-inputbar:focus-within {
   border-radius: 999px !important;
   box-shadow:
-    inset 0 0 0 1px rgba(52, 120, 246, 0.55),
-    0 0 26px -10px rgba(52, 120, 246, 0.5) !important;
+    inset 0 0 0 1px rgba(22, 196, 127, 0.55),
+    0 0 26px -10px rgba(22, 196, 127, 0.5) !important;
 }
 html body .cw-widget .cw-inputbar input {
   height: 44px !important;
@@ -1937,7 +1937,7 @@ html body .cw-widget .cw-consent input[type="checkbox"] {
     border-color var(--w-fast) var(--w-ease) !important;
 }
 html body .cw-widget .cw-consent input[type="checkbox"]:hover {
-  border-color: rgba(138, 180, 255, 0.5) !important;
+  border-color: rgba(127, 224, 180, 0.5) !important;
 }
 html body .cw-widget .cw-consent input[type="checkbox"]:checked {
   border-color: var(--w-blue) !important;
@@ -1963,7 +1963,7 @@ html body .cw-widget .cw-consent input[type="checkbox"]:checked::after {
   transform: rotate(45deg) scale(1) !important;
 }
 html body .cw-widget .cw-consent input[type="checkbox"]:focus-visible {
-  outline: 3px solid rgba(52, 120, 246, 0.86) !important;
+  outline: 3px solid rgba(22, 196, 127, 0.86) !important;
   outline-offset: 3px !important;
 }
 html body .cw-widget .cw-consent {
@@ -1975,4 +1975,272 @@ html body .cw-widget .cw-consent > span {
   font-size: 11.5px !important;
   line-height: 1.4 !important;
   color: var(--w-text-dim, #aeb6c2) !important;
+}
+
+/* =============================================================
+   Green system pass — palette, the six reported defects, shapes, motion.
+
+   Earlier layers reach (0,5,2) with selectors like
+   `.cw-widget .cw-quick-replies .cw-chip:is(:hover):not(:disabled)`, and they
+   all use !important. `[class]` matches any element that has a class at all,
+   so it adds specificity without changing what is matched — that is what
+   makes these rules land instead of silently losing.
+   ============================================================= */
+
+html body .cw-widget {
+  --w-green: #16c47f;        /* CTA, active, icon-in-circle */
+  --w-green-hover: #0fa568;
+  --w-green-soft: #7fe0b4;   /* decorative icons, small labels */
+  --w-line: rgba(122, 210, 180, 0.18);  /* the only border tone, always 1px */
+  --w-ink: #f7f9fc;
+  --w-ink-dim: #aeb6c2;
+  --w-surface-card: #0b1420;
+  --w-surface-item: #111d2b;
+  --w-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---- (a) nothing may move when you point at it or pick it -------------
+   Hover lifted the chip 2px while the selected state had no lift, so the
+   chip dropped back the instant it was picked and read as a bounce. No
+   state changes position now, and border width is identical everywhere so
+   height cannot shift either. Colour is the only thing that changes. */
+html body .cw-widget[class] :is(
+    .cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt,
+    .cw-contact-method, .cw-submit, .cw-next, .cw-chat-builder
+  )[class],
+html body .cw-widget[class] :is(
+    .cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt,
+    .cw-contact-method, .cw-submit, .cw-next, .cw-chat-builder
+  )[class]:is(:hover, :focus-visible, :active),
+html body .cw-widget[class] :is(
+    .cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt,
+    .cw-contact-method, .cw-submit, .cw-next, .cw-chat-builder
+  )[class]:is([data-selected="true"], [aria-pressed="true"], [data-sending="true"]) {
+  transform: none !important;
+  border-style: solid !important;
+  border-width: 1px !important;
+  transition:
+    background-color 360ms var(--w-ease),
+    border-color 360ms var(--w-ease),
+    color 240ms var(--w-ease) !important;
+}
+
+/* ---- (b) the fill has to cover the whole button -----------------------
+   Hover was a 50%-radius ellipse in ::before sliding across the button, so
+   a round shape could never fill a rectangle — it only washed part of it.
+   Removed; hover is a flat background-colour change over the full surface. */
+html body .cw-widget[class] :is(
+    .cw-chip, .cw-submit, .cw-next, .cw-chat-builder, .cw-rowcard,
+    .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method
+  )[class]::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* ---- (e) three button looks, no more ----------------------------------
+   1. solid green pill = primary action
+   2. dark pill of the same size = secondary
+   3. text with an icon = quiet action
+   Same height, same radius across the set. */
+html body .cw-widget[class] :is(.cw-submit, .cw-next, .cw-chat-builder)[class] {
+  height: 50px !important;
+  min-height: 50px !important;
+  border-radius: 999px !important;
+  border-color: transparent !important;
+  background: var(--w-green) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+html body .cw-widget[class] :is(.cw-submit, .cw-next, .cw-chat-builder)[class]:is(:hover, :focus-visible):not(:disabled) {
+  background: var(--w-green-hover) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+html body .cw-widget[class] :is(.cw-submit, .cw-next)[class]:disabled {
+  background: var(--w-surface-item) !important;
+  color: var(--w-ink-dim) !important;
+  border-color: var(--w-line) !important;
+}
+
+/* secondary: identical pill, dark fill */
+html body .cw-widget[class] .cw-chip[class],
+html body .cw-widget[class] .cw-quick-replies[class] .cw-chip[class],
+html body .cw-widget[class] .cw-quick-replies[class] .cw-chip[class]:first-child,
+html body .cw-widget[class] .cw-quick-replies[class] .cw-chip[class]:last-child {
+  height: 46px !important;
+  min-height: 46px !important;
+  border-radius: 999px !important;
+  padding: 0 18px !important;
+  border: 1px solid var(--w-line) !important;
+  background: var(--w-surface-item) !important;
+  color: var(--w-ink) !important;
+  box-shadow: none !important;
+}
+html body .cw-widget[class] .cw-chip[class]:is(:hover, :focus-visible):not(:disabled),
+html body .cw-widget[class] .cw-quick-replies[class] .cw-chip[class]:is(:hover, :focus-visible):not(:disabled) {
+  background: #16281f !important;
+  border-color: rgba(122, 210, 180, 0.38) !important;
+  color: var(--w-ink) !important;
+}
+html body .cw-widget[class] .cw-chip[class]:is([data-selected="true"], [aria-pressed="true"], [data-sending="true"]),
+html body .cw-widget[class] .cw-quick-replies[class] .cw-chip[class]:is([data-selected="true"], [data-sending="true"]) {
+  background: var(--w-green) !important;
+  border-color: var(--w-green) !important;
+  color: #ffffff !important;
+}
+
+/* ---- (c) height follows content ---------------------------------------
+   A pinned min-height left a band of dead space under any card whose text
+   ran short. */
+html body .cw-widget[class] :is(
+    .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-summary, .cw-lead__form
+  )[class] {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+/* ---- (d) icon left, text right ----------------------------------------
+   Stacking these in a column dropped the label under the icon and opened a
+   hole down the right-hand side of the card. */
+html body .cw-widget[class] :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-contact-method)[class] {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 13px !important;
+  text-align: left !important;
+}
+html body .cw-widget[class] :is(.cw-rowcard, .cw-scard, .cw-opt)[class] > :last-child {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+/* ---- shapes: cards and bubbles 20-26px, list rows 14px, one 1px line -- */
+html body .cw-widget[class] :is(
+    .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method, .cw-summary
+  )[class] {
+  border-radius: 22px !important;
+  border: 1px solid var(--w-line) !important;
+  background: var(--w-surface-card) !important;
+  color: var(--w-ink) !important;
+}
+html body .cw-widget[class] :is(
+    .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method
+  )[class]:is(:hover, :focus-visible):not([data-selected="true"]) {
+  background: #0e1d18 !important;
+  border-color: rgba(122, 210, 180, 0.38) !important;
+}
+html body .cw-widget[class] :is(
+    .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method
+  )[class][data-selected="true"] {
+  background: var(--w-green) !important;
+  border-color: var(--w-green) !important;
+  color: #ffffff !important;
+}
+html body .cw-widget[class] .cw-summary__row[class] {
+  border-radius: 14px !important;
+}
+
+/* decorative icons carry the soft green; on a filled card they turn white */
+html body .cw-widget[class] :is(
+    .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method
+  )[class] svg {
+  color: var(--w-green-soft) !important;
+}
+html body .cw-widget[class] :is(
+    .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method
+  )[class][data-selected="true"] :is(svg, b, small, span) {
+  color: #ffffff !important;
+}
+
+/* ---- typing: three dots as a wave ------------------------------------ */
+html body .cw-widget[class] .cw-typing[class] i {
+  background: var(--w-green-soft) !important;
+  animation: cw-typing-wave 1.15s var(--w-ease) infinite !important;
+}
+html body .cw-widget[class] .cw-typing[class] i:nth-child(2) { animation-delay: 0.15s !important; }
+html body .cw-widget[class] .cw-typing[class] i:nth-child(3) { animation-delay: 0.3s !important; }
+@keyframes cw-typing-wave {
+  0%, 60%, 100% { opacity: 0.36; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-4px); }
+}
+
+/* ---- focus ------------------------------------------------------------ */
+html body .cw-widget[class] :is(button, a, input, textarea, summary)[class]:focus-visible,
+html body .cw-widget[class] :is(button, a, input, textarea, summary):focus-visible {
+  outline: 3px solid rgba(22, 196, 127, 0.86) !important;
+  outline-offset: 4px !important;
+}
+
+/* ---- (f) nothing runs past the viewport on a narrow phone ------------- */
+@media (max-width: 430px) {
+  html body .cw-widget[class] .cw-panel[class],
+  html body .cw-widget[class] .cw-panel[class] * {
+    max-width: 100% !important;
+  }
+  html body .cw-widget[class] .cw-lead__row[class] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body .cw-widget[class] .cw-typing[class] i {
+    animation: none !important;
+    opacity: 0.7 !important;
+  }
+}
+
+/* ---- (c) continued: the floor was on the grid, not the card -----------
+   `grid-auto-rows: minmax(112px, auto)` on the choice grid held every row at
+   112px while the cards only needed 82px, so each one carried ~30px of dead
+   space under its text. Rows size to their content now. */
+html body .cw-widget[class] :is(.cw-choice-grid, .cw-choice-grid--rows, .cw-choice-grid--tiles)[class] {
+  grid-template-rows: none !important;
+  grid-auto-rows: auto !important;
+  align-items: stretch !important;
+}
+
+/* ---- the step reads top-down -----------------------------------------
+   Once the rows stopped being padded out to 112px the grid still stretched
+   and `align-content: center` floated the cards into the middle of the
+   step, leaving a hole under the question. Cards follow the text. */
+html body .cw-widget[class] :is(.cw-choice-grid, .cw-choice-grid--interest, .cw-choice-grid--rows, .cw-choice-grid--tiles)[class] {
+  align-content: start !important;
+  flex: 0 0 auto !important;
+}
+html body .cw-widget[class] .cw-calc-step[class] {
+  justify-content: flex-start !important;
+}
+
+/* Headings are main text. Soft green is reserved for decorative icons and
+   small labels, per the website's own rule. */
+html body .cw-widget[class] :is(.cw-q, .cw-calc-step h2, .cw-calc-step h3)[class] {
+  color: var(--w-ink) !important;
+}
+html body .cw-widget[class] :is(.cw-qsub, .cw-calc-step p)[class] {
+  color: var(--w-ink-dim) !important;
+}
+
+/* (e) the three contact tiles are one look, not two */
+html body .cw-widget[class] .cw-direct-actions__grid[class] a {
+  border: 1px solid var(--w-line) !important;
+  border-radius: 14px !important;
+  background: var(--w-surface-item) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+html body .cw-widget[class] .cw-direct-actions__grid[class] a:is(:hover, :focus-visible) {
+  background: #16281f !important;
+  border-color: rgba(122, 210, 180, 0.38) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Card titles are primary content, not small labels — main ink, with the
+   description in the secondary tone. Green stays on the icon. */
+html body .cw-widget[class] :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[class]:not([data-selected="true"]) b {
+  color: var(--w-ink) !important;
+}
+html body .cw-widget[class] :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[class]:not([data-selected="true"]) small,
+html body .cw-widget[class] :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[class]:not([data-selected="true"]) p {
+  color: var(--w-ink-dim) !important;
 }
