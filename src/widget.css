@@ -21,12 +21,20 @@ body,
   margin: 0;
 }
 
+/* `overflow: hidden` on html/body turns them into the scroll container, which
+   breaks scrolling and pinch-zoom on mobile once the on-screen keyboard opens.
+   Sideways bleed is clipped on the inner container instead. */
 html[data-embed="true"],
-html[data-embed="true"] body,
+html[data-embed="true"] body {
+  min-width: 0;
+  min-height: 100%;
+  background: transparent;
+}
+
 html[data-embed="true"] #root {
   min-width: 0;
   min-height: 100%;
-  overflow: hidden;
+  overflow-x: clip;
   background: transparent;
 }
 
@@ -40,6 +48,16 @@ summary {
 .cw-widget {
   position: relative;
   z-index: 2147483000;
+}
+
+/* WidgetIcon renders a viewBox-only <svg>, which has no intrinsic size: drop one
+   into a flex container that does not size it and it expands to the full width
+   and drags the button's height with it. This is the default every later rule
+   overrides, so an unsized container can no longer produce a giant glyph. */
+.cw-widget svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
 }
 
 .bl {

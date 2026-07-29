@@ -1,18 +1,18 @@
 /* Môj Chatbot — premium product layer. One palette, one geometry system, one motion language. */
 :root {
-  --mc-bg: #05070b;
-  --mc-shell: #080d14;
-  --mc-surface: #0d141f;
-  --mc-surface-raised: #111b2a;
-  --mc-surface-hover: #142033;
-  --mc-selected: #14294a;
+  --mc-bg: #0b110f;
+  --mc-shell: #080d0b;
+  --mc-surface: #131c18;
+  --mc-surface-raised: #18231e;
+  --mc-surface-hover: #1c2924;
+  --mc-selected: #1b2d24;
   --mc-green: #16c47f;
   --mc-green-hover: #0fa568;
-  --mc-text: #f6f8fb;
-  --mc-muted: #9eabbc;
-  --mc-faint: #6f7d8f;
-  --mc-line: rgba(246, 248, 251, 0.075);
-  --mc-line-soft: rgba(246, 248, 251, 0.045);
+  --mc-text: #f4f8f6;
+  --mc-muted: #a8bab1;
+  --mc-faint: #7f9489;
+  --mc-line: rgba(122, 210, 180, 0.16);
+  --mc-line-soft: rgba(122, 210, 180, 0.1);
   --mc-line-blue: rgba(22, 196, 127, 0.48);
   --mc-danger: #ff9f9f;
   --mc-ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -47,10 +47,12 @@ body {
 .widget-preview {
   position: relative;
   min-height: 100dvh;
-  overflow: hidden;
+  /* Clip sideways bleed only. A full `overflow: hidden` here would make the
+     page's own scrolling depend on this element. */
+  overflow-x: clip;
   background:
     radial-gradient(circle at 82% 10%, rgba(22, 196, 127, 0.1), transparent 32rem),
-    radial-gradient(circle at 18% 90%, rgba(27, 67, 128, 0.08), transparent 28rem),
+    radial-gradient(circle at 18% 90%, rgba(44, 75, 60, 0.08), transparent 28rem),
     var(--mc-bg);
 }
 
@@ -174,7 +176,7 @@ html[data-embed="true"] .widget-preview__surface {
   color: var(--mc-text);
   background:
     radial-gradient(circle at 82% -8%, rgba(22, 196, 127, 0.16), transparent 25rem),
-    linear-gradient(180deg, #080d15 0%, var(--mc-bg) 28%, #05070b 100%);
+    linear-gradient(180deg, #090e0c 0%, var(--mc-bg) 28%, #05070b 100%);
   box-shadow:
     0 68px 150px -56px rgba(0, 0, 0, 1),
     0 30px 78px -46px rgba(22, 196, 127, 0.42),
@@ -234,7 +236,7 @@ html[data-embed="true"] .widget-preview__surface {
   gap: 12px;
   padding: 11px 12px 10px 15px;
   flex: 0 0 auto;
-  background: rgba(8, 13, 20, 0.86);
+  background: rgba(8, 14, 11, 0.86);
   backdrop-filter: blur(18px) saturate(125%);
   box-shadow: inset 0 -1px 0 var(--mc-line-soft);
 }
@@ -304,7 +306,7 @@ html[data-embed="true"] .widget-preview__surface {
   border: 0;
   border-radius: 50%;
   color: var(--mc-muted);
-  background: rgba(13, 20, 31, 0.46);
+  background: rgba(13, 22, 17, 0.46);
   box-shadow: inset 0 0 0 1px rgba(246, 248, 251, 0.025);
   cursor: pointer;
   transition:
@@ -340,7 +342,7 @@ html[data-embed="true"] .widget-preview__surface {
   padding: 5px;
   border: 0;
   border-radius: 18px;
-  background: linear-gradient(180deg, rgba(17, 27, 42, 0.96), rgba(11, 18, 28, 0.96));
+  background: linear-gradient(180deg, rgba(17, 29, 24, 0.96), rgba(11, 19, 16, 0.96));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.055),
     inset 0 0 0 1px rgba(246, 248, 251, 0.035),
@@ -395,7 +397,7 @@ html[data-embed="true"] .widget-preview__surface {
 
 .cw-tabs > button:not([data-active="true"]):hover,
 .cw-tabs > button:not([data-active="true"]):focus-visible {
-  color: #d7e0ec;
+  color: #d6e2dc;
   background: rgba(255, 255, 255, 0.018);
 }
 
@@ -550,7 +552,7 @@ html[data-embed="true"] .widget-preview__surface {
   overflow-y: auto;
   padding: 9px 13px 10px;
   scrollbar-width: thin;
-  scrollbar-color: #26374f transparent;
+  scrollbar-color: #233c30 transparent;
   overscroll-behavior: contain;
 }
 
@@ -599,8 +601,8 @@ html[data-embed="true"] .widget-preview__surface {
   padding: 13px 15px;
   border: 0;
   border-radius: 19px 19px 19px 7px;
-  color: #dce4ee;
-  background: linear-gradient(145deg, rgba(17, 27, 42, 0.98), rgba(11, 18, 28, 0.98));
+  color: #dce6e1;
+  background: linear-gradient(145deg, rgba(17, 29, 24, 0.98), rgba(11, 19, 16, 0.98));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.045),
     inset 0 0 0 1px rgba(246, 248, 251, 0.035),
@@ -628,7 +630,7 @@ html[data-embed="true"] .widget-preview__surface {
   gap: 6px;
   padding: 13px 15px;
   border-radius: 19px 19px 19px 7px;
-  background: linear-gradient(145deg, rgba(17, 27, 42, 0.98), rgba(11, 18, 28, 0.98));
+  background: linear-gradient(145deg, rgba(17, 29, 24, 0.98), rgba(11, 19, 16, 0.98));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.045),
     inset 0 0 0 1px rgba(246, 248, 251, 0.035);
@@ -686,8 +688,8 @@ html[data-embed="true"] .widget-preview__surface {
   padding: 0 30px 0 15px;
   border: 0;
   border-radius: 999px;
-  color: #cfd8e5;
-  background: linear-gradient(180deg, rgba(20, 32, 50, 0.96), rgba(12, 20, 32, 0.98));
+  color: #cddbd4;
+  background: linear-gradient(180deg, rgba(20, 34, 28, 0.96), rgba(13, 22, 17, 0.98));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
     inset 0 0 0 1px rgba(22, 196, 127, 0.14),
@@ -824,7 +826,7 @@ html[data-embed="true"] .widget-preview__surface {
   padding: 7px 7px 7px 16px;
   border: 0;
   border-radius: 18px;
-  background: linear-gradient(180deg, rgba(17, 27, 42, 0.98), rgba(10, 16, 25, 0.99));
+  background: linear-gradient(180deg, rgba(17, 29, 24, 0.98), rgba(10, 18, 14, 0.99));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.055),
     inset 0 0 0 1px rgba(246, 248, 251, 0.05),
@@ -913,8 +915,8 @@ html[data-embed="true"] .widget-preview__surface {
 }
 
 .cw-inputbar > .cw-send:disabled {
-  color: #708096;
-  background: linear-gradient(180deg, #1a2432, #121924);
+  color: #638676;
+  background: linear-gradient(180deg, #17261f, #101b15);
   box-shadow: inset 0 0 0 1px rgba(246, 248, 251, 0.035);
   cursor: default;
 }
@@ -987,7 +989,7 @@ html[data-embed="true"] .widget-preview__surface {
   border: 0;
   border-radius: 14px;
   color: var(--mc-muted);
-  background: linear-gradient(180deg, rgba(13, 21, 33, 0.96), rgba(8, 13, 21, 0.98));
+  background: linear-gradient(180deg, rgba(13, 22, 18, 0.96), rgba(9, 14, 12, 0.98));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.045),
     inset 0 0 0 1px rgba(246, 248, 251, 0.032);
@@ -1003,7 +1005,7 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-direct-actions__grid a:hover,
 .cw-direct-actions__grid a:focus-visible {
   color: white;
-  background: linear-gradient(180deg, rgba(20, 36, 58, 0.98), rgba(12, 22, 36, 0.98));
+  background: linear-gradient(180deg, rgba(23, 38, 31, 0.98), rgba(14, 23, 19, 0.98));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.07),
     inset 0 0 0 1px rgba(22, 196, 127, 0.16),
@@ -1053,7 +1055,7 @@ html[data-embed="true"] .widget-preview__surface {
   border: 0;
   border-radius: 50%;
   color: var(--mc-muted);
-  background: linear-gradient(180deg, rgba(17, 27, 42, 0.98), rgba(10, 17, 27, 0.98));
+  background: linear-gradient(180deg, rgba(17, 29, 24, 0.98), rgba(11, 19, 15, 0.98));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.045),
     inset 0 0 0 1px rgba(246, 248, 251, 0.035);
@@ -1089,7 +1091,7 @@ html[data-embed="true"] .widget-preview__surface {
   height: 6px;
   overflow: hidden;
   border-radius: 999px;
-  background: #152033;
+  background: #14221c;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.42);
 }
 
@@ -1117,7 +1119,7 @@ html[data-embed="true"] .widget-preview__surface {
   overflow-y: auto;
   padding: 17px 16px 13px;
   scrollbar-width: thin;
-  scrollbar-color: #26374f transparent;
+  scrollbar-color: #233c30 transparent;
   overscroll-behavior: contain;
 }
 
@@ -1197,10 +1199,10 @@ html[data-embed="true"] .widget-preview__surface {
   isolation: isolate;
   overflow: hidden;
   border: 0;
-  color: #dce4ee;
+  color: #dce6e1;
   background:
     radial-gradient(circle at 84% 0%, rgba(22, 196, 127, 0.055), transparent 44%),
-    linear-gradient(145deg, rgba(17, 27, 42, 0.99), rgba(10, 17, 27, 0.99));
+    linear-gradient(145deg, rgba(17, 29, 24, 0.99), rgba(11, 19, 15, 0.99));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.045),
     inset 0 0 0 1px rgba(246, 248, 251, 0.04),
@@ -1224,7 +1226,7 @@ html[data-embed="true"] .widget-preview__surface {
   inset: 0;
   background:
     radial-gradient(circle at 80% 0%, rgba(127, 224, 180, 0.18), transparent 48%),
-    linear-gradient(135deg, rgba(20, 47, 84, 0.98), rgba(15, 34, 61, 0.98));
+    linear-gradient(135deg, rgba(30, 51, 42, 0.98), rgba(22, 37, 30, 0.98));
   transform: scaleX(0);
   transform-origin: center;
   transition: transform 620ms var(--mc-ease);
@@ -1574,7 +1576,7 @@ html[data-embed="true"] .widget-preview__surface {
   border: 0;
   outline: none;
   color: var(--mc-text);
-  background: linear-gradient(180deg, rgba(17, 27, 42, 0.98), rgba(10, 17, 27, 0.98));
+  background: linear-gradient(180deg, rgba(17, 29, 24, 0.98), rgba(11, 19, 15, 0.98));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.045),
     inset 0 0 0 1px rgba(246, 248, 251, 0.045);
@@ -1612,8 +1614,8 @@ html[data-embed="true"] .widget-preview__surface {
   padding: 10px 12px;
   border: 0;
   border-radius: 15px;
-  color: #cbd5e2;
-  background: linear-gradient(180deg, rgba(13, 23, 37, 0.98), rgba(8, 14, 23, 0.98));
+  color: #c8d8d0;
+  background: linear-gradient(180deg, rgba(14, 25, 20, 0.98), rgba(9, 15, 12, 0.98));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.045),
     inset 0 0 0 1px rgba(22, 196, 127, 0.075);
@@ -1752,8 +1754,8 @@ html[data-embed="true"] .widget-preview__surface {
 
 .cw-next:disabled,
 .cw-submit:disabled {
-  color: #748196;
-  background: linear-gradient(180deg, #171f2b, #111721);
+  color: #668778;
+  background: linear-gradient(180deg, #14221b, #0e1914);
   box-shadow: inset 0 0 0 1px rgba(246, 248, 251, 0.035);
   cursor: default;
 }
@@ -1777,7 +1779,7 @@ html[data-embed="true"] .widget-preview__surface {
   border-radius: 21px;
   background:
     radial-gradient(circle at 86% 0%, rgba(22, 196, 127, 0.07), transparent 40%),
-    linear-gradient(145deg, rgba(12, 20, 31, 0.99), rgba(7, 12, 19, 0.99));
+    linear-gradient(145deg, rgba(13, 22, 17, 0.99), rgba(8, 13, 10, 0.99));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.045),
     inset 0 0 0 1px rgba(246, 248, 251, 0.04),
@@ -1858,7 +1860,7 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-lead__optional {
   border: 0;
   border-radius: 16px;
-  background: rgba(8, 14, 23, 0.72);
+  background: rgba(9, 15, 12, 0.72);
   box-shadow: inset 0 0 0 1px rgba(246, 248, 251, 0.03);
 }
 
@@ -1932,7 +1934,7 @@ html[data-embed="true"] .widget-preview__surface {
 }
 
 .cw-summary__row b {
-  color: #dfe7f1;
+  color: #e0e8e4;
   font-size: 10.4px;
   font-weight: 610;
   line-height: 1.36;
@@ -1948,7 +1950,7 @@ html[data-embed="true"] .widget-preview__surface {
   border: 0;
   border-radius: 16px;
   color: var(--mc-muted);
-  background: linear-gradient(180deg, rgba(17, 27, 42, 0.98), rgba(10, 17, 27, 0.98));
+  background: linear-gradient(180deg, rgba(17, 29, 24, 0.98), rgba(11, 19, 15, 0.98));
   box-shadow: inset 0 0 0 1px rgba(246, 248, 251, 0.04);
   font-size: 11.7px;
   font-weight: 640;
@@ -2020,8 +2022,8 @@ html[data-embed="true"] .widget-preview__surface {
   gap: 4px;
   padding: 11px;
   border-radius: 15px;
-  color: #dfe7f1;
-  background: linear-gradient(180deg, rgba(17, 27, 42, 0.98), rgba(10, 17, 27, 0.98));
+  color: #e0e8e4;
+  background: linear-gradient(180deg, rgba(17, 29, 24, 0.98), rgba(11, 19, 15, 0.98));
   box-shadow: inset 0 0 0 1px rgba(246, 248, 251, 0.035);
   font-size: 10.7px;
 }
@@ -2385,7 +2387,7 @@ html[data-embed="true"] .widget-preview__surface {
   gap: 4px;
   border-radius: 16px;
   padding: 8px 6px;
-  background: linear-gradient(180deg, rgba(15, 24, 39, 0.98), rgba(9, 15, 25, 0.98));
+  background: linear-gradient(180deg, rgba(15, 26, 21, 0.98), rgba(10, 16, 13, 0.98));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
     inset 0 0 0 1px rgba(22, 196, 127, 0.14);
@@ -2421,7 +2423,7 @@ html[data-embed="true"] .widget-preview__surface {
 
 /* --- Chips: cleaner rest state, deeper hover --- */
 .cw-quick-replies .cw-chip {
-  background: linear-gradient(180deg, rgba(21, 33, 52, 0.98), rgba(12, 20, 32, 0.98));
+  background: linear-gradient(180deg, rgba(21, 35, 29, 0.98), rgba(13, 22, 17, 0.98));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
     inset 0 0 0 1px rgba(22, 196, 127, 0.18),
@@ -2456,6 +2458,6 @@ html[data-embed="true"] .widget-preview__surface {
 
 /* --- Bot message bubble: crisper --- */
 .cw-message-row--bot .cw-message-wrap p {
-  background: linear-gradient(180deg, rgba(20, 32, 50, 0.94), rgba(13, 21, 33, 0.94));
+  background: linear-gradient(180deg, rgba(20, 34, 28, 0.94), rgba(13, 22, 18, 0.94));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), inset 0 0 0 1px rgba(22, 196, 127, 0.08);
 }

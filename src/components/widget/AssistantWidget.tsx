@@ -120,12 +120,17 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
     if (embedMode) announceEmbedState(isOpen);
   }, [embedMode, isOpen]);
 
+  /* The panel used to set `overflow: hidden` on <body> while open. That makes
+     the body the scroll container, which breaks page scrolling and pinch-zoom
+     on mobile as soon as the keyboard opens. The panel is `position: fixed` and
+     stops touch scroll from reaching the page via `overscroll-behavior`, so no
+     lock on <body> is needed at all. A data flag stays available for hosts that
+     want to react to the open panel. */
   useEffect(() => {
-    if (!isOpen || !window.matchMedia("(max-width: 520px)").matches) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    if (!isOpen) return;
+    document.documentElement.dataset.assistantOpen = "true";
     return () => {
-      document.body.style.overflow = previous;
+      delete document.documentElement.dataset.assistantOpen;
     };
   }, [isOpen]);
 
@@ -136,7 +141,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
         data-testid="widget-launcher"
         className="cw-launcher"
         type="button"
-        aria-label="Otvoriť Môj Chatbot"
+        aria-label="Otvoriť chat — spočítam cenu alebo odpoviem na otázky"
         aria-expanded={isOpen}
         aria-controls="chameleon-widget-panel"
         onClick={() => open("assistant")}
@@ -172,7 +177,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
         >
           <header className="cw-panel-head">
             <h2 id="chameleon-widget-title" className="cw-sr-only">
-              Môj Chatbot — AI asistent a konfigurátor riešenia
+              Môj Chatbot — spočíta cenu a odpovie na otázky
             </h2>
             <span className="cw-panel-head__mascot">
               <BubbleLogo size="header" />
@@ -200,7 +205,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
                 type="button"
                 className="cw-panel-head__close"
                 data-testid="widget-close"
-                aria-label="Zavrieť asistenta"
+                aria-label="Zavrieť"
                 title="Zavrieť"
                 onClick={close}
               >
@@ -211,7 +216,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
 
           <nav
             className="cw-tabs"
-            aria-label="Vyberte spôsob pomoci"
+            aria-label="Vyberte si, ako vám mám pomôcť"
             data-mode={mode}
             ref={tabsRef}
             onPointerDown={(event) => {
@@ -233,7 +238,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
               onClick={() => switchMode("calculator")}
             >
               <WidgetIcon name="calculator" />
-              <span>Konfigurátor</span>
+              <span>Spočítať cenu</span>
             </button>
             <button
               type="button"
@@ -243,7 +248,7 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
               onClick={() => switchMode("assistant")}
             >
               <WidgetIcon name="chat" />
-              <span>Chatbot</span>
+              <span>Napísať mi</span>
             </button>
           </nav>
 

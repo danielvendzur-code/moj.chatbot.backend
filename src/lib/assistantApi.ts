@@ -46,32 +46,35 @@ function cleanText(value: string, limit: number): string {
     .slice(0, limit);
 }
 
+/* The offline answers a visitor actually reads when the chat endpoint is not
+   reachable. Same rule as the rest of the widget: no jargon, short sentences,
+   and say plainly what happens next. */
 export function localAssistantReply(question: string): string {
   const normalized = question.toLocaleLowerCase("sk");
 
   if (/cen|koľko|rozpočet|stojí|suma/.test(normalized)) {
-    return "Cena závisí od rozsahu, logiky a prepojení. Cez „Vyskladať riešenie“ mi za minútu zadáte typ chatbota a Daniel vám pripraví konkrétny odhad bez záväzkov.";
+    return "Záleží na tom, čo všetko má chatbot zvládnuť. Kliknite na „Spočítať cenu“, odpoviete mi na štyri otázky a hneď uvidíte odhad. Nič tým neplatíte.";
   }
   if (/kalkula|výpočet|odhad/.test(normalized)) {
-    return "Chatbot s kalkulačkou počas rozhovoru zozbiera parametre a vypočíta cenu, spotrebu alebo rozsah podľa vašich vlastných pravidiel. Výsledok aj kontakt odošle firme ako hotový dopyt.";
+    return "Zákazník zadá napríklad rozmery alebo množstvo a chatbot mu hneď povie cenu — podľa pravidiel, ktoré si určíte vy. Vám potom pošle jeho kontakt aj s tým, čo si vybral.";
   }
   if (/konfigur|produkt|variant|dopln/.test(normalized)) {
-    return "Konfigurátor prevedie zákazníka výberom typu, rozmerov, materiálu, farby a doplnkov. Na konci vznikne presná špecifikácia, ktorú môžete rovno naceniť alebo spracovať.";
+    return "Chatbot sa zákazníka postupne spýta na rozmery, materiál, farbu aj doplnky. Vy dostanete hotový dopyt, ktorý už len naceníte.";
   }
   if (/rezerv|termín|kalendár/.test(normalized)) {
-    return "Áno. Chatbot môže zistiť službu, ponúknuť dostupný termín, zapísať rezerváciu do kalendára a odoslať potvrdenie zákazníkovi aj firme.";
+    return "Áno. Chatbot zistí, čo zákazník potrebuje, ponúkne voľný termín, zapíše ho do kalendára a potvrdenie pošle jemu aj vám.";
   }
   if (/ako dlho|termín realiz|spustenie|hotov/.test(normalized)) {
-    return "Jednoduchšie riešenie môže byť pripravené v priebehu niekoľkých dní, komplexnejšie závisí od logiky a prepojení. Presný postup dostanete po krátkom zadaní cez konfigurátor.";
+    return "Jednoduchý chatbot zvládnem za niekoľko dní. Ak má aj počítať ceny alebo rezervovať termíny, potrebujem trochu viac času. Presne vám to poviem, keď mi napíšete, čo potrebujete.";
   }
   if (/web|vložiť|integr|wordpress|shopify/.test(normalized)) {
-    return "Widget sa dá vložiť na existujúci web bez kompletnej prerábky. Prispôsobí sa farbám značky, funguje na mobile a dopyty môže posielať na e-mail, kalendár, tabuľku alebo CRM.";
+    return "Váš web prerábať netreba. Chatbot doň pridám tak, aby ladil s vašimi farbami, fungoval na mobile a dopyty vám posielal na e-mail, do kalendára alebo do tabuľky.";
   }
   if (/kontakt|zavola|email|e-mail/.test(normalized)) {
-    return "Daniela môžete kontaktovať na daniel@vendzur.sk alebo +421 948 699 433. Najrýchlejšie je otvoriť „Vyskladať riešenie“ a poslať krátke zadanie.";
+    return "Napíšte na daniel@vendzur.sk alebo zavolajte na +421 948 699 433. Najrýchlejšie je kliknúť na „Spočítať cenu“ — ozvem sa vám do jedného dňa.";
   }
 
-  return "Pomôžem vám vybrať chatbot na mieru, kalkulačku, konfigurátor alebo rezervácie. Otvorte „Vyskladať riešenie“ alebo mi napíšte, čo má zákazník na vašom webe vedieť vybaviť bez telefonátu.";
+  return "Poradím vám, čo by váš web mohol robiť za vás: odpovedať zákazníkom, počítať ceny alebo dohadovať termíny. Napíšte mi, čo vás dnes najviac zdržuje, alebo kliknite na „Spočítať cenu“.";
 }
 
 export async function sendChat(history: ChatTurn[]): Promise<string> {

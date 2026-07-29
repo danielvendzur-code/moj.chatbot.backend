@@ -1,15 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { animateStepIn, drawCheck } from "../../lib/motion";
+import { drawCheck } from "../../lib/motion";
 import { track } from "../../lib/analytics";
 import { submitLead as sendLead } from "../../lib/leadApi";
+import { useCountUp } from "../../hooks/useCountUp";
+import { useStepTransition } from "../../hooks/useStepTransition";
 import {
+  BASE_PRICE,
   buildProposalNumber,
-  defaultFeatures,
   FEATURES,
   INDUSTRIES,
   INTERESTS,
   labelOf,
   PRESET_TO_INTEREST,
+  priceOf,
+  QUESTION_STEPS,
   QUESTIONS,
   RECOMMENDED_FEATURES,
   STEPS,
@@ -27,7 +31,9 @@ type ToolCalculatorProps = {
 type ContactMethod = "video" | "phone" | "meeting" | "email";
 
 type LeadState = {
-  contactMethod: ContactMethod;
+  /* Starts empty on purpose: a method that looks picked before the visitor
+     touched anything reads as a highlighted chip nobody chose. */
+  contactMethod: ContactMethod | null;
   name: string;
   email: string;
   phone: string;
@@ -38,7 +44,7 @@ type LeadState = {
 };
 
 const EMPTY_LEAD: LeadState = {
-  contactMethod: "video",
+  contactMethod: null,
   name: "",
   email: "",
   phone: "",
@@ -53,10 +59,10 @@ type SendState = "idle" | "sending" | "done";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const CONTACT_METHODS: Array<{ id: ContactMethod; label: string; icon: "chat" | "phone" | "user" | "mail" }> = [
-  { id: "video", label: "Videohovor", icon: "chat" },
-  { id: "phone", label: "Telefonát", icon: "phone" },
-  { id: "meeting", label: "Osobné stretnutie", icon: "user" },
-  { id: "email", label: "E-mail", icon: "mail" },
+  { id: "phone", label: "Telefonicky", icon: "phone" },
+  { id: "video", label: "Cez video", icon: "chat" },
+  { id: "meeting", label: "Osobne", icon: "user" },
+  { id: "email", label: "E-mailom", icon: "mail" },
 ];
 
 function SelectionIndicator({ selected }: { selected: boolean }): JSX.Element {
@@ -78,22 +84,25 @@ export function ToolCalculator({
   const [interest, setInterest] = useState<InterestId | null>(initialInterest);
   const [customText, setCustomText] = useState("");
   const [industry, setIndustry] = useState<string | null>(null);
-  const [features, setFeatures] = useState<string[]>(defaultFeatures(initialInterest));
+  const [features, setFeatures] = useState<string[]>([]);
   const [timeline, setTimeline] = useState<string | null>(null);
   const [lead, setLead] = useState<LeadState>(EMPTY_LEAD);
   const [leadError, setLeadError] = useState("");
   const [sendState, setSendState] = useState<SendState>("idle");
   const [proposalNumber, setProposalNumber] = useState("");
   const bodyRef = useRef<HTMLDivElement>(null);
-  const stepRef = useRef<HTMLElement>(null);
   const thanksIconRef = useRef<HTMLSpanElement>(null);
+
+  /* The outgoing step fades up and out before the new one arrives from below,
+     and the body holds its height across the swap so nothing jumps. */
+  const { visibleStep, leaving } = useStepTransition(step, bodyRef);
 
   const restart = (nextInterest: InterestId | null) => {
     setStep(0);
     setInterest(nextInterest);
     setCustomText("");
     setIndustry(null);
-    setFeatures(defaultFeatures(nextInterest));
+    setFeatures([]);
     setTimeline(null);
     setLead(EMPTY_LEAD);
     setLeadError("");
@@ -104,19 +113,29 @@ export function ToolCalculator({
     restart(initialPreset ? PRESET_TO_INTEREST[initialPreset] : null);
   }, [initialPreset, resetToken]);
 
+  /* Arriving at a step must leave nothing looking pre-chosen. Any button still
+     holding focus from the previous step is released, so the only thing that can
+     colour a chip is its own `data-selected`. */
   useEffect(() => {
     bodyRef.current?.scrollTo({ top: 0 });
-    animateStepIn(stepRef.current);
-    track("config_step_view", { step: STEPS[step], index: step + 1 });
-  }, [step, resetToken]);
+    const active = document.activeElement;
+    if (active instanceof HTMLElement && active.closest(".cw-calc-step")) active.blur();
+    track("config_step_view", { step: STEPS[visibleStep], index: visibleStep + 1 });
+  }, [visibleStep, resetToken]);
 
   useEffect(() => {
     if (sendState === "done") drawCheck(thanksIconRef.current);
   }, [sendState]);
 
-  const stepId = STEPS[step];
+  const stepId = STEPS[visibleStep];
   const [title, subtitle] = QUESTIONS[stepId];
-  const isLast = step === STEPS.length - 1;
+  const isLast = visibleStep === STEPS.length - 1;
+  const questionIndex = QUESTION_STEPS.indexOf(stepId);
+
+  const price = priceOf(features);
+  const shownPrice = useCountUp(price);
+  /* The bar is driven by a number so CSS can ease it instead of jumping. */
+  const progress = ((visibleStep + 1) / STEPS.length) * 100;
 
   const featureLabels = useMemo(
     () => FEATURES.filter((option) => features.includes(option.id)).map((option) => option.label),
@@ -129,6 +148,7 @@ export function ToolCalculator({
   );
 
   const canContinue = (() => {
+    if (leaving) return false;
     switch (stepId) {
       case "interest":
         return interest !== null && (interest !== "custom" || customText.trim().length > 0);
@@ -143,14 +163,17 @@ export function ToolCalculator({
     }
   })();
 
+  /* Picking a goal no longer ticks feature boxes for the visitor. */
   const pickInterest = (id: InterestId) => {
     setInterest(id);
-    setFeatures((current) => [
-      ...current,
-      ...RECOMMENDED_FEATURES[id].filter((featureId) => !current.includes(featureId)),
-    ]);
     track("config_interest_select", { interest: id });
   };
+
+  /* The suggestion belongs in the sentence above the options, never as a mark on
+     one of them. */
+  const recommendedLabels = (interest ? RECOMMENDED_FEATURES[interest] : [])
+    .map((id) => FEATURES.find((option) => option.id === id)?.label)
+    .filter((label): label is string => Boolean(label));
 
   const toggleFeature = (id: string) => {
     setFeatures((current) =>
@@ -159,11 +182,10 @@ export function ToolCalculator({
   };
 
   const summaryRows: Array<[string, string]> = [
-    ["Riešenie", interest === "custom" ? "Riešenie na mieru" : labelOf(INTERESTS, interest)],
-    ["Odvetvie", labelOf(INDUSTRIES, industry)],
-    ["Funkcie", featureLabels.length ? featureLabels.join(", ") : "—"],
-    ["Spustenie", labelOf(TIMELINES, timeline)],
-    ["Orientačný základ", "od 350 € — presná cena po kontrole zadania"],
+    ["Web má", interest === "custom" ? "Poradiť mi, čo sa hodí" : labelOf(INTERESTS, interest)],
+    ["Vaša firma", labelOf(INDUSTRIES, industry)],
+    ["Má zvládnuť", featureLabels.length ? featureLabels.join(", ") : "—"],
+    ["Hotové", labelOf(TIMELINES, timeline)],
   ];
 
   const submitLead = async () => {
@@ -172,24 +194,28 @@ export function ToolCalculator({
     const safeEmail = lead.email.trim();
     const safePhone = lead.phone.trim();
     const hasValidEmail = safeEmail ? EMAIL_PATTERN.test(safeEmail) : false;
+    if (!lead.contactMethod) {
+      setLeadError("Vyberte, ako sa vám mám ozvať.");
+      return;
+    }
     if (!safeName) {
-      setLeadError("Doplňte prosím meno.");
+      setLeadError("Napíšte mi prosím svoje meno.");
       return;
     }
     if (safeEmail && !hasValidEmail) {
-      setLeadError("Skontrolujte prosím e-mailovú adresu.");
+      setLeadError("Skontrolujte prosím e-mail, niečo v ňom chýba.");
       return;
     }
     if (lead.contactMethod === "email" && !hasValidEmail) {
-      setLeadError("Pre zaslanie e-mailom doplňte platnú adresu.");
+      setLeadError("Napíšte e-mail, kam vám mám poslať cenu.");
       return;
     }
     if (lead.contactMethod !== "email" && !safePhone && !hasValidEmail) {
-      setLeadError("Doplňte telefón alebo e-mail, aby som si s vami vedel dohodnúť termín.");
+      setLeadError("Napíšte telefón alebo e-mail, aby som sa vám vedel ozvať.");
       return;
     }
     if (!lead.consent) {
-      setLeadError("Potvrďte prosím súhlas so spracovaním údajov.");
+      setLeadError("Potvrďte prosím, že vám môžem napísať.");
       return;
     }
 
@@ -210,10 +236,11 @@ export function ToolCalculator({
         note: [
           lead.note.trim(),
           interest === "custom" && customText.trim()
-            ? `Vlastná predstava: ${customText.trim()}`
+            ? `Čo dnes riešia ručne: ${customText.trim()}`
             : "",
-          `Preferovaný spôsob prezentácie: ${CONTACT_METHODS.find((item) => item.id === lead.contactMethod)?.label ?? lead.contactMethod}`,
-          `Číslo návrhu: ${nextProposalNumber}`,
+          `Ozvať sa takto: ${CONTACT_METHODS.find((item) => item.id === lead.contactMethod)?.label ?? lead.contactMethod}`,
+          `Odhad ceny: ${price} €`,
+          `Číslo dopytu: ${nextProposalNumber}`,
         ]
           .filter(Boolean)
           .join("\n\n"),
@@ -228,7 +255,7 @@ export function ToolCalculator({
       track("lead_submit_success");
     } catch (error) {
       setSendState("idle");
-      setLeadError("Dopyt sa nepodarilo odoslať. Skúste to znova alebo použite priamy kontakt.");
+      setLeadError("Nepodarilo sa to poslať. Skúste to ešte raz alebo mi zavolajte.");
       track("lead_submit_error", {
         reason: error instanceof Error ? error.message : "unknown",
       });
@@ -236,41 +263,43 @@ export function ToolCalculator({
   };
 
   if (sendState === "done") {
+    /* The step view lays this container out as a three-row grid (progress, body,
+       actions). The thank-you screen is a single block, so it says which view it
+       is and gets its own layout instead of being squeezed into the 48px
+       progress row. */
     return (
-      <div className="cw-calculator" data-testid="calculator-view">
+      <div className="cw-calculator" data-view="thanks" data-testid="calculator-view">
         <div className="cw-thanks" role="status">
           <span className="cw-thanks__icon" ref={thanksIconRef}>
             <WidgetIcon name="check" />
           </span>
-          <span className="cw-thanks__eyebrow">Zadanie je pripravené</span>
+          <span className="cw-thanks__eyebrow">Hotovo, poslal som to</span>
           <h3>Ďakujem, {lead.name.trim()}.</h3>
-          <p>
-            Ozvem sa s odporúčaným rozsahom a konkrétnou cenou zvyčajne do jedného pracovného dňa.
-          </p>
+          <p>Ozvem sa vám do jedného pracovného dňa s presnou cenou.</p>
           <div className="cw-thanks__grid">
             <div>
-              <span>Riešenie</span>
+              <span>Web má</span>
               {summaryRows[0][1]}
             </div>
             <div>
-              <span>Odvetvie</span>
-              {summaryRows[1][1]}
+              <span>Odhad ceny</span>
+              {price} €
             </div>
             <div>
-              <span>Kontakt</span>
+              <span>Ozvem sa na</span>
               {lead.phone.trim() || lead.email.trim()}
             </div>
             <div>
-              <span>Číslo návrhu</span>
+              <span>Číslo dopytu</span>
               {proposalNumber}
             </div>
           </div>
           <div className="cw-thanks__actions">
             <button type="button" onClick={() => restart(null)}>
-              <WidgetIcon name="reset" /> Nový návrh
+              <WidgetIcon name="reset" /> Spočítať znova
             </button>
             <button type="button" className="ghost" onClick={onOpenChat}>
-              Späť na asistenta
+              Mám ešte otázku
             </button>
           </div>
         </div>
@@ -279,33 +308,48 @@ export function ToolCalculator({
   }
 
   return (
-    <div className="cw-calculator" data-testid="calculator-view">
-      <div className="cw-progress" aria-label={`Krok ${step + 1} z ${STEPS.length}`}>
+    <div className="cw-calculator" data-view="steps" data-testid="calculator-view">
+      <div className="cw-progress">
         <button
           type="button"
           className="cw-progress__back"
           onClick={() => setStep((value) => Math.max(0, value - 1))}
-          disabled={step === 0}
-          aria-label="Späť"
+          disabled={step === 0 || leaving}
+          aria-label="Späť na predchádzajúcu otázku"
         >
           <WidgetIcon name="arrow" className="cw-back-icon" />
         </button>
         <div className="cw-progress__track">
-          <span
-            className="cw-progress__fill"
-            style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
-          />
+          <span className="cw-progress__fill" style={{ width: `${progress}%` }} />
         </div>
-        <span className="cw-progress__count">
-          {step + 1}/{STEPS.length}
+        {/* One live region, so the label is spoken once per step instead of
+            reading a bare fraction. */}
+        <span className="cw-progress__count" aria-live="polite">
+          {questionIndex === -1
+            ? "Posledný krok"
+            : `Otázka ${questionIndex + 1} zo ${QUESTION_STEPS.length}`}
         </span>
       </div>
 
       <div className="cw-calc-body" ref={bodyRef}>
-        <section className="cw-calc-step" key={stepId} ref={stepRef} data-step={stepId}>
+        <section
+          className="cw-calc-step"
+          key={stepId}
+          data-step={stepId}
+          data-leaving={leaving || undefined}
+        >
           <header className="cw-step-head">
             <h3 className="cw-q">{title}</h3>
-            <p className="cw-q-sub">{subtitle}</p>
+            <p className="cw-q-sub">
+              {subtitle}
+              {stepId === "features" && recommendedLabels.length ? (
+                <>
+                  {" "}
+                  Pri tom, čo ste vybrali, sa najviac hodí{" "}
+                  <b>{recommendedLabels.join(" a ").toLowerCase()}</b>.
+                </>
+              ) : null}
+            </p>
           </header>
 
           {stepId === "interest" ? (
@@ -320,7 +364,7 @@ export function ToolCalculator({
                       data-testid={`interest-${option.id}`}
                       data-selected={selected}
                       aria-pressed={selected}
-                      key={option.id}
+                      key={`${stepId}-${option.id}`}
                       onClick={() => pickInterest(option.id)}
                     >
                       <span className="cw-rowcard__icon">
@@ -340,8 +384,8 @@ export function ToolCalculator({
                   <textarea
                     value={customText}
                     onChange={(event) => setCustomText(event.target.value)}
-                    placeholder="Stručne napíšte, čo dnes riešite ručne…"
-                    aria-label="Vlastná predstava"
+                    placeholder="Napíšte, čo vás dnes najviac zdržuje…"
+                    aria-label="Čo vás dnes zdržuje"
                     rows={3}
                   />
                 </div>
@@ -361,7 +405,7 @@ export function ToolCalculator({
                       data-testid={`industry-${option.id}`}
                       data-selected={selected}
                       aria-pressed={selected}
-                      key={option.id}
+                      key={`${stepId}-${option.id}`}
                       onClick={() => setIndustry(option.id)}
                     >
                       <span className="cw-scard__icon">
@@ -376,7 +420,7 @@ export function ToolCalculator({
               {selectedIndustry ? (
                 <aside className="cw-industry-tip" key={selectedIndustry.id} data-testid="industry-tip">
                   <b>
-                    <WidgetIcon name="spark" /> Čo sa hodí pre váš typ firmy
+                    <WidgetIcon name="spark" /> Toto sa u vás najviac oplatí
                   </b>
                   <ul>
                     {selectedIndustry.examples.map((example) => (
@@ -389,31 +433,44 @@ export function ToolCalculator({
           ) : null}
 
           {stepId === "features" ? (
-            <div className="cw-choice-grid cw-choice-grid--features">
-              {FEATURES.map((option) => {
-                const selected = features.includes(option.id);
-                return (
-                  <button
-                    type="button"
-                    className="cw-opt"
-                    data-testid={`feature-${option.id}`}
-                    data-selected={selected}
-                    aria-pressed={selected}
-                    key={option.id}
-                    onClick={() => toggleFeature(option.id)}
-                  >
-                    <span className="cw-opt__body">
-                      <b>
-                        {option.label}
-                        {option.basic ? <em className="cw-opt__tag">Základ</em> : null}
-                      </b>
-                      <span>{option.description}</span>
-                    </span>
-                    <SelectionIndicator selected={selected} />
-                  </button>
-                );
-              })}
-            </div>
+            <>
+              <div className="cw-choice-grid cw-choice-grid--features">
+                {/* No badges, hints or highlights here. Every option on a fresh
+                    step has to look exactly like every other option — the moment
+                    one of them stands out, it reads as already chosen. */}
+                {FEATURES.map((option) => {
+                  const selected = features.includes(option.id);
+                  return (
+                    <button
+                      type="button"
+                      className="cw-opt"
+                      data-testid={`feature-${option.id}`}
+                      data-selected={selected}
+                      aria-pressed={selected}
+                      key={`${stepId}-${option.id}`}
+                      onClick={() => toggleFeature(option.id)}
+                    >
+                      <span className="cw-opt__body">
+                        <b>{option.label}</b>
+                        <span>{option.description}</span>
+                      </span>
+                      <SelectionIndicator selected={selected} />
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="cw-price" data-testid="price-estimate" aria-live="polite">
+                <span className="cw-price__label">Odhad ceny</span>
+                <b className="cw-price__value">
+                  <span data-testid="price-number">{shownPrice}</span> €
+                </b>
+                <small>
+                  {features.length
+                    ? "Presnú cenu potvrdím, keď sa pozriem na váš web."
+                    : `Základ je ${BASE_PRICE} €. Vyberte, čo potrebujete.`}
+                </small>
+              </p>
+            </>
           ) : null}
 
           {stepId === "timeline" ? (
@@ -427,7 +484,7 @@ export function ToolCalculator({
                     data-testid={`timeline-${option.id}`}
                     data-selected={selected}
                     aria-pressed={selected}
-                    key={option.id}
+                    key={`${stepId}-${option.id}`}
                     onClick={() => setTimeline(option.id)}
                   >
                     <b>{option.label}</b>
@@ -442,7 +499,8 @@ export function ToolCalculator({
           {stepId === "contact" ? (
             <div className="cw-contact-stage">
               <div className="cw-lead">
-                <div className="cw-contact-methods" role="group" aria-label="Preferovaný spôsob prezentácie návrhu">
+                <span className="cw-lead__ask">Ako sa vám mám ozvať?</span>
+                <div className="cw-contact-methods" role="group" aria-label="Ako sa vám mám ozvať">
                   {CONTACT_METHODS.map((method) => {
                     const selected = lead.contactMethod === method.id;
                     return (
@@ -451,7 +509,7 @@ export function ToolCalculator({
                         className="cw-contact-method"
                         data-selected={selected}
                         aria-pressed={selected}
-                        key={method.id}
+                        key={`${stepId}-${method.id}`}
                         onClick={() => setLead({ ...lead, contactMethod: method.id })}
                       >
                         <WidgetIcon name={method.icon} />
@@ -465,43 +523,43 @@ export function ToolCalculator({
                   <input
                     value={lead.name}
                     onChange={(event) => setLead({ ...lead, name: event.target.value })}
-                    placeholder="Meno a priezvisko *"
-                    aria-label="Meno a priezvisko"
+                    placeholder="Ako sa menujete? *"
+                    aria-label="Vaše meno"
                     autoComplete="name"
                   />
                   <div className="cw-lead__row">
                     <input
                       value={lead.email}
                       onChange={(event) => setLead({ ...lead, email: event.target.value })}
-                      placeholder={lead.contactMethod === "email" ? "E-mail *" : "E-mail (voliteľné)"}
-                      aria-label="E-mail"
+                      placeholder={lead.contactMethod === "email" ? "Váš e-mail *" : "Váš e-mail"}
+                      aria-label="Váš e-mail"
                       type="email"
                       autoComplete="email"
                     />
                     <input
                       value={lead.phone}
                       onChange={(event) => setLead({ ...lead, phone: event.target.value })}
-                      placeholder={lead.contactMethod === "email" ? "Telefón (voliteľné)" : "Telefón *"}
-                      aria-label="Telefón"
+                      placeholder={lead.contactMethod === "email" ? "Vaše číslo" : "Vaše číslo *"}
+                      aria-label="Vaše telefónne číslo"
                       autoComplete="tel"
                     />
                   </div>
                   <details className="cw-lead__optional">
-                    <summary>Doplniť firmu, web alebo poznámku</summary>
+                    <summary>Chcem pridať firmu, web alebo vzkaz</summary>
                     <div className="cw-lead__optional-body">
                       <div className="cw-lead__row">
                         <input
                           value={lead.company}
                           onChange={(event) => setLead({ ...lead, company: event.target.value })}
-                          placeholder="Firma"
-                          aria-label="Firma"
+                          placeholder="Názov firmy"
+                          aria-label="Názov firmy"
                           autoComplete="organization"
                         />
                         <input
                           value={lead.web}
                           onChange={(event) => setLead({ ...lead, web: event.target.value })}
                           placeholder="vasafirma.sk"
-                          aria-label="Adresa webu"
+                          aria-label="Adresa vášho webu"
                           autoComplete="url"
                           inputMode="url"
                         />
@@ -509,8 +567,8 @@ export function ToolCalculator({
                       <textarea
                         value={lead.note}
                         onChange={(event) => setLead({ ...lead, note: event.target.value })}
-                        placeholder="Poznámka alebo dôležitý termín…"
-                        aria-label="Poznámka"
+                        placeholder="Čo by som mal ešte vedieť?"
+                        aria-label="Vzkaz pre mňa"
                         rows={2}
                       />
                     </div>
@@ -521,13 +579,13 @@ export function ToolCalculator({
                       checked={lead.consent}
                       onChange={(event) => setLead({ ...lead, consent: event.target.checked })}
                     />
-                    <span>Súhlasím so spracovaním údajov na prípravu návrhu.</span>
+                    <span>Súhlasím, že mi môžete napísať alebo zavolať.</span>
                   </label>
                 </div>
               </div>
 
               <div className="cw-summary">
-                <span className="cw-summary__label">Vaše zadanie</span>
+                <span className="cw-summary__label">Čo som si zapísal</span>
                 {summaryRows.map(([label, value]) => (
                   <div className="cw-summary__row" key={label}>
                     <span>{label}</span>
@@ -536,10 +594,16 @@ export function ToolCalculator({
                 ))}
                 {interest === "custom" && customText.trim() ? (
                   <div className="cw-summary__row cw-summary__row--note">
-                    <span>Vaša predstava</span>
+                    <span>Napísali ste</span>
                     <b>{customText.trim()}</b>
                   </div>
                 ) : null}
+                <div className="cw-summary__row cw-summary__row--price">
+                  <span>Odhad ceny</span>
+                  <b data-testid="summary-price">
+                    <span data-testid="summary-price-number">{shownPrice}</span> €
+                  </b>
+                </div>
               </div>
             </div>
           ) : null}
@@ -555,7 +619,7 @@ export function ToolCalculator({
             disabled={!canContinue}
             onClick={() => setStep((value) => Math.min(STEPS.length - 1, value + 1))}
           >
-            <span>Pokračovať</span>
+            <span>Ďalej</span>
             <WidgetIcon name="arrow" />
           </button>
         </footer>
@@ -580,11 +644,11 @@ export function ToolCalculator({
             <span className="cw-submit__content">
               {sendState === "sending" ? (
                 <>
-                  <span className="cw-spinner" aria-hidden="true" /> Odosielam…
+                  <span className="cw-spinner" aria-hidden="true" /> Posielam…
                 </>
               ) : (
                 <>
-                  <WidgetIcon name="send" /> Odoslať dopyt
+                  <WidgetIcon name="send" /> Poslať a dostať cenu
                 </>
               )}
             </span>

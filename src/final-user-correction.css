@@ -21,8 +21,8 @@ html body .cw-widget .cw-quick-replies .cw-chip {
   overflow: hidden !important;
   border: 0 !important;
   border-radius: 14px !important;
-  color: #cbd6e4 !important;
-  background: #111b29 !important;
+  color: #cad9d2 !important;
+  background: #111d17 !important;
   background-image: none !important;
   box-shadow: none !important;
   text-align: center !important;
@@ -59,7 +59,7 @@ html body .cw-widget .cw-quick-replies .cw-chip:is(:hover, :focus-visible):not(:
 html body .cw-widget .cw-quick-replies .cw-chip[data-sending="true"] {
   border: 0 !important;
   color: #fff !important;
-  background: #111b29 !important;
+  background: #111d17 !important;
   box-shadow: none !important;
   transform: none !important;
 }
@@ -80,9 +80,9 @@ html body .cw-widget .cw-inputbar:focus-within {
   min-height: 54px !important;
   margin: 0 12px 10px !important;
   padding: 5px 5px 5px 14px !important;
-  border: 1px solid #1c2d43 !important;
+  border: 1px solid #1c3027 !important;
   border-radius: 15px !important;
-  background: #0c1521 !important;
+  background: #0d1612 !important;
   background-image: none !important;
   box-shadow: none !important;
   filter: none !important;
@@ -134,7 +134,7 @@ html body .cw-widget .cw-calculator {
   display: grid !important;
   grid-template-rows: 48px minmax(0, 1fr) auto !important;
   overflow: hidden !important;
-  background: #07111a !important;
+  background: #0a120e !important;
   background-image: none !important;
 }
 
@@ -143,7 +143,7 @@ html body .cw-widget .cw-progress {
   min-height: 48px !important;
   padding: 7px 13px !important;
   border: 0 !important;
-  background: #0a1521 !important;
+  background: #0d1612 !important;
   box-shadow: inset 0 -1px 0 rgba(22, 196, 127, 0.08) !important;
 }
 
@@ -152,8 +152,8 @@ html body .cw-widget .cw-progress__back {
   height: 34px !important;
   border: 0 !important;
   border-radius: 11px !important;
-  color: #8292a7 !important;
-  background: #111d2b !important;
+  color: #729986 !important;
+  background: #121f19 !important;
   box-shadow: none !important;
   transform: none !important;
 }
@@ -161,7 +161,7 @@ html body .cw-widget .cw-progress__back {
 html body .cw-widget .cw-progress__track {
   height: 6px !important;
   border-radius: 999px !important;
-  background: #18283a !important;
+  background: #192b22 !important;
   box-shadow: none !important;
 }
 
@@ -182,7 +182,7 @@ html body .cw-widget .cw-calc-body {
   overflow-x: hidden !important;
   overflow-y: auto !important;
   padding: 18px 16px 18px !important;
-  background: #07111a !important;
+  background: #0a120e !important;
   scrollbar-gutter: auto !important;
   scroll-padding-block: 18px !important;
 }
@@ -216,7 +216,7 @@ html body .cw-widget .cw-q {
 html body .cw-widget .cw-q-sub {
   max-width: 42ch !important;
   margin: 0 !important;
-  color: #97a7ba !important;
+  color: #8dad9e !important;
   font-size: 12.2px !important;
   line-height: 1.48 !important;
 }
@@ -257,8 +257,8 @@ html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
   min-width: 0 !important;
   overflow: hidden !important;
   border: 0 !important;
-  color: #dce5ef !important;
-  background: #111b29 !important;
+  color: #dde7e2 !important;
+  background: #111d17 !important;
   background-image: none !important;
   box-shadow: none !important;
   filter: none !important;
@@ -277,7 +277,7 @@ html body .cw-widget :is(.cw-rowcard__icon, .cw-scard__icon)::after {
 
 html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):is(:hover, :focus-visible):not([data-selected="true"]) {
   color: #fff !important;
-  background: #182638 !important;
+  background: #182921 !important;
   box-shadow: none !important;
   transform: none !important;
 }
@@ -287,7 +287,7 @@ html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-select
   color: #fff !important;
   background:
     radial-gradient(circle at 50% 45%, rgba(22, 196, 127, 0.2), transparent 68%),
-    #18375f !important;
+    #233c30 !important;
   box-shadow: none !important;
   transform: none !important;
 }
@@ -358,14 +358,15 @@ html body .cw-widget .cw-rowcard__body b {
 html body .cw-widget .cw-rowcard__body small {
   display: block !important;
   margin: 0 !important;
-  color: #99a9bc !important;
+  color: #90afa0 !important;
   font-size: 10.8px !important;
   line-height: 1.42 !important;
   text-wrap: pretty !important;
 }
 
 html body .cw-widget .cw-rowcard[data-selected="true"] .cw-rowcard__body small {
-  color: #c7d6e9 !important;
+  /* was #c8d8d1 — pale grey on green, the 1.0:1 case from the brief */
+  color: #04140d !important;
 }
 
 html body .cw-widget .cw-scard {
@@ -468,7 +469,7 @@ html body .cw-widget .cw-calc-actions {
   align-items: center !important;
   padding: 9px 12px max(10px, env(safe-area-inset-bottom)) !important;
   border: 0 !important;
-  background: #08121c !important;
+  background: #0b130f !important;
   box-shadow: inset 0 1px 0 rgba(22, 196, 127, 0.08) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -496,15 +497,15 @@ html body .cw-widget .cw-next::after {
 }
 
 html body .cw-widget .cw-next:disabled {
-  color: #75859a !important;
-  background: #152131 !important;
+  color: #668c7a !important;
+  background: #15231d !important;
 }
 
 html body .cw-widget .cw-industry-tip {
   margin-top: 12px !important;
   border: 0 !important;
   border-radius: 15px !important;
-  background: #101b29 !important;
+  background: #111c17 !important;
   box-shadow: none !important;
 }
 
@@ -550,20 +551,21 @@ html body .cw-widget .cw-industry-tip {
    Only three blues. One line colour. One easing.
    ============================================================= */
 html body .cw-widget {
-  --w-bg: #050609;
-  --w-bg-alt: #080b12;
-  --w-card: #0b1420;
-  --w-switch: #0f1a28;
-  --w-chip: #111b29;
-  --w-item: #111d2b;
-  --w-text: #7fe0b4;
-  --w-text-2: #aeb6c2;
-  --w-text-3: #747e8d;
+  --w-bg: #0b110f;
+  --w-bg-alt: #0d1411;
+  --w-card: #131c18;
+  --w-switch: #18231e;
+  --w-chip: #131c18;
+  --w-item: #131c18;
+  --w-text: #f4f8f6;
+  --w-text-2: #a8bab1;
+  --w-text-3: #8fa399;
   --w-blue: #16c47f;
   --w-blue-hover: #0fa568;
   --w-blue-soft: #7fe0b4;
-  --w-line: rgba(122, 210, 180, 0.18);
-  --w-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --w-line: rgba(122, 210, 180, 0.16);
+  --w-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --w-on-green: #04140d;
 }
 
 /* ---------- Shell ---------- */
@@ -635,7 +637,7 @@ html body .cw-widget .cw-tabs__thumb {
   box-shadow: none !important;
   pointer-events: none !important;
   transform: translateX(0) !important;
-  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 html body .cw-widget .cw-tabs[data-mode="assistant"] .cw-tabs__thumb {
   transform: translateX(100%) !important;
@@ -796,7 +798,7 @@ html body .cw-widget .cw-opt[data-selected="true"] {
 html body .cw-widget .cw-message-row--bot .cw-message-wrap p {
   border-radius: 18px 18px 18px 6px !important;
   color: var(--w-text-2) !important;
-  background: #0e1118 !important;
+  background: #0b130f !important;
   box-shadow: inset 0 0 0 1px var(--w-line) !important;
 }
 html body .cw-widget .cw-message-row--me .cw-message-wrap p {
@@ -813,7 +815,7 @@ html body .cw-widget .cw-avatar {
 /* typing: three dots as a wave */
 html body .cw-widget .cw-typing {
   border-radius: 18px 18px 18px 6px !important;
-  background: #0e1118 !important;
+  background: #0b130f !important;
   box-shadow: inset 0 0 0 1px var(--w-line) !important;
 }
 html body .cw-widget .cw-typing i {
@@ -888,14 +890,11 @@ html body .cw-widget .cw-launcher {
   box-shadow:
     inset 0 0 0 1px var(--w-line),
     0 18px 40px -22px rgba(0, 0, 0, 0.9) !important;
-  animation: w-idle 2.6s var(--w-ease) infinite !important;
+  /* No endless pulse. A ring that breathes forever pulls the eye off the page
+     it is meant to help with. */
 }
 html body .cw-widget .cw-launcher:hover {
   background: var(--w-switch) !important;
-}
-@keyframes w-idle {
-  0%, 100% { box-shadow: inset 0 0 0 1px var(--w-line), 0 18px 40px -22px rgba(0, 0, 0, 0.9), 0 0 0 0 rgba(22, 196, 127, 0.4); }
-  55% { box-shadow: inset 0 0 0 1px var(--w-line), 0 18px 40px -22px rgba(0, 0, 0, 0.9), 0 0 0 14px rgba(22, 196, 127, 0); }
 }
 
 /* ---------- Focus + reduced motion ---------- */
@@ -1128,7 +1127,7 @@ html body .cw-widget .cw-opt[data-selected="true"] {
   100% { transform: scale(1); }
 }
 html body .cw-widget .cw-selection-indicator[data-visible="true"] {
-  animation: w-check 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both !important;
+  animation: w-check 420ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
 }
 @keyframes w-check {
   0% { opacity: 0; transform: scale(0.4); }
@@ -1201,51 +1200,10 @@ html body .cw-widget .cw-rowcard {
   padding: 15px 14px !important;
 }
 
-/* ---- Selected card: a light orbits the whole edge ---- */
-@property --w-orbit {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
-html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]::before {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  z-index: 2 !important;
-  inset: 0 !important;
-  padding: 1.6px !important;
-  border: 0 !important;
-  border-radius: inherit !important;
-  background: conic-gradient(
-    from var(--w-orbit),
-    rgba(22, 196, 127, 0.22) 0deg,
-    rgba(22, 196, 127, 0.22) 210deg,
-    rgba(127, 224, 180, 0.55) 288deg,
-    #7fe0b4 330deg,
-    #ffffff 352deg,
-    #7fe0b4 358deg,
-    rgba(22, 196, 127, 0.22) 360deg
-  ) !important;
-  filter: drop-shadow(0 0 6px rgba(22, 196, 127, 0.55)) !important;
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0) !important;
-  -webkit-mask-composite: xor !important;
-  mask-composite: exclude !important;
-  pointer-events: none !important;
-  animation: w-orbit 2.6s linear infinite !important;
-}
-@keyframes w-orbit {
-  to {
-    --w-orbit: 360deg;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]::before {
-    animation: none !important;
-    background: var(--w-blue) !important;
-  }
-}
+/* The selected card used to carry a conic-gradient light orbiting its edge,
+   forever. The picked state is the green fill and nothing else — an endless
+   animation on the one element that just needs to read as "chosen" is the
+   opposite of feedback. */
 
 /* =============================================================
    Chip system, glow, calm multi-select, bare logo.
@@ -1353,7 +1311,7 @@ html body .cw-widget .cw-calc-step[data-step="contact"] .cw-summary {
   margin-top: 2px !important;
   padding: 12px 14px !important;
   border-radius: 18px !important;
-  background: rgba(17, 29, 43, 0.6) !important;
+  background: rgba(18, 31, 25, 0.6) !important;
   box-shadow: inset 0 0 0 1px var(--w-line) !important;
 }
 html body .cw-widget .cw-summary__label {
@@ -1375,7 +1333,7 @@ html body .cw-widget .cw-lead__form textarea {
   padding: 0 16px !important;
   border-radius: 16px !important;
   font-size: 14px !important;
-  background: #0d1725 !important;
+  background: #0e1914 !important;
   box-shadow: inset 0 0 0 1px var(--w-line) !important;
 }
 html body .cw-widget .cw-lead__form textarea {
@@ -1504,7 +1462,7 @@ html body .cw-widget .cw-consent {
   gap: 10px !important;
   padding: 12px 14px !important;
   border-radius: 16px !important;
-  background: rgba(17, 29, 43, 0.6) !important;
+  background: rgba(18, 31, 25, 0.6) !important;
   box-shadow: inset 0 0 0 1px var(--w-line) !important;
   color: var(--w-text-2) !important;
   font-size: 11.6px !important;
@@ -1513,7 +1471,7 @@ html body .cw-widget .cw-consent {
   transition: box-shadow 260ms var(--w-ease), background-color 260ms var(--w-ease) !important;
 }
 html body .cw-widget .cw-consent:hover {
-  background: rgba(23, 39, 58, 0.7) !important;
+  background: rgba(24, 41, 34, 0.7) !important;
   box-shadow: inset 0 0 0 1px rgba(22, 196, 127, 0.35) !important;
 }
 html body .cw-widget .cw-consent input[type="checkbox"] {
@@ -1807,7 +1765,7 @@ html body .cw-widget .cw-lead__form input:not([type="checkbox"]):not([type="radi
 
 /* ---- One Apple-like motion system for everything ---- */
 html body .cw-widget {
-  --w-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --w-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --w-fast: 240ms;
   --w-base: 360ms;
   --w-slow: 520ms;
@@ -1974,7 +1932,7 @@ html body .cw-widget .cw-consent {
 html body .cw-widget .cw-consent > span {
   font-size: 11.5px !important;
   line-height: 1.4 !important;
-  color: var(--w-text-dim, #aeb6c2) !important;
+  color: var(--w-text-dim, #a4bbb0) !important;
 }
 
 /* =============================================================
@@ -1991,12 +1949,12 @@ html body .cw-widget {
   --w-green: #16c47f;        /* CTA, active, icon-in-circle */
   --w-green-hover: #0fa568;
   --w-green-soft: #7fe0b4;   /* decorative icons, small labels */
-  --w-line: rgba(122, 210, 180, 0.18);  /* the only border tone, always 1px */
-  --w-ink: #f7f9fc;
-  --w-ink-dim: #aeb6c2;
-  --w-surface-card: #0b1420;
-  --w-surface-item: #111d2b;
-  --w-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --w-line: rgba(122, 210, 180, 0.16);  /* the only border tone, always 1px */
+  --w-ink: #f4f8f6;
+  --w-ink-dim: #a8bab1;
+  --w-surface-card: #131c18;
+  --w-surface-item: #131c18;
+  --w-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ---- (a) nothing may move when you point at it or pick it -------------
@@ -2134,7 +2092,9 @@ html body .cw-widget[class] :is(
   )[class][data-selected="true"] {
   background: var(--w-green) !important;
   border-color: var(--w-green) !important;
-  color: #ffffff !important;
+  /* Dark ink on green. White measured 2.6:1 here — legible enough to look
+     deliberate and not legible enough to read. */
+  color: #04140d !important;
 }
 html body .cw-widget[class] .cw-summary__row[class] {
   border-radius: 14px !important;
@@ -2149,7 +2109,7 @@ html body .cw-widget[class] :is(
 html body .cw-widget[class] :is(
     .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method
   )[class][data-selected="true"] :is(svg, b, small, span) {
-  color: #ffffff !important;
+  color: #04140d !important;
 }
 
 /* ---- typing: three dots as a wave ------------------------------------ */
