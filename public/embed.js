@@ -38,7 +38,7 @@
       "@media(max-width:560px){#site-assistant-frame.is-open{inset:0;width:100vw;height:100vh;height:100dvh;max-width:100vw;max-height:100dvh;}}",
       "@media(prefers-reduced-motion:reduce){#site-assistant-frame{transition:opacity .01ms linear;}}",
       "</style>",
-      '<iframe id="site-assistant-frame" title="Webový asistent a konfigurátor" scrolling="no" referrerpolicy="strict-origin-when-cross-origin" allow="clipboard-write"></iframe>',
+      '<iframe id="site-assistant-frame" title="Chat — spočíta cenu a odpovie na otázky" scrolling="no" referrerpolicy="strict-origin-when-cross-origin" allow="clipboard-write"></iframe>',
     ].join("");
 
     document.body.appendChild(host);

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { animateReceivedMessage, animateSentMessage } from "../../lib/motion";
 import { sendChat, type ChatTurn } from "../../lib/assistantApi";
 import { track } from "../../lib/analytics";
 import { BubbleLogo } from "./BubbleLogo";
@@ -21,7 +20,7 @@ const INITIAL_MESSAGES: ChatMessage[] = [
     id: 1,
     from: "bot",
     text:
-      "Napíšte, čo dnes zákazníkom opakovane vysvetľujete, počítate alebo zisťujete. Pomôžem vybrať najjednoduchšie riešenie pre váš web.",
+      "Dobrý deň. Napíšte mi, čo zákazníkom stále dokola vysvetľujete alebo počítate — poradím vám, ako to môže robiť váš web.",
   },
 ];
 
@@ -30,24 +29,24 @@ type QuickReply = { label: string; question: string };
 const QUICK_REPLIES: QuickReply[] = [
   {
     label: "Čo mi to ušetrí?",
-    question: "Čo mi môže chatbot alebo kalkulačka ušetriť v bežnej prevádzke firmy?",
+    question: "Čo mi chatbot na webe ušetrí v bežný pracovný deň?",
   },
   {
     label: "Ako to funguje?",
-    question: "Ako chatbot funguje na existujúcom webe a čo vidí zákazník?",
+    question: "Ako to funguje na mojom webe a čo z toho uvidí zákazník?",
   },
   {
-    label: "Čo treba pripraviť?",
-    question: "Aké podklady odo mňa potrebujete na prípravu riešenia?",
+    label: "Čo mám poslať?",
+    question: "Čo vám mám poslať, aby ste mi to vedeli pripraviť?",
   },
   {
-    label: "Pozrieť ukážky",
-    question: "Aké živé chatboty, kalkulačky alebo konfigurátory si môžem pozrieť?",
+    label: "Ukážte mi príklad",
+    question: "Môžete mi ukázať, ako to vyzerá na skutočnom webe?",
   },
 ];
 
 const CHAT_FALLBACK =
-  "Teraz sa neviem spojiť. Skúste otázku znova alebo použite priamy kontakt nižšie.";
+  "Teraz sa mi nepodarilo odpovedať. Skúste to prosím ešte raz alebo mi zavolajte — čísla máte nižšie.";
 
 export function AssistantConversation({
   resetToken,
@@ -65,22 +64,6 @@ export function AssistantConversation({
      and just crowd the thread, so they go away. Reset brings them back. */
   const conversationStarted = messages.some((message) => message.from === "me");
 
-
-  useEffect(() => {
-    const last = messages[messages.length - 1];
-    if (!last) return;
-
-    if (last.from === "me") {
-      const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--me");
-      animateSentMessage(rows?.[rows.length - 1] ?? null);
-      return;
-    }
-
-    if (last.id > 1) {
-      const rows = messagesRef.current?.querySelectorAll<HTMLElement>(".cw-message-row--bot");
-      animateReceivedMessage(rows?.[rows.length - 1] ?? null);
-    }
-  }, [messages]);
 
   useEffect(() => {
     setMessages(INITIAL_MESSAGES);
@@ -157,7 +140,7 @@ export function AssistantConversation({
             <WidgetIcon name="spark" />
           </span>
           <span className="cw-chat-builder__copy">
-            <b>Vyskladať riešenie</b>
+            <b>Spočítať cenu za štyri otázky</b>
           </span>
         </button>
       </div>
@@ -185,7 +168,7 @@ export function AssistantConversation({
             <span className="cw-avatar">
               <BubbleLogo size="avatar" />
             </span>
-            <div className="cw-typing" aria-label="Môj Chatbot odpovedá">
+            <div className="cw-typing" role="status" aria-label="Píšem odpoveď">
               <i />
               <i />
               <i />
@@ -195,7 +178,7 @@ export function AssistantConversation({
       </div>
 
       {conversationStarted ? null : (
-        <div className="cw-quick-replies" aria-label="Časté otázky">
+        <div className="cw-quick-replies" aria-label="Na čo sa ľudia pýtajú najčastejšie">
           {QUICK_REPLIES.map(({ label, question }) => {
             const sending = activeQuickReply === label;
             return (
@@ -225,8 +208,8 @@ export function AssistantConversation({
               submit();
             }
           }}
-          placeholder="Napíšte správu…"
-          aria-label="Otázka pre Môj Chatbot"
+          placeholder="Napíšte mi svoju otázku…"
+          aria-label="Vaša otázka"
         />
         <button
           type="button"

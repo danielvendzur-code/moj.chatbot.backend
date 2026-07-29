@@ -1,7 +1,7 @@
 /* Approved submit interaction. Imported after assistant-redesign.css. */
 :root {
-  --submit-ink: #08111f;
-  --submit-ink-hover: #0b1829;
+  --submit-ink: #04140d;
+  --submit-ink-hover: #071b12;
   --submit-blue: #16c47f;
   --submit-blue-light: #7fe0b4;
   --submit-ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -20,7 +20,7 @@ html body .cw-widget .cw-submit.cw-submit--approved {
   color: #ffffff !important;
   background:
     radial-gradient(circle at 16% -32%, rgba(127, 224, 180, 0.22), transparent 46%),
-    linear-gradient(145deg, #0d1a2d 0%, var(--submit-ink) 68%, #07101c 100%) !important;
+    linear-gradient(145deg, #111c17 0%, var(--submit-ink) 68%, #0a120e 100%) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.09),
     0 17px 34px -27px rgba(22, 196, 127, 0.95) !important;
@@ -59,7 +59,7 @@ html body .cw-widget .cw-submit.cw-submit--approved:is(:hover, :focus-visible):n
   border-color: rgba(127, 224, 180, 0.86) !important;
   background:
     radial-gradient(circle at 18% -30%, rgba(127, 224, 180, 0.28), transparent 48%),
-    linear-gradient(145deg, #10233d 0%, var(--submit-ink-hover) 70%, #08121f 100%) !important;
+    linear-gradient(145deg, #16261e 0%, var(--submit-ink-hover) 70%, #0b1310 100%) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.13),
     0 21px 40px -29px rgba(22, 196, 127, 1) !important;
@@ -78,7 +78,7 @@ html body .cw-widget .cw-submit.cw-submit--approved:active:not(:disabled) {
 html body .cw-widget .cw-submit.cw-submit--approved[data-state="sending"] {
   border-color: rgba(127, 224, 180, 0.66) !important;
   color: #ffffff !important;
-  background: linear-gradient(145deg, #10233d, #0a1728) !important;
+  background: linear-gradient(145deg, #16261e, #0e1914) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
     0 18px 34px -28px rgba(22, 196, 127, 0.9) !important;
@@ -116,7 +116,7 @@ html body .cw-widget .cw-lead,
 html body .cw-widget .cw-summary {
   border: 1px solid rgba(246, 248, 251, 0.065) !important;
   border-radius: 18px !important;
-  background: #080d14 !important;
+  background: #080e0b !important;
   box-shadow: none !important;
 }
 
@@ -197,8 +197,8 @@ html body .cw-widget .cw-messages {
 html body .cw-widget .cw-message-row--bot .cw-message-wrap p,
 html body .cw-widget .cw-typing {
   border: 0 !important;
-  color: #d7e0eb !important;
-  background: #111a27 !important;
+  color: #d6e2dc !important;
+  background: #111c17 !important;
   background-image: none !important;
   box-shadow: none !important;
 }
@@ -217,9 +217,9 @@ html body .cw-widget .cw-inputbar {
   gap: 7px !important;
   margin: 0 11px 9px !important;
   padding: 5px 5px 5px 14px !important;
-  border: 1px solid #1a293d !important;
+  border: 1px solid #1a2c24 !important;
   border-radius: 16px !important;
-  background: #0b121c !important;
+  background: #0b1310 !important;
   background-image: none !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
@@ -228,7 +228,7 @@ html body .cw-widget .cw-inputbar {
 
 html body .cw-widget .cw-inputbar:focus-within {
   border-color: #16c47f !important;
-  background: #0d1622 !important;
+  background: #0e1713 !important;
   box-shadow: none !important;
 }
 
@@ -267,8 +267,8 @@ html body .cw-widget .cw-inputbar > .cw-send:active:not(:disabled) {
 }
 
 html body .cw-widget .cw-inputbar > .cw-send:disabled {
-  color: #6f7f93 !important;
-  background: #162130 !important;
+  color: #638575 !important;
+  background: #15231d !important;
   box-shadow: none !important;
 }
 
@@ -281,8 +281,8 @@ html body .cw-widget .cw-quick-replies .cw-chip {
   contain: paint !important;
   overflow: hidden !important;
   border: 0 !important;
-  color: #c6d0dd !important;
-  background: #111a27 !important;
+  color: #c2d3cb !important;
+  background: #111c17 !important;
   background-image: none !important;
   box-shadow: none !important;
   filter: none !important;
@@ -301,14 +301,14 @@ html body .cw-widget .cw-quick-replies .cw-chip::after {
 
 html body .cw-widget .cw-quick-replies .cw-chip:is(:hover, :focus-visible):not(:disabled) {
   color: #ffffff !important;
-  background: #172335 !important;
+  background: #16261e !important;
   box-shadow: none !important;
   transform: none !important;
 }
 
 html body .cw-widget .cw-quick-replies .cw-chip[data-sending="true"] {
   color: #ffffff !important;
-  background: #17365f !important;
+  background: #223b2f !important;
   box-shadow: none !important;
 }
 
@@ -324,8 +324,8 @@ html body .cw-widget .cw-chip__label {
 html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
   contain: paint !important;
   border: 0 !important;
-  color: #d5deea !important;
-  background: #0f1722 !important;
+  color: #d4e0da !important;
+  background: #0e1914 !important;
   background-image: none !important;
   box-shadow: none !important;
   filter: none !important;
@@ -344,14 +344,14 @@ html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)::after {
 
 html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):is(:hover, :focus-visible):not([data-selected="true"]) {
   color: #ffffff !important;
-  background: #151f2d !important;
+  background: #14221b !important;
   box-shadow: none !important;
   filter: none !important;
 }
 
 html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] {
   color: #ffffff !important;
-  background: #17365f !important;
+  background: #223b2f !important;
   background-image: none !important;
   box-shadow: none !important;
 }
@@ -370,12 +370,13 @@ html body .cw-widget :is(.cw-rowcard__body b, .cw-scard b, .cw-opt__body b, .cw-
 }
 
 html body .cw-widget :is(.cw-rowcard__body small, .cw-opt__body > span, .cw-vcard > span) {
-  color: #91a0b3 !important;
+  color: #85a697 !important;
   opacity: 1 !important;
 }
 
 html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] :is(.cw-rowcard__body small, .cw-opt__body > span, .cw-vcard > span) {
-  color: #c3d3e8 !important;
+  /* was #c6d5ce — pale grey on green */
+  color: #04140d !important;
 }
 
 /* No emoji tile or square plate behind any option icon. */
@@ -458,7 +459,7 @@ html body .cw-widget .cw-lead::before {
 
 html body .cw-widget .cw-lead__head {
   padding: 0 0 14px !important;
-  border-bottom: 1px solid #1a293b !important;
+  border-bottom: 1px solid #1a2c23 !important;
 }
 
 html body .cw-widget .cw-lead__icon {
@@ -477,23 +478,23 @@ html body .cw-widget .cw-lead__form {
 }
 
 html body .cw-widget :is(.cw-lead__form input, .cw-lead__form textarea, .cw-custom textarea) {
-  border: 1px solid #1a293d !important;
+  border: 1px solid #1a2c24 !important;
   color: #7fe0b4 !important;
-  background: #0d1622 !important;
+  background: #0e1713 !important;
   background-image: none !important;
   box-shadow: none !important;
 }
 
 html body .cw-widget :is(.cw-lead__form input, .cw-lead__form textarea, .cw-custom textarea):focus {
   border-color: #16c47f !important;
-  background: #101b29 !important;
+  background: #111c17 !important;
   box-shadow: none !important;
 }
 
 html body .cw-widget .cw-lead__optional {
   border: 0 !important;
-  border-top: 1px solid #1a293b !important;
-  border-bottom: 1px solid #1a293b !important;
+  border-top: 1px solid #1a2c23 !important;
+  border-bottom: 1px solid #1a2c23 !important;
   border-radius: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
@@ -501,12 +502,12 @@ html body .cw-widget .cw-lead__optional {
 
 html body .cw-widget .cw-summary {
   padding-top: 16px !important;
-  border-top: 1px solid #1a293b !important;
+  border-top: 1px solid #1a2c23 !important;
 }
 
 html body .cw-widget .cw-summary__row {
   padding: 9px 0 !important;
-  border-bottom: 1px solid #162334 !important;
+  border-bottom: 1px solid #16261e !important;
   box-shadow: none !important;
 }
 
@@ -515,7 +516,7 @@ html body .cw-widget .cw-summary__row:last-child {
 }
 
 html body .cw-widget .cw-local-note {
-  color: #8796aa !important;
+  color: #779c8b !important;
   line-height: 1.45 !important;
 }
 
@@ -543,9 +544,9 @@ html body .cw-widget .cw-tabs {
   gap: 6px !important;
   margin: 8px 11px 6px !important;
   padding: 5px !important;
-  border: 1px solid #17253a !important;
+  border: 1px solid #172820 !important;
   border-radius: 16px !important;
-  background: #09111b !important;
+  background: #0b120e !important;
   background-image: none !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
@@ -568,7 +569,7 @@ html body .cw-widget .cw-tabs > button {
   padding: 0 10px !important;
   border: 0 !important;
   border-radius: 11px !important;
-  color: #95a4b8 !important;
+  color: #89aa9a !important;
   background: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
@@ -625,7 +626,7 @@ html body .cw-widget .cw-chat-builder {
   border: 1px solid rgba(22, 196, 127, 0.28) !important;
   border-radius: 14px !important;
   color: #ffffff !important;
-  background: #111b29 !important;
+  background: #111d17 !important;
   background-image: none !important;
   box-shadow: none !important;
   transform: none !important;
@@ -701,8 +702,8 @@ html body .cw-widget .cw-typing {
 
 html body .cw-widget .cw-message-row--bot .cw-message-wrap p,
 html body .cw-widget .cw-typing {
-  color: #dce4ee !important;
-  background: #121c2a !important;
+  color: #dce6e1 !important;
+  background: #121e19 !important;
 }
 
 html body .cw-widget .cw-message-row--bot .cw-message-wrap p {
@@ -730,8 +731,8 @@ html body .cw-widget .cw-quick-replies .cw-chip {
   padding: 0 12px !important;
   border: 1px solid rgba(22, 196, 127, 0.24) !important;
   border-radius: 13px !important;
-  color: #c9d3df !important;
-  background: #101824 !important;
+  color: #c6d6ce !important;
+  background: #0f1915 !important;
   background-image: none !important;
   box-shadow: none !important;
   transform: none !important;
@@ -747,7 +748,7 @@ html body .cw-widget .cw-chip__send {
 html body .cw-widget .cw-quick-replies .cw-chip:is(:hover, :focus-visible):not(:disabled) {
   border-color: rgba(22, 196, 127, 0.5) !important;
   color: #ffffff !important;
-  background: #162235 !important;
+  background: #15251e !important;
 }
 
 html body .cw-widget .cw-quick-replies .cw-chip[data-sending="true"] {
@@ -763,9 +764,9 @@ html body .cw-widget .cw-inputbar {
   gap: 7px !important;
   margin: 0 11px 9px !important;
   padding: 5px 5px 5px 14px !important;
-  border: 1px solid #1b2b41 !important;
+  border: 1px solid #1b2f26 !important;
   border-radius: 15px !important;
-  background: #0b131e !important;
+  background: #0c1511 !important;
   background-image: none !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
@@ -774,7 +775,7 @@ html body .cw-widget .cw-inputbar {
 
 html body .cw-widget .cw-inputbar:focus-within {
   border-color: #16c47f !important;
-  background: #0d1723 !important;
+  background: #0e1914 !important;
   box-shadow: none !important;
 }
 
@@ -808,14 +809,14 @@ html body .cw-widget .cw-inputbar > .cw-send:is(:hover, :focus-visible):not(:dis
 }
 
 html body .cw-widget .cw-inputbar > .cw-send:disabled {
-  color: #6e7c90 !important;
-  background: #162130 !important;
+  color: #638173 !important;
+  background: #15231d !important;
 }
 
 html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
-  border: 1px solid #1b2a3e !important;
-  color: #d7e0eb !important;
-  background: #101824 !important;
+  border: 1px solid #1b2d24 !important;
+  color: #d6e2dc !important;
+  background: #0f1915 !important;
   background-image: none !important;
   box-shadow: none !important;
   filter: none !important;
@@ -832,13 +833,13 @@ html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)::after {
 html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):is(:hover, :focus-visible):not([data-selected="true"]) {
   border-color: rgba(22, 196, 127, 0.5) !important;
   color: #ffffff !important;
-  background: #142033 !important;
+  background: #14221c !important;
 }
 
 html body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] {
   border-color: #16c47f !important;
   color: #ffffff !important;
-  background: #14243a !important;
+  background: #17261f !important;
   box-shadow: inset 3px 0 0 #16c47f !important;
 }
 
@@ -897,10 +898,10 @@ html body .cw-widget .cw-contact-method {
   align-items: center !important;
   gap: 8px !important;
   padding: 0 11px !important;
-  border: 1px solid #1b2a3e !important;
+  border: 1px solid #1b2d24 !important;
   border-radius: 13px !important;
-  color: #cbd5e1 !important;
-  background: #101824 !important;
+  color: #c8d8d0 !important;
+  background: #0f1915 !important;
   box-shadow: none !important;
   text-align: left !important;
 }
@@ -946,7 +947,7 @@ html body .cw-widget :is(.cw-lead, .cw-summary) {
 
 html body .cw-widget .cw-lead__head {
   padding: 0 0 13px !important;
-  border-bottom: 1px solid #1a293b !important;
+  border-bottom: 1px solid #1a2c23 !important;
 }
 
 html body .cw-widget .cw-lead__form {
@@ -955,22 +956,22 @@ html body .cw-widget .cw-lead__form {
 }
 
 html body .cw-widget :is(.cw-lead__form input, .cw-lead__form textarea, .cw-custom textarea) {
-  border: 1px solid #1b2b41 !important;
+  border: 1px solid #1b2f26 !important;
   color: #7fe0b4 !important;
-  background: #0d1622 !important;
+  background: #0e1713 !important;
   background-image: none !important;
   box-shadow: none !important;
 }
 
 html body .cw-widget :is(.cw-lead__form input, .cw-lead__form textarea, .cw-custom textarea):focus {
   border-color: #16c47f !important;
-  background: #101b29 !important;
+  background: #111c17 !important;
   box-shadow: none !important;
 }
 
 html body .cw-widget .cw-summary {
   padding-top: 15px !important;
-  border-top: 1px solid #1a293b !important;
+  border-top: 1px solid #1a2c23 !important;
 }
 
 @media (max-width: 390px) {

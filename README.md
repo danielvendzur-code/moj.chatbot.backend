@@ -1,19 +1,37 @@
-# Webový asistent — konfigurátor riešenia
+# Môj Chatbot — widget pre web
 
-Samostatný React/TypeScript widget s viac-krokovým konfigurátorom (výberové karty,
-krokovanie s bodkami, kontaktný formulár so zhrnutím). Vizuál „Forest Night": tmavé
-lesné pozadie (near-black green), teplá ivory typografia a akcenty starej mosadze
-(logá, progress), šalvie (aktívne voľby a focus) a medi (hlavné CTA). Liquid glass
-sa používa striedmo — panel, prepínač režimov a bubliny odpovedí — s fallbackom pre
-prehliadače bez `backdrop-filter`. Prepínač režimov je iOS segmented control a pod
-chipmi aj kartami konfigurátora sa pružinovo presúva šalviová sklenená pilulka.
-Animuje sa iba `transform` a `opacity`, s rešpektom k `prefers-reduced-motion`.
+Samostatný React/TypeScript widget: chat, ktorý odpovedá zákazníkom, a štvor-otázkový
+tok, ktorý spočíta odhad ceny a odošle dopyt. Vizuál je zelený („#16c47f" na
+takmer čiernom „#0b110f"), s jednou krivkou pohybu `cubic-bezier(0.16, 1, 0.3, 1)`
+zhodnou s webom, písmom Inter Tight a jedinou farbou hraníc.
+
+Pravidlá, ktoré widget drží a testy ich strážia:
+
+- **Nový krok nikdy neprichádza s vybraným čipom.** Nič nie je predvolené,
+  žiadny čip nedrží `:focus` ani `:hover` z predchádzajúceho kroku a `key`
+  každej možnosti obsahuje aj číslo kroku, takže React nerecykluje DOM prvok
+  medzi krokmi.
+- **Pohyb je len pri príchode.** Nič sa nehýbe pri ukázaní myšou, pri kliknutí
+  ani pri scrollovaní. Všetky animácie sú v
+  `@media (prefers-reduced-motion: no-preference)`; kto má pohyb vypnutý, vidí
+  rovnaký obsah bez pohybu.
+- **Na zelenej je vždy tmavý text `#04140d`.** Kontrast každého textu voči
+  skutočne vykreslenému pozadiu je nad 4,5 : 1 — vrátane prípadov, kde je
+  pozadie súrodenec (jazdec prepínača), kde sa farba odčítava z pixelov snímky.
+- **Plocha na klik je aspoň 44 × 44 px**, aj keď je ovládací prvok vizuálne
+  nižší. `touch-action: manipulation` je len na ovládacích prvkoch, nikdy na
+  paneli ani na scrollovacej oblasti, aby zostalo priblíženie prstami.
+- **`overflow: hidden` nie je na `html` ani `body`.** Vodorovný presah rieši
+  `overflow-x: clip` na vnútornom kontajneri, takže scrollovanie a zoom fungujú
+  aj po vyskočení klávesnice na mobile.
+- **Texty sú bez odborných slov.** Žiadny „konfigurátor", „parametre",
+  „špecifikácia" ani „kvalifikácia dopytu"; každá otázka je jedna veta.
 
 Verejná ukážka: <https://danielvendzur-code.github.io/moj.chatbot.backend/>
 
 ## Logo
 
-Logom je čistá chatová bublina v starej mosadzi s tromi tmavými bodkami (`src/components/widget/BubbleLogo.tsx`)
+Logom je čistá chatová bublina v zelenej s tromi tmavými bodkami (`src/components/widget/BubbleLogo.tsx`)
 v troch veľkostiach — launcher, hlavička a avatar pri správach. (Skorší pixel-art maskot
 chameleóna zostáva dostupný v git histórii, keby sa hodil neskôr.)
 
@@ -28,6 +46,7 @@ Produkčná kontrola:
 
 ```bash
 pnpm check
+pnpm test
 pnpm build
 ```
 
@@ -55,8 +74,11 @@ a vyplní viewport. Loader používa otvorený Shadow DOM s hostom
 - `src/components/widget/AssistantWidget.tsx` — launcher, teaser, okno, prepínanie režimov.
 - `src/components/widget/BubbleLogo.tsx` — logo asistenta (chatová bublina, tri veľkosti).
 - `src/components/widget/AssistantConversation.tsx` — konverzácia s rýchlymi čipmi.
-- `src/components/widget/ToolCalculator.tsx` — 6-krokový konfigurátor: záujem → odvetvie → nasadenie → funkcie → objem dopytov → zhrnutie + kontakt (s poďakovaním).
-- `src/lib/assistantFlow.ts` — dáta krokov, odporúčané funkcie podľa výberu, číslo návrhu.
+- `src/components/widget/ToolCalculator.tsx` — päť krokov: čo má web robiť → typ firmy → čo má zvládnuť (tu sa počíta odhad ceny) → kedy → kontakt (s poďakovaním).
+- `src/lib/assistantFlow.ts` — dáta krokov, odporúčania podľa výberu, cenník (`BASE_PRICE`, `priceOf`), číslo dopytu.
+- `src/green-motion-final.css` — posledná vrstva štýlov: zelená paleta, geometria, plochy na klik a všetky animácie.
+- `src/hooks/useCountUp.ts` — odpočítanie ceny nahor za 900 ms; pri vypnutom pohybe vráti finálne číslo hneď.
+- `src/hooks/useStepTransition.ts` — prechod medzi krokmi, ktorý drží výšku panela, takže nič nepodskočí.
 - `src/lib/siteAssistant.ts` — verejné API a integračné udalosti.
 
 ## Vloženie na web
@@ -114,7 +136,7 @@ Nastavenie:
    rebuildu: `window.__DV_ASSISTANT_ENDPOINT__ = "https://…/api/chat";` (napr. z embed skriptu).
 
 Kým endpoint nie je nastavený, chat elegantne padne na fallback hlášku a widget (vrátane
-konfigurátora) ostáva plne funkčný. Funkcia obmedzuje vstup (počet a dĺžku správ), drží nízke
+krokový tok) ostáva plne funkčný. Funkcia obmedzuje vstup (počet a dĺžku správ), drží nízke
 `max_tokens` a system prompt, ktorý ostáva pri téme Danielových služieb. Odporúčané ďalšie
 zlepšenie: rate-limiting cez Vercel KV/Upstash.
 
@@ -135,5 +157,8 @@ window.addEventListener("site-assistant:analytics", (e) => {
 
 ## Aktuálny rozsah
 
-Chat odpovedá reálne (po nastavení Vercel proxy). Kontaktný formulár konfigurátora zatiaľ nič
-neodosiela ani neukladá — e-mail, databáza, CRM a kalendár patria do ďalšej fázy.
+Chat odpovedá reálne (po nastavení Vercel proxy). Kontaktný formulár posiela dopyt cez
+`api/lead.ts`; databáza, CRM a kalendár patria do ďalšej fázy.
+
+Odhad ceny je orientačný: `BASE_PRICE` (350 €) plus cena za každú vybranú schopnosť
+v `FEATURES`. Widget to takto aj hovorí — presnú cenu potvrdzuje Daniel.

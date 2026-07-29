@@ -1,0 +1,865 @@
+/* =============================================================
+   Môj Chatbot — green palette, one easing, one motion language.
+
+   Loaded last, so it settles the disagreements the earlier layers
+   left behind. Three things happen here:
+
+   1. Geometry and type match the website: pill controls, 20px panel,
+      16px bubbles, Inter Tight.
+   2. Every entrance is a CSS animation inside
+      `@media (prefers-reduced-motion: no-preference)`. Nobody who
+      asked for stillness gets movement, and nobody loses content.
+   3. Nothing moves because you pointed at it, picked it or scrolled
+      past it. Only arrivals move.
+   ============================================================= */
+
+:root {
+  /* The website curve, used by every transition and animation here. */
+  --cw-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --cw-green: #16c47f;
+  --cw-green-hover: #0fa568;
+  --cw-green-soft: #7fe0b4;
+  --cw-on-green: #04140d;
+  --cw-panel: #0b110f;
+  --cw-chip: #131c18;
+  --cw-ink: #f4f8f6;
+  --cw-ink-dim: #a8bab1;
+  --cw-line: rgba(122, 210, 180, 0.16);
+
+  --cw-radius-pill: 999px;
+  --cw-radius-panel: 20px;
+  --cw-radius-bubble: 16px;
+
+  /* Comfortable finger target, independent of how tall a chip looks. */
+  --cw-tap: 44px;
+
+  --cw-font-stack: "Inter Tight", "Inter", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+}
+
+/* The host page's font wins when there is one; otherwise Inter Tight, the same
+   family the website uses. */
+html body .cw-widget,
+html body .cw-widget button,
+html body .cw-widget input,
+html body .cw-widget textarea,
+html body .cw-widget summary,
+html body .cw-widget a {
+  font-family: var(--cw-font, var(--cw-font-stack)) !important;
+}
+
+/* ---------------------------------------------------------------
+   1. Geometry
+   --------------------------------------------------------------- */
+
+html body .cw-widget[class] .cw-panel[class] {
+  border-radius: var(--cw-radius-panel) !important;
+}
+
+/* Pill controls: chips, buttons, the mode switch and its thumb. */
+html body .cw-widget[class] :is(
+    .cw-chip,
+    .cw-contact-method,
+    .cw-next,
+    .cw-submit,
+    .cw-send,
+    .cw-progress__back,
+    .cw-panel-head__actions button,
+    .cw-chat-builder,
+    .cw-thanks__actions button,
+    .cw-direct-actions__grid a,
+    .cw-tabs,
+    .cw-tabs > button,
+    .cw-tabs__thumb,
+    .cw-scard
+  )[class] {
+  border-radius: var(--cw-radius-pill) !important;
+}
+
+/* Option cards carry an icon and two lines of text. A pill outline around a
+   94px-tall block reads as a mistake, so they take the bubble radius — the
+   same corner as everything else that holds a paragraph. */
+html body .cw-widget[class] :is(.cw-rowcard, .cw-opt, .cw-vcard)[class] {
+  border-radius: var(--cw-radius-bubble) !important;
+}
+
+html body .cw-widget[class] :is(.cw-message-wrap p, .cw-typing, .cw-industry-tip)[class] {
+  border-radius: var(--cw-radius-bubble) !important;
+}
+
+html body .cw-widget[class] :is(.cw-summary, .cw-price, .cw-thanks__grid > div)[class] {
+  border-radius: var(--cw-radius-bubble) !important;
+}
+
+html body .cw-widget[class] :is(
+    .cw-lead__form input,
+    .cw-lead__form textarea,
+    .cw-custom textarea,
+    .cw-inputbar
+  )[class] {
+  border-radius: var(--cw-radius-bubble) !important;
+}
+
+/* ---------------------------------------------------------------
+   2. Type scale
+   --------------------------------------------------------------- */
+
+html body .cw-widget[class] .cw-message-wrap p[class],
+html body .cw-widget[class] .cw-message-wrap p {
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+}
+
+html body .cw-widget[class] .cw-inputbar input {
+  font-size: 15px !important;
+}
+
+html body .cw-widget[class] :is(
+    .cw-chip,
+    .cw-chip__label,
+    .cw-contact-method,
+    .cw-contact-method span,
+    .cw-scard b,
+    .cw-rowcard__body b,
+    .cw-opt__body b,
+    .cw-vcard > b
+  ) {
+  font-size: 14px !important;
+}
+
+/* Numbers that animate get fixed-width digits, so counting up cannot nudge the
+   layout sideways. */
+html body .cw-widget[class] :is(.cw-price__value, .cw-progress__count),
+html body .cw-widget[class] .cw-summary__row--price b,
+html body .cw-widget[class] .cw-thanks__grid > div {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ---------------------------------------------------------------
+   3. Colour — dark ink on green, light ink on dark. Never the reverse.
+   --------------------------------------------------------------- */
+
+html body .cw-widget[class] :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt,
+    .cw-contact-method,
+    .cw-chip
+  )[class][class][data-selected="true"] {
+  color: var(--cw-on-green) !important;
+  background: var(--cw-green) !important;
+  border-color: var(--cw-green) !important;
+  box-shadow: inset 0 0 0 1px var(--cw-green) !important;
+}
+
+/* Descriptions, tags and icons inside a picked chip sit on green too, so they
+   take the same dark ink. A light grey label on green measured 1.0:1 — text
+   that is technically present and actually invisible. */
+html body .cw-widget[class] :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt,
+    .cw-contact-method
+  )[class][class][data-selected="true"] :is(b, small, span, em, i, svg, path) {
+  color: var(--cw-on-green) !important;
+  opacity: 1 !important;
+}
+
+html body .cw-widget[class] :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt
+  )[data-selected="true"] :is(.cw-rowcard__icon, .cw-scard__icon) {
+  color: var(--cw-on-green) !important;
+  background: rgba(4, 20, 13, 0.14) !important;
+  border-color: rgba(4, 20, 13, 0.2) !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget[class] :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt,
+    .cw-contact-method
+  )[data-selected="true"] .cw-selection-indicator {
+  color: var(--cw-on-green) !important;
+  background: rgba(4, 20, 13, 0.16) !important;
+  border-color: transparent !important;
+}
+
+html body .cw-widget[class] .cw-opt__tag {
+  color: var(--cw-green-soft) !important;
+  background: rgba(22, 196, 127, 0.14) !important;
+}
+
+/* Full-green CTAs carry dark ink for the same reason. */
+html body .cw-widget[class] :is(.cw-next, .cw-submit, .cw-send, .cw-chat-builder):not(:disabled),
+html body .cw-widget[class] :is(.cw-next, .cw-submit, .cw-send, .cw-chat-builder):not(:disabled) :is(
+    span, b, svg, path, .cw-submit__content
+  ) {
+  color: var(--cw-on-green) !important;
+}
+
+html body .cw-widget[class] .cw-tabs > button[data-active="true"],
+html body .cw-widget[class] .cw-tabs > button[data-active="true"] :is(span, svg, path) {
+  color: var(--cw-on-green) !important;
+}
+
+/* The inactive tab label sits on the switch track, not on the thumb. */
+html body .cw-widget[class] .cw-tabs > button:not([data-active="true"]),
+html body .cw-widget[class] .cw-tabs > button:not([data-active="true"]) :is(span, svg, path) {
+  color: var(--cw-ink-dim) !important;
+}
+
+html body .cw-widget[class] .cw-panel-head__context {
+  color: var(--cw-ink-dim) !important;
+}
+
+html body .cw-widget[class] .cw-q-sub,
+html body .cw-widget[class] .cw-summary__label,
+html body .cw-widget[class] .cw-summary__row > span,
+html body .cw-widget[class] .cw-lead__ask,
+html body .cw-widget[class] .cw-price__label,
+html body .cw-widget[class] .cw-price small,
+html body .cw-widget[class] .cw-thanks__grid > div > span,
+html body .cw-widget[class] .cw-consent span,
+html body .cw-widget[class] .cw-lead__optional summary {
+  color: var(--cw-ink-dim) !important;
+}
+
+html body .cw-widget[class] :is(
+    .cw-rowcard__body small,
+    .cw-opt__body > span,
+    .cw-vcard > span
+  ) {
+  color: var(--cw-ink-dim) !important;
+}
+
+/* The estimate itself */
+html body .cw-widget .cw-price {
+  display: grid !important;
+  grid-template-columns: 1fr auto;
+  gap: 2px 12px;
+  align-items: baseline;
+  margin: 14px 0 0 !important;
+  padding: 14px 16px !important;
+  color: var(--cw-ink);
+  background: var(--cw-chip);
+  box-shadow: inset 0 0 0 1px var(--cw-line);
+}
+
+html body .cw-widget .cw-price__label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+html body .cw-widget .cw-price__value {
+  color: var(--cw-green-soft) !important;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: right;
+  white-space: nowrap;
+}
+
+html body .cw-widget .cw-price small {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+html body .cw-widget .cw-summary__row--price b {
+  color: var(--cw-green-soft) !important;
+}
+
+html body .cw-widget .cw-lead__ask {
+  display: block;
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------------
+   4. Touch — a 44px target under every control, and pinch-zoom left alone
+   --------------------------------------------------------------- */
+
+/* `manipulation` removes the double-tap-to-zoom delay on buttons. It must never
+   land on the panel or a scroll area: there it would take pinch-zoom with it. */
+html body .cw-widget button,
+html body .cw-widget a[href],
+html body .cw-widget summary,
+html body .cw-widget input[type="checkbox"] {
+  touch-action: manipulation;
+}
+
+html body .cw-widget[class] :is(
+    .cw-chip,
+    .cw-contact-method,
+    .cw-next,
+    .cw-submit,
+    .cw-thanks__actions button,
+    .cw-direct-actions__grid a,
+    .cw-scard,
+    .cw-rowcard,
+    .cw-opt,
+    .cw-vcard,
+    .cw-tabs > button
+  ) {
+  min-height: var(--cw-tap) !important;
+}
+
+/* Small round controls keep their compact look and grow only their hit area. */
+html body .cw-widget[class] :is(
+    .cw-panel-head__actions button,
+    .cw-progress__back,
+    .cw-send
+  ) {
+  position: relative !important;
+}
+
+html body .cw-widget[class] :is(
+    .cw-panel-head__actions button,
+    .cw-progress__back,
+    .cw-send
+  )::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: var(--cw-tap) !important;
+  height: var(--cw-tap) !important;
+  transform: translate(-50%, -50%) !important;
+  border-radius: var(--cw-radius-pill) !important;
+  background: none !important;
+  animation: none !important;
+  pointer-events: auto !important;
+}
+
+/* The consent checkbox and the "add more" toggle are text-height by design; the
+   label around them carries the target. */
+html body .cw-widget[class] .cw-consent {
+  min-height: var(--cw-tap) !important;
+  align-items: center !important;
+}
+
+/* The summary keeps the browser's own disclosure marker — switching it to flex
+   removed the triangle and left no sign it could be opened. Padding, not
+   `display`, carries the 44px target. */
+html body .cw-widget[class] .cw-lead__optional summary {
+  min-height: var(--cw-tap) !important;
+  padding-top: 13px !important;
+  padding-bottom: 13px !important;
+}
+
+/* ---------------------------------------------------------------
+   5. Hover may never impersonate "chosen"
+   --------------------------------------------------------------- */
+
+/* This was the reported bug. Hover painted an unpicked chip with the *selected*
+   green ring and lifted it 2px. Auto-advance then swapped the step under a
+   pointer that had not moved, so whichever chip landed under the cursor arrived
+   already glowing — on a new step, with nothing selected.
+   Hover is now a quiet background change in the same family, it never borrows
+   the selection colour, and it never moves anything. */
+/* Hover keeps each control's own resting ring, because a hovered chip that
+   gains a ring its neighbours do not have is still a chip that looks picked.
+   Option cards rest with a 1px inset line... */
+html body .cw-widget[class] :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[class]:hover:not(
+    [data-selected="true"]
+  ):not(:disabled) {
+  color: var(--cw-ink) !important;
+  border-color: var(--cw-line) !important;
+  box-shadow: inset 0 0 0 1px var(--cw-line) !important;
+  transform: none !important;
+}
+
+/* ...while chips and contact pills rest with a border and no shadow at all. */
+html body .cw-widget[class] :is(.cw-contact-method, .cw-chip)[class]:hover:not(
+    [data-selected="true"]
+  ):not(:disabled) {
+  color: var(--cw-ink) !important;
+  border-color: var(--cw-line) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* With a real pointer, hover is allowed one quiet background step. */
+@media (hover: hover) and (pointer: fine) {
+  html body .cw-widget[class] :is(
+      .cw-rowcard,
+      .cw-scard,
+      .cw-vcard,
+      .cw-opt,
+      .cw-contact-method,
+      .cw-chip
+    )[class]:hover:not([data-selected="true"]):not(:disabled) {
+    background: #1c2924 !important;
+  }
+}
+
+/* On a touch screen `:hover` sticks to whatever was tapped last, which is the
+   same defect by another route. Without a real pointer, hover changes nothing. */
+@media not all and (hover: hover) {
+  html body .cw-widget[class] :is(
+      .cw-rowcard,
+      .cw-scard,
+      .cw-vcard,
+      .cw-opt,
+      .cw-contact-method,
+      .cw-chip
+    )[class]:hover:not([data-selected="true"]) {
+    background: var(--cw-chip) !important;
+  }
+}
+
+/* And while the pointer is parked from an auto-advance, hover is fully off —
+   background, shadow and transform, which the earlier guard left behind. */
+html body .cw-widget[data-pointer-parked="true"][class] :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt,
+    .cw-contact-method,
+    .cw-chip
+  )[class]:hover:not([data-selected="true"]) {
+  background: var(--cw-chip) !important;
+  transform: none !important;
+}
+
+/* Keyboard focus stays loud, and it is `:focus-visible` only — a mouse click
+   never leaves a ring behind. */
+html body .cw-widget[class] :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt,
+    .cw-contact-method,
+    .cw-chip
+  ):focus:not(:focus-visible) {
+  outline: none !important;
+}
+
+/* ---------------------------------------------------------------
+   6. Nothing moves on pick or on scroll
+   --------------------------------------------------------------- */
+
+/* The pick animation nudged the chip up by 2% — a visible jump right where the
+   finger just landed. Colour alone marks the choice now. */
+html body .cw-widget[class] :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt
+  )[data-selected="true"] {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* An endless glow on the launcher and an endless orbiting border on the chosen
+   chip both drew the eye forever. Gone. */
+html body .cw-widget[class] .cw-launcher[class] {
+  animation: none !important;
+}
+
+html body .cw-widget[class] :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt
+  )[data-selected="true"]::before {
+  animation: none !important;
+  background: none !important;
+  content: none !important;
+  display: none !important;
+}
+
+/* ---------------------------------------------------------------
+   7. Motion — arrivals only, and only when movement is welcome
+   --------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* --- New step: options arrive one after another, not all at once --- */
+  html body .cw-widget[class] .cw-choice-grid > :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt),
+  html body .cw-widget[class] .cw-contact-methods > .cw-contact-method,
+  html body .cw-widget[class] .cw-quick-replies > .cw-chip {
+    animation: cw-chip-in 420ms var(--cw-ease) backwards;
+  }
+
+  html body .cw-widget[class] .cw-choice-grid > :nth-child(1),
+  html body .cw-widget[class] .cw-contact-methods > :nth-child(1),
+  html body .cw-widget[class] .cw-quick-replies > :nth-child(1) {
+    animation-delay: 40ms;
+  }
+  html body .cw-widget[class] .cw-choice-grid > :nth-child(2),
+  html body .cw-widget[class] .cw-contact-methods > :nth-child(2),
+  html body .cw-widget[class] .cw-quick-replies > :nth-child(2) {
+    animation-delay: 90ms;
+  }
+  html body .cw-widget[class] .cw-choice-grid > :nth-child(3),
+  html body .cw-widget[class] .cw-contact-methods > :nth-child(3),
+  html body .cw-widget[class] .cw-quick-replies > :nth-child(3) {
+    animation-delay: 140ms;
+  }
+  html body .cw-widget[class] .cw-choice-grid > :nth-child(4),
+  html body .cw-widget[class] .cw-contact-methods > :nth-child(4),
+  html body .cw-widget[class] .cw-quick-replies > :nth-child(4) {
+    animation-delay: 190ms;
+  }
+  html body .cw-widget[class] .cw-choice-grid > :nth-child(5) {
+    animation-delay: 240ms;
+  }
+  html body .cw-widget[class] .cw-choice-grid > :nth-child(6) {
+    animation-delay: 290ms;
+  }
+
+  @keyframes cw-chip-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* --- Step swap: old one up and out, new one from below --- */
+  html body .cw-widget[class] .cw-calc-step {
+    animation: cw-step-in 380ms var(--cw-ease) both;
+  }
+
+  html body .cw-widget[class] .cw-calc-step[data-leaving] {
+    animation: cw-step-out 180ms var(--cw-ease) forwards;
+  }
+
+  @keyframes cw-step-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes cw-step-out {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+
+  /* The tip under a chosen industry arrives the same way as a chip. */
+  html body .cw-widget[class] :is(.cw-industry-tip, .cw-custom, .cw-price) {
+    animation: cw-chip-in 420ms var(--cw-ease) 120ms backwards;
+  }
+
+  /* --- Messages: mine from the right, the reply from the left --- */
+  html body .cw-widget[class] .cw-message-row--bot {
+    animation: cw-msg-in-left 320ms var(--cw-ease) both;
+  }
+
+  html body .cw-widget[class] .cw-message-row--me {
+    animation: cw-msg-in-right 320ms var(--cw-ease) both;
+  }
+
+  @keyframes cw-msg-in-left {
+    from {
+      opacity: 0;
+      transform: translate(-10px, 8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes cw-msg-in-right {
+    from {
+      opacity: 0;
+      transform: translate(10px, 8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* --- "píše…" — three dots, 160ms apart, gone the moment a reply lands --- */
+  html body .cw-widget[class] .cw-typing[class] i {
+    animation: cw-typing-dot 1080ms var(--cw-ease) infinite !important;
+    animation-delay: 0ms !important;
+  }
+  html body .cw-widget[class] .cw-typing[class] i:nth-child(2) {
+    animation-delay: 160ms !important;
+  }
+  html body .cw-widget[class] .cw-typing[class] i:nth-child(3) {
+    animation-delay: 320ms !important;
+  }
+
+  @keyframes cw-typing-dot {
+    0%,
+    64%,
+    100% {
+      opacity: 0.35;
+      transform: translateY(0);
+    }
+    32% {
+      opacity: 1;
+      transform: translateY(-3px);
+    }
+  }
+
+  /* --- Progress fills, it does not hop --- */
+  html body .cw-widget[class] .cw-progress__fill {
+    transition: width 520ms var(--cw-ease) !important;
+  }
+
+  html body .cw-widget[class] .cw-progress__count {
+    animation: cw-count-in 320ms var(--cw-ease) both;
+  }
+
+  @keyframes cw-count-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Reduced motion: identical content, no movement. Nothing here may hide
+   anything — an entrance animation that never runs must not leave an element
+   stuck at `opacity: 0`. */
+@media (prefers-reduced-motion: reduce) {
+  html body .cw-widget[class] *,
+  html body .cw-widget[class] *::before,
+  html body .cw-widget[class] *::after {
+    animation: none !important;
+    transition: none !important;
+    /* `opacity: 1` un-hides anything a base rule left transparent for an
+       entrance to reveal. It is deliberately not !important, so the few
+       elements that are meant to be invisible can still say so below.
+
+       Transform is NOT reset here. Turning off the animation already drops its
+       fill styles, and a blanket `transform: none` also destroys static
+       transforms — it flipped the back arrow to point forwards and moved the
+       mode-switch thumb off the active tab. */
+    opacity: 1;
+  }
+
+  html body .cw-widget[class] .cw-launcher[aria-expanded="true"] {
+    opacity: 0;
+  }
+
+  html body .cw-widget[class] .cw-selection-indicator[data-visible="false"] {
+    opacity: 0;
+  }
+
+  /* The step being replaced is unmounted immediately, so it never needs to fade. */
+  html body .cw-widget[class] .cw-calc-step[data-leaving] {
+    display: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   8. Layout safety at both ends of the range
+   --------------------------------------------------------------- */
+
+/* "Otázka 3 zo 4" says more than "3/5" but also needs the room to say it.
+   The row is a grid whose last column was pinned to 34px, so a longer label was
+   simply clipped. The label column now sizes to its content and the bar gives up
+   the width. */
+html body .cw-widget[class] .cw-progress[class] {
+  display: grid !important;
+  grid-template-columns: auto minmax(24px, 1fr) auto !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+html body .cw-widget[class] .cw-progress__count {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  overflow: visible !important;
+  color: var(--cw-ink-dim) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em !important;
+  white-space: nowrap !important;
+  text-align: right !important;
+}
+
+html body .cw-widget[class] .cw-progress__track {
+  flex: 1 1 auto !important;
+  min-width: 40px !important;
+}
+
+html body .cw-widget[class] .cw-calc-body {
+  /* Holding a height during a step swap must not create a second scrollbar. */
+  overflow-x: clip;
+}
+
+html body .cw-widget[class] :is(.cw-summary__row b, .cw-thanks__grid > div) {
+  overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------------
+   9. Last word on ink over green
+
+   Several earlier layers paint white or pale grey onto the green fill. On
+   #16c47f white measures 2.6:1 and pale grey 2.5:1 — both below the 4.5:1
+   floor. Everything that sits on green resolves to #04140d here, at a
+   specificity no earlier layer reaches.
+   --------------------------------------------------------------- */
+
+html body .cw-widget[class][class] :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt,
+    .cw-contact-method,
+    .cw-chip
+  )[class][class][data-selected="true"],
+html body .cw-widget[class][class] :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt,
+    .cw-contact-method,
+    .cw-chip
+  )[class][class][data-selected="true"] :is(b, small, span, em, i, strong, svg, path) {
+  color: var(--cw-on-green) !important;
+}
+
+html body .cw-widget[class][class] :is(
+    .cw-next,
+    .cw-submit,
+    .cw-send,
+    .cw-chat-builder
+  )[class][class]:not(:disabled),
+html body .cw-widget[class][class] :is(
+    .cw-next,
+    .cw-submit,
+    .cw-send,
+    .cw-chat-builder
+  )[class][class]:not(:disabled) :is(b, span, small, svg, path) {
+  color: var(--cw-on-green) !important;
+}
+
+html body .cw-widget[class][class] .cw-tabs[class] > button[data-active="true"],
+html body .cw-widget[class][class] .cw-tabs[class] > button[data-active="true"] :is(span, svg, path) {
+  color: var(--cw-on-green) !important;
+}
+
+/* Hover on a green control keeps dark ink too — the darker green still needs it. */
+html body .cw-widget[class][class] :is(
+    .cw-next,
+    .cw-submit,
+    .cw-chat-builder
+  )[class][class]:is(:hover, :focus-visible, :active):not(:disabled),
+html body .cw-widget[class][class] :is(
+    .cw-next,
+    .cw-submit,
+    .cw-chat-builder
+  )[class][class]:is(:hover, :focus-visible, :active):not(:disabled) :is(b, span, small, svg, path) {
+  color: var(--cw-on-green) !important;
+}
+
+/* ---------------------------------------------------------------
+   10. Thank-you screen
+
+   The two closing buttons held an unsized icon, so each one grew to about
+   170px tall and the pill radius turned them into blobs. The icon is sized
+   and the buttons keep the pill height every other action uses.
+   --------------------------------------------------------------- */
+
+/* The thank-you screen is one block, not the three-row step grid. */
+html body .cw-widget[class] .cw-calculator[data-view="thanks"] {
+  display: block !important;
+  grid-template-rows: none !important;
+  overflow-y: auto !important;
+}
+
+html body .cw-widget[class] .cw-calculator[data-view="thanks"] .cw-thanks {
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+html body .cw-widget[class] .cw-thanks__actions[class] {
+  gap: 10px !important;
+  align-items: stretch !important;
+}
+
+html body .cw-widget[class] .cw-thanks__actions[class] button {
+  min-height: var(--cw-tap) !important;
+  height: auto !important;
+  padding: 10px 14px !important;
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+  /* No nowrap: a label longer than its column used to run out of the button and
+     across the one beside it. */
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+html body .cw-widget[class] .cw-thanks__actions[class] button svg {
+  width: 16px !important;
+  height: 16px !important;
+  flex: 0 0 auto !important;
+}
+
+html body .cw-widget[class] .cw-thanks__actions[class] button:not(.ghost),
+html body .cw-widget[class] .cw-thanks__actions[class] button:not(.ghost) svg {
+  color: var(--cw-on-green) !important;
+}
+
+html body .cw-widget[class] .cw-thanks__actions[class] button.ghost {
+  color: var(--cw-ink) !important;
+  background: var(--cw-chip) !important;
+  box-shadow: inset 0 0 0 1px var(--cw-line) !important;
+}
+
+html body .cw-widget[class] .cw-thanks__icon[class] svg {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+html body .cw-widget[class] .cw-thanks__icon[class] {
+  color: var(--cw-on-green) !important;
+}
+
+html body .cw-widget[class] .cw-thanks__grid[class] > div {
+  color: var(--cw-ink) !important;
+  font-size: 12px !important;
+}
+
+html body .cw-widget[class] .cw-thanks__grid[class] span {
+  font-size: 11px !important;
+}
+
+html body .cw-widget[class] .cw-thanks[class] > p {
+  color: var(--cw-ink-dim) !important;
+  font-size: 14px !important;
+}
+
+html body .cw-widget[class] .cw-thanks[class] .cw-thanks__eyebrow {
+  color: var(--cw-green-soft) !important;
+  font-size: 11px !important;
+}

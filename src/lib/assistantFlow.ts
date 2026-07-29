@@ -12,34 +12,39 @@ export type StepId =
 
 export const STEPS: StepId[] = ["interest", "industry", "features", "timeline", "contact"];
 
+/* Everything before the contact form is a question the visitor answers, so the
+   progress label can count them honestly: "Otázka 2 zo 4". */
+export const QUESTION_STEPS: StepId[] = STEPS.filter((id) => id !== "contact");
+
+/* One short sentence per question, plus a line that says why I am asking. */
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
-    "Čo má váš web vybaviť za vás?",
-    "Vyberte jednu možnosť. Každá vedie k inému typu riešenia.",
+    "Čo má web robiť za vás?",
+    "Vyberte jednu vec. Podľa nej vám spočítam cenu.",
   ],
   industry: [
-    "Aký typ firmy máte?",
-    "Vyberte jednu možnosť. Podľa odvetvia spresním odporúčanie.",
-  ],
-  priority: [
-    "Čo od asistenta očakávate?",
-    "Tento krok sa v skrátenom toku nepoužíva.",
+    "Čo robí vaša firma?",
+    "Poradím vám to, čo sa vo vašom odbore najviac oplatí.",
   ],
   features: [
-    "Čo má riešenie vedieť?",
-    "Môžete vybrať viac možností. Označte iba to, čo je pre vás dôležité.",
-  ],
-  volume: [
-    "Koľko dopytov mesačne riešite?",
-    "Tento údaj sa dá doplniť neskôr a nie je samostatným krokom.",
+    "Čo všetko to má zvládnuť?",
+    "Vyberte si, čo potrebujete. Cena sa hneď prepočíta.",
   ],
   timeline: [
-    "Kedy to chcete spustiť?",
-    "Vyberte jednu možnosť. Presný harmonogram pripravím podľa rozsahu.",
+    "Kedy to chcete mať hotové?",
+    "Podľa toho si na vás naplánujem čas.",
   ],
   contact: [
-    "Kam vám mám poslať návrh?",
-    "Stačí meno a telefón.",
+    "Kam vám mám poslať cenu?",
+    "Stačí meno a telefón. Ozvem sa do jedného dňa.",
+  ],
+  priority: [
+    "Čo je pre vás najdôležitejšie?",
+    "Túto otázku teraz nepoužívam.",
+  ],
+  volume: [
+    "Koľko ľudí sa vás denne pýta?",
+    "Túto otázku teraz nepoužívam.",
   ],
 };
 
@@ -54,26 +59,26 @@ export type InterestOption = {
 export const INTERESTS: InterestOption[] = [
   {
     id: "chatbot",
-    label: "AI chatbot",
-    description: "Vysvetlí služby, poradí a pripraví dopyt.",
+    label: "Odpovedať zákazníkom",
+    description: "Vysvetlí služby a ceny aj v noci.",
     icon: "chat",
   },
   {
     id: "calcbot",
-    label: "Chatbot s kalkulačkou",
-    description: "Vypočíta cenu alebo rozsah podľa vašich pravidiel.",
+    label: "Počítať cenu",
+    description: "Zákazník zadá rozmery a hneď vidí, koľko to stojí.",
     icon: "calculator",
   },
   {
     id: "product",
-    label: "Chatbot s konfigurátorom",
-    description: "Prevedie zákazníka variantmi a doplnkami.",
+    label: "Pomáhať s výberom",
+    description: "Prevedie zákazníka možnosťami a doplnkami.",
     icon: "options",
   },
   {
     id: "custom",
     label: "Neviem, poraďte mi",
-    description: "Opíšte situáciu a navrhnem najjednoduchší postup.",
+    description: "Napíšte, čo vás zdržuje, a ja navrhnem riešenie.",
     icon: "spark",
   },
 ];
@@ -91,9 +96,9 @@ export const INDUSTRIES: IndustryOption[] = [
     label: "Služby a remeslá",
     icon: "tools",
     examples: [
-      "Cenový dopyt s rozsahom a lokalitou",
-      "Fotky ešte pred obhliadkou",
-      "Rezervácia termínu alebo obhliadky",
+      "Spočíta cenu aj s dopravou",
+      "Zákazník pošle fotky ešte pred obhliadkou",
+      "Termín si dohodne sám",
     ],
   },
   {
@@ -101,19 +106,19 @@ export const INDUSTRIES: IndustryOption[] = [
     label: "E-shop a predaj",
     icon: "cart",
     examples: [
-      "Odporúčanie produktu podľa potreby",
-      "Výber variantu a doplnkov",
-      "Kontakt s hotovou konfiguráciou",
+      "Poradí, ktorý produkt sa hodí",
+      "Pomôže vybrať veľkosť a doplnky",
+      "Pošle vám hotovú objednávku",
     ],
   },
   {
     id: "gastro",
-    label: "Gastro a ubytovanie",
+    label: "Restaurácia a ubytovanie",
     icon: "food",
     examples: [
-      "Rezervácia stola alebo pobytu",
-      "Odpovede na časté otázky",
-      "Komunikácia vo viacerých jazykoch",
+      "Rezervuje stôl alebo pobyt",
+      "Odpovie na otázky aj v noci",
+      "Zvládne to aj po anglicky",
     ],
   },
   {
@@ -121,29 +126,29 @@ export const INDUSTRIES: IndustryOption[] = [
     label: "Zdravie a krása",
     icon: "heart",
     examples: [
-      "Výber služby a termínu",
-      "Predpríprava klienta pred návštevou",
-      "Cenník bez opakovaných telefonátov",
+      "Klient si vyberie službu a termín",
+      "Dozvie sa, čo si má priniesť",
+      "Cenník má hneď pred sebou",
     ],
   },
   {
     id: "vyroba",
-    label: "Výroba a B2B",
+    label: "Výroba a veľké zákazky",
     icon: "factory",
     examples: [
-      "Technické parametre dopytu",
-      "Pripravené zadanie pred obchodníkom",
-      "Zápis do CRM alebo tabuľky",
+      "Zapíše rozmery aj množstvo",
+      "Pripraví dopyt pre obchodníka",
+      "Uloží kontakt do vašej tabuľky",
     ],
   },
   {
     id: "ine",
-    label: "Iný typ firmy",
+    label: "Niečo iné",
     icon: "spark",
     examples: [
-      "Vlastné otázky a rozhodovanie",
-      "Zber kontaktu s kontextom",
-      "Odovzdanie človeku v správnom momente",
+      "Otázky nastavíme podľa vás",
+      "Zbiera kontakty aj s tým, čo zákazník chce",
+      "Zložité veci prepošle vám",
     ],
   },
 ];
@@ -165,60 +170,72 @@ export type FeatureOption = {
   id: string;
   label: string;
   description: string;
+  /* What this piece adds to the estimate, in euro. */
+  price: number;
   basic?: boolean;
 };
 
 export const FEATURES: FeatureOption[] = [
   {
     id: "faq",
-    label: "Odpovede podľa podkladov",
-    description: "Služby, postup a časté otázky.",
+    label: "Odpovie na otázky",
+    description: "O vašich službách, cenách a postupe.",
+    price: 0,
     basic: true,
   },
   {
     id: "dopyty",
-    label: "Pripravený dopyt",
-    description: "Kontakt aj odpovede v jednom zhrnutí.",
+    label: "Pošle vám kontakt",
+    description: "Aj so všetkým, čo zákazník napísal.",
+    price: 0,
     basic: true,
   },
   {
     id: "cena",
-    label: "Výpočet ceny",
-    description: "Cena alebo rozsah podľa vašich pravidiel.",
+    label: "Spočíta cenu",
+    description: "Podľa rozmerov alebo množstva.",
+    price: 180,
   },
   {
     id: "varianty",
-    label: "Výber variantov",
-    description: "Rozmery, materiály a doplnky.",
+    label: "Pomôže vybrať",
+    description: "Rozmery, materiál a doplnky.",
+    price: 220,
   },
   {
     id: "rezervacie",
-    label: "Termíny a rezervácie",
-    description: "Výber termínu bez prepisovania.",
+    label: "Dohodne termín",
+    description: "Zákazník si vyberie voľný čas.",
+    price: 160,
   },
   {
     id: "fotky",
-    label: "Fotky a prílohy",
-    description: "Lepší odhad ešte pred kontaktom.",
+    label: "Prijme fotky",
+    description: "Lepší odhad ešte pred návštevou.",
+    price: 90,
   },
 ];
 
-export const BASIC_FEATURE_IDS: string[] = FEATURES.filter((option) => option.basic).map(
-  (option) => option.id,
-);
-
+/* Which extras usually go with a given goal. These are shown as a hint on the
+   option itself — never pre-ticked, because a chip that looks chosen before the
+   visitor touched it reads as a bug. */
 export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
-  chatbot: [],
+  chatbot: ["faq", "dopyty"],
   calcbot: ["cena"],
   product: ["varianty", "cena"],
   booking: ["rezervacie"],
   custom: [],
 };
 
-export const defaultFeatures = (interest: InterestId | null): string[] => [
-  ...BASIC_FEATURE_IDS,
-  ...(interest ? RECOMMENDED_FEATURES[interest] : []),
-];
+/* The starting price covers setup, the two basic abilities and putting the
+   chatbot on the site. Extras add to it. */
+export const BASE_PRICE = 350;
+
+export const priceOf = (featureIds: string[]): number =>
+  FEATURES.reduce(
+    (total, option) => (featureIds.includes(option.id) ? total + option.price : total),
+    BASE_PRICE,
+  );
 
 export type VolumeOption = {
   id: string;
@@ -240,10 +257,10 @@ export type TimelineOption = {
 };
 
 export const TIMELINES: TimelineOption[] = [
-  { id: "asap", label: "Čo najskôr", description: "Začneme podľa pripravenosti podkladov." },
-  { id: "mesiac", label: "Do mesiaca", description: "Priestor na doladenie obsahu a logiky." },
-  { id: "kvartal", label: "O 1 – 3 mesiace", description: "Pripravíme plán a jednotlivé etapy." },
-  { id: "rozhliadam", label: "Zatiaľ sa rozhliadam", description: "Najprv si porovnáte možnosti." },
+  { id: "asap", label: "Čo najskôr", description: "Začnem, len čo mi pošlete podklady." },
+  { id: "mesiac", label: "Do mesiaca", description: "Je čas texty pekne doladiť." },
+  { id: "kvartal", label: "Za dva až tri mesiace", description: "Rozdelíme to na menšie kroky." },
+  { id: "rozhliadam", label: "Len sa pozerám", description: "Pošlem cenu, rozhodnete sa neskôr." },
 ];
 
 export const PRESET_TO_INTEREST: Record<AssistantPreset, InterestId> = {
