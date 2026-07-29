@@ -87,20 +87,71 @@ jobs:
           must(css.includes('cw-choice-grid--interest'), 'interest grid missing');
           must(css.includes('cw-selection-indicator'), 'selection indicator missing');
           must(/border-radius:\s*999px/.test(css), 'oval geometry missing');
-          must(/--mc-green:\s*#16c47f/i.test(css), 'website green missing');
           must(main.includes('assistant-redesign') && embed.includes('assistant-redesign'), 'redesign import missing');
           must(!main.includes('installWidgetSpotlight') && !embed.includes('installWidgetSpotlight'), 'legacy builder spotlight still mounted');
           must(finalCss.includes('Visible widget rebuild'), 'visible widget rebuild layer missing');
           must(finalCss.includes('.cw-contact-methods'), 'presentation method controls missing');
-          must(calculator.includes('Osobné stretnutie'), 'personal meeting option missing');
           must(lead.includes('api/lead'), 'lead API missing');
-          must(conversation.includes('Vyskladať riešenie'), 'builder CTA missing');
-          must(flow.includes('Čo má váš web vybaviť za vás?'), 'first question missing');
-          must(flow.includes('Neviem, poraďte mi'), 'safe fallback option missing');
-          must(!/(#2aa|#1fa|teal|turquoise)/i.test(css), 'forbidden colour remains');
           must(!calculator.includes('cw-choice-arrow'), 'legacy choice arrow remains');
           must(!js.includes('REPLACE-ME'), 'placeholder remains');
           must(meta.sourceSha === process.env.GITHUB_SHA, 'build metadata SHA mismatch');
+
+          // The motion and palette layer must actually ship, in both entries.
+          must(
+            main.includes('green-motion-final') && embed.includes('green-motion-final'),
+            'motion and palette layer not imported',
+          );
+          // The minifier drops leading zeros, so both 0.16 and .16 are valid here.
+          must(
+            /--cw-ease:\s*cubic-bezier\(\s*0?\.16\s*,\s*1\s*,\s*0?\.3\s*,\s*1\s*\)/.test(css),
+            'website easing missing',
+          );
+          must(/--cw-on-green:\s*#04140d/i.test(css), 'dark ink for green surfaces missing');
+          must(css.includes('#16c47f') && css.includes('#0b110f'), 'green palette missing');
+          must(css.includes('prefers-reduced-motion: no-preference'), 'motion is not gated behind a media query');
+          must(css.includes('@keyframes cw-chip-in'), 'staggered option entrance missing');
+
+          // Plain language, checked on the built bundle rather than on sources.
+          for (const word of ['konfigurátor', 'špecifikác', 'kvalifikác']) {
+            must(!js.toLowerCase().includes(word), `jargon "${word}" reached the bundle`);
+          }
+          must(flow.includes('Čo má web robiť za vás?'), 'first question missing');
+          must(flow.includes('Neviem, poraďte mi'), 'safe fallback option missing');
+          must(conversation.includes('Spočítať cenu'), 'builder CTA missing');
+          must(calculator.includes('Osobne'), 'in-person option missing');
+
+          // No chip may arrive on a new step already looking chosen.
+          must(
+            (calculator.match(/key=\{`\$\{stepId\}-/g) ?? []).length === 5,
+            'option keys are not scoped to the step',
+          );
+          must(calculator.includes('contactMethod: null'), 'a contact method is pre-selected again');
+
+          // Nothing blue may survive in the shipped stylesheet. Measured, not eyeballed:
+          // every colour literal is parsed and rejected if its blue channel clearly
+          // leads both red and green.
+          const blues = [];
+          const record = (r, g, b, raw) => {
+            if (b > r + 6 && b > g + 6) blues.push(raw);
+          };
+          for (const m of css.matchAll(/#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b/g)) {
+            let hex = m[1];
+            if (hex.length === 3) hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+            record(
+              parseInt(hex.slice(0, 2), 16),
+              parseInt(hex.slice(2, 4), 16),
+              parseInt(hex.slice(4, 6), 16),
+              m[0],
+            );
+          }
+          for (const m of css.matchAll(/rgba?\(\s*(\d+)[\s,]+(\d+)[\s,]+(\d+)/g)) {
+            record(Number(m[1]), Number(m[2]), Number(m[3]), m[0]);
+          }
+          must(
+            blues.length === 0,
+            `${blues.length} blue-dominant colour(s) in widget.css: ${[...new Set(blues)].slice(0, 12).join(', ')}`,
+          );
+          must(!/(#2aa|#1fa|teal|turquoise)/i.test(css), 'forbidden colour remains');
           NODE
 
       - name: Configure GitHub Pages
@@ -154,6 +205,7 @@ jobs:
           }
 
           verify "/" "Môj Chatbot"
+          verify "/widget.css" "cw-chip-in"
           verify "/widget.js" "competition-redesign-20260723-v10"
           verify "/widget.css" "cw-selection-indicator"
           verify "/build-meta.json" "$SOURCE_SHA"
