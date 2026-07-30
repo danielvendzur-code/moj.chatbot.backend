@@ -863,3 +863,148 @@ html body .cw-widget[class] .cw-thanks[class] .cw-thanks__eyebrow {
   color: var(--cw-green-soft) !important;
   font-size: 11px !important;
 }
+
+/* ---------------------------------------------------------------
+   8. Premium pass — a slower reveal, a pointer-following tilt, and
+      a summary card whose text stops touching its own border.
+   --------------------------------------------------------------- */
+
+/* The summary sat on `padding: 10px 0`, so every label started 1px from the
+   card edge and read as if the text were spilling out of the box. Give it a
+   real inset and let the hairlines stop short of the corners. */
+html body .cw-widget[class] .cw-summary[class] {
+  padding: 14px 16px !important;
+}
+html body .cw-widget[class] .cw-summary__row[class] {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  column-gap: 14px !important;
+  align-items: start !important;
+}
+/* Long values wrap inside their column instead of pushing the row wider. */
+html body .cw-widget[class] .cw-summary__row[class] > * {
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+}
+html body .cw-widget[class] .cw-summary__row[class] > b {
+  text-align: right !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* --- Reveal, slower and further apart -------------------------------
+     50ms apart over 420ms overlapped so heavily that the group read as one
+     block appearing. Longer travel, longer hold, 85ms between each, so you
+     actually see them arrive in order. */
+  html body .cw-widget[class] .cw-choice-grid > :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt),
+  html body .cw-widget[class] .cw-contact-methods > .cw-contact-method,
+  html body .cw-widget[class] .cw-quick-replies > .cw-chip {
+    animation: cw-chip-rise 620ms var(--cw-ease) backwards;
+  }
+
+  html body .cw-widget[class] .cw-choice-grid > :nth-child(1),
+  html body .cw-widget[class] .cw-contact-methods > :nth-child(1),
+  html body .cw-widget[class] .cw-quick-replies > :nth-child(1) { animation-delay: 60ms; }
+  html body .cw-widget[class] .cw-choice-grid > :nth-child(2),
+  html body .cw-widget[class] .cw-contact-methods > :nth-child(2),
+  html body .cw-widget[class] .cw-quick-replies > :nth-child(2) { animation-delay: 145ms; }
+  html body .cw-widget[class] .cw-choice-grid > :nth-child(3),
+  html body .cw-widget[class] .cw-contact-methods > :nth-child(3),
+  html body .cw-widget[class] .cw-quick-replies > :nth-child(3) { animation-delay: 230ms; }
+  html body .cw-widget[class] .cw-choice-grid > :nth-child(4),
+  html body .cw-widget[class] .cw-contact-methods > :nth-child(4),
+  html body .cw-widget[class] .cw-quick-replies > :nth-child(4) { animation-delay: 315ms; }
+  html body .cw-widget[class] .cw-choice-grid > :nth-child(5) { animation-delay: 400ms; }
+  html body .cw-widget[class] .cw-choice-grid > :nth-child(6) { animation-delay: 485ms; }
+
+  @keyframes cw-chip-rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.955);
+      filter: blur(3px);
+    }
+    60% {
+      filter: blur(0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      filter: blur(0);
+    }
+  }
+
+  /* --- Tilt -----------------------------------------------------------
+     premiumTilt.ts publishes --cw-tilt-x / --cw-tilt-y while the cursor is
+     over an element. Rotation only, never a translate: a hover lift that the
+     selected state did not match is what made the chips look like they
+     jumped when clicked, and that must not come back. The element keeps its
+     exact box, so nothing around it moves. */
+  @media (hover: hover) and (pointer: fine) {
+    /* The no-jump rules that keep every state at `transform: none` reach
+       (0,8,2) — e.g. `.cw-widget[class] :is(.cw-contact-method,.cw-chip)[class]
+       :hover:not([data-selected]):not(:disabled)`. These have to outrank that
+       to hand transform back for the tilt, hence the repeated `[class]`, which
+       adds specificity without changing what is matched. Gating on the root
+       flag also means the rule is inert unless premiumTilt.ts installed. */
+    html[data-cw-premium-tilt="true"] body .cw-widget[class][class] :is(
+        .cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method
+      )[class][class][data-tilting="true"]:not(:disabled) {
+      transform:
+        perspective(620px)
+        rotateX(var(--cw-tilt-x, 0deg))
+        rotateY(var(--cw-tilt-y, 0deg)) !important;
+      transition: transform 90ms linear, background-color 360ms var(--cw-ease),
+        border-color 360ms var(--cw-ease), box-shadow 360ms var(--cw-ease) !important;
+    }
+    /* Letting go settles it flat on a slow curve rather than snapping back. */
+    html[data-cw-premium-tilt="true"] body .cw-widget[class][class] :is(
+        .cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method
+      )[class][class]:not([data-tilting="true"]) {
+      transition: transform 520ms var(--cw-ease), background-color 360ms var(--cw-ease),
+        border-color 360ms var(--cw-ease), box-shadow 360ms var(--cw-ease) !important;
+    }
+    /* A tilted card lifts its own shadow slightly — depth without movement. */
+    html[data-cw-premium-tilt="true"] body .cw-widget[class][class] :is(
+        .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt
+      )[class][class][data-tilting="true"]:not(:disabled) {
+      box-shadow: 0 18px 34px -26px rgba(22, 196, 127, 0.85) !important;
+    }
+  }
+
+  /* --- Messages arrive rather than appear ---------------------------- */
+  html body .cw-widget[class] .cw-message-row {
+    animation: cw-message-in 520ms var(--cw-ease) backwards;
+  }
+  @keyframes cw-message-in {
+    from { opacity: 0; transform: translateY(9px) scale(0.985); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body .cw-widget[class] :is(
+      .cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method
+    )[class] {
+    transform: none !important;
+  }
+}
+
+/* The optional-details row keeps a 44px tap target, but `list-item` pins its
+   text to the top, so the whole 24px of slack fell below the label and read as
+   a hole above the consent line. Centre the content instead of shrinking the
+   target — `align-content` is ignored by older engines, which just leaves
+   today's top-aligned behaviour. */
+html body .cw-widget[class] .cw-lead__optional[class] > summary {
+  align-content: center !important;
+}
+html body .cw-widget[class] .cw-consent[class] {
+  align-items: center !important;
+}
+
+/* Two stacked 44px tap targets with 14px labels left 42px of air between the
+   two lines. The targets stay — the gap between them tightens. */
+html body .cw-widget[class] .cw-lead__form[class] {
+  row-gap: 8px !important;
+}
+html body .cw-widget[class] .cw-lead__optional[class] {
+  margin: 0 !important;
+}

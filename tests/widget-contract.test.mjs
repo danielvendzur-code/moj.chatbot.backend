@@ -590,3 +590,53 @@ test("no jargon reaches the screen", async () => {
     }
   }
 });
+
+test("chips and cards lean toward the cursor without ever moving their box", async () => {
+  const tilt = await read("src/lib/premiumTilt.ts");
+  const css = await read("src/green-motion-final.css");
+  const main = await read("src/main.tsx");
+  const embed = await read("src/embed.tsx");
+
+  for (const entry of [main, embed]) assert.match(entry, /installPremiumTilt\(\)/);
+
+  // rotation only — a hover lift the selected state does not match is what
+  // made the chips look like they jumped when clicked. Strip comments first so
+  // the prose explaining that rule does not trip the check.
+  const tiltCode = tilt.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*/g, "");
+  assert.doesNotMatch(tiltCode, /translate|top:|margin/);
+  assert.match(tilt, /--cw-tilt-x/);
+  assert.match(tilt, /--cw-tilt-y/);
+  assert.match(css, /rotateX\(var\(--cw-tilt-x, 0deg\)\)/);
+  assert.match(css, /rotateY\(var\(--cw-tilt-y, 0deg\)\)/);
+  assert.doesNotMatch(css.match(/\[data-tilting="true"\]:not\(:disabled\) \{[\s\S]*?\}/)?.[0] ?? "", /translate/);
+
+  // never on touch, never under reduced motion, and inert unless installed
+  assert.match(tilt, /\(hover: hover\) and \(pointer: fine\)/);
+  assert.match(tilt, /prefers-reduced-motion: reduce/);
+  assert.match(css, /html\[data-cw-premium-tilt="true"\]/);
+});
+
+test("options reveal one after another rather than as a block", async () => {
+  const css = await read("src/green-motion-final.css");
+
+  assert.match(css, /animation: cw-chip-rise 620ms var\(--cw-ease\) backwards/);
+  // 85ms apart, so the order is actually readable
+  for (const delay of ["60ms", "145ms", "230ms", "315ms", "400ms", "485ms"]) {
+    assert.ok(css.includes(`animation-delay: ${delay}`), `Missing stagger step ${delay}`);
+  }
+  assert.match(css, /@keyframes cw-chip-rise[\s\S]*?filter: blur\(3px\)/);
+});
+
+test("the summary card keeps its text off its own border", async () => {
+  const motion = await read("src/green-motion-final.css");
+  const correction = await read("src/final-user-correction.css");
+
+  assert.match(motion, /\.cw-summary\[class\] \{\s*\n\s*padding: 14px 16px !important/);
+  assert.match(motion, /overflow-wrap: anywhere !important/);
+  // the alignment rule zeroes padding on the layout wrappers only; the summary
+  // is a bordered card and keeps its own inset
+  const paddingRule = correction.match(
+    /:is\(\s*\n\s*\.cw-step-head, \.cw-q, \.cw-contact-stage, \.cw-contact-methods,\s*\n\s*\.cw-lead, \.cw-lead__form\s*\n\s*\) \{\s*\n\s*padding-left: 0/,
+  );
+  assert.ok(paddingRule, "summary must be excluded from the padding-zeroing rule");
+});
