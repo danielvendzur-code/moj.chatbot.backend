@@ -807,15 +807,10 @@
   list-style: none !important;
 }
 
-.cw-widget .cw-lead__optional summary::after {
-  content: "+" !important;
-  color: #7fe0b4 !important;
-  font-size: 16px !important;
-}
-
-.cw-widget .cw-lead__optional[open] summary::after {
-  content: "−" !important;
-}
+/* The +/- disclosure glyph is gone. This file is not imported anywhere, but a
+   stray "+" in the stylesheet tree is exactly the thing that gets grepped up
+   and re-adopted later, and a plus near the chips has been reported enough
+   times already. The summary carries its own disclosure marker. */
 
 .cw-widget .cw-lead__optional-body {
   display: grid !important;

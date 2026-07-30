@@ -640,3 +640,25 @@ test("the summary card keeps its text off its own border", async () => {
   );
   assert.ok(paddingRule, "summary must be excluded from the padding-zeroing rule");
 });
+
+test("nothing plus-shaped renders anywhere near the quick replies", async () => {
+  const conversation = await read("src/components/widget/AssistantConversation.tsx");
+  const motion = await read("src/green-motion-final.css");
+
+  // The four-pointed spark sat on the CTA directly above the chips and read as
+  // a "+" at the size it rendered. The button is label-only now.
+  const builder = conversation.match(/<button[^>]*className="cw-chat-builder"[\s\S]*?<\/button>/)?.[0] ?? "";
+  assert.ok(builder, "chat builder button must exist");
+  assert.doesNotMatch(builder, /WidgetIcon|cw-chat-builder__icon/);
+
+  // and no layer may put a character on a chip pseudo-element
+  assert.match(motion, /\.cw-quick-replies\[class\] \.cw-chip\[class\]::before \{\s*\n\s*content: none !important/);
+  assert.match(motion, /\.cw-quick-replies\[class\] \.cw-chip\[class\]::after \{[\s\S]*?content: "" !important/);
+
+  // no stylesheet in the tree carries a plus glyph, imported or not
+  const sheets = await Promise.all(
+    ["src/competition-winner-final.css", "src/final-user-correction.css", "src/green-motion-final.css",
+     "src/approved-submit-final.css", "src/assistant-redesign.css"].map(read),
+  );
+  for (const sheet of sheets) assert.doesNotMatch(sheet, /content:\s*"\+"/);
+});

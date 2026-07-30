@@ -135,10 +135,10 @@ export function AssistantConversation({
   return (
     <div className="cw-conversation" data-testid="assistant-view">
       <div className="cw-chat-top">
+        {/* No glyph here. The four-pointed spark reads as a "+" at the size it
+            renders, sitting right above the quick replies — which is what kept
+            getting reported as a plus on the chips. The label is enough. */}
         <button type="button" className="cw-chat-builder" onClick={openCalculator}>
-          <span className="cw-chat-builder__icon" aria-hidden="true">
-            <WidgetIcon name="spark" />
-          </span>
           <span className="cw-chat-builder__copy">
             <b>Spočítať cenu za štyri otázky</b>
           </span>
