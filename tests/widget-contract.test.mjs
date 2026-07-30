@@ -39,7 +39,7 @@ test("assistant order and interactive send feedback remain explicit", async () =
 
   assert.ok(top > -1 && top < messages);
   assert.ok(messages < chips && chips < input && input < contacts);
-  assert.match(conversation, /Spočítať cenu za štyri otázky/);
+  assert.match(conversation, /Vyskladať riešenie/);
   assert.match(conversation, /Čo mi to ušetrí\?/);
   assert.match(conversation, /Čo mám poslať\?/);
   // no jargon anywhere the visitor can read it
@@ -645,15 +645,20 @@ test("nothing plus-shaped renders anywhere near the quick replies", async () => 
   const conversation = await read("src/components/widget/AssistantConversation.tsx");
   const motion = await read("src/green-motion-final.css");
 
-  // The four-pointed spark sat on the CTA directly above the chips and read as
-  // a "+" at the size it rendered. The button is label-only now.
+  // The builder keeps its spark and its original label.
   const builder = conversation.match(/<button[^>]*className="cw-chat-builder"[\s\S]*?<\/button>/)?.[0] ?? "";
   assert.ok(builder, "chat builder button must exist");
-  assert.doesNotMatch(builder, /WidgetIcon|cw-chat-builder__icon/);
+  assert.match(builder, /WidgetIcon name="spark"/);
+  assert.match(builder, /Vyskladať riešenie/);
 
-  // and no layer may put a character on a chip pseudo-element
+  // A chip renders its label and nothing else: no glyph on either
+  // pseudo-element, and no other child may draw a badge beside the text.
   assert.match(motion, /\.cw-quick-replies\[class\] \.cw-chip\[class\]::before \{\s*\n\s*content: none !important/);
   assert.match(motion, /\.cw-quick-replies\[class\] \.cw-chip\[class\]::after \{[\s\S]*?content: "" !important/);
+  assert.match(motion, /\.cw-chip\[class\] > \*:not\(\.cw-chip__label\) \{\s*\n\s*display: none !important/);
+  const chipMarkup = conversation.match(/className="cw-chip"[\s\S]*?<\/button>/)?.[0] ?? "";
+  assert.ok(chipMarkup, "chip markup must exist");
+  assert.doesNotMatch(chipMarkup, /WidgetIcon|__icon|__badge/);
 
   // no stylesheet in the tree carries a plus glyph, imported or not
   const sheets = await Promise.all(
