@@ -2229,10 +2229,18 @@ html body .cw-widget[class] .cw-calc-step[data-step="contact"][class] :is(
   ) {
   margin-left: 0 !important;
   margin-right: 0 !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
   width: 100% !important;
   max-width: none !important;
+}
+/* Padding is zeroed on the layout wrappers only. The summary is a bordered
+   card, so its own padding is what keeps the labels off its border — zeroing
+   it here is what made the text look like it was spilling out of the box. */
+html body .cw-widget[class] .cw-calc-step[data-step="contact"][class] :is(
+    .cw-step-head, .cw-q, .cw-contact-stage, .cw-contact-methods,
+    .cw-lead, .cw-lead__form
+  ) {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 html body .cw-widget[class] .cw-calc-step[data-step="contact"][class] {
   padding-left: 16px !important;
