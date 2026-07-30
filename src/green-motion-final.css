@@ -1008,3 +1008,14 @@ html body .cw-widget[class] .cw-lead__form[class] {
 html body .cw-widget[class] .cw-lead__optional[class] {
   margin: 0 !important;
 }
+
+/* No pseudo-element may put a glyph on a quick reply, in any state. The chips
+   carry their label and nothing else — a stray "+" near them has been reported
+   repeatedly, and this makes it impossible for any layer to reintroduce one. */
+html body .cw-widget[class] .cw-quick-replies[class] .cw-chip[class]::before {
+  content: none !important;
+}
+html body .cw-widget[class] .cw-quick-replies[class] .cw-chip[class]::after {
+  /* ::after is the fill sweep — it must stay empty, never a character. */
+  content: "" !important;
+}
