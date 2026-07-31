@@ -17,15 +17,15 @@
   /* The website curve, used by every transition and animation here. */
   --cw-ease: cubic-bezier(0.16, 1, 0.3, 1);
 
-  --cw-green: #16c47f;
-  --cw-green-hover: #0fa568;
-  --cw-green-soft: #7fe0b4;
-  --cw-on-green: #04140d;
-  --cw-panel: #0b110f;
-  --cw-chip: #131c18;
-  --cw-ink: #f4f8f6;
+  --cw-green: #ffc79d;
+  --cw-green-hover: #4db6ac;
+  --cw-green-soft: #7b8fa6;
+  --cw-on-green: #080b10;
+  --cw-panel: #0b0d11;
+  --cw-chip: #13161c;
+  --cw-ink: #f5f7fa;
   --cw-ink-dim: #a8bab1;
-  --cw-line: rgba(122, 210, 180, 0.16);
+  --cw-line: rgba(123, 143, 166, 0.16);
 
   --cw-radius-pill: 999px;
   --cw-radius-panel: 20px;
@@ -176,8 +176,8 @@ html body .cw-widget[class] :is(
     .cw-opt
   )[data-selected="true"] :is(.cw-rowcard__icon, .cw-scard__icon) {
   color: var(--cw-on-green) !important;
-  background: rgba(4, 20, 13, 0.14) !important;
-  border-color: rgba(4, 20, 13, 0.2) !important;
+  background: rgba(8, 11, 16, 0.14) !important;
+  border-color: rgba(8, 11, 16, 0.2) !important;
   box-shadow: none !important;
 }
 
@@ -189,13 +189,13 @@ html body .cw-widget[class] :is(
     .cw-contact-method
   )[data-selected="true"] .cw-selection-indicator {
   color: var(--cw-on-green) !important;
-  background: rgba(4, 20, 13, 0.16) !important;
+  background: rgba(8, 11, 16, 0.16) !important;
   border-color: transparent !important;
 }
 
 html body .cw-widget[class] .cw-opt__tag {
   color: var(--cw-green-soft) !important;
-  background: rgba(22, 196, 127, 0.14) !important;
+  background: rgba(255, 199, 157, 0.14) !important;
 }
 
 /* Full-green CTAs carry dark ink for the same reason. */
@@ -401,7 +401,7 @@ html body .cw-widget[class] :is(.cw-contact-method, .cw-chip)[class]:hover:not(
       .cw-contact-method,
       .cw-chip
     )[class]:hover:not([data-selected="true"]):not(:disabled) {
-    background: #1c2924 !important;
+    background: #1c2129 !important;
   }
 }
 
@@ -724,8 +724,8 @@ html body .cw-widget[class] :is(.cw-summary__row b, .cw-thanks__grid > div) {
    9. Last word on ink over green
 
    Several earlier layers paint white or pale grey onto the green fill. On
-   #16c47f white measures 2.6:1 and pale grey 2.5:1 — both below the 4.5:1
-   floor. Everything that sits on green resolves to #04140d here, at a
+   #ffc79d white measures 2.6:1 and pale grey 2.5:1 — both below the 4.5:1
+   floor. Everything that sits on green resolves to #080b10 here, at a
    specificity no earlier layer reaches.
    --------------------------------------------------------------- */
 
@@ -966,7 +966,7 @@ html body .cw-widget[class] .cw-summary__row[class] > b {
     html[data-cw-premium-tilt="true"] body .cw-widget[class][class] :is(
         .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt
       )[class][class][data-tilting="true"]:not(:disabled) {
-      box-shadow: 0 18px 34px -26px rgba(22, 196, 127, 0.85) !important;
+      box-shadow: 0 18px 34px -26px rgba(255, 199, 157, 0.85) !important;
     }
   }
 
@@ -1028,4 +1028,86 @@ html body .cw-widget[class] .cw-quick-replies[class] .cw-chip[class] .cw-chip__l
 html body .cw-widget[class] .cw-quick-replies[class] .cw-chip[class] .cw-chip__label::after {
   content: none !important;
   display: none !important;
+}
+
+/* =============================================================
+   Brand system — peach / slate / teal, matching the website.
+   #FFC79D is a light colour: white on it measures 1.51:1 and is
+   unreadable, so anything sitting ON a filled primary takes the dark
+   base at 12.89:1. Same for the teal accent — 2.44:1 vs 7.97:1.
+   ============================================================= */
+html body .cw-widget[class] {
+  --cw-brand: #ffc79d;
+  --cw-brand-accent: #4db6ac;
+  --cw-brand-secondary: #7b8fa6;
+  --cw-on-fill: #0a0d12;
+}
+
+html body .cw-widget[class] :is(.cw-submit, .cw-next, .cw-chat-builder)[class] {
+  background: var(--cw-brand) !important;
+  color: var(--cw-on-fill) !important;
+}
+html body .cw-widget[class] :is(.cw-submit, .cw-next, .cw-chat-builder)[class]:is(:hover, :focus-visible):not(:disabled) {
+  background: var(--cw-brand-accent) !important;
+  color: var(--cw-on-fill) !important;
+}
+html body .cw-widget[class] :is(.cw-submit, .cw-next, .cw-chat-builder)[class] :is(svg, span, b) {
+  color: inherit !important;
+}
+
+/* selected chips and cards are filled, so they take the same treatment */
+html body .cw-widget[class] :is(
+    .cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method
+  )[class]:is([data-selected="true"], [aria-pressed="true"], [data-sending="true"]) {
+  background: var(--cw-brand) !important;
+  border-color: var(--cw-brand) !important;
+  color: var(--cw-on-fill) !important;
+}
+html body .cw-widget[class] :is(
+    .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method
+  )[class][data-selected="true"] :is(svg, b, small, span) {
+  color: var(--cw-on-fill) !important;
+}
+
+html body .cw-widget[class] .cw-tabs[class] > button[data-active="true"],
+html body .cw-widget[class] .cw-tabs[class] > button[data-active="true"] svg {
+  color: var(--cw-on-fill) !important;
+}
+
+html body .cw-widget[class] .cw-message-row--me[class] .cw-message-wrap p {
+  background: var(--cw-brand) !important;
+  color: var(--cw-on-fill) !important;
+}
+
+/* the mark itself: primary, never a plate behind it */
+html body .cw-widget[class] .bl {
+  color: var(--cw-brand) !important;
+  background: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+html body .cw-widget[class] .cw-launcher[class] {
+  background: var(--cw-brand) !important;
+}
+html body .cw-widget[class] .cw-launcher[class] .bl {
+  color: var(--cw-on-fill) !important;
+}
+
+html body .cw-widget[class] .cw-typing[class] i {
+  background: var(--cw-brand-secondary) !important;
+}
+
+html body .cw-widget[class] :is(button, a, input, textarea, summary):focus-visible {
+  outline: 3px solid rgba(77, 182, 172, 0.86) !important;
+}
+
+/* The brief is explicit: no background, circle, bubble, gradient, shadow or
+   glow behind the mark. The avatar carried a drop-shadow; it goes. */
+html body .cw-widget[class] :is(.cw-avatar, .cw-panel-head__mascot, .bl)[class],
+html body .cw-widget[class] :is(.cw-avatar, .cw-panel-head__mascot, .bl)[class] svg {
+  filter: none !important;
+  box-shadow: none !important;
+  background: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
 }

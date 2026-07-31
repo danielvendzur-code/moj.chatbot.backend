@@ -72,20 +72,20 @@ test("mode switch is one rounded segmented control without pill geometry", async
   assert.match(css, /Visible widget rebuild/);
   assert.match(css, /grid-template-columns:\s*1fr 1fr !important/);
   assert.match(css, /\.cw-tabs > button\[data-active="true"\]/);
-  assert.match(css, /background:\s*#0fa568 !important/);
+  assert.match(css, /background:\s*#4db6ac !important/);
 });
 
-test("the redesign uses only the website black and green palette", async () => {
+test("the redesign uses only the website black and brand palette", async () => {
   const css = await read("src/assistant-redesign.css");
 
   // dark base stays dark; the accents are the website's three greens
-  for (const token of ["#0b110f", "#131c18", "#16c47f", "#0fa568", "#7fe0b4", "#f4f8f6", "#a8bab1"]) {
+  for (const token of ["#0b0d11", "#13161c", "#ffc79d", "#4db6ac", "#7b8fa6", "#f5f7fa", "#a8bab1"]) {
     assert.ok(css.toLowerCase().includes(token), `Missing palette token ${token}`);
   }
 
   // the blues the website moved away from must not come back
-  for (const gone of ["#3478f6", "#1f55c9", "#8ab4ff", "#78a9ff", "#4e8cff", "#2868c8", "#245fae"]) {
-    assert.ok(!css.toLowerCase().includes(gone), `Blue ${gone} is back in the palette`);
+  for (const gone of ["#3478f6", "#1f55c9", "#8ab4ff", "#16c47f", "#0fa568", "#7fe0b4"]) {
+    assert.ok(!css.toLowerCase().includes(gone), `Retired accent ${gone} is back in the palette`);
   }
 
   assert.doesNotMatch(css, /teal|turquoise|bronze|gold/i);
@@ -113,7 +113,7 @@ test("chat chips and composer use a crisp non-liquid system", async () => {
   assert.match(css, /\.cw-quick-replies \.cw-chip::before/);
   assert.match(css, /content:\s*none !important/);
   assert.match(css, /\.cw-inputbar/);
-  assert.match(css, /background:\s*#0b1310 !important/);
+  assert.match(css, /background:\s*#0b0e13 !important/);
 });
 
 test("calculator choices keep geometry and use one static selected system", async () => {
@@ -124,7 +124,7 @@ test("calculator choices keep geometry and use one static selected system", asyn
 
   assert.match(baseCss.match(/\.cw-choice-grid--interest,[\s\S]*?\}/)?.[0] ?? "", twoColumns);
   assert.match(rule(baseCss, ".cw-rowcard"), /border-radius:\s*18px/);
-  assert.match(finalCss, /background:\s*#223b2f !important/);
+  assert.match(finalCss, /background:\s*#222c3b !important/);
   assert.match(finalCss, /\.cw-rowcard__icon/);
   assert.match(finalCss, /content:\s*none !important/);
   assert.match(calculator, /function SelectionIndicator/);
@@ -137,7 +137,7 @@ test("selection indicator is one real aligned circular check", async () => {
 
   assert.match(css, /\.cw-selection-indicator/);
   assert.match(css, /width:\s*21px !important/);
-  assert.match(css, /background:\s*#16c47f !important/);
+  assert.match(css, /background:\s*#ffc79d !important/);
   assert.match(css, /data-visible="true"/);
   assert.doesNotMatch(css, /\.cw-selection-indicator::(?:before|after)/);
 });
@@ -330,11 +330,11 @@ test("final configurator correction removes clipping, icon tiles and selected st
   assert.match(css, /overflow:\s*visible !important/);
   assert.match(css, /\.cw-rowcard__icon[\s\S]*background:\s*transparent !important/);
   assert.match(css, /\.cw-selection-indicator svg[\s\S]*transform:\s*none !important/);
-  assert.match(css, /\.cw-next,[\s\S]*background:\s*#16c47f !important/);
+  assert.match(css, /\.cw-next,[\s\S]*background:\s*#ffc79d !important/);
   assert.doesNotMatch(css, /inset 3px 0 0|#5ee7c4|#82f4d8/);
 });
 
-test("green palette replaces every blue accent across the shipped layers", async () => {
+test("the brand palette replaces every retired accent across the shipped layers", async () => {
   const layers = await Promise.all(
     [
       "src/widget.css",
@@ -343,24 +343,25 @@ test("green palette replaces every blue accent across the shipped layers", async
       "src/final-user-correction.css",
       "src/mobile-configurator-polish.css",
       "src/configurator-runtime-final.css",
+      "src/green-motion-final.css",
     ].map(read),
   );
   const css = layers.join("\n");
 
   for (const gone of [
     "#3478f6", "#1f55c9", "#8ab4ff", "#78a9ff",
-    "#75b8ff", "#4e8cff", "#2868c8", "#245fae",
+    "#16c47f", "#0fa568", "#7fe0b4", "#22cf8c",
   ]) {
-    assert.ok(!css.toLowerCase().includes(gone), `Blue ${gone} is back`);
+    assert.ok(!css.toLowerCase().includes(gone), `Retired accent ${gone} is back`);
   }
   assert.doesNotMatch(css, /rgba\(\s*52,\s*120,\s*246/);
-  assert.doesNotMatch(css, /rgba\(\s*31,\s*85,\s*201/);
-  assert.doesNotMatch(css, /rgba\(\s*122,\s*162,\s*220/);
+  assert.doesNotMatch(css, /rgba\(\s*22,\s*196,\s*127/);
 
-  for (const token of ["#16c47f", "#0fa568", "#7fe0b4"]) {
-    assert.ok(css.toLowerCase().includes(token), `Missing green ${token}`);
+  for (const token of ["#ffc79d", "#4db6ac", "#7b8fa6"]) {
+    assert.ok(css.toLowerCase().includes(token), `Missing brand colour ${token}`);
   }
-  assert.match(css, /rgba\(122,\s*210,\s*180/);
+  // white on the light primary is 1.51:1; filled controls must use dark ink
+  assert.match(css, /--cw-on-fill:\s*#0a0d12/);
 });
 
 test("the six reported interaction defects stay fixed", async () => {
@@ -384,7 +385,9 @@ test("the six reported interaction defects stay fixed", async () => {
   // one curve for the whole product, the website's
   assert.doesNotMatch(css, /cubic-bezier\((?!0\.16, 1, 0\.3, 1\))/);
   assert.match(css, /--w-ease:\s*cubic-bezier\(0\.16,\s*1,\s*0\.3,\s*1\)/);
-  assert.match(css, /outline:\s*3px solid rgba\(22,\s*196,\s*127,\s*0\.86\) !important/);
+  // the focus ring moved to the brand layer and is now the teal accent
+  const brandLayer = await read("src/green-motion-final.css");
+  assert.match(brandLayer, /outline:\s*3px solid rgba\(77,\s*182,\s*172,\s*0\.86\) !important/);
   assert.match(css, /animation-delay:\s*0\.15s !important/);
   assert.match(css, /prefers-reduced-motion/);
 });

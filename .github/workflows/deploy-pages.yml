@@ -87,7 +87,7 @@ jobs:
           must(css.includes('cw-choice-grid--interest'), 'interest grid missing');
           must(css.includes('cw-selection-indicator'), 'selection indicator missing');
           must(/border-radius:\s*999px/.test(css), 'oval geometry missing');
-          must(/--mc-green:\s*#16c47f/i.test(css), 'website green missing');
+          must(/--mc-brand:\s*#ffc79d/i.test(css), 'brand primary missing');
           must(main.includes('assistant-redesign') && embed.includes('assistant-redesign'), 'redesign import missing');
           must(!main.includes('installWidgetSpotlight') && !embed.includes('installWidgetSpotlight'), 'legacy builder spotlight still mounted');
           must(finalCss.includes('Visible widget rebuild'), 'visible widget rebuild layer missing');

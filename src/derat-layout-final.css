@@ -45,10 +45,10 @@
   padding: 11px 12px !important;
   border: 1px solid #2c405b !important;
   border-radius: 15px !important;
-  color: #7fe0b4 !important;
+  color: #7b8fa6 !important;
   background: #0e1723 !important;
   background-image: none !important;
-  box-shadow: 0 12px 28px -24px rgba(22, 196, 127, 0.74) !important;
+  box-shadow: 0 12px 28px -24px rgba(255, 199, 157, 0.74) !important;
   text-align: left !important;
   cursor: pointer !important;
   transform: none !important;
@@ -63,9 +63,9 @@
 
 .cw-widget .cw-chat-builder:hover,
 .cw-widget .cw-chat-builder:focus-visible {
-  border-color: #16c47f !important;
+  border-color: #ffc79d !important;
   background: #111d2d !important;
-  box-shadow: 0 16px 34px -24px rgba(22, 196, 127, 0.94) !important;
+  box-shadow: 0 16px 34px -24px rgba(255, 199, 157, 0.94) !important;
   transform: none !important;
 }
 
@@ -74,10 +74,10 @@
   height: 46px !important;
   display: grid !important;
   place-items: center !important;
-  border: 1px solid #16c47f !important;
+  border: 1px solid #ffc79d !important;
   border-radius: 13px !important;
   color: #ffffff !important;
-  background: #0fa568 !important;
+  background: #4db6ac !important;
   box-shadow: none !important;
 }
 
@@ -107,7 +107,7 @@
 }
 
 .cw-widget .cw-chat-builder__arrow {
-  color: #7fe0b4 !important;
+  color: #7b8fa6 !important;
   font-size: 24px !important;
   font-weight: 800 !important;
   line-height: 1 !important;
@@ -258,7 +258,7 @@
   display: grid !important;
   place-items: center !important;
   border-radius: 9px !important;
-  color: #7fe0b4 !important;
+  color: #7b8fa6 !important;
   background: #13223a !important;
 }
 
@@ -392,11 +392,11 @@
 .cw-widget .cw-vcard[data-selected="true"],
 .cw-widget .cw-feature[data-selected="true"],
 .cw-widget .cw-feature[aria-pressed="true"] {
-  border-color: rgba(127, 224, 180, 0.78) !important;
+  border-color: rgba(123, 143, 166, 0.78) !important;
   color: #ffffff !important;
   background: #132039 !important;
   background-image: none !important;
-  box-shadow: 0 0 0 1px rgba(22, 196, 127, 0.08) !important;
+  box-shadow: 0 0 0 1px rgba(255, 199, 157, 0.08) !important;
   transform: none !important;
   animation: none !important;
 }
@@ -411,9 +411,9 @@
   right: 8px !important;
   width: 18px !important;
   height: 18px !important;
-  border: 1px solid #7fe0b4 !important;
+  border: 1px solid #7b8fa6 !important;
   background:
-    #16c47f
+    #ffc79d
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' d='M6 12.5l3.7 3.7L18.5 7.7'/%3E%3C/svg%3E")
     center / 12px 12px no-repeat !important;
   box-shadow: none !important;

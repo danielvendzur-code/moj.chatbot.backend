@@ -5,7 +5,7 @@
   padding: 0 !important;
   border: 0 !important;
   border-radius: 0 !important;
-  color: rgba(151, 226, 215, 0.82) !important;
+  color: rgba(123, 143, 166, 0.82) !important;
   background: transparent !important;
   box-shadow: none !important;
   font-size: 0.66rem !important;
@@ -14,7 +14,7 @@
 }
 
 .cw-widget .cw-opt[data-selected="true"] .cw-opt__tag {
-  color: #dffff9 !important;
+  color: #f5f7fa !important;
 }
 
 .cw-widget .cw-calc-actions {
