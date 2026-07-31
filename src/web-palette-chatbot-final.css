@@ -8,9 +8,9 @@
   --cw-site-surface: #0d141e;
   --cw-site-surface-hover: #121c29;
   --cw-site-surface-selected: #17325d;
-  --cw-site-primary: #16c47f;
-  --cw-site-primary-hover: #16c47f;
-  --cw-site-icon: #7fe0b4;
+  --cw-site-primary: #ffc79d;
+  --cw-site-primary-hover: #ffc79d;
+  --cw-site-icon: #7b8fa6;
   --cw-site-text: #f6f8fb;
   --cw-site-muted: #9eabbc;
   --cw-site-muted-2: #748196;
@@ -306,7 +306,7 @@ html body .cw-widget .cw-opt__tag {
   border: 0 !important;
   border-radius: 999px !important;
   color: var(--cw-site-icon) !important;
-  background: rgba(22, 196, 127, 0.16) !important;
+  background: rgba(255, 199, 157, 0.16) !important;
   box-shadow: none !important;
 }
 
@@ -336,7 +336,7 @@ html body .cw-widget .cw-next {
   color: #ffffff !important;
   background: var(--cw-site-primary) !important;
   background-image: none !important;
-  box-shadow: 0 18px 38px -28px rgba(22, 196, 127, 0.95) !important;
+  box-shadow: 0 18px 38px -28px rgba(255, 199, 157, 0.95) !important;
   font-size: 14px !important;
   font-weight: 720 !important;
   letter-spacing: -0.018em !important;
@@ -352,7 +352,7 @@ html body .cw-widget .cw-next:focus-visible {
   border: 0 !important;
   color: #ffffff !important;
   background: var(--cw-site-primary-hover) !important;
-  box-shadow: 0 18px 38px -26px rgba(22, 196, 127, 0.88) !important;
+  box-shadow: 0 18px 38px -26px rgba(255, 199, 157, 0.88) !important;
   transform: none !important;
 }
 

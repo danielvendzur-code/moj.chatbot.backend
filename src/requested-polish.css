@@ -1,13 +1,13 @@
 /* Final UI refinement requested for the embedded assistant. */
 :root {
-  --cw-action: #64e3b3;
-  --cw-action-hover: #7af0c5;
-  --cw-action-ink: #052018;
-  --cw-action-soft: rgba(100, 227, 179, 0.13);
-  --cw-action-line: rgba(100, 227, 179, 0.42);
-  --cw-cyan: #16c47f;
-  --cw-cyan-soft: rgba(22, 196, 127, 0.12);
-  --cw-cyan-line: rgba(22, 196, 127, 0.28);
+  --cw-action: #ffc79d;
+  --cw-action-hover: #ffc79d;
+  --cw-action-ink: #0d1118;
+  --cw-action-soft: rgba(255, 199, 157, 0.13);
+  --cw-action-line: rgba(255, 199, 157, 0.42);
+  --cw-cyan: #ffc79d;
+  --cw-cyan-soft: rgba(255, 199, 157, 0.12);
+  --cw-cyan-line: rgba(255, 199, 157, 0.28);
 }
 
 /* Cleaner, more professional panel proportions. */
@@ -15,9 +15,9 @@
   width: min(446px, calc(100vw - 24px)) !important;
   max-height: min(770px, calc(100dvh - 28px)) !important;
   border-radius: 22px !important;
-  border-color: rgba(22, 196, 127,.2) !important;
+  border-color: rgba(255, 199, 157,.2) !important;
   background:
-    radial-gradient(80% 50% at 50% -10%, rgba(22, 196, 127,.075), transparent 66%),
+    radial-gradient(80% 50% at 50% -10%, rgba(255, 199, 157,.075), transparent 66%),
     var(--cw-bg-soft) !important;
   box-shadow: 0 32px 78px -28px rgba(0,0,0,.78), inset 0 1px 0 rgba(255,255,255,.045) !important;
 }
@@ -31,7 +31,7 @@
 .cw-panel-head {
   min-height: 68px !important;
   padding: 12px 14px !important;
-  border-bottom-color: rgba(22, 196, 127,.12) !important;
+  border-bottom-color: rgba(255, 199, 157,.12) !important;
 }
 
 .cw-panel-head__title b {
@@ -43,7 +43,7 @@
   display: inline-flex !important;
   align-items: center;
   gap: 6px;
-  color: #a8d9bd !important;
+  color: #7b8fa6 !important;
   font-size: 0.72rem !important;
   font-weight: 680;
 }
@@ -52,8 +52,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #58d48a;
-  box-shadow: 0 0 0 4px rgba(88,212,138,.1), 0 0 14px rgba(88,212,138,.45);
+  background: #ffc79d;
+  box-shadow: 0 0 0 4px rgba(255, 199, 157,.1), 0 0 14px rgba(255, 199, 157,.45);
   animation: cw-online-pulse 2.4s ease-in-out infinite;
 }
 
@@ -105,7 +105,7 @@
   padding: 5px !important;
   border-radius: 16px !important;
   border: 1px solid var(--cw-cyan-line) !important;
-  background: rgba(6,18,14,.76) !important;
+  background: rgba(8, 11, 16,.76) !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 12px 30px rgba(0,0,0,.18) !important;
   backdrop-filter: blur(18px) saturate(118%);
   touch-action: manipulation !important;
@@ -129,7 +129,7 @@
 .cw-tabs button[data-active="true"] {
   color: #06171c !important;
   background: var(--cw-cyan) !important;
-  box-shadow: 0 9px 24px rgba(22, 196, 127,.23), inset 0 1px 0 rgba(255,255,255,.4) !important;
+  box-shadow: 0 9px 24px rgba(255, 199, 157,.23), inset 0 1px 0 rgba(255,255,255,.4) !important;
 }
 
 /* Restore clean rounded chat chips without moving light overlays. */
@@ -157,12 +157,12 @@
 .cw-chip--primary {
   border-color: var(--cw-action-line) !important;
   background: var(--cw-action-soft) !important;
-  color: #bff8df !important;
+  color: #f5f7fa !important;
 }
 
 .cw-chip--primary:hover {
-  border-color: rgba(100,227,179,.7) !important;
-  background: rgba(100,227,179,.2) !important;
+  border-color: rgba(255, 199, 157,.7) !important;
+  background: rgba(255, 199, 157,.2) !important;
 }
 
 /* First step: five choices fit without an internal scrollbar. */
@@ -241,9 +241,9 @@
 .cw-scard[data-selected="true"],
 .cw-opt[data-selected="true"],
 .cw-vcard[data-selected="true"] {
-  border-color: rgba(22, 196, 127,.55) !important;
-  background: rgba(22, 196, 127,.105) !important;
-  box-shadow: 0 0 0 1px rgba(22, 196, 127,.08) inset, 0 12px 28px rgba(0,0,0,.13) !important;
+  border-color: rgba(255, 199, 157,.55) !important;
+  background: rgba(255, 199, 157,.105) !important;
+  box-shadow: 0 0 0 1px rgba(255, 199, 157,.08) inset, 0 12px 28px rgba(0,0,0,.13) !important;
   animation: cw-clean-select 280ms cubic-bezier(.16,1,.3,1) both !important;
 }
 
@@ -264,7 +264,7 @@
   color: var(--cw-action-ink) !important;
   font-weight: 810 !important;
   letter-spacing: -.016em;
-  box-shadow: 0 14px 30px rgba(100,227,179,.24), inset 0 1px 0 rgba(255,255,255,.36) !important;
+  box-shadow: 0 14px 30px rgba(255, 199, 157,.24), inset 0 1px 0 rgba(255,255,255,.36) !important;
   transition: transform 250ms cubic-bezier(.16,1,.3,1), background-color 180ms ease, box-shadow 230ms ease, opacity 180ms ease !important;
 }
 
@@ -284,7 +284,7 @@
 .cw-submit:hover:not(:disabled) {
   transform: translateY(-2px) scale(1.008) !important;
   background: var(--cw-action-hover) !important;
-  box-shadow: 0 19px 38px rgba(100,227,179,.32), inset 0 1px 0 rgba(255,255,255,.42) !important;
+  box-shadow: 0 19px 38px rgba(255, 199, 157,.32), inset 0 1px 0 rgba(255,255,255,.42) !important;
 }
 
 .cw-next:hover:not(:disabled)::after,
@@ -313,7 +313,7 @@
 
 .cw-lead {
   border-color: var(--cw-cyan-line) !important;
-  background: rgba(22, 196, 127,.055) !important;
+  background: rgba(255, 199, 157,.055) !important;
 }
 
 .cw-lead__head > span:first-child { color: var(--cw-cyan) !important; }

@@ -11,8 +11,8 @@
   --taste-surface-selected: #18345d;
   --taste-text: #f5f7fb;
   --taste-muted: #94a2b5;
-  --taste-blue: #16c47f;
-  --taste-blue-soft: #7fe0b4;
+  --taste-blue: #ffc79d;
+  --taste-blue-soft: #7b8fa6;
 }
 
 html body .cw-widget,
@@ -185,7 +185,7 @@ html body .cw-widget .cw-chat-builder.cw-spotlight::after {
   background: radial-gradient(
     circle 88px at var(--cw-spot-x) var(--cw-spot-y),
     rgba(255, 255, 255, 0.16),
-    rgba(22, 196, 127, 0.1) 38%,
+    rgba(255, 199, 157, 0.1) 38%,
     transparent 72%
   ) !important;
   transition: opacity 150ms ease !important;
@@ -207,7 +207,7 @@ html body .cw-widget .cw-chat-builder {
   padding: 14px 16px !important;
   border: 0 !important;
   border-radius: 18px !important;
-  color: #7fe0b4 !important;
+  color: #7b8fa6 !important;
   background: #12213a !important;
   box-shadow: none !important;
   transform: none !important;
@@ -231,7 +231,7 @@ html body .cw-widget .cw-chat-builder__icon {
   height: 24px !important;
   border: 0 !important;
   border-radius: 0 !important;
-  color: #7fe0b4 !important;
+  color: #7b8fa6 !important;
   background: transparent !important;
   box-shadow: none !important;
 }
@@ -279,7 +279,7 @@ html body .cw-widget .cw-message-wrap p {
 
 html body .cw-widget .cw-message-row--me .cw-message-wrap p {
   color: #ffffff !important;
-  background: #16c47f !important;
+  background: #ffc79d !important;
 }
 
 html body .cw-widget .cw-avatar {
@@ -345,7 +345,7 @@ html body .cw-widget .cw-inputbar input {
   padding: 0 !important;
   border: 0 !important;
   border-radius: 0 !important;
-  color: #7fe0b4 !important;
+  color: #7b8fa6 !important;
   background: transparent !important;
   box-shadow: none !important;
   font-size: 16px !important;
@@ -371,7 +371,7 @@ html body .cw-widget .cw-inputbar > button {
   border: 0 !important;
   border-radius: 14px !important;
   color: #ffffff !important;
-  background: #16c47f !important;
+  background: #ffc79d !important;
   box-shadow: none !important;
   transform: none !important;
 }
@@ -379,7 +379,7 @@ html body .cw-widget .cw-inputbar > button {
 html body .cw-widget .cw-inputbar > button:hover:not(:disabled),
 html body .cw-widget .cw-inputbar > button:focus-visible:not(:disabled) {
   border: 0 !important;
-  background: #16c47f !important;
+  background: #ffc79d !important;
   box-shadow: none !important;
   transform: none !important;
 }
@@ -423,7 +423,7 @@ html body .cw-widget .cw-direct-actions__grid a:focus-visible {
 html body .cw-widget .cw-direct-actions__icon {
   border: 0 !important;
   border-radius: 0 !important;
-  color: #7fe0b4 !important;
+  color: #7b8fa6 !important;
   background: transparent !important;
   box-shadow: none !important;
 }
@@ -452,7 +452,7 @@ html body .cw-widget .cw-progress__track {
 }
 
 html body .cw-widget .cw-progress__fill {
-  background: #16c47f !important;
+  background: #ffc79d !important;
   box-shadow: none !important;
 }
 
@@ -576,7 +576,7 @@ html body .cw-widget .cw-vcard[data-selected="true"]::before {
   border: 0 !important;
   border-radius: 999px !important;
   background:
-    #16c47f
+    #ffc79d
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='m5.2 10.2 3 3.1 6.7-7'/%3E%3C/svg%3E")
     center / 14px 14px no-repeat !important;
   box-shadow: none !important;
@@ -603,7 +603,7 @@ html body .cw-widget .cw-scard__icon {
   height: 24px !important;
   border: 0 !important;
   border-radius: 0 !important;
-  color: #7fe0b4 !important;
+  color: #7b8fa6 !important;
   background: transparent !important;
   box-shadow: none !important;
 }
@@ -643,8 +643,8 @@ html body .cw-widget .cw-vcard[data-selected="true"] > span {
 html body .cw-widget .cw-opt__tag {
   border: 0 !important;
   border-radius: 999px !important;
-  color: #7fe0b4 !important;
-  background: rgba(127, 224, 180, 0.12) !important;
+  color: #7b8fa6 !important;
+  background: rgba(123, 143, 166, 0.12) !important;
   box-shadow: none !important;
 }
 
@@ -663,7 +663,7 @@ html body .cw-widget .cw-lead__icon,
 html body .cw-widget .cw-thanks__icon {
   border: 0 !important;
   border-radius: 0 !important;
-  color: #7fe0b4 !important;
+  color: #7b8fa6 !important;
   background: transparent !important;
   box-shadow: none !important;
 }
@@ -683,7 +683,7 @@ html body .cw-widget .cw-lead__form input:focus,
 html body .cw-widget .cw-lead__form textarea:focus,
 html body .cw-widget .cw-custom textarea:focus {
   border: 0 !important;
-  outline: 2px solid rgba(127, 224, 180, 0.72) !important;
+  outline: 2px solid rgba(123, 143, 166, 0.72) !important;
   outline-offset: 1px !important;
   box-shadow: none !important;
 }
@@ -693,7 +693,7 @@ html body .cw-widget .cw-next {
   border: 0 !important;
   border-radius: 15px !important;
   color: #ffffff !important;
-  background: #16c47f !important;
+  background: #ffc79d !important;
   box-shadow: none !important;
   font-size: 13.5px !important;
   font-weight: 660 !important;
@@ -706,7 +706,7 @@ html body .cw-widget .cw-next:hover:not(:disabled),
 html body .cw-widget .cw-submit:focus-visible,
 html body .cw-widget .cw-next:focus-visible:not(:disabled) {
   border: 0 !important;
-  background: #16c47f !important;
+  background: #ffc79d !important;
   box-shadow: none !important;
   transform: none !important;
 }
@@ -734,7 +734,7 @@ html body .cw-widget .cw-restart {
 /* Accessible focus is temporary and never reads as a permanent chip border. */
 html body .cw-widget button:focus-visible,
 html body .cw-widget a:focus-visible {
-  outline: 2px solid rgba(127, 224, 180, 0.86) !important;
+  outline: 2px solid rgba(123, 143, 166, 0.86) !important;
   outline-offset: 3px !important;
 }
 

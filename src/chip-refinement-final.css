@@ -27,7 +27,7 @@
 .cw-widget {
   --cw-chip-rgb: 52, 120, 246;
   --cw-chip-light-rgb: 137, 198, 255;
-  --cw-chip-line: rgba(127, 224, 180, 0.27);
+  --cw-chip-line: rgba(123, 143, 166, 0.27);
   --cw-chip-surface: rgba(9, 14, 23, 0.76);
   --cw-chip-surface-strong: rgba(8, 15, 27, 0.91);
 }
@@ -44,14 +44,14 @@
   overflow: hidden !important;
   gap: 6px !important;
   padding: 6px !important;
-  border: 1px solid rgba(127, 224, 180, 0.28) !important;
+  border: 1px solid rgba(123, 143, 166, 0.28) !important;
   border-radius: 999px !important;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.012)),
     rgba(6, 10, 17, 0.8) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.11),
-    0 18px 42px -34px rgba(22, 196, 127, 0.78) !important;
+    0 18px 42px -34px rgba(255, 199, 157, 0.78) !important;
   -webkit-backdrop-filter: blur(24px) saturate(150%) !important;
   backdrop-filter: blur(24px) saturate(150%) !important;
   touch-action: pan-y;
@@ -71,15 +71,15 @@
   left: 6px !important;
   width: calc((100% - 18px) / 2) !important;
   height: calc(100% - 12px) !important;
-  border: 1px solid rgba(127, 224, 180, 0.72) !important;
+  border: 1px solid rgba(123, 143, 166, 0.72) !important;
   border-radius: 999px !important;
   background:
     radial-gradient(circle at 48% -35%, rgba(255, 255, 255, 0.42), transparent 48%),
-    linear-gradient(145deg, rgba(35, 196, 181, 0.58), rgba(12, 92, 101, 0.52)) !important;
+    linear-gradient(145deg, rgba(77, 182, 172, 0.58), rgba(40, 53, 73, 0.52)) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.32),
-    inset 0 -10px 24px rgba(3, 39, 45, 0.25),
-    0 14px 34px -20px rgba(35, 196, 181, 0.86) !important;
+    inset 0 -10px 24px rgba(17, 22, 31, 0.25),
+    0 14px 34px -20px rgba(77, 182, 172, 0.86) !important;
   transform: translate3d(var(--cw-segment-x), 0, 0) scaleX(var(--cw-segment-stretch)) !important;
   transform-origin: center;
   transition:
@@ -91,14 +91,14 @@
 }
 
 .cw-widget .cw-tabs[data-mode="assistant"] .cw-tabs__glass {
-  border-color: rgba(127, 224, 180, 0.7) !important;
+  border-color: rgba(123, 143, 166, 0.7) !important;
   background:
     radial-gradient(circle at 48% -35%, rgba(255, 255, 255, 0.4), transparent 48%),
-    linear-gradient(145deg, rgba(22, 196, 127, 0.62), rgba(15, 165, 104, 0.58)) !important;
+    linear-gradient(145deg, rgba(255, 199, 157, 0.62), rgba(77, 182, 172, 0.58)) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
     inset 0 -10px 24px rgba(5, 22, 58, 0.24),
-    0 14px 34px -20px rgba(22, 196, 127, 0.88) !important;
+    0 14px 34px -20px rgba(255, 199, 157, 0.88) !important;
 }
 
 .cw-widget .cw-tabs[data-liquid-dragging="true"] .cw-tabs__glass {
@@ -182,7 +182,7 @@
   isolation: isolate !important;
   overflow: hidden !important;
   border: 1px solid var(--cw-chip-line) !important;
-  color: #7fe0b4 !important;
+  color: #7b8fa6 !important;
   background-color: var(--cw-chip-surface) !important;
   background-image:
     radial-gradient(
@@ -228,8 +228,8 @@
 }
 
 .cw-widget .cw-quick-replies .cw-chip--primary {
-  border-color: rgba(127, 224, 180, 0.48) !important;
-  color: #7fe0b4 !important;
+  border-color: rgba(123, 143, 166, 0.48) !important;
+  color: #7b8fa6 !important;
 }
 
 .cw-widget .cw-rowcard {
@@ -416,16 +416,16 @@
   position: relative !important;
   isolation: isolate !important;
   overflow: hidden !important;
-  border: 1px solid rgba(127, 224, 180, 0.58) !important;
+  border: 1px solid rgba(123, 143, 166, 0.58) !important;
   border-radius: 999px !important;
   color: #ffffff !important;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.025)),
-    linear-gradient(145deg, rgba(22, 196, 127, 0.76), rgba(15, 165, 104, 0.78)) !important;
+    linear-gradient(145deg, rgba(255, 199, 157, 0.76), rgba(77, 182, 172, 0.78)) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.24),
     inset 0 -12px 26px rgba(5, 22, 58, 0.24),
-    0 20px 46px -27px rgba(22, 196, 127, 0.94) !important;
+    0 20px 46px -27px rgba(255, 199, 157, 0.94) !important;
   -webkit-backdrop-filter: blur(18px) saturate(155%) !important;
   backdrop-filter: blur(18px) saturate(155%) !important;
   transition:
@@ -437,14 +437,14 @@
 
 .cw-widget .cw-calculator .cw-next,
 .cw-widget .cw-calculator .cw-submit {
-  border-color: rgba(137, 255, 235, 0.62) !important;
+  border-color: rgba(123, 143, 166, 0.62) !important;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.025)),
-    linear-gradient(145deg, rgba(35, 196, 181, 0.78), rgba(11, 112, 108, 0.82)) !important;
+    linear-gradient(145deg, rgba(77, 182, 172, 0.78), rgba(43, 57, 80, 0.82)) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.25),
-    inset 0 -12px 26px rgba(3, 43, 45, 0.24),
-    0 20px 46px -27px rgba(35, 196, 181, 0.94) !important;
+    inset 0 -12px 26px rgba(17, 22, 31, 0.24),
+    0 20px 46px -27px rgba(77, 182, 172, 0.94) !important;
 }
 
 .cw-widget .cw-next:hover:not(:disabled),
@@ -455,7 +455,7 @@
 .cw-widget .cw-thanks__actions button:focus-visible,
 .cw-widget .cw-inputbar button:hover:not(:disabled),
 .cw-widget .cw-inputbar button:focus-visible:not(:disabled) {
-  border-color: rgba(127, 224, 180, 0.86) !important;
+  border-color: rgba(123, 143, 166, 0.86) !important;
   filter: brightness(1.08) saturate(1.08);
   transform: translateY(-2px) scale(1.01) !important;
   box-shadow:
