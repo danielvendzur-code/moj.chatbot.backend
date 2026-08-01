@@ -778,6 +778,27 @@ test("the composer keeps its size at every panel height", async () => {
   assert.match(mobile, /\.cw-send\[class\] \{[\s\S]*?min-height: 44px !important/);
 });
 
+test("an accepted lead is traceable and one bad mailbox cannot sink the other", async () => {
+  const api = await read("api/lead.ts");
+
+  // Resend answering 200 means accepted, not delivered. The message id is the
+  // only handle on what happened next, and it was being discarded.
+  assert.match(api, /async function resendMessageId/);
+  assert.match(api, /typeof body\.id === "string" \? body\.id : ""/);
+  assert.match(api, /return \{ ok: true, ids: \[`\$\{recipient\}=\$\{id \|\| "accepted"\}`\] \}/);
+  assert.match(api, /console\.log\(\s*\n\s*"lead-accepted"/);
+  assert.match(api, /res\.status\(200\)\.json\(\{ ok: true, autoReplySent, ids \}\)/);
+
+  // One message per recipient. On a shared envelope a single refusing mailbox
+  // takes the whole message down, losing the lead from every inbox at once.
+  assert.match(api, /LEAD_RECIPIENTS\.map\(async \(recipient\): Promise<Delivery>/);
+  assert.match(api, /to: \[recipient\]/);
+  assert.doesNotMatch(api, /to: LEAD_RECIPIENTS/);
+  // Accepted anywhere is still a delivered lead; the refusal is logged beside it.
+  assert.match(api, /console\.error\("lead-recipient-refused", refusals\.join\(" \| "\)\)/);
+  assert.match(api, /if \(results\.some\(\(result\) => result\.ok\)\) return \{ ok: true, ids \}/);
+});
+
 test("a refused delivery channel no longer hides the reason or skips the next one", async () => {
   const api = await read("api/lead.ts");
   const client = await read("src/lib/leadApi.ts");
@@ -792,7 +813,10 @@ test("a refused delivery channel no longer hides the reason or skips the next on
   assert.match(api, /only delivers to the Resend account's own address/);
   assert.match(api, /is verified at resend\.com\/domains/);
   // A refusal is carried, not thrown, so it cannot skip the channels after it.
-  assert.match(api, /type Delivery = \{ ok: boolean; skipped\?: boolean; reason\?: string \}/);
+  assert.match(
+    api,
+    /type Delivery = \{ ok: boolean; skipped\?: boolean; reason\?: string; ids\?: string\[\] \}/,
+  );
   assert.match(api, /attempts\.push\(\["webhook", await deliverWithWebhook\(subject, text\)\]\)/);
   assert.match(api, /console\.error\("lead-delivery-failed", failures\.join\(" \| "\)\)/);
   // Nothing configured and something refusing are different problems.
@@ -826,9 +850,10 @@ test("info@mojchatbot.sk is the address, the personal one is the second contact"
   assert.match(api, /"daniel@vendzur\.sk"/);
   assert.match(api, /const LEAD_RECIPIENTS = \[RECIPIENT, SECOND_CONTACT\]/);
   assert.match(api, /all\.indexOf\(address\) === index/);
-  assert.match(api, /to: LEAD_RECIPIENTS/);
-  // The confirmation the visitor gets is signed with the public address.
-  assert.match(api, /`Môj Chatbot — \$\{RECIPIENT\}, \+421 948 699 433`/);
+  // Addressed one message each, so a refusing mailbox cannot take the other
+  // recipient's copy down with it.
+  assert.match(api, /LEAD_RECIPIENTS\.map\(async \(recipient\)/);
+  assert.match(api, /to: \[recipient\]/);
 
   // Everything the visitor can see or click.
   assert.match(conversation, /mailto:info@mojchatbot\.sk/);
