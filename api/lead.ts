@@ -30,6 +30,7 @@ const DEFAULT_ALLOWED_ORIGINS = new Set([
 const SHARED_SENDER = "Môj Chatbot <onboarding@resend.dev>";
 /* The production sending domain is verified at resend.com/domains. */
 const SENDER = process.env.LEAD_FROM_EMAIL || "Môj Chatbot <info@mojchatbot.sk>";
+/* Plain-text brand contact: `Môj Chatbot — ${RECIPIENT}, +421 948 699 433` */
 
 type RateState = { count: number; resetAt: number };
 type GlobalRateStore = typeof globalThis & { __dvLeadRateLimit?: Map<string, RateState> };
