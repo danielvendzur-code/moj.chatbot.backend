@@ -1,0 +1,35 @@
+name: Live lead delivery diagnostic
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/live-lead-diagnostic.yml
+
+permissions:
+  contents: read
+
+jobs:
+  test-production-lead:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Send one clearly labelled production test lead
+        shell: bash
+        run: |
+          set -euo pipefail
+          body_file="$(mktemp)"
+          status="$(curl --silent --show-error --location \
+            --output "$body_file" \
+            --write-out '%{http_code}' \
+            --request POST \
+            --header 'Origin: https://mojchatbot.sk' \
+            --header 'Content-Type: application/json' \
+            --data '{"source":"github-live-diagnostic","name":"TEST ChatGPT","email":"info@mojchatbot.sk","phone":"+421948699433","company":"Môj Chatbot","web":"https://mojchatbot.sk","note":"TEST produkčného odosielania dopytu. Tento dopyt bol odoslaný na výslovnú žiadosť majiteľa 1. 8. 2026.","interest":"Test doručenia","industry":"Interný test","features":"Overenie produkčného Resend odoslania","timeline":"ihneď","reference":"TEST-GHA-20260801-2315","consent":true}' \
+            'https://moj-chatbot-backend.vercel.app/api/lead')"
+          echo "HTTP status: $status"
+          echo "Response body:"
+          cat "$body_file"
+          echo
+          test "$status" = "200"
+          grep -Eq '"ok"[[:space:]]*:[[:space:]]*true' "$body_file"
