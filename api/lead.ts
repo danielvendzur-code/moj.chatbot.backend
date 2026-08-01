@@ -14,9 +14,15 @@ const LEAD_RECIPIENTS = [RECIPIENT, SECOND_CONTACT].filter(
   (address, index, all) => address && all.indexOf(address) === index,
 );
 
+/* These are the browser origins that actually host the widget and the
+   website form. The custom production domain was missing here, so Vercel
+   rejected valid submissions with `origin-not-allowed` before Resend ran. */
 const DEFAULT_ALLOWED_ORIGINS = new Set([
   "https://danielvendzur-code.github.io",
   "https://moj-chatbot-backend.vercel.app",
+  "https://vne-n.vercel.app",
+  "https://mojchatbot.sk",
+  "https://www.mojchatbot.sk",
 ]);
 
 type RateState = { count: number; resetAt: number };
