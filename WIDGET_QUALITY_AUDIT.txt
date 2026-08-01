@@ -1,4 +1,4 @@
-run_id=30717727917
+run_id=30718333234
 install=success
 lint=success
 build=success
@@ -27,7 +27,7 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  1.14 kB[22m[1m[22m[2m │ gzip:  0.62 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-DcZsJA8E.css  [39m[1m[2m190.82 kB[22m[1m[22m[2m │ gzip: 25.95 kB[22m
 [2mdist/[22m[2massets/[22m[36mindex-BD4amcEW.js   [39m[1m[2m229.29 kB[22m[1m[22m[2m │ gzip: 77.96 kB[22m
-[32m✓ built in 892ms[39m
+[32m✓ built in 883ms[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 102 modules transformed.
@@ -35,7 +35,7 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m190.46 kB[22m[1m[22m[2m │ gzip: 25.86 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m229.05 kB[22m[1m[22m[2m │ gzip: 77.95 kB[22m
-[32m✓ built in 872ms[39m
+[32m✓ built in 886ms[39m
 
 ===== test =====
 
@@ -46,319 +46,319 @@ TAP version 13
 # Subtest: demo and embed load one foundation and one authoritative redesign
 ok 1 - demo and embed load one foundation and one authoritative redesign
   ---
-  duration_ms: 11.247065
+  duration_ms: 11.579083
   type: 'test'
   ...
 # Subtest: assistant order and interactive send feedback remain explicit
 ok 2 - assistant order and interactive send feedback remain explicit
   ---
-  duration_ms: 0.803488
+  duration_ms: 0.847543
   type: 'test'
   ...
 # Subtest: panel has the corrected premium desktop proportions
 ok 3 - panel has the corrected premium desktop proportions
   ---
-  duration_ms: 0.754115
+  duration_ms: 0.860444
   type: 'test'
   ...
 # Subtest: mode switch is one rounded segmented control without pill geometry
 ok 4 - mode switch is one rounded segmented control without pill geometry
   ---
-  duration_ms: 0.911109
+  duration_ms: 0.988476
   type: 'test'
   ...
 # Subtest: the redesign uses only the website black and brand palette
 ok 5 - the redesign uses only the website black and brand palette
   ---
-  duration_ms: 3.350237
+  duration_ms: 2.64734
   type: 'test'
   ...
 # Subtest: primary actions, quick chips and composer use intentional geometry
 ok 6 - primary actions, quick chips and composer use intentional geometry
   ---
-  duration_ms: 1.58879
+  duration_ms: 1.710009
   type: 'test'
   ...
 # Subtest: chat chips and composer use a crisp non-liquid system
 ok 7 - chat chips and composer use a crisp non-liquid system
   ---
-  duration_ms: 0.910959
+  duration_ms: 0.98785
   type: 'test'
   ...
 # Subtest: calculator choices keep geometry and use one static selected system
 ok 8 - calculator choices keep geometry and use one static selected system
   ---
-  duration_ms: 1.240661
+  duration_ms: 1.306231
   type: 'test'
   ...
 # Subtest: selection indicator is one real aligned circular check
 ok 9 - selection indicator is one real aligned circular check
   ---
-  duration_ms: 1.110356
+  duration_ms: 0.858897
   type: 'test'
   ...
 # Subtest: icons remain one custom rounded line family
 ok 10 - icons remain one custom rounded line family
   ---
-  duration_ms: 1.016476
+  duration_ms: 0.807631
   type: 'test'
   ...
 # Subtest: chat and configurator motion remain reduced-motion safe
 ok 11 - chat and configurator motion remain reduced-motion safe
   ---
-  duration_ms: 1.443052
+  duration_ms: 2.589243
   type: 'test'
   ...
 # Subtest: configurator remains five short steps with explicit selection guidance
 ok 12 - configurator remains five short steps with explicit selection guidance
   ---
-  duration_ms: 1.144407
+  duration_ms: 0.904073
   type: 'test'
   ...
 # Subtest: approved lead submission keeps sweep feedback and website hierarchy
 ok 13 - approved lead submission keeps sweep feedback and website hierarchy
   ---
-  duration_ms: 1.918361
+  duration_ms: 1.711195
   type: 'test'
   ...
 # Subtest: contact submits a real lead and keeps API protections
 ok 14 - contact submits a real lead and keeps API protections
   ---
-  duration_ms: 1.418736
+  duration_ms: 1.216771
   type: 'test'
   ...
 # Subtest: a delivered lead is confirmed to the visitor, and a failed one is not claimed
 ok 15 - a delivered lead is confirmed to the visitor, and a failed one is not claimed
   ---
-  duration_ms: 0.992791
+  duration_ms: 1.135389
   type: 'test'
   ...
 # Subtest: the reply streams in and the thread keeps up with it
 ok 16 - the reply streams in and the thread keeps up with it
   ---
-  duration_ms: 0.91831
+  duration_ms: 0.992547
   type: 'test'
   ...
 # Subtest: tapping a mode never lands on the drag handler instead of the button
 ok 17 - tapping a mode never lands on the drag handler instead of the button
   ---
-  duration_ms: 3.854299
+  duration_ms: 3.426369
   type: 'test'
   ...
 # Subtest: the finish layer removes browser blue and keeps one motion vocabulary
 ok 18 - the finish layer removes browser blue and keeps one motion vocabulary
   ---
-  duration_ms: 1.378656
+  duration_ms: 1.72863
   type: 'test'
   ...
 # Subtest: the finish layer sizes the builder to its step and glows the contacts
 ok 19 - the finish layer sizes the builder to its step and glows the contacts
   ---
-  duration_ms: 0.686173
+  duration_ms: 1.557769
   type: 'test'
   ...
 # Subtest: the phone keyboard folds away what is not the conversation
 ok 20 - the phone keyboard folds away what is not the conversation
   ---
-  duration_ms: 1.338025
+  duration_ms: 1.345985
   type: 'test'
   ...
 # Subtest: consent sits with the button it gates, not below the fold
 ok 21 - consent sits with the button it gates, not below the fold
   ---
-  duration_ms: 0.895375
+  duration_ms: 1.031326
   type: 'test'
   ...
 # Subtest: mobile full screen, safe areas and keyboard constraints remain safe
 ok 22 - mobile full screen, safe areas and keyboard constraints remain safe
   ---
-  duration_ms: 0.826042
+  duration_ms: 0.695648
   type: 'test'
   ...
 # Subtest: final contact step scrolls and supports calls or meetings
 ok 23 - final contact step scrolls and supports calls or meetings
   ---
-  duration_ms: 1.244466
+  duration_ms: 1.026117
   type: 'test'
   ...
 # Subtest: messages begin at the top and icon tiles stay transparent
 ok 24 - messages begin at the top and icon tiles stay transparent
   ---
-  duration_ms: 1.110457
+  duration_ms: 0.829188
   type: 'test'
   ...
 # Subtest: final user correction centers quick replies and keeps one input shape
 ok 25 - final user correction centers quick replies and keeps one input shape
   ---
-  duration_ms: 3.287013
+  duration_ms: 2.7704
   type: 'test'
   ...
 # Subtest: final configurator correction removes clipping, icon tiles and selected stripes
 ok 26 - final configurator correction removes clipping, icon tiles and selected stripes
   ---
-  duration_ms: 1.020071
+  duration_ms: 1.110472
   type: 'test'
   ...
 # Subtest: the final authority exposes only charcoal, warm surfaces and peach interaction
 ok 27 - the final authority exposes only charcoal, warm surfaces and peach interaction
   ---
-  duration_ms: 0.553495
+  duration_ms: 1.190755
   type: 'test'
   ...
 # Subtest: the six reported interaction defects stay fixed
 ok 28 - the six reported interaction defects stay fixed
   ---
-  duration_ms: 1.920184
+  duration_ms: 1.397768
   type: 'test'
   ...
 # Subtest: starter chips retire once the conversation begins
 ok 29 - starter chips retire once the conversation begins
   ---
-  duration_ms: 0.500206
+  duration_ms: 0.543315
   type: 'test'
   ...
 # Subtest: the composer keeps its size at every panel height
 ok 30 - the composer keeps its size at every panel height
   ---
-  duration_ms: 0.574487
+  duration_ms: 0.745043
   type: 'test'
   ...
 # Subtest: a refused delivery channel no longer hides the reason or skips the next one
 ok 31 - a refused delivery channel no longer hides the reason or skips the next one
   ---
-  duration_ms: 0.84422
+  duration_ms: 1.083946
   type: 'test'
   ...
 # Subtest: info@mojchatbot.sk is the address, the personal one is the second contact
 ok 32 - info@mojchatbot.sk is the address, the personal one is the second contact
   ---
-  duration_ms: 1.143796
+  duration_ms: 1.266267
   type: 'test'
   ...
 # Subtest: auto-advance does not leave a parked pointer lighting up the next step
 ok 33 - auto-advance does not leave a parked pointer lighting up the next step
   ---
-  duration_ms: 0.939412
+  duration_ms: 0.969923
   type: 'test'
   ...
 # Subtest: the contact step lines up on one inset without stray rules
 ok 34 - the contact step lines up on one inset without stray rules
   ---
-  duration_ms: 0.774215
+  duration_ms: 0.979565
   type: 'test'
   ...
 # Subtest: a new step never arrives with a chip that looks chosen
 ok 35 - a new step never arrives with a chip that looks chosen
   ---
-  duration_ms: 0.940452
+  duration_ms: 1.102516
   type: 'test'
   ...
 # Subtest: project estimates are absent while customer-price capability remains
 ok 36 - project estimates are absent while customer-price capability remains
   ---
-  duration_ms: 1.635008
+  duration_ms: 2.682151
   type: 'test'
   ...
 # Subtest: the step swap holds the panel height so nothing jumps
 ok 37 - the step swap holds the panel height so nothing jumps
   ---
-  duration_ms: 1.332258
+  duration_ms: 1.188637
   type: 'test'
   ...
 # Subtest: the progress label reads as a sentence and has room for it
 ok 38 - the progress label reads as a sentence and has room for it
   ---
-  duration_ms: 1.649751
+  duration_ms: 1.102743
   type: 'test'
   ...
 # Subtest: mobile keeps its scrolling and its pinch-zoom
 ok 39 - mobile keeps its scrolling and its pinch-zoom
   ---
-  duration_ms: 1.20002
+  duration_ms: 1.169615
   type: 'test'
   ...
 # Subtest: nothing pulses forever and nothing moves when you point at it
 ok 40 - nothing pulses forever and nothing moves when you point at it
   ---
-  duration_ms: 1.061714
+  duration_ms: 1.162165
   type: 'test'
   ...
 # Subtest: icons cannot balloon and the thank-you screen is not squeezed into a grid row
 ok 41 - icons cannot balloon and the thank-you screen is not squeezed into a grid row
   ---
-  duration_ms: 1.052871
+  duration_ms: 1.698387
   type: 'test'
   ...
 # Subtest: no jargon reaches the screen
 ok 42 - no jargon reaches the screen
   ---
-  duration_ms: 2.489663
+  duration_ms: 2.872692
   type: 'test'
   ...
 # Subtest: chips and cards lean toward the cursor without ever moving their box
 ok 43 - chips and cards lean toward the cursor without ever moving their box
   ---
-  duration_ms: 1.168723
+  duration_ms: 2.299282
   type: 'test'
   ...
 # Subtest: the iframe follows the mobile visual viewport above the software keyboard
 ok 44 - the iframe follows the mobile visual viewport above the software keyboard
   ---
-  duration_ms: 0.571743
+  duration_ms: 1.671168
   type: 'test'
   ...
 # Subtest: the closed iframe canvas stays transparent around the circular launcher
 ok 45 - the closed iframe canvas stays transparent around the circular launcher
   ---
-  duration_ms: 0.585424
+  duration_ms: 0.691198
   type: 'test'
   ...
 # Subtest: the iframe returns focus to the page control that opened it
 ok 46 - the iframe returns focus to the page control that opened it
   ---
-  duration_ms: 0.488118
+  duration_ms: 0.516714
   type: 'test'
   ...
 # Subtest: options reveal one after another rather than as a block
 ok 47 - options reveal one after another rather than as a block
   ---
-  duration_ms: 0.506205
+  duration_ms: 0.621961
   type: 'test'
   ...
 # Subtest: mode transitions preserve work and close only after the exit motion
 ok 48 - mode transitions preserve work and close only after the exit motion
   ---
-  duration_ms: 0.627546
+  duration_ms: 0.851484
   type: 'test'
   ...
 # Subtest: close and reopen retain mode, chat draft, history and calculator progress
 ok 49 - close and reopen retain mode, chat draft, history and calculator progress
   ---
-  duration_ms: 1.09982
+  duration_ms: 1.540847
   type: 'test'
   ...
 # Subtest: close button and Escape both restore focus to the launcher
 ok 50 - close button and Escape both restore focus to the launcher
   ---
-  duration_ms: 0.708616
+  duration_ms: 0.733376
   type: 'test'
   ...
 # Subtest: chat reset aborts stale work and same-tick sends are locked synchronously
 ok 51 - chat reset aborts stale work and same-tick sends are locked synchronously
   ---
-  duration_ms: 0.595078
+  duration_ms: 0.663741
   type: 'test'
   ...
 # Subtest: the summary card keeps its text off its own border
 ok 52 - the summary card keeps its text off its own border
   ---
-  duration_ms: 0.901315
+  duration_ms: 1.057583
   type: 'test'
   ...
 # Subtest: nothing plus-shaped renders anywhere near the quick replies
 ok 53 - nothing plus-shaped renders anywhere near the quick replies
   ---
-  duration_ms: 1.838692
+  duration_ms: 1.944297
   type: 'test'
   ...
 1..53
@@ -369,4 +369,4 @@ ok 53 - nothing plus-shaped renders anywhere near the quick replies
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 122.032516
+# duration_ms 128.119937
