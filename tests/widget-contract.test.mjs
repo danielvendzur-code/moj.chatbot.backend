@@ -968,6 +968,112 @@ test("mode transitions preserve work and close only after the exit motion", asyn
   assert.match(css, /\.cw-mode-view\[data-active="true"\]/);
 });
 
+test("close and reopen retain mode, chat draft, history and calculator progress", async () => {
+  const widget = await read("src/components/widget/AssistantWidget.tsx");
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
+  );
+  const calculator = await read("src/components/widget/ToolCalculator.tsx");
+  const css = await read("src/unified-experience-final.css");
+
+  // The panel mounts lazily once, then stays mounted. Closing only applies
+  // `hidden` after the exit timer, so every child hook keeps its identity.
+  assert.match(widget, /const \[hasOpened, setHasOpened\] = useState\(false\)/);
+  assert.match(widget, /setHasOpened\(true\)/);
+  assert.match(widget, /\{hasOpened \? \(\s*<section[\s\S]*?hidden=\{!isOpen\}/);
+  assert.doesNotMatch(widget, /\{isOpen \? \(\s*<section/);
+  assert.match(
+    css,
+    /\.cw-panel\[class\]\[hidden\] \{\s*\n\s*display: none !important/,
+  );
+  assert.match(
+    widget,
+    /panelRef\.current\?\.toggleAttribute\("inert", isClosing \|\| !isOpen\)/,
+  );
+
+  // Launcher resume keeps the current mode and preset. Only the visible reset
+  // button may advance resetToken; ordinary open/close cannot erase work.
+  assert.match(widget, /onClick=\{\(\) => open\(mode, preset\)\}/);
+  const openHandler = widget.slice(
+    widget.indexOf("const open = useCallback"),
+    widget.indexOf("const switchMode = useCallback"),
+  );
+  assert.doesNotMatch(openHandler, /setResetToken/);
+  assert.equal((widget.match(/setResetToken\(/g) ?? []).length, 1);
+  const resetButton =
+    widget.match(/data-testid="widget-reset"[\s\S]*?<\/button>/)?.[0] ?? "";
+  assert.ok(resetButton, "explicit reset button must exist");
+  assert.match(resetButton, /setPreset\(null\)/);
+  assert.match(
+    resetButton,
+    /setResetToken\(\(value\) => value \+ 1\)/,
+  );
+
+  // Programmatic opens still select the requested route/preset instead of
+  // accidentally using the launcher's resume behavior.
+  assert.match(
+    widget,
+    /window\.addEventListener\(SITE_ASSISTANT_OPEN_EVENT, onOpen\)/,
+  );
+  assert.match(widget, /openFromOptions\(options \?\? \{ entry: "builder" \}\)/);
+  assert.match(
+    widget,
+    /installEmbedBridge\(\{ open: openFromOptions, close \}\)/,
+  );
+
+  // These local states now live for the full widget session because their
+  // owning components are descendants of the persistent panel.
+  assert.match(conversation, /useState<ChatMessage\[]>\(INITIAL_MESSAGES\)/);
+  assert.match(conversation, /const \[input, setInput\] = useState\(""\)/);
+  assert.match(conversation, /value=\{input\}/);
+  assert.match(conversation, /onChange=\{\(event\) => setInput\(event\.target\.value\)\}/);
+  assert.match(widget, /data-view="assistant"[\s\S]*?<AssistantConversation/);
+  assert.match(widget, /data-view="calculator"[\s\S]*?<ToolCalculator/);
+  assert.match(calculator, /const \[step, setStep\] = useState\(0\)/);
+  assert.match(
+    calculator,
+    /const \[lead, setLead\] = useState<LeadState>\(EMPTY_LEAD\)/,
+  );
+});
+
+test("close button and Escape both restore focus to the launcher", async () => {
+  const widget = await read("src/components/widget/AssistantWidget.tsx");
+  const focusTrap = await read("src/hooks/useFocusTrap.ts");
+
+  const closeButton =
+    widget.match(/data-testid="widget-close"[\s\S]*?<\/button>/)?.[0] ?? "";
+  assert.ok(closeButton, "close button must exist");
+  assert.match(closeButton, /onClick=\{close\}/);
+
+  // Escape and the X share one close path, including normal and reduced-motion
+  // exits. The post-commit layout effect focuses the still-mounted launcher.
+  assert.match(focusTrap, /if \(event\.key === "Escape"\)[\s\S]*?onEscape\(\)/);
+  assert.match(
+    widget,
+    /useFocusTrap\(panelRef, isOpen && !isClosing, close, launcherRef\)/,
+  );
+  assert.match(
+    widget,
+    /if \(reducedMotion\(\)\) \{\s*\n\s*finish\(\);\s*\n\s*return;/,
+  );
+  assert.match(widget, /window\.setTimeout\(finish, PANEL_EXIT_MS\)/);
+  assert.match(
+    widget,
+    /restoreLauncherFocusRef\.current = true;\s*\n\s*setIsOpen\(false\)/,
+  );
+  assert.match(
+    widget,
+    /if \(isOpen \|\| !restoreLauncherFocusRef\.current\) return;[\s\S]*?launcherRef\.current\?\.focus\(\{ preventScroll: true \}\)/,
+  );
+
+  // The focus-trap cleanup can no longer race the close effect back to body or
+  // another stale element: the explicit launcher ref always wins.
+  assert.match(
+    focusTrap,
+    /\(returnFocusRef\?\.current \?\? previous\)\?\.focus\(\{ preventScroll: true \}\)/,
+  );
+});
+
 test("chat reset aborts stale work and same-tick sends are locked synchronously", async () => {
   const conversation = await read(
     "src/components/widget/AssistantConversation.tsx",

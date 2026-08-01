@@ -86,6 +86,13 @@ html body .cw-widget[class][class] .cw-panel[class] {
     0 24px 58px -44px rgba(255, 199, 157, 0.46) !important;
 }
 
+/* Keep the panel mounted after its first open so drafts, conversation history,
+   pending replies and calculator progress survive close/reopen. `hidden` only
+   takes effect after the exit animation finishes. */
+html body .cw-widget[class][class] .cw-panel[class][hidden] {
+  display: none !important;
+}
+
 html
   body
   .cw-widget[class]

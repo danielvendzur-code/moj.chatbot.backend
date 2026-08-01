@@ -49,6 +49,7 @@ export function AssistantWidget({
 }: AssistantWidgetProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [hasOpened, setHasOpened] = useState(false);
   const [mode, setMode] = useState<WidgetMode>("assistant");
   const [modeDirection, setModeDirection] = useState<"forward" | "backward">(
     "forward",
@@ -67,6 +68,7 @@ export function AssistantWidget({
   const closeTimerRef = useRef<number | null>(null);
   const openRef = useRef(false);
   const closingRef = useRef(false);
+  const restoreLauncherFocusRef = useRef(false);
 
   const close = useCallback(() => {
     if (!openRef.current || closingRef.current) return;
@@ -78,11 +80,9 @@ export function AssistantWidget({
       closeTimerRef.current = null;
       openRef.current = false;
       closingRef.current = false;
+      restoreLauncherFocusRef.current = true;
       setIsOpen(false);
       setIsClosing(false);
-      window.requestAnimationFrame(() =>
-        launcherRef.current?.focus({ preventScroll: true }),
-      );
     };
 
     if (reducedMotion()) {
@@ -91,7 +91,7 @@ export function AssistantWidget({
     }
     closeTimerRef.current = window.setTimeout(finish, PANEL_EXIT_MS);
   }, []);
-  useFocusTrap(panelRef, isOpen && !isClosing, close);
+  useFocusTrap(panelRef, isOpen && !isClosing, close, launcherRef);
 
   const open = useCallback(
     (nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {
@@ -101,11 +101,12 @@ export function AssistantWidget({
       }
       openRef.current = true;
       closingRef.current = false;
+      restoreLauncherFocusRef.current = false;
+      setHasOpened(true);
       setIsClosing(false);
       setModeDirection(nextMode === "assistant" ? "forward" : "backward");
       setMode(nextMode);
       setPreset(nextPreset);
-      setResetToken((value) => value + 1);
       setIsOpen(true);
       track("widget_open", { mode: nextMode });
     },
@@ -222,9 +223,19 @@ export function AssistantWidget({
   }, [embedMode, isOpen]);
 
   useLayoutEffect(() => {
+    if (isOpen || !restoreLauncherFocusRef.current) return;
+    restoreLauncherFocusRef.current = false;
+    launcherRef.current?.focus({ preventScroll: true });
+  }, [isOpen]);
+
+  useLayoutEffect(() => {
+    panelRef.current?.toggleAttribute("inert", isClosing || !isOpen);
+  }, [hasOpened, isClosing, isOpen]);
+
+  useLayoutEffect(() => {
     calculatorViewRef.current?.toggleAttribute("inert", mode !== "calculator");
     assistantViewRef.current?.toggleAttribute("inert", mode !== "assistant");
-  }, [mode]);
+  }, [hasOpened, mode]);
 
   useEffect(
     () => () => {
@@ -262,17 +273,19 @@ export function AssistantWidget({
         aria-label="Otvoriť chat — navrhnem riešenie alebo odpoviem na otázky"
         aria-expanded={isOpen}
         aria-controls="chameleon-widget-panel"
-        onClick={() => open("assistant")}
+        onClick={() => open(mode, preset)}
       >
         <BubbleLogo size="launcher" />
       </button>
 
-      {isOpen ? (
+      {hasOpened ? (
         <section
           id="chameleon-widget-panel"
           className="cw-panel"
           data-mode={mode}
           data-state={isClosing ? "closing" : "open"}
+          hidden={!isOpen}
+          aria-hidden={isClosing || !isOpen}
           ref={panelRef}
           role="dialog"
           aria-modal="true"

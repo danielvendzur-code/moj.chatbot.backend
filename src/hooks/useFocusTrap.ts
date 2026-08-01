@@ -13,6 +13,7 @@ export function useFocusTrap(
   ref: RefObject<HTMLElement>,
   active: boolean,
   onEscape: () => void,
+  returnFocusRef?: RefObject<HTMLElement>,
 ): void {
   useEffect(() => {
     if (!active || !ref.current) return;
@@ -52,7 +53,7 @@ export function useFocusTrap(
     document.addEventListener("keydown", onKeyDown);
     return () => {
       document.removeEventListener("keydown", onKeyDown);
-      previous?.focus({ preventScroll: true });
+      (returnFocusRef?.current ?? previous)?.focus({ preventScroll: true });
     };
-  }, [active, onEscape, ref]);
+  }, [active, onEscape, ref, returnFocusRef]);
 }
