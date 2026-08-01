@@ -10,26 +10,35 @@ permissions:
   contents: read
 
 jobs:
-  test-production-lead:
+  inspect-production-mail-flow:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - name: Send one clearly labelled production test lead
+      - name: Inspect DNS and production CORS without sending another email
         shell: bash
         run: |
           set -euo pipefail
-          body_file="$(mktemp)"
-          status="$(curl --silent --show-error --location \
-            --output "$body_file" \
-            --write-out '%{http_code}' \
-            --request POST \
-            --header 'Origin: https://mojchatbot.sk' \
-            --header 'Content-Type: application/json' \
-            --data '{"source":"github-live-diagnostic","name":"TEST ChatGPT","email":"info@mojchatbot.sk","phone":"+421948699433","company":"Môj Chatbot","web":"https://mojchatbot.sk","note":"TEST produkčného odosielania dopytu. Tento dopyt bol odoslaný na výslovnú žiadosť majiteľa 1. 8. 2026.","interest":"Test doručenia","industry":"Interný test","features":"Overenie produkčného Resend odoslania","timeline":"ihneď","reference":"TEST-GHA-20260801-2315","consent":true}' \
-            'https://moj-chatbot-backend.vercel.app/api/lead')"
-          echo "HTTP status: $status"
-          echo "Response body:"
-          cat "$body_file"
-          echo
-          test "$status" = "200"
-          grep -Eq '"ok"[[:space:]]*:[[:space:]]*true' "$body_file"
+          {
+            echo '=== mojchatbot.sk MX ==='
+            curl --silent --show-error 'https://dns.google/resolve?name=mojchatbot.sk&type=MX'
+            echo
+            echo '=== mojchatbot.sk TXT ==='
+            curl --silent --show-error 'https://dns.google/resolve?name=mojchatbot.sk&type=TXT'
+            echo
+            echo '=== send.mojchatbot.sk MX ==='
+            curl --silent --show-error 'https://dns.google/resolve?name=send.mojchatbot.sk&type=MX'
+            echo
+            echo '=== production lead OPTIONS ==='
+            curl --silent --show-error --include --request OPTIONS \
+              --header 'Origin: https://mojchatbot.sk' \
+              --header 'Access-Control-Request-Method: POST' \
+              'https://moj-chatbot-backend.vercel.app/api/lead'
+            echo
+          } | tee diagnostic.txt
+
+      - name: Upload diagnostic report
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-lead-diagnostic
+          path: diagnostic.txt
+          retention-days: 1
