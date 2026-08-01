@@ -115,7 +115,33 @@ function textLines(payload: Record<string, string>): string {
   ].join("\n");
 }
 
-const SENDER = process.env.LEAD_FROM_EMAIL || "Môj Chatbot <onboarding@resend.dev>";
+/* Resend's shared `onboarding@resend.dev` sender only ever delivers to the
+   address the Resend account was opened with. Left on the default, a lead to
+   any other recipient comes back 403 and is never seen — which is exactly
+   how an enquiry goes missing on a correctly configured key. Set
+   LEAD_FROM_EMAIL to an address on a domain verified at resend.com/domains. */
+const SHARED_SENDER = "Môj Chatbot <onboarding@resend.dev>";
+const SENDER = process.env.LEAD_FROM_EMAIL || SHARED_SENDER;
+
+/* One channel's outcome. A reason is carried rather than thrown so a single
+   refusal cannot skip the channels that come after it. */
+type Delivery = { ok: boolean; skipped?: boolean; reason?: string };
+
+/* Resend answers a refusal with a body that names the cause — the unverified
+   domain, the shared-sender restriction, a bad key. Throwing away everything
+   but the status code is what left the logs saying nothing. */
+async function resendFailure(response: Response): Promise<string> {
+  let detail = "";
+  try {
+    const body = (await response.json()) as { name?: unknown; message?: unknown };
+    const name = typeof body.name === "string" ? body.name : "";
+    const message = typeof body.message === "string" ? body.message : "";
+    detail = [name, message].filter(Boolean).join(": ").slice(0, 300);
+  } catch {
+    /* A refusal without a JSON body still has its status, which is enough. */
+  }
+  return `resend-${response.status}${detail ? ` ${detail}` : ""}`;
+}
 
 async function sendWithResend(payload: Record<string, unknown>): Promise<Response> {
   return fetch("https://api.resend.com/emails", {
@@ -128,16 +154,31 @@ async function sendWithResend(payload: Record<string, unknown>): Promise<Respons
   });
 }
 
-async function deliverWithResend(subject: string, text: string, replyTo?: string): Promise<boolean> {
-  if (!process.env.RESEND_API_KEY) return false;
-  const response = await sendWithResend({
-    to: [RECIPIENT],
-    ...(replyTo ? { reply_to: replyTo } : {}),
-    subject,
-    text,
-  });
-  if (!response.ok) throw new Error(`resend-${response.status}`);
-  return true;
+async function deliverWithResend(
+  subject: string,
+  text: string,
+  replyTo?: string,
+): Promise<Delivery> {
+  if (!process.env.RESEND_API_KEY) return { ok: false, skipped: true };
+  try {
+    const response = await sendWithResend({
+      to: [RECIPIENT],
+      ...(replyTo ? { reply_to: replyTo } : {}),
+      subject,
+      text,
+    });
+    if (response.ok) return { ok: true };
+    const reason = await resendFailure(response);
+    /* The single most common cause, called out by name so it is actionable
+       from the log line alone instead of needing a round of guessing. */
+    const hint =
+      SENDER === SHARED_SENDER
+        ? " — LEAD_FROM_EMAIL is unset, so the shared onboarding@resend.dev sender is in use and it only delivers to the Resend account's own address"
+        : "";
+    return { ok: false, reason: `${reason}${hint}` };
+  } catch (error) {
+    return { ok: false, reason: `resend-unreachable: ${String(error).slice(0, 200)}` };
+  }
 }
 
 /* What the visitor gets back: proof the enquiry arrived, the reference number
@@ -179,22 +220,27 @@ async function sendConfirmation(payload: Record<string, string>): Promise<void> 
         : "Máme váš dopyt",
       text: confirmationText(payload),
     });
-    if (!response.ok) throw new Error(`resend-${response.status}`);
+    if (!response.ok) throw new Error(await resendFailure(response));
   } catch (error) {
-    console.error("lead-confirmation-failed", error);
+    console.error("lead-confirmation-failed", String(error));
   }
 }
 
-async function deliverWithWebhook(subject: string, text: string): Promise<boolean> {
+async function deliverWithWebhook(subject: string, text: string): Promise<Delivery> {
   const url = process.env.LEAD_WEBHOOK_URL;
-  if (!url) return false;
-  const response = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ subject, text, recipient: RECIPIENT }),
-  });
-  if (!response.ok) throw new Error(`webhook-${response.status}`);
-  return true;
+  if (!url) return { ok: false, skipped: true };
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ subject, text, recipient: RECIPIENT }),
+    });
+    return response.ok
+      ? { ok: true }
+      : { ok: false, reason: `webhook-${response.status}` };
+  } catch (error) {
+    return { ok: false, reason: `webhook-unreachable: ${String(error).slice(0, 200)}` };
+  }
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
@@ -263,26 +309,50 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   const subject = `Nový dopyt — ${payload.company || payload.name}`;
   const text = textLines(payload);
 
-  try {
-    const delivered =
-      (await deliverWithResend(subject, text, validEmail(payload.email) ? payload.email : undefined)) ||
-      (await deliverWithWebhook(subject, text));
+  const mailto = `mailto:${RECIPIENT}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
 
-    if (!delivered) {
-      res.status(503).json({
-        error: "delivery-not-configured",
-        fallback: `mailto:${RECIPIENT}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`,
-      });
-      return;
-    }
+  /* Every configured channel gets its turn. Previously a Resend refusal threw
+     straight past the webhook, so a second, working route was never tried and
+     the lead was lost to a problem the first channel alone had. */
+  const attempts: Array<[string, Delivery]> = [
+    [
+      "resend",
+      await deliverWithResend(
+        subject,
+        text,
+        validEmail(payload.email) ? payload.email : undefined,
+      ),
+    ],
+  ];
+  if (!attempts.some(([, result]) => result.ok)) {
+    attempts.push(["webhook", await deliverWithWebhook(subject, text)]);
+  }
 
+  const failures = attempts
+    .filter(([, result]) => !result.ok && !result.skipped)
+    .map(([channel, result]) => `${channel}: ${result.reason}`);
+  if (failures.length) console.error("lead-delivery-failed", failures.join(" | "));
+
+  if (attempts.some(([, result]) => result.ok)) {
     await sendConfirmation(payload);
     res.status(200).json({ ok: true });
-  } catch (error) {
-    console.error("lead-delivery-failed", error);
-    res.status(502).json({
-      error: "delivery-failed",
-      fallback: `mailto:${RECIPIENT}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`,
-    });
+    return;
   }
+
+  /* Nothing refused, nothing was configured — a deployment question, not a
+     runtime one, and worth saying so distinctly. */
+  if (!failures.length) {
+    res.status(503).json({ error: "delivery-not-configured", fallback: mailto });
+    return;
+  }
+
+  /* The reason travels to the client too. It is the provider's own wording
+     about the sender or the key, never a credential, and having it in the
+     network tab is the difference between a fixable report and "it just
+     didn't arrive". */
+  res.status(502).json({
+    error: "delivery-failed",
+    reason: failures.join(" | "),
+    fallback: mailto,
+  });
 }

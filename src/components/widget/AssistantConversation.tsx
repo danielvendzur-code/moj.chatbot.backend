@@ -108,6 +108,14 @@ export function AssistantConversation({
      and just crowd the thread, so they go away. Reset brings them back. */
   const conversationStarted = messages.some((message) => message.from === "me");
 
+  /* They also go the moment the visitor starts writing their own question:
+     the offer has been declined, and on a phone with the keyboard up those two
+     rows were taking as much height as the conversation itself. Clearing the
+     field brings them back — nothing has been sent yet. A chip that is
+     mid-send keeps them, because that fill is the thing being watched. */
+  const showQuickReplies =
+    !conversationStarted && (activeQuickReply !== null || input.trim() === "");
+
   useEffect(() => {
     requestEpochRef.current += 1;
     requestAbortRef.current?.abort();
@@ -406,7 +414,7 @@ export function AssistantConversation({
         ) : null}
       </div>
 
-      {conversationStarted ? null : (
+      {showQuickReplies ? (
         <div
           className="cw-quick-replies"
           aria-label="Na čo sa ľudia pýtajú najčastejšie"
@@ -430,7 +438,7 @@ export function AssistantConversation({
             );
           })}
         </div>
-      )}
+      ) : null}
 
       <div
         className="cw-inputbar"

@@ -746,13 +746,64 @@ test("starter chips retire once the conversation begins", async () => {
     conversation,
     /const conversationStarted = messages\.some\(\(message\) => message\.from === "me"\)/,
   );
-  assert.match(conversation, /\{conversationStarted \? null : \(/);
+  // They also go the moment the visitor starts writing their own question —
+  // on a phone those two rows were taking as much height as the thread.
+  assert.match(
+    conversation,
+    /const showQuickReplies =\s*\n\s*!conversationStarted && \(activeQuickReply !== null \|\| input\.trim\(\) === ""\)/,
+  );
+  assert.match(conversation, /\{showQuickReplies \? \(/);
   // the chip carries only its label — no glyph is appended in any state
   assert.match(
     conversation,
     /<span className="cw-chip__label">\{label\}<\/span>/,
   );
   assert.doesNotMatch(conversation, /cw-chip__plus|content: "\+"/);
+});
+
+test("the composer keeps its size at every panel height", async () => {
+  const css = await read("src/masterpiece-final.css");
+  const mobile =
+    css.match(/@media \(max-width: 560px\) \{[\s\S]*?\n\}/)?.[0] ?? "";
+
+  assert.ok(mobile, "the phone block must exist");
+  // Only the thread is elastic. Every other row is content-sized, so a short
+  // panel cannot squeeze the row the visitor is typing into.
+  assert.match(
+    mobile,
+    /grid-template-rows: auto minmax\(0, 1fr\) min-content min-content min-content !important/,
+  );
+  assert.match(mobile, /\.cw-inputbar\[class\] \{\s*\n\s*height: 54px !important;\s*\n\s*min-height: 54px !important/);
+  assert.match(mobile, /\.cw-inputbar\[class\] input \{[\s\S]*?min-height: 42px !important/);
+  assert.match(mobile, /\.cw-send\[class\] \{[\s\S]*?min-height: 44px !important/);
+});
+
+test("a refused delivery channel no longer hides the reason or skips the next one", async () => {
+  const api = await read("api/lead.ts");
+  const client = await read("src/lib/leadApi.ts");
+  const readme = await read("README.md");
+
+  // Resend names the cause in the body; only the status used to survive.
+  assert.match(api, /async function resendFailure/);
+  assert.match(api, /`resend-\$\{response\.status\}\$\{detail \? ` \$\{detail\}` : ""\}`/);
+  // The shared sender only delivers to the account's own address — the single
+  // most common reason a correctly-keyed enquiry never arrives.
+  assert.match(api, /const SHARED_SENDER = "Môj Chatbot <onboarding@resend\.dev>"/);
+  assert.match(api, /LEAD_FROM_EMAIL is unset/);
+  // A refusal is carried, not thrown, so it cannot skip the channels after it.
+  assert.match(api, /type Delivery = \{ ok: boolean; skipped\?: boolean; reason\?: string \}/);
+  assert.match(api, /attempts\.push\(\["webhook", await deliverWithWebhook\(subject, text\)\]\)/);
+  assert.match(api, /console\.error\("lead-delivery-failed", failures\.join\(" \| "\)\)/);
+  // Nothing configured and something refusing are different problems.
+  assert.match(api, /error: "delivery-not-configured"/);
+  assert.match(api, /reason: failures\.join\(" \| "\)/);
+  // The key is never part of what travels back.
+  assert.doesNotMatch(api, /reason:.*RESEND_API_KEY|RESEND_API_KEY.*reason:/);
+
+  assert.match(client, /if \(data\.reason\) console\.warn\("lead-delivery-failed", data\.reason\)/);
+  // ...and the env the owner has to set is written down.
+  assert.match(readme, /LEAD_FROM_EMAIL/);
+  assert.match(readme, /onboarding@resend\.dev/);
 });
 
 test("auto-advance does not leave a parked pointer lighting up the next step", async () => {

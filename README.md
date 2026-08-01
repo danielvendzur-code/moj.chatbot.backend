@@ -139,6 +139,35 @@ krokový tok) ostáva plne funkčný. Funkcia obmedzuje vstup (počet a dĺžku 
 `max_tokens` a system prompt, ktorý ostáva pri téme Danielových služieb. Odporúčané ďalšie
 zlepšenie: rate-limiting cez Vercel KV/Upstash.
 
+Odpoveď sa **streamuje**: keď klient pošle `Accept: text/event-stream`, funkcia posiela text
+po kúskoch a prvé slová sú na obrazovke asi za sekundu. Klienti bez SSE dostanú JSON ako
+predtým.
+
+## Doručovanie dopytov (`api/lead.ts`)
+
+| Premenná | Povinná | Načo je |
+| --- | --- | --- |
+| `RESEND_API_KEY` | áno (ak chcete e-maily) | Kľúč z resend.com. Bez neho funkcia vráti `delivery-not-configured` a widget otvorí rozpísaný mail v klientovi. |
+| `LEAD_FROM_EMAIL` | **áno** | Odosielateľ, napr. `Môj Chatbot <dopyt@vasadomena.sk>`. |
+| `LEAD_TO_EMAIL` | nie | Kam chodia dopyty. Default `daniel@vendzur.sk`. |
+| `LEAD_WEBHOOK_URL` | nie | Záloha, keď e-mail zlyhá — dostane `{ subject, text, recipient }`. |
+| `ALLOWED_ORIGINS` | nie | Ďalšie domény, z ktorých smie widget volať (čiarkou oddelené). |
+
+> **Najčastejšia príčina „dopyt neprišiel".** Keď `LEAD_FROM_EMAIL` nie je nastavená, použije
+> sa zdieľaný odosielateľ `onboarding@resend.dev` — a ten Resend doručí **len na adresu, ktorou
+> ste si Resend účet založili**. Dopyt na akúkoľvek inú adresu vráti 403 a nikam nedôjde.
+> Riešenie: overte si doménu na resend.com/domains a nastavte `LEAD_FROM_EMAIL` na adresu
+> z nej.
+
+Keď doručenie zlyhá, dôvod od Resendu ide do logu funkcie (`lead-delivery-failed …`) aj do
+odpovede ako pole `reason`, takže je vidno v Network tabe. Kľúč sa neposiela nikdy. Ak je
+nastavený `LEAD_WEBHOOK_URL`, skúsi sa aj vtedy, keď e-mail odmietne — jeden odmietnutý kanál
+už nepreskočí ostatné.
+
+Okrem dopytu pre vás odchádza aj **potvrdenie zákazníkovi** (ak nechal e-mail), s číslom
+dopytu a `reply_to` na vás. Je to zdvorilosť navyše — keď zlyhá, len sa zaloguje, dopyt je
+u vás tak či tak.
+
 ## Analytika lievika
 
 Widget dispatchne `CustomEvent("site-assistant:analytics", { detail: { event, props, ts } })`

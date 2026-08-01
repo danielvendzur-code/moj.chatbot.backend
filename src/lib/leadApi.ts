@@ -22,6 +22,7 @@ export type LeadSubmission = {
 type LeadResponse = {
   ok?: boolean;
   error?: string;
+  reason?: string;
   fallback?: string;
 };
 
@@ -67,6 +68,10 @@ export async function submitLead(payload: LeadSubmission): Promise<LeadResult> {
     });
     const data = (await response.json().catch(() => ({}))) as LeadResponse;
     if (response.ok && data.ok) return { delivered: true };
+    /* The provider's own wording about why it refused. It never carries a
+       credential, and having it in the console is what turns "it didn't
+       arrive" into something the owner can act on. */
+    if (data.reason) console.warn("lead-delivery-failed", data.reason);
     return { delivered: false, fallback: data.fallback || localFallback(payload) };
   } catch {
     return { delivered: false, fallback: localFallback(payload) };

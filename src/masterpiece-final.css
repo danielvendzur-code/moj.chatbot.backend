@@ -838,13 +838,35 @@ html body .cw-widget[class][class][class][class] .cw-contact-method[class][data-
 
   /* Whatever the panel's height ends up being, the message the visitor is
      answering has to stay readable — so the thread keeps the room, and
-     the type does not shrink to make space for anything else. */
+     the type does not shrink to make space for anything else.
+
+     Only the thread is elastic. The composer, the chips and the header are
+     content-sized rows that may not be compressed: when the keyboard leaves
+     the panel 380px tall, a grid that lets every row give a little is how
+     "everything shrank" happens. The thread absorbs all of it instead. */
   html body .cw-widget[class][class][class] .cw-conversation[class] {
-    grid-template-rows: auto minmax(0, 1fr) auto auto auto !important;
+    grid-template-rows: auto minmax(0, 1fr) min-content min-content min-content !important;
   }
 
-  html body .cw-widget[class][class][class] .cw-messages[class] {
-    min-height: 96px !important;
+  /* The row the visitor is typing into keeps its exact size at every panel
+     height — same bar, same 44px button, same 16px text. */
+  html body .cw-widget[class][class][class] .cw-inputbar[class] {
+    height: 54px !important;
+    min-height: 54px !important;
+    flex: 0 0 auto !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-inputbar[class] input {
+    height: 42px !important;
+    min-height: 42px !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-inputbar[class] > .cw-send[class] {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    flex: 0 0 44px !important;
   }
 
   html body .cw-widget[class][class][class] .cw-message-wrap[class] p {
