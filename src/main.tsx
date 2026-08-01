@@ -11,6 +11,7 @@ import "./approved-submit-final.css";
 import "./final-user-correction.css";
 import "./green-motion-final.css";
 import "./unified-experience-final.css";
+import "./masterpiece-final.css";
 
 installConfiguratorAutoAdvance();
 installPremiumTilt();

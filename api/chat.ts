@@ -1,14 +1,24 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-const MODEL = "claude-haiku-4-5";
-const MAX_TOKENS = 512;
+const MODEL = "claude-opus-5";
+/* Thinking is on by default on this model and shares the ceiling with the
+   answer, so the cap has to cover both. The reply itself stays three short
+   sentences because the prompt says so, not because the budget ran out. */
+const MAX_TOKENS = 2_048;
+/* A widget reply is three sentences. Low effort keeps the visitor from
+   watching a typing indicator while the model deliberates. */
+const EFFORT = "low" as const;
 const MAX_MESSAGES = 12;
 const MAX_CHARS = 1_000;
 const MAX_BODY_BYTES = 24_000;
+const MAX_REPLY_CHARS = 4_000;
 const RATE_WINDOW_MS = 10 * 60 * 1_000;
 const RATE_MAX_REQUESTS = 18;
-const UPSTREAM_TIMEOUT_MS = 18_000;
+/* A hard ceiling on the whole exchange, streaming included, kept under the
+   function's own 30s limit so a slow upstream ends as a readable error
+   instead of a killed process. */
+const UPSTREAM_TIMEOUT_MS = 25_000;
 
 const DEFAULT_ALLOWED_ORIGINS = new Set([
   "https://danielvendzur-code.github.io",
@@ -124,7 +134,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   res.setHeader("Referrer-Policy", "no-referrer");
   res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
 
   const origin = requestOrigin(req);
   const allowed = allowedOrigin(origin);
@@ -201,26 +211,74 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS);
+  const client = new Anthropic({ apiKey });
+  const request = {
+    model: MODEL,
+    max_tokens: MAX_TOKENS,
+    system: SYSTEM_PROMPT,
+    thinking: { type: "adaptive" as const },
+    output_config: { effort: EFFORT },
+    messages,
+  };
+
+  /* Streaming is what makes the widget feel instant: the first words land in
+     about a second instead of the visitor watching three dots for the whole
+     reply. Clients that cannot read an event stream keep the JSON path. */
+  if (wantsStream(req)) {
+    res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
+    res.setHeader("Connection", "keep-alive");
+    /* Proxies that buffer a response defeat the point of streaming it. */
+    res.setHeader("X-Accel-Buffering", "no");
+    res.flushHeaders?.();
+
+    let streamed = 0;
+    try {
+      const stream = client.messages.stream(request, {
+        signal: controller.signal,
+      });
+
+      for await (const event of stream) {
+        if (
+          event.type !== "content_block_delta" ||
+          event.delta.type !== "text_delta"
+        ) {
+          continue;
+        }
+        const text = event.delta.text;
+        if (!text || streamed >= MAX_REPLY_CHARS) continue;
+        streamed += text.length;
+        writeEvent(res, "delta", { text });
+      }
+
+      if (streamed === 0) {
+        writeEvent(res, "error", { error: "empty-upstream-response" });
+      } else {
+        writeEvent(res, "done", {});
+      }
+    } catch (error) {
+      /* Once the headers are out a status code is no longer available, so the
+         failure has to travel as an event the client can act on. */
+      writeEvent(res, "error", {
+        error: isTimeout(error) ? "upstream-timeout" : "upstream-error",
+      });
+    } finally {
+      clearTimeout(timeout);
+      res.end();
+    }
+    return;
+  }
 
   try {
-    const client = new Anthropic({ apiKey });
-    const completion = await client.messages.create(
-      {
-        model: MODEL,
-        max_tokens: MAX_TOKENS,
-        temperature: 0.25,
-        system: SYSTEM_PROMPT,
-        messages,
-      },
-      { signal: controller.signal },
-    );
+    const completion = await client.messages.create(request, {
+      signal: controller.signal,
+    });
 
     const reply = completion.content
       .filter((block): block is Anthropic.TextBlock => block.type === "text")
       .map((block) => block.text)
       .join("")
       .trim()
-      .slice(0, 4_000);
+      .slice(0, MAX_REPLY_CHARS);
 
     if (!reply) {
       res.status(502).json({ error: "empty-upstream-response" });
@@ -229,13 +287,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
 
     res.status(200).json({ reply });
   } catch (error) {
-    const timedOut = error instanceof Error && error.name === "AbortError";
+    const timedOut = isTimeout(error);
     res.status(timedOut ? 504 : 502).json({
       error: timedOut ? "upstream-timeout" : "upstream-error",
     });
   } finally {
     clearTimeout(timeout);
   }
+}
+
+function wantsStream(req: VercelRequest): boolean {
+  const accept = String(req.headers.accept ?? "").toLowerCase();
+  return accept.includes("text/event-stream");
+}
+
+function isTimeout(error: unknown): boolean {
+  return (
+    error instanceof Error &&
+    (error.name === "AbortError" || error.name === "APIUserAbortError")
+  );
+}
+
+function writeEvent(res: VercelResponse, event: string, data: unknown): void {
+  res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
 }
 
 function safeParse(value: string): unknown {

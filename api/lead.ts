@@ -27,6 +27,7 @@ type LeadPayload = {
   industry?: unknown;
   features?: unknown;
   timeline?: unknown;
+  reference?: unknown;
   consent?: unknown;
 };
 
@@ -107,31 +108,81 @@ function textLines(payload: Record<string, string>): string {
     `Odvetvie: ${payload.industry || "neuvedené"}`,
     `Funkcie: ${payload.features || "neuvedené"}`,
     `Termín: ${payload.timeline || "neuvedený"}`,
+    `Číslo dopytu: ${payload.reference || "neuvedené"}`,
     "",
     "Poznámka:",
     payload.note || "bez poznámky",
   ].join("\n");
 }
 
-async function deliverWithResend(subject: string, text: string, replyTo?: string): Promise<boolean> {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return false;
-  const response = await fetch("https://api.resend.com/emails", {
+const SENDER = process.env.LEAD_FROM_EMAIL || "Môj Chatbot <onboarding@resend.dev>";
+
+async function sendWithResend(payload: Record<string, unknown>): Promise<Response> {
+  return fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      from: process.env.LEAD_FROM_EMAIL || "Môj Chatbot <onboarding@resend.dev>",
-      to: [RECIPIENT],
-      ...(replyTo ? { reply_to: replyTo } : {}),
-      subject,
-      text,
-    }),
+    body: JSON.stringify({ from: SENDER, ...payload }),
+  });
+}
+
+async function deliverWithResend(subject: string, text: string, replyTo?: string): Promise<boolean> {
+  if (!process.env.RESEND_API_KEY) return false;
+  const response = await sendWithResend({
+    to: [RECIPIENT],
+    ...(replyTo ? { reply_to: replyTo } : {}),
+    subject,
+    text,
   });
   if (!response.ok) throw new Error(`resend-${response.status}`);
   return true;
+}
+
+/* What the visitor gets back: proof the enquiry arrived, the reference number
+   to quote, and a copy of what they told me so they can check it. */
+function confirmationText(payload: Record<string, string>): string {
+  const firstName = payload.name.split(/\s+/)[0] || payload.name;
+  return [
+    `Dobrý deň, ${firstName},`,
+    "",
+    "ďakujem za váš dopyt. Mám ho u seba a ozvem sa vám do jedného pracovného dňa.",
+    "",
+    "Čo som si zapísal:",
+    `• Web má: ${payload.interest || "upresníme spolu"}`,
+    `• Vaša firma: ${payload.industry || "neuvedená"}`,
+    `• Má zvládnuť: ${payload.features || "upresníme spolu"}`,
+    `• Termín: ${payload.timeline || "neuvedený"}`,
+    payload.reference ? `• Číslo dopytu: ${payload.reference}` : "",
+    "",
+    "Ak vám medzitým niečo napadne, stačí odpovedať na tento e-mail.",
+    "",
+    "Daniel Vendžúr",
+    "Môj Chatbot — daniel@vendzur.sk, +421 948 699 433",
+  ]
+    .filter((line) => line !== "")
+    .join("\n");
+}
+
+/* The visitor's copy is a courtesy, not the delivery itself: the lead is
+   already with me by the time this runs, so a failure here is logged and
+   swallowed rather than shown to someone who did nothing wrong. */
+async function sendConfirmation(payload: Record<string, string>): Promise<void> {
+  if (!process.env.RESEND_API_KEY || !validEmail(payload.email)) return;
+  try {
+    const response = await sendWithResend({
+      to: [payload.email],
+      reply_to: RECIPIENT,
+      subject: payload.reference
+        ? `Máme váš dopyt — ${payload.reference}`
+        : "Máme váš dopyt",
+      text: confirmationText(payload),
+    });
+    if (!response.ok) throw new Error(`resend-${response.status}`);
+  } catch (error) {
+    console.error("lead-confirmation-failed", error);
+  }
 }
 
 async function deliverWithWebhook(subject: string, text: string): Promise<boolean> {
@@ -200,6 +251,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     industry: clean(raw.industry, 200),
     features: clean(raw.features, 1_200),
     timeline: clean(raw.timeline, 160),
+    reference: clean(raw.reference, 40),
   };
 
   const hasContact = Boolean(payload.phone) || validEmail(payload.email);
@@ -224,6 +276,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
       return;
     }
 
+    await sendConfirmation(payload);
     res.status(200).json({ ok: true });
   } catch (error) {
     console.error("lead-delivery-failed", error);
