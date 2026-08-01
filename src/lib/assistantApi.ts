@@ -73,7 +73,7 @@ export function localAssistantReply(question: string): string {
     return "Váš web prerábať netreba. Chatbot doň pridám tak, aby ladil s vašimi farbami, fungoval na mobile a dopyty vám posielal na e-mail, do kalendára alebo do tabuľky.";
   }
   if (/kontakt|zavola|email|e-mail/.test(normalized)) {
-    return "Napíšte na daniel@vendzur.sk alebo zavolajte na +421 948 699 433. Najrýchlejšie je vyskladať riešenie priamo tu — ozvem sa vám do jedného dňa.";
+    return "Napíšte na info@mojchatbot.sk alebo zavolajte na +421 948 699 433. Najrýchlejšie je vyskladať riešenie priamo tu — ozvem sa vám do jedného dňa.";
   }
 
   return "Poradím vám, čo by váš web mohol robiť za vás: odpovedať zákazníkom, počítať ceny alebo dohadovať termíny. Napíšte mi, čo vás dnes najviac zdržuje, alebo si vyskladajte riešenie.";

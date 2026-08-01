@@ -148,16 +148,17 @@ predtým.
 | Premenná | Povinná | Načo je |
 | --- | --- | --- |
 | `RESEND_API_KEY` | áno (ak chcete e-maily) | Kľúč z resend.com. Bez neho funkcia vráti `delivery-not-configured` a widget otvorí rozpísaný mail v klientovi. |
-| `LEAD_FROM_EMAIL` | **áno** | Odosielateľ, napr. `Môj Chatbot <dopyt@vasadomena.sk>`. |
-| `LEAD_TO_EMAIL` | nie | Kam chodia dopyty. Default `daniel@vendzur.sk`. |
+| `LEAD_FROM_EMAIL` | nie | Odosielateľ. Default `Môj Chatbot <info@mojchatbot.sk>` — vyžaduje overenú doménu `mojchatbot.sk`. |
+| `LEAD_TO_EMAIL` | nie | Kam chodia dopyty. Default `info@mojchatbot.sk`. |
+| `LEAD_CC_EMAIL` | nie | Druhý kontakt v kópii. Default `daniel@vendzur.sk`; prázdny reťazec ho vypne. |
 | `LEAD_WEBHOOK_URL` | nie | Záloha, keď e-mail zlyhá — dostane `{ subject, text, recipient }`. |
 | `ALLOWED_ORIGINS` | nie | Ďalšie domény, z ktorých smie widget volať (čiarkou oddelené). |
 
-> **Najčastejšia príčina „dopyt neprišiel".** Keď `LEAD_FROM_EMAIL` nie je nastavená, použije
-> sa zdieľaný odosielateľ `onboarding@resend.dev` — a ten Resend doručí **len na adresu, ktorou
-> ste si Resend účet založili**. Dopyt na akúkoľvek inú adresu vráti 403 a nikam nedôjde.
-> Riešenie: overte si doménu na resend.com/domains a nastavte `LEAD_FROM_EMAIL` na adresu
-> z nej.
+> **Najčastejšia príčina „dopyt neprišiel".** Resend odošle len z domény, ktorú máte overenú.
+> Kým `mojchatbot.sk` nie je overená na [resend.com/domains](https://resend.com/domains),
+> vráti 403 a dopyt nikam nedôjde. To isté platí pre zdieľaný `onboarding@resend.dev` —
+> ten doručí **len na adresu, ktorou ste si Resend účet založili**. V oboch prípadoch je
+> presný dôvod v logu funkcie aj v odpovedi.
 
 Keď doručenie zlyhá, dôvod od Resendu ide do logu funkcie (`lead-delivery-failed …`) aj do
 odpovede ako pole `reason`, takže je vidno v Network tabe. Kľúč sa neposiela nikdy. Ak je

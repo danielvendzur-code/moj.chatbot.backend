@@ -789,7 +789,8 @@ test("a refused delivery channel no longer hides the reason or skips the next on
   // The shared sender only delivers to the account's own address — the single
   // most common reason a correctly-keyed enquiry never arrives.
   assert.match(api, /const SHARED_SENDER = "Môj Chatbot <onboarding@resend\.dev>"/);
-  assert.match(api, /LEAD_FROM_EMAIL is unset/);
+  assert.match(api, /only delivers to the Resend account's own address/);
+  assert.match(api, /is verified at resend\.com\/domains/);
   // A refusal is carried, not thrown, so it cannot skip the channels after it.
   assert.match(api, /type Delivery = \{ ok: boolean; skipped\?: boolean; reason\?: string \}/);
   assert.match(api, /attempts\.push\(\["webhook", await deliverWithWebhook\(subject, text\)\]\)/);
@@ -804,6 +805,41 @@ test("a refused delivery channel no longer hides the reason or skips the next on
   // ...and the env the owner has to set is written down.
   assert.match(readme, /LEAD_FROM_EMAIL/);
   assert.match(readme, /onboarding@resend\.dev/);
+});
+
+test("info@mojchatbot.sk is the address, the personal one is the second contact", async () => {
+  const api = await read("api/lead.ts");
+  const client = await read("src/lib/leadApi.ts");
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
+  );
+  const fallbackReplies = await read("src/lib/assistantApi.ts");
+  const readme = await read("README.md");
+
+  // Sender and primary recipient.
+  assert.match(api, /const SENDER = process\.env\.LEAD_FROM_EMAIL \|\| "Môj Chatbot <info@mojchatbot\.sk>"/);
+  assert.match(api, /const RECIPIENT = process\.env\.LEAD_TO_EMAIL \|\| "info@mojchatbot\.sk"/);
+
+  // The personal address is kept on the thread, so a lead is never sitting in
+  // one inbox alone — and it is de-duplicated if both point at the same box.
+  assert.match(api, /const SECOND_CONTACT =/);
+  assert.match(api, /"daniel@vendzur\.sk"/);
+  assert.match(api, /const LEAD_RECIPIENTS = \[RECIPIENT, SECOND_CONTACT\]/);
+  assert.match(api, /all\.indexOf\(address\) === index/);
+  assert.match(api, /to: LEAD_RECIPIENTS/);
+  // The confirmation the visitor gets is signed with the public address.
+  assert.match(api, /`Môj Chatbot — \$\{RECIPIENT\}, \+421 948 699 433`/);
+
+  // Everything the visitor can see or click.
+  assert.match(conversation, /mailto:info@mojchatbot\.sk/);
+  assert.match(fallbackReplies, /Napíšte na info@mojchatbot\.sk/);
+  assert.match(client, /const FALLBACK_RECIPIENT = "info@mojchatbot\.sk"/);
+  assert.match(readme, /LEAD_CC_EMAIL/);
+
+  // No visitor-facing surface still shows the personal address.
+  for (const source of [conversation, fallbackReplies, client]) {
+    assert.doesNotMatch(source, /daniel@vendzur\.sk/);
+  }
 });
 
 test("auto-advance does not leave a parked pointer lighting up the next step", async () => {

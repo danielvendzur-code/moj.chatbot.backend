@@ -487,7 +487,7 @@ export function AssistantConversation({
             </span>
             <span>Zavolať</span>
           </a>
-          <a href="mailto:daniel@vendzur.sk">
+          <a href="mailto:info@mojchatbot.sk">
             <span className="cw-direct-actions__icon">
               <WidgetIcon name="mail" />
             </span>

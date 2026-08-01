@@ -3,7 +3,16 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 const MAX_BODY_BYTES = 28_000;
 const RATE_WINDOW_MS = 15 * 60 * 1_000;
 const RATE_MAX_REQUESTS = 8;
-const RECIPIENT = process.env.LEAD_TO_EMAIL || "daniel@vendzur.sk";
+const RECIPIENT = process.env.LEAD_TO_EMAIL || "info@mojchatbot.sk";
+/* The personal address stays on the thread as a second contact, so a lead is
+   never sitting in one inbox alone. Set LEAD_CC_EMAIL to "" to drop it. */
+const SECOND_CONTACT =
+  process.env.LEAD_CC_EMAIL === undefined
+    ? "daniel@vendzur.sk"
+    : process.env.LEAD_CC_EMAIL.trim();
+const LEAD_RECIPIENTS = [RECIPIENT, SECOND_CONTACT].filter(
+  (address, index, all) => address && all.indexOf(address) === index,
+);
 
 const DEFAULT_ALLOWED_ORIGINS = new Set([
   "https://danielvendzur-code.github.io",
@@ -121,7 +130,9 @@ function textLines(payload: Record<string, string>): string {
    how an enquiry goes missing on a correctly configured key. Set
    LEAD_FROM_EMAIL to an address on a domain verified at resend.com/domains. */
 const SHARED_SENDER = "Môj Chatbot <onboarding@resend.dev>";
-const SENDER = process.env.LEAD_FROM_EMAIL || SHARED_SENDER;
+/* Sending as info@mojchatbot.sk requires mojchatbot.sk to be verified at
+   resend.com/domains — until it is, Resend refuses and the reason says so. */
+const SENDER = process.env.LEAD_FROM_EMAIL || "Môj Chatbot <info@mojchatbot.sk>";
 
 /* One channel's outcome. A reason is carried rather than thrown so a single
    refusal cannot skip the channels that come after it. */
@@ -162,19 +173,21 @@ async function deliverWithResend(
   if (!process.env.RESEND_API_KEY) return { ok: false, skipped: true };
   try {
     const response = await sendWithResend({
-      to: [RECIPIENT],
+      to: LEAD_RECIPIENTS,
       ...(replyTo ? { reply_to: replyTo } : {}),
       subject,
       text,
     });
     if (response.ok) return { ok: true };
     const reason = await resendFailure(response);
-    /* The single most common cause, called out by name so it is actionable
-       from the log line alone instead of needing a round of guessing. */
+    /* The two causes worth naming, so the log line alone is actionable
+       instead of needing a round of guessing. */
     const hint =
       SENDER === SHARED_SENDER
-        ? " — LEAD_FROM_EMAIL is unset, so the shared onboarding@resend.dev sender is in use and it only delivers to the Resend account's own address"
-        : "";
+        ? " — the shared onboarding@resend.dev sender only delivers to the Resend account's own address"
+        : response.status === 403
+          ? ` — check that the sending domain of "${SENDER}" is verified at resend.com/domains`
+          : "";
     return { ok: false, reason: `${reason}${hint}` };
   } catch (error) {
     return { ok: false, reason: `resend-unreachable: ${String(error).slice(0, 200)}` };
@@ -200,7 +213,7 @@ function confirmationText(payload: Record<string, string>): string {
     "Ak vám medzitým niečo napadne, stačí odpovedať na tento e-mail.",
     "",
     "Daniel Vendžúr",
-    "Môj Chatbot — daniel@vendzur.sk, +421 948 699 433",
+    `Môj Chatbot — ${RECIPIENT}, +421 948 699 433`,
   ]
     .filter((line) => line !== "")
     .join("\n");

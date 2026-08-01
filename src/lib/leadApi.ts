@@ -1,7 +1,7 @@
 const LEAD_ENDPOINT =
   import.meta.env.VITE_LEAD_API_URL?.trim() ||
   "https://moj-chatbot-backend.vercel.app/api/lead";
-const FALLBACK_RECIPIENT = "daniel@vendzur.sk";
+const FALLBACK_RECIPIENT = "info@mojchatbot.sk";
 
 export type LeadSubmission = {
   source: string;
