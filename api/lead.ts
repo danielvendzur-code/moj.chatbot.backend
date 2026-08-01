@@ -1,11 +1,16 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import {
+  confirmationHtml,
+  confirmationText,
+  internalHtml,
+  internalText,
+  type EmailLead,
+} from "./emailTemplates.js";
 
 const MAX_BODY_BYTES = 28_000;
 const RATE_WINDOW_MS = 15 * 60 * 1_000;
 const RATE_MAX_REQUESTS = 8;
 const RECIPIENT = process.env.LEAD_TO_EMAIL || "info@mojchatbot.sk";
-/* The personal address stays on the thread as a second contact, so a lead is
-   never sitting in one inbox alone. Set LEAD_CC_EMAIL to "" to drop it. */
 const SECOND_CONTACT =
   process.env.LEAD_CC_EMAIL === undefined
     ? "daniel@vendzur.sk"
@@ -14,9 +19,6 @@ const LEAD_RECIPIENTS = [RECIPIENT, SECOND_CONTACT].filter(
   (address, index, all) => address && all.indexOf(address) === index,
 );
 
-/* These are the browser origins that actually host the widget and the
-   website form. The custom production domain was missing here, so Vercel
-   rejected valid submissions with `origin-not-allowed` before Resend ran. */
 const DEFAULT_ALLOWED_ORIGINS = new Set([
   "https://danielvendzur-code.github.io",
   "https://moj-chatbot-backend.vercel.app",
@@ -25,26 +27,15 @@ const DEFAULT_ALLOWED_ORIGINS = new Set([
   "https://www.mojchatbot.sk",
 ]);
 
-type RateState = { count: number; resetAt: number };
-type GlobalRateStore = typeof globalThis & {
-  __dvLeadRateLimit?: Map<string, RateState>;
-};
+const SHARED_SENDER = "Môj Chatbot <onboarding@resend.dev>";
+/* The production sending domain is verified at resend.com/domains. */
+const SENDER = process.env.LEAD_FROM_EMAIL || "Môj Chatbot <info@mojchatbot.sk>";
+/* Plain-text brand contact: `Môj Chatbot — ${RECIPIENT}, +421 948 699 433` */
 
-type LeadPayload = {
-  source?: unknown;
-  name?: unknown;
-  email?: unknown;
-  phone?: unknown;
-  company?: unknown;
-  web?: unknown;
-  note?: unknown;
-  interest?: unknown;
-  industry?: unknown;
-  features?: unknown;
-  timeline?: unknown;
-  reference?: unknown;
-  consent?: unknown;
-};
+type RateState = { count: number; resetAt: number };
+type GlobalRateStore = typeof globalThis & { __dvLeadRateLimit?: Map<string, RateState> };
+type Delivery = { ok: boolean; skipped?: boolean; reason?: string };
+type LeadPayload = Partial<Record<keyof EmailLead | "consent", unknown>>;
 
 const globalRateStore = globalThis as GlobalRateStore;
 const rateLimitStore =
@@ -68,8 +59,7 @@ function allowedOrigin(origin: string | null): string | null {
   if (!origin) return null;
   try {
     const normalized = new URL(origin).origin;
-    if (/^http:\/\/localhost(?::\d+)?$/.test(normalized)) return normalized;
-    if (/^http:\/\/127\.0\.0\.1(?::\d+)?$/.test(normalized)) return normalized;
+    if (/^http:\/\/(localhost|127\.0\.0\.1)(?::\d+)?$/.test(normalized)) return normalized;
     return configuredOrigins().has(normalized) ? normalized : null;
   } catch {
     return null;
@@ -110,43 +100,6 @@ function validEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && value.length <= 160;
 }
 
-function textLines(payload: Record<string, string>): string {
-  return [
-    `Zdroj: ${payload.source || "web"}`,
-    `Meno: ${payload.name}`,
-    `E-mail: ${payload.email}`,
-    `Telefón: ${payload.phone || "neuvedený"}`,
-    `Firma: ${payload.company || "neuvedená"}`,
-    `Web: ${payload.web || "neuvedený"}`,
-    "",
-    `Riešenie: ${payload.interest || "neuvedené"}`,
-    `Odvetvie: ${payload.industry || "neuvedené"}`,
-    `Funkcie: ${payload.features || "neuvedené"}`,
-    `Termín: ${payload.timeline || "neuvedený"}`,
-    `Číslo dopytu: ${payload.reference || "neuvedené"}`,
-    "",
-    "Poznámka:",
-    payload.note || "bez poznámky",
-  ].join("\n");
-}
-
-/* Resend's shared `onboarding@resend.dev` sender only ever delivers to the
-   address the Resend account was opened with. Left on the default, a lead to
-   any other recipient comes back 403 and is never seen — which is exactly
-   how an enquiry goes missing on a correctly configured key. Set
-   LEAD_FROM_EMAIL to an address on a domain verified at resend.com/domains. */
-const SHARED_SENDER = "Môj Chatbot <onboarding@resend.dev>";
-/* Sending as info@mojchatbot.sk requires mojchatbot.sk to be verified at
-   resend.com/domains — until it is, Resend refuses and the reason says so. */
-const SENDER = process.env.LEAD_FROM_EMAIL || "Môj Chatbot <info@mojchatbot.sk>";
-
-/* One channel's outcome. A reason is carried rather than thrown so a single
-   refusal cannot skip the channels that come after it. */
-type Delivery = { ok: boolean; skipped?: boolean; reason?: string };
-
-/* Resend answers a refusal with a body that names the cause — the unverified
-   domain, the shared-sender restriction, a bad key. Throwing away everything
-   but the status code is what left the logs saying nothing. */
 async function resendFailure(response: Response): Promise<string> {
   let detail = "";
   try {
@@ -155,7 +108,7 @@ async function resendFailure(response: Response): Promise<string> {
     const message = typeof body.message === "string" ? body.message : "";
     detail = [name, message].filter(Boolean).join(": ").slice(0, 300);
   } catch {
-    /* A refusal without a JSON body still has its status, which is enough. */
+    /* The status still identifies a refusal without a JSON body. */
   }
   return `resend-${response.status}${detail ? ` ${detail}` : ""}`;
 }
@@ -174,6 +127,7 @@ async function sendWithResend(payload: Record<string, unknown>): Promise<Respons
 async function deliverWithResend(
   subject: string,
   text: string,
+  html: string,
   replyTo?: string,
 ): Promise<Delivery> {
   if (!process.env.RESEND_API_KEY) return { ok: false, skipped: true };
@@ -183,11 +137,10 @@ async function deliverWithResend(
       ...(replyTo ? { reply_to: replyTo } : {}),
       subject,
       text,
+      html,
     });
     if (response.ok) return { ok: true };
     const reason = await resendFailure(response);
-    /* The two causes worth naming, so the log line alone is actionable
-       instead of needing a round of guessing. */
     const hint =
       SENDER === SHARED_SENDER
         ? " — the shared onboarding@resend.dev sender only delivers to the Resend account's own address"
@@ -200,48 +153,24 @@ async function deliverWithResend(
   }
 }
 
-/* What the visitor gets back: proof the enquiry arrived, the reference number
-   to quote, and a copy of what they told me so they can check it. */
-function confirmationText(payload: Record<string, string>): string {
-  const firstName = payload.name.split(/\s+/)[0] || payload.name;
-  return [
-    `Dobrý deň, ${firstName},`,
-    "",
-    "ďakujem za váš dopyt. Mám ho u seba a ozvem sa vám do jedného pracovného dňa.",
-    "",
-    "Čo som si zapísal:",
-    `• Web má: ${payload.interest || "upresníme spolu"}`,
-    `• Vaša firma: ${payload.industry || "neuvedená"}`,
-    `• Má zvládnuť: ${payload.features || "upresníme spolu"}`,
-    `• Termín: ${payload.timeline || "neuvedený"}`,
-    payload.reference ? `• Číslo dopytu: ${payload.reference}` : "",
-    "",
-    "Ak vám medzitým niečo napadne, stačí odpovedať na tento e-mail.",
-    "",
-    "Daniel Vendžúr",
-    `Môj Chatbot — ${RECIPIENT}, +421 948 699 433`,
-  ]
-    .filter((line) => line !== "")
-    .join("\n");
-}
-
-/* The visitor's copy is a courtesy, not the delivery itself: the lead is
-   already with me by the time this runs, so a failure here is logged and
-   swallowed rather than shown to someone who did nothing wrong. */
-async function sendConfirmation(payload: Record<string, string>): Promise<void> {
-  if (!process.env.RESEND_API_KEY || !validEmail(payload.email)) return;
+async function sendConfirmation(payload: EmailLead): Promise<boolean | undefined> {
+  if (!process.env.RESEND_API_KEY) return false;
+  if (!validEmail(payload.email)) return;
   try {
     const response = await sendWithResend({
       to: [payload.email],
       reply_to: RECIPIENT,
       subject: payload.reference
-        ? `Máme váš dopyt — ${payload.reference}`
-        : "Máme váš dopyt",
-      text: confirmationText(payload),
+        ? `Dopyt sme prijali · ${payload.reference}`
+        : "Dopyt sme prijali · Môj Chatbot",
+      text: confirmationText(payload, RECIPIENT),
+      html: confirmationHtml(payload, RECIPIENT),
     });
     if (!response.ok) throw new Error(await resendFailure(response));
+    return true;
   } catch (error) {
     console.error("lead-confirmation-failed", String(error));
+    return false;
   }
 }
 
@@ -254,9 +183,7 @@ async function deliverWithWebhook(subject: string, text: string): Promise<Delive
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ subject, text, recipient: RECIPIENT }),
     });
-    return response.ok
-      ? { ok: true }
-      : { ok: false, reason: `webhook-${response.status}` };
+    return response.ok ? { ok: true } : { ok: false, reason: `webhook-${response.status}` };
   } catch (error) {
     return { ok: false, reason: `webhook-unreachable: ${String(error).slice(0, 200)}` };
   }
@@ -304,7 +231,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   }
 
   const raw = (req.body ?? {}) as LeadPayload;
-  const payload = {
+  const payload: EmailLead = {
     source: clean(raw.source, 80),
     name: clean(raw.name, 80),
     email: clean(raw.email, 160),
@@ -325,23 +252,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     return;
   }
 
-  const subject = `Nový dopyt — ${payload.company || payload.name}`;
-  const text = textLines(payload);
-
+  const subject = payload.reference
+    ? `Nový dopyt · ${payload.reference} · ${payload.company || payload.name}`
+    : `Nový dopyt · ${payload.company || payload.name}`;
+  const text = internalText(payload);
+  const html = internalHtml(payload, RECIPIENT);
   const mailto = `mailto:${RECIPIENT}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
 
-  /* Every configured channel gets its turn. Previously a Resend refusal threw
-     straight past the webhook, so a second, working route was never tried and
-     the lead was lost to a problem the first channel alone had. */
   const attempts: Array<[string, Delivery]> = [
-    [
-      "resend",
-      await deliverWithResend(
-        subject,
-        text,
-        validEmail(payload.email) ? payload.email : undefined,
-      ),
-    ],
+    ["resend", await deliverWithResend(subject, text, html, validEmail(payload.email) ? payload.email : undefined)],
   ];
   if (!attempts.some(([, result]) => result.ok)) {
     attempts.push(["webhook", await deliverWithWebhook(subject, text)]);
@@ -353,22 +272,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   if (failures.length) console.error("lead-delivery-failed", failures.join(" | "));
 
   if (attempts.some(([, result]) => result.ok)) {
-    await sendConfirmation(payload);
-    res.status(200).json({ ok: true });
+    const autoReplySent = (await sendConfirmation(payload)) === true;
+    res.status(200).json({ ok: true, autoReplySent });
     return;
   }
-
-  /* Nothing refused, nothing was configured — a deployment question, not a
-     runtime one, and worth saying so distinctly. */
   if (!failures.length) {
     res.status(503).json({ error: "delivery-not-configured", fallback: mailto });
     return;
   }
-
-  /* The reason travels to the client too. It is the provider's own wording
-     about the sender or the key, never a credential, and having it in the
-     network tab is the difference between a fixable report and "it just
-     didn't arrive". */
   res.status(502).json({
     error: "delivery-failed",
     reason: failures.join(" | "),
