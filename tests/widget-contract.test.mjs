@@ -428,14 +428,13 @@ test("the reply streams in and the thread keeps up with it", async () => {
   assert.match(api, /writeEvent\(res, "error"/);
   assert.match(api, /client\.messages\.stream\(request/);
 
-  // Model config: the parameters this model actually accepts.
-  assert.match(api, /const MODEL = "claude-opus-5"/);
-  assert.match(api, /thinking: \{ type: "adaptive" as const \}/);
-  assert.match(api, /output_config: \{ effort: EFFORT \}/);
-  // Sampling parameters are rejected outright on this model.
+  // Model config: Haiku has no `effort` knob and does not think unless
+  // asked, so the request carries neither — sending `effort` errors outright
+  // on this model.
+  assert.match(api, /const MODEL = "claude-haiku-4-5"/);
+  assert.doesNotMatch(api, /thinking:|output_config:|EFFORT/);
   assert.doesNotMatch(api, /temperature|top_p|top_k/);
-  // Thinking shares the ceiling with the answer, so 512 would truncate.
-  assert.match(api, /const MAX_TOKENS = 2_048/);
+  assert.match(api, /const MAX_TOKENS = 512/);
 
   // Client: frames are parsed across chunk boundaries, and the first-byte
   // timeout is released once text is arriving so it cannot cut a live stream.

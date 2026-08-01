@@ -1,14 +1,11 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-const MODEL = "claude-opus-5";
-/* Thinking is on by default on this model and shares the ceiling with the
-   answer, so the cap has to cover both. The reply itself stays three short
-   sentences because the prompt says so, not because the budget ran out. */
-const MAX_TOKENS = 2_048;
-/* A widget reply is three sentences. Low effort keeps the visitor from
-   watching a typing indicator while the model deliberates. */
-const EFFORT = "low" as const;
+const MODEL = "claude-haiku-4-5";
+/* Haiku doesn't think unless asked and has no `effort` knob (that param
+   errors on this model), so the ceiling only has to cover the answer
+   itself — three short sentences, per the prompt. */
+const MAX_TOKENS = 512;
 const MAX_MESSAGES = 12;
 const MAX_CHARS = 1_000;
 const MAX_BODY_BYTES = 24_000;
@@ -216,8 +213,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     model: MODEL,
     max_tokens: MAX_TOKENS,
     system: SYSTEM_PROMPT,
-    thinking: { type: "adaptive" as const },
-    output_config: { effort: EFFORT },
     messages,
   };
 
