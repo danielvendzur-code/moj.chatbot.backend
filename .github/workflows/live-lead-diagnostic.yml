@@ -12,9 +12,9 @@ permissions:
 jobs:
   inspect-production-mail-flow:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 4
     steps:
-      - name: Inspect DNS and production CORS without sending another email
+      - name: Inspect DNS, CORS and mailbox acceptance
         shell: bash
         run: |
           set -euo pipefail
@@ -28,13 +28,39 @@ jobs:
             echo '=== send.mojchatbot.sk MX ==='
             curl --silent --show-error 'https://dns.google/resolve?name=send.mojchatbot.sk&type=MX'
             echo
+            echo '=== vendzur.sk MX ==='
+            curl --silent --show-error 'https://dns.google/resolve?name=vendzur.sk&type=MX'
+            echo
             echo '=== production lead OPTIONS ==='
             curl --silent --show-error --include --request OPTIONS \
               --header 'Origin: https://mojchatbot.sk' \
               --header 'Access-Control-Request-Method: POST' \
               'https://moj-chatbot-backend.vercel.app/api/lead'
             echo
-          } | tee diagnostic.txt
+            echo '=== SMTP RCPT probes (no message body is sent) ==='
+            python3 - <<'PY'
+          import smtplib
+          import socket
+
+          probes = [
+              ("mx10.websupport.sk", "info@mojchatbot.sk"),
+              ("mx20.websupport.sk", "info@mojchatbot.sk"),
+          ]
+          for host, recipient in probes:
+              print(f"-- {host} -> {recipient}")
+              try:
+                  smtp = smtplib.SMTP(host, 25, timeout=15)
+                  smtp.set_debuglevel(1)
+                  smtp.ehlo("github-diagnostic.invalid")
+                  code, message = smtp.mail("diagnostic@github-diagnostic.invalid")
+                  print("MAIL FROM:", code, message.decode(errors="replace"))
+                  code, message = smtp.rcpt(recipient)
+                  print("RCPT TO:", code, message.decode(errors="replace"))
+                  smtp.quit()
+              except (OSError, smtplib.SMTPException, socket.timeout) as error:
+                  print("SMTP probe error:", repr(error))
+          PY
+          } 2>&1 | tee diagnostic.txt
 
       - name: Upload diagnostic report
         uses: actions/upload-artifact@v4
