@@ -98,6 +98,7 @@ export function ToolCalculator({
   const [lead, setLead] = useState<LeadState>(EMPTY_LEAD);
   const [leadError, setLeadError] = useState("");
   const [sendState, setSendState] = useState<SendState>("idle");
+  const [handedToMailClient, setHandedToMailClient] = useState(false);
   const [proposalNumber, setProposalNumber] = useState("");
   const bodyRef = useRef<HTMLDivElement>(null);
   const questionRef = useRef<HTMLHeadingElement>(null);
@@ -119,6 +120,7 @@ export function ToolCalculator({
     setLead(EMPTY_LEAD);
     setLeadError("");
     setSendState("idle");
+    setHandedToMailClient(false);
   };
 
   useEffect(() => {
@@ -279,11 +281,16 @@ export function ToolCalculator({
         industry: summaryRows[1][1],
         features: featureLabels.join(", "),
         timeline: summaryRows[3][1],
+        reference: nextProposalNumber,
         consent: true,
       });
+      /* When the server could not deliver, the visitor's own mail client is
+         opened with everything already filled in. The thank-you screen then
+         says so plainly rather than claiming a send that did not happen. */
+      setHandedToMailClient(!result.delivered);
       if (result.fallback) window.location.assign(result.fallback);
       setSendState("done");
-      track("lead_submit_success");
+      track("lead_submit_success", { delivered: result.delivered });
     } catch (error) {
       setSendState("idle");
       setLeadError(
@@ -310,10 +317,16 @@ export function ToolCalculator({
           <span className="cw-thanks__icon" ref={thanksIconRef}>
             <WidgetIcon name="check" />
           </span>
-          <span className="cw-thanks__eyebrow">Hotovo, poslal som to</span>
+          <span className="cw-thanks__eyebrow">
+            {handedToMailClient ? "Skoro hotovo" : "Hotovo, poslal som to"}
+          </span>
           <h3>Ďakujem, {lead.name.trim()}.</h3>
           <p>
-            Ozvem sa vám do jedného pracovného dňa s návrhom ďalšieho kroku.
+            {handedToMailClient
+              ? "Otvoril som vám rozpísaný e-mail — stačí ho odoslať a ozvem sa do jedného pracovného dňa."
+              : EMAIL_PATTERN.test(lead.email.trim())
+                ? "Potvrdenie som vám poslal na e-mail a ozvem sa do jedného pracovného dňa."
+                : "Ozvem sa vám do jedného pracovného dňa s návrhom ďalšieho kroku."}
           </p>
           <div className="cw-thanks__grid">
             <div>
@@ -578,7 +591,7 @@ export function ToolCalculator({
                     onChange={(event) =>
                       setLead({ ...lead, name: event.target.value })
                     }
-                    placeholder="Ako sa menujete? *"
+                    placeholder="Meno *"
                     aria-label="Vaše meno"
                     autoComplete="name"
                   />
@@ -646,16 +659,6 @@ export function ToolCalculator({
                       />
                     </div>
                   </details>
-                  <label className="cw-consent">
-                    <input
-                      type="checkbox"
-                      checked={lead.consent}
-                      onChange={(event) =>
-                        setLead({ ...lead, consent: event.target.checked })
-                      }
-                    />
-                    <span>Súhlasím, že mi môžete napísať alebo zavolať.</span>
-                  </label>
                 </div>
               </div>
 
@@ -697,13 +700,34 @@ export function ToolCalculator({
       ) : (
         /* The sticky slot carries the action that finishes the flow. Restart
            stays one tap away in the panel header, so it does not need to sit
-           here pushing the submit button below the fold. */
+           here pushing the submit button below the fold.
+
+           Consent lives here rather than at the bottom of the scrolling form:
+           it is the one box that has to be ticked before anything can be sent,
+           so it belongs next to the button it gates, visible without scrolling.
+           The whole row is the target, and it is a control the visitor can
+           reach with one thumb. */
         <footer className="cw-calc-actions cw-calc-actions--final">
           {leadError ? (
             <p className="cw-lead__status" role="alert">
               {leadError}
             </p>
           ) : null}
+          <label className="cw-consent" data-checked={lead.consent}>
+            <input
+              type="checkbox"
+              checked={lead.consent}
+              onChange={(event) =>
+                setLead({ ...lead, consent: event.target.checked })
+              }
+            />
+            <span className="cw-consent__box" aria-hidden="true">
+              <WidgetIcon name="check" />
+            </span>
+            <span className="cw-consent__text">
+              Súhlasím, že ma môžete kontaktovať.
+            </span>
+          </label>
           <button
             type="button"
             className="cw-submit cw-submit--approved"

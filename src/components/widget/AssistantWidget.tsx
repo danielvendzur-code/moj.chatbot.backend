@@ -39,6 +39,10 @@ const isPreset = (value: string | undefined): value is AssistantPreset =>
   );
 
 const PANEL_EXIT_MS = 210;
+/* Below this the pointer is still a tap, not a drag. */
+const DRAG_THRESHOLD_PX = 6;
+/* Matches the reset icon's sweep in the stylesheet. */
+const RESET_SPIN_MS = 620;
 
 const reducedMotion = (): boolean =>
   typeof window !== "undefined" &&
@@ -55,7 +59,9 @@ export function AssistantWidget({
     "forward",
   );
   const [resetToken, setResetToken] = useState(0);
+  const [resetSpinning, setResetSpinning] = useState(false);
   const [preset, setPreset] = useState<AssistantPreset | null>(null);
+  const resetSpinTimerRef = useRef<number | null>(null);
   const panelRef = useRef<HTMLElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
   const tabsRef = useRef<HTMLElement>(null);
@@ -113,6 +119,22 @@ export function AssistantWidget({
     [],
   );
 
+  /* Reset clears the panel behind the visitor's back, so the button itself has
+     to acknowledge the tap. The flag is dropped and re-set on the next frame
+     so a second tap replays the sweep instead of doing nothing. */
+  const pulseReset = useCallback(() => {
+    if (reducedMotion()) return;
+    if (resetSpinTimerRef.current !== null) {
+      window.clearTimeout(resetSpinTimerRef.current);
+    }
+    setResetSpinning(false);
+    window.requestAnimationFrame(() => setResetSpinning(true));
+    resetSpinTimerRef.current = window.setTimeout(() => {
+      resetSpinTimerRef.current = null;
+      setResetSpinning(false);
+    }, RESET_SPIN_MS);
+  }, []);
+
   const switchMode = useCallback(
     (nextMode: WidgetMode) => {
       if (nextMode === mode) return;
@@ -123,15 +145,14 @@ export function AssistantWidget({
     [mode],
   );
 
-  /* The switch thumb can be dragged, not only tapped. */
-  const startThumbDrag = (
-    pointerId: number,
-    clientX: number,
-    tabs: HTMLElement,
-  ) => {
+  /* The switch thumb can be dragged, not only tapped. Capture is deliberately
+     *not* taken here: while an element holds pointer capture the browser
+     retargets the resulting `click` to the capturing element, so capturing on
+     pointerdown swallowed every tap on the two tab buttons — "Vyskladať
+     riešenie" looked dead. Capture is taken in `moveThumbDrag`, once the
+     pointer has actually travelled far enough to be a drag. */
+  const startThumbDrag = (pointerId: number, clientX: number) => {
     dragRef.current = { pointerId, x: clientX, moved: false };
-    tabs.dataset.dragging = "true";
-    tabs.setPointerCapture?.(pointerId);
   };
 
   const moveThumbDrag = (pointerId: number, clientX: number) => {
@@ -141,9 +162,14 @@ export function AssistantWidget({
     if (!drag || drag.pointerId !== pointerId || !tabs || !thumb) return;
     const travel = tabs.getBoundingClientRect().width / 2;
     if (travel <= 0) return;
+    if (!drag.moved) {
+      if (Math.abs(clientX - drag.x) <= DRAG_THRESHOLD_PX) return;
+      drag.moved = true;
+      tabs.dataset.dragging = "true";
+      tabs.setPointerCapture?.(pointerId);
+    }
     const base = mode === "assistant" ? travel : 0;
     const next = Math.max(0, Math.min(travel, base + (clientX - drag.x)));
-    if (Math.abs(clientX - drag.x) > 6) drag.moved = true;
     thumb.style.transform = `translateX(${next}px)`;
   };
 
@@ -244,6 +270,9 @@ export function AssistantWidget({
       if (suppressClickTimerRef.current !== null) {
         window.clearTimeout(suppressClickTimerRef.current);
       }
+      if (resetSpinTimerRef.current !== null) {
+        window.clearTimeout(resetSpinTimerRef.current);
+      }
     },
     [],
   );
@@ -309,11 +338,13 @@ export function AssistantWidget({
               <button
                 type="button"
                 data-testid="widget-reset"
+                data-spinning={resetSpinning || undefined}
                 aria-label="Začať odznova"
                 title="Začať odznova"
                 onClick={() => {
                   setPreset(null);
                   setResetToken((value) => value + 1);
+                  pulseReset();
                 }}
               >
                 <WidgetIcon name="reset" />
@@ -343,11 +374,7 @@ export function AssistantWidget({
               ) {
                 return;
               }
-              startThumbDrag(
-                event.pointerId,
-                event.clientX,
-                event.currentTarget,
-              );
+              startThumbDrag(event.pointerId, event.clientX);
             }}
             onPointerMove={(event) => {
               if (!dragRef.current) return;

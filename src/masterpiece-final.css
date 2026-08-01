@@ -1,0 +1,1255 @@
+/* =============================================================
+   Môj Chatbot — the finish layer.
+
+   Loaded last, so it is the final word on the six things the
+   earlier layers left unresolved:
+
+   1. One motion system. Every transition uses the same curve and
+      one of three durations, and nothing animates a property that
+      forces layout.
+   2. No cool colour anywhere. Browser chrome — autofill, text
+      selection, checkboxes, the tap flash — ships blue by default,
+      and that blue was the last cool thing on screen.
+   3. A glow that reads as light, not as a drop shadow: a tight
+      inner ring plus a wide, soft, warm bloom.
+   4. The builder fills its step. Cards size to the space they are
+      given, so a question never needs a scrollbar.
+   5. The composer, the chips and the header actions each answer a
+      tap visibly.
+   6. On a phone the keyboard takes the panel, so the rows that are
+      not the conversation fold away instead of everything shrinking.
+   ============================================================= */
+
+.cw-widget[class] {
+  /* One curve for arrivals and one for exits. Nothing else. */
+  --mp-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --mp-ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --mp-fast: 160ms;
+  --mp-base: 280ms;
+  --mp-slow: 440ms;
+
+  --mp-accent: #ffc79d;
+  --mp-accent-soft: rgba(255, 199, 157, 0.14);
+  --mp-accent-line: rgba(255, 199, 157, 0.34);
+  --mp-ink-on-accent: #0a0908;
+
+  /* The glow, in three intensities. Each is a tight ring the eye reads
+     as an edge, plus a wide bloom it reads as light spilling out. */
+  --mp-glow-rest:
+    inset 0 0 0 1px rgba(255, 199, 157, 0.1),
+    0 0 18px -12px rgba(255, 199, 157, 0.6);
+  --mp-glow-hover:
+    inset 0 0 0 1px rgba(255, 199, 157, 0.32),
+    0 2px 10px -6px rgba(255, 199, 157, 0.5),
+    0 14px 40px -18px rgba(255, 199, 157, 0.72);
+  --mp-glow-strong:
+    inset 0 0 0 1px rgba(255, 199, 157, 0.4),
+    0 2px 12px -4px rgba(255, 199, 157, 0.55),
+    0 18px 52px -18px rgba(255, 199, 157, 0.9);
+}
+
+/* ---------------------------------------------------------------
+   1. Every cool pixel the browser adds on its own
+   --------------------------------------------------------------- */
+
+/* Chrome paints an autofilled field pale blue with dark ink and there is
+   no property that turns it off — the only lever is an inset shadow wide
+   enough to cover the field, held in place by a transition long enough
+   never to finish. This is the blue that appeared the moment the name
+   field was filled. */
+html body .cw-widget[class][class] :is(input, textarea):-webkit-autofill,
+html body .cw-widget[class][class] :is(input, textarea):-webkit-autofill:hover,
+html body .cw-widget[class][class] :is(input, textarea):-webkit-autofill:focus,
+html body .cw-widget[class][class] :is(input, textarea):-webkit-autofill:active {
+  -webkit-text-fill-color: var(--ux-ink, #fff8f2) !important;
+  -webkit-box-shadow: 0 0 0 60px var(--ux-surface, #18130f) inset !important;
+  box-shadow: 0 0 0 60px var(--ux-surface, #18130f) inset !important;
+  caret-color: var(--mp-accent) !important;
+  transition: background-color 8640000s ease-in-out 0s !important;
+}
+
+html body .cw-widget[class][class] :is(input, textarea):autofill {
+  -webkit-text-fill-color: var(--ux-ink, #fff8f2) !important;
+  box-shadow: 0 0 0 60px var(--ux-surface, #18130f) inset !important;
+}
+
+/* Selection, caret and every native form control follow the one accent. */
+html body .cw-widget[class] ::selection {
+  color: var(--mp-ink-on-accent) !important;
+  background: var(--mp-accent) !important;
+}
+
+html body .cw-widget[class][class] {
+  accent-color: var(--mp-accent) !important;
+  caret-color: var(--mp-accent) !important;
+  /* The translucent flash a tap leaves on a mobile control is blue-black,
+     and it fires on every button in the widget. The states below say
+     everything a tap needs to say. */
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+html body .cw-widget[class][class] :is(input, textarea, button, a, label, summary) {
+  accent-color: var(--mp-accent) !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Firefox marks a field it considers invalid with a red-blue ring before
+   the visitor has finished typing in it. Validation here is ours. */
+html body .cw-widget[class][class] :is(input, textarea):is(:invalid, :-moz-ui-invalid) {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Every surface an earlier layer still wins, audited against the rendered
+   page rather than against the stylesheets: anything whose blue channel led
+   its red one was a cool leftover, and each one is named here.
+
+   Most of them were left behind because the older rules target elements by
+   tag — `.cw-direct-actions__grid a`, `.cw-lead__form input` — while the
+   warm layer qualifies its selectors with `[class]`, and those elements
+   carry no class attribute, so the warm rule silently never applied. */
+html body .cw-widget[class][class][class] :is(
+    .cw-calculator,
+    .cw-calc-body,
+    .cw-conversation
+  )[class] {
+  background-color: var(--ux-panel, #100e0c) !important;
+  background-image: none !important;
+}
+
+html body .cw-widget[class][class][class] .cw-progress[class] {
+  background-color: rgba(10, 9, 8, 0.72) !important;
+  box-shadow: inset 0 -1px 0 rgba(255, 199, 157, 0.1) !important;
+}
+
+html body .cw-widget[class][class][class] .cw-progress__back[class] {
+  background-color: var(--ux-surface, #18130f) !important;
+}
+
+/* The three contact tiles were the most visible blue left on screen. */
+html body .cw-widget[class][class][class] .cw-direct-actions__grid[class] a {
+  color: var(--ux-ink, #fff8f2) !important;
+  background-color: var(--ux-surface, #18130f) !important;
+  background-image: none !important;
+}
+
+html body .cw-widget[class][class][class] .cw-direct-actions__grid[class] a span {
+  color: inherit !important;
+}
+
+/* Form fields, their borders and their placeholders. */
+html body .cw-widget[class][class][class] :is(
+    .cw-lead__form,
+    .cw-custom,
+    .cw-lead__optional-body
+  )[class] :is(input, textarea) {
+  color: var(--ux-ink, #fff8f2) !important;
+  border-color: var(--ux-line, rgba(255, 199, 157, 0.16)) !important;
+  background-color: var(--ux-surface, #18130f) !important;
+  background-image: none !important;
+}
+
+html body .cw-widget[class][class][class] :is(input, textarea)::placeholder {
+  color: var(--ux-faint, #8f8178) !important;
+  opacity: 1 !important;
+}
+
+/* A disabled primary action was a cool plate with cool ink on it. It is the
+   same warm surface as everything else now, just turned down. */
+html body .cw-widget[class][class][class][class] :is(.cw-next, .cw-submit)[class]:disabled,
+html body .cw-widget[class][class][class][class] :is(.cw-next, .cw-submit)[class]:disabled :is(span, svg, path) {
+  color: var(--ux-faint, #8f8178) !important;
+  border-color: var(--ux-line, rgba(255, 199, 157, 0.16)) !important;
+  background-color: var(--ux-surface-raised, #201914) !important;
+  background-image: none !important;
+}
+
+/* The secondary text tone was a desaturated green-grey. Warm sand instead. */
+html body .cw-widget[class][class][class] :is(
+    .cw-q-sub,
+    .cw-rowcard__body small,
+    .cw-opt__body > span,
+    .cw-vcard > span,
+    .cw-summary__row > span,
+    .cw-summary__label,
+    .cw-lead__ask,
+    .cw-lead__optional > summary
+  ) {
+  color: var(--ux-muted, #b9aaa0) !important;
+}
+
+/* Two cool accents survived in earlier layers — a teal and a slate — on
+   surfaces those layers still win. Both resolve to the one accent. */
+html body .cw-widget[class][class][class] :is(
+    .cw-chat-builder__icon,
+    .cw-progress__count,
+    .cw-progress__back,
+    .cw-direct-actions__icon
+  )[class],
+html body .cw-widget[class][class][class] :is(
+    .cw-chat-builder__icon,
+    .cw-progress__back,
+    .cw-direct-actions__icon
+  )[class] :is(svg, path) {
+  color: var(--mp-accent) !important;
+}
+
+html body .cw-widget[class][class][class] .cw-progress__count[class] {
+  color: var(--ux-muted, #b9aaa0) !important;
+}
+
+/* ---------------------------------------------------------------
+   2. One motion system
+
+   Only transform, opacity, colour, shadow and filter are animated.
+   Nothing here can make the browser re-lay-out a frame.
+   --------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html body .cw-widget[class][class] :is(
+      .cw-launcher,
+      .cw-chip,
+      .cw-rowcard,
+      .cw-scard,
+      .cw-vcard,
+      .cw-opt,
+      .cw-contact-method,
+      .cw-next,
+      .cw-submit,
+      .cw-send,
+      .cw-chat-builder,
+      .cw-progress__back,
+      .cw-panel-head__actions button,
+      .cw-thanks__actions button,
+      .cw-direct-actions__grid a,
+      .cw-lead__form input,
+      .cw-lead__form textarea,
+      .cw-custom textarea,
+      .cw-inputbar,
+      .cw-consent,
+      .cw-tabs > button
+    )[class] {
+    transition:
+      transform var(--mp-base) var(--mp-ease),
+      box-shadow var(--mp-base) var(--mp-ease),
+      background-color var(--mp-fast) var(--mp-ease-out),
+      border-color var(--mp-fast) var(--mp-ease-out),
+      color var(--mp-fast) var(--mp-ease-out),
+      opacity var(--mp-fast) linear !important;
+  }
+
+  /* Icons and labels inherit the same rhythm so a filled control never
+     changes colour a beat before or after its own background. */
+  html body .cw-widget[class][class] :is(
+      .cw-chip,
+      .cw-rowcard,
+      .cw-scard,
+      .cw-vcard,
+      .cw-opt,
+      .cw-contact-method,
+      .cw-send,
+      .cw-panel-head__actions button
+    )[class] :is(svg, path, b, small, span) {
+    transition:
+      color var(--mp-fast) var(--mp-ease-out),
+      transform var(--mp-base) var(--mp-ease),
+      opacity var(--mp-fast) linear !important;
+  }
+}
+
+/* A pressed control dips. One rule, every control, no exceptions —
+   this is what makes the whole panel feel like one object. */
+html body .cw-widget[class][class][class] :is(
+    .cw-chip,
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt,
+    .cw-contact-method,
+    .cw-next,
+    .cw-submit,
+    .cw-chat-builder,
+    .cw-thanks__actions button,
+    .cw-direct-actions__grid a,
+    .cw-tabs > button
+  )[class]:active:not(:disabled) {
+  transform: scale(0.976) !important;
+  transition-duration: 90ms !important;
+}
+
+/* ---------------------------------------------------------------
+   3. The panel itself
+   --------------------------------------------------------------- */
+
+html body .cw-widget[class][class][class] .cw-panel[class] {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 248, 242, 0.035),
+    0 42px 100px -46px rgba(0, 0, 0, 0.96),
+    0 0 72px -34px rgba(255, 199, 157, 0.5),
+    0 26px 62px -46px rgba(255, 199, 157, 0.58) !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The open settles rather than bounces: one overshoot of four pixels,
+     absorbed before the eye can call it a bounce. */
+  html body .cw-widget[class][class][class] .cw-panel[class][data-state="open"] {
+    animation: mp-panel-in 520ms var(--mp-ease) both !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-panel[class][data-state="closing"] {
+    animation: mp-panel-out 210ms var(--mp-ease-out) forwards !important;
+  }
+
+  @keyframes mp-panel-in {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 26px, 0) scale(0.958);
+      filter: blur(9px);
+    }
+    52% {
+      opacity: 1;
+      filter: blur(0);
+    }
+    72% {
+      transform: translate3d(0, -4px, 0) scale(1.005);
+    }
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes mp-panel-out {
+    from {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+      filter: blur(0);
+    }
+    to {
+      opacity: 0;
+      transform: translate3d(0, 14px, 0) scale(0.968);
+      filter: blur(6px);
+    }
+  }
+}
+
+/* The launcher answers the pointer and shows when the panel is open. */
+html body .cw-widget[class][class][class] .cw-launcher[class] {
+  box-shadow:
+    0 18px 44px -20px rgba(0, 0, 0, 0.7),
+    0 0 34px -14px rgba(255, 199, 157, 0.7) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html body .cw-widget[class][class][class] .cw-launcher[class]:hover {
+    transform: scale(1.06) !important;
+    box-shadow:
+      0 22px 52px -20px rgba(0, 0, 0, 0.72),
+      0 0 54px -12px rgba(255, 199, 157, 0.92) !important;
+  }
+}
+
+html body .cw-widget[class][class][class] .cw-launcher[class]:active {
+  transform: scale(0.94) !important;
+  transition-duration: 90ms !important;
+}
+
+/* ---------------------------------------------------------------
+   4. Header actions — reset and close
+
+   Both used to be flat plates that changed background and nothing
+   else. Reset now sweeps a full turn on the tap that clears the
+   panel, and close draws its cross a quarter turn on approach.
+   --------------------------------------------------------------- */
+
+html body .cw-widget[class][class][class] .cw-panel-head__actions[class] button {
+  position: relative !important;
+  width: 38px !important;
+  height: 38px !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  color: var(--ux-muted, #b9aaa0) !important;
+  background: rgba(255, 199, 157, 0.05) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 199, 157, 0.12) !important;
+  overflow: hidden !important;
+}
+
+/* A ring that grows out from under the finger and fades. It is a
+   pseudo-element so it costs nothing when it is not running. */
+html body .cw-widget[class][class][class] .cw-panel-head__actions[class] button::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 199, 157, 0.4),
+    transparent 70%
+  ) !important;
+  opacity: 0 !important;
+  transform: scale(0.5) !important;
+  pointer-events: none !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html body .cw-widget[class][class][class] .cw-panel-head__actions[class] button::after {
+    transition:
+      opacity 420ms var(--mp-ease),
+      transform 420ms var(--mp-ease) !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-panel-head__actions[class] button:active::after {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+    transition-duration: 0ms !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-panel-head__actions[class] button svg {
+    transition: transform var(--mp-slow) var(--mp-ease) !important;
+  }
+
+  /* The sweep runs on the tap, not on hover — it is feedback for an
+     action that just happened, and it has to replay on every tap. */
+  html body .cw-widget[class][class][class] [data-testid="widget-reset"][data-spinning] svg {
+    animation: mp-reset-sweep 620ms var(--mp-ease) !important;
+  }
+
+  @keyframes mp-reset-sweep {
+    from {
+      transform: rotate(0deg) scale(1);
+    }
+    55% {
+      transform: rotate(-260deg) scale(0.86);
+    }
+    to {
+      transform: rotate(-360deg) scale(1);
+    }
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html body .cw-widget[class][class][class] .cw-panel-head__actions[class] button:hover {
+    color: var(--mp-ink-on-accent) !important;
+    background: var(--mp-accent) !important;
+    box-shadow: var(--mp-glow-hover) !important;
+    transform: scale(1.08) !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-panel-head__actions[class] button:hover svg {
+    color: var(--mp-ink-on-accent) !important;
+  }
+
+  html body .cw-widget[class][class][class] [data-testid="widget-reset"]:hover svg {
+    transform: rotate(-90deg) !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-panel-head__close:hover svg {
+    transform: rotate(90deg) !important;
+  }
+}
+
+html body .cw-widget[class][class][class] .cw-panel-head__actions[class] button:active {
+  transform: scale(0.9) !important;
+  transition-duration: 90ms !important;
+}
+
+/* ---------------------------------------------------------------
+   5. The mode switch
+
+   The thumb travels; the labels only change colour. Both buttons stay
+   clickable — the thumb is decoration and takes no pointer events.
+   --------------------------------------------------------------- */
+
+html body .cw-widget[class][class][class] .cw-tabs__thumb[class] {
+  pointer-events: none !important;
+  box-shadow:
+    0 2px 10px -4px rgba(255, 199, 157, 0.55),
+    0 12px 30px -16px rgba(255, 199, 157, 0.95) !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html body .cw-widget[class][class][class] .cw-tabs__thumb[class] {
+    transition: transform 420ms var(--mp-ease) !important;
+  }
+
+  /* While a finger is dragging it, the thumb tracks the finger exactly —
+     an easing curve here would feel like lag. */
+  html body .cw-widget[class][class][class] .cw-tabs[data-dragging="true"] .cw-tabs__thumb[class] {
+    transition: none !important;
+  }
+}
+
+html body .cw-widget[class][class][class] .cw-tabs[class] > button {
+  position: relative !important;
+  z-index: 1 !important;
+  cursor: pointer !important;
+}
+
+/* ---------------------------------------------------------------
+   6. The composer
+
+   The send button was a rounded rectangle that squared off under the
+   focus ring. It is a circle now, it lifts and glows on approach, and
+   it presses in. The bar around it glows only while it has focus.
+   --------------------------------------------------------------- */
+
+html body .cw-widget[class][class][class] .cw-inputbar[class] {
+  align-items: center !important;
+  padding: 5px 5px 5px 16px !important;
+  border: 1px solid var(--ux-line, rgba(255, 199, 157, 0.16)) !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget[class][class][class] .cw-inputbar[class]:focus-within {
+  border-color: var(--mp-accent-line) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 199, 157, 0.22),
+    0 0 34px -20px rgba(255, 199, 157, 0.9) !important;
+}
+
+html body .cw-widget[class][class][class] .cw-inputbar[class] > .cw-send[class] {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  flex: 0 0 44px !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+  border: 0 !important;
+  /* A circle has no corner that can disagree with the focus ring. */
+  border-radius: 999px !important;
+  color: var(--mp-ink-on-accent) !important;
+  background: var(--mp-accent) !important;
+  box-shadow: 0 6px 20px -10px rgba(255, 199, 157, 0.9) !important;
+  cursor: pointer !important;
+}
+
+html body .cw-widget[class][class][class] .cw-inputbar[class] > .cw-send[class] svg {
+  width: 18px !important;
+  height: 18px !important;
+  /* The paper plane points up-right; nudging it back onto the optical
+     centre is the difference between deliberate and slightly wrong. */
+  transform: translate(-0.5px, 0.5px) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html body .cw-widget[class][class][class] .cw-inputbar[class] > .cw-send[class]:hover:not(:disabled) {
+    transform: scale(1.08) !important;
+    box-shadow: var(--mp-glow-strong) !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-inputbar[class] > .cw-send[class]:hover:not(:disabled) svg {
+    transform: translate(1px, -1px) !important;
+  }
+}
+
+html body .cw-widget[class][class][class] .cw-inputbar[class] > .cw-send[class]:active:not(:disabled) {
+  transform: scale(0.9) !important;
+  transition-duration: 90ms !important;
+}
+
+/* Disabled is quiet, not broken: it keeps its shape and loses its light. */
+html body .cw-widget[class][class][class][class] .cw-inputbar[class] > .cw-send[class]:disabled {
+  color: var(--ux-faint, #8f8178) !important;
+  background: var(--ux-surface-raised, #201914) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 199, 157, 0.1) !important;
+  transform: none !important;
+  cursor: default !important;
+}
+
+html body .cw-widget[class][class][class] :is(button, a, input, textarea, summary):focus-visible {
+  outline: 2px solid var(--mp-accent) !important;
+  outline-offset: 3px !important;
+}
+
+/* The composer is the exception: the bar it sits in already lights up on
+   focus, so a second ring drawn inside the first reads as a mistake. */
+html body .cw-widget[class][class][class][class] .cw-inputbar[class] input:focus-visible {
+  outline: none !important;
+}
+
+/* ---------------------------------------------------------------
+   7. Starter chips — the slow fill
+
+   The chip does not swap colour on tap. A panel of accent grows across
+   it from the left over the whole confirm window, the label crosses to
+   dark ink as the fill passes under it, and only then does the question
+   leave for the thread.
+   --------------------------------------------------------------- */
+
+html body .cw-widget[class][class][class] .cw-quick-replies[class] .cw-chip[class] {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+}
+
+html body .cw-widget[class][class][class] .cw-quick-replies[class] .cw-chip[class]::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: -1 !important;
+  border-radius: inherit !important;
+  background: var(--mp-accent) !important;
+  transform: scaleX(0) !important;
+  transform-origin: left center !important;
+  will-change: transform !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html body .cw-widget[class][class][class] .cw-quick-replies[class] .cw-chip[class]::after {
+    transition: transform 440ms var(--mp-ease) !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-quick-replies[class] .cw-chip[class] .cw-chip__label {
+    transition: color 220ms var(--mp-ease-out) 140ms !important;
+  }
+}
+
+html body .cw-widget[class][class][class] .cw-quick-replies[class] .cw-chip[class][data-sending="true"]::after {
+  transform: scaleX(1) !important;
+}
+
+/* The chip's own background stays the resting surface throughout — the
+   fill above it is the only thing that moves, so the edge of the fill
+   stays visible for the whole sweep instead of landing on flat accent. */
+html body .cw-widget[class][class][class][class] .cw-quick-replies[class] .cw-chip[class][data-sending="true"] {
+  border-color: var(--mp-accent) !important;
+  background: var(--ux-surface, #18130f) !important;
+  box-shadow: var(--mp-glow-hover) !important;
+}
+
+html body .cw-widget[class][class][class][class] .cw-quick-replies[class] .cw-chip[class][data-sending="true"] .cw-chip__label {
+  color: var(--mp-ink-on-accent) !important;
+}
+
+/* The chips that were not chosen step back rather than grey out. */
+html body .cw-widget[class][class][class] .cw-quick-replies[class] .cw-chip[class]:disabled:not([data-sending="true"]) {
+  opacity: 0.42 !important;
+  transform: scale(0.985) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html body .cw-widget[class][class][class] .cw-quick-replies[class] .cw-chip[class]:hover:not(:disabled) {
+    border-color: var(--mp-accent-line) !important;
+    box-shadow: var(--mp-glow-hover) !important;
+    transform: translateY(-1px) !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   8. The thread
+
+   A message arrives from the side it belongs to. The reply arrives a
+   word at a time, so while it is still growing the bubble carries a
+   caret — the thread's way of saying the sentence is not finished.
+   --------------------------------------------------------------- */
+
+html body .cw-widget[class][class][class] .cw-message-row--me[class] .cw-message-wrap[class] p {
+  box-shadow: 0 10px 30px -18px rgba(255, 199, 157, 0.85) !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html body .cw-widget[class][class][class] .cw-message-row--bot[class]:not([data-streaming]) {
+    animation: mp-message-in 420ms var(--mp-ease) both !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-message-row--me[class]:not([data-flight="true"]) {
+    animation: mp-message-in 420ms var(--mp-ease) both !important;
+  }
+
+  @keyframes mp-message-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 10px, 0) scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  html body .cw-widget[class][class][class] .cw-message-row[data-streaming] .cw-message-wrap p::after {
+    content: "" !important;
+    display: inline-block !important;
+    width: 2px !important;
+    height: 1em !important;
+    margin-left: 3px !important;
+    border-radius: 1px !important;
+    background: var(--mp-accent) !important;
+    vertical-align: -0.14em !important;
+    animation: mp-caret 1s steps(1, end) infinite !important;
+  }
+
+  @keyframes mp-caret {
+    0%,
+    50% {
+      opacity: 1;
+    }
+    51%,
+    100% {
+      opacity: 0;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------
+   9. Contact — the glow
+
+   These four are the point of the whole widget, so they are the only
+   things in it that carry light at rest.
+   --------------------------------------------------------------- */
+
+html body .cw-widget[class][class][class] .cw-direct-actions__grid[class] a {
+  position: relative !important;
+  border: 1px solid var(--mp-accent-line) !important;
+  box-shadow: var(--mp-glow-rest) !important;
+}
+
+html body .cw-widget[class][class][class] .cw-direct-actions__grid[class] a .cw-direct-actions__icon {
+  color: var(--mp-accent) !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html body .cw-widget[class][class][class] .cw-direct-actions__grid[class] a .cw-direct-actions__icon svg {
+    transition:
+      filter var(--mp-base) var(--mp-ease),
+      transform var(--mp-base) var(--mp-ease) !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html body .cw-widget[class][class][class][class] .cw-direct-actions__grid[class] a:hover,
+  html body .cw-widget[class][class][class][class] .cw-direct-actions__grid[class] a:focus-visible {
+    border-color: var(--mp-accent) !important;
+    background: var(--ux-hover, #271e18) !important;
+    box-shadow: var(--mp-glow-strong) !important;
+    transform: translateY(-2px) !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-direct-actions__grid[class] a:hover .cw-direct-actions__icon svg {
+    transform: scale(1.12) !important;
+    filter: drop-shadow(0 0 8px rgba(255, 199, 157, 0.85)) !important;
+  }
+}
+
+html body .cw-widget[class][class][class] .cw-direct-actions__grid[class] a:active {
+  transform: translateY(0) scale(0.97) !important;
+  transition-duration: 90ms !important;
+}
+
+/* The four "how should I reach you" pills are contact too, and they
+   glow on the same terms once one of them is chosen. */
+html body .cw-widget[class][class][class] .cw-contact-method[class] {
+  cursor: pointer !important;
+}
+
+html body .cw-widget[class][class][class][class] .cw-contact-method[class][data-selected="true"] {
+  box-shadow: var(--mp-glow-strong) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html body .cw-widget[class][class][class][class] .cw-contact-method[class]:hover:not([data-selected="true"]) {
+    border-color: var(--mp-accent-line) !important;
+    box-shadow: var(--mp-glow-hover) !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   10. Mobile — the keyboard case
+
+   On a phone the panel is the viewport, and the software keyboard takes
+   more than half of it. Rather than let five rows share what is left,
+   the two that are not the conversation fold away while the composer
+   has focus. The builder is one tap away on the switch above, and the
+   contact links come back the moment the field is released.
+   --------------------------------------------------------------- */
+
+@media (max-width: 560px) {
+  html body .cw-widget[class][class][class] .cw-conversation[class] :is(.cw-chat-top, .cw-direct-actions) {
+    overflow: hidden !important;
+    transform-origin: center top !important;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html body .cw-widget[class][class][class] .cw-conversation[class] :is(.cw-chat-top, .cw-direct-actions) {
+      transition:
+        max-height 300ms var(--mp-ease),
+        opacity 180ms var(--mp-ease-out),
+        transform 300ms var(--mp-ease),
+        padding 300ms var(--mp-ease),
+        margin 300ms var(--mp-ease) !important;
+    }
+  }
+
+  html body .cw-widget[class][class][class] .cw-conversation[class] .cw-chat-top {
+    max-height: 84px !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-conversation[class] .cw-direct-actions {
+    max-height: 108px !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-conversation[data-composing][class] :is(.cw-chat-top, .cw-direct-actions) {
+    max-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    border-width: 0 !important;
+    opacity: 0 !important;
+    transform: translate3d(0, -6px, 0) !important;
+    pointer-events: none !important;
+  }
+
+  /* The mode switch goes with them: while the keyboard is up the visitor
+     is writing a message, not choosing between two ways to start. */
+  html body .cw-widget[class][class][class] .cw-panel[class]:has(.cw-conversation[data-composing]) .cw-tabs[class] {
+    max-height: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-panel[class] .cw-tabs[class] {
+    max-height: 72px !important;
+    overflow: hidden !important;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html body .cw-widget[class][class][class] .cw-panel[class] .cw-tabs[class] {
+      transition:
+        max-height 300ms var(--mp-ease),
+        opacity 180ms var(--mp-ease-out),
+        margin 300ms var(--mp-ease),
+        padding 300ms var(--mp-ease) !important;
+    }
+  }
+
+  /* Whatever the panel's height ends up being, the message the visitor is
+     answering has to stay readable — so the thread keeps the room, and
+     the type does not shrink to make space for anything else.
+
+     Only the thread is elastic. The composer, the chips and the header are
+     content-sized rows that may not be compressed: when the keyboard leaves
+     the panel 380px tall, a grid that lets every row give a little is how
+     "everything shrank" happens. The thread absorbs all of it instead. */
+  html body .cw-widget[class][class][class] .cw-conversation[class] {
+    grid-template-rows: auto minmax(0, 1fr) min-content min-content min-content !important;
+  }
+
+  /* The row the visitor is typing into keeps its exact size at every panel
+     height — same bar, same 44px button, same 16px text. */
+  html body .cw-widget[class][class][class] .cw-inputbar[class] {
+    height: 54px !important;
+    min-height: 54px !important;
+    flex: 0 0 auto !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-inputbar[class] input {
+    height: 42px !important;
+    min-height: 42px !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-inputbar[class] > .cw-send[class] {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    flex: 0 0 44px !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-message-wrap[class] p {
+    font-size: 15px !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Anything below 16px makes iOS zoom the page on focus, and the zoom is
+     what makes the panel look like it collapsed. */
+  html body .cw-widget[class][class][class] .cw-inputbar[class] input {
+    font-size: 16px !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   11. The builder fills its step
+
+   Every question except the last one now sizes its cards to the space
+   the step actually has. The grid takes the leftover height and splits
+   it evenly, so four options are generous, six are compact, and neither
+   needs a scrollbar.
+   --------------------------------------------------------------- */
+
+html body .cw-widget[class][class][class] .cw-calc-body[class]:has(.cw-calc-step:not([data-step="contact"])) {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  padding: 16px 16px 14px !important;
+}
+
+html body .cw-widget[class][class][class] .cw-calc-step[class]:not([data-step="contact"]) {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
+html body .cw-widget[class][class][class] .cw-calc-step[class]:not([data-step="contact"]) .cw-step-head {
+  flex: 0 0 auto !important;
+  margin-bottom: 12px !important;
+}
+
+html body .cw-widget[class][class][class] .cw-calc-step[class]:not([data-step="contact"]) .cw-q {
+  font-size: clamp(1.24rem, 4.6vw, 1.56rem) !important;
+  margin-bottom: 5px !important;
+}
+
+html body .cw-widget[class][class][class] .cw-calc-step[class]:not([data-step="contact"]) .cw-q-sub {
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+}
+
+html body .cw-widget[class][class][class] .cw-calc-step[class]:not([data-step="contact"]) .cw-choice-grid[class] {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  align-content: stretch !important;
+  align-items: stretch !important;
+  grid-template-rows: none !important;
+  /* `minmax(0, 1fr)` is what lets a row shrink below its content instead
+     of forcing the grid taller than the step and bringing back the
+     scrollbar this whole section exists to remove. */
+  grid-auto-rows: minmax(0, 1fr) !important;
+  gap: 9px !important;
+}
+
+html body .cw-widget[class][class][class][class] .cw-calc-step[class]:not([data-step="contact"]) :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt
+  )[class] {
+  min-height: 0 !important;
+  height: auto !important;
+  align-content: center !important;
+  align-items: center !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+}
+
+html body .cw-widget[class][class][class] .cw-calc-step[class] :is(.cw-rowcard, .cw-opt, .cw-vcard)[class] {
+  padding: 11px 34px 11px 13px !important;
+}
+
+html body .cw-widget[class][class][class] .cw-calc-step[class] .cw-scard[class] {
+  padding: 10px 32px 10px 12px !important;
+}
+
+/* Three lines of description, then an ellipsis. A card that grows a fourth
+   line is a card that pushes the grid past the step. */
+html body .cw-widget[class][class][class] .cw-calc-step[class]:not([data-step="contact"]) :is(
+    .cw-rowcard__body small,
+    .cw-opt__body > span,
+    .cw-vcard > span
+  ) {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  font-size: 10.6px !important;
+  line-height: 1.34 !important;
+}
+
+html body .cw-widget[class][class][class] .cw-calc-step[class]:not([data-step="contact"]) :is(
+    .cw-rowcard__body b,
+    .cw-scard b,
+    .cw-vcard b,
+    .cw-opt__body b
+  ) {
+  font-size: 12.8px !important;
+  line-height: 1.22 !important;
+}
+
+/* The tip under the trades question used to be three list rows, which is
+   most of a card's worth of height on a phone. It reads as one line now. */
+html body .cw-widget[class][class][class] .cw-industry-tip[class] {
+  flex: 0 0 auto !important;
+  margin-top: 9px !important;
+  padding: 9px 12px !important;
+  font-size: 10.8px !important;
+  line-height: 1.4 !important;
+}
+
+html body .cw-widget[class][class][class] .cw-industry-tip[class] > b {
+  font-size: 10.5px !important;
+}
+
+html body .cw-widget[class][class][class] .cw-industry-tip[class] ul {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 2px 14px !important;
+  margin: 4px 0 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+html body .cw-widget[class][class][class] .cw-industry-tip[class] li {
+  position: relative !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+html body .cw-widget[class][class][class] .cw-industry-tip[class] li + li::before {
+  content: "" !important;
+  position: absolute !important;
+  left: -8px !important;
+  top: 50% !important;
+  width: 3px !important;
+  height: 3px !important;
+  border-radius: 999px !important;
+  background: var(--mp-accent) !important;
+  opacity: 0.6 !important;
+  transform: translateY(-50%) !important;
+}
+
+html body .cw-widget[class][class][class] .cw-custom[class] {
+  flex: 0 0 auto !important;
+  margin-top: 9px !important;
+}
+
+/* A chosen card carries the same light as everything else that is on. */
+html body .cw-widget[class][class][class][class] :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt
+  )[class][data-selected="true"] {
+  box-shadow: var(--mp-glow-strong) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html body .cw-widget[class][class][class][class] :is(
+      .cw-rowcard,
+      .cw-scard,
+      .cw-vcard,
+      .cw-opt
+    )[class]:hover:not([data-selected="true"]):not(:disabled) {
+    border-color: var(--mp-accent-line) !important;
+    box-shadow: var(--mp-glow-hover) !important;
+    transform: translateY(-2px) !important;
+  }
+
+  html body .cw-widget[data-pointer-parked="true"][class][class][class][class] :is(
+      .cw-rowcard,
+      .cw-scard,
+      .cw-vcard,
+      .cw-opt
+    )[class]:hover:not([data-selected="true"]) {
+    box-shadow: none !important;
+    transform: none !important;
+  }
+}
+
+/* The tick does not appear, it lands. */
+html body .cw-widget[class][class][class] .cw-selection-indicator[class] {
+  transform: scale(0.4) !important;
+  opacity: 0 !important;
+}
+
+html body .cw-widget[class][class][class] .cw-selection-indicator[class][data-visible="true"] {
+  transform: scale(1) !important;
+  opacity: 1 !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html body .cw-widget[class][class][class] .cw-selection-indicator[class] {
+    transition:
+      transform 340ms var(--mp-ease),
+      opacity 160ms var(--mp-ease-out) !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   12. The contact step and its footer
+
+   Consent moved out of the scrolling form and into the sticky bar, so
+   the one box that gates the send is always on screen next to the
+   button it gates. The whole row is the target.
+   --------------------------------------------------------------- */
+
+html body .cw-widget[class][class][class] .cw-calc-actions--final[class] {
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 9px !important;
+  min-height: 0 !important;
+  padding: 11px 16px max(12px, env(safe-area-inset-bottom)) !important;
+}
+
+html body .cw-widget[class][class][class] .cw-consent[class] {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-height: 44px !important;
+  margin: 0 !important;
+  padding: 0 12px !important;
+  border: 1px solid var(--ux-line, rgba(255, 199, 157, 0.16)) !important;
+  border-radius: 999px !important;
+  background: var(--ux-surface, #18130f) !important;
+  cursor: pointer !important;
+  user-select: none !important;
+}
+
+html body .cw-widget[class][class][class] .cw-consent[class][data-checked="true"] {
+  border-color: var(--mp-accent-line) !important;
+  background: var(--mp-accent-soft) !important;
+  box-shadow: var(--mp-glow-hover) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html body .cw-widget[class][class][class] .cw-consent[class]:hover {
+    border-color: var(--mp-accent-line) !important;
+  }
+}
+
+/* The native box is the control — it keeps focus and the keyboard — but
+   it is not what gets drawn, because a native checkbox is the one thing
+   on screen the accent cannot fully repaint. */
+html body .cw-widget[class][class][class] .cw-consent[class] input[type="checkbox"] {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+html body .cw-widget[class][class][class] .cw-consent[class] .cw-consent__box {
+  flex: 0 0 auto !important;
+  width: 21px !important;
+  height: 21px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 7px !important;
+  color: transparent !important;
+  background: transparent !important;
+  box-shadow: inset 0 0 0 1.6px var(--mp-accent-line) !important;
+}
+
+html body .cw-widget[class][class][class] .cw-consent[class] .cw-consent__box svg {
+  width: 13px !important;
+  height: 13px !important;
+  transform: scale(0.5) !important;
+  opacity: 0 !important;
+}
+
+html body .cw-widget[class][class][class] .cw-consent[class][data-checked="true"] .cw-consent__box {
+  color: var(--mp-ink-on-accent) !important;
+  background: var(--mp-accent) !important;
+  box-shadow: inset 0 0 0 1.6px var(--mp-accent) !important;
+}
+
+html body .cw-widget[class][class][class] .cw-consent[class][data-checked="true"] .cw-consent__box svg {
+  transform: scale(1) !important;
+  opacity: 1 !important;
+}
+
+html body .cw-widget[class][class][class] .cw-consent[class] .cw-consent__text {
+  min-width: 0 !important;
+  color: var(--ux-muted, #b9aaa0) !important;
+  font-size: 12.4px !important;
+  line-height: 1.3 !important;
+}
+
+html body .cw-widget[class][class][class] .cw-consent[class][data-checked="true"] .cw-consent__text {
+  color: var(--ux-ink, #fff8f2) !important;
+}
+
+html body .cw-widget[class][class][class] .cw-consent[class]:has(input:focus-visible) {
+  outline: 2px solid var(--mp-accent) !important;
+  outline-offset: 3px !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html body .cw-widget[class][class][class] .cw-consent[class] :is(.cw-consent__box, svg) {
+    transition:
+      transform 320ms var(--mp-ease),
+      opacity 160ms var(--mp-ease-out),
+      background-color var(--mp-fast) var(--mp-ease-out),
+      box-shadow var(--mp-fast) var(--mp-ease-out),
+      color var(--mp-fast) var(--mp-ease-out) !important;
+  }
+}
+
+html body .cw-widget[class][class][class] .cw-calc-actions--final[class] .cw-lead__status {
+  margin: 0 !important;
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+/* The last step is the only one that scrolls, because it is the only one
+   holding a form. Its bar sits above that scroll, always reachable. */
+html body .cw-widget[class][class][class] .cw-calc-body[class]:has(.cw-calc-step[data-step="contact"]) {
+  overflow-y: auto !important;
+  scrollbar-gutter: stable !important;
+}
+
+html body .cw-widget[class][class][class] :is(.cw-next, .cw-submit)[class] {
+  cursor: pointer !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html body .cw-widget[class][class][class][class] :is(.cw-next, .cw-submit, .cw-chat-builder)[class]:hover:not(:disabled) {
+    box-shadow: var(--mp-glow-strong) !important;
+    transform: translateY(-1px) !important;
+  }
+}
+
+html body .cw-widget[class][class][class][class] :is(.cw-next, .cw-submit)[class]:disabled {
+  opacity: 0.5 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  cursor: default !important;
+}
+
+/* ---------------------------------------------------------------
+   13. Stillness, when it is asked for
+
+   Everything above is decoration on top of a layout that already
+   works. Under reduced motion the decoration stops and nothing else
+   changes — no content is hidden, no state becomes unreadable.
+   --------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html body .cw-widget[class][class][class] *,
+  html body .cw-widget[class][class][class] *::before,
+  html body .cw-widget[class][class][class] *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-quick-replies[class] .cw-chip[class][data-sending="true"] {
+    background: var(--mp-accent) !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-quick-replies[class] .cw-chip[class][data-sending="true"] .cw-chip__label {
+    color: var(--mp-ink-on-accent) !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-selection-indicator[class][data-visible="true"],
+  html body .cw-widget[class][class][class] .cw-consent[class][data-checked="true"] .cw-consent__box svg {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

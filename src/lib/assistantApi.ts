@@ -73,15 +73,44 @@ export function localAssistantReply(question: string): string {
     return "Váš web prerábať netreba. Chatbot doň pridám tak, aby ladil s vašimi farbami, fungoval na mobile a dopyty vám posielal na e-mail, do kalendára alebo do tabuľky.";
   }
   if (/kontakt|zavola|email|e-mail/.test(normalized)) {
-    return "Napíšte na daniel@vendzur.sk alebo zavolajte na +421 948 699 433. Najrýchlejšie je vyskladať riešenie priamo tu — ozvem sa vám do jedného dňa.";
+    return "Napíšte na info@mojchatbot.sk alebo zavolajte na +421 948 699 433. Najrýchlejšie je vyskladať riešenie priamo tu — ozvem sa vám do jedného dňa.";
   }
 
   return "Poradím vám, čo by váš web mohol robiť za vás: odpovedať zákazníkom, počítať ceny alebo dohadovať termíny. Napíšte mi, čo vás dnes najviac zdržuje, alebo si vyskladajte riešenie.";
 }
 
+/* Called with the reply so far, every time more of it arrives. The caller uses
+   it to paint words as they land instead of after the last one. */
+export type ChatStreamHandler = (partial: string) => void;
+
+/* Parses `event:`/`data:` frames out of an SSE body. Frames are separated by a
+   blank line, and a chunk boundary can land anywhere, so whatever follows the
+   last separator stays in the buffer until the next read completes it. */
+function parseEventStream(
+  buffer: string,
+  onFrame: (event: string, data: string) => void,
+): string {
+  let rest = buffer;
+  let separator = rest.indexOf("\n\n");
+  while (separator !== -1) {
+    const frame = rest.slice(0, separator);
+    rest = rest.slice(separator + 2);
+    let event = "message";
+    let data = "";
+    for (const line of frame.split("\n")) {
+      if (line.startsWith("event:")) event = line.slice(6).trim();
+      else if (line.startsWith("data:")) data += line.slice(5).trim();
+    }
+    if (data) onFrame(event, data);
+    separator = rest.indexOf("\n\n");
+  }
+  return rest;
+}
+
 export async function sendChat(
   history: ChatTurn[],
   requestSignal?: AbortSignal,
+  onPartial?: ChatStreamHandler,
 ): Promise<string> {
   const lastQuestion =
     [...history].reverse().find((turn) => turn.role === "user")?.text ?? "";
@@ -98,17 +127,25 @@ export async function sendChat(
   if (requestSignal?.aborted) controller.abort();
   else
     requestSignal?.addEventListener("abort", abortFromCaller, { once: true });
-  const timeout = window.setTimeout(
+  /* The timeout guards the wait for the first byte. Once text is arriving the
+     stream is alive, so cutting it off mid-sentence would be the bug, not the
+     fix — the timer is cleared as soon as the first delta lands. */
+  let timeout: number | null = window.setTimeout(
     () => controller.abort(),
     REQUEST_TIMEOUT_MS,
   );
+  const clearTimeoutOnce = () => {
+    if (timeout === null) return;
+    window.clearTimeout(timeout);
+    timeout = null;
+  };
 
   try {
     const response = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json",
+        Accept: onPartial ? "text/event-stream" : "application/json",
       },
       body: JSON.stringify({ messages }),
       cache: "no-store",
@@ -119,16 +156,53 @@ export async function sendChat(
 
     if (!response.ok) return localAssistantReply(lastQuestion);
 
-    const data = (await response.json()) as { reply?: unknown };
-    const reply =
-      typeof data.reply === "string"
-        ? cleanText(data.reply, MAX_REPLY_CHARS)
-        : "";
-    return reply || localAssistantReply(lastQuestion);
+    const contentType = response.headers.get("content-type") ?? "";
+    if (!contentType.includes("text/event-stream") || !response.body) {
+      const data = (await response.json()) as { reply?: unknown };
+      const reply =
+        typeof data.reply === "string"
+          ? cleanText(data.reply, MAX_REPLY_CHARS)
+          : "";
+      return reply || localAssistantReply(lastQuestion);
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let reply = "";
+
+    const handleFrame = (event: string, data: string) => {
+      /* An `error` frame after some text still leaves the visitor with the
+         words already on screen, so a truncated reply beats replacing what
+         they just watched arrive. Only an empty reply falls back. */
+      if (event !== "delta") return;
+      try {
+        const parsed = JSON.parse(data) as { text?: unknown };
+        if (typeof parsed.text !== "string" || !parsed.text) return;
+        clearTimeoutOnce();
+        reply = (reply + parsed.text).slice(0, MAX_REPLY_CHARS);
+        onPartial?.(reply);
+      } catch {
+        /* A frame we cannot read is a frame we skip; the rest still arrives. */
+      }
+    };
+
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer = parseEventStream(
+        buffer + decoder.decode(value, { stream: true }),
+        handleFrame,
+      );
+    }
+    parseEventStream(buffer + "\n\n", handleFrame);
+
+    const finished = cleanText(reply, MAX_REPLY_CHARS);
+    return finished || localAssistantReply(lastQuestion);
   } catch {
     return localAssistantReply(lastQuestion);
   } finally {
-    window.clearTimeout(timeout);
+    clearTimeoutOnce();
     requestSignal?.removeEventListener("abort", abortFromCaller);
   }
 }

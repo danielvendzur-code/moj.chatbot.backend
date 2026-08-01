@@ -15,6 +15,9 @@ type ChatMessage = {
   from: "bot" | "me";
   text: string;
   flightOrigin?: FlightOrigin;
+  /* True while the reply is still arriving, so the bubble can carry a caret
+     instead of the thread showing a separate typing indicator. */
+  streaming?: boolean;
 };
 
 type FlightOrigin = {
@@ -56,7 +59,9 @@ const QUICK_REPLIES: QuickReply[] = [
 const CHAT_FALLBACK =
   "Teraz sa mi nepodarilo odpovedať. Skúste to prosím ešte raz alebo mi zavolajte — čísla máte nižšie.";
 
-const QUICK_REPLY_CONFIRM_MS = 210;
+/* Long enough to watch the chip fill with the accent before the question
+   leaves for the thread — the fill is the confirmation, so it has to finish. */
+const QUICK_REPLY_CONFIRM_MS = 460;
 
 const prefersReducedMotion = (): boolean =>
   typeof window !== "undefined" &&
@@ -82,6 +87,11 @@ export function AssistantConversation({
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const [activeQuickReply, setActiveQuickReply] = useState<string | null>(null);
+  /* On a phone the software keyboard eats most of the panel. While the visitor
+     is typing, the stylesheet folds the builder shortcut and the contact links
+     away so the thread and the composer keep their full size instead of every
+     row shrinking to fit. Both come back the moment the field loses focus. */
+  const [composing, setComposing] = useState(false);
   const nextIdRef = useRef(2);
   const messagesRef = useRef<HTMLDivElement>(null);
   const inputbarRef = useRef<HTMLDivElement>(null);
@@ -97,6 +107,14 @@ export function AssistantConversation({
      you have asked something — by chip or by typing — they stop being an offer
      and just crowd the thread, so they go away. Reset brings them back. */
   const conversationStarted = messages.some((message) => message.from === "me");
+
+  /* They also go the moment the visitor starts writing their own question:
+     the offer has been declined, and on a phone with the keyboard up those two
+     rows were taking as much height as the conversation itself. Clearing the
+     field brings them back — nothing has been sent yet. A chip that is
+     mid-send keeps them, because that fill is the thing being watched. */
+  const showQuickReplies =
+    !conversationStarted && (activeQuickReply !== null || input.trim() === "");
 
   useEffect(() => {
     requestEpochRef.current += 1;
@@ -128,15 +146,31 @@ export function AssistantConversation({
     [],
   );
 
+  const streamingReply = messages.some((message) => message.streaming);
+
   useEffect(() => {
     const container = messagesRef.current;
-    if (container) {
-      container.scrollTo({
-        top: container.scrollHeight,
-        behavior: prefersReducedMotion() ? "auto" : "smooth",
-      });
-    }
-  }, [messages, typing]);
+    if (!container) return;
+    /* A smooth scroll restarted on every token never arrives; while the reply
+       is still growing the feed tracks the bottom instantly instead. */
+    const smooth = !prefersReducedMotion() && !streamingReply;
+    container.scrollTo({
+      top: container.scrollHeight,
+      behavior: smooth ? "smooth" : "auto",
+    });
+  }, [messages, typing, streamingReply]);
+
+  /* Folding the surrounding rows away changes the feed's height, so the last
+     message has to be brought back into view once the layout has settled —
+     otherwise the visitor types into a thread scrolled to the wrong place. */
+  useEffect(() => {
+    const container = messagesRef.current;
+    if (!container) return;
+    const settle = window.setTimeout(() => {
+      container.scrollTo({ top: container.scrollHeight, behavior: "auto" });
+    }, 320);
+    return () => window.clearTimeout(settle);
+  }, [composing]);
 
   useEffect(() => {
     const becameActive = active && !previousActiveRef.current;
@@ -226,22 +260,52 @@ export function AssistantConversation({
     const firstUser = turns.findIndex((turn) => turn.role === "user");
     const history = firstUser === -1 ? [] : turns.slice(firstUser);
 
-    try {
-      const reply = await sendChat(history, controller.signal);
+    /* The reply lands word by word. The first word replaces the typing dots
+       with a real bubble; every word after it grows that same bubble, so the
+       thread never jumps between two different shapes. */
+    const replyId = nextIdRef.current++;
+    let opened = false;
+    const paint = (partial: string) => {
       if (requestEpoch !== requestEpochRef.current || controller.signal.aborted)
         return;
-      setMessages((current) => [
-        ...current,
-        { id: nextIdRef.current++, from: "bot", text: reply },
-      ]);
+      if (!opened) {
+        opened = true;
+        setTyping(false);
+        setMessages((current) => [
+          ...current,
+          { id: replyId, from: "bot", text: partial, streaming: true },
+        ]);
+        return;
+      }
+      setMessages((current) =>
+        current.map((message) =>
+          message.id === replyId ? { ...message, text: partial } : message,
+        ),
+      );
+    };
+
+    const settle = (text: string) => {
+      setMessages((current) =>
+        opened
+          ? current.map((message) =>
+              message.id === replyId
+                ? { ...message, text, streaming: false }
+                : message,
+            )
+          : [...current, { id: replyId, from: "bot", text }],
+      );
+    };
+
+    try {
+      const reply = await sendChat(history, controller.signal, paint);
+      if (requestEpoch !== requestEpochRef.current || controller.signal.aborted)
+        return;
+      settle(reply);
       track("chat_reply_received");
     } catch (error) {
       if (requestEpoch !== requestEpochRef.current || controller.signal.aborted)
         return;
-      setMessages((current) => [
-        ...current,
-        { id: nextIdRef.current++, from: "bot", text: CHAT_FALLBACK },
-      ]);
+      settle(CHAT_FALLBACK);
       track("chat_error", {
         reason: error instanceof Error ? error.message : "unknown",
       });
@@ -296,7 +360,11 @@ export function AssistantConversation({
   };
 
   return (
-    <div className="cw-conversation" data-testid="assistant-view">
+    <div
+      className="cw-conversation"
+      data-testid="assistant-view"
+      data-composing={composing || undefined}
+    >
       <div className="cw-chat-top">
         <button
           type="button"
@@ -318,6 +386,7 @@ export function AssistantConversation({
             className={`cw-message-row cw-message-row--${message.from}`}
             data-message-id={message.id}
             data-flight={message.flightOrigin ? "true" : undefined}
+            data-streaming={message.streaming || undefined}
             key={message.id}
           >
             {message.from === "bot" ? (
@@ -345,7 +414,7 @@ export function AssistantConversation({
         ) : null}
       </div>
 
-      {conversationStarted ? null : (
+      {showQuickReplies ? (
         <div
           className="cw-quick-replies"
           aria-label="Na čo sa ľudia pýtajú najčastejšie"
@@ -369,7 +438,7 @@ export function AssistantConversation({
             );
           })}
         </div>
-      )}
+      ) : null}
 
       <div
         className="cw-inputbar"
@@ -386,6 +455,8 @@ export function AssistantConversation({
               submit();
             }
           }}
+          onFocus={() => setComposing(true)}
+          onBlur={() => setComposing(false)}
           placeholder="Napíšte mi svoju otázku…"
           aria-label="Vaša otázka"
           disabled={activeQuickReply !== null}
@@ -416,7 +487,7 @@ export function AssistantConversation({
             </span>
             <span>Zavolať</span>
           </a>
-          <a href="mailto:daniel@vendzur.sk">
+          <a href="mailto:info@mojchatbot.sk">
             <span className="cw-direct-actions__icon">
               <WidgetIcon name="mail" />
             </span>

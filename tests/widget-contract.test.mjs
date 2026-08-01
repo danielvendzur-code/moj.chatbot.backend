@@ -21,6 +21,7 @@ test("demo and embed load one foundation and one authoritative redesign", async 
       "src/final-user-correction.css",
       "src/green-motion-final.css",
       "src/unified-experience-final.css",
+      "src/masterpiece-final.css",
     ].map(read),
   );
 
@@ -31,12 +32,18 @@ test("demo and embed load one foundation and one authoritative redesign", async 
     assert.match(source, /final-user-correction\.css/);
     assert.match(source, /green-motion-final\.css/);
     assert.match(source, /unified-experience-final\.css/);
+    assert.match(source, /masterpiece-final\.css/);
     assert.doesNotMatch(source, /installWidgetSpotlight/);
+  }
+  // The finish layer is the last word, so it has to be imported last.
+  for (const source of [main, embed]) {
+    const sheets = source.match(/import "\.\/(.*)\.css";/g) ?? [];
+    assert.match(sheets[sheets.length - 1], /masterpiece-final\.css/);
   }
   assert.match(main, /preview\.css/);
   assert.doesNotMatch(embed, /preview\.css/);
-  assert.equal((main.match(/import "\.\/.*\.css";/g) ?? []).length, 7);
-  assert.equal((embed.match(/import "\.\/.*\.css";/g) ?? []).length, 6);
+  assert.equal((main.match(/import "\.\/.*\.css";/g) ?? []).length, 8);
+  assert.equal((embed.match(/import "\.\/.*\.css";/g) ?? []).length, 7);
 
   // The direct widget.js build shares the host document. Foundation resets
   // therefore belong to the widget, never to every host element.
@@ -91,8 +98,9 @@ test("assistant order and interactive send feedback remain explicit", async () =
   assert.match(conversation, /useLayoutEffect/);
   assert.match(conversation, /bubble\.animate/);
   assert.match(conversation, /getBoundingClientRect/);
-  assert.match(conversation, /QUICK_REPLY_CONFIRM_MS = 210/);
-  assert.match(conversation, /prefersReducedMotion\(\) \? "auto" : "smooth"/);
+  // The chip fill is the confirmation, so the wait has to outlast the sweep.
+  assert.match(conversation, /QUICK_REPLY_CONFIRM_MS = 460/);
+  assert.match(conversation, /smooth \? "smooth" : "auto"/);
   assert.doesNotMatch(conversation, /cw-chip__send/);
   assert.doesNotMatch(conversation, /cw-send__halo/);
 });
@@ -366,7 +374,7 @@ test("contact submits a real lead and keeps API protections", async () => {
   const client = await read("src/lib/leadApi.ts");
   const api = await read("api/lead.ts");
 
-  assert.match(calculator, /Ako sa menujete\? \*/);
+  assert.match(calculator, /placeholder="Meno \*"/);
   assert.match(calculator, /Váš e-mail/);
   assert.match(calculator, /CONTACT_METHODS/);
   assert.match(calculator, /Osobne/);
@@ -375,6 +383,193 @@ test("contact submits a real lead and keeps API protections", async () => {
   assert.match(client, /AbortController/);
   assert.match(api, /RESEND_API_KEY/);
   assert.match(api, /rate-limit-exceeded/);
+});
+
+test("a delivered lead is confirmed to the visitor, and a failed one is not claimed", async () => {
+  const api = await read("api/lead.ts");
+  const client = await read("src/lib/leadApi.ts");
+  const calculator = await read("src/components/widget/ToolCalculator.tsx");
+
+  // The visitor gets their own copy, with the reference they can quote.
+  assert.match(api, /async function sendConfirmation/);
+  assert.match(api, /to: \[payload\.email\]/);
+  assert.match(api, /reply_to: RECIPIENT/);
+  assert.match(api, /await sendConfirmation\(payload\)/);
+  assert.match(api, /reference: clean\(raw\.reference, 40\)/);
+  // Confirming is a courtesy on top of a lead that already arrived, so a
+  // failure there may never fail the request the visitor is waiting on.
+  assert.match(api, /catch \(error\) \{\s*\n\s*console\.error\("lead-confirmation-failed"/);
+  // It also may not fire for someone who never gave an address.
+  assert.match(api, /!validEmail\(payload\.email\)\) return;/);
+
+  // The client reports what actually happened instead of always succeeding.
+  assert.match(client, /export type LeadResult = \{ delivered: boolean; fallback\?: string \}/);
+  assert.match(client, /return \{ delivered: true \}/);
+  assert.match(calculator, /setHandedToMailClient\(!result\.delivered\)/);
+  assert.match(calculator, /Otvoril som vám rozpísaný e-mail/);
+  assert.match(calculator, /reference: nextProposalNumber/);
+});
+
+test("the reply streams in and the thread keeps up with it", async () => {
+  const api = await read("api/chat.ts");
+  const client = await read("src/lib/assistantApi.ts");
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
+  );
+
+  // Server: an event stream when the client asks for one, JSON otherwise.
+  assert.match(api, /function wantsStream/);
+  assert.match(api, /text\/event-stream/);
+  assert.match(api, /res\.flushHeaders\?\.\(\)/);
+  // A buffering proxy would defeat the whole point of streaming.
+  assert.match(api, /"X-Accel-Buffering", "no"/);
+  assert.match(api, /writeEvent\(res, "delta", \{ text \}\)/);
+  // Once headers are out a status code is gone, so failures travel as events.
+  assert.match(api, /writeEvent\(res, "error"/);
+  assert.match(api, /client\.messages\.stream\(request/);
+
+  // Model config: Haiku has no `effort` knob and does not think unless
+  // asked, so the request carries neither — sending `effort` errors outright
+  // on this model.
+  assert.match(api, /const MODEL = "claude-haiku-4-5"/);
+  assert.doesNotMatch(api, /thinking:|output_config:|EFFORT/);
+  assert.doesNotMatch(api, /temperature|top_p|top_k/);
+  assert.match(api, /const MAX_TOKENS = 512/);
+
+  // Client: frames are parsed across chunk boundaries, and the first-byte
+  // timeout is released once text is arriving so it cannot cut a live stream.
+  assert.match(client, /function parseEventStream/);
+  assert.match(client, /buffer \+ decoder\.decode\(value, \{ stream: true \}\)/);
+  assert.match(client, /clearTimeoutOnce\(\)/);
+  assert.match(client, /onPartial\?: ChatStreamHandler/);
+  assert.match(client, /Accept: onPartial \? "text\/event-stream" : "application\/json"/);
+  // A server that answers with JSON anyway still works.
+  assert.match(client, /!contentType\.includes\("text\/event-stream"\)/);
+
+  // Thread: one bubble that grows, never a second one beside it.
+  assert.match(conversation, /const replyId = nextIdRef\.current\+\+/);
+  assert.match(conversation, /sendChat\(history, controller\.signal, paint\)/);
+  assert.match(conversation, /data-streaming=\{message\.streaming \|\| undefined\}/);
+});
+
+test("tapping a mode never lands on the drag handler instead of the button", async () => {
+  const widget = await read("src/components/widget/AssistantWidget.tsx");
+  const startDrag =
+    widget.match(/const startThumbDrag[\s\S]*?\n  \};/)?.[0] ?? "";
+
+  assert.ok(startDrag, "startThumbDrag must exist");
+  // While an element holds pointer capture the browser retargets `click` to
+  // it, so capturing on pointerdown swallowed every tap on the tab buttons.
+  assert.doesNotMatch(startDrag, /setPointerCapture/);
+  assert.doesNotMatch(startDrag, /dataset\.dragging/);
+  // Capture is taken only once the pointer has actually travelled.
+  assert.match(widget, /if \(Math\.abs\(clientX - drag\.x\) <= DRAG_THRESHOLD_PX\) return;/);
+  assert.match(widget, /drag\.moved = true;\s*\n\s*tabs\.dataset\.dragging = "true";\s*\n\s*tabs\.setPointerCapture\?\.\(pointerId\)/);
+});
+
+test("the finish layer removes browser blue and keeps one motion vocabulary", async () => {
+  const css = await read("src/masterpiece-final.css");
+
+  // Autofill is the blue that showed up the moment the name field was filled.
+  assert.match(css, /-webkit-autofill/);
+  assert.match(css, /box-shadow: 0 0 0 60px var\(--ux-surface, #18130f\) inset !important/);
+  assert.match(css, /transition: background-color 8640000s/);
+  assert.match(css, /::selection/);
+  assert.match(css, /accent-color: var\(--mp-accent\) !important/);
+  assert.match(css, /-webkit-tap-highlight-color: transparent !important/);
+  // No cool accent may be introduced here.
+  for (const gone of ["#4db6ac", "#7b8fa6", "#3478f6", "#16c47f"]) {
+    assert.ok(
+      !css.toLowerCase().includes(gone),
+      `Retired accent ${gone} is back in the finish layer`,
+    );
+  }
+  // One curve, three durations.
+  assert.match(css, /--mp-ease: cubic-bezier\(0\.16, 1, 0\.3, 1\)/);
+  for (const token of ["--mp-fast: 160ms", "--mp-base: 280ms", "--mp-slow: 440ms"]) {
+    assert.ok(css.includes(token), `Missing duration token ${token}`);
+  }
+  // Reduced motion stops the decoration without hiding any state.
+  const reduced = css.match(
+    /@media \(prefers-reduced-motion: reduce\) \{[\s\S]*$/,
+  )?.[0];
+  assert.ok(reduced, "reduce block missing");
+  assert.match(reduced, /animation: none !important/);
+  assert.match(reduced, /opacity: 1 !important/);
+});
+
+test("the finish layer sizes the builder to its step and glows the contacts", async () => {
+  const css = await read("src/masterpiece-final.css");
+
+  // Cards take the leftover height instead of overflowing into a scrollbar.
+  assert.match(css, /grid-auto-rows: minmax\(0, 1fr\) !important/);
+  assert.match(
+    css,
+    /\.cw-calc-body\[class\]:has\(\.cw-calc-step:not\(\[data-step="contact"\]\)\)/,
+  );
+  assert.match(css, /-webkit-line-clamp: 3 !important/);
+  // The contact step is the one that may scroll, because it holds a form.
+  assert.match(
+    css,
+    /\.cw-calc-body\[class\]:has\(\.cw-calc-step\[data-step="contact"\]\)/,
+  );
+  // Contact is the only thing carrying light at rest.
+  assert.match(css, /--mp-glow-rest:/);
+  assert.match(css, /--mp-glow-strong:/);
+  assert.match(css, /\.cw-direct-actions__grid\[class\] a \{[\s\S]*?box-shadow: var\(--mp-glow-rest\)/);
+  // The chip fills rather than flipping colour.
+  assert.match(css, /transform: scaleX\(0\) !important/);
+  assert.match(css, /transition: transform 440ms var\(--mp-ease\) !important/);
+  assert.match(css, /\[data-sending="true"\]::after \{\s*\n\s*transform: scaleX\(1\)/);
+  // The send button is a circle with a real pressed state.
+  assert.match(css, /\.cw-send\[class\] \{[\s\S]*?border-radius: 999px !important/);
+  assert.match(css, /transform: scale\(0\.9\) !important/);
+});
+
+test("the phone keyboard folds away what is not the conversation", async () => {
+  const css = await read("src/masterpiece-final.css");
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
+  );
+
+  assert.match(conversation, /const \[composing, setComposing\] = useState\(false\)/);
+  assert.match(conversation, /onFocus=\{\(\) => setComposing\(true\)\}/);
+  assert.match(conversation, /onBlur=\{\(\) => setComposing\(false\)\}/);
+  assert.match(conversation, /data-composing=\{composing \|\| undefined\}/);
+
+  assert.match(css, /@media \(max-width: 560px\)/);
+  assert.match(
+    css,
+    /\.cw-conversation\[data-composing\]\[class\] :is\(\.cw-chat-top, \.cw-direct-actions\)/,
+  );
+  assert.match(css, /:has\(\.cw-conversation\[data-composing\]\) \.cw-tabs\[class\]/);
+  // The message stays readable — nothing shrinks to make room.
+  assert.match(css, /\.cw-message-wrap\[class\] p \{\s*\n\s*font-size: 15px !important/);
+  // Below 16px iOS zooms the page on focus, which is what "it shrank" was.
+  assert.match(css, /\.cw-inputbar\[class\] input \{\s*\n\s*font-size: 16px !important/);
+});
+
+test("consent sits with the button it gates, not below the fold", async () => {
+  const calculator = await read("src/components/widget/ToolCalculator.tsx");
+  const css = await read("src/masterpiece-final.css");
+
+  // It is inside the sticky footer, above the submit button.
+  const footer =
+    calculator.match(/cw-calc-actions--final[\s\S]*?<\/footer>/)?.[0] ?? "";
+  assert.ok(footer, "final action bar must exist");
+  assert.ok(
+    footer.indexOf("cw-consent") < footer.indexOf('data-testid="lead-submit"'),
+    "consent must come before the submit button",
+  );
+  assert.match(footer, /data-checked=\{lead\.consent\}/);
+  // ...and no longer duplicated inside the scrolling form.
+  assert.equal((calculator.match(/className="cw-consent"/g) ?? []).length, 1);
+
+  // The native box keeps focus and the keyboard; the drawn one is the accent.
+  assert.match(css, /\.cw-consent\[class\] input\[type="checkbox"\] \{[\s\S]*?opacity: 0 !important/);
+  assert.match(css, /\.cw-consent\[class\]:has\(input:focus-visible\)/);
+  assert.match(css, /\.cw-consent\[class\] \{[\s\S]*?min-height: 44px !important/);
+  assert.match(css, /\[data-checked="true"\] \.cw-consent__box \{[\s\S]*?background: var\(--mp-accent\)/);
 });
 
 test("mobile full screen, safe areas and keyboard constraints remain safe", async () => {
@@ -551,13 +746,100 @@ test("starter chips retire once the conversation begins", async () => {
     conversation,
     /const conversationStarted = messages\.some\(\(message\) => message\.from === "me"\)/,
   );
-  assert.match(conversation, /\{conversationStarted \? null : \(/);
+  // They also go the moment the visitor starts writing their own question —
+  // on a phone those two rows were taking as much height as the thread.
+  assert.match(
+    conversation,
+    /const showQuickReplies =\s*\n\s*!conversationStarted && \(activeQuickReply !== null \|\| input\.trim\(\) === ""\)/,
+  );
+  assert.match(conversation, /\{showQuickReplies \? \(/);
   // the chip carries only its label — no glyph is appended in any state
   assert.match(
     conversation,
     /<span className="cw-chip__label">\{label\}<\/span>/,
   );
   assert.doesNotMatch(conversation, /cw-chip__plus|content: "\+"/);
+});
+
+test("the composer keeps its size at every panel height", async () => {
+  const css = await read("src/masterpiece-final.css");
+  const mobile =
+    css.match(/@media \(max-width: 560px\) \{[\s\S]*?\n\}/)?.[0] ?? "";
+
+  assert.ok(mobile, "the phone block must exist");
+  // Only the thread is elastic. Every other row is content-sized, so a short
+  // panel cannot squeeze the row the visitor is typing into.
+  assert.match(
+    mobile,
+    /grid-template-rows: auto minmax\(0, 1fr\) min-content min-content min-content !important/,
+  );
+  assert.match(mobile, /\.cw-inputbar\[class\] \{\s*\n\s*height: 54px !important;\s*\n\s*min-height: 54px !important/);
+  assert.match(mobile, /\.cw-inputbar\[class\] input \{[\s\S]*?min-height: 42px !important/);
+  assert.match(mobile, /\.cw-send\[class\] \{[\s\S]*?min-height: 44px !important/);
+});
+
+test("a refused delivery channel no longer hides the reason or skips the next one", async () => {
+  const api = await read("api/lead.ts");
+  const client = await read("src/lib/leadApi.ts");
+  const readme = await read("README.md");
+
+  // Resend names the cause in the body; only the status used to survive.
+  assert.match(api, /async function resendFailure/);
+  assert.match(api, /`resend-\$\{response\.status\}\$\{detail \? ` \$\{detail\}` : ""\}`/);
+  // The shared sender only delivers to the account's own address — the single
+  // most common reason a correctly-keyed enquiry never arrives.
+  assert.match(api, /const SHARED_SENDER = "Môj Chatbot <onboarding@resend\.dev>"/);
+  assert.match(api, /only delivers to the Resend account's own address/);
+  assert.match(api, /is verified at resend\.com\/domains/);
+  // A refusal is carried, not thrown, so it cannot skip the channels after it.
+  assert.match(api, /type Delivery = \{ ok: boolean; skipped\?: boolean; reason\?: string \}/);
+  assert.match(api, /attempts\.push\(\["webhook", await deliverWithWebhook\(subject, text\)\]\)/);
+  assert.match(api, /console\.error\("lead-delivery-failed", failures\.join\(" \| "\)\)/);
+  // Nothing configured and something refusing are different problems.
+  assert.match(api, /error: "delivery-not-configured"/);
+  assert.match(api, /reason: failures\.join\(" \| "\)/);
+  // The key is never part of what travels back.
+  assert.doesNotMatch(api, /reason:.*RESEND_API_KEY|RESEND_API_KEY.*reason:/);
+
+  assert.match(client, /if \(data\.reason\) console\.warn\("lead-delivery-failed", data\.reason\)/);
+  // ...and the env the owner has to set is written down.
+  assert.match(readme, /LEAD_FROM_EMAIL/);
+  assert.match(readme, /onboarding@resend\.dev/);
+});
+
+test("info@mojchatbot.sk is the address, the personal one is the second contact", async () => {
+  const api = await read("api/lead.ts");
+  const client = await read("src/lib/leadApi.ts");
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
+  );
+  const fallbackReplies = await read("src/lib/assistantApi.ts");
+  const readme = await read("README.md");
+
+  // Sender and primary recipient.
+  assert.match(api, /const SENDER = process\.env\.LEAD_FROM_EMAIL \|\| "Môj Chatbot <info@mojchatbot\.sk>"/);
+  assert.match(api, /const RECIPIENT = process\.env\.LEAD_TO_EMAIL \|\| "info@mojchatbot\.sk"/);
+
+  // The personal address is kept on the thread, so a lead is never sitting in
+  // one inbox alone — and it is de-duplicated if both point at the same box.
+  assert.match(api, /const SECOND_CONTACT =/);
+  assert.match(api, /"daniel@vendzur\.sk"/);
+  assert.match(api, /const LEAD_RECIPIENTS = \[RECIPIENT, SECOND_CONTACT\]/);
+  assert.match(api, /all\.indexOf\(address\) === index/);
+  assert.match(api, /to: LEAD_RECIPIENTS/);
+  // The confirmation the visitor gets is signed with the public address.
+  assert.match(api, /`Môj Chatbot — \$\{RECIPIENT\}, \+421 948 699 433`/);
+
+  // Everything the visitor can see or click.
+  assert.match(conversation, /mailto:info@mojchatbot\.sk/);
+  assert.match(fallbackReplies, /Napíšte na info@mojchatbot\.sk/);
+  assert.match(client, /const FALLBACK_RECIPIENT = "info@mojchatbot\.sk"/);
+  assert.match(readme, /LEAD_CC_EMAIL/);
+
+  // No visitor-facing surface still shows the personal address.
+  for (const source of [conversation, fallbackReplies, client]) {
+    assert.doesNotMatch(source, /daniel@vendzur\.sk/);
+  }
 });
 
 test("auto-advance does not leave a parked pointer lighting up the next step", async () => {
