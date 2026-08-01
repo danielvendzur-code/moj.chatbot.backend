@@ -1,0 +1,804 @@
+/* Final authority for the direct embed and demo. Everything is scoped to the
+   widget so loading widget.css can never restyle the host page. */
+.cw-widget[class] {
+  --ux-bg: #0a0908;
+  --ux-panel: #100e0c;
+  --ux-surface: #18130f;
+  --ux-surface-raised: #201914;
+  --ux-hover: #271e18;
+  --ux-peach: #ffc79d;
+  --ux-on-peach: #0a0908;
+  --ux-ink: #fff8f2;
+  --ux-muted: #b9aaa0;
+  --ux-faint: #8f8178;
+  --ux-line: rgba(255, 199, 157, 0.16);
+  --ux-line-strong: rgba(255, 199, 157, 0.48);
+  --ux-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Compatibility aliases for older layers. Their final computed value is
+     still the one-accent system even before individual selectors below win. */
+  --mc-bg: var(--ux-bg);
+  --mc-shell: var(--ux-bg);
+  --mc-surface: var(--ux-surface);
+  --mc-surface-raised: var(--ux-surface-raised);
+  --mc-surface-hover: var(--ux-hover);
+  --mc-selected: var(--ux-hover);
+  --mc-brand: var(--ux-peach);
+  --mc-brand-hover: var(--ux-peach);
+  --mc-text: var(--ux-ink);
+  --mc-muted: var(--ux-muted);
+  --mc-faint: var(--ux-faint);
+  --mc-line: var(--ux-line);
+  --mc-line-blue: var(--ux-line-strong);
+  --cw-green: var(--ux-peach);
+  --cw-green-hover: var(--ux-peach);
+  --cw-green-soft: var(--ux-peach);
+  --cw-on-green: var(--ux-on-peach);
+  --cw-panel: var(--ux-panel);
+  --cw-chip: var(--ux-surface);
+  --cw-ink: var(--ux-ink);
+  --cw-ink-dim: var(--ux-muted);
+  --cw-line: var(--ux-line);
+  --w-green: var(--ux-peach);
+  --w-green-hover: var(--ux-peach);
+  --w-green-soft: var(--ux-peach);
+  --w-blue: var(--ux-peach);
+  --w-blue-hover: var(--ux-peach);
+  --w-blue-soft: var(--ux-peach);
+  --w-bg: var(--ux-bg);
+  --w-card: var(--ux-surface);
+  --w-switch: var(--ux-surface-raised);
+  --w-chip: var(--ux-surface);
+  --w-item: var(--ux-surface);
+  --w-text: var(--ux-ink);
+  --w-text-2: var(--ux-muted);
+  --w-text-3: var(--ux-faint);
+  --w-line: var(--ux-line);
+  --submit-blue: var(--ux-peach);
+  --submit-blue-light: var(--ux-peach);
+  color: var(--ux-ink);
+  color-scheme: dark;
+}
+
+html body .cw-widget[class][class] .cw-panel[class] {
+  color: var(--ux-ink) !important;
+  border-color: var(--ux-line) !important;
+  background-color: var(--ux-panel) !important;
+  background-image:
+    radial-gradient(
+      circle at 82% 3%,
+      rgba(255, 199, 157, 0.12),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 14% 82%,
+      rgba(255, 199, 157, 0.055),
+      transparent 38%
+    ),
+    repeating-linear-gradient(
+      118deg,
+      rgba(255, 248, 242, 0.016) 0 1px,
+      transparent 1px 7px
+    ),
+    linear-gradient(155deg, #14100d 0%, var(--ux-panel) 48%, var(--ux-bg) 100%) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 248, 242, 0.025),
+    0 38px 92px -42px rgba(0, 0, 0, 0.96),
+    0 24px 58px -44px rgba(255, 199, 157, 0.46) !important;
+}
+
+html
+  body
+  .cw-widget[class]
+  :is(
+    .cw-panel-head,
+    .cw-calc-actions,
+    .cw-direct-actions,
+    .cw-chat-top
+  )[class] {
+  border-color: var(--ux-line) !important;
+  background-color: rgba(10, 9, 8, 0.72) !important;
+}
+
+html
+  body
+  .cw-widget[class]
+  :is(
+    .cw-tabs,
+    .cw-inputbar,
+    .cw-message-row--bot .cw-message-wrap p,
+    .cw-typing,
+    .cw-chip,
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt,
+    .cw-contact-method,
+    .cw-summary,
+    .cw-industry-tip,
+    .cw-lead__form input,
+    .cw-lead__form textarea,
+    .cw-custom textarea,
+    .cw-thanks__grid > div,
+    .cw-direct-actions__grid a
+  )[class] {
+  color: var(--ux-ink) !important;
+  border-color: var(--ux-line) !important;
+  background-color: var(--ux-surface) !important;
+  background-image: none !important;
+}
+
+/* Older corrective layers used deliberately heavy selectors. Repeat the
+   widget boundary here for the few surfaces whose visual state is central to
+   the experience, so their computed colour cannot fall back to a cool slate. */
+html
+  body
+  .cw-widget[class][class][class]
+  :is(
+    .cw-tabs,
+    .cw-inputbar,
+    .cw-chip,
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt,
+    .cw-contact-method,
+    .cw-summary,
+    .cw-industry-tip,
+    .cw-lead__form input,
+    .cw-lead__form textarea,
+    .cw-custom textarea,
+    .cw-thanks__grid > div,
+    .cw-direct-actions__grid a
+  )[class][class] {
+  color: var(--ux-ink) !important;
+  border-color: var(--ux-line) !important;
+  background-color: var(--ux-surface) !important;
+  background-image: none !important;
+}
+
+html
+  body
+  .cw-widget[class][class][class]
+  .cw-message-row--bot[class]
+  .cw-message-wrap[class]
+  p {
+  color: var(--ux-ink) !important;
+  border-color: var(--ux-line) !important;
+  background: var(--ux-surface) !important;
+}
+
+html
+  body
+  .cw-widget[class][class][class]
+  .cw-quick-replies[class][class]
+  .cw-chip[class][class][data-sending="true"],
+html
+  body
+  .cw-widget[class][class][class]
+  .cw-quick-replies[class][class]
+  .cw-chip[class][class][data-sending="true"]
+  .cw-chip__label {
+  color: var(--ux-on-peach) !important;
+  border-color: var(--ux-peach) !important;
+  background-color: var(--ux-peach) !important;
+}
+
+html
+  body
+  .cw-widget[class][class][class]
+  :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt,
+    .cw-contact-method
+  )[class][class][data-selected="true"] {
+  color: var(--ux-on-peach) !important;
+  border-color: var(--ux-peach) !important;
+  background-color: var(--ux-peach) !important;
+}
+
+html
+  body
+  .cw-widget[class][class][class]
+  :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt,
+    .cw-contact-method
+  )[class][class][data-selected="true"]
+  :is(span, b, small, svg, path) {
+  color: var(--ux-on-peach) !important;
+}
+
+html
+  body
+  .cw-widget[class]
+  :is(
+    .cw-q-sub,
+    .cw-rowcard__body small,
+    .cw-opt__body > span,
+    .cw-vcard > span,
+    .cw-summary__label,
+    .cw-summary__row > span,
+    .cw-lead__ask,
+    .cw-consent span,
+    .cw-lead__optional summary,
+    .cw-panel-head__context,
+    .cw-thanks > p,
+    .cw-thanks__grid > div > span
+  ) {
+  color: var(--ux-muted) !important;
+}
+
+html
+  body
+  .cw-widget[class]
+  :is(
+    .cw-rowcard__body b,
+    .cw-scard b,
+    .cw-vcard b,
+    .cw-opt__body b,
+    .cw-q,
+    .cw-thanks h3
+  ) {
+  color: var(--ux-ink) !important;
+}
+
+/* One accent: peach. Filled controls always use charcoal ink. */
+html
+  body
+  .cw-widget[class][class]
+  :is(
+    .cw-launcher,
+    .cw-submit,
+    .cw-next,
+    .cw-chat-builder,
+    .cw-send
+  )[class]:not(:disabled),
+html
+  body
+  .cw-widget[class][class]
+  :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt,
+    .cw-contact-method,
+    .cw-chip
+  )[class]:is(
+    [data-selected="true"],
+    [aria-pressed="true"],
+    [data-sending="true"]
+  ) {
+  color: var(--ux-on-peach) !important;
+  border-color: var(--ux-peach) !important;
+  background: var(--ux-peach) !important;
+}
+
+html
+  body
+  .cw-widget[class][class]
+  :is(.cw-launcher, .cw-submit, .cw-next, .cw-chat-builder, .cw-send)[class]:is(
+    :hover,
+    :focus-visible,
+    :active
+  ):not(:disabled) {
+  color: var(--ux-on-peach) !important;
+  border-color: var(--ux-peach) !important;
+  background: var(--ux-peach) !important;
+  box-shadow: 0 18px 42px -22px rgba(255, 199, 157, 0.88) !important;
+}
+
+html
+  body
+  .cw-widget[class][class]
+  :is(
+    .cw-submit,
+    .cw-next,
+    .cw-chat-builder,
+    .cw-send,
+    .cw-rowcard[data-selected="true"],
+    .cw-scard[data-selected="true"],
+    .cw-vcard[data-selected="true"],
+    .cw-opt[data-selected="true"],
+    .cw-contact-method[data-selected="true"],
+    .cw-chip[data-sending="true"]
+  )
+  :is(span, b, small, svg, path) {
+  color: var(--ux-on-peach) !important;
+  opacity: 1 !important;
+}
+
+html body .cw-widget[class] .cw-tabs__thumb[class] {
+  background: var(--ux-peach) !important;
+  box-shadow: 0 10px 28px -18px rgba(255, 199, 157, 0.9) !important;
+}
+
+html body .cw-widget[class] .cw-tabs > button[data-active="true"],
+html
+  body
+  .cw-widget[class]
+  .cw-tabs
+  > button[data-active="true"]
+  :is(span, svg, path) {
+  color: var(--ux-on-peach) !important;
+}
+
+html body .cw-widget[class] .cw-message-row--me .cw-message-wrap p {
+  color: var(--ux-on-peach) !important;
+  background: var(--ux-peach) !important;
+  box-shadow: 0 14px 34px -24px rgba(255, 199, 157, 0.74) !important;
+}
+
+html
+  body
+  .cw-widget[class]
+  :is(.cw-typing i, .cw-panel-head__online i, .cw-progress__fill) {
+  border-color: var(--ux-peach) !important;
+  background-color: var(--ux-peach) !important;
+}
+
+html body .cw-widget[class] .cw-spinner {
+  border-color: rgba(10, 9, 8, 0.24) !important;
+  border-top-color: var(--ux-on-peach) !important;
+  background: transparent !important;
+}
+
+html body .cw-widget[class][class][class] .cw-send[class][class]:disabled {
+  color: var(--ux-muted) !important;
+  border-color: var(--ux-line) !important;
+  background: var(--ux-surface-raised) !important;
+  box-shadow: none !important;
+}
+
+html body .cw-widget[class][class] .cw-progress__track[class] {
+  background: var(--ux-surface-raised) !important;
+  box-shadow: inset 0 0 0 1px var(--ux-line) !important;
+}
+
+html
+  body
+  .cw-widget[class]
+  :is(
+    .cw-progress__back,
+    .cw-direct-actions__icon,
+    .cw-industry-tip > b,
+    .cw-thanks__eyebrow
+  ),
+html
+  body
+  .cw-widget[class]
+  :is(.cw-progress__back, .cw-direct-actions__icon, .cw-industry-tip > b)
+  svg {
+  color: var(--ux-peach) !important;
+}
+
+html body .cw-widget[class] .cw-inputbar:focus-within {
+  border-color: var(--ux-line-strong) !important;
+  background: var(--ux-surface-raised) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 199, 157, 0.32),
+    0 18px 40px -28px rgba(255, 199, 157, 0.72) !important;
+}
+
+html body .cw-widget[class] .cw-submit.cw-submit--approved::before {
+  background: linear-gradient(
+    110deg,
+    transparent 0 34%,
+    rgba(255, 199, 157, 0.36) 48%,
+    transparent 62%
+  ) !important;
+}
+
+html body .cw-widget[class] :is(.bl, .cw-avatar, .cw-panel-head__mascot)[class],
+html
+  body
+  .cw-widget[class]
+  :is(.bl, .cw-avatar, .cw-panel-head__mascot)[class]
+  svg {
+  color: var(--ux-peach) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+html body .cw-widget[class] .cw-launcher .bl {
+  color: var(--ux-on-peach) !important;
+}
+
+/* Avatars use a peach mark on dark. The launcher is peach itself, so its mark
+   needs the inverse charcoal ink with enough specificity to win that rule. */
+html body .cw-widget[class][class] .cw-launcher[class] .bl[class],
+html body .cw-widget[class][class] .cw-launcher[class] .bl[class] svg,
+html body .cw-widget[class][class] .cw-launcher[class] .bl[class] path {
+  color: var(--ux-on-peach) !important;
+  fill: currentColor !important;
+}
+
+/* The line icon is the icon. No tile, circle or selected plate may sit behind it. */
+html
+  body
+  .cw-widget[class][class]
+  :is(
+    .cw-rowcard__icon,
+    .cw-scard__icon,
+    .cw-rowcard[data-selected="true"] .cw-rowcard__icon,
+    .cw-scard[data-selected="true"] .cw-scard__icon
+  )[class],
+html
+  body
+  .cw-widget[class][class]
+  :is(.cw-rowcard__icon, .cw-scard__icon)[class]
+  svg {
+  color: var(--ux-peach) !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+html
+  body
+  .cw-widget[class][class]
+  :is(
+    .cw-rowcard[data-selected="true"] .cw-rowcard__icon,
+    .cw-scard[data-selected="true"] .cw-scard__icon
+  )[class]
+  :is(svg, path) {
+  color: var(--ux-on-peach) !important;
+}
+
+html body .cw-widget[class] :is(.cw-rowcard__icon, .cw-scard__icon)::before,
+html body .cw-widget[class] :is(.cw-rowcard__icon, .cw-scard__icon)::after,
+html body .cw-widget[class] :is(.cw-opt, .cw-vcard)::before {
+  content: none !important;
+  display: none !important;
+}
+
+html body .cw-widget[class] .cw-selection-indicator[class] {
+  color: var(--ux-on-peach) !important;
+  border-color: transparent !important;
+  background: rgba(10, 9, 8, 0.16) !important;
+  box-shadow: none !important;
+}
+
+html
+  body
+  .cw-widget[class]
+  :is(button, a, input, textarea, summary):focus-visible {
+  outline: 3px solid rgba(255, 199, 157, 0.88) !important;
+  outline-offset: 3px !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html
+    body
+    .cw-widget[class][class]
+    :is(
+      .cw-chip,
+      .cw-rowcard,
+      .cw-scard,
+      .cw-vcard,
+      .cw-opt,
+      .cw-contact-method
+    )[class]:hover:not([data-selected="true"]):not([data-sending="true"]):not(
+      :disabled
+    ) {
+    color: var(--ux-ink) !important;
+    border-color: var(--ux-line-strong) !important;
+    background: var(--ux-hover) !important;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 199, 157, 0.12),
+      0 18px 38px -22px rgba(255, 199, 157, 0.72) !important;
+  }
+
+  html
+    body
+    .cw-widget[data-pointer-parked="true"][class]
+    :is(
+      .cw-chip,
+      .cw-rowcard,
+      .cw-scard,
+      .cw-vcard,
+      .cw-opt,
+      .cw-contact-method
+    )[class]:hover:not([data-selected="true"]) {
+    border-color: var(--ux-line) !important;
+    background: var(--ux-surface) !important;
+    box-shadow: none !important;
+  }
+}
+
+html
+  body
+  .cw-widget[class][class]
+  :is(
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt,
+    .cw-contact-method
+  )[class][data-selected="true"] {
+  box-shadow:
+    inset 0 0 0 1px rgba(10, 9, 8, 0.12),
+    0 18px 42px -24px rgba(255, 199, 157, 0.88) !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html body .cw-widget[class] .cw-calc-step[data-direction="forward"] {
+    animation: ux-step-forward-in 400ms var(--ux-ease) both !important;
+  }
+  html body .cw-widget[class] .cw-calc-step[data-direction="backward"] {
+    animation: ux-step-backward-in 400ms var(--ux-ease) both !important;
+  }
+  html
+    body
+    .cw-widget[class]
+    .cw-calc-step[data-direction="forward"][data-leaving] {
+    animation: ux-step-forward-out 72ms ease-out forwards !important;
+  }
+  html
+    body
+    .cw-widget[class]
+    .cw-calc-step[data-direction="backward"][data-leaving] {
+    animation: ux-step-backward-out 72ms ease-out forwards !important;
+  }
+
+  html
+    body
+    .cw-widget[class]
+    .cw-choice-grid
+    > :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt),
+  html body .cw-widget[class] .cw-contact-methods > .cw-contact-method,
+  html body .cw-widget[class] .cw-quick-replies > .cw-chip {
+    animation: ux-option-in 400ms var(--ux-ease) backwards !important;
+  }
+  html
+    body
+    .cw-widget[class]
+    :is(.cw-choice-grid, .cw-contact-methods, .cw-quick-replies)
+    > :nth-child(1) {
+    animation-delay: 20ms !important;
+  }
+  html
+    body
+    .cw-widget[class]
+    :is(.cw-choice-grid, .cw-contact-methods, .cw-quick-replies)
+    > :nth-child(2) {
+    animation-delay: 60ms !important;
+  }
+  html
+    body
+    .cw-widget[class]
+    :is(.cw-choice-grid, .cw-contact-methods, .cw-quick-replies)
+    > :nth-child(3) {
+    animation-delay: 100ms !important;
+  }
+  html
+    body
+    .cw-widget[class]
+    :is(.cw-choice-grid, .cw-contact-methods, .cw-quick-replies)
+    > :nth-child(4) {
+    animation-delay: 140ms !important;
+  }
+  html body .cw-widget[class] .cw-choice-grid > :nth-child(5) {
+    animation-delay: 180ms !important;
+  }
+  html body .cw-widget[class] .cw-choice-grid > :nth-child(6) {
+    animation-delay: 220ms !important;
+  }
+
+  html
+    body
+    .cw-widget[class][class]
+    :is(.cw-rowcard, .cw-scard, .cw-vcard)[data-confirming="true"],
+  html body .cw-widget[class][class] .cw-chip[data-sending="true"] {
+    animation: ux-choice-confirm 220ms var(--ux-ease) both !important;
+  }
+
+  html body .cw-widget[class] .cw-message-row--me[data-flight="true"] {
+    animation: none !important;
+  }
+
+  html body .cw-widget[class] .cw-progress__fill {
+    transition: width 420ms var(--ux-ease) !important;
+  }
+
+  html body .cw-widget[class] .cw-tabs__thumb {
+    transition: transform 360ms var(--ux-ease) !important;
+  }
+
+  @keyframes ux-step-forward-in {
+    from {
+      opacity: 0.18;
+      transform: translate3d(16px, 5px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  @keyframes ux-step-backward-in {
+    from {
+      opacity: 0.18;
+      transform: translate3d(-16px, 5px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  @keyframes ux-step-forward-out {
+    to {
+      opacity: 0;
+      transform: translate3d(-10px, -2px, 0);
+    }
+  }
+  @keyframes ux-step-backward-out {
+    to {
+      opacity: 0;
+      transform: translate3d(10px, -2px, 0);
+    }
+  }
+  @keyframes ux-option-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 10px, 0) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+  @keyframes ux-choice-confirm {
+    0% {
+      box-shadow:
+        inset 0 0 0 1px rgba(10, 9, 8, 0.08),
+        0 0 0 0 rgba(255, 199, 157, 0.5);
+    }
+    58% {
+      box-shadow:
+        inset 0 0 0 1px rgba(10, 9, 8, 0.14),
+        0 0 0 7px rgba(255, 199, 157, 0.12),
+        0 18px 42px -22px rgba(255, 199, 157, 0.9);
+    }
+    100% {
+      box-shadow:
+        inset 0 0 0 1px rgba(10, 9, 8, 0.12),
+        0 18px 42px -24px rgba(255, 199, 157, 0.88);
+    }
+  }
+}
+
+/* Stateful panel and two persistent views. Keeping both views mounted means a
+   visitor can ask a question, inspect the builder and return without losing
+   either conversation or selections. The crossing motion makes that spatial
+   relationship visible instead of flashing a blank frame between modes. */
+html body .cw-widget[class][class] .cw-panel-body[class] {
+  position: relative !important;
+  display: block !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  animation: none !important;
+}
+
+html body .cw-widget[class] .cw-mode-view[class] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  filter: blur(5px);
+}
+
+html body .cw-widget[class] .cw-mode-view[data-view="calculator"] {
+  transform: translate3d(-18px, 0, 0) scale(0.992);
+}
+
+html body .cw-widget[class] .cw-mode-view[data-view="assistant"] {
+  transform: translate3d(18px, 0, 0) scale(0.992);
+}
+
+html body .cw-widget[class] .cw-mode-view[data-active="true"] {
+  z-index: 1;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0);
+}
+
+html
+  body
+  .cw-widget[class]
+  .cw-mode-view
+  > :is(.cw-conversation, .cw-calculator) {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Programmatic focus announces the new question after auto-advance. It is a
+   heading, not an editable control, so it keeps no field-like outline. */
+html body .cw-widget[class] .cw-q:focus {
+  outline: none !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html body .cw-widget[class][class] .cw-panel[class][data-state="open"] {
+    animation: ux-panel-open 480ms var(--ux-ease) both !important;
+  }
+
+  html body .cw-widget[class][class] .cw-panel[class][data-state="closing"] {
+    pointer-events: none !important;
+    animation: ux-panel-close 210ms cubic-bezier(0.55, 0, 1, 0.45) forwards !important;
+  }
+
+  html body .cw-widget[class] .cw-mode-view[class] {
+    transition:
+      opacity 150ms ease,
+      transform 280ms var(--ux-ease),
+      filter 190ms ease,
+      visibility 0s linear 280ms;
+  }
+
+  html body .cw-widget[class] .cw-mode-view[data-active="true"] {
+    transition:
+      opacity 240ms ease 55ms,
+      transform 340ms var(--ux-ease) 24ms,
+      filter 220ms ease 24ms,
+      visibility 0s linear 0s;
+  }
+
+  @keyframes ux-panel-open {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 24px, 0) scale(0.965);
+      filter: blur(8px);
+    }
+    68% {
+      opacity: 1;
+      transform: translate3d(0, -2px, 0) scale(1.004);
+      filter: blur(0);
+    }
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes ux-panel-close {
+    from {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+      filter: blur(0);
+    }
+    to {
+      opacity: 0;
+      transform: translate3d(10px, 17px, 0) scale(0.972);
+      filter: blur(5px);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body .cw-widget[class] *,
+  html body .cw-widget[class] *::before,
+  html body .cw-widget[class] *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

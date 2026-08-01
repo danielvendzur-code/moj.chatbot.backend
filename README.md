@@ -1,8 +1,8 @@
 # Môj Chatbot — widget pre web
 
 Samostatný React/TypeScript widget: chat, ktorý odpovedá zákazníkom, a štvor-otázkový
-tok, ktorý spočíta odhad ceny a odošle dopyt. Vizuál je zelený („#16c47f" na
-takmer čiernom „#0b110f"), s jednou krivkou pohybu `cubic-bezier(0.16, 1, 0.3, 1)`
+tok, ktorý vyskladá potrebné funkcie a odošle zadanie. Vizuál používa broskyňový
+akcent `#ffc79d` na teplom charcoal základe `#0a0908`, s jednou krivkou pohybu `cubic-bezier(0.16, 1, 0.3, 1)`
 zhodnou s webom, písmom Inter Tight a jedinou farbou hraníc.
 
 Pravidlá, ktoré widget drží a testy ich strážia:
@@ -11,11 +11,11 @@ Pravidlá, ktoré widget drží a testy ich strážia:
   žiadny čip nedrží `:focus` ani `:hover` z predchádzajúceho kroku a `key`
   každej možnosti obsahuje aj číslo kroku, takže React nerecykluje DOM prvok
   medzi krokmi.
-- **Pohyb je len pri príchode.** Nič sa nehýbe pri ukázaní myšou, pri kliknutí
-  ani pri scrollovaní. Všetky animácie sú v
+- **Pohyb vysvetľuje zmenu.** Výber sa krátko potvrdí, kroky sa vymenia smerovým
+  prechodom a odoslaná správa letí z inputu do konverzácie. Všetky animácie sú v
   `@media (prefers-reduced-motion: no-preference)`; kto má pohyb vypnutý, vidí
   rovnaký obsah bez pohybu.
-- **Na zelenej je vždy tmavý text `#04140d`.** Kontrast každého textu voči
+- **Na broskyňovej je vždy tmavý text `#0a0908`.** Kontrast každého textu voči
   skutočne vykreslenému pozadiu je nad 4,5 : 1 — vrátane prípadov, kde je
   pozadie súrodenec (jazdec prepínača), kde sa farba odčítava z pixelov snímky.
 - **Plocha na klik je aspoň 44 × 44 px**, aj keď je ovládací prvok vizuálne
@@ -31,7 +31,7 @@ Verejná ukážka: <https://danielvendzur-code.github.io/moj.chatbot.backend/>
 
 ## Logo
 
-Logom je čistá chatová bublina v zelenej s tromi tmavými bodkami (`src/components/widget/BubbleLogo.tsx`)
+Logom je čistá chatová značka v broskyňovej farbe (`src/components/widget/BubbleLogo.tsx`)
 v troch veľkostiach — launcher, hlavička a avatar pri správach. (Skorší pixel-art maskot
 chameleóna zostáva dostupný v git histórii, keby sa hodil neskôr.)
 
@@ -74,10 +74,9 @@ a vyplní viewport. Loader používa otvorený Shadow DOM s hostom
 - `src/components/widget/AssistantWidget.tsx` — launcher, teaser, okno, prepínanie režimov.
 - `src/components/widget/BubbleLogo.tsx` — logo asistenta (chatová bublina, tri veľkosti).
 - `src/components/widget/AssistantConversation.tsx` — konverzácia s rýchlymi čipmi.
-- `src/components/widget/ToolCalculator.tsx` — päť krokov: čo má web robiť → typ firmy → čo má zvládnuť (tu sa počíta odhad ceny) → kedy → kontakt (s poďakovaním).
-- `src/lib/assistantFlow.ts` — dáta krokov, odporúčania podľa výberu, cenník (`BASE_PRICE`, `priceOf`), číslo dopytu.
-- `src/green-motion-final.css` — posledná vrstva štýlov: zelená paleta, geometria, plochy na klik a všetky animácie.
-- `src/hooks/useCountUp.ts` — odpočítanie ceny nahor za 900 ms; pri vypnutom pohybe vráti finálne číslo hneď.
+- `src/components/widget/ToolCalculator.tsx` — päť krokov: čo má web robiť → typ firmy → čo má zvládnuť → kedy → kontakt (s poďakovaním).
+- `src/lib/assistantFlow.ts` — dáta krokov, schopnosti, odporúčania podľa výberu a číslo dopytu.
+- `src/unified-experience-final.css` — posledná autoritatívna vrstva: charcoal/peach paleta, textúra, focus, hover a pohyb.
 - `src/hooks/useStepTransition.ts` — prechod medzi krokmi, ktorý drží výšku panela, takže nič nepodskočí.
 - `src/lib/siteAssistant.ts` — verejné API a integračné udalosti.
 
@@ -157,8 +156,6 @@ window.addEventListener("site-assistant:analytics", (e) => {
 
 ## Aktuálny rozsah
 
-Chat odpovedá reálne (po nastavení Vercel proxy). Kontaktný formulár posiela dopyt cez
-`api/lead.ts`; databáza, CRM a kalendár patria do ďalšej fázy.
-
-Odhad ceny je orientačný: `BASE_PRICE` (350 €) plus cena za každú vybranú schopnosť
-v `FEATURES`. Widget to takto aj hovorí — presnú cenu potvrdzuje Daniel.
+Chat odpovedá reálne (po nastavení Vercel proxy). Kontaktný formulár posiela zadanie cez
+`api/lead.ts`; databáza, CRM a kalendár patria do ďalšej fázy. Widget vymenuje potrebné
+schopnosti, ale cenu projektu neodhaduje.

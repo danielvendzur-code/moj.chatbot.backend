@@ -4,11 +4,13 @@ import App from "./App";
 import { installConfiguratorAutoAdvance } from "./lib/configuratorAutoAdvance";
 import { installPremiumTilt } from "./lib/premiumTilt";
 import { getInitialEmbedViewport, isEmbedMode } from "./lib/embedBridge";
+import "./preview.css";
 import "./widget.css";
 import "./assistant-redesign.css";
 import "./approved-submit-final.css";
 import "./final-user-correction.css";
 import "./green-motion-final.css";
+import "./unified-experience-final.css";
 
 installConfiguratorAutoAdvance();
 installPremiumTilt();

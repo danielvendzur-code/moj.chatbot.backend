@@ -1,4 +1,6 @@
 const DEFAULT_ENDPOINT = "https://moj-chatbot-backend.vercel.app/api/chat";
+const BUILT_ENDPOINT =
+  import.meta.env.VITE_CHAT_API_URL?.trim() || DEFAULT_ENDPOINT;
 const REQUEST_TIMEOUT_MS = 15_000;
 const MAX_HISTORY = 10;
 const MAX_MESSAGE_CHARS = 1_000;
@@ -32,7 +34,7 @@ export function chatEndpoint(): string {
     const override = safeEndpoint(window.__DV_ASSISTANT_ENDPOINT__);
     if (override) return override;
   }
-  return DEFAULT_ENDPOINT;
+  return BUILT_ENDPOINT;
 }
 
 export function isChatConfigured(): boolean {
@@ -53,7 +55,7 @@ export function localAssistantReply(question: string): string {
   const normalized = question.toLocaleLowerCase("sk");
 
   if (/cen|koľko|rozpočet|stojí|suma/.test(normalized)) {
-    return "Záleží na tom, čo všetko má chatbot zvládnuť. Kliknite na „Spočítať cenu“, odpoviete mi na štyri otázky a hneď uvidíte odhad. Nič tým neplatíte.";
+    return "Cena závisí od toho, čo má riešenie robiť a s čím sa má prepojiť. Vo „Vyskladať riešenie“ mi označte potrebné funkcie a Daniel sa vám ozve s konkrétnym návrhom.";
   }
   if (/kalkula|výpočet|odhad/.test(normalized)) {
     return "Zákazník zadá napríklad rozmery alebo množstvo a chatbot mu hneď povie cenu — podľa pravidiel, ktoré si určíte vy. Vám potom pošle jeho kontakt aj s tým, čo si vybral.";
@@ -71,13 +73,16 @@ export function localAssistantReply(question: string): string {
     return "Váš web prerábať netreba. Chatbot doň pridám tak, aby ladil s vašimi farbami, fungoval na mobile a dopyty vám posielal na e-mail, do kalendára alebo do tabuľky.";
   }
   if (/kontakt|zavola|email|e-mail/.test(normalized)) {
-    return "Napíšte na daniel@vendzur.sk alebo zavolajte na +421 948 699 433. Najrýchlejšie je kliknúť na „Spočítať cenu“ — ozvem sa vám do jedného dňa.";
+    return "Napíšte na daniel@vendzur.sk alebo zavolajte na +421 948 699 433. Najrýchlejšie je vyskladať riešenie priamo tu — ozvem sa vám do jedného dňa.";
   }
 
-  return "Poradím vám, čo by váš web mohol robiť za vás: odpovedať zákazníkom, počítať ceny alebo dohadovať termíny. Napíšte mi, čo vás dnes najviac zdržuje, alebo kliknite na „Spočítať cenu“.";
+  return "Poradím vám, čo by váš web mohol robiť za vás: odpovedať zákazníkom, počítať ceny alebo dohadovať termíny. Napíšte mi, čo vás dnes najviac zdržuje, alebo si vyskladajte riešenie.";
 }
 
-export async function sendChat(history: ChatTurn[]): Promise<string> {
+export async function sendChat(
+  history: ChatTurn[],
+  requestSignal?: AbortSignal,
+): Promise<string> {
   const lastQuestion =
     [...history].reverse().find((turn) => turn.role === "user")?.text ?? "";
   const endpoint = safeEndpoint(chatEndpoint());
@@ -89,6 +94,10 @@ export async function sendChat(history: ChatTurn[]): Promise<string> {
   }));
 
   const controller = new AbortController();
+  const abortFromCaller = () => controller.abort();
+  if (requestSignal?.aborted) controller.abort();
+  else
+    requestSignal?.addEventListener("abort", abortFromCaller, { once: true });
   const timeout = window.setTimeout(
     () => controller.abort(),
     REQUEST_TIMEOUT_MS,
@@ -120,5 +129,6 @@ export async function sendChat(history: ChatTurn[]): Promise<string> {
     return localAssistantReply(lastQuestion);
   } finally {
     window.clearTimeout(timeout);
+    requestSignal?.removeEventListener("abort", abortFromCaller);
   }
 }

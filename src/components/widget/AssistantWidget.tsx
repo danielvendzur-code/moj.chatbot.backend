@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useFocusTrap } from "../../hooks/useFocusTrap";
 import {
   installSiteAssistantGlobal,
@@ -6,7 +12,10 @@ import {
 } from "../../lib/siteAssistant";
 import { announceEmbedState, installEmbedBridge } from "../../lib/embedBridge";
 import { track } from "../../lib/analytics";
-import type { AssistantPreset, OpenSiteAssistantOptions } from "../../types/assistant";
+import type {
+  AssistantPreset,
+  OpenSiteAssistantOptions,
+} from "../../types/assistant";
 import { AssistantConversation } from "./AssistantConversation";
 import { BubbleLogo } from "./BubbleLogo";
 import { ToolCalculator } from "./ToolCalculator";
@@ -14,32 +23,86 @@ import { WidgetIcon } from "./WidgetIcon";
 
 type WidgetMode = "assistant" | "calculator";
 
+type ThumbDrag = {
+  pointerId: number;
+  x: number;
+  moved: boolean;
+};
+
 type AssistantWidgetProps = {
   embedMode?: boolean;
 };
 
 const isPreset = (value: string | undefined): value is AssistantPreset =>
-  Boolean(value && ["calculator", "inquiry", "advisor", "booking"].includes(value));
+  Boolean(
+    value && ["calculator", "inquiry", "advisor", "booking"].includes(value),
+  );
 
-export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JSX.Element {
+const PANEL_EXIT_MS = 210;
+
+const reducedMotion = (): boolean =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+export function AssistantWidget({
+  embedMode = false,
+}: AssistantWidgetProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [mode, setMode] = useState<WidgetMode>("assistant");
+  const [modeDirection, setModeDirection] = useState<"forward" | "backward">(
+    "forward",
+  );
   const [resetToken, setResetToken] = useState(0);
   const [preset, setPreset] = useState<AssistantPreset | null>(null);
   const panelRef = useRef<HTMLElement>(null);
-  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const launcherRef = useRef<HTMLButtonElement>(null);
   const tabsRef = useRef<HTMLElement>(null);
   const thumbRef = useRef<HTMLSpanElement>(null);
-  const dragRef = useRef<{ x: number; moved: boolean } | null>(null);
+  const calculatorViewRef = useRef<HTMLDivElement>(null);
+  const assistantViewRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<ThumbDrag | null>(null);
+  const suppressClickRef = useRef(false);
+  const suppressClickTimerRef = useRef<number | null>(null);
+  const closeTimerRef = useRef<number | null>(null);
+  const openRef = useRef(false);
+  const closingRef = useRef(false);
 
   const close = useCallback(() => {
-    setIsOpen(false);
+    if (!openRef.current || closingRef.current) return;
+    closingRef.current = true;
+    setIsClosing(true);
     track("widget_close");
+
+    const finish = () => {
+      closeTimerRef.current = null;
+      openRef.current = false;
+      closingRef.current = false;
+      setIsOpen(false);
+      setIsClosing(false);
+      window.requestAnimationFrame(() =>
+        launcherRef.current?.focus({ preventScroll: true }),
+      );
+    };
+
+    if (reducedMotion()) {
+      finish();
+      return;
+    }
+    closeTimerRef.current = window.setTimeout(finish, PANEL_EXIT_MS);
   }, []);
-  useFocusTrap(panelRef, isOpen, close);
+  useFocusTrap(panelRef, isOpen && !isClosing, close);
 
   const open = useCallback(
     (nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {
+      if (closeTimerRef.current !== null) {
+        window.clearTimeout(closeTimerRef.current);
+        closeTimerRef.current = null;
+      }
+      openRef.current = true;
+      closingRef.current = false;
+      setIsClosing(false);
+      setModeDirection(nextMode === "assistant" ? "forward" : "backward");
       setMode(nextMode);
       setPreset(nextPreset);
       setResetToken((value) => value + 1);
@@ -49,51 +112,89 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
     [],
   );
 
-  const switchMode = useCallback((nextMode: WidgetMode) => {
-    setMode(nextMode);
-    setPreset(null);
-    track("mode_switch", { to: nextMode });
-  }, []);
+  const switchMode = useCallback(
+    (nextMode: WidgetMode) => {
+      if (nextMode === mode) return;
+      setModeDirection(nextMode === "assistant" ? "forward" : "backward");
+      setMode(nextMode);
+      track("mode_switch", { to: nextMode });
+    },
+    [mode],
+  );
 
   /* The switch thumb can be dragged, not only tapped. */
-  const startThumbDrag = (clientX: number) => {
-    dragRef.current = { x: clientX, moved: false };
-    tabsRef.current?.setAttribute("data-dragging", "true");
+  const startThumbDrag = (
+    pointerId: number,
+    clientX: number,
+    tabs: HTMLElement,
+  ) => {
+    dragRef.current = { pointerId, x: clientX, moved: false };
+    tabs.dataset.dragging = "true";
+    tabs.setPointerCapture?.(pointerId);
   };
 
-  const moveThumbDrag = (clientX: number) => {
+  const moveThumbDrag = (pointerId: number, clientX: number) => {
     const drag = dragRef.current;
     const tabs = tabsRef.current;
     const thumb = thumbRef.current;
-    if (!drag || !tabs || !thumb) return;
+    if (!drag || drag.pointerId !== pointerId || !tabs || !thumb) return;
     const travel = tabs.getBoundingClientRect().width / 2;
     if (travel <= 0) return;
     const base = mode === "assistant" ? travel : 0;
     const next = Math.max(0, Math.min(travel, base + (clientX - drag.x)));
-    if (Math.abs(clientX - drag.x) > 3) drag.moved = true;
+    if (Math.abs(clientX - drag.x) > 6) drag.moved = true;
     thumb.style.transform = `translateX(${next}px)`;
   };
 
-  const endThumbDrag = (clientX: number) => {
+  const endThumbDrag = (
+    pointerId: number,
+    clientX: number,
+    commit: boolean,
+  ) => {
     const drag = dragRef.current;
     const tabs = tabsRef.current;
     const thumb = thumbRef.current;
+    if (!drag || drag.pointerId !== pointerId) return;
     dragRef.current = null;
     tabs?.removeAttribute("data-dragging");
     if (thumb) thumb.style.transform = "";
-    if (!drag || !tabs) return;
-    if (!drag.moved) return;
+    if (tabs?.hasPointerCapture?.(pointerId))
+      tabs.releasePointerCapture(pointerId);
+    if (!tabs || !drag.moved) return;
+
+    suppressClickRef.current = true;
+    if (suppressClickTimerRef.current !== null) {
+      window.clearTimeout(suppressClickTimerRef.current);
+    }
+    suppressClickTimerRef.current = window.setTimeout(() => {
+      suppressClickRef.current = false;
+      suppressClickTimerRef.current = null;
+    }, 0);
+
+    if (!commit) return;
     const travel = tabs.getBoundingClientRect().width / 2;
     const base = mode === "assistant" ? travel : 0;
     const next = base + (clientX - drag.x);
     switchMode(next > travel / 2 ? "assistant" : "calculator");
   };
 
+  const clickMode = (nextMode: WidgetMode) => {
+    if (suppressClickRef.current) {
+      suppressClickRef.current = false;
+      return;
+    }
+    switchMode(nextMode);
+  };
+
   const openFromOptions = useCallback(
     (options: OpenSiteAssistantOptions) => {
-      const directPreset = options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);
+      const directPreset =
+        options?.preset ??
+        (isPreset(options?.entry) ? options.entry : undefined);
       const calculatorEntry =
-        options?.entry === "builder" || options?.entry === "calculator" || Boolean(directPreset);
+        options?.entry === "builder" ||
+        options?.entry === "calculator" ||
+        Boolean(directPreset);
       open(calculatorEntry ? "calculator" : "assistant", directPreset ?? null);
     },
     [open],
@@ -120,6 +221,22 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
     if (embedMode) announceEmbedState(isOpen);
   }, [embedMode, isOpen]);
 
+  useLayoutEffect(() => {
+    calculatorViewRef.current?.toggleAttribute("inert", mode !== "calculator");
+    assistantViewRef.current?.toggleAttribute("inert", mode !== "assistant");
+  }, [mode]);
+
+  useEffect(
+    () => () => {
+      if (closeTimerRef.current !== null)
+        window.clearTimeout(closeTimerRef.current);
+      if (suppressClickTimerRef.current !== null) {
+        window.clearTimeout(suppressClickTimerRef.current);
+      }
+    },
+    [],
+  );
+
   /* The panel used to set `overflow: hidden` on <body> while open. That makes
      the body the scroll container, which breaks page scrolling and pinch-zoom
      on mobile as soon as the keyboard opens. The panel is `position: fixed` and
@@ -140,8 +257,9 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
         id="chameleon-widget-launcher"
         data-testid="widget-launcher"
         className="cw-launcher"
+        ref={launcherRef}
         type="button"
-        aria-label="Otvoriť chat — spočítam cenu alebo odpoviem na otázky"
+        aria-label="Otvoriť chat — navrhnem riešenie alebo odpoviem na otázky"
         aria-expanded={isOpen}
         aria-controls="chameleon-widget-panel"
         onClick={() => open("assistant")}
@@ -154,30 +272,16 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
           id="chameleon-widget-panel"
           className="cw-panel"
           data-mode={mode}
+          data-state={isClosing ? "closing" : "open"}
           ref={panelRef}
           role="dialog"
           aria-modal="true"
           aria-labelledby="chameleon-widget-title"
           tabIndex={-1}
-          onTouchStart={(event) => {
-            const touch = event.touches[0];
-            touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-          }}
-          onTouchEnd={(event) => {
-            const start = touchStartRef.current;
-            touchStartRef.current = null;
-            if (!start) return;
-            const touch = event.changedTouches[0];
-            const dx = touch.clientX - start.x;
-            const dy = touch.clientY - start.y;
-            if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
-            if (dx < 0 && mode === "calculator") switchMode("assistant");
-            else if (dx > 0 && mode === "assistant") switchMode("calculator");
-          }}
         >
           <header className="cw-panel-head">
             <h2 id="chameleon-widget-title" className="cw-sr-only">
-              Môj Chatbot — spočíta cenu a odpovie na otázky
+              Môj Chatbot — navrhne riešenie a odpovie na otázky
             </h2>
             <span className="cw-panel-head__mascot">
               <BubbleLogo size="header" />
@@ -220,51 +324,91 @@ export function AssistantWidget({ embedMode = false }: AssistantWidgetProps): JS
             data-mode={mode}
             ref={tabsRef}
             onPointerDown={(event) => {
-              if (event.pointerType === "mouse" && event.button !== 0) return;
-              startThumbDrag(event.clientX);
+              if (
+                !event.isPrimary ||
+                (event.pointerType === "mouse" && event.button !== 0)
+              ) {
+                return;
+              }
+              startThumbDrag(
+                event.pointerId,
+                event.clientX,
+                event.currentTarget,
+              );
             }}
             onPointerMove={(event) => {
-              if (dragRef.current) moveThumbDrag(event.clientX);
+              if (!dragRef.current) return;
+              moveThumbDrag(event.pointerId, event.clientX);
+              if (dragRef.current?.moved) event.preventDefault();
             }}
-            onPointerUp={(event) => endThumbDrag(event.clientX)}
-            onPointerCancel={(event) => endThumbDrag(event.clientX)}
+            onPointerUp={(event) =>
+              endThumbDrag(event.pointerId, event.clientX, true)
+            }
+            onPointerCancel={(event) =>
+              endThumbDrag(event.pointerId, event.clientX, false)
+            }
+            onLostPointerCapture={(event) => {
+              const drag = dragRef.current;
+              if (drag?.pointerId === event.pointerId) {
+                endThumbDrag(event.pointerId, drag.x, false);
+              }
+            }}
           >
-            <span className="cw-tabs__thumb" aria-hidden="true" ref={thumbRef} />
+            <span
+              className="cw-tabs__thumb"
+              aria-hidden="true"
+              ref={thumbRef}
+            />
             <button
               type="button"
               data-testid="tab-calculator"
               data-active={mode === "calculator"}
               aria-pressed={mode === "calculator"}
-              onClick={() => switchMode("calculator")}
+              onClick={() => clickMode("calculator")}
             >
               <WidgetIcon name="calculator" />
-              <span>Spočítať cenu</span>
+              <span>Vyskladať riešenie</span>
             </button>
             <button
               type="button"
               data-testid="tab-assistant"
               data-active={mode === "assistant"}
               aria-pressed={mode === "assistant"}
-              onClick={() => switchMode("assistant")}
+              onClick={() => clickMode("assistant")}
             >
               <WidgetIcon name="chat" />
               <span>Napísať mi</span>
             </button>
           </nav>
 
-          <div className="cw-panel-body" key={mode}>
-            {mode === "assistant" ? (
-              <AssistantConversation
-                resetToken={resetToken}
-                onOpenCalculator={() => switchMode("calculator")}
-              />
-            ) : (
+          <div className="cw-panel-body" data-direction={modeDirection}>
+            <div
+              className="cw-mode-view"
+              ref={calculatorViewRef}
+              data-view="calculator"
+              data-active={mode === "calculator"}
+              aria-hidden={mode !== "calculator"}
+            >
               <ToolCalculator
+                active={mode === "calculator"}
                 resetToken={resetToken}
                 initialPreset={preset}
                 onOpenChat={() => switchMode("assistant")}
               />
-            )}
+            </div>
+            <div
+              className="cw-mode-view"
+              ref={assistantViewRef}
+              data-view="assistant"
+              data-active={mode === "assistant"}
+              aria-hidden={mode !== "assistant"}
+            >
+              <AssistantConversation
+                active={mode === "assistant"}
+                resetToken={resetToken}
+                onOpenCalculator={() => switchMode("calculator")}
+              />
+            </div>
           </div>
         </section>
       ) : null}

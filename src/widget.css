@@ -1,24 +1,16 @@
 /* Shared embed foundation only. Component styling lives in assistant-redesign.css. */
-:root {
+.cw-widget {
   color-scheme: dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
-*,
-*::before,
-*::after {
+.cw-widget,
+.cw-widget *,
+.cw-widget *::before,
+.cw-widget *::after {
   box-sizing: border-box;
-}
-
-html,
-body,
-#root {
-  width: 100%;
-  min-width: 320px;
-  min-height: 100%;
-  margin: 0;
 }
 
 /* `overflow: hidden` on html/body turns them into the scroll container, which
@@ -28,20 +20,21 @@ html[data-embed="true"],
 html[data-embed="true"] body {
   min-width: 0;
   min-height: 100%;
-  background: transparent;
+  color-scheme: normal;
+  background: transparent !important;
 }
 
 html[data-embed="true"] #root {
   min-width: 0;
   min-height: 100%;
   overflow-x: clip;
-  background: transparent;
+  background: transparent !important;
 }
 
-button,
-input,
-textarea,
-summary {
+.cw-widget button,
+.cw-widget input,
+.cw-widget textarea,
+.cw-widget summary {
   font: inherit;
 }
 
