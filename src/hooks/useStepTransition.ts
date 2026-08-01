@@ -2,10 +2,10 @@ import { useEffect, useRef, useState, type RefObject } from "react";
 
 /* How long the outgoing step is given to fade up and out. Must match
    `cw-step-out` in the stylesheet. */
-export const STEP_EXIT_MS = 180;
+export const STEP_EXIT_MS = 72;
 /* Longest incoming animation (the last staggered chip), after which the height
    lock can be released without anything visibly settling. */
-const STEP_ENTER_MS = 740;
+const STEP_ENTER_MS = 640;
 
 const prefersReducedMotion = (): boolean =>
   typeof window !== "undefined" &&
@@ -16,6 +16,7 @@ type StepTransition = {
   visibleStep: number;
   /* True while the old step is fading out. */
   leaving: boolean;
+  direction: "forward" | "backward";
 };
 
 /* Swaps one step for the next without the panel resizing under the pointer:
@@ -27,10 +28,14 @@ export function useStepTransition(
 ): StepTransition {
   const [visibleStep, setVisibleStep] = useState(step);
   const [leaving, setLeaving] = useState(false);
+  const [direction, setDirection] = useState<"forward" | "backward">("forward");
   const releaseRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (step === visibleStep) return;
+
+    const nextDirection = step > visibleStep ? "forward" : "backward";
+    setDirection(nextDirection);
 
     if (prefersReducedMotion()) {
       setVisibleStep(step);
@@ -70,5 +75,5 @@ export function useStepTransition(
     };
   }, [containerRef, leaving, visibleStep]);
 
-  return { visibleStep, leaving };
+  return { visibleStep, leaving, direction };
 }

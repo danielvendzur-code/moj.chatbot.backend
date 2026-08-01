@@ -2,17 +2,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { drawCheck } from "../../lib/motion";
 import { track } from "../../lib/analytics";
 import { submitLead as sendLead } from "../../lib/leadApi";
-import { useCountUp } from "../../hooks/useCountUp";
 import { useStepTransition } from "../../hooks/useStepTransition";
 import {
-  BASE_PRICE,
   buildProposalNumber,
   FEATURES,
   INDUSTRIES,
   INTERESTS,
   labelOf,
   PRESET_TO_INTEREST,
-  priceOf,
   QUESTION_STEPS,
   QUESTIONS,
   RECOMMENDED_FEATURES,
@@ -23,6 +20,7 @@ import type { AssistantPreset, InterestId } from "../../types/assistant";
 import { WidgetIcon } from "./WidgetIcon";
 
 type ToolCalculatorProps = {
+  active: boolean;
   resetToken: number;
   initialPreset: AssistantPreset | null;
   onOpenChat: () => void;
@@ -58,7 +56,11 @@ type SendState = "idle" | "sending" | "done";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const CONTACT_METHODS: Array<{ id: ContactMethod; label: string; icon: "chat" | "phone" | "user" | "mail" }> = [
+const CONTACT_METHODS: Array<{
+  id: ContactMethod;
+  label: string;
+  icon: "chat" | "phone" | "user" | "mail";
+}> = [
   { id: "phone", label: "Telefonicky", icon: "phone" },
   { id: "video", label: "Cez video", icon: "chat" },
   { id: "meeting", label: "Osobne", icon: "user" },
@@ -67,18 +69,25 @@ const CONTACT_METHODS: Array<{ id: ContactMethod; label: string; icon: "chat" | 
 
 function SelectionIndicator({ selected }: { selected: boolean }): JSX.Element {
   return (
-    <span className="cw-selection-indicator" aria-hidden="true" data-visible={selected}>
+    <span
+      className="cw-selection-indicator"
+      aria-hidden="true"
+      data-visible={selected}
+    >
       <WidgetIcon name="check" />
     </span>
   );
 }
 
 export function ToolCalculator({
+  active,
   resetToken,
   initialPreset,
   onOpenChat,
 }: ToolCalculatorProps): JSX.Element {
-  const initialInterest = initialPreset ? PRESET_TO_INTEREST[initialPreset] : null;
+  const initialInterest = initialPreset
+    ? PRESET_TO_INTEREST[initialPreset]
+    : null;
 
   const [step, setStep] = useState(0);
   const [interest, setInterest] = useState<InterestId | null>(initialInterest);
@@ -91,11 +100,14 @@ export function ToolCalculator({
   const [sendState, setSendState] = useState<SendState>("idle");
   const [proposalNumber, setProposalNumber] = useState("");
   const bodyRef = useRef<HTMLDivElement>(null);
+  const questionRef = useRef<HTMLHeadingElement>(null);
+  const previousVisibleStepRef = useRef(0);
+  const previousActiveRef = useRef(active);
   const thanksIconRef = useRef<HTMLSpanElement>(null);
 
   /* The outgoing step fades up and out before the new one arrives from below,
      and the body holds its height across the swap so nothing jumps. */
-  const { visibleStep, leaving } = useStepTransition(step, bodyRef);
+  const { visibleStep, leaving, direction } = useStepTransition(step, bodyRef);
 
   const restart = (nextInterest: InterestId | null) => {
     setStep(0);
@@ -113,15 +125,24 @@ export function ToolCalculator({
     restart(initialPreset ? PRESET_TO_INTEREST[initialPreset] : null);
   }, [initialPreset, resetToken]);
 
-  /* Arriving at a step must leave nothing looking pre-chosen. Any button still
-     holding focus from the previous step is released, so the only thing that can
-     colour a chip is its own `data-selected`. */
+  /* Move keyboard and assistive-technology users to the question that just
+     arrived. This replaces the old bare blur, which dropped focus on <body>. */
   useEffect(() => {
     bodyRef.current?.scrollTo({ top: 0 });
-    const active = document.activeElement;
-    if (active instanceof HTMLElement && active.closest(".cw-calc-step")) active.blur();
-    track("config_step_view", { step: STEPS[visibleStep], index: visibleStep + 1 });
-  }, [visibleStep, resetToken]);
+    const stepChanged = previousVisibleStepRef.current !== visibleStep;
+    const becameActive = active && !previousActiveRef.current;
+    previousVisibleStepRef.current = visibleStep;
+    previousActiveRef.current = active;
+    if ((stepChanged || becameActive) && active) {
+      window.requestAnimationFrame(() =>
+        questionRef.current?.focus({ preventScroll: true }),
+      );
+    }
+    track("config_step_view", {
+      step: STEPS[visibleStep],
+      index: visibleStep + 1,
+    });
+  }, [active, visibleStep, resetToken]);
 
   useEffect(() => {
     if (sendState === "done") drawCheck(thanksIconRef.current);
@@ -132,13 +153,14 @@ export function ToolCalculator({
   const isLast = visibleStep === STEPS.length - 1;
   const questionIndex = QUESTION_STEPS.indexOf(stepId);
 
-  const price = priceOf(features);
-  const shownPrice = useCountUp(price);
   /* The bar is driven by a number so CSS can ease it instead of jumping. */
   const progress = ((visibleStep + 1) / STEPS.length) * 100;
 
   const featureLabels = useMemo(
-    () => FEATURES.filter((option) => features.includes(option.id)).map((option) => option.label),
+    () =>
+      FEATURES.filter((option) => features.includes(option.id)).map(
+        (option) => option.label,
+      ),
     [features],
   );
 
@@ -151,7 +173,10 @@ export function ToolCalculator({
     if (leaving) return false;
     switch (stepId) {
       case "interest":
-        return interest !== null && (interest !== "custom" || customText.trim().length > 0);
+        return (
+          interest !== null &&
+          (interest !== "custom" || customText.trim().length > 0)
+        );
       case "industry":
         return industry !== null;
       case "features":
@@ -177,12 +202,19 @@ export function ToolCalculator({
 
   const toggleFeature = (id: string) => {
     setFeatures((current) =>
-      current.includes(id) ? current.filter((item) => item !== id) : [...current, id],
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id],
     );
   };
 
   const summaryRows: Array<[string, string]> = [
-    ["Web má", interest === "custom" ? "Poradiť mi, čo sa hodí" : labelOf(INTERESTS, interest)],
+    [
+      "Web má",
+      interest === "custom"
+        ? "Poradiť mi, čo sa hodí"
+        : labelOf(INTERESTS, interest),
+    ],
     ["Vaša firma", labelOf(INDUSTRIES, industry)],
     ["Má zvládnuť", featureLabels.length ? featureLabels.join(", ") : "—"],
     ["Hotové", labelOf(TIMELINES, timeline)],
@@ -207,7 +239,7 @@ export function ToolCalculator({
       return;
     }
     if (lead.contactMethod === "email" && !hasValidEmail) {
-      setLeadError("Napíšte e-mail, kam vám mám poslať cenu.");
+      setLeadError("Napíšte e-mail, na ktorý vám môžem odpovedať.");
       return;
     }
     if (lead.contactMethod !== "email" && !safePhone && !hasValidEmail) {
@@ -239,7 +271,6 @@ export function ToolCalculator({
             ? `Čo dnes riešia ručne: ${customText.trim()}`
             : "",
           `Ozvať sa takto: ${CONTACT_METHODS.find((item) => item.id === lead.contactMethod)?.label ?? lead.contactMethod}`,
-          `Odhad ceny: ${price} €`,
           `Číslo dopytu: ${nextProposalNumber}`,
         ]
           .filter(Boolean)
@@ -255,7 +286,9 @@ export function ToolCalculator({
       track("lead_submit_success");
     } catch (error) {
       setSendState("idle");
-      setLeadError("Nepodarilo sa to poslať. Skúste to ešte raz alebo mi zavolajte.");
+      setLeadError(
+        "Nepodarilo sa to poslať. Skúste to ešte raz alebo mi zavolajte.",
+      );
       track("lead_submit_error", {
         reason: error instanceof Error ? error.message : "unknown",
       });
@@ -268,22 +301,28 @@ export function ToolCalculator({
        is and gets its own layout instead of being squeezed into the 48px
        progress row. */
     return (
-      <div className="cw-calculator" data-view="thanks" data-testid="calculator-view">
+      <div
+        className="cw-calculator"
+        data-view="thanks"
+        data-testid="calculator-view"
+      >
         <div className="cw-thanks" role="status">
           <span className="cw-thanks__icon" ref={thanksIconRef}>
             <WidgetIcon name="check" />
           </span>
           <span className="cw-thanks__eyebrow">Hotovo, poslal som to</span>
           <h3>Ďakujem, {lead.name.trim()}.</h3>
-          <p>Ozvem sa vám do jedného pracovného dňa s presnou cenou.</p>
+          <p>
+            Ozvem sa vám do jedného pracovného dňa s návrhom ďalšieho kroku.
+          </p>
           <div className="cw-thanks__grid">
             <div>
               <span>Web má</span>
               {summaryRows[0][1]}
             </div>
             <div>
-              <span>Odhad ceny</span>
-              {price} €
+              <span>Má zvládnuť</span>
+              {featureLabels.length ? featureLabels.join(", ") : "Podľa dohody"}
             </div>
             <div>
               <span>Ozvem sa na</span>
@@ -296,7 +335,7 @@ export function ToolCalculator({
           </div>
           <div className="cw-thanks__actions">
             <button type="button" onClick={() => restart(null)}>
-              <WidgetIcon name="reset" /> Spočítať znova
+              <WidgetIcon name="reset" /> Vyskladať znova
             </button>
             <button type="button" className="ghost" onClick={onOpenChat}>
               Mám ešte otázku
@@ -308,7 +347,11 @@ export function ToolCalculator({
   }
 
   return (
-    <div className="cw-calculator" data-view="steps" data-testid="calculator-view">
+    <div
+      className="cw-calculator"
+      data-view="steps"
+      data-testid="calculator-view"
+    >
       <div className="cw-progress">
         <button
           type="button"
@@ -320,7 +363,10 @@ export function ToolCalculator({
           <WidgetIcon name="arrow" className="cw-back-icon" />
         </button>
         <div className="cw-progress__track">
-          <span className="cw-progress__fill" style={{ width: `${progress}%` }} />
+          <span
+            className="cw-progress__fill"
+            style={{ width: `${progress}%` }}
+          />
         </div>
         {/* One live region, so the label is spoken once per step instead of
             reading a bare fraction. */}
@@ -337,9 +383,12 @@ export function ToolCalculator({
           key={stepId}
           data-step={stepId}
           data-leaving={leaving || undefined}
+          data-direction={direction}
         >
           <header className="cw-step-head">
-            <h3 className="cw-q">{title}</h3>
+            <h3 className="cw-q" ref={questionRef} tabIndex={-1}>
+              {title}
+            </h3>
             <p className="cw-q-sub">
               {subtitle}
               {stepId === "features" && recommendedLabels.length ? (
@@ -418,7 +467,11 @@ export function ToolCalculator({
                 })}
               </div>
               {selectedIndustry ? (
-                <aside className="cw-industry-tip" key={selectedIndustry.id} data-testid="industry-tip">
+                <aside
+                  className="cw-industry-tip"
+                  key={selectedIndustry.id}
+                  data-testid="industry-tip"
+                >
                   <b>
                     <WidgetIcon name="spark" /> Toto sa u vás najviac oplatí
                   </b>
@@ -459,17 +512,6 @@ export function ToolCalculator({
                   );
                 })}
               </div>
-              <p className="cw-price" data-testid="price-estimate" aria-live="polite">
-                <span className="cw-price__label">Odhad ceny</span>
-                <b className="cw-price__value">
-                  <span data-testid="price-number">{shownPrice}</span> €
-                </b>
-                <small>
-                  {features.length
-                    ? "Presnú cenu potvrdím, keď sa pozriem na váš web."
-                    : `Základ je ${BASE_PRICE} €. Vyberte, čo potrebujete.`}
-                </small>
-              </p>
             </>
           ) : null}
 
@@ -500,7 +542,11 @@ export function ToolCalculator({
             <div className="cw-contact-stage">
               <div className="cw-lead">
                 <span className="cw-lead__ask">Ako sa vám mám ozvať?</span>
-                <div className="cw-contact-methods" role="group" aria-label="Ako sa vám mám ozvať">
+                <div
+                  className="cw-contact-methods"
+                  role="group"
+                  aria-label="Ako sa vám mám ozvať"
+                >
                   {CONTACT_METHODS.map((method) => {
                     const selected = lead.contactMethod === method.id;
                     return (
@@ -510,11 +556,18 @@ export function ToolCalculator({
                         data-selected={selected}
                         aria-pressed={selected}
                         key={`${stepId}-${method.id}`}
-                        onClick={() => setLead({ ...lead, contactMethod: method.id })}
+                        onClick={() =>
+                          setLead({ ...lead, contactMethod: method.id })
+                        }
                       >
                         <WidgetIcon name={method.icon} />
                         <span>{method.label}</span>
-                        {selected ? <WidgetIcon name="check" className="cw-contact-method__check" /> : null}
+                        {selected ? (
+                          <WidgetIcon
+                            name="check"
+                            className="cw-contact-method__check"
+                          />
+                        ) : null}
                       </button>
                     );
                   })}
@@ -522,7 +575,9 @@ export function ToolCalculator({
                 <div className="cw-lead__form">
                   <input
                     value={lead.name}
-                    onChange={(event) => setLead({ ...lead, name: event.target.value })}
+                    onChange={(event) =>
+                      setLead({ ...lead, name: event.target.value })
+                    }
                     placeholder="Ako sa menujete? *"
                     aria-label="Vaše meno"
                     autoComplete="name"
@@ -530,16 +585,28 @@ export function ToolCalculator({
                   <div className="cw-lead__row">
                     <input
                       value={lead.email}
-                      onChange={(event) => setLead({ ...lead, email: event.target.value })}
-                      placeholder={lead.contactMethod === "email" ? "Váš e-mail *" : "Váš e-mail"}
+                      onChange={(event) =>
+                        setLead({ ...lead, email: event.target.value })
+                      }
+                      placeholder={
+                        lead.contactMethod === "email"
+                          ? "Váš e-mail *"
+                          : "Váš e-mail"
+                      }
                       aria-label="Váš e-mail"
                       type="email"
                       autoComplete="email"
                     />
                     <input
                       value={lead.phone}
-                      onChange={(event) => setLead({ ...lead, phone: event.target.value })}
-                      placeholder={lead.contactMethod === "email" ? "Vaše číslo" : "Vaše číslo *"}
+                      onChange={(event) =>
+                        setLead({ ...lead, phone: event.target.value })
+                      }
+                      placeholder={
+                        lead.contactMethod === "email"
+                          ? "Vaše číslo"
+                          : "Vaše číslo *"
+                      }
                       aria-label="Vaše telefónne číslo"
                       autoComplete="tel"
                     />
@@ -550,14 +617,18 @@ export function ToolCalculator({
                       <div className="cw-lead__row">
                         <input
                           value={lead.company}
-                          onChange={(event) => setLead({ ...lead, company: event.target.value })}
+                          onChange={(event) =>
+                            setLead({ ...lead, company: event.target.value })
+                          }
                           placeholder="Názov firmy"
                           aria-label="Názov firmy"
                           autoComplete="organization"
                         />
                         <input
                           value={lead.web}
-                          onChange={(event) => setLead({ ...lead, web: event.target.value })}
+                          onChange={(event) =>
+                            setLead({ ...lead, web: event.target.value })
+                          }
                           placeholder="vasafirma.sk"
                           aria-label="Adresa vášho webu"
                           autoComplete="url"
@@ -566,7 +637,9 @@ export function ToolCalculator({
                       </div>
                       <textarea
                         value={lead.note}
-                        onChange={(event) => setLead({ ...lead, note: event.target.value })}
+                        onChange={(event) =>
+                          setLead({ ...lead, note: event.target.value })
+                        }
                         placeholder="Čo by som mal ešte vedieť?"
                         aria-label="Vzkaz pre mňa"
                         rows={2}
@@ -577,7 +650,9 @@ export function ToolCalculator({
                     <input
                       type="checkbox"
                       checked={lead.consent}
-                      onChange={(event) => setLead({ ...lead, consent: event.target.checked })}
+                      onChange={(event) =>
+                        setLead({ ...lead, consent: event.target.checked })
+                      }
                     />
                     <span>Súhlasím, že mi môžete napísať alebo zavolať.</span>
                   </label>
@@ -598,12 +673,6 @@ export function ToolCalculator({
                     <b>{customText.trim()}</b>
                   </div>
                 ) : null}
-                <div className="cw-summary__row cw-summary__row--price">
-                  <span>Odhad ceny</span>
-                  <b data-testid="summary-price">
-                    <span data-testid="summary-price-number">{shownPrice}</span> €
-                  </b>
-                </div>
               </div>
             </div>
           ) : null}
@@ -617,7 +686,9 @@ export function ToolCalculator({
             className="cw-next"
             data-testid="flow-next"
             disabled={!canContinue}
-            onClick={() => setStep((value) => Math.min(STEPS.length - 1, value + 1))}
+            onClick={() =>
+              setStep((value) => Math.min(STEPS.length - 1, value + 1))
+            }
           >
             <span>Ďalej</span>
             <WidgetIcon name="arrow" />
@@ -648,7 +719,7 @@ export function ToolCalculator({
                 </>
               ) : (
                 <>
-                  <WidgetIcon name="send" /> Poslať a dostať cenu
+                  <WidgetIcon name="send" /> Poslať zadanie
                 </>
               )}
             </span>

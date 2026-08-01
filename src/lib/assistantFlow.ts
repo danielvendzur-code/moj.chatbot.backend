@@ -20,7 +20,7 @@ export const QUESTION_STEPS: StepId[] = STEPS.filter((id) => id !== "contact");
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
     "Čo má web robiť za vás?",
-    "Vyberte jednu vec. Podľa nej vám spočítam cenu.",
+    "Vyberte jednu vec. Podľa nej vám navrhnem vhodné riešenie.",
   ],
   industry: [
     "Čo robí vaša firma?",
@@ -28,14 +28,14 @@ export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   ],
   features: [
     "Čo všetko to má zvládnuť?",
-    "Vyberte si, čo potrebujete. Cena sa hneď prepočíta.",
+    "Vyberte všetko, čo má riešenie robiť za vás.",
   ],
   timeline: [
     "Kedy to chcete mať hotové?",
     "Podľa toho si na vás naplánujem čas.",
   ],
   contact: [
-    "Kam vám mám poslať cenu?",
+    "Ako sa vám môžem ozvať?",
     "Stačí meno a telefón. Ozvem sa do jedného dňa.",
   ],
   priority: [
@@ -170,8 +170,6 @@ export type FeatureOption = {
   id: string;
   label: string;
   description: string;
-  /* What this piece adds to the estimate, in euro. */
-  price: number;
   basic?: boolean;
 };
 
@@ -180,39 +178,33 @@ export const FEATURES: FeatureOption[] = [
     id: "faq",
     label: "Odpovie na otázky",
     description: "O vašich službách, cenách a postupe.",
-    price: 0,
     basic: true,
   },
   {
     id: "dopyty",
     label: "Pošle vám kontakt",
     description: "Aj so všetkým, čo zákazník napísal.",
-    price: 0,
     basic: true,
   },
   {
     id: "cena",
     label: "Spočíta cenu",
     description: "Podľa rozmerov alebo množstva.",
-    price: 180,
   },
   {
     id: "varianty",
     label: "Pomôže vybrať",
     description: "Rozmery, materiál a doplnky.",
-    price: 220,
   },
   {
     id: "rezervacie",
     label: "Dohodne termín",
     description: "Zákazník si vyberie voľný čas.",
-    price: 160,
   },
   {
     id: "fotky",
     label: "Prijme fotky",
     description: "Lepší odhad ešte pred návštevou.",
-    price: 90,
   },
 ];
 
@@ -226,16 +218,6 @@ export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
   booking: ["rezervacie"],
   custom: [],
 };
-
-/* The starting price covers setup, the two basic abilities and putting the
-   chatbot on the site. Extras add to it. */
-export const BASE_PRICE = 350;
-
-export const priceOf = (featureIds: string[]): number =>
-  FEATURES.reduce(
-    (total, option) => (featureIds.includes(option.id) ? total + option.price : total),
-    BASE_PRICE,
-  );
 
 export type VolumeOption = {
   id: string;
@@ -260,7 +242,7 @@ export const TIMELINES: TimelineOption[] = [
   { id: "asap", label: "Čo najskôr", description: "Začnem, len čo mi pošlete podklady." },
   { id: "mesiac", label: "Do mesiaca", description: "Je čas texty pekne doladiť." },
   { id: "kvartal", label: "Za dva až tri mesiace", description: "Rozdelíme to na menšie kroky." },
-  { id: "rozhliadam", label: "Len sa pozerám", description: "Pošlem cenu, rozhodnete sa neskôr." },
+  { id: "rozhliadam", label: "Len sa pozerám", description: "Pošlem návrh, rozhodnete sa neskôr." },
 ];
 
 export const PRESET_TO_INTEREST: Record<AssistantPreset, InterestId> = {

@@ -4,6 +4,7 @@ import "../configurator-runtime-final.css";
 const SINGLE_CHOICE_SELECTOR = ".cw-rowcard, .cw-scard, .cw-vcard";
 const BACK_SELECTOR = ".cw-progress__back, .cw-tabs, .cw-panel-head__actions";
 const INSTALL_FLAG = "cwConfiguratorAutoAdvance";
+const CONFIRM_MS = 220;
 
 export function installConfiguratorAutoAdvance(): void {
   if (typeof document === "undefined") return;
@@ -12,11 +13,14 @@ export function installConfiguratorAutoAdvance(): void {
   document.documentElement.dataset[INSTALL_FLAG] = "true";
 
   let pending: number | null = null;
+  let confirming: HTMLButtonElement | null = null;
   const cancel = () => {
     if (pending !== null) {
       window.clearTimeout(pending);
       pending = null;
     }
+    if (confirming) delete confirming.dataset.confirming;
+    confirming = null;
   };
 
   document.addEventListener(
@@ -44,6 +48,8 @@ export function installConfiguratorAutoAdvance(): void {
       }
 
       cancel();
+      confirming = target;
+      target.dataset.confirming = "true";
       pending = window.setTimeout(() => {
         pending = null;
         const widget = target.closest<HTMLElement>(".cw-widget");
@@ -61,8 +67,14 @@ export function installConfiguratorAutoAdvance(): void {
         widget.addEventListener("pointermove", release);
 
         const next = widget.querySelector<HTMLButtonElement>(".cw-next:not(:disabled)");
-        next?.click();
-      }, 130);
+        if (!next) {
+          delete target.dataset.confirming;
+          confirming = null;
+          return;
+        }
+        confirming = null;
+        next.click();
+      }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 32 : CONFIRM_MS);
     },
     true,
   );

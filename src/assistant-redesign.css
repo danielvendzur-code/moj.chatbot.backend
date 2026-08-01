@@ -1,5 +1,6 @@
 /* Môj Chatbot — premium product layer. One palette, one geometry system, one motion language. */
-:root {
+.widget-preview,
+.cw-widget {
   --mc-bg: #0b0d11;
   --mc-shell: #080a0d;
   --mc-surface: #13161c;
@@ -28,20 +29,9 @@
   );
 }
 
-html,
-body,
-#root,
 .widget-preview {
   min-height: 100%;
   margin: 0;
-}
-
-body {
-  color: var(--mc-text);
-  background: var(--mc-bg);
-  font-family: var(--mc-font);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
 .widget-preview {
@@ -2077,8 +2067,8 @@ html[data-embed="true"] .widget-preview__surface {
 
 /* Mobile */
 @media (max-width: 520px) {
-  html,
-  body {
+  .cw-widget,
+  .cw-widget .cw-panel {
     overscroll-behavior: none;
   }
 

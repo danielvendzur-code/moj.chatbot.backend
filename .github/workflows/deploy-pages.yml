@@ -50,7 +50,7 @@ jobs:
         run: pnpm test -- --run
 
       - name: Build demo and embedded widget
-        run: pnpm build
+        run: pnpm build:pages
 
       - name: Create immutable build metadata
         shell: bash

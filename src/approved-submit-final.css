@@ -1,5 +1,5 @@
 /* Approved submit interaction. Imported after assistant-redesign.css. */
-:root {
+.cw-widget {
   --submit-ink: #080b10;
   --submit-ink-hover: #0c1016;
   --submit-blue: #ffc79d;

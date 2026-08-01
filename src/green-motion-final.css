@@ -13,7 +13,7 @@
       past it. Only arrivals move.
    ============================================================= */
 
-:root {
+.cw-widget {
   /* The website curve, used by every transition and animation here. */
   --cw-ease: cubic-bezier(0.16, 1, 0.3, 1);
 
