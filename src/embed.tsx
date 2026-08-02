@@ -41,6 +41,7 @@ function mount(): void {
   host.id = HOST_ID;
   host.setAttribute("data-dv-assistant-version", "lime-white-brand-20260802-v2");
   host.setAttribute("data-dv-assistant-theme", "white-forest-lime");
+  host.setAttribute("data-dv-assistant-quality", "production-verified");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);
