@@ -32,6 +32,8 @@ jobs:
           cache: pnpm
 
       - name: Align final widget contracts
+        id: contracts
+        continue-on-error: true
         shell: bash
         run: |
           python - <<'PY'
@@ -82,43 +84,92 @@ test("the corrected logo and standalone launcher use the final identity", async 
           path.write_text(text, encoding='utf-8')
           PY
 
-      - name: Install and audit dependencies
-        run: |
-          pnpm install --frozen-lockfile
-          pnpm audit --prod --audit-level high
+      - name: Install dependencies
+        id: install
+        continue-on-error: true
+        run: pnpm install --frozen-lockfile > /tmp/install.log 2>&1
+
+      - name: Audit production dependencies
+        id: audit
+        continue-on-error: true
+        run: pnpm audit --prod --audit-level high > /tmp/audit.log 2>&1
 
       - name: Format final files
+        id: format
+        continue-on-error: true
         run: |
           pnpm exec prettier --write \
             tests/widget-contract.test.mjs \
             src/components/widget/BubbleLogo.tsx \
             src/main.tsx \
             src/embed.tsx \
-            src/lime-white-widget-final.css
+            src/lime-white-widget-final.css > /tmp/format.log 2>&1
 
-      - name: TypeScript, tests and both builds
-        run: |
-          pnpm lint
-          pnpm test -- --run
-          pnpm build
-          pnpm build:pages
-          test -f dist/index.html
-          test -f dist/widget.js
-          test -f dist/widget.css
-          grep -Fq 'lime-white-brand-20260802-v2' dist/widget.js
-          grep -Fq 'cw-launcher' dist/widget.css
-          grep -Fq '#b9ed4d' dist/widget.css
+      - name: TypeScript check
+        id: lint
+        continue-on-error: true
+        run: pnpm lint > /tmp/lint.log 2>&1
 
-      - name: Persist validated contracts to the feature branch
+      - name: Tests
+        id: test
+        continue-on-error: true
+        run: pnpm test -- --run > /tmp/test.log 2>&1
+
+      - name: Vercel and direct widget builds
+        id: build
+        continue-on-error: true
         shell: bash
         run: |
+          {
+            pnpm build
+            pnpm build:pages
+            test -f dist/index.html
+            test -f dist/widget.js
+            test -f dist/widget.css
+            grep -Fq 'lime-white-brand-20260802-v2' dist/widget.js
+            grep -Fq 'cw-launcher' dist/widget.css
+            grep -Fq '#b9ed4d' dist/widget.css
+          } > /tmp/build.log 2>&1
+
+      - name: Persist complete validation audit to the feature branch
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "run_id=${{ github.run_id }}"
+            echo "contracts=${{ steps.contracts.outcome }}"
+            echo "install=${{ steps.install.outcome }}"
+            echo "dependency_audit=${{ steps.audit.outcome }}"
+            echo "format=${{ steps.format.outcome }}"
+            echo "typescript=${{ steps.lint.outcome }}"
+            echo "tests=${{ steps.test.outcome }}"
+            echo "builds=${{ steps.build.outcome }}"
+            echo
+            for name in install audit format lint test build; do
+              echo "===== ${name} ====="
+              cat "/tmp/${name}.log" 2>/dev/null || true
+              echo
+            done
+          } > LIME_WIDGET_VALIDATION.txt
+
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add tests/widget-contract.test.mjs \
-            src/components/widget/BubbleLogo.tsx \
-            src/main.tsx \
-            src/embed.tsx \
-            src/lime-white-widget-final.css
-          git diff --cached --quiet && exit 0
-          git commit -m 'test: protect the final lime white widget system'
+          git add LIME_WIDGET_VALIDATION.txt
+          if [ "${{ steps.contracts.outcome }}" = "success" ] && \
+             [ "${{ steps.install.outcome }}" = "success" ] && \
+             [ "${{ steps.audit.outcome }}" = "success" ] && \
+             [ "${{ steps.format.outcome }}" = "success" ] && \
+             [ "${{ steps.lint.outcome }}" = "success" ] && \
+             [ "${{ steps.test.outcome }}" = "success" ] && \
+             [ "${{ steps.build.outcome }}" = "success" ]; then
+            git add tests/widget-contract.test.mjs \
+              src/components/widget/BubbleLogo.tsx \
+              src/main.tsx \
+              src/embed.tsx \
+              src/lime-white-widget-final.css
+            message='test: validate the final lime white widget system'
+          else
+            message='chore: record failed lime widget validation'
+          fi
+          git commit -m "$message"
           git push origin HEAD:agent/lime-white-brand-final
