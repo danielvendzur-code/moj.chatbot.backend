@@ -1,3 +1,0 @@
-target=agent/lime-white-brand-final
-requested_at=2026-08-02T14:01:00Z
-purpose=validate-only-no-merge
