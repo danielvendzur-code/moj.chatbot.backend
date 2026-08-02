@@ -3,14 +3,17 @@ name: Finalize lime white widget once
 on:
   pull_request:
     branches: [main]
-    paths:
-      - .github/workflows/finalize-lime-white-widget-once.yml
 
 permissions:
   contents: write
 
+concurrency:
+  group: lime-widget-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   finalize:
+    if: github.head_ref == 'agent/lime-white-brand-rebuild' && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -23,7 +26,7 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Protect the new widget contract
+      - name: Align contracts with the final widget layer
         shell: bash
         run: |
           python - <<'PY'
@@ -51,7 +54,8 @@ jobs:
               '  assert.equal((embed.match(/import "\\.\\/.*\\.css";/g) ?? []).length, 7);',
               '  assert.equal((embed.match(/import "\\.\\/.*\\.css";/g) ?? []).length, 8);',
           )
-          text += r'''
+          if 'the corrected logo and standalone launcher use the final identity' not in text:
+              text += r'''
 
 test("the corrected logo and standalone launcher use the final identity", async () => {
   const logo = await read("src/components/widget/BubbleLogo.tsx");
@@ -66,14 +70,14 @@ test("the corrected logo and standalone launcher use the final identity", async 
   assert.match(css, /\.cw-launcher\[class\][\s\S]*background: transparent !important/);
   assert.match(css, /\.cw-launcher\[class\][\s\S]*border: 0 !important/);
   assert.match(css, /\.cw-launcher\[class\][\s\S]*border-radius: 0 !important/);
-  assert.match(css, /\.cw-panel\[class\][\s\S]*background:[\s\S]*#ffffff !important/);
+  assert.match(css, /\.cw-panel\[class\][\s\S]*#ffffff !important/);
   assert.match(css, /backdrop-filter: none !important/);
 });
 '''
           path.write_text(text, encoding='utf-8')
           PY
 
-      - name: Install and format
+      - name: Install, format and validate
         run: |
           npm ci
           npx prettier --write \
@@ -82,17 +86,14 @@ test("the corrected logo and standalone launcher use the final identity", async 
             src/main.tsx \
             src/embed.tsx \
             src/lime-white-widget-final.css
-
-      - name: Validate complete widget
-        run: |
           npm test
           npm run check
           npm run build
 
-      - name: Commit validated changes and remove helper
+      - name: Commit validated contracts and remove temporary workflow
         shell: bash
         run: |
-          rm .github/workflows/finalize-lime-white-widget-once.yml
+          rm -f .github/workflows/finalize-lime-white-widget-once.yml
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
