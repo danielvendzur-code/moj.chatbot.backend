@@ -1,0 +1,148 @@
+name: Apple production diagnostic
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/apple-production-diagnostic.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Repository map and runtime configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '=== ROOT ==='
+          find . -maxdepth 3 -type f \
+            ! -path './.git/*' ! -path './node_modules/*' \
+            | sort | sed -n '1,260p'
+          echo '=== PACKAGE ==='
+          cat package.json
+          echo '=== VERCEL ==='
+          test -f vercel.json && cat vercel.json || true
+
+      - name: Relevant backend and widget sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=(
+            api/chat.ts api/lead.ts api/origins.ts api/chatLog.ts
+            src/App.tsx src/main.tsx src/index.css src/App.css
+            src/components/ChatWidget.tsx src/components/Widget.tsx
+            public/embed.js public/widget.js embed.js widget.js
+          )
+          for file in "${files[@]}"; do
+            if [ -f "$file" ]; then
+              echo
+              echo "===== $file ====="
+              sed -n '1,1200p' "$file"
+            fi
+          done
+          echo
+          echo '=== RELEVANT REFERENCES ==='
+          grep -RInE --exclude-dir=node_modules --exclude-dir=.git \
+            'api/chat|api/lead|ANTHROPIC|RESEND|sendMessage|stream|requestAnimationFrame|setInterval|setTimeout|visualViewport|keyboard|focused|focus-within|backdrop-filter|filter: blur|transition: all|contact|email' \
+            api src public tests scripts package.json 2>/dev/null | sed -n '1,1400p' || true
+
+      - name: Probe production chat from the real origin
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p diagnostic
+          endpoint='https://moj-chatbot-backend.vercel.app/api/chat'
+          questions=(
+            'Čo presne ponúkate a koľko stojí jednoduchý chatbot?'
+            'Viete mi vytvoriť e-shop a spravovať reklamy?'
+            'Môže chatbot vypočítať cenu plota podľa metrov a poslať dopyt?'
+          )
+          i=0
+          for question in "${questions[@]}"; do
+            i=$((i+1))
+            body=$(node -e 'console.log(JSON.stringify({messages:[{role:"user",content:process.argv[1]}],conversationId:"applediag-20260802-'"$i"'"}))' "$question")
+            curl --silent --show-error --location \
+              --connect-timeout 10 --max-time 40 \
+              -D "diagnostic/chat-$i.headers" \
+              -o "diagnostic/chat-$i.body" \
+              -w 'chat-'"$i"' status=%{http_code} total=%{time_total}s start=%{time_starttransfer}s size=%{size_download}\n' \
+              -H 'Origin: https://mojchatbot.sk' \
+              -H 'Content-Type: application/json' \
+              -H 'Accept: application/json' \
+              --data "$body" "$endpoint" | tee -a diagnostic/timings.txt
+            echo "--- chat-$i headers ---"
+            cat "diagnostic/chat-$i.headers"
+            echo "--- chat-$i body ---"
+            cat "diagnostic/chat-$i.body"
+            echo
+          done
+
+      - name: Probe production SSE framing
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --silent --show-error --location --no-buffer \
+            --connect-timeout 10 --max-time 40 \
+            -D diagnostic/sse.headers \
+            -o diagnostic/sse.body \
+            -w 'sse status=%{http_code} total=%{time_total}s start=%{time_starttransfer}s size=%{size_download}\n' \
+            -H 'Origin: https://mojchatbot.sk' \
+            -H 'Content-Type: application/json' \
+            -H 'Accept: text/event-stream' \
+            --data '{"messages":[{"role":"user","content":"V jednej krátkej odpovedi vysvetli, čo robí Môj Chatbot."}],"conversationId":"applediag-sse-20260802"}' \
+            'https://moj-chatbot-backend.vercel.app/api/chat' | tee -a diagnostic/timings.txt
+          echo '--- SSE headers ---'
+          cat diagnostic/sse.headers
+          echo '--- SSE body ---'
+          cat diagnostic/sse.body
+
+      - name: Send one labelled production lead test
+        shell: bash
+        run: |
+          set -euo pipefail
+          ref="APPLE-DIAG-$(date -u +%Y%m%d-%H%M%S)"
+          printf '%s\n' "$ref" > diagnostic/lead-reference.txt
+          payload=$(node -e 'console.log(JSON.stringify({name:"Apple diagnostika",email:"info@mojchatbot.sk",phone:"+421900000000",company:"Môj Chatbot",website:"https://mojchatbot.sk",message:`${process.argv[1]} — automatický produkčný test. Prosím ignorovať.`,source:"github-production-diagnostic",reference:process.argv[1]}))' "$ref")
+          curl --silent --show-error --location \
+            --connect-timeout 10 --max-time 40 \
+            -D diagnostic/lead.headers \
+            -o diagnostic/lead.body \
+            -w 'lead status=%{http_code} total=%{time_total}s start=%{time_starttransfer}s size=%{size_download}\n' \
+            -H 'Origin: https://mojchatbot.sk' \
+            -H 'Content-Type: application/json' \
+            -H 'Accept: application/json' \
+            --data "$payload" \
+            'https://moj-chatbot-backend.vercel.app/api/lead' | tee -a diagnostic/timings.txt
+          echo "lead-reference=$ref"
+          echo '--- lead headers ---'
+          cat diagnostic/lead.headers
+          echo '--- lead body ---'
+          cat diagnostic/lead.body
+
+      - name: Inspect deployed embed and cache headers
+        shell: bash
+        run: |
+          set -euo pipefail
+          for url in \
+            'https://danielvendzur-code.github.io/moj.chatbot.backend/embed.js' \
+            'https://danielvendzur-code.github.io/moj.chatbot.backend/widget.js'; do
+            safe=$(echo "$url" | sed 's#[^A-Za-z0-9]#_#g')
+            curl --silent --show-error --location --max-time 30 \
+              -D "diagnostic/$safe.headers" -o "diagnostic/$safe.body" "$url" || true
+            echo "--- $url headers ---"
+            cat "diagnostic/$safe.headers" || true
+            echo "--- $url first lines ---"
+            sed -n '1,100p' "diagnostic/$safe.body" || true
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apple-production-diagnostic
+          path: diagnostic
+          retention-days: 2
