@@ -1,6 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { sendChat, type ChatTurn } from "../../lib/assistantApi";
-import { clearHistory, loadHistory, saveHistory } from "../../lib/chatHistory";
+import {
+  clearHistory,
+  conversationId,
+  loadHistory,
+  saveHistory,
+} from "../../lib/chatHistory";
 import { track } from "../../lib/analytics";
 import { BubbleLogo } from "./BubbleLogo";
 import { WidgetIcon } from "./WidgetIcon";
@@ -84,9 +89,6 @@ export function AssistantConversation({
   resetToken,
   onOpenCalculator,
 }: AssistantConversationProps): JSX.Element {
-  /* A conversation from earlier today is picked back up instead of starting
-     over. Read once during the initial render so the thread is already there
-     on the first paint rather than appearing a frame later. */
   /* A conversation from earlier today is picked back up instead of starting
      over. Read once during the initial render so the thread is already there
      on the first paint rather than appearing a frame later. What is stored
@@ -326,7 +328,12 @@ export function AssistantConversation({
     };
 
     try {
-      const reply = await sendChat(history, controller.signal, paint);
+      const reply = await sendChat(
+        history,
+        controller.signal,
+        paint,
+        conversationId(),
+      );
       if (requestEpoch !== requestEpochRef.current || controller.signal.aborted)
         return;
       settle(reply);

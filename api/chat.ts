@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { allowedOrigin, requestOrigin } from "./origins.js";
+import { logExchange, safeConversationId } from "./chatLog.js";
 
 const MODEL = "claude-haiku-4-5";
 /* Haiku doesn't think unless asked and has no `effort` knob (that param
@@ -151,6 +152,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
 
   const body = (typeof req.body === "string" ? safeParse(req.body) : req.body) as {
     messages?: unknown;
+    conversationId?: unknown;
   } | null;
 
   if (typeof req.body === "string" && Buffer.byteLength(req.body, "utf8") > MAX_BODY_BYTES) {
@@ -177,6 +179,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     return;
   }
 
+  /* The transcript is the owner's record of what was asked. It is written
+     after the visitor already has their answer and never awaited, so a slow or
+     unreachable log cannot add latency to a reply or fail one. */
+  const conversationId = safeConversationId(body?.conversationId);
+  const question = messages[messages.length - 1].content;
+  const record = (answer: string): void => {
+    if (!conversationId || !answer) return;
+    void logExchange(conversationId, question, answer);
+  };
+
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS);
   const client = new Anthropic({ apiKey });
@@ -198,6 +210,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     res.flushHeaders?.();
 
     let streamed = 0;
+    let collected = "";
     try {
       const stream = client.messages.stream(request, {
         signal: controller.signal,
@@ -213,6 +226,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
         const text = event.delta.text;
         if (!text || streamed >= MAX_REPLY_CHARS) continue;
         streamed += text.length;
+        collected += text;
         writeEvent(res, "delta", { text });
       }
 
@@ -220,6 +234,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
         writeEvent(res, "error", { error: "empty-upstream-response" });
       } else {
         writeEvent(res, "done", {});
+        record(collected);
       }
     } catch (error) {
       /* Once the headers are out a status code is no longer available, so the
@@ -252,6 +267,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     }
 
     res.status(200).json({ reply });
+    record(reply);
   } catch (error) {
     const timedOut = isTimeout(error);
     res.status(timedOut ? 504 : 502).json({

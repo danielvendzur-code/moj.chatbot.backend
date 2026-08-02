@@ -94,9 +94,35 @@ export function saveHistory(messages: StoredMessage[], nextId: number): void {
   }
 }
 
+const CONVERSATION_KEY = "dv-assistant-conversation-v1";
+
+/* A stable id so the server can group a visitor's turns into one readable
+   transcript. It identifies the conversation, not the person: it is random,
+   carries nothing about them, and a reset mints a new one. */
+export function conversationId(): string {
+  const store = storage();
+  if (!store) return "";
+  try {
+    const existing = store.getItem(CONVERSATION_KEY);
+    if (existing && /^[A-Za-z0-9_-]{8,64}$/.test(existing)) return existing;
+    const fresh =
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID().replace(/-/g, "")
+        : `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 12)}`;
+    store.setItem(CONVERSATION_KEY, fresh);
+    return fresh;
+  } catch {
+    return "";
+  }
+}
+
 export function clearHistory(): void {
   try {
-    storage()?.removeItem(STORAGE_KEY);
+    const store = storage();
+    store?.removeItem(STORAGE_KEY);
+    /* Starting over starts a new transcript too, rather than appending a
+       fresh conversation onto the one the visitor just abandoned. */
+    store?.removeItem(CONVERSATION_KEY);
   } catch {
     /* Nothing to clear is the same outcome as a cleared store. */
   }

@@ -448,7 +448,10 @@ test("the reply streams in and the thread keeps up with it", async () => {
 
   // Thread: one bubble that grows, never a second one beside it.
   assert.match(conversation, /const replyId = nextIdRef\.current\+\+/);
-  assert.match(conversation, /sendChat\(history, controller\.signal, paint\)/);
+  assert.match(
+    conversation,
+    /sendChat\(\s*\n\s*history,\s*\n\s*controller\.signal,\s*\n\s*paint,\s*\n\s*conversationId\(\),\s*\n\s*\)/,
+  );
   assert.match(conversation, /data-streaming=\{message\.streaming \|\| undefined\}/);
 });
 
@@ -778,6 +781,65 @@ test("the composer keeps its size at every panel height", async () => {
   assert.match(mobile, /\.cw-inputbar\[class\] \{\s*\n\s*height: 54px !important;\s*\n\s*min-height: 54px !important/);
   assert.match(mobile, /\.cw-inputbar\[class\] input \{[\s\S]*?min-height: 42px !important/);
   assert.match(mobile, /\.cw-send\[class\] \{[\s\S]*?min-height: 44px !important/);
+});
+
+test("transcripts are logged without ever costing a visitor their answer", async () => {
+  const log = await read("api/chatLog.ts");
+  const chat = await read("api/chat.ts");
+  const client = await read("src/lib/chatHistory.ts");
+  const api = await read("src/lib/assistantApi.ts");
+
+  // Logging is opt-in and inert until both Upstash values are present.
+  assert.match(log, /export function chatLogEnabled/);
+  assert.match(log, /UPSTASH_REDIS_REST_URL && process\.env\.UPSTASH_REDIS_REST_TOKEN/);
+  // Ids arrive from the browser, so they may never be pasted into a key.
+  assert.match(log, /\^\[A-Za-z0-9_-\]\{8,64\}\$/);
+  // Nothing accumulates forever: transcripts expire, turns and index are capped.
+  assert.match(log, /const RETENTION_SECONDS = 90 \* 24 \* 60 \* 60/);
+  assert.match(log, /\["LTRIM", key, -MAX_TURNS_PER_CONVERSATION, -1\]/);
+  assert.match(log, /ZREMRANGEBYRANK/);
+  assert.match(log, /\["EXPIRE", key, RETENTION_SECONDS\]/);
+
+  // Written after the answer is out and never awaited.
+  assert.match(chat, /const record = \(answer: string\): void =>/);
+  assert.match(chat, /void logExchange\(conversationId, question, answer\)/);
+  assert.match(chat, /record\(collected\);/);
+  assert.match(chat, /record\(reply\);/);
+
+  // The id identifies the conversation, not the person, and reset mints a new one.
+  assert.match(client, /export function conversationId\(\): string/);
+  assert.match(client, /store\?\.removeItem\(CONVERSATION_KEY\)/);
+  assert.match(api, /body: JSON\.stringify\(\{ messages, conversationId \}\)/);
+});
+
+test("the transcript viewer is the least permissive thing here", async () => {
+  const viewer = await read("api/transcripts.ts");
+  const readme = await read("README.md");
+
+  // One shared secret, compared in constant time, accepted three ways.
+  assert.match(viewer, /timingSafeEqual/);
+  assert.match(viewer, /createHash\("sha256"\)/);
+  assert.match(viewer, /Bearer /);
+  // A short secret is refused rather than served weakly.
+  assert.match(viewer, /const MIN_TOKEN_LENGTH = 24/);
+  assert.match(viewer, /transcripts-token-too-weak/);
+  // Proving it once keeps it out of every link and out of the page source.
+  assert.match(viewer, /HttpOnly; Secure; SameSite=Strict/);
+  assert.doesNotMatch(viewer, /href="\?token=/);
+  // Never cached, never indexed, and no CORS header is ever set.
+  assert.match(viewer, /"X-Robots-Tag", "noindex, nofollow"/);
+  assert.match(viewer, /"Cache-Control", "no-store, max-age=0"/);
+  assert.doesNotMatch(viewer, /Access-Control-Allow-Origin/);
+  // Visitor text is rendered as text, never as markup.
+  assert.match(viewer, /const escapeHtml/);
+  assert.match(viewer, /escapeHtml\(turn\.text\)/);
+  assert.match(viewer, /escapeHtml\(c\.preview/);
+  // Unset means the endpoint does not answer at all.
+  assert.match(viewer, /transcripts-not-configured/);
+
+  assert.match(readme, /UPSTASH_REDIS_REST_URL/);
+  assert.match(readme, /CHAT_LOG_TOKEN/);
+  assert.match(readme, /90 dňoch/);
 });
 
 test("both endpoints share one origin list so it cannot half-apply", async () => {

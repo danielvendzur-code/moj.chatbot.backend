@@ -111,6 +111,7 @@ export async function sendChat(
   history: ChatTurn[],
   requestSignal?: AbortSignal,
   onPartial?: ChatStreamHandler,
+  conversationId?: string,
 ): Promise<string> {
   const lastQuestion =
     [...history].reverse().find((turn) => turn.role === "user")?.text ?? "";
@@ -147,7 +148,7 @@ export async function sendChat(
         "Content-Type": "application/json",
         Accept: onPartial ? "text/event-stream" : "application/json",
       },
-      body: JSON.stringify({ messages }),
+      body: JSON.stringify({ messages, conversationId }),
       cache: "no-store",
       credentials: "omit",
       referrerPolicy: "strict-origin-when-cross-origin",
