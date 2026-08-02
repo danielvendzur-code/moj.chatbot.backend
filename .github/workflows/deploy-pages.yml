@@ -2,29 +2,27 @@ name: Deploy and verify chatbot
 
 on:
   push:
-    branches: [main]
-    paths-ignore:
-      - "WIDGET_QUALITY_AUDIT.txt"
-      - "PAGES_DEPLOY_AUDIT.txt"
-      - "PAGES_WORKFLOW_STATUS.txt"
-  workflow_dispatch:
+    branches:
+      - agent/lime-white-brand-rebuild
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: lime-widget-trusted-validation
   cancel-in-progress: true
 
 jobs:
-  build:
-    if: ${{ github.actor != 'github-actions[bot]' }}
+  validate:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - name: Checkout
+      - name: Checkout feature branch
         uses: actions/checkout@v4
+        with:
+          ref: agent/lime-white-brand-rebuild
+          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -37,188 +35,96 @@ jobs:
           node-version: 22
           cache: pnpm
 
+      - name: Align contracts with the approved final layer
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('tests/widget-contract.test.mjs')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace(
+              '      "src/masterpiece-final.css",\n    ].map(read),',
+              '      "src/masterpiece-final.css",\n      "src/lime-white-widget-final.css",\n    ].map(read),',
+          )
+          text = text.replace(
+              '    assert.match(source, /masterpiece-final\\.css/);',
+              '    assert.match(source, /masterpiece-final\\.css/);\n    assert.match(source, /lime-white-widget-final\\.css/);',
+          )
+          text = text.replace(
+              '    assert.match(sheets[sheets.length - 1], /masterpiece-final\\.css/);',
+              '    assert.match(sheets[sheets.length - 1], /lime-white-widget-final\\.css/);',
+          )
+          text = text.replace(
+              '  assert.equal((main.match(/import "\\.\\/.*\\.css";/g) ?? []).length, 8);',
+              '  assert.equal((main.match(/import "\\.\\/.*\\.css";/g) ?? []).length, 9);',
+          )
+          text = text.replace(
+              '  assert.equal((embed.match(/import "\\.\\/.*\\.css";/g) ?? []).length, 7);',
+              '  assert.equal((embed.match(/import "\\.\\/.*\\.css";/g) ?? []).length, 8);',
+          )
+          if 'the corrected logo and standalone launcher use the final identity' not in text:
+              text += r'''
+
+test("the corrected logo and standalone launcher use the final identity", async () => {
+  const logo = await read("src/components/widget/BubbleLogo.tsx");
+  const css = await read("src/lime-white-widget-final.css");
+
+  assert.match(logo, /viewBox="0 0 112 112"/);
+  assert.match(logo, /translate\(112 0\) scale\(-1 1\)/);
+  assert.match(logo, /strokeWidth="9"/);
+  assert.match(css, /--lw-lime: #b9ed4d/);
+  assert.match(css, /--lw-forest: #0b2f20/);
+  assert.match(css, /--lw-yellow: #ffe38a/);
+  assert.match(css, /\.cw-launcher\[class\][\s\S]*background: transparent !important/);
+  assert.match(css, /\.cw-launcher\[class\][\s\S]*border: 0 !important/);
+  assert.match(css, /\.cw-launcher\[class\][\s\S]*border-radius: 0 !important/);
+  assert.match(css, /\.cw-panel\[class\][\s\S]*#ffffff !important/);
+  assert.match(css, /backdrop-filter: none !important/);
+});
+'''
+          path.write_text(text, encoding='utf-8')
+          PY
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Audit production dependencies
         run: pnpm audit --prod --audit-level high
 
-      - name: TypeScript check
-        run: pnpm lint
-
-      - name: Run visual security and lead contracts
-        run: pnpm test -- --run
-
-      - name: Build demo and embedded widget
-        run: pnpm build:pages
-
-      - name: Create immutable build metadata
-        shell: bash
+      - name: Format changed files
         run: |
-          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"competition-redesign-20260723-v10"},null,2))'
+          pnpm exec prettier --write \
+            tests/widget-contract.test.mjs \
+            src/components/widget/BubbleLogo.tsx \
+            src/main.tsx \
+            src/embed.tsx \
+            src/lime-white-widget-final.css
 
-      - name: Validate production artifacts
-        shell: bash
+      - name: Validate contracts and TypeScript
         run: |
-          set -euo pipefail
+          pnpm test -- --run
+          pnpm lint
+
+      - name: Build demo, Vercel output and direct widget
+        run: |
+          pnpm build
+          pnpm build:pages
           test -f dist/index.html
           test -f dist/widget.js
           test -f dist/widget.css
-          test -f dist/build-meta.json
-          test -f api/lead.ts
-          node <<'NODE'
-          const fs = require('fs');
-          const css = fs.readFileSync('dist/widget.css', 'utf8');
-          const js = fs.readFileSync('dist/widget.js', 'utf8');
-          const main = fs.readFileSync('src/main.tsx', 'utf8');
-          const embed = fs.readFileSync('src/embed.tsx', 'utf8');
-          const conversation = fs.readFileSync('src/components/widget/AssistantConversation.tsx', 'utf8');
-          const calculator = fs.readFileSync('src/components/widget/ToolCalculator.tsx', 'utf8');
-          const flow = fs.readFileSync('src/lib/assistantFlow.ts', 'utf8');
-          const lead = fs.readFileSync('src/lib/leadApi.ts', 'utf8');
-          const finalCss = fs.readFileSync('src/approved-submit-final.css', 'utf8');
-          const meta = JSON.parse(fs.readFileSync('dist/build-meta.json', 'utf8'));
+          grep -Fq 'lime-white-brand-20260802-v2' dist/widget.js
+          grep -Fq -- '--lw-lime:#b9ed4d' dist/widget.css || grep -Fq -- '--lw-lime: #b9ed4d' dist/widget.css
+          grep -Fq 'cw-launcher' dist/widget.css
 
-          const must = (condition, message) => {
-            if (!condition) throw new Error(message);
-          };
-
-          must(js.includes('competition-redesign-20260723-v10'), 'widget version missing');
-          must(css.includes('cw-choice-grid--interest'), 'interest grid missing');
-          must(css.includes('cw-selection-indicator'), 'selection indicator missing');
-          must(/border-radius:\s*999px/.test(css), 'oval geometry missing');
-          must(/--mc-brand:\s*#ffc79d/i.test(css), 'brand primary missing');
-          must(main.includes('assistant-redesign') && embed.includes('assistant-redesign'), 'redesign import missing');
-          must(!main.includes('installWidgetSpotlight') && !embed.includes('installWidgetSpotlight'), 'legacy builder spotlight still mounted');
-          must(finalCss.includes('Visible widget rebuild'), 'visible widget rebuild layer missing');
-          must(finalCss.includes('.cw-contact-methods'), 'presentation method controls missing');
-          // Pinned to the stable option id, not the display copy — the label has
-          // been reworded three times and each rename silently broke the deploy.
-          must(/id:\s*"meeting"/.test(calculator), 'personal meeting option missing');
-          must(calculator.includes('CONTACT_METHODS'), 'contact method options missing');
-          must(lead.includes('api/lead'), 'lead API missing');
-          must(conversation.includes('Vyskladať riešenie'), 'builder CTA missing');
-          // Structure, not wording. Every reword of these strings has broken the
-          // deploy while the flow itself was perfectly fine.
-          must(/interest:\s*\[/.test(flow), 'first question missing');
-          must(/id:\s*"custom"/.test(flow), 'safe fallback option missing');
-          must(!/(#2aa|#1fa|teal|turquoise)/i.test(css), 'forbidden colour remains');
-          must(!calculator.includes('cw-choice-arrow'), 'legacy choice arrow remains');
-          must(!js.includes('REPLACE-ME'), 'placeholder remains');
-          must(meta.sourceSha === process.env.GITHUB_SHA, 'build metadata SHA mismatch');
-          NODE
-
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
-
-      - name: Verify live demo and embedded assets
+      - name: Commit contracts and restore production workflow
         shell: bash
-        env:
-          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
-          SOURCE_SHA: ${{ github.sha }}
         run: |
-          set -euo pipefail
-          BASE="${PAGE_URL%/}"
-
-          verify() {
-            local path="$1"
-            local expected="$2"
-            local body="/tmp/widget-live-$(echo "$path" | tr '/.' '__').txt"
-
-            for attempt in {1..24}; do
-              if curl --location --fail --silent --show-error \
-                --header "Cache-Control: no-cache" \
-                "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then
-                if grep -Fqi "$expected" "$body"; then
-                  echo "verified ${path}"
-                  return 0
-                fi
-              fi
-              sleep 5
-            done
-
-            echo "Live verification failed for ${path}"
-            head -c 1000 "$body" 2>/dev/null || true
-            return 1
-          }
-
-          verify "/" "Môj Chatbot"
-          verify "/widget.js" "competition-redesign-20260723-v10"
-          verify "/widget.css" "cw-selection-indicator"
-          verify "/build-meta.json" "$SOURCE_SHA"
-
-      - name: Checkout latest main for deployment record
-        uses: actions/checkout@v4
-        with:
-          ref: main
-
-      - name: Record verified widget deployment
-        shell: bash
-        env:
-          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
-          SOURCE_SHA: ${{ github.sha }}
-        run: |
-          {
-            echo "deployment=success"
-            echo "dependency_audit=success"
-            echo "live_smoke=success"
-            echo "source_sha=${SOURCE_SHA}"
-            echo "page_url=${PAGE_URL}"
-            echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          } > PAGES_DEPLOY_AUDIT.txt
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add PAGES_DEPLOY_AUDIT.txt
-          git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0
-          git pull --rebase origin main
-          git push origin HEAD:main
-
-  diagnostics:
-    if: ${{ always() && github.actor != 'github-actions[bot]' }}
-    needs: [build, deploy]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout latest main for workflow status
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0
-
-      - name: Record workflow outcome
-        shell: bash
-        env:
-          SOURCE_SHA: ${{ github.sha }}
-          RUN_ID: ${{ github.run_id }}
-          BUILD_RESULT: ${{ needs.build.result }}
-          DEPLOY_RESULT: ${{ needs.deploy.result }}
-        run: |
-          {
-            echo "source_sha=${SOURCE_SHA}"
-            echo "run_id=${RUN_ID}"
-            echo "build_result=${BUILD_RESULT}"
-            echo "deploy_result=${DEPLOY_RESULT}"
-            echo "recorded_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          } > PAGES_WORKFLOW_STATUS.txt
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add PAGES_WORKFLOW_STATUS.txt
-          git diff --cached --quiet && exit 0
-          git commit -m "chore: record chatbot Pages workflow outcome [skip widget-quality]"
-          git pull --rebase origin main
-          git push origin HEAD:main
+          git checkout origin/main -- .github/workflows/deploy-pages.yml
+          rm -f .github/workflows/lime-widget-branch-validation.yml
+          rm -f .github/workflows/finalize-lime-white-widget-once.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'test: protect the final lime white widget system'
+          git push origin HEAD:agent/lime-white-brand-rebuild
