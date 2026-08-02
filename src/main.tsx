@@ -12,6 +12,7 @@ import "./final-user-correction.css";
 import "./green-motion-final.css";
 import "./unified-experience-final.css";
 import "./masterpiece-final.css";
+import "./lime-white-widget-final.css";
 
 installConfiguratorAutoAdvance();
 installPremiumTilt();
