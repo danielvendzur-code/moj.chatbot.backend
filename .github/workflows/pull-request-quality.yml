@@ -55,10 +55,13 @@ jobs:
           test -f dist/index.html
           test -f dist/widget.js
           test -f dist/widget.css
-          grep -Fq 'white-green-single-line-20260802-v4' dist/widget.js
+          grep -Fq 'approved-option-one-20260802-v5' dist/widget.js
           grep -Fq 'competition-redesign-20260723-v10' dist/widget.js
-          grep -Fq 'white-green-identity-lock' src/lib/installLimeWhiteStyles.ts
-          grep -Fq 'M69 103L69 88H82' dist/widget.js
+          grep -Fq 'approved-option-one-widget-final' src/lib/installLimeWhiteStyles.ts
+          grep -Fq 'M93 84V23C93 13 81 9 74 16' dist/widget.js
+          grep -Fq 'M36 69V43L51 58' dist/widget.js
           grep -Fq '#b9ed4d' dist/widget.js
+          grep -Fq '#19834f' dist/widget.js
           grep -Fq '#0b2f20' dist/widget.js
+          grep -Fq 'color 520ms' dist/widget.js
           grep -Fq 'cw-widget[class][class][class][class]' dist/widget.js
