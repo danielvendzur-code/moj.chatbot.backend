@@ -3,26 +3,25 @@ name: Widget quality audit
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 permissions:
   contents: write
 
 concurrency:
-  group: widget-quality-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  group: widget-quality
   cancel-in-progress: true
 
 jobs:
   quality:
-    if: ${{ github.actor != 'github-actions[bot]' && (github.event_name == 'pull_request' || !contains(github.event.head_commit.message, '[skip widget-quality]')) }}
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout final widget branch
+        uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'pull_request' && github.head_ref || 'main' }}
+          ref: agent/lime-white-brand-final
           fetch-depth: 0
       - uses: pnpm/action-setup@v4
         with:
@@ -32,8 +31,7 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      - name: Align the lime-white PR contracts
-        if: github.event_name == 'pull_request'
+      - name: Align final widget contracts
         shell: bash
         run: |
           python - <<'PY'
@@ -84,14 +82,12 @@ test("the corrected logo and standalone launcher use the final identity", async 
           path.write_text(text, encoding='utf-8')
           PY
 
-      - name: Install
-        run: pnpm install --frozen-lockfile
+      - name: Install and audit dependencies
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm audit --prod --audit-level high
 
-      - name: Audit production dependencies
-        run: pnpm audit --prod --audit-level high
-
-      - name: Format PR brand files
-        if: github.event_name == 'pull_request'
+      - name: Format final files
         run: |
           pnpm exec prettier --write \
             tests/widget-contract.test.mjs \
@@ -100,27 +96,20 @@ test("the corrected logo and standalone launcher use the final identity", async 
             src/embed.tsx \
             src/lime-white-widget-final.css
 
-      - name: TypeScript check
-        run: pnpm lint
-
-      - name: Build
+      - name: TypeScript, tests and both builds
         run: |
+          pnpm lint
+          pnpm test -- --run
           pnpm build
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            pnpm build:pages
-            test -f dist/index.html
-            test -f dist/widget.js
-            test -f dist/widget.css
-            grep -Fq 'lime-white-brand-20260802-v2' dist/widget.js
-            grep -Fq 'cw-launcher' dist/widget.css
-            grep -Fq '#b9ed4d' dist/widget.css
-          fi
+          pnpm build:pages
+          test -f dist/index.html
+          test -f dist/widget.js
+          test -f dist/widget.css
+          grep -Fq 'lime-white-brand-20260802-v2' dist/widget.js
+          grep -Fq 'cw-launcher' dist/widget.css
+          grep -Fq '#b9ed4d' dist/widget.css
 
-      - name: Test
-        run: pnpm test -- --run
-
-      - name: Persist validated PR contracts
-        if: github.event_name == 'pull_request'
+      - name: Persist validated contracts to the feature branch
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
@@ -132,20 +121,4 @@ test("the corrected logo and standalone launcher use the final identity", async 
             src/lime-white-widget-final.css
           git diff --cached --quiet && exit 0
           git commit -m 'test: protect the final lime white widget system'
-          git push origin HEAD:${{ github.head_ref }}
-
-      - name: Save main audit result
-        if: github.event_name == 'push'
-        run: |
-          {
-            echo "run_id=${{ github.run_id }}"
-            echo "install=success"
-            echo "lint=success"
-            echo "build=success"
-            echo "test=success"
-          } > WIDGET_QUALITY_AUDIT.txt
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add WIDGET_QUALITY_AUDIT.txt
-          git commit -m "chore: ulož widget quality audit [skip widget-quality]" || exit 0
-          git push origin HEAD:main
+          git push origin HEAD:agent/lime-white-brand-final
