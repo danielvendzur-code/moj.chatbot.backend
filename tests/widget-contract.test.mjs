@@ -475,7 +475,9 @@ test("the finish layer removes browser blue and keeps one motion vocabulary", as
 
   // Autofill is the blue that showed up the moment the name field was filled.
   assert.match(css, /-webkit-autofill/);
-  assert.match(css, /box-shadow: 0 0 0 60px var\(--ux-surface, #18130f\) inset !important/);
+  // The fallback is the light surface: if the identity token ever went
+  // missing, a dark one would paint a black slab over a white form.
+  assert.match(css, /box-shadow: 0 0 0 60px var\(--ux-surface, #ffffff\) inset !important/);
   assert.match(css, /transition: background-color 8640000s/);
   assert.match(css, /::selection/);
   assert.match(css, /accent-color: var\(--mp-accent\) !important/);
