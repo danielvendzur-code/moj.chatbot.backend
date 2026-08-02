@@ -1,0 +1,34 @@
+name: History dashboard check
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - api/chatLog.ts
+      - api/historyUi.ts
+      - api/transcripts.ts
+      - tests/history-contract.test.mjs
+      - package.json
+      - vercel.json
+      - .github/workflows/history-dashboard-check.yml
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm check
+      - run: pnpm build
