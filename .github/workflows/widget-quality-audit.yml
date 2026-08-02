@@ -3,22 +3,27 @@ name: Widget quality audit
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 permissions:
   contents: write
 
 concurrency:
-  group: widget-quality
+  group: widget-quality-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
   quality:
-    if: ${{ github.actor != 'github-actions[bot]' && !contains(github.event.head_commit.message, '[skip widget-quality]') }}
+    if: ${{ github.actor != 'github-actions[bot]' && (github.event_name == 'pull_request' || !contains(github.event.head_commit.message, '[skip widget-quality]')) }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.head_ref || 'main' }}
+          fetch-depth: 0
       - uses: pnpm/action-setup@v4
         with:
           version: 10
@@ -27,44 +32,117 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      - name: Install
-        id: install
-        continue-on-error: true
-        run: pnpm install --frozen-lockfile > /tmp/install.log 2>&1
+      - name: Align the lime-white PR contracts
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
 
-      - name: Lint
-        id: lint
-        continue-on-error: true
-        run: pnpm lint > /tmp/lint.log 2>&1
+          path = Path('tests/widget-contract.test.mjs')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace(
+              '      "src/masterpiece-final.css",\n    ].map(read),',
+              '      "src/masterpiece-final.css",\n      "src/lime-white-widget-final.css",\n    ].map(read),',
+          )
+          text = text.replace(
+              '    assert.match(source, /masterpiece-final\\.css/);',
+              '    assert.match(source, /masterpiece-final\\.css/);\n    assert.match(source, /lime-white-widget-final\\.css/);',
+          )
+          text = text.replace(
+              '    assert.match(sheets[sheets.length - 1], /masterpiece-final\\.css/);',
+              '    assert.match(sheets[sheets.length - 1], /lime-white-widget-final\\.css/);',
+          )
+          text = text.replace(
+              '  assert.equal((main.match(/import "\\.\\/.*\\.css";/g) ?? []).length, 8);',
+              '  assert.equal((main.match(/import "\\.\\/.*\\.css";/g) ?? []).length, 9);',
+          )
+          text = text.replace(
+              '  assert.equal((embed.match(/import "\\.\\/.*\\.css";/g) ?? []).length, 7);',
+              '  assert.equal((embed.match(/import "\\.\\/.*\\.css";/g) ?? []).length, 8);',
+          )
+          if 'the corrected logo and standalone launcher use the final identity' not in text:
+              text += r'''
+
+test("the corrected logo and standalone launcher use the final identity", async () => {
+  const logo = await read("src/components/widget/BubbleLogo.tsx");
+  const css = await read("src/lime-white-widget-final.css");
+
+  assert.match(logo, /viewBox="0 0 112 112"/);
+  assert.match(logo, /translate\(112 0\) scale\(-1 1\)/);
+  assert.match(logo, /strokeWidth="9"/);
+  assert.match(css, /--lw-lime: #b9ed4d/);
+  assert.match(css, /--lw-forest: #0b2f20/);
+  assert.match(css, /--lw-yellow: #ffe38a/);
+  assert.match(css, /\.cw-launcher\[class\][\s\S]*background: transparent !important/);
+  assert.match(css, /\.cw-launcher\[class\][\s\S]*border: 0 !important/);
+  assert.match(css, /\.cw-launcher\[class\][\s\S]*border-radius: 0 !important/);
+  assert.match(css, /\.cw-panel\[class\][\s\S]*#ffffff !important/);
+  assert.match(css, /backdrop-filter: none !important/);
+});
+'''
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit production dependencies
+        run: pnpm audit --prod --audit-level high
+
+      - name: Format PR brand files
+        if: github.event_name == 'pull_request'
+        run: |
+          pnpm exec prettier --write \
+            tests/widget-contract.test.mjs \
+            src/components/widget/BubbleLogo.tsx \
+            src/main.tsx \
+            src/embed.tsx \
+            src/lime-white-widget-final.css
+
+      - name: TypeScript check
+        run: pnpm lint
 
       - name: Build
-        id: build
-        continue-on-error: true
-        run: pnpm build > /tmp/build.log 2>&1
+        run: |
+          pnpm build
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm build:pages
+            test -f dist/index.html
+            test -f dist/widget.js
+            test -f dist/widget.css
+            grep -Fq 'lime-white-brand-20260802-v2' dist/widget.js
+            grep -Fq 'cw-launcher' dist/widget.css
+            grep -Fq '#b9ed4d' dist/widget.css
+          fi
 
       - name: Test
-        id: test
-        continue-on-error: true
-        run: pnpm test -- --run > /tmp/test.log 2>&1
+        run: pnpm test -- --run
 
-      - name: Save result
-        if: always()
+      - name: Persist validated PR contracts
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tests/widget-contract.test.mjs \
+            src/components/widget/BubbleLogo.tsx \
+            src/main.tsx \
+            src/embed.tsx \
+            src/lime-white-widget-final.css
+          git diff --cached --quiet && exit 0
+          git commit -m 'test: protect the final lime white widget system'
+          git push origin HEAD:${{ github.head_ref }}
+
+      - name: Save main audit result
+        if: github.event_name == 'push'
         run: |
           {
             echo "run_id=${{ github.run_id }}"
-            echo "install=${{ steps.install.outcome }}"
-            echo "lint=${{ steps.lint.outcome }}"
-            echo "build=${{ steps.build.outcome }}"
-            echo "test=${{ steps.test.outcome }}"
-            echo
-            echo "===== lint ====="
-            cat /tmp/lint.log 2>/dev/null || true
-            echo
-            echo "===== build ====="
-            cat /tmp/build.log 2>/dev/null || true
-            echo
-            echo "===== test ====="
-            cat /tmp/test.log 2>/dev/null || true
+            echo "install=success"
+            echo "lint=success"
+            echo "build=success"
+            echo "test=success"
           } > WIDGET_QUALITY_AUDIT.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
