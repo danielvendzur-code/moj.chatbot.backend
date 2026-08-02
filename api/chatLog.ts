@@ -1,27 +1,24 @@
 /* Server-side transcripts, so the owner can read what visitors actually asked.
 
-   Backed by Upstash Redis over its REST API, which is the one Redis shape that
-   works from a serverless function: no connection pool to keep warm, just a
-   fetch. Turned on by setting UPSTASH_REDIS_REST_URL and
-   UPSTASH_REDIS_REST_TOKEN; with either missing, logging is skipped and the
-   chat behaves exactly as before.
+   Backed by Upstash Redis over its REST API. The backend accepts both the
+   current Upstash names and the older Vercel KV names used by MôjPlot:
+
+   - UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN
+   - KV_REST_API_URL / KV_REST_API_TOKEN
 
    Two keys per conversation:
      chat:conv:<id>  a list of turns, oldest first
-     chat:index      a sorted set of conversation ids scored by last activity,
-                     so the viewer can show the most recent first without
-                     scanning every key.
+     chat:index      a sorted set of conversation ids scored by last activity
 
-   Everything here is best effort. A transcript is a convenience for the owner;
-   it may never cost a visitor their answer, so every failure is swallowed. */
+   MôjPlot uses a different namespace (`convo:*`), so both projects can share
+   one Redis database without overwriting each other's conversations.
+
+   Everything here is best effort. A transcript must never slow down or break
+   a visitor's answer, so storage failures are swallowed after being logged. */
 
 const CONVERSATION_PREFIX = "chat:conv:";
 const INDEX_KEY = "chat:index";
-/* Transcripts expire on their own. Keeping visitor conversations indefinitely
-   is a liability rather than an asset, and 90 days is long enough to review a
-   quarter's questions. */
 const RETENTION_SECONDS = 90 * 24 * 60 * 60;
-/* A single conversation cannot grow without bound. */
 const MAX_TURNS_PER_CONVERSATION = 200;
 const MAX_INDEXED_CONVERSATIONS = 2_000;
 const MAX_TEXT = 2_000;
@@ -39,18 +36,26 @@ export type ConversationSummary = {
   preview: string;
 };
 
+function redisUrl(): string | undefined {
+  return process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+}
+
+function redisToken(): string | undefined {
+  return process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+}
+
 export function chatLogEnabled(): boolean {
   return Boolean(
-    process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN,
+    (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) ||
+      (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN),
   );
 }
 
-/* Upstash's REST pipeline takes an array of command arrays and answers with an
-   array of results in the same order. */
 async function pipeline(commands: unknown[][]): Promise<unknown[] | null> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = redisUrl();
+  const token = redisToken();
   if (!url || !token) return null;
+
   try {
     const response = await fetch(`${url.replace(/\/$/, "")}/pipeline`, {
       method: "POST",
@@ -60,15 +65,19 @@ async function pipeline(commands: unknown[][]): Promise<unknown[] | null> {
       },
       body: JSON.stringify(commands),
     });
+
     if (!response.ok) {
       console.error("chat-log-upstash", `HTTP ${response.status}`);
       return null;
     }
+
     const body = (await response.json()) as Array<{ result?: unknown; error?: unknown }>;
     if (!Array.isArray(body)) return null;
+
     for (const entry of body) {
       if (entry?.error) console.error("chat-log-upstash", String(entry.error).slice(0, 200));
     }
+
     return body.map((entry) => entry?.result ?? null);
   } catch (error) {
     console.error("chat-log-upstash", String(error).slice(0, 200));
@@ -76,8 +85,6 @@ async function pipeline(commands: unknown[][]): Promise<unknown[] | null> {
   }
 }
 
-/* Ids come from the browser, so they are treated as untrusted: anything that
-   is not a plain short token is rejected rather than used to build a key. */
 export function safeConversationId(value: unknown): string | null {
   if (typeof value !== "string") return null;
   const trimmed = value.trim();
@@ -91,14 +98,13 @@ function clip(value: string): string {
     .slice(0, MAX_TEXT);
 }
 
-/* Called after a reply has been produced. Awaiting it would add a round trip
-   to every answer, so callers fire it and move on — see api/chat.ts. */
 export async function logExchange(
   conversationId: string,
   question: string,
   answer: string,
 ): Promise<void> {
   if (!chatLogEnabled()) return;
+
   const id = safeConversationId(conversationId);
   if (!id) return;
 
@@ -108,15 +114,14 @@ export async function logExchange(
     { at: now, role: "user", text: clip(question) },
     { at: now, role: "assistant", text: clip(answer) },
   ];
+
   if (turns.every((turn) => !turn.text)) return;
 
   await pipeline([
     ["RPUSH", key, ...turns.map((turn) => JSON.stringify(turn))],
-    /* Keep only the newest turns if a conversation runs very long. */
     ["LTRIM", key, -MAX_TURNS_PER_CONVERSATION, -1],
     ["EXPIRE", key, RETENTION_SECONDS],
     ["ZADD", INDEX_KEY, now, id],
-    /* Drop the oldest ids so the index cannot grow forever either. */
     ["ZREMRANGEBYRANK", INDEX_KEY, 0, -(MAX_INDEXED_CONVERSATIONS + 1)],
     ["EXPIRE", INDEX_KEY, RETENTION_SECONDS],
   ]);
@@ -124,17 +129,19 @@ export async function logExchange(
 
 export async function listConversations(limit = 50): Promise<ConversationSummary[]> {
   const capped = Math.min(Math.max(limit, 1), 200);
-  /* Newest first. */
-  const indexed = await pipeline([["ZRANGE", INDEX_KEY, 0, capped - 1, "REV", "WITHSCORES"]]);
+  const indexed = await pipeline([
+    ["ZRANGE", INDEX_KEY, 0, capped - 1, "REV", "WITHSCORES"],
+  ]);
   const flat = Array.isArray(indexed?.[0]) ? (indexed[0] as unknown[]) : [];
   const ids: Array<{ id: string; lastAt: number }> = [];
-  for (let i = 0; i < flat.length; i += 2) {
-    const id = safeConversationId(flat[i]);
-    if (id) ids.push({ id, lastAt: Number(flat[i + 1]) || 0 });
+
+  for (let index = 0; index < flat.length; index += 2) {
+    const id = safeConversationId(flat[index]);
+    if (id) ids.push({ id, lastAt: Number(flat[index + 1]) || 0 });
   }
+
   if (!ids.length) return [];
 
-  /* One round trip for every conversation's length and opening turn. */
   const details = await pipeline(
     ids.flatMap(({ id }) => [
       ["LLEN", `${CONVERSATION_PREFIX}${id}`],
@@ -146,6 +153,7 @@ export async function listConversations(limit = 50): Promise<ConversationSummary
     const turns = Number(details?.[index * 2] ?? 0) || 0;
     const first = details?.[index * 2 + 1];
     let preview = "";
+
     if (typeof first === "string") {
       try {
         preview = String((JSON.parse(first) as LoggedTurn).text ?? "").slice(0, 120);
@@ -153,6 +161,7 @@ export async function listConversations(limit = 50): Promise<ConversationSummary
         preview = "";
       }
     }
+
     return { id, lastAt, turns, preview };
   });
 }
@@ -160,16 +169,25 @@ export async function listConversations(limit = 50): Promise<ConversationSummary
 export async function readConversation(id: string): Promise<LoggedTurn[]> {
   const safe = safeConversationId(id);
   if (!safe) return [];
+
   const result = await pipeline([
     ["LRANGE", `${CONVERSATION_PREFIX}${safe}`, 0, MAX_TURNS_PER_CONVERSATION - 1],
   ]);
   const raw = Array.isArray(result?.[0]) ? (result[0] as unknown[]) : [];
+
   return raw.flatMap((entry) => {
     if (typeof entry !== "string") return [];
+
     try {
       const turn = JSON.parse(entry) as LoggedTurn;
       if (turn.role !== "user" && turn.role !== "assistant") return [];
-      return [{ at: Number(turn.at) || 0, role: turn.role, text: String(turn.text ?? "") }];
+      return [
+        {
+          at: Number(turn.at) || 0,
+          role: turn.role,
+          text: String(turn.text ?? ""),
+        },
+      ];
     } catch {
       return [];
     }

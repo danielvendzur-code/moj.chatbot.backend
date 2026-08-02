@@ -2,6 +2,12 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "pnpm build",
   "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/historia",
+      "destination": "/api/transcripts"
+    }
+  ],
   "functions": {
     "api/chat.ts": {
       "maxDuration": 30
