@@ -197,14 +197,27 @@ export const FEATURES: FeatureOption[] = [
     description: "Rozmery, materiál a doplnky.",
   },
   {
+    /* The system prompt already promises the calendar half of this; the option
+       only mentioned picking a time, so the two disagreed about what is on
+       offer. It says the whole thing now. */
     id: "rezervacie",
     label: "Dohodne termín",
-    description: "Zákazník si vyberie voľný čas.",
+    description: "Konzultáciu zapíše do kalendára.",
   },
   {
     id: "fotky",
     label: "Prijme fotky",
-    description: "Lepší odhad ešte pred návštevou.",
+    description: "Lepší odhad pred návštevou.",
+  },
+  {
+    id: "tabulka",
+    label: "Zapíše do tabuľky",
+    description: "Dopyty aj v tabuľke či CRM.",
+  },
+  {
+    id: "jazyky",
+    label: "Zvládne cudzí jazyk",
+    description: "Odpovie v jazyku zákazníka.",
   },
 ];
 

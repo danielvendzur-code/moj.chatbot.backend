@@ -562,15 +562,46 @@ html body .cw-widget[class][class][class][class] .cw-inputbar[class] > .cw-send[
   cursor: default !important;
 }
 
-html body .cw-widget[class][class][class] :is(button, a, input, textarea, summary):focus-visible {
+/* Focus has to be unmistakable without looking like a mistake. An outline
+   offset from the control draws a second, detached ring — around a rounded
+   field it reads as a doubled border, and around a pill button as a stray
+   rectangle sitting on top of it. The ring hugs the control now, so it looks
+   like part of the shape rather than something dropped on it. */
+html body .cw-widget[class][class][class] :is(button, a, summary, label):focus-visible {
   outline: 2px solid var(--mp-accent) !important;
-  outline-offset: 3px !important;
+  outline-offset: 2px !important;
 }
 
-/* The composer is the exception: the bar it sits in already lights up on
-   focus, so a second ring drawn inside the first reads as a mistake. */
-html body .cw-widget[class][class][class][class] .cw-inputbar[class] input:focus-visible {
+/* On an accent-filled control a peach ring on peach is invisible, so the ring
+   goes dark and sits just inside the edge instead. */
+html body .cw-widget[class][class][class][class] :is(
+    .cw-next,
+    .cw-submit,
+    .cw-chat-builder,
+    .cw-send
+  )[class]:focus-visible {
   outline: none !important;
+  box-shadow:
+    inset 0 0 0 2px rgba(10, 9, 8, 0.55),
+    var(--mp-glow-strong) !important;
+}
+
+/* A text field already announces focus with its own border and glow. A ring
+   drawn outside that is the doubled edge the visitor sees while typing. */
+html body .cw-widget[class][class][class][class] :is(input, textarea):focus-visible,
+html body .cw-widget[class][class][class][class] :is(input, textarea):focus {
+  outline: none !important;
+}
+
+html body .cw-widget[class][class][class][class] :is(
+    .cw-lead__form,
+    .cw-custom,
+    .cw-lead__optional-body
+  )[class] :is(input, textarea):focus {
+  border-color: var(--mp-accent) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 199, 157, 0.28),
+    0 0 26px -14px rgba(255, 199, 157, 0.85) !important;
 }
 
 /* ---------------------------------------------------------------
@@ -882,6 +913,70 @@ html body .cw-widget[class][class][class][class] .cw-contact-method[class][data-
 }
 
 /* ---------------------------------------------------------------
+   10b. The contact step with a keyboard in front of it
+
+   On a phone the panel is only as tall as the space above the software
+   keyboard — about 380px. The header, the mode switch and the progress
+   row take 298 of that between them, which left 64px of form: the
+   visitor was typing their name into a field scrolled out of sight.
+
+   While a field has focus the switch and the progress row fold away and
+   the header goes compact. That hands the form 166px instead of 64, and
+   everything returns the moment the field is released. Both the flag and
+   a short-panel media query drive it, so the fold still happens in the
+   direct embed where the panel height does not follow the keyboard.
+   --------------------------------------------------------------- */
+
+@media (max-width: 560px) {
+  html body .cw-widget[class][class][class] .cw-panel[class]:has(.cw-calculator[data-composing]) :is(.cw-tabs, .cw-progress)[class],
+  html body .cw-widget[class][class][class] .cw-calculator[data-composing][class] .cw-progress[class] {
+    max-height: 0 !important;
+    min-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    border-width: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-calculator[class] .cw-progress[class] {
+    overflow: hidden !important;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html body .cw-widget[class][class][class] .cw-calculator[class] .cw-progress[class] {
+      transition:
+        max-height 280ms var(--mp-ease),
+        opacity 160ms var(--mp-ease-out),
+        padding 280ms var(--mp-ease) !important;
+    }
+  }
+
+  /* The header keeps the close button reachable but gives back its height. */
+  html body .cw-widget[class][class][class] .cw-panel[class]:has(.cw-calculator[data-composing]) .cw-panel-head[class] {
+    min-height: 0 !important;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-panel[class]:has(.cw-calculator[data-composing]) .cw-panel-head__mascot[class] {
+    display: none !important;
+  }
+
+  html body .cw-widget[class][class][class] .cw-panel[class]:has(.cw-calculator[data-composing]) .cw-panel-head__context[class] {
+    display: none !important;
+  }
+
+  /* The form is what the remaining room is for. */
+  html body .cw-widget[class][class][class] .cw-calculator[data-composing][class] .cw-calc-body[class] {
+    scroll-padding-block: 12px !important;
+  }
+}
+
+/* ---------------------------------------------------------------
    11. The builder fills its step
 
    Every question except the last one now sizes its cards to the space
@@ -923,16 +1018,26 @@ html body .cw-widget[class][class][class] .cw-calc-step[class]:not([data-step="c
 html body .cw-widget[class][class][class] .cw-calc-step[class]:not([data-step="contact"]) .cw-choice-grid[class] {
   flex: 1 1 auto !important;
   min-height: 0 !important;
-  align-content: stretch !important;
+  /* Centred, not stretched. Rows take what they need up to a ceiling and the
+     leftover space goes around the block — a four-option step used to blow its
+     cards up to 280px tall to fill the panel, which is what made them look
+     oversized rather than generous. */
+  /* Rows hug their content instead of being stretched to a share of the panel:
+     a four-option step used to inflate its cards to 280px just to fill the
+     height, which is what made them look oversized. They follow the question
+     directly — spreading the leftover space between them instead opens a gap
+     under the heading that reads as something failing to load. */
+  align-content: start !important;
   align-items: stretch !important;
   grid-template-rows: none !important;
-  /* `minmax(0, 1fr)` is what lets a row shrink below its content instead
-     of forcing the grid taller than the step and bringing back the
-     scrollbar this whole section exists to remove. */
-  grid-auto-rows: minmax(0, 1fr) !important;
-  gap: 9px !important;
+  grid-auto-rows: minmax(72px, auto) !important;
+  gap: 10px !important;
 }
 
+/* One shape for all four kinds of option — interest, industry, feature and
+   timeline used to differ in radius, height and inner layout, so a step never
+   looked like the step before it. Same soft capsule corner, same ceiling,
+   same centred content, everywhere. */
 html body .cw-widget[class][class][class][class] .cw-calc-step[class]:not([data-step="contact"]) :is(
     .cw-rowcard,
     .cw-scard,
@@ -941,6 +1046,10 @@ html body .cw-widget[class][class][class][class] .cw-calc-step[class]:not([data-
   )[class] {
   min-height: 0 !important;
   height: auto !important;
+  /* The cap is what keeps them proportionate: they grow to fill the step and
+     stop at a size that still reads as a control rather than a panel. */
+  max-height: 104px !important;
+  border-radius: 26px !important;
   align-content: center !important;
   align-items: center !important;
   overflow: hidden !important;
@@ -948,11 +1057,43 @@ html body .cw-widget[class][class][class][class] .cw-calc-step[class]:not([data-
 }
 
 html body .cw-widget[class][class][class] .cw-calc-step[class] :is(.cw-rowcard, .cw-opt, .cw-vcard)[class] {
-  padding: 11px 34px 11px 13px !important;
+  padding: 10px 32px 10px 15px !important;
 }
 
 html body .cw-widget[class][class][class] .cw-calc-step[class] .cw-scard[class] {
-  padding: 10px 32px 10px 12px !important;
+  padding: 10px 30px 10px 14px !important;
+}
+
+/* Two options in a row need less height than six, so the ceiling scales with
+   how many there are — four stay comfortable, six stay compact. */
+html body .cw-widget[class][class][class][class] .cw-choice-grid--interest[class] > * {
+  max-height: 120px !important;
+}
+
+html body .cw-widget[class][class][class][class] :is(.cw-choice-grid--industry, .cw-choice-grid--features)[class] > * {
+  max-height: 96px !important;
+}
+
+/* Eight options is four rows, and on the shortest phone worth designing for
+   (375x667) that is the step most at risk of needing a scrollbar. It gets a
+   tighter rhythm than the six-option steps so it still fits whole. */
+html body .cw-widget[class][class][class][class] .cw-calc-step[class][class]:not([data-step="contact"]) .cw-choice-grid--features[class][class] {
+  grid-auto-rows: minmax(62px, auto) !important;
+  gap: 8px !important;
+}
+
+html body .cw-widget[class][class][class][class] .cw-calc-step[class][class] .cw-choice-grid--features[class] .cw-opt[class] {
+  padding: 8px 30px 8px 14px !important;
+}
+
+/* Below this height the description is what has to give. It is dropped whole
+   rather than clamped to one line: a label cut mid-word ("O vašich službách,…")
+   reads as something broken, while the label on its own reads as deliberate —
+   and on this step the label is what the visitor is choosing between anyway. */
+@media (max-height: 720px) {
+  html body .cw-widget[class][class][class][class] .cw-calc-step[class][class] .cw-choice-grid--features[class][class] .cw-opt__body > span {
+    display: none !important;
+  }
 }
 
 /* Three lines of description, then an ellipsis. A card that grows a fourth

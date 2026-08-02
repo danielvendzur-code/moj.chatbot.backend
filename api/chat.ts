@@ -1,5 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { allowedOrigin, requestOrigin } from "./origins.js";
+import { logExchange, safeConversationId } from "./chatLog.js";
 
 const MODEL = "claude-haiku-4-5";
 /* Haiku doesn't think unless asked and has no `effort` knob (that param
@@ -17,11 +19,6 @@ const RATE_MAX_REQUESTS = 18;
    instead of a killed process. */
 const UPSTREAM_TIMEOUT_MS = 25_000;
 
-const DEFAULT_ALLOWED_ORIGINS = new Set([
-  "https://danielvendzur-code.github.io",
-  "https://moj-chatbot-backend.vercel.app",
-]);
-
 /* The prompt sets the same plain-language bar as the widget's own copy: the
    person reading the reply may never have thought about chatbots before. */
 const SYSTEM_PROMPT = [
@@ -32,7 +29,8 @@ const SYSTEM_PROMPT = [
   "• Chatbot odpovedá zákazníkom o službách a cenách podľa podkladov firmy a pošle firme kontakt aj s tým, na čo sa zákazník pýtal.",
   "• Chatbot môže spočítať cenu — zákazník zadá napríklad rozmery alebo množstvo a hneď vidí, koľko to stojí.",
   "• Chatbot môže pomôcť s výberom: prevedie zákazníka rozmermi, materiálmi, farbami a doplnkami.",
-  "• Chatbot môže dohodnúť termín a zapísať ho do kalendára.",
+  "• Chatbot môže dohodnúť termín alebo konzultáciu a zapísať ju do kalendára.",
+  "• Chatbot vie odpovedať aj v cudzom jazyku — zákazníkovi odpovie v tom, ktorým píše.",
   "• Pridá sa na existujúci web bez prerábky a preberie jeho farby aj písmo.",
   "• Dopyty môžu chodiť na e-mail, WhatsApp, do kalendára, do tabuľky alebo do CRM.",
   "• Na začiatok stačí web alebo popis služieb, časté otázky, cenník a kam majú dopyty chodiť.",
@@ -61,32 +59,6 @@ type GlobalRateStore = typeof globalThis & {
 const globalRateStore = globalThis as GlobalRateStore;
 const rateLimitStore =
   globalRateStore.__dvAssistantRateLimit ?? (globalRateStore.__dvAssistantRateLimit = new Map());
-
-function requestOrigin(req: VercelRequest): string | null {
-  const raw = req.headers.origin;
-  return Array.isArray(raw) ? raw[0] ?? null : raw ?? null;
-}
-
-function configuredOrigins(): Set<string> {
-  const origins = new Set(DEFAULT_ALLOWED_ORIGINS);
-  for (const value of (process.env.ALLOWED_ORIGINS ?? "").split(",")) {
-    const trimmed = value.trim();
-    if (trimmed) origins.add(trimmed.replace(/\/$/, ""));
-  }
-  return origins;
-}
-
-function allowedOrigin(origin: string | null): string | null {
-  if (!origin) return null;
-  try {
-    const normalized = new URL(origin).origin;
-    if (/^http:\/\/localhost(?::\d+)?$/.test(normalized)) return normalized;
-    if (/^http:\/\/127\.0\.0\.1(?::\d+)?$/.test(normalized)) return normalized;
-    return configuredOrigins().has(normalized) ? normalized : null;
-  } catch {
-    return null;
-  }
-}
 
 function requestIp(req: VercelRequest): string {
   const forwarded = req.headers["x-forwarded-for"];
@@ -133,7 +105,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
 
-  const origin = requestOrigin(req);
+  const origin = requestOrigin(req.headers);
   const allowed = allowedOrigin(origin);
   if (!allowed) {
     res.status(403).json({ error: "origin-not-allowed" });
@@ -180,6 +152,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
 
   const body = (typeof req.body === "string" ? safeParse(req.body) : req.body) as {
     messages?: unknown;
+    conversationId?: unknown;
   } | null;
 
   if (typeof req.body === "string" && Buffer.byteLength(req.body, "utf8") > MAX_BODY_BYTES) {
@@ -206,6 +179,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     return;
   }
 
+  /* The transcript is the owner's record of what was asked. It is written
+     after the visitor already has their answer and never awaited, so a slow or
+     unreachable log cannot add latency to a reply or fail one. */
+  const conversationId = safeConversationId(body?.conversationId);
+  const question = messages[messages.length - 1].content;
+  const record = (answer: string): void => {
+    if (!conversationId || !answer) return;
+    void logExchange(conversationId, question, answer);
+  };
+
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS);
   const client = new Anthropic({ apiKey });
@@ -227,6 +210,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     res.flushHeaders?.();
 
     let streamed = 0;
+    let collected = "";
     try {
       const stream = client.messages.stream(request, {
         signal: controller.signal,
@@ -242,6 +226,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
         const text = event.delta.text;
         if (!text || streamed >= MAX_REPLY_CHARS) continue;
         streamed += text.length;
+        collected += text;
         writeEvent(res, "delta", { text });
       }
 
@@ -249,6 +234,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
         writeEvent(res, "error", { error: "empty-upstream-response" });
       } else {
         writeEvent(res, "done", {});
+        record(collected);
       }
     } catch (error) {
       /* Once the headers are out a status code is no longer available, so the
@@ -281,6 +267,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     }
 
     res.status(200).json({ reply });
+    record(reply);
   } catch (error) {
     const timedOut = isTimeout(error);
     res.status(timedOut ? 504 : 502).json({

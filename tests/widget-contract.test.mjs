@@ -326,7 +326,7 @@ test("configurator remains five short steps with explicit selection guidance", a
     ).length,
     5,
   );
-  assert.equal((featureBlock.match(/id:/g) ?? []).length, 6);
+  assert.equal((featureBlock.match(/id:/g) ?? []).length, 8);
   assert.match(flow, /Vyberte jednu vec/);
   assert.match(flow, /Odpovedať zákazníkom/);
   assert.match(flow, /Počítať cenu/);
@@ -448,7 +448,10 @@ test("the reply streams in and the thread keeps up with it", async () => {
 
   // Thread: one bubble that grows, never a second one beside it.
   assert.match(conversation, /const replyId = nextIdRef\.current\+\+/);
-  assert.match(conversation, /sendChat\(history, controller\.signal, paint\)/);
+  assert.match(
+    conversation,
+    /sendChat\(\s*\n\s*history,\s*\n\s*controller\.signal,\s*\n\s*paint,\s*\n\s*conversationId\(\),\s*\n\s*\)/,
+  );
   assert.match(conversation, /data-streaming=\{message\.streaming \|\| undefined\}/);
 });
 
@@ -501,8 +504,10 @@ test("the finish layer removes browser blue and keeps one motion vocabulary", as
 test("the finish layer sizes the builder to its step and glows the contacts", async () => {
   const css = await read("src/masterpiece-final.css");
 
-  // Cards take the leftover height instead of overflowing into a scrollbar.
-  assert.match(css, /grid-auto-rows: minmax\(0, 1fr\) !important/);
+  // Rows hug their content and follow the question, rather than inflating to
+  // fill the panel — a four-option step used to reach 280px per card.
+  assert.match(css, /grid-auto-rows: minmax\(72px, auto\) !important/);
+  assert.match(css, /align-content: start !important/);
   assert.match(
     css,
     /\.cw-calc-body\[class\]:has\(\.cw-calc-step:not\(\[data-step="contact"\]\)\)/,
@@ -778,6 +783,175 @@ test("the composer keeps its size at every panel height", async () => {
   assert.match(mobile, /\.cw-send\[class\] \{[\s\S]*?min-height: 44px !important/);
 });
 
+test("transcripts are logged without ever costing a visitor their answer", async () => {
+  const log = await read("api/chatLog.ts");
+  const chat = await read("api/chat.ts");
+  const client = await read("src/lib/chatHistory.ts");
+  const api = await read("src/lib/assistantApi.ts");
+
+  // Logging is opt-in and inert until both Upstash values are present.
+  assert.match(log, /export function chatLogEnabled/);
+  assert.match(log, /UPSTASH_REDIS_REST_URL && process\.env\.UPSTASH_REDIS_REST_TOKEN/);
+  // Ids arrive from the browser, so they may never be pasted into a key.
+  assert.match(log, /\^\[A-Za-z0-9_-\]\{8,64\}\$/);
+  // Nothing accumulates forever: transcripts expire, turns and index are capped.
+  assert.match(log, /const RETENTION_SECONDS = 90 \* 24 \* 60 \* 60/);
+  assert.match(log, /\["LTRIM", key, -MAX_TURNS_PER_CONVERSATION, -1\]/);
+  assert.match(log, /ZREMRANGEBYRANK/);
+  assert.match(log, /\["EXPIRE", key, RETENTION_SECONDS\]/);
+
+  // Written after the answer is out and never awaited.
+  assert.match(chat, /const record = \(answer: string\): void =>/);
+  assert.match(chat, /void logExchange\(conversationId, question, answer\)/);
+  assert.match(chat, /record\(collected\);/);
+  assert.match(chat, /record\(reply\);/);
+
+  // The id identifies the conversation, not the person, and reset mints a new one.
+  assert.match(client, /export function conversationId\(\): string/);
+  assert.match(client, /store\?\.removeItem\(CONVERSATION_KEY\)/);
+  assert.match(api, /body: JSON\.stringify\(\{ messages, conversationId \}\)/);
+});
+
+test("the transcript viewer is the least permissive thing here", async () => {
+  const viewer = await read("api/transcripts.ts");
+  const readme = await read("README.md");
+
+  // One shared secret, compared in constant time, accepted three ways.
+  assert.match(viewer, /timingSafeEqual/);
+  assert.match(viewer, /createHash\("sha256"\)/);
+  assert.match(viewer, /Bearer /);
+  // A short secret is refused rather than served weakly.
+  assert.match(viewer, /const MIN_TOKEN_LENGTH = 24/);
+  assert.match(viewer, /transcripts-token-too-weak/);
+  // Proving it once keeps it out of every link and out of the page source.
+  assert.match(viewer, /HttpOnly; Secure; SameSite=Strict/);
+  assert.doesNotMatch(viewer, /href="\?token=/);
+  // Never cached, never indexed, and no CORS header is ever set.
+  assert.match(viewer, /"X-Robots-Tag", "noindex, nofollow"/);
+  assert.match(viewer, /"Cache-Control", "no-store, max-age=0"/);
+  assert.doesNotMatch(viewer, /Access-Control-Allow-Origin/);
+  // Visitor text is rendered as text, never as markup.
+  assert.match(viewer, /const escapeHtml/);
+  assert.match(viewer, /escapeHtml\(turn\.text\)/);
+  assert.match(viewer, /escapeHtml\(c\.preview/);
+  // Unset means the endpoint does not answer at all.
+  assert.match(viewer, /transcripts-not-configured/);
+
+  assert.match(readme, /UPSTASH_REDIS_REST_URL/);
+  assert.match(readme, /CHAT_LOG_TOKEN/);
+  assert.match(readme, /90 dňoch/);
+});
+
+test("both endpoints share one origin list so it cannot half-apply", async () => {
+  const origins = await read("api/origins.ts");
+  const chat = await read("api/chat.ts");
+  const lead = await read("api/lead.ts");
+
+  // The chat list was missing mojchatbot.sk while the lead list had it, so on
+  // the production site every chat request came back 403 and the widget fell
+  // back to its offline text — which reads as the bot answering badly.
+  for (const domain of [
+    "https://danielvendzur-code.github.io",
+    "https://moj-chatbot-backend.vercel.app",
+    "https://mojchatbot.sk",
+    "https://www.mojchatbot.sk",
+  ]) {
+    assert.ok(origins.includes(domain), `Missing allowed origin ${domain}`);
+  }
+  assert.match(origins, /ALLOWED_ORIGINS/);
+
+  // Neither handler may keep a list of its own to drift again.
+  for (const source of [chat, lead]) {
+    assert.match(source, /from "\.\/origins\.js"/);
+    assert.match(source, /requestOrigin\(req\.headers\)/);
+    assert.doesNotMatch(source, /const DEFAULT_ALLOWED_ORIGINS/);
+    assert.doesNotMatch(source, /function allowedOrigin/);
+    assert.doesNotMatch(source, /function configuredOrigins/);
+  }
+});
+
+test("the contact step gives the form room when the keyboard is up", async () => {
+  const calculator = await read("src/components/widget/ToolCalculator.tsx");
+  const css = await read("src/masterpiece-final.css");
+
+  // Header, switch and progress took 298px of a 380px panel, leaving 64px of
+  // form — the visitor typed their name into a field scrolled out of sight.
+  assert.match(calculator, /const \[composing, setComposing\] = useState\(false\)/);
+  assert.match(calculator, /data-composing=\{composing \|\| undefined\}/);
+  assert.match(calculator, /onFocusCapture=/);
+  assert.match(calculator, /onBlurCapture=/);
+  // Only a control that summons a keyboard may fold the panel.
+  assert.match(calculator, /const isTextField = \(element: HTMLElement\): boolean =>/);
+  assert.match(calculator, /element\.type !== "checkbox" && element\.type !== "radio"/);
+  // Moving between two fields must not unfold and refold it.
+  assert.match(calculator, /if \(!\(next instanceof HTMLElement\) \|\| !isTextField\(next\)\)/);
+
+  assert.match(css, /:has\(\.cw-calculator\[data-composing\]\) :is\(\.cw-tabs, \.cw-progress\)/);
+  assert.match(css, /:has\(\.cw-calculator\[data-composing\]\) \.cw-panel-head\[class\]/);
+});
+
+test("focus is drawn on the control, not as a rectangle beside it", async () => {
+  const css = await read("src/masterpiece-final.css");
+
+  // An offset outline reads as a doubled border on a field and a stray
+  // rectangle on a pill button.
+  assert.match(css, /:is\(button, a, summary, label\):focus-visible/);
+  // A peach ring on a peach button is invisible, so that one goes dark inside.
+  assert.match(
+    css,
+    /:is\(\s*\n\s*\.cw-next,\s*\n\s*\.cw-submit,\s*\n\s*\.cw-chat-builder,\s*\n\s*\.cw-send\s*\n\s*\)\[class\]:focus-visible \{\s*\n\s*outline: none !important/,
+  );
+  // A text field announces focus with its own border and glow.
+  assert.match(css, /:is\(input, textarea\):focus \{\s*\n\s*outline: none !important/);
+});
+
+test("the conversation survives a reload and reset clears it", async () => {
+  const history = await read("src/lib/chatHistory.ts");
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
+  );
+
+  // Blocked storage must never break the widget, only cost it the history.
+  assert.match(history, /function storage\(\): Storage \| null/);
+  assert.match(history, /probe\.setItem\(key, "1"\)/);
+  // A thread nobody replied to is the greeting, not a conversation.
+  assert.match(history, /if \(!messages\.some\(\(message\) => message\.from === "me"\)\) return null/);
+  assert.match(history, /MAX_AGE_MS/);
+  assert.match(history, /MAX_TURNS/);
+  // Ids must continue past what was restored or React reuses the wrong node.
+  assert.match(history, /const highest = messages\.reduce/);
+
+  assert.match(conversation, /const restored = useRef\(loadHistory\(\)\)\.current/);
+  assert.match(conversation, /const nextIdRef = useRef\(restored\?\.nextId \?\? 2\)/);
+  // Saved once the reply has settled, not once per streamed token.
+  assert.match(conversation, /if \(streamingReply \|\| typing\) return;\s*\n\s*saveHistory/);
+  // An effect also runs on mount; ungated it wiped the thread it had just
+  // restored, which is why history never survived a reload.
+  assert.match(conversation, /if \(resetTokenRef\.current === resetToken\) return;/);
+  assert.match(conversation, /clearHistory\(\);/);
+});
+
+test("an accepted lead is traceable and one bad mailbox cannot sink the other", async () => {
+  const api = await read("api/lead.ts");
+
+  // Resend answering 200 means accepted, not delivered. The message id is the
+  // only handle on what happened next, and it was being discarded.
+  assert.match(api, /async function resendMessageId/);
+  assert.match(api, /typeof body\.id === "string" \? body\.id : ""/);
+  assert.match(api, /return \{ ok: true, ids: \[`\$\{recipient\}=\$\{id \|\| "accepted"\}`\] \}/);
+  assert.match(api, /console\.log\(\s*\n\s*"lead-accepted"/);
+  assert.match(api, /res\.status\(200\)\.json\(\{ ok: true, autoReplySent, ids \}\)/);
+
+  // One message per recipient. On a shared envelope a single refusing mailbox
+  // takes the whole message down, losing the lead from every inbox at once.
+  assert.match(api, /LEAD_RECIPIENTS\.map\(async \(recipient\): Promise<Delivery>/);
+  assert.match(api, /to: \[recipient\]/);
+  assert.doesNotMatch(api, /to: LEAD_RECIPIENTS/);
+  // Accepted anywhere is still a delivered lead; the refusal is logged beside it.
+  assert.match(api, /console\.error\("lead-recipient-refused", refusals\.join\(" \| "\)\)/);
+  assert.match(api, /if \(results\.some\(\(result\) => result\.ok\)\) return \{ ok: true, ids \}/);
+});
+
 test("a refused delivery channel no longer hides the reason or skips the next one", async () => {
   const api = await read("api/lead.ts");
   const client = await read("src/lib/leadApi.ts");
@@ -792,7 +966,10 @@ test("a refused delivery channel no longer hides the reason or skips the next on
   assert.match(api, /only delivers to the Resend account's own address/);
   assert.match(api, /is verified at resend\.com\/domains/);
   // A refusal is carried, not thrown, so it cannot skip the channels after it.
-  assert.match(api, /type Delivery = \{ ok: boolean; skipped\?: boolean; reason\?: string \}/);
+  assert.match(
+    api,
+    /type Delivery = \{ ok: boolean; skipped\?: boolean; reason\?: string; ids\?: string\[\] \}/,
+  );
   assert.match(api, /attempts\.push\(\["webhook", await deliverWithWebhook\(subject, text\)\]\)/);
   assert.match(api, /console\.error\("lead-delivery-failed", failures\.join\(" \| "\)\)/);
   // Nothing configured and something refusing are different problems.
@@ -826,9 +1003,10 @@ test("info@mojchatbot.sk is the address, the personal one is the second contact"
   assert.match(api, /"daniel@vendzur\.sk"/);
   assert.match(api, /const LEAD_RECIPIENTS = \[RECIPIENT, SECOND_CONTACT\]/);
   assert.match(api, /all\.indexOf\(address\) === index/);
-  assert.match(api, /to: LEAD_RECIPIENTS/);
-  // The confirmation the visitor gets is signed with the public address.
-  assert.match(api, /`Môj Chatbot — \$\{RECIPIENT\}, \+421 948 699 433`/);
+  // Addressed one message each, so a refusing mailbox cannot take the other
+  // recipient's copy down with it.
+  assert.match(api, /LEAD_RECIPIENTS\.map\(async \(recipient\)/);
+  assert.match(api, /to: \[recipient\]/);
 
   // Everything the visitor can see or click.
   assert.match(conversation, /mailto:info@mojchatbot\.sk/);
@@ -1305,7 +1483,12 @@ test("close and reopen retain mode, chat draft, history and calculator progress"
 
   // These local states now live for the full widget session because their
   // owning components are descendants of the persistent panel.
-  assert.match(conversation, /useState<ChatMessage\[]>\(INITIAL_MESSAGES\)/);
+  // The thread now starts from storage when there is one to restore, so the
+  // greeting is the fallback rather than the only possible starting state.
+  assert.match(
+    conversation,
+    /restored\?\.messages\.length \? restored\.messages : INITIAL_MESSAGES/,
+  );
   assert.match(conversation, /const \[input, setInput\] = useState\(""\)/);
   assert.match(conversation, /value=\{input\}/);
   assert.match(conversation, /onChange=\{\(event\) => setInput\(event\.target\.value\)\}/);

@@ -143,6 +143,33 @@ Odpoveď sa **streamuje**: keď klient pošle `Accept: text/event-stream`, funkc
 po kúskoch a prvé slová sú na obrazovke asi za sekundu. Klienti bez SSE dostanú JSON ako
 predtým.
 
+## História chatov pre vás (`api/transcripts.ts`)
+
+Kde si prečítate, čo návštevníci naozaj písali. Ukladá sa do **Upstash Redis**
+cez jeho REST API (jediná podoba Redisu, ktorá dáva zmysel v serverless funkcii
+— žiadny connection pool, len `fetch`).
+
+| Premenná | Načo je |
+| --- | --- |
+| `UPSTASH_REDIS_REST_URL` | Z upstash.com → Redis databáza → REST API |
+| `UPSTASH_REDIS_REST_TOKEN` | Tamtiež |
+| `CHAT_LOG_TOKEN` | Heslo do prehliadača transkriptov. **Minimálne 24 znakov** — kratšie funkcia odmietne obsluhovať. |
+
+Otvorte `https://<projekt>.vercel.app/api/transcripts?token=<CHAT_LOG_TOKEN>`.
+Uvidíte zoznam konverzácií od najnovšej, kliknutím sa rozbalí celý priebeh.
+Po prvom otvorení sa token uloží do `HttpOnly` cookie na 8 hodín, takže sa už
+neobjavuje v odkazoch ani v zdroji stránky. `Accept: application/json` vráti
+to isté ako JSON.
+
+Bez týchto premenných sa nič neloguje a chat funguje presne ako predtým.
+Zapisuje sa až **po** tom, čo návštevník dostal odpoveď, a nikdy sa naň nečaká
+— pomalý alebo nedostupný log nemôže spomaliť ani pokaziť odpoveď.
+
+> **Ochrana údajov.** Sú to konverzácie vašich návštevníkov, takže ste ich
+> správcom. Transkripty **samy expirujú po 90 dňoch**, neukladá sa IP ani nič,
+> čím by sa dal človek identifikovať — len text a čas. Ak v chate zbierate
+> osobné údaje, spomeňte to v zásadách ochrany súkromia.
+
 ## Doručovanie dopytov (`api/lead.ts`)
 
 | Premenná | Povinná | Načo je |

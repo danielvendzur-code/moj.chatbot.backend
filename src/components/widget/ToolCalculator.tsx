@@ -67,6 +67,13 @@ const CONTACT_METHODS: Array<{
   { id: "email", label: "E-mailom", icon: "mail" },
 ];
 
+/* Only a control that summons the keyboard should fold the panel; a tap on a
+   choice card or the Next button must leave the layout alone. */
+const isTextField = (element: HTMLElement): boolean =>
+  element instanceof HTMLInputElement
+    ? element.type !== "checkbox" && element.type !== "radio"
+    : element instanceof HTMLTextAreaElement;
+
 function SelectionIndicator({ selected }: { selected: boolean }): JSX.Element {
   return (
     <span
@@ -90,6 +97,13 @@ export function ToolCalculator({
     : null;
 
   const [step, setStep] = useState(0);
+  /* The contact step is the one with a keyboard in front of it. On a phone the
+     panel shrinks to the space above that keyboard — around 380px — and the
+     header, mode switch and progress row alone eat 298 of it, leaving 64px of
+     form. The visitor ends up typing into a field they cannot see. While a
+     field here has focus the stylesheet folds the switch and the progress row
+     away; both come back the moment it is released. */
+  const [composing, setComposing] = useState(false);
   const [interest, setInterest] = useState<InterestId | null>(initialInterest);
   const [customText, setCustomText] = useState("");
   const [industry, setIndustry] = useState<string | null>(null);
@@ -364,6 +378,22 @@ export function ToolCalculator({
       className="cw-calculator"
       data-view="steps"
       data-testid="calculator-view"
+      data-composing={composing || undefined}
+      /* Focus events bubble here, so one pair of handlers covers every field
+         on the step — including the ones inside the optional details block. */
+      onFocusCapture={(event) => {
+        if (event.target instanceof HTMLElement && isTextField(event.target)) {
+          setComposing(true);
+        }
+      }}
+      onBlurCapture={(event) => {
+        const next = event.relatedTarget;
+        /* Moving between two fields is still composing; only leaving the form
+           for something that is not a field puts the panel back. */
+        if (!(next instanceof HTMLElement) || !isTextField(next)) {
+          setComposing(false);
+        }
+      }}
     >
       <div className="cw-progress">
         <button

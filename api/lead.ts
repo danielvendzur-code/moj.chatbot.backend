@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { allowedOrigin, requestOrigin } from "./origins.js";
 import {
   confirmationHtml,
   confirmationText,
@@ -19,14 +20,6 @@ const LEAD_RECIPIENTS = [RECIPIENT, SECOND_CONTACT].filter(
   (address, index, all) => address && all.indexOf(address) === index,
 );
 
-const DEFAULT_ALLOWED_ORIGINS = new Set([
-  "https://danielvendzur-code.github.io",
-  "https://moj-chatbot-backend.vercel.app",
-  "https://vne-n.vercel.app",
-  "https://mojchatbot.sk",
-  "https://www.mojchatbot.sk",
-]);
-
 const SHARED_SENDER = "Môj Chatbot <onboarding@resend.dev>";
 /* The production sending domain is verified at resend.com/domains. */
 const SENDER = process.env.LEAD_FROM_EMAIL || "Môj Chatbot <info@mojchatbot.sk>";
@@ -34,37 +27,12 @@ const SENDER = process.env.LEAD_FROM_EMAIL || "Môj Chatbot <info@mojchatbot.sk>
 
 type RateState = { count: number; resetAt: number };
 type GlobalRateStore = typeof globalThis & { __dvLeadRateLimit?: Map<string, RateState> };
-type Delivery = { ok: boolean; skipped?: boolean; reason?: string };
+type Delivery = { ok: boolean; skipped?: boolean; reason?: string; ids?: string[] };
 type LeadPayload = Partial<Record<keyof EmailLead | "consent", unknown>>;
 
 const globalRateStore = globalThis as GlobalRateStore;
 const rateLimitStore =
   globalRateStore.__dvLeadRateLimit ?? (globalRateStore.__dvLeadRateLimit = new Map());
-
-function requestOrigin(req: VercelRequest): string | null {
-  const raw = req.headers.origin;
-  return Array.isArray(raw) ? raw[0] ?? null : raw ?? null;
-}
-
-function configuredOrigins(): Set<string> {
-  const origins = new Set(DEFAULT_ALLOWED_ORIGINS);
-  for (const value of (process.env.ALLOWED_ORIGINS ?? "").split(",")) {
-    const trimmed = value.trim();
-    if (trimmed) origins.add(trimmed.replace(/\/$/, ""));
-  }
-  return origins;
-}
-
-function allowedOrigin(origin: string | null): string | null {
-  if (!origin) return null;
-  try {
-    const normalized = new URL(origin).origin;
-    if (/^http:\/\/(localhost|127\.0\.0\.1)(?::\d+)?$/.test(normalized)) return normalized;
-    return configuredOrigins().has(normalized) ? normalized : null;
-  } catch {
-    return null;
-  }
-}
 
 function requestIp(req: VercelRequest): string {
   const forwarded = req.headers["x-forwarded-for"];
@@ -124,6 +92,19 @@ async function sendWithResend(payload: Record<string, unknown>): Promise<Respons
   });
 }
 
+/* Resend answers an accepted send with the message id. Accepted is not the
+   same as delivered — a mailbox can still bounce it or file it as spam — and
+   that id is the only way to look the outcome up at resend.com/emails. It was
+   being thrown away, which is what left "it never arrived" untraceable. */
+async function resendMessageId(response: Response): Promise<string> {
+  try {
+    const body = (await response.json()) as { id?: unknown };
+    return typeof body.id === "string" ? body.id : "";
+  } catch {
+    return "";
+  }
+}
+
 async function deliverWithResend(
   subject: string,
   text: string,
@@ -131,26 +112,51 @@ async function deliverWithResend(
   replyTo?: string,
 ): Promise<Delivery> {
   if (!process.env.RESEND_API_KEY) return { ok: false, skipped: true };
-  try {
-    const response = await sendWithResend({
-      to: LEAD_RECIPIENTS,
-      ...(replyTo ? { reply_to: replyTo } : {}),
-      subject,
-      text,
-      html,
-    });
-    if (response.ok) return { ok: true };
-    const reason = await resendFailure(response);
-    const hint =
-      SENDER === SHARED_SENDER
-        ? " — the shared onboarding@resend.dev sender only delivers to the Resend account's own address"
-        : response.status === 403
-          ? ` — check that the sending domain of "${SENDER}" is verified at resend.com/domains`
-          : "";
-    return { ok: false, reason: `${reason}${hint}` };
-  } catch (error) {
-    return { ok: false, reason: `resend-unreachable: ${String(error).slice(0, 200)}` };
-  }
+
+  /* One message per recipient rather than one message addressed to both.
+     On a shared envelope a single refusing mailbox can take the whole message
+     down with it, which loses the lead from every inbox at once — including
+     the one that would have accepted it. Addressed separately, the second
+     contact still gets the lead when the first one bounces. */
+  const results = await Promise.all(
+    LEAD_RECIPIENTS.map(async (recipient): Promise<Delivery> => {
+      try {
+        const response = await sendWithResend({
+          to: [recipient],
+          ...(replyTo ? { reply_to: replyTo } : {}),
+          subject,
+          text,
+          html,
+        });
+        if (response.ok) {
+          const id = await resendMessageId(response);
+          return { ok: true, ids: [`${recipient}=${id || "accepted"}`] };
+        }
+        const reason = await resendFailure(response);
+        const hint =
+          SENDER === SHARED_SENDER
+            ? " — the shared onboarding@resend.dev sender only delivers to the Resend account's own address"
+            : response.status === 403
+              ? ` — check that the sending domain of "${SENDER}" is verified at resend.com/domains`
+              : "";
+        return { ok: false, reason: `${recipient}: ${reason}${hint}` };
+      } catch (error) {
+        return {
+          ok: false,
+          reason: `${recipient}: resend-unreachable: ${String(error).slice(0, 200)}`,
+        };
+      }
+    }),
+  );
+
+  const ids = results.flatMap((result) => result.ids ?? []);
+  const refusals = results.flatMap((result) => (result.reason ? [result.reason] : []));
+  /* Accepted for even one recipient means the lead is out of our hands and
+     the visitor should not be asked to send it again by hand. Any refusal
+     alongside it still reaches the log. */
+  if (refusals.length) console.error("lead-recipient-refused", refusals.join(" | "));
+  if (results.some((result) => result.ok)) return { ok: true, ids };
+  return { ok: false, reason: refusals.join(" | ") };
 }
 
 async function sendConfirmation(payload: EmailLead): Promise<boolean | undefined> {
@@ -197,7 +203,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  const origin = requestOrigin(req);
+  const origin = requestOrigin(req.headers);
   const acceptedOrigin = allowedOrigin(origin);
   if (acceptedOrigin) res.setHeader("Access-Control-Allow-Origin", acceptedOrigin);
   res.setHeader("Vary", "Origin");
@@ -273,7 +279,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
 
   if (attempts.some(([, result]) => result.ok)) {
     const autoReplySent = (await sendConfirmation(payload)) === true;
-    res.status(200).json({ ok: true, autoReplySent });
+    /* Handing the message ids back is what makes a lead that was accepted but
+       never landed diagnosable: each one looks up at resend.com/emails as
+       Delivered, Bounced or Complained. */
+    const ids = attempts.flatMap(([, result]) => result.ids ?? []);
+    console.log(
+      "lead-accepted",
+      `ref=${payload.reference || "—"}`,
+      `recipients=${ids.join(",") || "—"}`,
+      `autoReply=${autoReplySent}`,
+    );
+    res.status(200).json({ ok: true, autoReplySent, ids });
     return;
   }
   if (!failures.length) {
