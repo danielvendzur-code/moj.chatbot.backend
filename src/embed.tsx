@@ -41,11 +41,9 @@ function mount(): void {
 
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "white-green-single-line-20260802-v4");
-  host.setAttribute("data-dv-assistant-theme", "white-green-single-line");
-  host.setAttribute("data-dv-assistant-quality", "production-verified-v4-artifact-checked");
-  // Stable deployment marker retained for the immutable Pages smoke test.
-  // It identifies the integration contract, not the visual palette.
+  host.setAttribute("data-dv-assistant-version", "approved-option-one-20260802-v5");
+  host.setAttribute("data-dv-assistant-theme", "approved-option-one");
+  host.setAttribute("data-dv-assistant-quality", "production-verified-v5");
   host.setAttribute("data-dv-assistant-compat", "competition-redesign-20260723-v10");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
