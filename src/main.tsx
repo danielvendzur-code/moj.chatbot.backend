@@ -2,8 +2,9 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import { installConfiguratorAutoAdvance } from "./lib/configuratorAutoAdvance";
-import { installPremiumTilt } from "./lib/premiumTilt";
 import { getInitialEmbedViewport, isEmbedMode } from "./lib/embedBridge";
+import { installLimeWhiteStyles } from "./lib/installLimeWhiteStyles";
+import { installPremiumTilt } from "./lib/premiumTilt";
 import "./preview.css";
 import "./widget.css";
 import "./assistant-redesign.css";
@@ -12,8 +13,8 @@ import "./final-user-correction.css";
 import "./green-motion-final.css";
 import "./unified-experience-final.css";
 import "./masterpiece-final.css";
-import "./lime-white-widget-final.css";
 
+installLimeWhiteStyles();
 installConfiguratorAutoAdvance();
 installPremiumTilt();
 
