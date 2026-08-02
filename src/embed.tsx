@@ -9,6 +9,7 @@ import "./final-user-correction.css";
 import "./green-motion-final.css";
 import "./unified-experience-final.css";
 import "./masterpiece-final.css";
+import "./lime-white-widget-final.css";
 
 installConfiguratorAutoAdvance();
 installPremiumTilt();
@@ -38,8 +39,8 @@ function mount(): void {
   ensureStylesheet();
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "competition-redesign-20260723-v10");
-  host.setAttribute("data-dv-assistant-theme", "website-palette");
+  host.setAttribute("data-dv-assistant-version", "lime-white-brand-20260802-v1");
+  host.setAttribute("data-dv-assistant-theme", "white-forest-lime");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);
