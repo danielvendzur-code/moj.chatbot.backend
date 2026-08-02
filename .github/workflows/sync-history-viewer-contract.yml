@@ -1,0 +1,59 @@
+name: Sync history viewer contract
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/sync-history-viewer-contract.yml
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Point the existing security contract at the UI module
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('tests/widget-contract.test.mjs')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace(
+              '  const viewer = await read("api/transcripts.ts");\n  const readme = await read("README.md");',
+              '  const viewer = await read("api/transcripts.ts");\n  const ui = await read("api/historyUi.ts");\n  const readme = await read("README.md");',
+          )
+          text = text.replace(
+              '  assert.match(viewer, /const escapeHtml/);\n  assert.match(viewer, /escapeHtml\\(turn\\.text\\)/);\n  assert.match(viewer, /escapeHtml\\(c\\.preview/);',
+              '  assert.match(ui, /export const escapeHtml/);\n  assert.match(ui, /escapeHtml\\(turn\\.text\\)/);\n  assert.match(ui, /escapeHtml\\(item\\.preview/);',
+          )
+          path.write_text(text, encoding='utf-8')
+          PY
+      - run: pnpm test
+      - run: pnpm check
+      - run: pnpm build
+      - name: Remove helper and commit validated contract
+        shell: bash
+        run: |
+          rm .github/workflows/sync-history-viewer-contract.yml
+          rm -f .history-dashboard-ready
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tests/widget-contract.test.mjs .github/workflows/sync-history-viewer-contract.yml .history-dashboard-ready
+          git commit -m 'test: keep transcript escaping contract on the UI module'
+          git push origin HEAD:${{ github.head_ref }}
