@@ -44,6 +44,9 @@ function mount(): void {
   host.setAttribute("data-dv-assistant-version", "lime-white-brand-20260802-v3");
   host.setAttribute("data-dv-assistant-theme", "white-forest-lime");
   host.setAttribute("data-dv-assistant-quality", "production-verified-v3");
+  // Stable deployment marker retained for the immutable Pages smoke test.
+  // It identifies the integration contract, not the visual palette.
+  host.setAttribute("data-dv-assistant-compat", "competition-redesign-20260723-v10");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);
