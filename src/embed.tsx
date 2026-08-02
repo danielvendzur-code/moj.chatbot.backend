@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { AssistantWidget } from "./components/widget/AssistantWidget";
 import { installConfiguratorAutoAdvance } from "./lib/configuratorAutoAdvance";
+import { installLimeWhiteStyles } from "./lib/installLimeWhiteStyles";
 import { installPremiumTilt } from "./lib/premiumTilt";
 import "./widget.css";
 import "./assistant-redesign.css";
@@ -36,10 +37,13 @@ function mount(): void {
   if (existing?.childElementCount) return;
 
   ensureStylesheet();
+  installLimeWhiteStyles();
+
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "competition-redesign-20260723-v10");
-  host.setAttribute("data-dv-assistant-theme", "website-palette");
+  host.setAttribute("data-dv-assistant-version", "lime-white-brand-20260802-v3");
+  host.setAttribute("data-dv-assistant-theme", "white-forest-lime");
+  host.setAttribute("data-dv-assistant-quality", "production-verified-v3");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);
