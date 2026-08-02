@@ -19,25 +19,29 @@ test("widget uses the approved option 1 logo", async () => {
   assert.match(logo, /strokeWidth="8\.5"/);
 });
 
-test("approved option 1 is appended after all compatibility themes", async () => {
+test("professional harmony is the final runtime authority", async () => {
   const installer = await read("src/lib/installLimeWhiteStyles.ts");
-  const css = await read("src/approved-option-one-widget-final.css");
+  const approved = await read("src/approved-option-one-widget-final.css");
+  const harmony = await read("src/professional-harmony-widget-final.css");
   const embed = await read("src/embed.tsx");
 
   assert.match(installer, /approved-option-one-widget-final\.css\?inline/);
+  assert.match(installer, /professional-harmony-widget-final\.css\?inline/);
   assert.match(
     installer,
-    /`\$\{limeWhiteCss\}\\n\$\{whiteGreenLockCss\}\\n\$\{approvedOptionOneCss\}`/,
+    /`\$\{limeWhiteCss\}\\n\$\{whiteGreenLockCss\}\\n\$\{approvedOptionOneCss\}\\n\$\{professionalHarmonyCss\}`/,
   );
+  assert.match(installer, /professional-white-green/);
   assert.match(embed, /installLimeWhiteStyles\(\)/);
-  assert.match(embed, /approved-option-one-20260802-v5/);
 
-  assert.match(css, /--approved-lime: #b9ed4d/);
-  assert.match(css, /--approved-green: #19834f/);
-  assert.match(css, /--approved-forest: #0b2f20/);
-  assert.match(css, /\.cw-launcher\[class\][\s\S]*background: transparent !important/);
-  assert.match(css, /\.cw-launcher\[class\][\s\S]*color 520ms/);
-  assert.match(css, /\.cw-panel-head\[class\][\s\S]*#0b2f20 !important/);
-  assert.match(css, /\.cw-panel\[class\][\s\S]*#ffffff !important/);
-  assert.doesNotMatch(css, forbiddenWarm);
+  assert.match(approved, /--approved-lime: #b9ed4d/);
+  assert.match(harmony, /--h-forest: #0b2f20/);
+  assert.match(harmony, /--h-green: #19834f/);
+  assert.match(harmony, /--h-lime: #b9ed4d/);
+  assert.match(harmony, /\.cw-launcher\[class\][\s\S]*background: transparent !important/);
+  assert.match(harmony, /\.cw-launcher\[class\][\s\S]*path[\s\S]*stroke: currentColor !important/);
+  assert.match(harmony, /\.cw-panel-head\[class\][\s\S]*background: rgba\(255, 255, 255, 0\.98\) !important/);
+  assert.match(harmony, /\.cw-tabs__glass\[class\][\s\S]*background: #ffffff !important/);
+  assert.match(harmony, /\.cw-msg--user[\s\S]*background: var\(--h-forest\) !important/);
+  assert.doesNotMatch(harmony, forbiddenWarm);
 });
