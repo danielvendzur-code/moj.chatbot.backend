@@ -1,0 +1,63 @@
+name: Pull request quality
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: widget-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout proposed changes
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit production dependencies
+        run: pnpm audit --prod --audit-level high
+
+      - name: TypeScript check
+        run: pnpm lint
+
+      - name: Run all contracts
+        run: pnpm test -- --run
+
+      - name: Build Vercel application and direct widget
+        run: pnpm build
+
+      - name: Build GitHub Pages application and direct widget
+        run: pnpm build:pages
+
+      - name: Validate immutable production artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f dist/index.html
+          test -f dist/widget.js
+          test -f dist/widget.css
+          grep -Fq 'white-green-single-line-20260802-v4' dist/widget.js
+          grep -Fq 'competition-redesign-20260723-v10' dist/widget.js
+          grep -Fq 'white-green-identity-lock' src/lib/installLimeWhiteStyles.ts
+          grep -Fq 'M69 103L69 88H82' dist/widget.js
+          grep -Fq '#b9ed4d' dist/widget.css
+          grep -Fq '#0b2f20' dist/widget.css
