@@ -1074,6 +1074,28 @@ html body .cw-widget[class][class][class][class] :is(.cw-choice-grid--industry, 
   max-height: 96px !important;
 }
 
+/* Eight options is four rows, and on the shortest phone worth designing for
+   (375x667) that is the step most at risk of needing a scrollbar. It gets a
+   tighter rhythm than the six-option steps so it still fits whole. */
+html body .cw-widget[class][class][class][class] .cw-calc-step[class][class]:not([data-step="contact"]) .cw-choice-grid--features[class][class] {
+  grid-auto-rows: minmax(62px, auto) !important;
+  gap: 8px !important;
+}
+
+html body .cw-widget[class][class][class][class] .cw-calc-step[class][class] .cw-choice-grid--features[class] .cw-opt[class] {
+  padding: 8px 30px 8px 14px !important;
+}
+
+/* Below this height the description is what has to give. It is dropped whole
+   rather than clamped to one line: a label cut mid-word ("O vašich službách,…")
+   reads as something broken, while the label on its own reads as deliberate —
+   and on this step the label is what the visitor is choosing between anyway. */
+@media (max-height: 720px) {
+  html body .cw-widget[class][class][class][class] .cw-calc-step[class][class] .cw-choice-grid--features[class][class] .cw-opt__body > span {
+    display: none !important;
+  }
+}
+
 /* Three lines of description, then an ellipsis. A card that grows a fourth
    line is a card that pushes the grid past the step. */
 html body .cw-widget[class][class][class] .cw-calc-step[class]:not([data-step="contact"]) :is(

@@ -326,7 +326,7 @@ test("configurator remains five short steps with explicit selection guidance", a
     ).length,
     5,
   );
-  assert.equal((featureBlock.match(/id:/g) ?? []).length, 6);
+  assert.equal((featureBlock.match(/id:/g) ?? []).length, 8);
   assert.match(flow, /Vyberte jednu vec/);
   assert.match(flow, /Odpovedať zákazníkom/);
   assert.match(flow, /Počítať cenu/);
