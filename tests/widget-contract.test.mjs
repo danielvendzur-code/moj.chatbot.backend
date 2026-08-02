@@ -814,6 +814,7 @@ test("transcripts are logged without ever costing a visitor their answer", async
 
 test("the transcript viewer is the least permissive thing here", async () => {
   const viewer = await read("api/transcripts.ts");
+  const ui = await read("api/historyUi.ts");
   const readme = await read("README.md");
 
   // One shared secret, compared in constant time, accepted three ways.
@@ -831,9 +832,9 @@ test("the transcript viewer is the least permissive thing here", async () => {
   assert.match(viewer, /"Cache-Control", "no-store, max-age=0"/);
   assert.doesNotMatch(viewer, /Access-Control-Allow-Origin/);
   // Visitor text is rendered as text, never as markup.
-  assert.match(viewer, /const escapeHtml/);
-  assert.match(viewer, /escapeHtml\(turn\.text\)/);
-  assert.match(viewer, /escapeHtml\(c\.preview/);
+  assert.match(ui, /export const escapeHtml/);
+  assert.match(ui, /escapeHtml\(turn\.text\)/);
+  assert.match(ui, /escapeHtml\(item\.preview/);
   // Unset means the endpoint does not answer at all.
   assert.match(viewer, /transcripts-not-configured/);
 
