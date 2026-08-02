@@ -1,0 +1,468 @@
+/* =====================================================================
+   MÔJ CHATBOT WIDGET — STRICT WHITE / GREEN IDENTITY LOCK
+
+   Staršie vrstvy používajú až štyri `[class]` kvalifikátory a niektoré
+   broskyňové hodnoty preto prepisovali novší vizuál. Táto posledná vrstva
+   má rovnakú alebo vyššiu špecificitu a povoľuje iba bielu, lesnú zelenú,
+   smaragdovú, limetkovú a neutrálne zelenosivé odtiene.
+   ===================================================================== */
+
+html:root body .cw-widget[class][class][class][class],
+html:root body .widget-preview .cw-widget[class][class][class][class] {
+  --lw-lime: #b9ed4d;
+  --lw-lime-bright: #d9ff78;
+  --lw-lime-strong: #9bd126;
+  --lw-emerald: #19834f;
+  --lw-forest: #0b2f20;
+  --lw-forest-2: #123d2b;
+  --lw-white: #ffffff;
+  --lw-soft: #f5f9f2;
+  --lw-soft-green: #eaf6df;
+  --lw-ink: #101812;
+  --lw-muted: #536159;
+  --lw-faint: #87928b;
+  --lw-line: rgba(11, 47, 32, 0.13);
+
+  --mc-bg: #ffffff;
+  --mc-shell: #ffffff;
+  --mc-surface: #ffffff;
+  --mc-surface-raised: #f5f9f2;
+  --mc-surface-hover: #eaf6df;
+  --mc-selected: #0b2f20;
+  --mc-brand: #b9ed4d;
+  --mc-brand-hover: #9bd126;
+  --mc-text: #101812;
+  --mc-muted: #536159;
+  --mc-faint: #87928b;
+  --mc-line: rgba(11, 47, 32, 0.13);
+  --mc-line-soft: rgba(11, 47, 32, 0.08);
+  --mc-line-blue: rgba(25, 131, 79, 0.34);
+
+  --ux-panel: #ffffff;
+  --ux-surface: #ffffff;
+  --ux-surface-raised: #f5f9f2;
+  --ux-ink: #101812;
+  --ux-muted: #536159;
+  --ux-faint: #87928b;
+  --ux-line: rgba(11, 47, 32, 0.13);
+
+  --mp-accent: #b9ed4d;
+  --mp-accent-soft: rgba(185, 237, 77, 0.2);
+  --mp-accent-line: rgba(25, 131, 79, 0.3);
+  --mp-ink-on-accent: #0b2f20;
+  --mp-glow-rest:
+    inset 0 0 0 1px rgba(25, 131, 79, 0.08),
+    0 0 18px -13px rgba(25, 131, 79, 0.3);
+  --mp-glow-hover:
+    inset 0 0 0 1px rgba(127, 178, 26, 0.28),
+    0 14px 38px -22px rgba(86, 132, 0, 0.42);
+  --mp-glow-strong:
+    inset 0 0 0 1px rgba(127, 178, 26, 0.34),
+    0 18px 46px -24px rgba(86, 132, 0, 0.5);
+
+  color: #101812 !important;
+  color-scheme: light !important;
+  accent-color: #19834f !important;
+  caret-color: #19834f !important;
+}
+
+html:root body .widget-preview {
+  background:
+    radial-gradient(circle at 82% 9%, rgba(217, 255, 120, 0.2), transparent 28rem),
+    radial-gradient(circle at 13% 88%, rgba(25, 131, 79, 0.07), transparent 26rem),
+    #ffffff !important;
+}
+
+html:root[data-embed="true"] body .widget-preview,
+html:root[data-embed="true"] body .widget-preview__surface {
+  background: transparent !important;
+}
+
+/* Launcher: iba značka, bez kruhu, štítku, okraja alebo farebnej platne. */
+html:root body .cw-widget[class][class][class][class] .cw-launcher[class] {
+  width: 68px !important;
+  height: 68px !important;
+  padding: 5px !important;
+  color: #b9ed4d !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 2px 0 rgba(11, 47, 32, 0.22))
+    drop-shadow(0 12px 20px rgba(11, 47, 32, 0.18)) !important;
+  overflow: visible !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-launcher[class]::before,
+html:root body .cw-widget[class][class][class][class] .cw-launcher[class]::after {
+  content: none !important;
+  display: none !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-launcher[class] .bl--launcher {
+  width: 58px !important;
+  height: 58px !important;
+  color: inherit !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  .cw-launcher[class]:is(:hover, :focus-visible) {
+  color: #19834f !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 15px 24px rgba(25, 131, 79, 0.26)) !important;
+  transform: translateY(-4px) scale(1.055) !important;
+}
+
+/* Shell */
+html:root body .cw-widget[class][class][class][class] .cw-panel[class] {
+  color: #101812 !important;
+  border: 1px solid rgba(11, 47, 32, 0.14) !important;
+  border-radius: 28px !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(217, 255, 120, 0.19), transparent 18rem),
+    #ffffff !important;
+  background-color: #ffffff !important;
+  box-shadow:
+    0 58px 140px -64px rgba(11, 47, 32, 0.64),
+    0 24px 58px -44px rgba(25, 131, 79, 0.36),
+    inset 0 1px #ffffff !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-panel[class]::before {
+  background: radial-gradient(circle, rgba(217, 255, 120, 0.22), transparent 68%) !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-panel-head[class] {
+  color: #ffffff !important;
+  border-color: rgba(217, 255, 120, 0.12) !important;
+  background:
+    radial-gradient(circle at 88% 0%, rgba(217, 255, 120, 0.12), transparent 13rem),
+    #0b2f20 !important;
+  background-color: #0b2f20 !important;
+  box-shadow: inset 0 -1px rgba(217, 255, 120, 0.13) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-panel-head__mascot[class],
+html:root body .cw-widget[class][class][class][class] .cw-panel-head__mascot[class] .bl {
+  color: #d9ff78 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-panel-head__title b {
+  color: #ffffff !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-panel-head__context[class] {
+  color: #c7d9ce !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-panel-head__online i {
+  background: #d9ff78 !important;
+  box-shadow: 0 0 0 3px rgba(217, 255, 120, 0.12), 0 0 13px rgba(217, 255, 120, 0.32) !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  .cw-panel-head__actions
+  button[class] {
+  color: #dce9df !important;
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  .cw-panel-head__actions
+  button[class]:is(:hover, :focus-visible) {
+  color: #0b2f20 !important;
+  border-color: rgba(217, 255, 120, 0.28) !important;
+  background: #d9ff78 !important;
+}
+
+/* Mode switch */
+html:root body .cw-widget[class][class][class][class] .cw-tabs[class] {
+  border-color: rgba(11, 47, 32, 0.1) !important;
+  background: #edf6e7 !important;
+  box-shadow: inset 0 1px #ffffff !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-tabs__glass[class] {
+  border-color: rgba(127, 178, 26, 0.22) !important;
+  background: #d9ff78 !important;
+  background-image: none !important;
+  box-shadow: 0 13px 28px -21px rgba(86, 132, 0, 0.5), inset 0 1px #f7ffd9 !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-tabs > button[class] {
+  color: #536159 !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  .cw-tabs
+  > button[class]:is([aria-selected="true"], [data-active="true"]) {
+  color: #0b2f20 !important;
+}
+
+/* White content canvas */
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  :is(.cw-calculator, .cw-calc-body, .cw-conversation, .cw-view, .cw-assistant-view, .cw-calculator-view)[class] {
+  color: #101812 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+html:root body .cw-widget[class][class][class][class] :is(h1, h2, h3, b, strong) {
+  color: #0b2f20 !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  :is(p, small, .cw-q-sub, .cw-summary__label, .cw-progress__count) {
+  color: #536159 !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  :is(
+    .cw-chat-builder,
+    .cw-rowcard,
+    .cw-scard,
+    .cw-vcard,
+    .cw-opt,
+    .cw-contact-method,
+    .cw-direct-actions__grid a,
+    .cw-summary,
+    .cw-lead,
+    .cw-consent,
+    .cw-inputbar,
+    .cw-custom,
+    .cw-lead__optional-body
+  ) {
+  color: #101812 !important;
+  border-color: rgba(11, 47, 32, 0.13) !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  box-shadow: 0 14px 34px -30px rgba(11, 47, 32, 0.46) !important;
+}
+
+/* Chips and option cards */
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  :is(.cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method, .cw-direct-actions__grid a) {
+  color: #355044 !important;
+  border-color: rgba(11, 47, 32, 0.14) !important;
+  background: #ffffff !important;
+  background-image: none !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  :is(.cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method, .cw-direct-actions__grid a):is(
+    :hover,
+    :focus-visible
+  ):not([data-selected="true"]):not([data-active="true"]) {
+  color: #0b2f20 !important;
+  border-color: rgba(127, 178, 26, 0.42) !important;
+  background: #d9ff78 !important;
+  box-shadow: 0 18px 36px -25px rgba(86, 132, 0, 0.42) !important;
+  transform: translateY(-2px) !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  :is(.cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method):is(
+    [data-selected="true"],
+    [data-active="true"],
+    [aria-pressed="true"]
+  ) {
+  color: #d9ff78 !important;
+  border-color: #0b2f20 !important;
+  background: #0b2f20 !important;
+  background-color: #0b2f20 !important;
+  background-image: none !important;
+  box-shadow: 0 20px 40px -28px rgba(11, 47, 32, 0.7) !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  :is(.cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method)
+  :is(b, strong, span, small, svg, path) {
+  color: inherit !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  :is(.cw-chat-builder__icon, .cw-progress__back, .cw-direct-actions__icon, .cw-rowcard__icon, .cw-opt__icon) {
+  color: #19834f !important;
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Conversation bubbles */
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  :is(.cw-msg, .cw-message, .cw-bubble, .cw-chat-message, .cw-assistant-message, .cw-user-message) {
+  border-color: rgba(11, 47, 32, 0.1) !important;
+  box-shadow: 0 12px 28px -24px rgba(11, 47, 32, 0.4) !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  :is(.cw-msg--assistant, .cw-message--assistant, .cw-assistant-message) {
+  color: #101812 !important;
+  background: #edf6e7 !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  :is(.cw-msg--user, .cw-message--user, .cw-user-message) {
+  color: #0b2f20 !important;
+  background: #d9ff78 !important;
+}
+
+/* Inputs */
+html:root body .cw-widget[class][class][class][class] :is(input, textarea) {
+  color: #101812 !important;
+  -webkit-text-fill-color: #101812 !important;
+  caret-color: #19834f !important;
+  border-color: rgba(11, 47, 32, 0.16) !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  box-shadow: inset 0 1px rgba(11, 47, 32, 0.02) !important;
+}
+
+html:root body .cw-widget[class][class][class][class] :is(input, textarea)::placeholder {
+  color: #87928b !important;
+  opacity: 1 !important;
+}
+
+html:root body .cw-widget[class][class][class][class] :is(input, textarea):focus {
+  border-color: #19834f !important;
+  box-shadow: 0 0 0 4px rgba(25, 131, 79, 0.11) !important;
+}
+
+html:root body .cw-widget[class][class][class][class] :is(input, textarea):-webkit-autofill,
+html:root body .cw-widget[class][class][class][class] :is(input, textarea):-webkit-autofill:hover,
+html:root body .cw-widget[class][class][class][class] :is(input, textarea):-webkit-autofill:focus {
+  -webkit-text-fill-color: #101812 !important;
+  -webkit-box-shadow: 0 0 0 60px #ffffff inset !important;
+  box-shadow: 0 0 0 60px #ffffff inset !important;
+  caret-color: #19834f !important;
+}
+
+/* Primary actions */
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  :is(.cw-next, .cw-submit, .cw-send, .cw-thanks__actions button:first-child) {
+  color: #0b2f20 !important;
+  border-color: rgba(127, 178, 26, 0.28) !important;
+  background: #d9ff78 !important;
+  background-color: #d9ff78 !important;
+  background-image: none !important;
+  box-shadow: 0 18px 38px -25px rgba(86, 132, 0, 0.52) !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  :is(.cw-next, .cw-submit, .cw-send, .cw-thanks__actions button:first-child):is(
+    :hover,
+    :focus-visible
+  ):not(:disabled) {
+  color: #ffffff !important;
+  border-color: #19834f !important;
+  background: #19834f !important;
+  background-color: #19834f !important;
+  box-shadow: 0 20px 42px -26px rgba(11, 47, 32, 0.5) !important;
+  transform: translateY(-2px) !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  :is(.cw-next, .cw-submit, .cw-send):disabled {
+  color: #87928b !important;
+  border-color: rgba(11, 47, 32, 0.1) !important;
+  background: #edf2eb !important;
+  background-color: #edf2eb !important;
+  box-shadow: none !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-progress[class] {
+  background: #f5f9f2 !important;
+  background-color: #f5f9f2 !important;
+  box-shadow: inset 0 -1px rgba(11, 47, 32, 0.09) !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  :is(.cw-progress__bar, .cw-progress__fill, .cw-success-mark, .cw-online-dot) {
+  color: #19834f !important;
+  background: #b9ed4d !important;
+}
+
+/* No expensive live blur or old warm bloom. */
+html:root body .cw-widget[class][class][class][class] :is(.cw-panel, .cw-panel-head, .cw-tabs) {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html:root body .cw-widget[class][class][class][class] :is(button, a, input, textarea, summary):focus-visible {
+  outline: 3px solid rgba(25, 131, 79, 0.54) !important;
+  outline-offset: 3px !important;
+}
+
+@media (max-width: 560px) {
+  html:root body .cw-widget[class][class][class][class] .cw-launcher[class] {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class] .cw-launcher[class] .bl--launcher {
+    width: 52px !important;
+    height: 52px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:root body .cw-widget[class][class][class][class] *,
+  html:root body .cw-widget[class][class][class][class] *::before,
+  html:root body .cw-widget[class][class][class][class] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
