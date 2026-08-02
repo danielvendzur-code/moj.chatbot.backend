@@ -1,21 +1,33 @@
-/* MÔJ CHATBOT — professional harmony for the approved palette. */
+/* =====================================================================
+   MÔJ CHATBOT WIDGET — animated white / lime / forest finish
+   The launcher is the approved mark only. Light lime is the default action,
+   deep green is the hover/selected state. Motion is transform/opacity only.
+   ===================================================================== */
+
 html:root body .cw-widget[class][class][class][class] {
-  --h-forest: #0b2f20;
-  --h-green: #19834f;
-  --h-lime: #b9ed4d;
-  --h-lime-soft: #d9ff78;
-  --h-sage: #f5f9f2;
+  --h-white: #ffffff;
+  --h-paper: #fbfdf9;
+  --h-sage: #f3f8ef;
   --h-mint: #eaf6df;
-  --h-muted: #536159;
-  --h-line: rgba(11, 47, 32, 0.12);
+  --h-lime: #d9ff78;
+  --h-lime-main: #b9ed4d;
+  --h-lime-deep: #90cd2f;
+  --h-green: #19834f;
+  --h-green-hover: #126d41;
+  --h-forest: #0b2f20;
+  --h-ink: #10291d;
+  --h-muted: #56655d;
+  --h-line: rgba(11, 47, 32, 0.13);
+  --h-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--h-ink) !important;
 }
 
-/* The closed widget is only the approved mark. No black plate or bubble. */
+/* Closed state: bright approved logo, no black plate. */
 html:root body .cw-widget[class][class][class][class] .cw-launcher[class] {
-  width: 68px !important;
-  height: 68px !important;
-  padding: 5px !important;
-  color: var(--h-lime) !important;
+  width: 72px !important;
+  height: 72px !important;
+  padding: 4px !important;
+  color: var(--h-lime-main) !important;
   border: 0 !important;
   border-radius: 0 !important;
   outline: 0 !important;
@@ -23,171 +35,269 @@ html:root body .cw-widget[class][class][class][class] .cw-launcher[class] {
   background-color: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
-  filter: drop-shadow(0 10px 16px rgba(11, 47, 32, 0.16)) !important;
+  filter:
+    drop-shadow(0 0 5px rgba(217, 255, 120, 0.82))
+    drop-shadow(0 0 15px rgba(185, 237, 77, 0.5))
+    drop-shadow(0 14px 22px rgba(11, 47, 32, 0.2)) !important;
   isolation: isolate !important;
   overflow: visible !important;
+  animation: cw-logo-float 4.8s ease-in-out infinite !important;
+  transition:
+    color 420ms var(--h-ease),
+    filter 420ms var(--h-ease),
+    transform 420ms var(--h-ease) !important;
 }
+
 html:root body .cw-widget[class][class][class][class] .cw-launcher[class]::before,
 html:root body .cw-widget[class][class][class][class] .cw-launcher[class]::after {
   content: none !important;
   display: none !important;
 }
-html:root body .cw-widget[class][class][class][class] .cw-launcher[class] .bl,
-html:root body .cw-widget[class][class][class][class] .cw-launcher[class] svg {
-  width: 58px !important;
-  height: 58px !important;
+
+html:root body .cw-widget[class][class][class][class] .cw-launcher[class] :is(.bl, .bl--launcher, svg) {
+  width: 62px !important;
+  height: 62px !important;
   color: inherit !important;
   fill: none !important;
+  border: 0 !important;
   background: transparent !important;
+  box-shadow: none !important;
   filter: none !important;
 }
+
 html:root body .cw-widget[class][class][class][class] .cw-launcher[class] path {
   fill: none !important;
   stroke: currentColor !important;
 }
+
 html:root body .cw-widget[class][class][class][class] .cw-launcher[class]:is(:hover, :focus-visible) {
-  color: var(--h-green) !important;
+  color: var(--h-green-hover) !important;
+  border: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
-  filter: drop-shadow(0 12px 18px rgba(25, 131, 79, 0.2)) !important;
-  transform: translateY(-3px) scale(1.035) !important;
+  filter:
+    drop-shadow(0 0 7px rgba(185, 237, 77, 0.38))
+    drop-shadow(0 15px 24px rgba(25, 131, 79, 0.3)) !important;
+  animation-play-state: paused !important;
+  transform: translateY(-5px) scale(1.07) rotate(-2deg) !important;
 }
 
-/* One calm white product panel. */
-html:root body .cw-widget[class][class][class][class] .cw-panel[class] {
-  color: #101812 !important;
-  border: 1px solid var(--h-line) !important;
-  border-radius: 26px !important;
-  background: #ffffff !important;
-  background-image: none !important;
-  box-shadow:
-    0 42px 110px -58px rgba(11, 47, 32, 0.58),
-    0 18px 42px -34px rgba(25, 131, 79, 0.2) !important;
-  overflow: hidden !important;
+html:root body .cw-widget[class][class][class][class] .cw-launcher[class]:active {
+  transform: translateY(-1px) scale(0.97) !important;
 }
-html:root body .cw-widget[class][class][class][class] .cw-panel[class]::before,
+
+/* Panel: white glass with a green halo, not a flat grey box. */
+html:root body .cw-widget[class][class][class][class] .cw-panel[class] {
+  color: var(--h-ink) !important;
+  border: 1px solid rgba(25, 131, 79, 0.18) !important;
+  border-radius: 28px !important;
+  background:
+    radial-gradient(circle at 92% 2%, rgba(217, 255, 120, 0.2), transparent 18rem),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.99), rgba(248, 252, 246, 0.98)) !important;
+  background-color: #ffffff !important;
+  box-shadow:
+    0 58px 145px -67px rgba(11, 47, 32, 0.68),
+    0 25px 58px -43px rgba(25, 131, 79, 0.34),
+    inset 0 1px rgba(255, 255, 255, 0.98) !important;
+  overflow: hidden !important;
+  transform-origin: right bottom !important;
+  animation: cw-panel-enter 520ms var(--h-ease) both !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-panel[class]::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  z-index: 0 !important;
+  top: -9rem !important;
+  right: -8rem !important;
+  width: 20rem !important;
+  height: 20rem !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+  background: radial-gradient(circle, rgba(217, 255, 120, 0.22), transparent 68%) !important;
+  filter: blur(12px) !important;
+  animation: cw-panel-glow 7.5s ease-in-out infinite alternate !important;
+}
+
 html:root body .cw-widget[class][class][class][class] .cw-panel[class]::after {
   content: none !important;
   display: none !important;
 }
 
-/* White header keeps the brand light and avoids a second dark website. */
+/* Header: bright product identity with moving mascot. */
 html:root body .cw-widget[class][class][class][class] .cw-panel-head[class] {
-  min-height: 72px !important;
+  position: relative !important;
+  z-index: 2 !important;
+  min-height: 76px !important;
   color: var(--h-forest) !important;
-  border-bottom: 1px solid var(--h-line) !important;
-  background: rgba(255, 255, 255, 0.98) !important;
-  background-image: none !important;
-  box-shadow: none !important;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
+  border-bottom: 1px solid rgba(11, 47, 32, 0.1) !important;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(217, 255, 120, 0.22), transparent 10rem),
+    rgba(255, 255, 255, 0.92) !important;
+  box-shadow: 0 12px 34px -32px rgba(11, 47, 32, 0.38) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(125%) !important;
+  backdrop-filter: blur(16px) saturate(125%) !important;
 }
+
 html:root body .cw-widget[class][class][class][class] .cw-panel-head__mascot[class],
 html:root body .cw-widget[class][class][class][class] .cw-panel-head__mascot[class] .bl {
-  color: var(--h-lime) !important;
+  color: var(--h-lime-main) !important;
   border: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
-  filter: none !important;
+  filter:
+    drop-shadow(0 0 5px rgba(217, 255, 120, 0.54))
+    drop-shadow(0 7px 12px rgba(25, 131, 79, 0.14)) !important;
+  animation: cw-mascot-bob 3.7s ease-in-out infinite !important;
 }
-html:root body .cw-widget[class][class][class][class] .cw-panel-head__mascot[class] svg {
-  fill: none !important;
-}
-html:root body .cw-widget[class][class][class][class] .cw-panel-head__mascot[class] path {
+
+html:root body .cw-widget[class][class][class][class] .cw-panel-head__mascot[class] :is(svg, path) {
   fill: none !important;
   stroke: currentColor !important;
 }
+
 html:root body .cw-widget[class][class][class][class] .cw-panel-head__title b {
   color: var(--h-forest) !important;
-  font-weight: 720 !important;
+  font-weight: 760 !important;
+  letter-spacing: -0.025em !important;
 }
+
 html:root body .cw-widget[class][class][class][class] .cw-panel-head__context[class] {
   color: var(--h-muted) !important;
 }
-html:root body .cw-widget[class][class][class][class] .cw-panel-head__online i {
+
+html:root body .cw-widget[class][class][class][class] .cw-panel-head__online i,
+html:root body .cw-widget[class][class][class][class] .cw-online-dot[class] {
   background: var(--h-green) !important;
-  box-shadow: 0 0 0 3px rgba(25, 131, 79, 0.1) !important;
-}
-html:root body .cw-widget[class][class][class][class] .cw-panel-head__actions button[class] {
-  color: #355044 !important;
-  border: 0 !important;
-  border-radius: 10px !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-html:root body .cw-widget[class][class][class][class] .cw-panel-head__actions button[class]:is(:hover, :focus-visible) {
-  color: var(--h-forest) !important;
-  background: var(--h-mint) !important;
+  box-shadow:
+    0 0 0 3px rgba(25, 131, 79, 0.1),
+    0 0 10px rgba(25, 131, 79, 0.28) !important;
+  animation: cw-online-breathe 2.8s ease-in-out infinite !important;
 }
 
-/* Segmented control: neutral track, white active item, no lime slab. */
+html:root body .cw-widget[class][class][class][class] .cw-panel-head__actions button[class] {
+  color: #3b5246 !important;
+  border: 0 !important;
+  border-radius: 11px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transition:
+    color 240ms ease,
+    background-color 280ms ease,
+    transform 300ms var(--h-ease) !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-panel-head__actions button[class]:is(:hover, :focus-visible) {
+  color: var(--h-green-hover) !important;
+  background: var(--h-mint) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* The last header action is close: only this hover may be red. */
+html:root body .cw-widget[class][class][class][class] .cw-panel-head__actions button[class]:last-child:is(:hover, :focus-visible) {
+  color: #a92f2f !important;
+  background: #fff1f1 !important;
+}
+
+/* Tabs: light lime active control that travels smoothly. */
 html:root body .cw-widget[class][class][class][class] .cw-tabs[class] {
+  position: relative !important;
+  z-index: 2 !important;
   margin: 10px 12px 0 !important;
   border: 1px solid rgba(11, 47, 32, 0.08) !important;
-  border-radius: 14px !important;
+  border-radius: 15px !important;
   background: var(--h-sage) !important;
-  box-shadow: none !important;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.9) !important;
 }
+
 html:root body .cw-widget[class][class][class][class] .cw-tabs__glass[class] {
-  border: 1px solid var(--h-line) !important;
-  border-radius: 11px !important;
-  background: #ffffff !important;
+  border: 1px solid rgba(144, 205, 47, 0.34) !important;
+  border-radius: 12px !important;
+  background: var(--h-lime) !important;
   background-image: none !important;
-  box-shadow: 0 8px 20px -16px rgba(11, 47, 32, 0.4) !important;
+  box-shadow:
+    0 13px 28px -20px rgba(82, 129, 0, 0.48),
+    inset 0 1px rgba(255, 255, 255, 0.55) !important;
+  transition:
+    transform 460ms var(--h-ease),
+    width 460ms var(--h-ease) !important;
 }
+
 html:root body .cw-widget[class][class][class][class] .cw-tabs > button[class] {
   color: var(--h-muted) !important;
-  font-weight: 650 !important;
+  font-weight: 680 !important;
 }
+
 html:root body .cw-widget[class][class][class][class] .cw-tabs > button[class]:is([aria-selected="true"], [data-active="true"]) {
   color: var(--h-forest) !important;
 }
 
-/* Content and type hierarchy. */
+/* White content canvas with a restrained texture-like gradient. */
 html:root body .cw-widget[class][class][class][class] :is(.cw-calculator, .cw-calc-body, .cw-conversation, .cw-view, .cw-assistant-view, .cw-calculator-view)[class] {
-  color: #101812 !important;
-  background: #ffffff !important;
-  background-image: none !important;
+  position: relative !important;
+  z-index: 1 !important;
+  color: var(--h-ink) !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(217, 255, 120, 0.08), transparent 16rem),
+    #ffffff !important;
 }
+
 html:root body .cw-widget[class][class][class][class] :is(h1, h2, h3, h4, b, strong) {
   color: var(--h-forest) !important;
-  letter-spacing: -0.02em !important;
+  letter-spacing: -0.025em !important;
 }
+
 html:root body .cw-widget[class][class][class][class] :is(p, small, .cw-q-sub, .cw-summary__label, .cw-progress__count) {
   color: var(--h-muted) !important;
 }
 
-/* Cards and options use one geometry and line-icon language. */
+/* Cards and chips keep description text, but gain visible fill and lift. */
 html:root body .cw-widget[class][class][class][class] :is(.cw-chat-builder, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method, .cw-direct-actions__grid a, .cw-summary, .cw-lead, .cw-consent, .cw-inputbar, .cw-custom, .cw-lead__optional-body) {
-  color: #101812 !important;
+  color: var(--h-ink) !important;
   border: 1px solid var(--h-line) !important;
-  border-radius: 15px !important;
-  background: #ffffff !important;
-  background-image: none !important;
-  box-shadow: none !important;
+  border-radius: 16px !important;
+  background:
+    radial-gradient(circle at 92% 0%, rgba(217, 255, 120, 0.07), transparent 10rem),
+    #ffffff !important;
+  box-shadow: 0 15px 34px -31px rgba(11, 47, 32, 0.42) !important;
 }
+
 html:root body .cw-widget[class][class][class][class] :is(.cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method, .cw-direct-actions__grid a) {
-  color: #355044 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  color: #3b5246 !important;
   border-color: var(--h-line) !important;
   background: #ffffff !important;
-  box-shadow: none !important;
+  box-shadow: 0 12px 28px -27px rgba(11, 47, 32, 0.4) !important;
+  transition:
+    color 260ms ease,
+    border-color 300ms ease,
+    background-color 300ms ease,
+    box-shadow 380ms var(--h-ease),
+    transform 380ms var(--h-ease) !important;
 }
+
 html:root body .cw-widget[class][class][class][class] :is(.cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method, .cw-direct-actions__grid a):is(:hover, :focus-visible):not([data-selected="true"]):not([data-active="true"]) {
   color: var(--h-forest) !important;
-  border-color: rgba(25, 131, 79, 0.24) !important;
-  background: var(--h-mint) !important;
-  box-shadow: none !important;
-  transform: translateY(-1px) !important;
+  border-color: rgba(144, 205, 47, 0.48) !important;
+  background: var(--h-lime) !important;
+  box-shadow: 0 20px 40px -27px rgba(82, 129, 0, 0.44) !important;
+  transform: translateY(-3px) scale(1.008) !important;
 }
+
 html:root body .cw-widget[class][class][class][class] :is(.cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method):is([data-selected="true"], [data-active="true"], [aria-pressed="true"]) {
   color: #ffffff !important;
-  border-color: var(--h-forest) !important;
-  background: var(--h-forest) !important;
-  box-shadow: none !important;
+  border-color: var(--h-green-hover) !important;
+  background: var(--h-green-hover) !important;
+  box-shadow: 0 20px 42px -28px rgba(11, 47, 32, 0.62) !important;
 }
+
 html:root body .cw-widget[class][class][class][class] :is(.cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method):is([data-selected="true"], [data-active="true"], [aria-pressed="true"]) :is(svg, .cw-selection-indicator) {
-  color: var(--h-lime-soft) !important;
+  color: var(--h-lime) !important;
 }
+
 html:root body .cw-widget[class][class][class][class] :is(.cw-chat-builder__icon, .cw-progress__back, .cw-direct-actions__icon, .cw-rowcard__icon, .cw-opt__icon) {
   color: var(--h-green) !important;
   border: 0 !important;
@@ -195,57 +305,126 @@ html:root body .cw-widget[class][class][class][class] :is(.cw-chat-builder__icon
   background: transparent !important;
   box-shadow: none !important;
 }
-html:root body .cw-widget[class][class][class][class] :is(.cw-chat-builder__icon, .cw-progress__back, .cw-direct-actions__icon, .cw-rowcard__icon, .cw-opt__icon) svg {
+
+html:root body .cw-widget[class][class][class][class] :is(.cw-chat-builder__icon, .cw-progress__back, .cw-direct-actions__icon, .cw-rowcard__icon, .cw-opt__icon) :is(svg, path) {
   fill: none !important;
   stroke: currentColor !important;
 }
 
-/* Conversation bubbles: sage assistant, forest user, no competing lime blocks. */
+/* Messages: friendly sage assistant and visible lime user bubble. */
 html:root body .cw-widget[class][class][class][class] :is(.cw-msg, .cw-message, .cw-bubble, .cw-chat-message, .cw-assistant-message, .cw-user-message) {
-  border: 0 !important;
-  border-radius: 16px !important;
-  box-shadow: none !important;
-}
-html:root body .cw-widget[class][class][class][class] :is(.cw-msg--assistant, .cw-message--assistant, .cw-assistant-message) {
-  color: #243b30 !important;
-  background: var(--h-sage) !important;
-}
-html:root body .cw-widget[class][class][class][class] :is(.cw-msg--user, .cw-message--user, .cw-user-message) {
-  color: #ffffff !important;
-  background: var(--h-forest) !important;
+  border: 1px solid rgba(11, 47, 32, 0.07) !important;
+  border-radius: 17px !important;
+  box-shadow: 0 13px 28px -25px rgba(11, 47, 32, 0.35) !important;
+  animation: cw-message-enter 360ms var(--h-ease) both !important;
 }
 
-/* Input and actions. Lime is reserved for the primary action only. */
+html:root body .cw-widget[class][class][class][class] :is(.cw-msg--assistant, .cw-message--assistant, .cw-assistant-message) {
+  color: #294337 !important;
+  background: linear-gradient(145deg, #f5f9f2, #eaf6df) !important;
+}
+
+html:root body .cw-widget[class][class][class][class] :is(.cw-msg--user, .cw-message--user, .cw-user-message) {
+  color: var(--h-forest) !important;
+  border-color: rgba(144, 205, 47, 0.34) !important;
+  background: var(--h-lime) !important;
+}
+
+/* Inputs and primary actions. */
 html:root body .cw-widget[class][class][class][class] :is(input, textarea) {
-  color: #101812 !important;
+  min-height: 44px !important;
+  color: var(--h-ink) !important;
   caret-color: var(--h-green) !important;
   border-color: var(--h-line) !important;
   background: #ffffff !important;
-  box-shadow: none !important;
+  box-shadow: inset 0 1px rgba(11, 47, 32, 0.02) !important;
 }
+
 html:root body .cw-widget[class][class][class][class] :is(input, textarea):focus {
-  border-color: rgba(25, 131, 79, 0.42) !important;
-  box-shadow: 0 0 0 3px rgba(25, 131, 79, 0.09) !important;
+  border-color: rgba(25, 131, 79, 0.48) !important;
+  box-shadow: 0 0 0 4px rgba(25, 131, 79, 0.1) !important;
 }
+
 html:root body .cw-widget[class][class][class][class] :is(.cw-next, .cw-submit, .cw-send, .cw-thanks__actions button:first-child)[class] {
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
   color: var(--h-forest) !important;
-  border-color: rgba(143, 207, 43, 0.3) !important;
-  border-radius: 14px !important;
-  background: var(--h-lime-soft) !important;
-  box-shadow: none !important;
+  border: 1px solid rgba(144, 205, 47, 0.4) !important;
+  border-radius: 15px !important;
+  background: var(--h-lime) !important;
+  box-shadow:
+    0 19px 39px -27px rgba(82, 129, 0, 0.5),
+    inset 0 1px rgba(255, 255, 255, 0.5) !important;
+  transition:
+    color 260ms ease,
+    border-color 300ms ease,
+    box-shadow 380ms var(--h-ease),
+    transform 380ms var(--h-ease) !important;
 }
+
+html:root body .cw-widget[class][class][class][class] :is(.cw-next, .cw-submit, .cw-send, .cw-thanks__actions button:first-child)[class]::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: -1px !important;
+  z-index: -1 !important;
+  border-radius: inherit !important;
+  background: var(--h-green-hover) !important;
+  transform: scaleX(0) !important;
+  transform-origin: center !important;
+  transition: transform 440ms var(--h-ease) 50ms !important;
+}
+
 html:root body .cw-widget[class][class][class][class] :is(.cw-next, .cw-submit, .cw-send, .cw-thanks__actions button:first-child)[class]:is(:hover, :focus-visible):not(:disabled) {
   color: #ffffff !important;
-  border-color: var(--h-green) !important;
-  background: var(--h-green) !important;
+  border-color: var(--h-green-hover) !important;
+  background: var(--h-lime) !important;
+  box-shadow: 0 24px 48px -29px rgba(11, 47, 32, 0.52) !important;
+  transform: translateY(-3px) !important;
 }
+
+html:root body .cw-widget[class][class][class][class] :is(.cw-next, .cw-submit, .cw-send, .cw-thanks__actions button:first-child)[class]:is(:hover, :focus-visible):not(:disabled)::before {
+  transform: scaleX(1) !important;
+}
+
 html:root body .cw-widget[class][class][class][class] .cw-progress[class] {
   background: var(--h-sage) !important;
   box-shadow: inset 0 -1px rgba(11, 47, 32, 0.07) !important;
 }
-html:root body .cw-widget[class][class][class][class] :is(.cw-progress__bar, .cw-progress__fill, .cw-success-mark, .cw-online-dot)[class] {
+
+html:root body .cw-widget[class][class][class][class] :is(.cw-progress__bar, .cw-progress__fill, .cw-success-mark)[class] {
   color: var(--h-green) !important;
-  background: var(--h-green) !important;
+  background: linear-gradient(90deg, var(--h-lime-main), var(--h-green)) !important;
+}
+
+@keyframes cw-logo-float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(0, -6px, 0) rotate(1.5deg); }
+}
+
+@keyframes cw-panel-enter {
+  from { opacity: 0; transform: translate3d(18px, 22px, 0) scale(0.94); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes cw-panel-glow {
+  from { transform: translate3d(-4%, -2%, 0) scale(0.92); }
+  to { transform: translate3d(5%, 4%, 0) scale(1.08); }
+}
+
+@keyframes cw-mascot-bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(-1.5deg); }
+}
+
+@keyframes cw-online-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+
+@keyframes cw-message-enter {
+  from { opacity: 0; transform: translate3d(0, 9px, 0) scale(0.985); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
 
 @media (max-width: 560px) {
@@ -254,22 +433,29 @@ html:root body .cw-widget[class][class][class][class] :is(.cw-progress__bar, .cw
     bottom: max(8px, env(safe-area-inset-bottom)) !important;
     width: calc(100vw - 16px) !important;
     height: min(760px, calc(100dvh - 16px)) !important;
-    border-radius: 22px !important;
+    border-radius: 23px !important;
   }
+
   html:root body .cw-widget[class][class][class][class] .cw-launcher[class] {
-    width: 62px !important;
-    height: 62px !important;
+    right: max(12px, env(safe-area-inset-right)) !important;
+    bottom: max(12px, env(safe-area-inset-bottom)) !important;
+    width: 64px !important;
+    height: 64px !important;
   }
-  html:root body .cw-widget[class][class][class][class] .cw-launcher[class] .bl,
-  html:root body .cw-widget[class][class][class][class] .cw-launcher[class] svg {
-    width: 53px !important;
-    height: 53px !important;
+
+  html:root body .cw-widget[class][class][class][class] .cw-launcher[class] :is(.bl, .bl--launcher, svg) {
+    width: 55px !important;
+    height: 55px !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class] :is(input, textarea) {
+    font-size: 16px !important;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html:root body .cw-widget[class][class][class][class] .cw-launcher[class],
-  html:root body .cw-widget[class][class][class][class] .cw-panel[class] {
+  html:root body .cw-widget[class][class][class][class] :is(.cw-launcher, .cw-panel, .cw-panel::before, .cw-panel-head__mascot, .cw-online-dot, .cw-panel-head__online i, .cw-msg, .cw-message, .cw-bubble) {
+    animation: none !important;
     transition-duration: 0.01ms !important;
   }
 }

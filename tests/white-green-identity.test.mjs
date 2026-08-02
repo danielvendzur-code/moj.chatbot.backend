@@ -19,7 +19,7 @@ test("widget uses the approved option 1 logo", async () => {
   assert.match(logo, /strokeWidth="8\.5"/);
 });
 
-test("professional harmony is the final runtime authority", async () => {
+test("animated lime harmony is the final runtime authority", async () => {
   const installer = await read("src/lib/installLimeWhiteStyles.ts");
   const approved = await read("src/approved-option-one-widget-final.css");
   const harmony = await read("src/professional-harmony-widget-final.css");
@@ -31,17 +31,21 @@ test("professional harmony is the final runtime authority", async () => {
     installer,
     /`\$\{limeWhiteCss\}\\n\$\{whiteGreenLockCss\}\\n\$\{approvedOptionOneCss\}\\n\$\{professionalHarmonyCss\}`/,
   );
-  assert.match(installer, /professional-white-green/);
+  assert.match(installer, /animated-white-lime/);
   assert.match(embed, /installLimeWhiteStyles\(\)/);
 
   assert.match(approved, /--approved-lime: #b9ed4d/);
-  assert.match(harmony, /--h-forest: #0b2f20/);
-  assert.match(harmony, /--h-green: #19834f/);
-  assert.match(harmony, /--h-lime: #b9ed4d/);
+  assert.match(harmony, /--h-white: #ffffff/);
+  assert.match(harmony, /--h-lime: #d9ff78/);
+  assert.match(harmony, /--h-green-hover: #126d41/);
+  assert.match(harmony, /\.cw-launcher\[class\][\s\S]*color: var\(--h-lime-main\) !important/);
   assert.match(harmony, /\.cw-launcher\[class\][\s\S]*background: transparent !important/);
-  assert.match(harmony, /\.cw-launcher\[class\][\s\S]*path[\s\S]*stroke: currentColor !important/);
-  assert.match(harmony, /\.cw-panel-head\[class\][\s\S]*background: rgba\(255, 255, 255, 0\.98\) !important/);
-  assert.match(harmony, /\.cw-tabs__glass\[class\][\s\S]*background: #ffffff !important/);
-  assert.match(harmony, /\.cw-msg--user[\s\S]*background: var\(--h-forest\) !important/);
+  assert.match(harmony, /\.cw-launcher\[class\][\s\S]*animation: cw-logo-float/);
+  assert.match(harmony, /@keyframes cw-logo-float/);
+  assert.match(harmony, /\.cw-panel\[class\][\s\S]*animation: cw-panel-enter/);
+  assert.match(harmony, /\.cw-tabs__glass\[class\][\s\S]*background: var\(--h-lime\) !important/);
+  assert.match(harmony, /\.cw-msg--user[\s\S]*background: var\(--h-lime\) !important/);
+  assert.match(harmony, /button\[class\]:last-child[\s\S]*#a92f2f/);
+  assert.match(harmony, /prefers-reduced-motion: reduce/);
   assert.doesNotMatch(harmony, forbiddenWarm);
 });
