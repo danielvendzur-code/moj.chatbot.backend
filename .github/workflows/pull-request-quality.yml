@@ -55,13 +55,20 @@ jobs:
           test -f dist/index.html
           test -f dist/widget.js
           test -f dist/widget.css
+
+          # The runtime bundle must contain the approved version, compatibility
+          # marker and both exact option-1 paths.
           grep -Fq 'approved-option-one-20260802-v5' dist/widget.js
           grep -Fq 'competition-redesign-20260723-v10' dist/widget.js
-          grep -Fq 'approved-option-one-widget-final' src/lib/installLimeWhiteStyles.ts
           grep -Fq 'M93 84V23C93 13 81 9 74 16' dist/widget.js
           grep -Fq 'M36 69V43L51 58' dist/widget.js
-          grep -Fq '#b9ed4d' dist/widget.js
-          grep -Fq '#19834f' dist/widget.js
-          grep -Fq '#0b2f20' dist/widget.js
-          grep -Fq 'color 520ms' dist/widget.js
-          grep -Fq 'cw-widget[class][class][class][class]' dist/widget.js
+
+          # Validate visual contracts in their source file. Vite minifies CSS
+          # timing and selectors inside widget.js, so checking the source is
+          # deterministic while the bundle checks above prove it is included.
+          grep -Fq 'approved-option-one-widget-final.css?inline' src/lib/installLimeWhiteStyles.ts
+          grep -Fq '#b9ed4d' src/approved-option-one-widget-final.css
+          grep -Fq '#19834f' src/approved-option-one-widget-final.css
+          grep -Fq '#0b2f20' src/approved-option-one-widget-final.css
+          grep -Fq 'color 520ms' src/approved-option-one-widget-final.css
+          grep -Fq 'cw-widget[class][class][class][class]' src/approved-option-one-widget-final.css
