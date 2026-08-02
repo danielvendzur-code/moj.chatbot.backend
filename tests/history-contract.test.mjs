@@ -24,8 +24,9 @@ test("history has a normal password page and never places the password in the UR
   assert.match(handler, /HttpOnly; Secure; SameSite=Strict/);
   assert.match(handler, /mojchatbot-history:/);
   assert.doesNotMatch(handler, /req\.query\?\.token/);
+  assert.match(ui, /const path = "\/historia"/);
+  assert.match(ui, /action="\$\{path\}"/);
   assert.match(ui, /name="password" type="password"/);
-  assert.match(ui, /action="\/historia"/);
   assert.match(ui, /escapeHtml\(turn\.text\)/);
   assert.deepEqual(vercel.rewrites, [
     { source: "/historia", destination: "/api/transcripts" },
@@ -40,4 +41,5 @@ test("history stays private and non-indexable", async () => {
   assert.match(handler, /X-Frame-Options", "DENY/);
   assert.match(handler, /frame-ancestors 'none'/);
   assert.match(handler, /timingSafeEqual/);
+  assert.match(handler, /const MIN_TOKEN_LENGTH = 24/);
 });
