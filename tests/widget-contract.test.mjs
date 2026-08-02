@@ -501,8 +501,10 @@ test("the finish layer removes browser blue and keeps one motion vocabulary", as
 test("the finish layer sizes the builder to its step and glows the contacts", async () => {
   const css = await read("src/masterpiece-final.css");
 
-  // Cards take the leftover height instead of overflowing into a scrollbar.
-  assert.match(css, /grid-auto-rows: minmax\(0, 1fr\) !important/);
+  // Rows hug their content and follow the question, rather than inflating to
+  // fill the panel — a four-option step used to reach 280px per card.
+  assert.match(css, /grid-auto-rows: minmax\(72px, auto\) !important/);
+  assert.match(css, /align-content: start !important/);
   assert.match(
     css,
     /\.cw-calc-body\[class\]:has\(\.cw-calc-step:not\(\[data-step="contact"\]\)\)/,
@@ -776,6 +778,95 @@ test("the composer keeps its size at every panel height", async () => {
   assert.match(mobile, /\.cw-inputbar\[class\] \{\s*\n\s*height: 54px !important;\s*\n\s*min-height: 54px !important/);
   assert.match(mobile, /\.cw-inputbar\[class\] input \{[\s\S]*?min-height: 42px !important/);
   assert.match(mobile, /\.cw-send\[class\] \{[\s\S]*?min-height: 44px !important/);
+});
+
+test("both endpoints share one origin list so it cannot half-apply", async () => {
+  const origins = await read("api/origins.ts");
+  const chat = await read("api/chat.ts");
+  const lead = await read("api/lead.ts");
+
+  // The chat list was missing mojchatbot.sk while the lead list had it, so on
+  // the production site every chat request came back 403 and the widget fell
+  // back to its offline text — which reads as the bot answering badly.
+  for (const domain of [
+    "https://danielvendzur-code.github.io",
+    "https://moj-chatbot-backend.vercel.app",
+    "https://mojchatbot.sk",
+    "https://www.mojchatbot.sk",
+  ]) {
+    assert.ok(origins.includes(domain), `Missing allowed origin ${domain}`);
+  }
+  assert.match(origins, /ALLOWED_ORIGINS/);
+
+  // Neither handler may keep a list of its own to drift again.
+  for (const source of [chat, lead]) {
+    assert.match(source, /from "\.\/origins\.js"/);
+    assert.match(source, /requestOrigin\(req\.headers\)/);
+    assert.doesNotMatch(source, /const DEFAULT_ALLOWED_ORIGINS/);
+    assert.doesNotMatch(source, /function allowedOrigin/);
+    assert.doesNotMatch(source, /function configuredOrigins/);
+  }
+});
+
+test("the contact step gives the form room when the keyboard is up", async () => {
+  const calculator = await read("src/components/widget/ToolCalculator.tsx");
+  const css = await read("src/masterpiece-final.css");
+
+  // Header, switch and progress took 298px of a 380px panel, leaving 64px of
+  // form — the visitor typed their name into a field scrolled out of sight.
+  assert.match(calculator, /const \[composing, setComposing\] = useState\(false\)/);
+  assert.match(calculator, /data-composing=\{composing \|\| undefined\}/);
+  assert.match(calculator, /onFocusCapture=/);
+  assert.match(calculator, /onBlurCapture=/);
+  // Only a control that summons a keyboard may fold the panel.
+  assert.match(calculator, /const isTextField = \(element: HTMLElement\): boolean =>/);
+  assert.match(calculator, /element\.type !== "checkbox" && element\.type !== "radio"/);
+  // Moving between two fields must not unfold and refold it.
+  assert.match(calculator, /if \(!\(next instanceof HTMLElement\) \|\| !isTextField\(next\)\)/);
+
+  assert.match(css, /:has\(\.cw-calculator\[data-composing\]\) :is\(\.cw-tabs, \.cw-progress\)/);
+  assert.match(css, /:has\(\.cw-calculator\[data-composing\]\) \.cw-panel-head\[class\]/);
+});
+
+test("focus is drawn on the control, not as a rectangle beside it", async () => {
+  const css = await read("src/masterpiece-final.css");
+
+  // An offset outline reads as a doubled border on a field and a stray
+  // rectangle on a pill button.
+  assert.match(css, /:is\(button, a, summary, label\):focus-visible/);
+  // A peach ring on a peach button is invisible, so that one goes dark inside.
+  assert.match(
+    css,
+    /:is\(\s*\n\s*\.cw-next,\s*\n\s*\.cw-submit,\s*\n\s*\.cw-chat-builder,\s*\n\s*\.cw-send\s*\n\s*\)\[class\]:focus-visible \{\s*\n\s*outline: none !important/,
+  );
+  // A text field announces focus with its own border and glow.
+  assert.match(css, /:is\(input, textarea\):focus \{\s*\n\s*outline: none !important/);
+});
+
+test("the conversation survives a reload and reset clears it", async () => {
+  const history = await read("src/lib/chatHistory.ts");
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
+  );
+
+  // Blocked storage must never break the widget, only cost it the history.
+  assert.match(history, /function storage\(\): Storage \| null/);
+  assert.match(history, /probe\.setItem\(key, "1"\)/);
+  // A thread nobody replied to is the greeting, not a conversation.
+  assert.match(history, /if \(!messages\.some\(\(message\) => message\.from === "me"\)\) return null/);
+  assert.match(history, /MAX_AGE_MS/);
+  assert.match(history, /MAX_TURNS/);
+  // Ids must continue past what was restored or React reuses the wrong node.
+  assert.match(history, /const highest = messages\.reduce/);
+
+  assert.match(conversation, /const restored = useRef\(loadHistory\(\)\)\.current/);
+  assert.match(conversation, /const nextIdRef = useRef\(restored\?\.nextId \?\? 2\)/);
+  // Saved once the reply has settled, not once per streamed token.
+  assert.match(conversation, /if \(streamingReply \|\| typing\) return;\s*\n\s*saveHistory/);
+  // An effect also runs on mount; ungated it wiped the thread it had just
+  // restored, which is why history never survived a reload.
+  assert.match(conversation, /if \(resetTokenRef\.current === resetToken\) return;/);
+  assert.match(conversation, /clearHistory\(\);/);
 });
 
 test("an accepted lead is traceable and one bad mailbox cannot sink the other", async () => {
@@ -1330,7 +1421,12 @@ test("close and reopen retain mode, chat draft, history and calculator progress"
 
   // These local states now live for the full widget session because their
   // owning components are descendants of the persistent panel.
-  assert.match(conversation, /useState<ChatMessage\[]>\(INITIAL_MESSAGES\)/);
+  // The thread now starts from storage when there is one to restore, so the
+  // greeting is the fallback rather than the only possible starting state.
+  assert.match(
+    conversation,
+    /restored\?\.messages\.length \? restored\.messages : INITIAL_MESSAGES/,
+  );
   assert.match(conversation, /const \[input, setInput\] = useState\(""\)/);
   assert.match(conversation, /value=\{input\}/);
   assert.match(conversation, /onChange=\{\(event\) => setInput\(event\.target\.value\)\}/);

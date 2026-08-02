@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { allowedOrigin, requestOrigin } from "./origins.js";
 import {
   confirmationHtml,
   confirmationText,
@@ -19,14 +20,6 @@ const LEAD_RECIPIENTS = [RECIPIENT, SECOND_CONTACT].filter(
   (address, index, all) => address && all.indexOf(address) === index,
 );
 
-const DEFAULT_ALLOWED_ORIGINS = new Set([
-  "https://danielvendzur-code.github.io",
-  "https://moj-chatbot-backend.vercel.app",
-  "https://vne-n.vercel.app",
-  "https://mojchatbot.sk",
-  "https://www.mojchatbot.sk",
-]);
-
 const SHARED_SENDER = "Môj Chatbot <onboarding@resend.dev>";
 /* The production sending domain is verified at resend.com/domains. */
 const SENDER = process.env.LEAD_FROM_EMAIL || "Môj Chatbot <info@mojchatbot.sk>";
@@ -40,31 +33,6 @@ type LeadPayload = Partial<Record<keyof EmailLead | "consent", unknown>>;
 const globalRateStore = globalThis as GlobalRateStore;
 const rateLimitStore =
   globalRateStore.__dvLeadRateLimit ?? (globalRateStore.__dvLeadRateLimit = new Map());
-
-function requestOrigin(req: VercelRequest): string | null {
-  const raw = req.headers.origin;
-  return Array.isArray(raw) ? raw[0] ?? null : raw ?? null;
-}
-
-function configuredOrigins(): Set<string> {
-  const origins = new Set(DEFAULT_ALLOWED_ORIGINS);
-  for (const value of (process.env.ALLOWED_ORIGINS ?? "").split(",")) {
-    const trimmed = value.trim();
-    if (trimmed) origins.add(trimmed.replace(/\/$/, ""));
-  }
-  return origins;
-}
-
-function allowedOrigin(origin: string | null): string | null {
-  if (!origin) return null;
-  try {
-    const normalized = new URL(origin).origin;
-    if (/^http:\/\/(localhost|127\.0\.0\.1)(?::\d+)?$/.test(normalized)) return normalized;
-    return configuredOrigins().has(normalized) ? normalized : null;
-  } catch {
-    return null;
-  }
-}
 
 function requestIp(req: VercelRequest): string {
   const forwarded = req.headers["x-forwarded-for"];
@@ -235,7 +203,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  const origin = requestOrigin(req);
+  const origin = requestOrigin(req.headers);
   const acceptedOrigin = allowedOrigin(origin);
   if (acceptedOrigin) res.setHeader("Access-Control-Allow-Origin", acceptedOrigin);
   res.setHeader("Vary", "Origin");

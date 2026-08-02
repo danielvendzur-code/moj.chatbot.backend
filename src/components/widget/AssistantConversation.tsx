@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { sendChat, type ChatTurn } from "../../lib/assistantApi";
+import { clearHistory, loadHistory, saveHistory } from "../../lib/chatHistory";
 import { track } from "../../lib/analytics";
 import { BubbleLogo } from "./BubbleLogo";
 import { WidgetIcon } from "./WidgetIcon";
@@ -83,7 +84,18 @@ export function AssistantConversation({
   resetToken,
   onOpenCalculator,
 }: AssistantConversationProps): JSX.Element {
-  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
+  /* A conversation from earlier today is picked back up instead of starting
+     over. Read once during the initial render so the thread is already there
+     on the first paint rather than appearing a frame later. */
+  /* A conversation from earlier today is picked back up instead of starting
+     over. Read once during the initial render so the thread is already there
+     on the first paint rather than appearing a frame later. What is stored
+     includes the opening greeting, so it replaces the starting thread rather
+     than being appended to it. */
+  const restored = useRef(loadHistory()).current;
+  const [messages, setMessages] = useState<ChatMessage[]>(
+    restored?.messages.length ? restored.messages : INITIAL_MESSAGES,
+  );
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const [activeQuickReply, setActiveQuickReply] = useState<string | null>(null);
@@ -92,7 +104,7 @@ export function AssistantConversation({
      away so the thread and the composer keep their full size instead of every
      row shrinking to fit. Both come back the moment the field loses focus. */
   const [composing, setComposing] = useState(false);
-  const nextIdRef = useRef(2);
+  const nextIdRef = useRef(restored?.nextId ?? 2);
   const messagesRef = useRef<HTMLDivElement>(null);
   const inputbarRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -116,7 +128,14 @@ export function AssistantConversation({
   const showQuickReplies =
     !conversationStarted && (activeQuickReply !== null || input.trim() === "");
 
+  /* This effect is the reset, and an effect also runs on mount. Left ungated
+     it wiped the conversation restored from storage a frame after it was
+     read, so history never survived a reload. Only a real change of the token
+     is a reset. */
+  const resetTokenRef = useRef(resetToken);
   useEffect(() => {
+    if (resetTokenRef.current === resetToken) return;
+    resetTokenRef.current = resetToken;
     requestEpochRef.current += 1;
     requestAbortRef.current?.abort();
     requestAbortRef.current = null;
@@ -125,6 +144,9 @@ export function AssistantConversation({
     setInput("");
     setTyping(false);
     setActiveQuickReply(null);
+    /* Reset is the visitor asking to start over, so the stored thread goes
+       with it — otherwise the old conversation would come back on reload. */
+    clearHistory();
     nextIdRef.current = 2;
     animatedMessageIdsRef.current.clear();
     if (quickReplyTimerRef.current !== null) {
@@ -147,6 +169,13 @@ export function AssistantConversation({
   );
 
   const streamingReply = messages.some((message) => message.streaming);
+
+  /* Stored once the reply has settled rather than on every token, so a
+     streaming answer does not write to disk forty times on its way in. */
+  useEffect(() => {
+    if (streamingReply || typing) return;
+    saveHistory(messages, nextIdRef.current);
+  }, [messages, streamingReply, typing]);
 
   useEffect(() => {
     const container = messagesRef.current;

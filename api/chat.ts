@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { allowedOrigin, requestOrigin } from "./origins.js";
 
 const MODEL = "claude-haiku-4-5";
 /* Haiku doesn't think unless asked and has no `effort` knob (that param
@@ -16,11 +17,6 @@ const RATE_MAX_REQUESTS = 18;
    function's own 30s limit so a slow upstream ends as a readable error
    instead of a killed process. */
 const UPSTREAM_TIMEOUT_MS = 25_000;
-
-const DEFAULT_ALLOWED_ORIGINS = new Set([
-  "https://danielvendzur-code.github.io",
-  "https://moj-chatbot-backend.vercel.app",
-]);
 
 /* The prompt sets the same plain-language bar as the widget's own copy: the
    person reading the reply may never have thought about chatbots before. */
@@ -61,32 +57,6 @@ type GlobalRateStore = typeof globalThis & {
 const globalRateStore = globalThis as GlobalRateStore;
 const rateLimitStore =
   globalRateStore.__dvAssistantRateLimit ?? (globalRateStore.__dvAssistantRateLimit = new Map());
-
-function requestOrigin(req: VercelRequest): string | null {
-  const raw = req.headers.origin;
-  return Array.isArray(raw) ? raw[0] ?? null : raw ?? null;
-}
-
-function configuredOrigins(): Set<string> {
-  const origins = new Set(DEFAULT_ALLOWED_ORIGINS);
-  for (const value of (process.env.ALLOWED_ORIGINS ?? "").split(",")) {
-    const trimmed = value.trim();
-    if (trimmed) origins.add(trimmed.replace(/\/$/, ""));
-  }
-  return origins;
-}
-
-function allowedOrigin(origin: string | null): string | null {
-  if (!origin) return null;
-  try {
-    const normalized = new URL(origin).origin;
-    if (/^http:\/\/localhost(?::\d+)?$/.test(normalized)) return normalized;
-    if (/^http:\/\/127\.0\.0\.1(?::\d+)?$/.test(normalized)) return normalized;
-    return configuredOrigins().has(normalized) ? normalized : null;
-  } catch {
-    return null;
-  }
-}
 
 function requestIp(req: VercelRequest): string {
   const forwarded = req.headers["x-forwarded-for"];
@@ -133,7 +103,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
 
-  const origin = requestOrigin(req);
+  const origin = requestOrigin(req.headers);
   const allowed = allowedOrigin(origin);
   if (!allowed) {
     res.status(403).json({ error: "origin-not-allowed" });
