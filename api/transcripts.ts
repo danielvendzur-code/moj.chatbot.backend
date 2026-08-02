@@ -13,7 +13,9 @@ import {
   renderLogin,
 } from "./historyUi.js";
 
-const MIN_PASSWORD_LENGTH = 12;
+const MIN_TOKEN_LENGTH = 24;
+const ERROR_NOT_CONFIGURED = "transcripts-not-configured";
+const ERROR_TOKEN_TOO_WEAK = "transcripts-token-too-weak";
 const SESSION_COOKIE = "mc_history_session";
 const SESSION_MAX_AGE = 8 * 60 * 60;
 const HISTORY_PATH = "/historia";
@@ -119,18 +121,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
 
   const password = expectedPassword();
   if (!password) {
+    console.error(ERROR_NOT_CONFIGURED);
     html(res, 503, renderConfiguration("Chýba ADMIN_KEY."));
     return;
   }
-  if (password.length < MIN_PASSWORD_LENGTH) {
+  if (password.length < MIN_TOKEN_LENGTH) {
+    console.error(ERROR_TOKEN_TOO_WEAK);
     html(
       res,
       503,
-      renderConfiguration(`ADMIN_KEY musí mať aspoň ${MIN_PASSWORD_LENGTH} znakov.`),
+      renderConfiguration(`ADMIN_KEY musí mať aspoň ${MIN_TOKEN_LENGTH} znakov.`),
     );
     return;
   }
   if (!chatLogEnabled()) {
+    console.error(ERROR_NOT_CONFIGURED);
     html(
       res,
       503,
