@@ -43,9 +43,82 @@ test("animated lime harmony is the final runtime authority", async () => {
   assert.match(harmony, /\.cw-launcher\[class\][\s\S]*animation: cw-logo-float/);
   assert.match(harmony, /@keyframes cw-logo-float/);
   assert.match(harmony, /\.cw-panel\[class\][\s\S]*animation: cw-panel-enter/);
-  assert.match(harmony, /\.cw-tabs__glass\[class\][\s\S]*background: var\(--h-lime\) !important/);
+  // The travelling pill is `__thumb` in the rendered markup; `__glass` is the
+  // older name. Both have to be covered or the pill keeps the retired fill.
+  assert.match(
+    harmony,
+    /:is\(\.cw-tabs__glass, \.cw-tabs__thumb\)\[class\][\s\S]*background: var\(--h-lime\) !important/,
+  );
   assert.match(harmony, /\.cw-msg--user[\s\S]*background: var\(--h-lime\) !important/);
   assert.match(harmony, /button\[class\]:last-child[\s\S]*#a92f2f/);
   assert.match(harmony, /prefers-reduced-motion: reduce/);
   assert.doesNotMatch(harmony, forbiddenWarm);
+});
+
+test("the finish layer carries no palette of its own", async () => {
+  const css = await read("src/masterpiece-final.css");
+
+  // Every colour in this layer now comes from the identity tokens or from the
+  // white/green family. The peach it used to hardcode outlived the palette it
+  // belonged to and painted glows, rings and sweeps that no longer matched.
+  assert.doesNotMatch(css, forbiddenWarm);
+  assert.match(css, /--mp-accent: #b9ed4d/);
+  assert.match(css, /--mp-ink-on-accent: #0b2f20/);
+
+  // The dark fallbacks were the other half of the same problem: a missing
+  // token would have repainted a white panel in the retired charcoal.
+  for (const dark of ["#100e0c", "#18130f", "#201914", "#271e18", "#fff8f2", "rgba(10, 9, 8"]) {
+    assert.ok(!css.includes(dark), `Retired dark surface ${dark} is back in the finish layer`);
+  }
+});
+
+test("every surface between the canvas and the panel edge stays white", async () => {
+  const harmony = await read("src/professional-harmony-widget-final.css");
+
+  // The builder shortcut, the contact row and the step footer were still
+  // painted with the retired dark surface, so each read as a black slab.
+  assert.match(
+    harmony,
+    /:is\(\.cw-chat-top, \.cw-direct-actions, \.cw-calc-actions\)\[class\] \{[\s\S]*?background: var\(--h-white\) !important/,
+  );
+});
+
+test("a chosen card and a waiting button both stay readable", async () => {
+  const harmony = await read("src/professional-harmony-widget-final.css");
+
+  // A selected card is deep green; its title was inheriting the near-black
+  // that belonged to the retired warm fill and sat at 3.4:1 on it.
+  assert.match(
+    harmony,
+    /\[data-selected="true"\], \[data-active="true"\], \[aria-pressed="true"\]\) :is\(b, strong, span, small, p, em, i\) \{[\s\S]*?color: inherit !important/,
+  );
+
+  // A disabled primary action says "not yet" with its fill, not by fading its
+  // label out — half opacity put the label at 3:1 against its own surface.
+  assert.match(
+    harmony,
+    /:is\(\.cw-next, \.cw-submit, \.cw-send\)\[class\]\[class\]:disabled[\s\S]*?color: var\(--h-muted\) !important;\s*\n\s*opacity: 1 !important/,
+  );
+});
+
+test("the launcher mark has an edge that reads on a white host page", async () => {
+  const harmony = await read("src/professional-harmony-widget-final.css");
+  const launcher = harmony.match(
+    /\.cw-launcher\[class\] \{[\s\S]*?\n\}/,
+  )?.[0];
+
+  assert.ok(launcher, "launcher block missing");
+  // Lime on white is 1.75:1 on its own, and this is the one control a visitor
+  // has to find. A tight forest rim gives the stroke a boundary.
+  assert.match(launcher, /drop-shadow\(0 0 1px rgba\(11, 47, 32, 0\.92\)\)/);
+  assert.match(launcher, /color: var\(--h-lime-main\) !important/);
+});
+
+test("quick replies fit their labels on a small phone", async () => {
+  const harmony = await read("src/professional-harmony-widget-final.css");
+  const small = harmony.match(/@media \(max-width: 400px\) \{[\s\S]*?\n\}\n/)?.[0];
+
+  assert.ok(small, "small-phone block missing");
+  assert.match(small, /\.cw-chip\[class\]\[class\][\s\S]*padding-left: 12px !important/);
+  assert.match(small, /\.cw-chip__label \{[\s\S]*font-size: 12\.8px !important/);
 });

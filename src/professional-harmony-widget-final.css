@@ -35,10 +35,16 @@ html:root body .cw-widget[class][class][class][class] .cw-launcher[class] {
   background-color: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
+  /* Lime on a white host page is only 1.75:1, and the launcher is the one
+     control a visitor has to find. The first two shadows are a forest rim
+     that hugs the stroke, so the mark keeps its lime colour but gains an
+     edge that reads on white as well as on dark. */
   filter:
-    drop-shadow(0 0 5px rgba(217, 255, 120, 0.82))
-    drop-shadow(0 0 15px rgba(185, 237, 77, 0.5))
-    drop-shadow(0 14px 22px rgba(11, 47, 32, 0.2)) !important;
+    drop-shadow(0 0 1px rgba(11, 47, 32, 0.92))
+    drop-shadow(0 0 2px rgba(11, 47, 32, 0.55))
+    drop-shadow(0 0 6px rgba(217, 255, 120, 0.9))
+    drop-shadow(0 0 16px rgba(185, 237, 77, 0.5))
+    drop-shadow(0 14px 22px rgba(11, 47, 32, 0.22)) !important;
   isolation: isolate !important;
   overflow: visible !important;
   animation: cw-logo-float 4.8s ease-in-out infinite !important;
@@ -211,7 +217,10 @@ html:root body .cw-widget[class][class][class][class] .cw-tabs[class] {
   box-shadow: inset 0 1px rgba(255, 255, 255, 0.9) !important;
 }
 
-html:root body .cw-widget[class][class][class][class] .cw-tabs__glass[class] {
+/* The travelling pill is `.cw-tabs__thumb` in the rendered widget; `__glass`
+   is the name an older layer used. Both are listed so whichever one the
+   markup carries is lime rather than the retired warm fill. */
+html:root body .cw-widget[class][class][class][class] :is(.cw-tabs__glass, .cw-tabs__thumb)[class] {
   border: 1px solid rgba(144, 205, 47, 0.34) !important;
   border-radius: 12px !important;
   background: var(--h-lime) !important;
@@ -250,6 +259,51 @@ html:root body .cw-widget[class][class][class][class] :is(h1, h2, h3, h4, b, str
 
 html:root body .cw-widget[class][class][class][class] :is(p, small, .cw-q-sub, .cw-summary__label, .cw-progress__count) {
   color: var(--h-muted) !important;
+}
+
+/* The three bars that frame the canvas — the builder shortcut above the
+   conversation, the contact row under it and the step footer — were still
+   painted with the retired dark surface, so each one read as a black slab
+   across a white panel. They are part of the canvas and stay white. */
+html:root body .cw-widget[class][class][class][class] :is(.cw-chat-top, .cw-direct-actions, .cw-calc-actions)[class] {
+  position: relative !important;
+  z-index: 1 !important;
+  color: var(--h-ink) !important;
+  background: var(--h-white) !important;
+  background-color: var(--h-white) !important;
+  background-image: none !important;
+}
+
+html:root body .cw-widget[class][class][class][class] :is(.cw-chat-top, .cw-direct-actions)[class] {
+  border-top: 1px solid var(--h-line) !important;
+  box-shadow: none !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-calc-actions[class] {
+  border-top: 1px solid var(--h-line) !important;
+  box-shadow: 0 -14px 30px -30px rgba(11, 47, 32, 0.45) !important;
+}
+
+/* The mark: one stroked path that inherits its colour from the element it
+   sits in. Older layers coloured the `<svg>` itself, which is why the header
+   logo and the reply avatar stayed warm while their containers went lime. */
+html:root body .cw-widget[class][class][class][class] :is(.bl, .cw-avatar) :is(svg, path) {
+  color: inherit !important;
+  fill: none !important;
+  stroke: currentColor !important;
+}
+
+/* Inside the panel the surface is white, and lime on white is too pale to
+   read as a shape — the mark takes the brand green there instead. */
+html:root body .cw-widget[class][class][class][class] :is(.cw-panel-head__mascot, .cw-panel-head__mascot .bl, .cw-avatar, .cw-avatar .bl)[class] {
+  color: var(--h-green) !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-avatar[class] {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
 }
 
 /* Cards and chips keep description text, but gain visible fill and lift. */
@@ -296,6 +350,21 @@ html:root body .cw-widget[class][class][class][class] :is(.cw-chip, .cw-rowcard,
 
 html:root body .cw-widget[class][class][class][class] :is(.cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method):is([data-selected="true"], [data-active="true"], [aria-pressed="true"]) :is(svg, .cw-selection-indicator) {
   color: var(--h-lime) !important;
+}
+
+/* The scrim behind the tick and the icon of a chosen card was a blue-black —
+   the last cool tint left in an interactive state. It is forest now. */
+html:root body .cw-widget[class][class][class][class] :is(.cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method)[class][class]:is([data-selected="true"], [data-active="true"], [aria-pressed="true"]) :is(.cw-selection-indicator, .cw-rowcard__icon, .cw-scard__icon, .cw-opt__icon) {
+  border-color: transparent !important;
+  background: rgba(11, 47, 32, 0.26) !important;
+}
+
+/* A chosen card is deep green, so its title and description have to be light.
+   They were still taking `--ux-on-peach` — the near-black that belonged to the
+   retired warm fill — and sat at 3.4:1 on the green. */
+html:root body .cw-widget[class][class][class][class] :is(.cw-chip, .cw-rowcard, .cw-scard, .cw-vcard, .cw-opt, .cw-contact-method)[class][class]:is([data-selected="true"], [data-active="true"], [aria-pressed="true"]) :is(b, strong, span, small, p, em, i) {
+  color: inherit !important;
+  opacity: 1 !important;
 }
 
 html:root body .cw-widget[class][class][class][class] :is(.cw-chat-builder__icon, .cw-progress__back, .cw-direct-actions__icon, .cw-rowcard__icon, .cw-opt__icon) {
@@ -387,6 +456,28 @@ html:root body .cw-widget[class][class][class][class] :is(.cw-next, .cw-submit, 
   transform: scaleX(1) !important;
 }
 
+/* A step that is not answered yet still has to be readable. The pale fill is
+   what says "not yet"; the label does not have to fade out with it — at the
+   old muted grey it sat at 3:1 against its own surface. */
+html:root body .cw-widget[class][class][class][class] :is(.cw-next, .cw-submit, .cw-send)[class][class]:disabled,
+html:root body .cw-widget[class][class][class][class] :is(.cw-next, .cw-submit, .cw-send)[class][class]:disabled :is(span, svg, path) {
+  color: var(--h-muted) !important;
+  opacity: 1 !important;
+}
+
+html:root body .cw-widget[class][class][class][class] :is(.cw-next, .cw-submit, .cw-send)[class][class]:disabled {
+  border-color: rgba(11, 47, 32, 0.12) !important;
+  background: #edf2eb !important;
+  background-color: #edf2eb !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+html:root body .cw-widget[class][class][class][class] :is(.cw-next, .cw-submit, .cw-send)[class][class]:disabled::before {
+  content: none !important;
+}
+
 html:root body .cw-widget[class][class][class][class] .cw-progress[class] {
   background: var(--h-sage) !important;
   box-shadow: inset 0 -1px rgba(11, 47, 32, 0.07) !important;
@@ -395,6 +486,13 @@ html:root body .cw-widget[class][class][class][class] .cw-progress[class] {
 html:root body .cw-widget[class][class][class][class] :is(.cw-progress__bar, .cw-progress__fill, .cw-success-mark)[class] {
   color: var(--h-green) !important;
   background: linear-gradient(90deg, var(--h-lime-main), var(--h-green)) !important;
+}
+
+/* Both of these carry a zero-width border, so the retired warm colour never
+   painted — but it would the moment anything gave them an edge. */
+html:root body .cw-widget[class][class][class][class] :is(.cw-progress__bar, .cw-progress__fill, .cw-online-dot)[class],
+html:root body .cw-widget[class][class][class][class] .cw-panel-head__online i {
+  border-color: currentColor !important;
 }
 
 @keyframes cw-logo-float {
@@ -425,6 +523,30 @@ html:root body .cw-widget[class][class][class][class] :is(.cw-progress__bar, .cw
 @keyframes cw-message-enter {
   from { opacity: 0; transform: translate3d(0, 9px, 0) scale(0.985); }
   to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+/* On a 360px phone the two-column quick replies were 115px of room for a
+   138px label, so every one of them ended in an ellipsis and lost its last
+   word. Tighter padding and a slightly smaller label fit all four whole. */
+@media (max-width: 400px) {
+  html:root body .cw-widget[class][class][class][class] .cw-chip[class][class] {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class] .cw-chip[class][class] .cw-chip__label {
+    font-size: 12.8px !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  /* "Telefonicky" ran 17px past its pill for the same reason. */
+  html:root body .cw-widget[class][class][class][class] .cw-contact-method[class][class] {
+    gap: 7px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    font-size: 12.8px !important;
+    letter-spacing: -0.01em !important;
+  }
 }
 
 @media (max-width: 560px) {

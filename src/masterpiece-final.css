@@ -11,7 +11,9 @@
       selection, checkboxes, the tap flash — ships blue by default,
       and that blue was the last cool thing on screen.
    3. A glow that reads as light, not as a drop shadow: a tight
-      inner ring plus a wide, soft, warm bloom.
+      inner ring plus a wide, soft bloom. Every colour in it comes
+      from the identity tokens, so this layer follows the palette
+      instead of carrying one of its own.
    4. The builder fills its step. Cards size to the space they are
       given, so a question never needs a scrollbar.
    5. The composer, the chips and the header actions each answer a
@@ -29,24 +31,24 @@
   --mp-base: 280ms;
   --mp-slow: 440ms;
 
-  --mp-accent: #ffc79d;
-  --mp-accent-soft: rgba(255, 199, 157, 0.14);
-  --mp-accent-line: rgba(255, 199, 157, 0.34);
-  --mp-ink-on-accent: #0a0908;
+  --mp-accent: #b9ed4d;
+  --mp-accent-soft: rgba(185, 237, 77, 0.18);
+  --mp-accent-line: rgba(25, 131, 79, 0.3);
+  --mp-ink-on-accent: #0b2f20;
 
   /* The glow, in three intensities. Each is a tight ring the eye reads
      as an edge, plus a wide bloom it reads as light spilling out. */
   --mp-glow-rest:
-    inset 0 0 0 1px rgba(255, 199, 157, 0.1),
-    0 0 18px -12px rgba(255, 199, 157, 0.6);
+    inset 0 0 0 1px rgba(25, 131, 79, 0.1),
+    0 0 18px -12px rgba(25, 131, 79, 0.42);
   --mp-glow-hover:
-    inset 0 0 0 1px rgba(255, 199, 157, 0.32),
-    0 2px 10px -6px rgba(255, 199, 157, 0.5),
-    0 14px 40px -18px rgba(255, 199, 157, 0.72);
+    inset 0 0 0 1px rgba(144, 205, 47, 0.34),
+    0 2px 10px -6px rgba(86, 132, 0, 0.32),
+    0 14px 40px -18px rgba(86, 132, 0, 0.48);
   --mp-glow-strong:
-    inset 0 0 0 1px rgba(255, 199, 157, 0.4),
-    0 2px 12px -4px rgba(255, 199, 157, 0.55),
-    0 18px 52px -18px rgba(255, 199, 157, 0.9);
+    inset 0 0 0 1px rgba(144, 205, 47, 0.46),
+    0 2px 12px -4px rgba(86, 132, 0, 0.36),
+    0 18px 52px -18px rgba(86, 132, 0, 0.6);
 }
 
 /* ---------------------------------------------------------------
@@ -62,16 +64,16 @@ html body .cw-widget[class][class] :is(input, textarea):-webkit-autofill,
 html body .cw-widget[class][class] :is(input, textarea):-webkit-autofill:hover,
 html body .cw-widget[class][class] :is(input, textarea):-webkit-autofill:focus,
 html body .cw-widget[class][class] :is(input, textarea):-webkit-autofill:active {
-  -webkit-text-fill-color: var(--ux-ink, #fff8f2) !important;
-  -webkit-box-shadow: 0 0 0 60px var(--ux-surface, #18130f) inset !important;
-  box-shadow: 0 0 0 60px var(--ux-surface, #18130f) inset !important;
+  -webkit-text-fill-color: var(--ux-ink, #101812) !important;
+  -webkit-box-shadow: 0 0 0 60px var(--ux-surface, #ffffff) inset !important;
+  box-shadow: 0 0 0 60px var(--ux-surface, #ffffff) inset !important;
   caret-color: var(--mp-accent) !important;
   transition: background-color 8640000s ease-in-out 0s !important;
 }
 
 html body .cw-widget[class][class] :is(input, textarea):autofill {
-  -webkit-text-fill-color: var(--ux-ink, #fff8f2) !important;
-  box-shadow: 0 0 0 60px var(--ux-surface, #18130f) inset !important;
+  -webkit-text-fill-color: var(--ux-ink, #101812) !important;
+  box-shadow: 0 0 0 60px var(--ux-surface, #ffffff) inset !important;
 }
 
 /* Selection, caret and every native form control follow the one accent. */
@@ -114,23 +116,23 @@ html body .cw-widget[class][class][class] :is(
     .cw-calc-body,
     .cw-conversation
   )[class] {
-  background-color: var(--ux-panel, #100e0c) !important;
+  background-color: var(--ux-panel, #ffffff) !important;
   background-image: none !important;
 }
 
 html body .cw-widget[class][class][class] .cw-progress[class] {
-  background-color: rgba(10, 9, 8, 0.72) !important;
-  box-shadow: inset 0 -1px 0 rgba(255, 199, 157, 0.1) !important;
+  background-color: var(--ux-surface-raised, #f5f9f2) !important;
+  box-shadow: inset 0 -1px 0 rgba(11, 47, 32, 0.09) !important;
 }
 
 html body .cw-widget[class][class][class] .cw-progress__back[class] {
-  background-color: var(--ux-surface, #18130f) !important;
+  background-color: var(--ux-surface, #ffffff) !important;
 }
 
 /* The three contact tiles were the most visible blue left on screen. */
 html body .cw-widget[class][class][class] .cw-direct-actions__grid[class] a {
-  color: var(--ux-ink, #fff8f2) !important;
-  background-color: var(--ux-surface, #18130f) !important;
+  color: var(--ux-ink, #101812) !important;
+  background-color: var(--ux-surface, #ffffff) !important;
   background-image: none !important;
 }
 
@@ -144,14 +146,14 @@ html body .cw-widget[class][class][class] :is(
     .cw-custom,
     .cw-lead__optional-body
   )[class] :is(input, textarea) {
-  color: var(--ux-ink, #fff8f2) !important;
-  border-color: var(--ux-line, rgba(255, 199, 157, 0.16)) !important;
-  background-color: var(--ux-surface, #18130f) !important;
+  color: var(--ux-ink, #101812) !important;
+  border-color: var(--ux-line, rgba(11, 47, 32, 0.13)) !important;
+  background-color: var(--ux-surface, #ffffff) !important;
   background-image: none !important;
 }
 
 html body .cw-widget[class][class][class] :is(input, textarea)::placeholder {
-  color: var(--ux-faint, #8f8178) !important;
+  color: var(--ux-faint, #87928b) !important;
   opacity: 1 !important;
 }
 
@@ -159,9 +161,9 @@ html body .cw-widget[class][class][class] :is(input, textarea)::placeholder {
    same warm surface as everything else now, just turned down. */
 html body .cw-widget[class][class][class][class] :is(.cw-next, .cw-submit)[class]:disabled,
 html body .cw-widget[class][class][class][class] :is(.cw-next, .cw-submit)[class]:disabled :is(span, svg, path) {
-  color: var(--ux-faint, #8f8178) !important;
-  border-color: var(--ux-line, rgba(255, 199, 157, 0.16)) !important;
-  background-color: var(--ux-surface-raised, #201914) !important;
+  color: var(--ux-faint, #87928b) !important;
+  border-color: var(--ux-line, rgba(11, 47, 32, 0.13)) !important;
+  background-color: var(--ux-surface-raised, #f5f9f2) !important;
   background-image: none !important;
 }
 
@@ -176,7 +178,7 @@ html body .cw-widget[class][class][class] :is(
     .cw-lead__ask,
     .cw-lead__optional > summary
   ) {
-  color: var(--ux-muted, #b9aaa0) !important;
+  color: var(--ux-muted, #536159) !important;
 }
 
 /* Two cool accents survived in earlier layers — a teal and a slate — on
@@ -196,7 +198,7 @@ html body .cw-widget[class][class][class] :is(
 }
 
 html body .cw-widget[class][class][class] .cw-progress__count[class] {
-  color: var(--ux-muted, #b9aaa0) !important;
+  color: var(--ux-muted, #536159) !important;
 }
 
 /* ---------------------------------------------------------------
@@ -284,10 +286,10 @@ html body .cw-widget[class][class][class] :is(
 
 html body .cw-widget[class][class][class] .cw-panel[class] {
   box-shadow:
-    inset 0 0 0 1px rgba(255, 248, 242, 0.035),
-    0 42px 100px -46px rgba(0, 0, 0, 0.96),
-    0 0 72px -34px rgba(255, 199, 157, 0.5),
-    0 26px 62px -46px rgba(255, 199, 157, 0.58) !important;
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
+    0 42px 100px -46px rgba(11, 47, 32, 0.55),
+    0 0 72px -34px rgba(185, 237, 77, 0.34),
+    0 26px 62px -46px rgba(25, 131, 79, 0.34) !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -338,16 +340,16 @@ html body .cw-widget[class][class][class] .cw-panel[class] {
 /* The launcher answers the pointer and shows when the panel is open. */
 html body .cw-widget[class][class][class] .cw-launcher[class] {
   box-shadow:
-    0 18px 44px -20px rgba(0, 0, 0, 0.7),
-    0 0 34px -14px rgba(255, 199, 157, 0.7) !important;
+    0 18px 44px -20px rgba(11, 47, 32, 0.34),
+    0 0 34px -14px rgba(185, 237, 77, 0.7) !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
   html body .cw-widget[class][class][class] .cw-launcher[class]:hover {
     transform: scale(1.06) !important;
     box-shadow:
-      0 22px 52px -20px rgba(0, 0, 0, 0.72),
-      0 0 54px -12px rgba(255, 199, 157, 0.92) !important;
+      0 22px 52px -20px rgba(11, 47, 32, 0.36),
+      0 0 54px -12px rgba(185, 237, 77, 0.9) !important;
   }
 }
 
@@ -372,9 +374,9 @@ html body .cw-widget[class][class][class] .cw-panel-head__actions[class] button 
   place-items: center !important;
   border: 0 !important;
   border-radius: 999px !important;
-  color: var(--ux-muted, #b9aaa0) !important;
-  background: rgba(255, 199, 157, 0.05) !important;
-  box-shadow: inset 0 0 0 1px rgba(255, 199, 157, 0.12) !important;
+  color: var(--ux-muted, #536159) !important;
+  background: transparent !important;
+  box-shadow: none !important;
   overflow: hidden !important;
 }
 
@@ -387,7 +389,7 @@ html body .cw-widget[class][class][class] .cw-panel-head__actions[class] button:
   border-radius: inherit !important;
   background: radial-gradient(
     circle at center,
-    rgba(255, 199, 157, 0.4),
+    rgba(185, 237, 77, 0.55),
     transparent 70%
   ) !important;
   opacity: 0 !important;
@@ -467,8 +469,8 @@ html body .cw-widget[class][class][class] .cw-panel-head__actions[class] button:
 html body .cw-widget[class][class][class] .cw-tabs__thumb[class] {
   pointer-events: none !important;
   box-shadow:
-    0 2px 10px -4px rgba(255, 199, 157, 0.55),
-    0 12px 30px -16px rgba(255, 199, 157, 0.95) !important;
+    0 2px 10px -4px rgba(86, 132, 0, 0.28),
+    0 12px 30px -16px rgba(86, 132, 0, 0.42) !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -500,15 +502,15 @@ html body .cw-widget[class][class][class] .cw-tabs[class] > button {
 html body .cw-widget[class][class][class] .cw-inputbar[class] {
   align-items: center !important;
   padding: 5px 5px 5px 16px !important;
-  border: 1px solid var(--ux-line, rgba(255, 199, 157, 0.16)) !important;
+  border: 1px solid var(--ux-line, rgba(11, 47, 32, 0.13)) !important;
   box-shadow: none !important;
 }
 
 html body .cw-widget[class][class][class] .cw-inputbar[class]:focus-within {
   border-color: var(--mp-accent-line) !important;
   box-shadow:
-    inset 0 0 0 1px rgba(255, 199, 157, 0.22),
-    0 0 34px -20px rgba(255, 199, 157, 0.9) !important;
+    inset 0 0 0 1px rgba(144, 205, 47, 0.34),
+    0 0 34px -20px rgba(86, 132, 0, 0.55) !important;
 }
 
 html body .cw-widget[class][class][class] .cw-inputbar[class] > .cw-send[class] {
@@ -525,7 +527,7 @@ html body .cw-widget[class][class][class] .cw-inputbar[class] > .cw-send[class] 
   border-radius: 999px !important;
   color: var(--mp-ink-on-accent) !important;
   background: var(--mp-accent) !important;
-  box-shadow: 0 6px 20px -10px rgba(255, 199, 157, 0.9) !important;
+  box-shadow: 0 6px 20px -10px rgba(86, 132, 0, 0.55) !important;
   cursor: pointer !important;
 }
 
@@ -555,9 +557,9 @@ html body .cw-widget[class][class][class] .cw-inputbar[class] > .cw-send[class]:
 
 /* Disabled is quiet, not broken: it keeps its shape and loses its light. */
 html body .cw-widget[class][class][class][class] .cw-inputbar[class] > .cw-send[class]:disabled {
-  color: var(--ux-faint, #8f8178) !important;
-  background: var(--ux-surface-raised, #201914) !important;
-  box-shadow: inset 0 0 0 1px rgba(255, 199, 157, 0.1) !important;
+  color: var(--ux-faint, #87928b) !important;
+  background: var(--ux-surface-raised, #f5f9f2) !important;
+  box-shadow: inset 0 0 0 1px rgba(11, 47, 32, 0.08) !important;
   transform: none !important;
   cursor: default !important;
 }
@@ -568,12 +570,12 @@ html body .cw-widget[class][class][class][class] .cw-inputbar[class] > .cw-send[
    rectangle sitting on top of it. The ring hugs the control now, so it looks
    like part of the shape rather than something dropped on it. */
 html body .cw-widget[class][class][class] :is(button, a, summary, label):focus-visible {
-  outline: 2px solid var(--mp-accent) !important;
+  outline: 2px solid rgba(25, 131, 79, 0.62) !important;
   outline-offset: 2px !important;
 }
 
-/* On an accent-filled control a peach ring on peach is invisible, so the ring
-   goes dark and sits just inside the edge instead. */
+/* On a lime-filled control a lime ring on lime is invisible, so the ring goes
+   forest green and sits just inside the edge instead. */
 html body .cw-widget[class][class][class][class] :is(
     .cw-next,
     .cw-submit,
@@ -582,7 +584,7 @@ html body .cw-widget[class][class][class][class] :is(
   )[class]:focus-visible {
   outline: none !important;
   box-shadow:
-    inset 0 0 0 2px rgba(10, 9, 8, 0.55),
+    inset 0 0 0 2px rgba(11, 47, 32, 0.62),
     var(--mp-glow-strong) !important;
 }
 
@@ -600,8 +602,8 @@ html body .cw-widget[class][class][class][class] :is(
   )[class] :is(input, textarea):focus {
   border-color: var(--mp-accent) !important;
   box-shadow:
-    inset 0 0 0 1px rgba(255, 199, 157, 0.28),
-    0 0 26px -14px rgba(255, 199, 157, 0.85) !important;
+    inset 0 0 0 1px rgba(144, 205, 47, 0.4),
+    0 0 26px -14px rgba(86, 132, 0, 0.55) !important;
 }
 
 /* ---------------------------------------------------------------
@@ -652,7 +654,7 @@ html body .cw-widget[class][class][class] .cw-quick-replies[class] .cw-chip[clas
    stays visible for the whole sweep instead of landing on flat accent. */
 html body .cw-widget[class][class][class][class] .cw-quick-replies[class] .cw-chip[class][data-sending="true"] {
   border-color: var(--mp-accent) !important;
-  background: var(--ux-surface, #18130f) !important;
+  background: var(--ux-surface, #ffffff) !important;
   box-shadow: var(--mp-glow-hover) !important;
 }
 
@@ -683,7 +685,7 @@ html body .cw-widget[class][class][class] .cw-quick-replies[class] .cw-chip[clas
    --------------------------------------------------------------- */
 
 html body .cw-widget[class][class][class] .cw-message-row--me[class] .cw-message-wrap[class] p {
-  box-shadow: 0 10px 30px -18px rgba(255, 199, 157, 0.85) !important;
+  box-shadow: 0 10px 30px -18px rgba(86, 132, 0, 0.5) !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -759,14 +761,14 @@ html body .cw-widget[class][class][class] .cw-direct-actions__grid[class] a .cw-
   html body .cw-widget[class][class][class][class] .cw-direct-actions__grid[class] a:hover,
   html body .cw-widget[class][class][class][class] .cw-direct-actions__grid[class] a:focus-visible {
     border-color: var(--mp-accent) !important;
-    background: var(--ux-hover, #271e18) !important;
+    background: var(--ux-hover, #eaf6df) !important;
     box-shadow: var(--mp-glow-strong) !important;
     transform: translateY(-2px) !important;
   }
 
   html body .cw-widget[class][class][class] .cw-direct-actions__grid[class] a:hover .cw-direct-actions__icon svg {
     transform: scale(1.12) !important;
-    filter: drop-shadow(0 0 8px rgba(255, 199, 157, 0.85)) !important;
+    filter: drop-shadow(0 0 8px rgba(144, 205, 47, 0.85)) !important;
   }
 }
 
@@ -1243,9 +1245,9 @@ html body .cw-widget[class][class][class] .cw-consent[class] {
   min-height: 44px !important;
   margin: 0 !important;
   padding: 0 12px !important;
-  border: 1px solid var(--ux-line, rgba(255, 199, 157, 0.16)) !important;
+  border: 1px solid var(--ux-line, rgba(11, 47, 32, 0.13)) !important;
   border-radius: 999px !important;
-  background: var(--ux-surface, #18130f) !important;
+  background: var(--ux-surface, #ffffff) !important;
   cursor: pointer !important;
   user-select: none !important;
 }
@@ -1308,13 +1310,13 @@ html body .cw-widget[class][class][class] .cw-consent[class][data-checked="true"
 
 html body .cw-widget[class][class][class] .cw-consent[class] .cw-consent__text {
   min-width: 0 !important;
-  color: var(--ux-muted, #b9aaa0) !important;
+  color: var(--ux-muted, #536159) !important;
   font-size: 12.4px !important;
   line-height: 1.3 !important;
 }
 
 html body .cw-widget[class][class][class] .cw-consent[class][data-checked="true"] .cw-consent__text {
-  color: var(--ux-ink, #fff8f2) !important;
+  color: var(--ux-ink, #101812) !important;
 }
 
 html body .cw-widget[class][class][class] .cw-consent[class]:has(input:focus-visible) {
