@@ -39,7 +39,7 @@ function mount(): void {
   ensureStylesheet();
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "lime-white-brand-20260802-v1");
+  host.setAttribute("data-dv-assistant-version", "lime-white-brand-20260802-v2");
   host.setAttribute("data-dv-assistant-theme", "white-forest-lime");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
