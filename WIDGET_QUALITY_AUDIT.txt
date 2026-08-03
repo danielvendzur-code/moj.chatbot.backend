@@ -1,4 +1,4 @@
-run_id=30816912724
+run_id=30817331086
 install=success
 lint=success
 build=success
@@ -26,16 +26,16 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  1.14 kB[22m[1m[22m[2m │ gzip:  0.62 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-Dz3fBo7F.css  [39m[1m[2m193.69 kB[22m[1m[22m[2m │ gzip: 26.27 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-CeZKszEQ.js   [39m[1m[2m297.25 kB[22m[1m[22m[2m │ gzip: 87.00 kB[22m
-[32m✓ built in 1.22s[39m
+[2mdist/[22m[2massets/[22m[36mindex-6m_DqYhc.js   [39m[1m[2m297.64 kB[22m[1m[22m[2m │ gzip: 87.12 kB[22m
+[32m✓ built in 1.17s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 112 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m193.33 kB[22m[1m[22m[2m │ gzip: 26.18 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m297.16 kB[22m[1m[22m[2m │ gzip: 87.03 kB[22m
-[32m✓ built in 1.24s[39m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m297.55 kB[22m[1m[22m[2m │ gzip: 87.15 kB[22m
+[32m✓ built in 1.15s[39m
 
 ===== test =====
 
@@ -46,44 +46,385 @@ TAP version 13
 # Subtest: history accepts the existing Vercel KV variables without colliding with MôjPlot
 ok 1 - history accepts the existing Vercel KV variables without colliding with MôjPlot
   ---
-  duration_ms: 7.716096
+  duration_ms: 9.268907
   type: 'test'
   ...
 # Subtest: history has a normal password page and never places the password in the URL
 ok 2 - history has a normal password page and never places the password in the URL
   ---
-  duration_ms: 6.858669
+  duration_ms: 3.482306
   type: 'test'
   ...
 # Subtest: history stays private and non-indexable
 ok 3 - history stays private and non-indexable
   ---
-  duration_ms: 3.056415
+  duration_ms: 1.570174
   type: 'test'
   ...
 # Subtest: widget uses the supplied raster logo without redrawing it
-not ok 4 - widget uses the supplied raster logo without redrawing it
+ok 4 - widget uses the supplied raster logo without redrawing it
   ---
-  duration_ms: 6.410931
+  duration_ms: 6.363599
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/white-green-identity.test.mjs:9:1'
+  ...
+# Subtest: the finished website palette is appended as the final widget authority
+ok 5 - the finished website palette is appended as the final widget authority
+  ---
+  duration_ms: 3.247908
+  type: 'test'
+  ...
+# Subtest: mobile iframe freezes and restores the parent page on iOS
+ok 6 - mobile iframe freezes and restores the parent page on iOS
+  ---
+  duration_ms: 3.16231
+  type: 'test'
+  ...
+# Subtest: demo and embed load one foundation and one authoritative redesign
+ok 7 - demo and embed load one foundation and one authoritative redesign
+  ---
+  duration_ms: 23.070572
+  type: 'test'
+  ...
+# Subtest: assistant order and interactive send feedback remain explicit
+ok 8 - assistant order and interactive send feedback remain explicit
+  ---
+  duration_ms: 2.924096
+  type: 'test'
+  ...
+# Subtest: panel has the corrected premium desktop proportions
+ok 9 - panel has the corrected premium desktop proportions
+  ---
+  duration_ms: 1.336547
+  type: 'test'
+  ...
+# Subtest: mode switch is one rounded segmented control without pill geometry
+ok 10 - mode switch is one rounded segmented control without pill geometry
+  ---
+  duration_ms: 1.683663
+  type: 'test'
+  ...
+# Subtest: the redesign uses only the website black and brand palette
+ok 11 - the redesign uses only the website black and brand palette
+  ---
+  duration_ms: 3.491119
+  type: 'test'
+  ...
+# Subtest: primary actions, quick chips and composer use intentional geometry
+ok 12 - primary actions, quick chips and composer use intentional geometry
+  ---
+  duration_ms: 1.956808
+  type: 'test'
+  ...
+# Subtest: chat chips and composer use a crisp non-liquid system
+ok 13 - chat chips and composer use a crisp non-liquid system
+  ---
+  duration_ms: 1.307724
+  type: 'test'
+  ...
+# Subtest: calculator choices keep geometry and use one static selected system
+ok 14 - calculator choices keep geometry and use one static selected system
+  ---
+  duration_ms: 1.649653
+  type: 'test'
+  ...
+# Subtest: selection indicator is one real aligned circular check
+ok 15 - selection indicator is one real aligned circular check
+  ---
+  duration_ms: 1.231931
+  type: 'test'
+  ...
+# Subtest: icons remain one custom rounded line family
+ok 16 - icons remain one custom rounded line family
+  ---
+  duration_ms: 1.263257
+  type: 'test'
+  ...
+# Subtest: chat and configurator motion remain reduced-motion safe
+ok 17 - chat and configurator motion remain reduced-motion safe
+  ---
+  duration_ms: 1.604234
+  type: 'test'
+  ...
+# Subtest: configurator remains five short steps with explicit selection guidance
+ok 18 - configurator remains five short steps with explicit selection guidance
+  ---
+  duration_ms: 1.50028
+  type: 'test'
+  ...
+# Subtest: approved lead submission keeps sweep feedback and website hierarchy
+ok 19 - approved lead submission keeps sweep feedback and website hierarchy
+  ---
+  duration_ms: 1.253023
+  type: 'test'
+  ...
+# Subtest: contact submits a real lead and keeps API protections
+ok 20 - contact submits a real lead and keeps API protections
+  ---
+  duration_ms: 1.804532
+  type: 'test'
+  ...
+# Subtest: a delivered lead is confirmed to the visitor, and a failed one is not claimed
+ok 21 - a delivered lead is confirmed to the visitor, and a failed one is not claimed
+  ---
+  duration_ms: 1.335355
+  type: 'test'
+  ...
+# Subtest: the reply streams in and the thread keeps up with it
+ok 22 - the reply streams in and the thread keeps up with it
+  ---
+  duration_ms: 6.678016
+  type: 'test'
+  ...
+# Subtest: tapping a mode never lands on the drag handler instead of the button
+ok 23 - tapping a mode never lands on the drag handler instead of the button
+  ---
+  duration_ms: 1.004493
+  type: 'test'
+  ...
+# Subtest: the finish layer removes browser blue and keeps one motion vocabulary
+ok 24 - the finish layer removes browser blue and keeps one motion vocabulary
+  ---
+  duration_ms: 1.575683
+  type: 'test'
+  ...
+# Subtest: the finish layer sizes the builder to its step and glows the contacts
+ok 25 - the finish layer sizes the builder to its step and glows the contacts
+  ---
+  duration_ms: 1.114727
+  type: 'test'
+  ...
+# Subtest: the phone keyboard folds away what is not the conversation
+ok 26 - the phone keyboard folds away what is not the conversation
+  ---
+  duration_ms: 1.709562
+  type: 'test'
+  ...
+# Subtest: consent sits with the button it gates, not below the fold
+ok 27 - consent sits with the button it gates, not below the fold
+  ---
+  duration_ms: 1.292502
+  type: 'test'
+  ...
+# Subtest: mobile full screen, safe areas and keyboard constraints remain safe
+ok 28 - mobile full screen, safe areas and keyboard constraints remain safe
+  ---
+  duration_ms: 1.040016
+  type: 'test'
+  ...
+# Subtest: final contact step scrolls and supports calls or meetings
+ok 29 - final contact step scrolls and supports calls or meetings
+  ---
+  duration_ms: 1.435394
+  type: 'test'
+  ...
+# Subtest: messages begin at the top and icon tiles stay transparent
+ok 30 - messages begin at the top and icon tiles stay transparent
+  ---
+  duration_ms: 2.350013
+  type: 'test'
+  ...
+# Subtest: final user correction centers quick replies and keeps one input shape
+ok 31 - final user correction centers quick replies and keeps one input shape
+  ---
+  duration_ms: 1.155698
+  type: 'test'
+  ...
+# Subtest: final configurator correction removes clipping, icon tiles and selected stripes
+ok 32 - final configurator correction removes clipping, icon tiles and selected stripes
+  ---
+  duration_ms: 1.24451
+  type: 'test'
+  ...
+# Subtest: the final authority exposes only charcoal, warm surfaces and peach interaction
+ok 33 - the final authority exposes only charcoal, warm surfaces and peach interaction
+  ---
+  duration_ms: 0.670126
+  type: 'test'
+  ...
+# Subtest: the six reported interaction defects stay fixed
+ok 34 - the six reported interaction defects stay fixed
+  ---
+  duration_ms: 2.212218
+  type: 'test'
+  ...
+# Subtest: starter chips retire once the conversation begins
+ok 35 - starter chips retire once the conversation begins
+  ---
+  duration_ms: 0.674893
+  type: 'test'
+  ...
+# Subtest: the composer keeps its size at every panel height
+ok 36 - the composer keeps its size at every panel height
+  ---
+  duration_ms: 0.73347
+  type: 'test'
+  ...
+# Subtest: transcripts are logged without ever costing a visitor their answer
+ok 37 - transcripts are logged without ever costing a visitor their answer
+  ---
+  duration_ms: 1.599367
+  type: 'test'
+  ...
+# Subtest: the transcript viewer is the least permissive thing here
+ok 38 - the transcript viewer is the least permissive thing here
+  ---
+  duration_ms: 1.359601
+  type: 'test'
+  ...
+# Subtest: both endpoints share one origin list so it cannot half-apply
+ok 39 - both endpoints share one origin list so it cannot half-apply
+  ---
+  duration_ms: 1.188787
+  type: 'test'
+  ...
+# Subtest: the contact step gives the form room when the keyboard is up
+ok 40 - the contact step gives the form room when the keyboard is up
+  ---
+  duration_ms: 1.207124
+  type: 'test'
+  ...
+# Subtest: focus is drawn on the control, not as a rectangle beside it
+ok 41 - focus is drawn on the control, not as a rectangle beside it
+  ---
+  duration_ms: 0.965836
+  type: 'test'
+  ...
+# Subtest: the conversation survives a reload and reset clears it
+ok 42 - the conversation survives a reload and reset clears it
+  ---
+  duration_ms: 2.478454
+  type: 'test'
+  ...
+# Subtest: an accepted lead is traceable and one bad mailbox cannot sink the other
+ok 43 - an accepted lead is traceable and one bad mailbox cannot sink the other
+  ---
+  duration_ms: 1.370528
+  type: 'test'
+  ...
+# Subtest: a refused delivery channel no longer hides the reason or skips the next one
+ok 44 - a refused delivery channel no longer hides the reason or skips the next one
+  ---
+  duration_ms: 1.384679
+  type: 'test'
+  ...
+# Subtest: info@mojchatbot.sk is the address, the personal one is the second contact
+ok 45 - info@mojchatbot.sk is the address, the personal one is the second contact
+  ---
+  duration_ms: 2.182724
+  type: 'test'
+  ...
+# Subtest: auto-advance does not leave a parked pointer lighting up the next step
+not ok 46 - auto-advance does not leave a parked pointer lighting up the next step
+  ---
+  duration_ms: 1.865403
+  type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:1024:1'
   failureType: 'testCodeFailure'
   error: |-
-    The input did not match the regular expression /data:image\/jpeg;base64,/. Input:
+    The input did not match the regular expression /widget\.addEventListener\("pointermove", release\)/. Input:
     
-    'type BubbleLogoProps = {\n' +
-      '  size: "launcher" | "header" | "avatar";\n' +
-      '};\n' +
+    'import "../mobile-configurator-polish.css";\n' +
+      'import "../configurator-runtime-final.css";\n' +
       '\n' +
-      '/* Original artwork supplied by the client. It is cropped only to a square and\n' +
-      '   resized for the 62 px UI mark; the logo itself is not redrawn. */\n' +
-      'const LOGO_IMAGE = "data:image/webp;base64,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";\n' +
+      'const SINGLE_CHOICE_SELECTOR = ".cw-rowcard, .cw-scard, .cw-vcard";\n' +
+      'const BACK_SELECTOR = ".cw-progress__back, .cw-tabs, .cw-panel-head__actions";\n' +
+      'const INSTALL_FLAG = "cwConfiguratorAutoAdvance";\n' +
+      'const CONFIRM_MS = 220;\n' +
+      'const POINTER_RELEASE_DISTANCE = 8;\n' +
       '\n' +
-      'export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {\n' +
-      '  return (\n' +
-      '    <span className={`bl bl--${size}`} aria-hidden="true">\n' +
-      '      <img src={LOGO_IMAGE} alt="" draggable={false} />\n' +
-      '    </span>\n' +
+      'export function installConfiguratorAutoAdvance(): void {\n' +
+      '  if (typeof document === "undefined") return;\n' +
+      '  if (document.documentElement.dataset[INSTALL_FLAG] === "true") return;\n' +
+      '\n' +
+      '  document.documentElement.dataset[INSTALL_FLAG] = "true";\n' +
+      '\n' +
+      '  let pending: number | null = null;\n' +
+      '  let confirming: HTMLButtonElement | null = null;\n' +
+      '  let releaseParkedPointer: (() => void) | null = null;\n' +
+      '\n' +
+      '  const cancel = () => {\n' +
+      '    if (pending !== null) {\n' +
+      '      window.clearTimeout(pending);\n' +
+      '      pending = null;\n' +
+      '    }\n' +
+      '    if (confirming) delete confirming.dataset.confirming;\n' +
+      '    confirming = null;\n' +
+      '    releaseParkedPointer?.();\n' +
+      '  };\n' +
+      '\n' +
+      '  const guardFreshStep = (widget: HTMLElement, originX: number, originY: number) => {\n' +
+      '    releaseParkedPointer?.();\n' +
+      '    widget.dataset.pointerParked = "true";\n' +
+      '\n' +
+      '    let released = false;\n' +
+      '    const release = () => {\n' +
+      '      if (released) return;\n' +
+      '      released = true;\n' +
+      '      delete widget.dataset.pointerParked;\n' +
+      '      widget.removeEventListener("pointermove", releaseOnRealMove);\n' +
+      '      widget.removeEventListener("pointerdown", release);\n' +
+      '      widget.removeEventListener("keydown", release);\n' +
+      '      releaseParkedPointer = null;\n' +
+      '    };\n' +
+      '    const releaseOnRealMove = (move: PointerEvent) => {\n' +
+      '      /* React replaces the card under a stationary cursor. Browsers may emit a\n' +
+      '         synthetic pointermove for that DOM change; only actual movement should\n' +
+      '         restore hover styling. */\n' +
+      '      if (Math.hypot(move.clientX - originX, move.clientY - originY) < POINTER_RELEASE_DISTANCE) return;\n' +
+      '      release();\n' +
+      '    };\n' +
+      '\n' +
+      '    widget.addEventListener("pointermove", releaseOnRealMove);\n' +
+      '    widget.addEventListener("pointerdown", release);\n' +
+      '    widget.addEventListener("keydown", release);\n' +
+      '    releaseParkedPointer = release;\n' +
+      '  };\n' +
+      '\n' +
+      '  document.addEventListener(\n' +
+      '    "click",\n' +
+      '    (event) => {\n' +
+      '      const element = event.target instanceof Element ? event.target : null;\n' +
+      '      if (!element) return;\n' +
+      '\n' +
+      '      if (element.closest(BACK_SELECTOR)) {\n' +
+      '        cancel();\n' +
+      '        return;\n' +
+      '      }\n' +
+      '\n' +
+      '      const target = element.closest<HTMLButtonElement>(SINGLE_CHOICE_SELECTOR);\n' +
+      '      if (!target || target.disabled || target.dataset.testid === "interest-custom") return;\n' +
+      '\n' +
+      '      if (target.dataset.selected === "true") {\n' +
+      '        cancel();\n' +
+      '        return;\n' +
+      '      }\n' +
+      '\n' +
+      '      const originX = event instanceof MouseEvent ? event.clientX : 0;\n' +
+      '      const originY = event instanceof MouseEvent ? event.clientY : 0;\n' +
+      '\n' +
+      '      cancel();\n' +
+      '      confirming = target;\n' +
+      '      target.dataset.confirming = "true";\n' +
+      '      pending = window.setTimeout(() => {\n' +
+      '        pending = null;\n' +
+      '        const widget = target.closest<HTMLElement>(".cw-widget");\n' +
+      '        if (!widget) return;\n' +
+      '\n' +
+      '        target.blur();\n' +
+      '        guardFreshStep(widget, originX, originY);\n' +
+      '\n' +
+      '        const next = widget.querySelector<HTMLButtonElement>(".cw-next:not(:disabled)");\n' +
+      '        if (!next) {\n' +
+      '          delete target.dataset.confirming;\n' +
+      '          confirming = null;\n' +
+      '          releaseParkedPointer?.();\n' +
+      '          return;\n' +
+      '        }\n' +
+      '        confirming = null;\n' +
+      '        next.click();\n' +
+      '      }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 32 : CONFIRM_MS);\n' +
+      '    },\n' +
+      '    true,\n' +
       '  );\n' +
       '}\n'
     
@@ -91,398 +432,235 @@ not ok 4 - widget uses the supplied raster logo without redrawing it
   name: 'AssertionError'
   expected:
   actual: |-
-    type BubbleLogoProps = {
-      size: "launcher" | "header" | "avatar";
-    };
+    import "../mobile-configurator-polish.css";
+    import "../configurator-runtime-final.css";
     
-    /* Original artwork supplied by the client. It is cropped only to a square and
-       resized for the 62 px UI mark; the logo itself is not redrawn. */
-    const LOGO_IMAGE = "data:image/webp;base64,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";
+    const SINGLE_CHOICE_SELECTOR = ".cw-rowcard, .cw-scard, .cw-vcard";
+    const BACK_SELECTOR = ".cw-progress__back, .cw-tabs, .cw-panel-head__actions";
+    const INSTALL_FLAG = "cwConfiguratorAutoAdvance";
+    const CONFIRM_MS = 220;
+    const POINTER_RELEASE_DISTANCE = 8;
     
-    export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
-      return (
-        <span className={`bl bl--${size}`} aria-hidden="true">
-          <img src={LOGO_IMAGE} alt="" draggable={false} />
-        </span>
+    export function installConfiguratorAutoAdvance(): void {
+      if (typeof document === "undefined") return;
+      if (document.documentElement.dataset[INSTALL_FLAG] === "true") return;
+    
+      document.documentElement.dataset[INSTALL_FLAG] = "true";
+    
+      let pending: number | null = null;
+      let confirming: HTMLButtonElement | null = null;
+      let releaseParkedPointer: (() => void) | null = null;
+    
+      const cancel = () => {
+        if (pending !== null) {
+          window.clearTimeout(pending);
+          pending = null;
+        }
+        if (confirming) delete confirming.dataset.confirming;
+        confirming = null;
+        releaseParkedPointer?.();
+      };
+    
+      const guardFreshStep = (widget: HTMLElement, originX: number, originY: number) => {
+        releaseParkedPointer?.();
+        widget.dataset.pointerParked = "true";
+    
+        let released = false;
+        const release = () => {
+          if (released) return;
+          released = true;
+          delete widget.dataset.pointerParked;
+          widget.removeEventListener("pointermove", releaseOnRealMove);
+          widget.removeEventListener("pointerdown", release);
+          widget.removeEventListener("keydown", release);
+          releaseParkedPointer = null;
+        };
+        const releaseOnRealMove = (move: PointerEvent) => {
+          /* React replaces the card under a stationary cursor. Browsers may emit a
+             synthetic pointermove for that DOM change; only actual movement should
+             restore hover styling. */
+          if (Math.hypot(move.clientX - originX, move.clientY - originY) < POINTER_RELEASE_DISTANCE) return;
+          release();
+        };
+    
+        widget.addEventListener("pointermove", releaseOnRealMove);
+        widget.addEventListener("pointerdown", release);
+        widget.addEventListener("keydown", release);
+        releaseParkedPointer = release;
+      };
+    
+      document.addEventListener(
+        "click",
+        (event) => {
+          const element = event.target instanceof Element ? event.target : null;
+          if (!element) return;
+    
+          if (element.closest(BACK_SELECTOR)) {
+            cancel();
+            return;
+          }
+    
+          const target = element.closest<HTMLButtonElement>(SINGLE_CHOICE_SELECTOR);
+          if (!target || target.disabled || target.dataset.testid === "interest-custom") return;
+    
+          if (target.dataset.selected === "true") {
+            cancel();
+            return;
+          }
+    
+          const originX = event instanceof MouseEvent ? event.clientX : 0;
+          const originY = event instanceof MouseEvent ? event.clientY : 0;
+    
+          cancel();
+          confirming = target;
+          target.dataset.confirming = "true";
+          pending = window.setTimeout(() => {
+            pending = null;
+            const widget = target.closest<HTMLElement>(".cw-widget");
+            if (!widget) return;
+    
+            target.blur();
+            guardFreshStep(widget, originX, originY);
+    
+            const next = widget.querySelector<HTMLButtonElement>(".cw-next:not(:disabled)");
+            if (!next) {
+              delete target.dataset.confirming;
+              confirming = null;
+              releaseParkedPointer?.();
+              return;
+            }
+            confirming = null;
+            next.click();
+          }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 32 : CONFIRM_MS);
+        },
+        true,
       );
     }
     
   operator: 'match'
   stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/white-green-identity.test.mjs:11:10)
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:1029:10)
     async Test.run (node:internal/test_runner/test:1054:7)
-    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
-  ...
-# Subtest: the finished website palette is appended as the final widget authority
-ok 5 - the finished website palette is appended as the final widget authority
-  ---
-  duration_ms: 4.260241
-  type: 'test'
-  ...
-# Subtest: mobile iframe freezes and restores the parent page on iOS
-ok 6 - mobile iframe freezes and restores the parent page on iOS
-  ---
-  duration_ms: 2.61531
-  type: 'test'
-  ...
-# Subtest: demo and embed load one foundation and one authoritative redesign
-ok 7 - demo and embed load one foundation and one authoritative redesign
-  ---
-  duration_ms: 17.860571
-  type: 'test'
-  ...
-# Subtest: assistant order and interactive send feedback remain explicit
-ok 8 - assistant order and interactive send feedback remain explicit
-  ---
-  duration_ms: 1.168068
-  type: 'test'
-  ...
-# Subtest: panel has the corrected premium desktop proportions
-ok 9 - panel has the corrected premium desktop proportions
-  ---
-  duration_ms: 1.229263
-  type: 'test'
-  ...
-# Subtest: mode switch is one rounded segmented control without pill geometry
-ok 10 - mode switch is one rounded segmented control without pill geometry
-  ---
-  duration_ms: 1.921119
-  type: 'test'
-  ...
-# Subtest: the redesign uses only the website black and brand palette
-ok 11 - the redesign uses only the website black and brand palette
-  ---
-  duration_ms: 3.932627
-  type: 'test'
-  ...
-# Subtest: primary actions, quick chips and composer use intentional geometry
-ok 12 - primary actions, quick chips and composer use intentional geometry
-  ---
-  duration_ms: 1.308492
-  type: 'test'
-  ...
-# Subtest: chat chips and composer use a crisp non-liquid system
-ok 13 - chat chips and composer use a crisp non-liquid system
-  ---
-  duration_ms: 1.227009
-  type: 'test'
-  ...
-# Subtest: calculator choices keep geometry and use one static selected system
-ok 14 - calculator choices keep geometry and use one static selected system
-  ---
-  duration_ms: 1.524306
-  type: 'test'
-  ...
-# Subtest: selection indicator is one real aligned circular check
-ok 15 - selection indicator is one real aligned circular check
-  ---
-  duration_ms: 1.053224
-  type: 'test'
-  ...
-# Subtest: icons remain one custom rounded line family
-ok 16 - icons remain one custom rounded line family
-  ---
-  duration_ms: 1.238029
-  type: 'test'
-  ...
-# Subtest: chat and configurator motion remain reduced-motion safe
-ok 17 - chat and configurator motion remain reduced-motion safe
-  ---
-  duration_ms: 2.091789
-  type: 'test'
-  ...
-# Subtest: configurator remains five short steps with explicit selection guidance
-ok 18 - configurator remains five short steps with explicit selection guidance
-  ---
-  duration_ms: 1.246285
-  type: 'test'
-  ...
-# Subtest: approved lead submission keeps sweep feedback and website hierarchy
-ok 19 - approved lead submission keeps sweep feedback and website hierarchy
-  ---
-  duration_ms: 1.679857
-  type: 'test'
-  ...
-# Subtest: contact submits a real lead and keeps API protections
-ok 20 - contact submits a real lead and keeps API protections
-  ---
-  duration_ms: 1.4093
-  type: 'test'
-  ...
-# Subtest: a delivered lead is confirmed to the visitor, and a failed one is not claimed
-ok 21 - a delivered lead is confirmed to the visitor, and a failed one is not claimed
-  ---
-  duration_ms: 1.517503
-  type: 'test'
-  ...
-# Subtest: the reply streams in and the thread keeps up with it
-ok 22 - the reply streams in and the thread keeps up with it
-  ---
-  duration_ms: 6.236714
-  type: 'test'
-  ...
-# Subtest: tapping a mode never lands on the drag handler instead of the button
-ok 23 - tapping a mode never lands on the drag handler instead of the button
-  ---
-  duration_ms: 0.749294
-  type: 'test'
-  ...
-# Subtest: the finish layer removes browser blue and keeps one motion vocabulary
-ok 24 - the finish layer removes browser blue and keeps one motion vocabulary
-  ---
-  duration_ms: 1.226428
-  type: 'test'
-  ...
-# Subtest: the finish layer sizes the builder to its step and glows the contacts
-ok 25 - the finish layer sizes the builder to its step and glows the contacts
-  ---
-  duration_ms: 1.916361
-  type: 'test'
-  ...
-# Subtest: the phone keyboard folds away what is not the conversation
-ok 26 - the phone keyboard folds away what is not the conversation
-  ---
-  duration_ms: 1.096765
-  type: 'test'
-  ...
-# Subtest: consent sits with the button it gates, not below the fold
-ok 27 - consent sits with the button it gates, not below the fold
-  ---
-  duration_ms: 1.148372
-  type: 'test'
-  ...
-# Subtest: mobile full screen, safe areas and keyboard constraints remain safe
-ok 28 - mobile full screen, safe areas and keyboard constraints remain safe
-  ---
-  duration_ms: 0.869339
-  type: 'test'
-  ...
-# Subtest: final contact step scrolls and supports calls or meetings
-ok 29 - final contact step scrolls and supports calls or meetings
-  ---
-  duration_ms: 1.312409
-  type: 'test'
-  ...
-# Subtest: messages begin at the top and icon tiles stay transparent
-ok 30 - messages begin at the top and icon tiles stay transparent
-  ---
-  duration_ms: 2.100325
-  type: 'test'
-  ...
-# Subtest: final user correction centers quick replies and keeps one input shape
-ok 31 - final user correction centers quick replies and keeps one input shape
-  ---
-  duration_ms: 1.235605
-  type: 'test'
-  ...
-# Subtest: final configurator correction removes clipping, icon tiles and selected stripes
-ok 32 - final configurator correction removes clipping, icon tiles and selected stripes
-  ---
-  duration_ms: 1.232619
-  type: 'test'
-  ...
-# Subtest: the final authority exposes only charcoal, warm surfaces and peach interaction
-ok 33 - the final authority exposes only charcoal, warm surfaces and peach interaction
-  ---
-  duration_ms: 1.352293
-  type: 'test'
-  ...
-# Subtest: the six reported interaction defects stay fixed
-ok 34 - the six reported interaction defects stay fixed
-  ---
-  duration_ms: 1.783221
-  type: 'test'
-  ...
-# Subtest: starter chips retire once the conversation begins
-ok 35 - starter chips retire once the conversation begins
-  ---
-  duration_ms: 0.799427
-  type: 'test'
-  ...
-# Subtest: the composer keeps its size at every panel height
-ok 36 - the composer keeps its size at every panel height
-  ---
-  duration_ms: 1.72666
-  type: 'test'
-  ...
-# Subtest: transcripts are logged without ever costing a visitor their answer
-ok 37 - transcripts are logged without ever costing a visitor their answer
-  ---
-  duration_ms: 1.741803
-  type: 'test'
-  ...
-# Subtest: the transcript viewer is the least permissive thing here
-ok 38 - the transcript viewer is the least permissive thing here
-  ---
-  duration_ms: 1.471547
-  type: 'test'
-  ...
-# Subtest: both endpoints share one origin list so it cannot half-apply
-ok 39 - both endpoints share one origin list so it cannot half-apply
-  ---
-  duration_ms: 1.312219
-  type: 'test'
-  ...
-# Subtest: the contact step gives the form room when the keyboard is up
-ok 40 - the contact step gives the form room when the keyboard is up
-  ---
-  duration_ms: 1.220346
-  type: 'test'
-  ...
-# Subtest: focus is drawn on the control, not as a rectangle beside it
-ok 41 - focus is drawn on the control, not as a rectangle beside it
-  ---
-  duration_ms: 1.24397
-  type: 'test'
-  ...
-# Subtest: the conversation survives a reload and reset clears it
-ok 42 - the conversation survives a reload and reset clears it
-  ---
-  duration_ms: 2.660405
-  type: 'test'
-  ...
-# Subtest: an accepted lead is traceable and one bad mailbox cannot sink the other
-ok 43 - an accepted lead is traceable and one bad mailbox cannot sink the other
-  ---
-  duration_ms: 2.270083
-  type: 'test'
-  ...
-# Subtest: a refused delivery channel no longer hides the reason or skips the next one
-ok 44 - a refused delivery channel no longer hides the reason or skips the next one
-  ---
-  duration_ms: 1.458022
-  type: 'test'
-  ...
-# Subtest: info@mojchatbot.sk is the address, the personal one is the second contact
-ok 45 - info@mojchatbot.sk is the address, the personal one is the second contact
-  ---
-  duration_ms: 1.546267
-  type: 'test'
-  ...
-# Subtest: auto-advance does not leave a parked pointer lighting up the next step
-ok 46 - auto-advance does not leave a parked pointer lighting up the next step
-  ---
-  duration_ms: 1.143041
-  type: 'test'
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 # Subtest: the contact step lines up on one inset without stray rules
 ok 47 - the contact step lines up on one inset without stray rules
   ---
-  duration_ms: 0.970579
+  duration_ms: 1.759616
   type: 'test'
   ...
 # Subtest: a new step never arrives with a chip that looks chosen
 ok 48 - a new step never arrives with a chip that looks chosen
   ---
-  duration_ms: 1.257175
+  duration_ms: 1.303738
   type: 'test'
   ...
 # Subtest: project estimates are absent while customer-price capability remains
 ok 49 - project estimates are absent while customer-price capability remains
   ---
-  duration_ms: 1.711166
+  duration_ms: 1.584896
   type: 'test'
   ...
 # Subtest: the step swap holds the panel height so nothing jumps
 ok 50 - the step swap holds the panel height so nothing jumps
   ---
-  duration_ms: 1.267988
+  duration_ms: 1.075239
   type: 'test'
   ...
 # Subtest: the progress label reads as a sentence and has room for it
 ok 51 - the progress label reads as a sentence and has room for it
   ---
-  duration_ms: 1.376078
+  duration_ms: 1.261244
   type: 'test'
   ...
 # Subtest: mobile keeps its scrolling and its pinch-zoom
 ok 52 - mobile keeps its scrolling and its pinch-zoom
   ---
-  duration_ms: 1.687361
+  duration_ms: 2.284596
   type: 'test'
   ...
 # Subtest: nothing pulses forever and nothing moves when you point at it
 ok 53 - nothing pulses forever and nothing moves when you point at it
   ---
-  duration_ms: 1.475835
+  duration_ms: 1.698285
   type: 'test'
   ...
 # Subtest: icons cannot balloon and the thank-you screen is not squeezed into a grid row
 ok 54 - icons cannot balloon and the thank-you screen is not squeezed into a grid row
   ---
-  duration_ms: 1.648819
+  duration_ms: 1.691104
   type: 'test'
   ...
 # Subtest: no jargon reaches the screen
 ok 55 - no jargon reaches the screen
   ---
-  duration_ms: 3.01571
+  duration_ms: 4.04979
   type: 'test'
   ...
 # Subtest: chips and cards lean toward the cursor without ever moving their box
 ok 56 - chips and cards lean toward the cursor without ever moving their box
   ---
-  duration_ms: 2.853886
+  duration_ms: 1.443305
   type: 'test'
   ...
 # Subtest: the iframe follows the mobile visual viewport above the software keyboard
 ok 57 - the iframe follows the mobile visual viewport above the software keyboard
   ---
-  duration_ms: 0.863879
+  duration_ms: 0.711056
   type: 'test'
   ...
 # Subtest: the closed iframe canvas stays transparent around the circular launcher
 ok 58 - the closed iframe canvas stays transparent around the circular launcher
   ---
-  duration_ms: 0.875811
+  duration_ms: 0.748723
   type: 'test'
   ...
 # Subtest: the iframe returns focus to the page control that opened it
 ok 59 - the iframe returns focus to the page control that opened it
   ---
-  duration_ms: 0.722723
+  duration_ms: 0.589977
   type: 'test'
   ...
 # Subtest: options reveal one after another rather than as a block
 ok 60 - options reveal one after another rather than as a block
   ---
-  duration_ms: 0.64018
+  duration_ms: 0.571349
   type: 'test'
   ...
 # Subtest: mode transitions preserve work and close only after the exit motion
 ok 61 - mode transitions preserve work and close only after the exit motion
   ---
-  duration_ms: 2.281953
+  duration_ms: 0.837736
   type: 'test'
   ...
 # Subtest: close and reopen retain mode, chat draft, history and calculator progress
 ok 62 - close and reopen retain mode, chat draft, history and calculator progress
   ---
-  duration_ms: 1.561786
+  duration_ms: 1.525448
   type: 'test'
   ...
 # Subtest: close button and Escape both restore focus to the launcher
 ok 63 - close button and Escape both restore focus to the launcher
   ---
-  duration_ms: 1.054636
+  duration_ms: 2.28697
   type: 'test'
   ...
 # Subtest: chat reset aborts stale work and same-tick sends are locked synchronously
 ok 64 - chat reset aborts stale work and same-tick sends are locked synchronously
   ---
-  duration_ms: 6.831909
+  duration_ms: 5.238016
   type: 'test'
   ...
 # Subtest: the summary card keeps its text off its own border
 ok 65 - the summary card keeps its text off its own border
   ---
-  duration_ms: 1.372402
+  duration_ms: 1.696351
   type: 'test'
   ...
 # Subtest: nothing plus-shaped renders anywhere near the quick replies
 ok 66 - nothing plus-shaped renders anywhere near the quick replies
   ---
-  duration_ms: 2.367505
+  duration_ms: 2.607987
   type: 'test'
   ...
 1..66
@@ -493,5 +671,5 @@ ok 66 - nothing plus-shaped renders anywhere near the quick replies
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 201.082187
+# duration_ms 205.204878
  ELIFECYCLE  Test failed. See above for more details.
