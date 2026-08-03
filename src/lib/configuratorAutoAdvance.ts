@@ -5,6 +5,7 @@ const SINGLE_CHOICE_SELECTOR = ".cw-rowcard, .cw-scard, .cw-vcard";
 const BACK_SELECTOR = ".cw-progress__back, .cw-tabs, .cw-panel-head__actions";
 const INSTALL_FLAG = "cwConfiguratorAutoAdvance";
 const CONFIRM_MS = 220;
+const POINTER_RELEASE_DISTANCE = 8;
 
 export function installConfiguratorAutoAdvance(): void {
   if (typeof document === "undefined") return;
@@ -14,6 +15,8 @@ export function installConfiguratorAutoAdvance(): void {
 
   let pending: number | null = null;
   let confirming: HTMLButtonElement | null = null;
+  let releaseParkedPointer: (() => void) | null = null;
+
   const cancel = () => {
     if (pending !== null) {
       window.clearTimeout(pending);
@@ -21,6 +24,35 @@ export function installConfiguratorAutoAdvance(): void {
     }
     if (confirming) delete confirming.dataset.confirming;
     confirming = null;
+    releaseParkedPointer?.();
+  };
+
+  const guardFreshStep = (widget: HTMLElement, originX: number, originY: number) => {
+    releaseParkedPointer?.();
+    widget.dataset.pointerParked = "true";
+
+    let released = false;
+    const release = () => {
+      if (released) return;
+      released = true;
+      delete widget.dataset.pointerParked;
+      widget.removeEventListener("pointermove", releaseOnRealMove);
+      widget.removeEventListener("pointerdown", release);
+      widget.removeEventListener("keydown", release);
+      releaseParkedPointer = null;
+    };
+    const releaseOnRealMove = (move: PointerEvent) => {
+      /* React replaces the card under a stationary cursor. Browsers may emit a
+         synthetic pointermove for that DOM change; only actual movement should
+         restore hover styling. */
+      if (Math.hypot(move.clientX - originX, move.clientY - originY) < POINTER_RELEASE_DISTANCE) return;
+      release();
+    };
+
+    widget.addEventListener("pointermove", releaseOnRealMove);
+    widget.addEventListener("pointerdown", release);
+    widget.addEventListener("keydown", release);
+    releaseParkedPointer = release;
   };
 
   document.addEventListener(
@@ -29,8 +61,6 @@ export function installConfiguratorAutoAdvance(): void {
       const element = event.target instanceof Element ? event.target : null;
       if (!element) return;
 
-      /* Going back (or switching mode) must never be overridden by a queued
-         auto-advance — that made the back button look broken. */
       if (element.closest(BACK_SELECTOR)) {
         cancel();
         return;
@@ -39,13 +69,13 @@ export function installConfiguratorAutoAdvance(): void {
       const target = element.closest<HTMLButtonElement>(SINGLE_CHOICE_SELECTOR);
       if (!target || target.disabled || target.dataset.testid === "interest-custom") return;
 
-      /* Only advance when the click actually changes the answer. Re-clicking the
-         option that is already selected (which is what sits under the cursor
-         right after pressing back) must keep you on the step. */
       if (target.dataset.selected === "true") {
         cancel();
         return;
       }
+
+      const originX = event instanceof MouseEvent ? event.clientX : 0;
+      const originY = event instanceof MouseEvent ? event.clientY : 0;
 
       cancel();
       confirming = target;
@@ -55,21 +85,14 @@ export function installConfiguratorAutoAdvance(): void {
         const widget = target.closest<HTMLElement>(".cw-widget");
         if (!widget) return;
 
-        /* Auto-advancing swaps the step under a pointer that has not moved, so
-           whatever lands beneath the cursor picks up :hover and reads as an
-           option you already chose. Mute hover styling until the pointer
-           actually moves again. */
-        widget.dataset.pointerParked = "true";
-        const release = () => {
-          delete widget.dataset.pointerParked;
-          widget.removeEventListener("pointermove", release);
-        };
-        widget.addEventListener("pointermove", release);
+        target.blur();
+        guardFreshStep(widget, originX, originY);
 
         const next = widget.querySelector<HTMLButtonElement>(".cw-next:not(:disabled)");
         if (!next) {
           delete target.dataset.confirming;
           confirming = null;
+          releaseParkedPointer?.();
           return;
         }
         confirming = null;
