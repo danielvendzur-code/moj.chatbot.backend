@@ -1,0 +1,43 @@
+/* Chat. */
+html:root body .cw-widget[class][class][class][class] .cw-chat-top[class],
+html:root body .cw-widget[class][class][class][class] .cw-direct-actions[class] {
+  border-color:var(--sg-line)!important; background:#fff!important; background-image:none!important; box-shadow:none!important;
+}
+html:root body .cw-widget[class][class][class][class] .cw-chat-builder[class] {
+  color:var(--sg-forest)!important; border:1px solid rgba(130,182,30,.26)!important; border-radius:999px!important;
+  background:var(--sg-lime)!important; background-image:none!important; box-shadow:0 17px 37px -27px rgba(87,131,0,.56)!important;
+}
+html:root body .cw-widget[class][class][class][class] .cw-chat-builder[class]::before,
+html:root body .cw-widget[class][class][class][class] .cw-chat-builder[class]::after {content:none!important;display:none!important}
+html:root body .cw-widget[class][class][class][class] .cw-chat-builder[class] :is(span,b,svg,path) {color:var(--sg-forest)!important;background:transparent!important}
+html:root body .cw-widget[class][class][class][class] .cw-message-row--bot .cw-message-wrap p {
+  color:var(--sg-ink)!important; border:1px solid var(--sg-line)!important; background:#fff!important; box-shadow:0 14px 30px -28px rgba(11,47,32,.34)!important;
+}
+html:root body .cw-widget[class][class][class][class] .cw-message-row--me .cw-message-wrap p {
+  color:#fff!important; border:1px solid var(--sg-green)!important; background:var(--sg-green)!important; background-image:none!important;
+  box-shadow:0 16px 34px -25px rgba(11,47,32,.58)!important;
+}
+html:root body .cw-widget[class][class][class][class] .cw-message-row--me .cw-message-wrap p :is(span,b,strong) {color:#fff!important}
+html:root body .cw-widget[class][class][class][class] .cw-typing[class] {color:var(--sg-green)!important;border:1px solid var(--sg-line)!important;background:var(--sg-soft)!important;box-shadow:none!important}
+html:root body .cw-widget[class][class][class][class] .cw-typing i {background:var(--sg-green)!important;box-shadow:0 0 9px rgba(25,131,79,.3)!important}
+html:root body .cw-widget[class][class][class][class] .cw-quick-replies .cw-chip[class] {
+  color:#355044!important; border:1px solid rgba(11,47,32,.15)!important; border-radius:999px!important; background:#fff!important; background-image:none!important; box-shadow:none!important;
+}
+html:root body .cw-widget[class][class][class][class] .cw-quick-replies .cw-chip[class]::before {
+  content:""!important; position:absolute!important; inset:0!important; z-index:-1!important; border-radius:inherit!important;
+  background:var(--sg-green)!important; opacity:0!important; transform:scaleX(0)!important; transform-origin:center!important;
+  transition:transform .43s var(--sg-ease),opacity .16s ease!important;
+}
+html:root body .cw-widget[class][class][class][class] .cw-quick-replies .cw-chip[class]::after {content:none!important;display:none!important}
+html:root body .cw-widget[class][class][class][class] .cw-quick-replies .cw-chip[class][data-sending="true"] {color:#fff!important;border-color:var(--sg-green)!important}
+html:root body .cw-widget[class][class][class][class] .cw-quick-replies .cw-chip[class][data-sending="true"]::before {opacity:1!important;transform:scaleX(1)!important}
+html:root body .cw-widget[class][class][class][class] .cw-inputbar[class] {
+  color:var(--sg-ink)!important; border:1px solid rgba(11,47,32,.16)!important; border-radius:18px!important; background:#fff!important; background-image:none!important;
+  box-shadow:0 16px 38px -34px rgba(11,47,32,.46),inset 0 1px rgba(255,255,255,.96)!important;
+}
+html:root body .cw-widget[class][class][class][class] .cw-inputbar[class]:focus-within {border-color:rgba(25,131,79,.52)!important;box-shadow:0 0 0 4px rgba(25,131,79,.08)!important}
+html:root body .cw-widget[class][class][class][class] .cw-inputbar input {color:var(--sg-ink)!important;background:transparent!important;box-shadow:none!important}
+html:root body .cw-widget[class][class][class][class] .cw-send[class] {color:var(--sg-faint)!important;border:1px solid rgba(25,131,79,.18)!important;background:var(--sg-soft)!important;background-image:none!important;box-shadow:none!important}
+html:root body .cw-widget[class][class][class][class] .cw-send[class]:not(:disabled) {color:#fff!important;border-color:var(--sg-green)!important;background:var(--sg-green)!important}
+html:root body .cw-widget[class][class][class][class] .cw-inputbar[class] .cw-send[class]:disabled {box-shadow:none!important}
+html:root body .cw-widget[class][class][class][class] .cw-direct-actions__grid a[class] {color:#355044!important;border:1px solid var(--sg-line)!important;background:#fff!important;background-image:none!important;box-shadow:none!important}
