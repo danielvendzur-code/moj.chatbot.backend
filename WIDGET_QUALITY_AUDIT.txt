@@ -1,8 +1,8 @@
-run_id=30817389205
+run_id=30817554414
 install=success
 lint=success
 build=success
-test=failure
+test=success
 
 ===== lint =====
 
@@ -27,7 +27,7 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  1.14 kB[22m[1m[22m[2m │ gzip:  0.61 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-Dz3fBo7F.css  [39m[1m[2m193.69 kB[22m[1m[22m[2m │ gzip: 26.27 kB[22m
 [2mdist/[22m[2massets/[22m[36mindex-BwgMkVg4.js   [39m[1m[2m299.26 kB[22m[1m[22m[2m │ gzip: 87.26 kB[22m
-[32m✓ built in 1.19s[39m
+[32m✓ built in 1.06s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 112 modules transformed.
@@ -35,7 +35,7 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m193.33 kB[22m[1m[22m[2m │ gzip: 26.18 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m299.18 kB[22m[1m[22m[2m │ gzip: 87.29 kB[22m
-[32m✓ built in 1.14s[39m
+[32m✓ built in 948ms[39m
 
 ===== test =====
 
@@ -46,630 +46,405 @@ TAP version 13
 # Subtest: history accepts the existing Vercel KV variables without colliding with MôjPlot
 ok 1 - history accepts the existing Vercel KV variables without colliding with MôjPlot
   ---
-  duration_ms: 6.361627
+  duration_ms: 7.222394
   type: 'test'
   ...
 # Subtest: history has a normal password page and never places the password in the URL
 ok 2 - history has a normal password page and never places the password in the URL
   ---
-  duration_ms: 3.6351
+  duration_ms: 4.45806
   type: 'test'
   ...
 # Subtest: history stays private and non-indexable
 ok 3 - history stays private and non-indexable
   ---
-  duration_ms: 1.641557
+  duration_ms: 1.841288
   type: 'test'
   ...
 # Subtest: widget uses the supplied raster logo without redrawing it
 ok 4 - widget uses the supplied raster logo without redrawing it
   ---
-  duration_ms: 7.305915
+  duration_ms: 4.923272
   type: 'test'
   ...
 # Subtest: the finished website palette is appended as the final widget authority
 ok 5 - the finished website palette is appended as the final widget authority
   ---
-  duration_ms: 3.860012
+  duration_ms: 3.015127
   type: 'test'
   ...
 # Subtest: mobile iframe freezes and restores the parent page on iOS
 ok 6 - mobile iframe freezes and restores the parent page on iOS
   ---
-  duration_ms: 2.260669
+  duration_ms: 3.175399
   type: 'test'
   ...
 # Subtest: demo and embed load one foundation and one authoritative redesign
 ok 7 - demo and embed load one foundation and one authoritative redesign
   ---
-  duration_ms: 15.237697
+  duration_ms: 12.963993
   type: 'test'
   ...
 # Subtest: assistant order and interactive send feedback remain explicit
 ok 8 - assistant order and interactive send feedback remain explicit
   ---
-  duration_ms: 1.168699
+  duration_ms: 0.918052
   type: 'test'
   ...
 # Subtest: panel has the corrected premium desktop proportions
 ok 9 - panel has the corrected premium desktop proportions
   ---
-  duration_ms: 1.332475
+  duration_ms: 1.16091
   type: 'test'
   ...
 # Subtest: mode switch is one rounded segmented control without pill geometry
 ok 10 - mode switch is one rounded segmented control without pill geometry
   ---
-  duration_ms: 1.291273
+  duration_ms: 1.226103
   type: 'test'
   ...
 # Subtest: the redesign uses only the website black and brand palette
 ok 11 - the redesign uses only the website black and brand palette
   ---
-  duration_ms: 3.864494
+  duration_ms: 3.668488
   type: 'test'
   ...
 # Subtest: primary actions, quick chips and composer use intentional geometry
 ok 12 - primary actions, quick chips and composer use intentional geometry
   ---
-  duration_ms: 1.218945
+  duration_ms: 1.250624
   type: 'test'
   ...
 # Subtest: chat chips and composer use a crisp non-liquid system
 ok 13 - chat chips and composer use a crisp non-liquid system
   ---
-  duration_ms: 1.054498
+  duration_ms: 1.054596
   type: 'test'
   ...
 # Subtest: calculator choices keep geometry and use one static selected system
 ok 14 - calculator choices keep geometry and use one static selected system
   ---
-  duration_ms: 1.487156
+  duration_ms: 1.384778
   type: 'test'
   ...
 # Subtest: selection indicator is one real aligned circular check
 ok 15 - selection indicator is one real aligned circular check
   ---
-  duration_ms: 1.066537
+  duration_ms: 1.022
   type: 'test'
   ...
 # Subtest: icons remain one custom rounded line family
 ok 16 - icons remain one custom rounded line family
   ---
-  duration_ms: 2.605309
+  duration_ms: 1.967818
   type: 'test'
   ...
 # Subtest: chat and configurator motion remain reduced-motion safe
 ok 17 - chat and configurator motion remain reduced-motion safe
   ---
-  duration_ms: 1.482058
+  duration_ms: 1.271705
   type: 'test'
   ...
 # Subtest: configurator remains five short steps with explicit selection guidance
 ok 18 - configurator remains five short steps with explicit selection guidance
   ---
-  duration_ms: 1.084313
+  duration_ms: 0.958737
   type: 'test'
   ...
 # Subtest: approved lead submission keeps sweep feedback and website hierarchy
 ok 19 - approved lead submission keeps sweep feedback and website hierarchy
   ---
-  duration_ms: 1.52351
+  duration_ms: 1.465786
   type: 'test'
   ...
 # Subtest: contact submits a real lead and keeps API protections
 ok 20 - contact submits a real lead and keeps API protections
   ---
-  duration_ms: 3.360204
+  duration_ms: 0.862302
   type: 'test'
   ...
 # Subtest: a delivered lead is confirmed to the visitor, and a failed one is not claimed
 ok 21 - a delivered lead is confirmed to the visitor, and a failed one is not claimed
   ---
-  duration_ms: 1.308268
+  duration_ms: 1.075466
   type: 'test'
   ...
 # Subtest: the reply streams in and the thread keeps up with it
 ok 22 - the reply streams in and the thread keeps up with it
   ---
-  duration_ms: 4.671292
+  duration_ms: 4.34048
   type: 'test'
   ...
 # Subtest: tapping a mode never lands on the drag handler instead of the button
 ok 23 - tapping a mode never lands on the drag handler instead of the button
   ---
-  duration_ms: 1.220567
+  duration_ms: 0.667764
   type: 'test'
   ...
 # Subtest: the finish layer removes browser blue and keeps one motion vocabulary
 ok 24 - the finish layer removes browser blue and keeps one motion vocabulary
   ---
-  duration_ms: 1.50282
+  duration_ms: 1.36229
   type: 'test'
   ...
 # Subtest: the finish layer sizes the builder to its step and glows the contacts
 ok 25 - the finish layer sizes the builder to its step and glows the contacts
   ---
-  duration_ms: 1.556049
+  duration_ms: 1.62417
   type: 'test'
   ...
 # Subtest: the phone keyboard folds away what is not the conversation
 ok 26 - the phone keyboard folds away what is not the conversation
   ---
-  duration_ms: 1.454848
+  duration_ms: 1.307252
   type: 'test'
   ...
 # Subtest: consent sits with the button it gates, not below the fold
 ok 27 - consent sits with the button it gates, not below the fold
   ---
-  duration_ms: 1.126846
+  duration_ms: 1.17606
   type: 'test'
   ...
 # Subtest: mobile full screen, safe areas and keyboard constraints remain safe
 ok 28 - mobile full screen, safe areas and keyboard constraints remain safe
   ---
-  duration_ms: 0.876042
+  duration_ms: 0.953632
   type: 'test'
   ...
 # Subtest: final contact step scrolls and supports calls or meetings
 ok 29 - final contact step scrolls and supports calls or meetings
   ---
-  duration_ms: 1.24274
+  duration_ms: 1.30847
   type: 'test'
   ...
 # Subtest: messages begin at the top and icon tiles stay transparent
 ok 30 - messages begin at the top and icon tiles stay transparent
   ---
-  duration_ms: 2.297418
+  duration_ms: 2.236059
   type: 'test'
   ...
 # Subtest: final user correction centers quick replies and keeps one input shape
 ok 31 - final user correction centers quick replies and keeps one input shape
   ---
-  duration_ms: 1.172285
+  duration_ms: 1.221753
   type: 'test'
   ...
 # Subtest: final configurator correction removes clipping, icon tiles and selected stripes
 ok 32 - final configurator correction removes clipping, icon tiles and selected stripes
   ---
-  duration_ms: 1.261048
+  duration_ms: 1.237103
   type: 'test'
   ...
 # Subtest: the final authority exposes only charcoal, warm surfaces and peach interaction
 ok 33 - the final authority exposes only charcoal, warm surfaces and peach interaction
   ---
-  duration_ms: 1.552003
+  duration_ms: 0.746393
   type: 'test'
   ...
 # Subtest: the six reported interaction defects stay fixed
 ok 34 - the six reported interaction defects stay fixed
   ---
-  duration_ms: 1.789338
+  duration_ms: 2.025064
   type: 'test'
   ...
 # Subtest: starter chips retire once the conversation begins
 ok 35 - starter chips retire once the conversation begins
   ---
-  duration_ms: 0.88801
+  duration_ms: 0.676022
   type: 'test'
   ...
 # Subtest: the composer keeps its size at every panel height
 ok 36 - the composer keeps its size at every panel height
   ---
-  duration_ms: 0.722181
+  duration_ms: 0.773353
   type: 'test'
   ...
 # Subtest: transcripts are logged without ever costing a visitor their answer
 ok 37 - transcripts are logged without ever costing a visitor their answer
   ---
-  duration_ms: 1.145685
+  duration_ms: 1.088443
   type: 'test'
   ...
 # Subtest: the transcript viewer is the least permissive thing here
 ok 38 - the transcript viewer is the least permissive thing here
   ---
-  duration_ms: 1.121098
+  duration_ms: 1.06311
   type: 'test'
   ...
 # Subtest: both endpoints share one origin list so it cannot half-apply
 ok 39 - both endpoints share one origin list so it cannot half-apply
   ---
-  duration_ms: 1.0361
+  duration_ms: 1.050416
   type: 'test'
   ...
 # Subtest: the contact step gives the form room when the keyboard is up
 ok 40 - the contact step gives the form room when the keyboard is up
   ---
-  duration_ms: 0.909791
+  duration_ms: 1.282206
   type: 'test'
   ...
 # Subtest: focus is drawn on the control, not as a rectangle beside it
 ok 41 - focus is drawn on the control, not as a rectangle beside it
   ---
-  duration_ms: 0.993236
+  duration_ms: 0.788348
   type: 'test'
   ...
 # Subtest: the conversation survives a reload and reset clears it
 ok 42 - the conversation survives a reload and reset clears it
   ---
-  duration_ms: 3.496474
+  duration_ms: 1.444879
   type: 'test'
   ...
 # Subtest: an accepted lead is traceable and one bad mailbox cannot sink the other
 ok 43 - an accepted lead is traceable and one bad mailbox cannot sink the other
   ---
-  duration_ms: 1.843719
+  duration_ms: 1.96826
   type: 'test'
   ...
 # Subtest: a refused delivery channel no longer hides the reason or skips the next one
 ok 44 - a refused delivery channel no longer hides the reason or skips the next one
   ---
-  duration_ms: 1.10237
+  duration_ms: 1.105267
   type: 'test'
   ...
 # Subtest: info@mojchatbot.sk is the address, the personal one is the second contact
 ok 45 - info@mojchatbot.sk is the address, the personal one is the second contact
   ---
-  duration_ms: 1.314387
+  duration_ms: 1.804598
   type: 'test'
   ...
 # Subtest: auto-advance does not leave a parked pointer lighting up the next step
-not ok 46 - auto-advance does not leave a parked pointer lighting up the next step
+ok 46 - auto-advance does not leave a parked pointer lighting up the next step
   ---
-  duration_ms: 1.838832
+  duration_ms: 0.799715
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:1024:1'
-  failureType: 'testCodeFailure'
-  error: |-
-    The input did not match the regular expression /widget\.addEventListener\("pointermove", release\)/. Input:
-    
-    'import "../mobile-configurator-polish.css";\n' +
-      'import "../configurator-runtime-final.css";\n' +
-      '\n' +
-      'const SINGLE_CHOICE_SELECTOR = ".cw-rowcard, .cw-scard, .cw-vcard";\n' +
-      'const BACK_SELECTOR = ".cw-progress__back, .cw-tabs, .cw-panel-head__actions";\n' +
-      'const INSTALL_FLAG = "cwConfiguratorAutoAdvance";\n' +
-      'const CONFIRM_MS = 220;\n' +
-      'const POINTER_RELEASE_DISTANCE = 8;\n' +
-      '\n' +
-      'export function installConfiguratorAutoAdvance(): void {\n' +
-      '  if (typeof document === "undefined") return;\n' +
-      '  if (document.documentElement.dataset[INSTALL_FLAG] === "true") return;\n' +
-      '\n' +
-      '  document.documentElement.dataset[INSTALL_FLAG] = "true";\n' +
-      '\n' +
-      '  let pending: number | null = null;\n' +
-      '  let confirming: HTMLButtonElement | null = null;\n' +
-      '  let releaseParkedPointer: (() => void) | null = null;\n' +
-      '\n' +
-      '  const cancel = () => {\n' +
-      '    if (pending !== null) {\n' +
-      '      window.clearTimeout(pending);\n' +
-      '      pending = null;\n' +
-      '    }\n' +
-      '    if (confirming) delete confirming.dataset.confirming;\n' +
-      '    confirming = null;\n' +
-      '    releaseParkedPointer?.();\n' +
-      '  };\n' +
-      '\n' +
-      '  const guardFreshStep = (widget: HTMLElement, originX: number, originY: number) => {\n' +
-      '    releaseParkedPointer?.();\n' +
-      '    widget.dataset.pointerParked = "true";\n' +
-      '\n' +
-      '    let released = false;\n' +
-      '    const release = () => {\n' +
-      '      if (released) return;\n' +
-      '      released = true;\n' +
-      '      delete widget.dataset.pointerParked;\n' +
-      '      widget.removeEventListener("pointermove", releaseOnRealMove);\n' +
-      '      widget.removeEventListener("pointerdown", release);\n' +
-      '      widget.removeEventListener("keydown", release);\n' +
-      '      releaseParkedPointer = null;\n' +
-      '    };\n' +
-      '    const releaseOnRealMove = (move: PointerEvent) => {\n' +
-      '      /* React replaces the card under a stationary cursor. Browsers may emit a\n' +
-      '         synthetic pointermove for that DOM change; only actual movement should\n' +
-      '         restore hover styling. */\n' +
-      '      if (Math.hypot(move.clientX - originX, move.clientY - originY) < POINTER_RELEASE_DISTANCE) return;\n' +
-      '      release();\n' +
-      '    };\n' +
-      '\n' +
-      '    widget.addEventListener("pointermove", releaseOnRealMove);\n' +
-      '    widget.addEventListener("pointerdown", release);\n' +
-      '    widget.addEventListener("keydown", release);\n' +
-      '    releaseParkedPointer = release;\n' +
-      '  };\n' +
-      '\n' +
-      '  document.addEventListener(\n' +
-      '    "click",\n' +
-      '    (event) => {\n' +
-      '      const element = event.target instanceof Element ? event.target : null;\n' +
-      '      if (!element) return;\n' +
-      '\n' +
-      '      if (element.closest(BACK_SELECTOR)) {\n' +
-      '        cancel();\n' +
-      '        return;\n' +
-      '      }\n' +
-      '\n' +
-      '      const target = element.closest<HTMLButtonElement>(SINGLE_CHOICE_SELECTOR);\n' +
-      '      if (!target || target.disabled || target.dataset.testid === "interest-custom") return;\n' +
-      '\n' +
-      '      if (target.dataset.selected === "true") {\n' +
-      '        cancel();\n' +
-      '        return;\n' +
-      '      }\n' +
-      '\n' +
-      '      const originX = event instanceof MouseEvent ? event.clientX : 0;\n' +
-      '      const originY = event instanceof MouseEvent ? event.clientY : 0;\n' +
-      '\n' +
-      '      cancel();\n' +
-      '      confirming = target;\n' +
-      '      target.dataset.confirming = "true";\n' +
-      '      pending = window.setTimeout(() => {\n' +
-      '        pending = null;\n' +
-      '        const widget = target.closest<HTMLElement>(".cw-widget");\n' +
-      '        if (!widget) return;\n' +
-      '\n' +
-      '        target.blur();\n' +
-      '        guardFreshStep(widget, originX, originY);\n' +
-      '\n' +
-      '        const next = widget.querySelector<HTMLButtonElement>(".cw-next:not(:disabled)");\n' +
-      '        if (!next) {\n' +
-      '          delete target.dataset.confirming;\n' +
-      '          confirming = null;\n' +
-      '          releaseParkedPointer?.();\n' +
-      '          return;\n' +
-      '        }\n' +
-      '        confirming = null;\n' +
-      '        next.click();\n' +
-      '      }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 32 : CONFIRM_MS);\n' +
-      '    },\n' +
-      '    true,\n' +
-      '  );\n' +
-      '}\n'
-    
-  code: 'ERR_ASSERTION'
-  name: 'AssertionError'
-  expected:
-  actual: |-
-    import "../mobile-configurator-polish.css";
-    import "../configurator-runtime-final.css";
-    
-    const SINGLE_CHOICE_SELECTOR = ".cw-rowcard, .cw-scard, .cw-vcard";
-    const BACK_SELECTOR = ".cw-progress__back, .cw-tabs, .cw-panel-head__actions";
-    const INSTALL_FLAG = "cwConfiguratorAutoAdvance";
-    const CONFIRM_MS = 220;
-    const POINTER_RELEASE_DISTANCE = 8;
-    
-    export function installConfiguratorAutoAdvance(): void {
-      if (typeof document === "undefined") return;
-      if (document.documentElement.dataset[INSTALL_FLAG] === "true") return;
-    
-      document.documentElement.dataset[INSTALL_FLAG] = "true";
-    
-      let pending: number | null = null;
-      let confirming: HTMLButtonElement | null = null;
-      let releaseParkedPointer: (() => void) | null = null;
-    
-      const cancel = () => {
-        if (pending !== null) {
-          window.clearTimeout(pending);
-          pending = null;
-        }
-        if (confirming) delete confirming.dataset.confirming;
-        confirming = null;
-        releaseParkedPointer?.();
-      };
-    
-      const guardFreshStep = (widget: HTMLElement, originX: number, originY: number) => {
-        releaseParkedPointer?.();
-        widget.dataset.pointerParked = "true";
-    
-        let released = false;
-        const release = () => {
-          if (released) return;
-          released = true;
-          delete widget.dataset.pointerParked;
-          widget.removeEventListener("pointermove", releaseOnRealMove);
-          widget.removeEventListener("pointerdown", release);
-          widget.removeEventListener("keydown", release);
-          releaseParkedPointer = null;
-        };
-        const releaseOnRealMove = (move: PointerEvent) => {
-          /* React replaces the card under a stationary cursor. Browsers may emit a
-             synthetic pointermove for that DOM change; only actual movement should
-             restore hover styling. */
-          if (Math.hypot(move.clientX - originX, move.clientY - originY) < POINTER_RELEASE_DISTANCE) return;
-          release();
-        };
-    
-        widget.addEventListener("pointermove", releaseOnRealMove);
-        widget.addEventListener("pointerdown", release);
-        widget.addEventListener("keydown", release);
-        releaseParkedPointer = release;
-      };
-    
-      document.addEventListener(
-        "click",
-        (event) => {
-          const element = event.target instanceof Element ? event.target : null;
-          if (!element) return;
-    
-          if (element.closest(BACK_SELECTOR)) {
-            cancel();
-            return;
-          }
-    
-          const target = element.closest<HTMLButtonElement>(SINGLE_CHOICE_SELECTOR);
-          if (!target || target.disabled || target.dataset.testid === "interest-custom") return;
-    
-          if (target.dataset.selected === "true") {
-            cancel();
-            return;
-          }
-    
-          const originX = event instanceof MouseEvent ? event.clientX : 0;
-          const originY = event instanceof MouseEvent ? event.clientY : 0;
-    
-          cancel();
-          confirming = target;
-          target.dataset.confirming = "true";
-          pending = window.setTimeout(() => {
-            pending = null;
-            const widget = target.closest<HTMLElement>(".cw-widget");
-            if (!widget) return;
-    
-            target.blur();
-            guardFreshStep(widget, originX, originY);
-    
-            const next = widget.querySelector<HTMLButtonElement>(".cw-next:not(:disabled)");
-            if (!next) {
-              delete target.dataset.confirming;
-              confirming = null;
-              releaseParkedPointer?.();
-              return;
-            }
-            confirming = null;
-            next.click();
-          }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 32 : CONFIRM_MS);
-        },
-        true,
-      );
-    }
-    
-  operator: 'match'
-  stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:1029:10)
-    async Test.run (node:internal/test_runner/test:1054:7)
-    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 # Subtest: the contact step lines up on one inset without stray rules
 ok 47 - the contact step lines up on one inset without stray rules
   ---
-  duration_ms: 1.699394
+  duration_ms: 0.766917
   type: 'test'
   ...
 # Subtest: a new step never arrives with a chip that looks chosen
 ok 48 - a new step never arrives with a chip that looks chosen
   ---
-  duration_ms: 1.298013
+  duration_ms: 0.99261
   type: 'test'
   ...
 # Subtest: project estimates are absent while customer-price capability remains
 ok 49 - project estimates are absent while customer-price capability remains
   ---
-  duration_ms: 1.620866
+  duration_ms: 1.291968
   type: 'test'
   ...
 # Subtest: the step swap holds the panel height so nothing jumps
 ok 50 - the step swap holds the panel height so nothing jumps
   ---
-  duration_ms: 1.154498
+  duration_ms: 0.785952
   type: 'test'
   ...
 # Subtest: the progress label reads as a sentence and has room for it
 ok 51 - the progress label reads as a sentence and has room for it
   ---
-  duration_ms: 1.230182
+  duration_ms: 0.971014
   type: 'test'
   ...
 # Subtest: mobile keeps its scrolling and its pinch-zoom
 ok 52 - mobile keeps its scrolling and its pinch-zoom
   ---
-  duration_ms: 1.594296
+  duration_ms: 1.237123
   type: 'test'
   ...
 # Subtest: nothing pulses forever and nothing moves when you point at it
 ok 53 - nothing pulses forever and nothing moves when you point at it
   ---
-  duration_ms: 1.807115
+  duration_ms: 2.091874
   type: 'test'
   ...
 # Subtest: icons cannot balloon and the thank-you screen is not squeezed into a grid row
 ok 54 - icons cannot balloon and the thank-you screen is not squeezed into a grid row
   ---
-  duration_ms: 1.681186
+  duration_ms: 1.180653
   type: 'test'
   ...
 # Subtest: no jargon reaches the screen
 ok 55 - no jargon reaches the screen
   ---
-  duration_ms: 5.155746
+  duration_ms: 2.013195
   type: 'test'
   ...
 # Subtest: chips and cards lean toward the cursor without ever moving their box
 ok 56 - chips and cards lean toward the cursor without ever moving their box
   ---
-  duration_ms: 1.666855
+  duration_ms: 1.191458
   type: 'test'
   ...
 # Subtest: the iframe follows the mobile visual viewport above the software keyboard
 ok 57 - the iframe follows the mobile visual viewport above the software keyboard
   ---
-  duration_ms: 0.732557
+  duration_ms: 0.639839
   type: 'test'
   ...
 # Subtest: the closed iframe canvas stays transparent around the circular launcher
 ok 58 - the closed iframe canvas stays transparent around the circular launcher
   ---
-  duration_ms: 0.769532
+  duration_ms: 0.647643
   type: 'test'
   ...
 # Subtest: the iframe returns focus to the page control that opened it
 ok 59 - the iframe returns focus to the page control that opened it
   ---
-  duration_ms: 0.587629
+  duration_ms: 0.536318
   type: 'test'
   ...
 # Subtest: options reveal one after another rather than as a block
 ok 60 - options reveal one after another rather than as a block
   ---
-  duration_ms: 0.612937
+  duration_ms: 0.522316
   type: 'test'
   ...
 # Subtest: mode transitions preserve work and close only after the exit motion
 ok 61 - mode transitions preserve work and close only after the exit motion
   ---
-  duration_ms: 2.10828
+  duration_ms: 0.709328
   type: 'test'
   ...
 # Subtest: close and reopen retain mode, chat draft, history and calculator progress
 ok 62 - close and reopen retain mode, chat draft, history and calculator progress
   ---
-  duration_ms: 1.411362
+  duration_ms: 1.23848
   type: 'test'
   ...
 # Subtest: close button and Escape both restore focus to the launcher
 ok 63 - close button and Escape both restore focus to the launcher
   ---
-  duration_ms: 0.972726
+  duration_ms: 1.77328
   type: 'test'
   ...
 # Subtest: chat reset aborts stale work and same-tick sends are locked synchronously
 ok 64 - chat reset aborts stale work and same-tick sends are locked synchronously
   ---
-  duration_ms: 3.454355
+  duration_ms: 3.911658
   type: 'test'
   ...
 # Subtest: the summary card keeps its text off its own border
 ok 65 - the summary card keeps its text off its own border
   ---
-  duration_ms: 1.896248
+  duration_ms: 2.249214
   type: 'test'
   ...
 # Subtest: nothing plus-shaped renders anywhere near the quick replies
 ok 66 - nothing plus-shaped renders anywhere near the quick replies
   ---
-  duration_ms: 2.814703
+  duration_ms: 2.464798
   type: 'test'
   ...
 1..66
 # tests 66
 # suites 0
-# pass 65
-# fail 1
+# pass 66
+# fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 194.961559
- ELIFECYCLE  Test failed. See above for more details.
+# duration_ms 161.992412
