@@ -55,7 +55,16 @@
     var returnFocusTimer = 0;
     var pageLocked = false;
     var savedHtmlOverflow = "";
+    var savedHtmlOverscrollBehavior = "";
+    var savedHtmlTouchAction = "";
     var savedBodyOverflow = "";
+    var savedBodyOverscrollBehavior = "";
+    var savedBodyTouchAction = "";
+    var savedBodyPosition = "";
+    var savedBodyTop = "";
+    var savedBodyLeft = "";
+    var savedBodyRight = "";
+    var savedBodyWidth = "";
     var savedScrollX = 0;
     var savedScrollY = 0;
 
@@ -75,32 +84,15 @@
       frame.style.removeProperty("--site-assistant-vv-height");
     }
 
-    /* On iOS the layout viewport can stay full-height while the visual viewport
-       shrinks above the software keyboard. Size and offset the open iframe to
-       that actually visible rectangle so the composer never sits underneath
-       the keyboard. The CSS fallbacks still cover browsers without this API. */
     function syncVisualViewport() {
       if (!isMobile() || !visualViewport) {
         clearVisualViewportSize();
         return;
       }
-
-      frame.style.setProperty(
-        "--site-assistant-vv-top",
-        viewportPixels(visualViewport.offsetTop, 0),
-      );
-      frame.style.setProperty(
-        "--site-assistant-vv-left",
-        viewportPixels(visualViewport.offsetLeft, 0),
-      );
-      frame.style.setProperty(
-        "--site-assistant-vv-width",
-        viewportPixels(visualViewport.width, 1),
-      );
-      frame.style.setProperty(
-        "--site-assistant-vv-height",
-        viewportPixels(visualViewport.height, 1),
-      );
+      frame.style.setProperty("--site-assistant-vv-top", viewportPixels(visualViewport.offsetTop, 0));
+      frame.style.setProperty("--site-assistant-vv-left", viewportPixels(visualViewport.offsetLeft, 0));
+      frame.style.setProperty("--site-assistant-vv-width", viewportPixels(visualViewport.width, 1));
+      frame.style.setProperty("--site-assistant-vv-height", viewportPixels(visualViewport.height, 1));
     }
 
     function scheduleVisualViewportSync() {
@@ -112,23 +104,10 @@
     }
 
     function normalizeOptions(value) {
-      var validEntries = [
-        "recommend",
-        "builder",
-        "calculator",
-        "inquiry",
-        "advisor",
-        "booking",
-      ];
+      var validEntries = ["recommend", "builder", "calculator", "inquiry", "advisor", "booking"];
       var validPresets = ["calculator", "inquiry", "advisor", "booking"];
-      var entry =
-        value && validEntries.indexOf(value.entry) >= 0
-          ? value.entry
-          : "builder";
-      var preset =
-        value && validPresets.indexOf(value.preset) >= 0
-          ? value.preset
-          : undefined;
+      var entry = value && validEntries.indexOf(value.entry) >= 0 ? value.entry : "builder";
+      var preset = value && validPresets.indexOf(value.preset) >= 0 ? value.preset : undefined;
       return preset ? { entry: entry, preset: preset } : { entry: entry };
     }
 
@@ -141,13 +120,7 @@
     function rememberReturnFocus() {
       cancelFocusRestore();
       var candidate = document.activeElement;
-      if (
-        !(candidate instanceof HTMLElement) ||
-        candidate === document.body ||
-        candidate === document.documentElement ||
-        candidate === host ||
-        candidate === frame
-      ) {
+      if (!(candidate instanceof HTMLElement) || candidate === document.body || candidate === document.documentElement || candidate === host || candidate === frame) {
         returnFocusElement = null;
         return;
       }
@@ -159,36 +132,20 @@
       var candidate = returnFocusElement;
       returnFocusElement = null;
       if (!candidate) return;
-
-      var delay = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? 0
-        : FOCUS_RESTORE_MS;
+      var delay = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : FOCUS_RESTORE_MS;
       returnFocusTimer = window.setTimeout(function () {
         returnFocusTimer = 0;
-        if (
-          !candidate.isConnected ||
-          candidate.matches(":disabled, [aria-disabled='true']") ||
-          candidate.getClientRects().length === 0
-        )
-          return;
+        if (!candidate.isConnected || candidate.matches(":disabled, [aria-disabled='true']") || candidate.getClientRects().length === 0) return;
         var style = window.getComputedStyle(candidate);
         if (style.display === "none" || style.visibility === "hidden") return;
-        try {
-          candidate.focus({ preventScroll: true });
-        } catch {
-          /* Focus restoration is an enhancement; never move the page as a fallback. */
-        }
+        try { candidate.focus({ preventScroll: true }); } catch { /* enhancement only */ }
       }, delay);
     }
 
     function postToWidget(type, extra) {
       if (!frame.contentWindow) return;
       var message = { source: PARENT_SOURCE, type: type };
-      if (extra) {
-        Object.keys(extra).forEach(function (key) {
-          message[key] = extra[key];
-        });
-      }
+      if (extra) Object.keys(extra).forEach(function (key) { message[key] = extra[key]; });
       frame.contentWindow.postMessage(message, widgetOrigin);
     }
 
@@ -198,27 +155,52 @@
       savedScrollX = window.scrollX || window.pageXOffset || 0;
       savedScrollY = window.scrollY || window.pageYOffset || 0;
       savedHtmlOverflow = document.documentElement.style.overflow;
+      savedHtmlOverscrollBehavior = document.documentElement.style.overscrollBehavior;
+      savedHtmlTouchAction = document.documentElement.style.touchAction;
       savedBodyOverflow = document.body.style.overflow;
+      savedBodyOverscrollBehavior = document.body.style.overscrollBehavior;
+      savedBodyTouchAction = document.body.style.touchAction;
+      savedBodyPosition = document.body.style.position;
+      savedBodyTop = document.body.style.top;
+      savedBodyLeft = document.body.style.left;
+      savedBodyRight = document.body.style.right;
+      savedBodyWidth = document.body.style.width;
+
       document.documentElement.style.overflow = "hidden";
+      document.documentElement.style.overscrollBehavior = "none";
+      document.documentElement.style.touchAction = "none";
       document.body.style.overflow = "hidden";
+      document.body.style.overscrollBehavior = "none";
+      document.body.style.touchAction = "none";
+      document.body.style.position = "fixed";
+      document.body.style.top = -savedScrollY + "px";
+      document.body.style.left = -savedScrollX + "px";
+      document.body.style.right = "0";
+      document.body.style.width = "100%";
     }
 
     function unlockParentPage() {
       if (!pageLocked) return;
       pageLocked = false;
       document.documentElement.style.overflow = savedHtmlOverflow;
+      document.documentElement.style.overscrollBehavior = savedHtmlOverscrollBehavior;
+      document.documentElement.style.touchAction = savedHtmlTouchAction;
       document.body.style.overflow = savedBodyOverflow;
-      window.requestAnimationFrame(function () {
-        window.scrollTo(savedScrollX, savedScrollY);
-      });
+      document.body.style.overscrollBehavior = savedBodyOverscrollBehavior;
+      document.body.style.touchAction = savedBodyTouchAction;
+      document.body.style.position = savedBodyPosition;
+      document.body.style.top = savedBodyTop;
+      document.body.style.left = savedBodyLeft;
+      document.body.style.right = savedBodyRight;
+      document.body.style.width = savedBodyWidth;
+      window.requestAnimationFrame(function () { window.scrollTo(savedScrollX, savedScrollY); });
     }
 
     function applyOpenState(nextOpen) {
       open = Boolean(nextOpen);
       frame.classList.toggle("is-open", open);
       syncVisualViewport();
-      if (open) lockParentPage();
-      else unlockParentPage();
+      if (open) lockParentPage(); else unlockParentPage();
     }
 
     function sendViewport() {
@@ -227,12 +209,7 @@
     }
 
     function sendPendingOpen() {
-      if (
-        !ready ||
-        !pendingOpen ||
-        document.body.dataset.siteMenuOpen === "true"
-      )
-        return;
+      if (!ready || !pendingOpen || document.body.dataset.siteMenuOpen === "true") return;
       var options = pendingOpen;
       pendingOpen = null;
       postToWidget("open", { options: options });
@@ -244,22 +221,16 @@
       sendPendingOpen();
     }
 
-    function publicOpen(options) {
-      requestOpen(options);
-    }
+    function publicOpen(options) { requestOpen(options); }
     publicOpen.__siteAssistantEmbed = true;
     window.openSiteAssistant = publicOpen;
 
-    function onOpenEvent(event) {
-      requestOpen(event && event.detail);
-    }
+    function onOpenEvent(event) { requestOpen(event && event.detail); }
 
     function onMessage(event) {
-      if (event.source !== frame.contentWindow || event.origin !== widgetOrigin)
-        return;
+      if (event.source !== frame.contentWindow || event.origin !== widgetOrigin) return;
       var data = event.data || {};
       if (data.source !== WIDGET_SOURCE) return;
-
       if (data.type === "ready") {
         ready = true;
         frame.classList.add("is-ready");
@@ -268,7 +239,6 @@
         sendPendingOpen();
         return;
       }
-
       if (data.type === "state") {
         var wasOpen = open;
         applyOpenState(data.open === true);
@@ -287,41 +257,20 @@
 
     function syncSiteMenu() {
       var menuOpen = document.body.dataset.siteMenuOpen === "true";
-      host.style.setProperty(
-        "visibility",
-        menuOpen ? "hidden" : "visible",
-        "important",
-      );
-
-      if (menuOpen) {
-        cancelFocusRestore();
-        returnFocusElement = null;
-      }
-
-      if (menuOpen && open) {
-        postToWidget("close");
-        applyOpenState(false);
-      }
-
+      host.style.setProperty("visibility", menuOpen ? "hidden" : "visible", "important");
+      if (menuOpen) { cancelFocusRestore(); returnFocusElement = null; }
+      if (menuOpen && open) { postToWidget("close"); applyOpenState(false); }
       if (!menuOpen) sendPendingOpen();
     }
 
     var menuObserver = new MutationObserver(syncSiteMenu);
-    menuObserver.observe(document.body, {
-      attributes: true,
-      attributeFilter: ["data-site-menu-open"],
-    });
+    menuObserver.observe(document.body, { attributes: true, attributeFilter: ["data-site-menu-open"] });
     syncSiteMenu();
-
     window.addEventListener(OPEN_EVENT, onOpenEvent);
     window.addEventListener("message", onMessage);
     if (visualViewport) {
-      visualViewport.addEventListener("resize", scheduleVisualViewportSync, {
-        passive: true,
-      });
-      visualViewport.addEventListener("scroll", scheduleVisualViewportSync, {
-        passive: true,
-      });
+      visualViewport.addEventListener("resize", scheduleVisualViewportSync, { passive: true });
+      visualViewport.addEventListener("scroll", scheduleVisualViewportSync, { passive: true });
     }
 
     function onPageHide() {
@@ -332,44 +281,27 @@
       if (visualViewportFrame) window.cancelAnimationFrame(visualViewportFrame);
       visualViewportFrame = 0;
       if (visualViewport) {
-        visualViewport.removeEventListener(
-          "resize",
-          scheduleVisualViewportSync,
-        );
-        visualViewport.removeEventListener(
-          "scroll",
-          scheduleVisualViewportSync,
-        );
+        visualViewport.removeEventListener("resize", scheduleVisualViewportSync);
+        visualViewport.removeEventListener("scroll", scheduleVisualViewportSync);
       }
       window.removeEventListener(OPEN_EVENT, onOpenEvent);
       window.removeEventListener("message", onMessage);
-      if (typeof mobileMedia.removeEventListener === "function") {
-        mobileMedia.removeEventListener("change", onViewportChange);
-      } else if (typeof mobileMedia.removeListener === "function") {
-        mobileMedia.removeListener(onViewportChange);
-      }
-      if (window.openSiteAssistant === publicOpen)
-        delete window.openSiteAssistant;
+      if (typeof mobileMedia.removeEventListener === "function") mobileMedia.removeEventListener("change", onViewportChange);
+      else if (typeof mobileMedia.removeListener === "function") mobileMedia.removeListener(onViewportChange);
+      if (window.openSiteAssistant === publicOpen) delete window.openSiteAssistant;
     }
     window.addEventListener("pagehide", onPageHide, { once: true });
-    if (typeof mobileMedia.addEventListener === "function") {
-      mobileMedia.addEventListener("change", onViewportChange);
-    } else if (typeof mobileMedia.addListener === "function") {
-      mobileMedia.addListener(onViewportChange);
-    }
+    if (typeof mobileMedia.addEventListener === "function") mobileMedia.addEventListener("change", onViewportChange);
+    else if (typeof mobileMedia.addListener === "function") mobileMedia.addListener(onViewportChange);
     syncVisualViewport();
 
     var widgetUrl = new URL(baseUrl.href);
     widgetUrl.searchParams.set("embed", "1");
     widgetUrl.searchParams.set("viewport", isMobile() ? "mobile" : "desktop");
-    // The HTML is tiny; a fresh URL makes every page load resolve the newest hashed build.
     widgetUrl.searchParams.set("build", Date.now().toString(36));
     frame.src = widgetUrl.href;
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot, { once: true });
-  } else {
-    boot();
-  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
+  else boot();
 })();
