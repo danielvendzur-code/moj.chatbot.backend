@@ -93,3 +93,36 @@ html:root body .cw-widget[class][class][class][class] .cw-send[class]:not(:disab
 html:root body .cw-widget[class][class][class][class] .cw-send[class] :is(span,svg,path) {background:transparent!important;box-shadow:none!important}
 html:root body .cw-widget[class][class][class][class] .cw-inputbar[class] .cw-send[class]:disabled {box-shadow:none!important}
 html:root body .cw-widget[class][class][class][class] .cw-direct-actions__grid a[class] {color:#355044!important;border:1px solid var(--sg-line)!important;background:#fff!important;background-image:none!important;box-shadow:none!important}
+
+/* Highest-specificity lock against historical sending-state rules. The whole
+   quick reply is one green pill; its label can never become a second tile. */
+html:root body .cw-widget[class][class][class][class]
+  .cw-quick-replies[class][class][class]
+  .cw-chip[class][class][class][data-sending="true"] {
+  opacity:1!important;
+  color:#fff!important;
+  border-color:var(--sg-green)!important;
+  background:var(--sg-green)!important;
+  background-color:var(--sg-green)!important;
+  background-image:none!important;
+  box-shadow:0 14px 28px -22px rgba(11,47,32,.46)!important;
+}
+html:root body .cw-widget[class][class][class][class]
+  .cw-quick-replies[class][class][class]
+  .cw-chip[class][class][class] .cw-chip__label[class] {
+  border:0!important;
+  background:transparent!important;
+  background-color:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+html:root body .cw-widget[class][class][class][class]
+  .cw-quick-replies[class][class][class]
+  .cw-chip[class][class][class][data-sending="true"] .cw-chip__label[class] {
+  color:#fff!important;
+  border:0!important;
+  background:transparent!important;
+  background-color:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
