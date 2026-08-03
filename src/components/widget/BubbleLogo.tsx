@@ -25,3 +25,5 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
     </span>
   );
 }
+
+// Deployment marker: preserves the stable visual version while retriggering Pages.
