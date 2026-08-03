@@ -22,12 +22,14 @@ html:root body .cw-widget[class][class][class][class] {
   color: var(--h-ink) !important;
 }
 
-/* Closed state: bright approved logo, no black plate. */
+/* Closed state: the mark is the button. It carries its own white bubble, so
+   it no longer borrows contrast from whatever page it is dropped onto, and
+   the plate that used to sit behind it is unnecessary. */
 html:root body .cw-widget[class][class][class][class] .cw-launcher[class] {
-  width: 72px !important;
-  height: 72px !important;
-  padding: 4px !important;
-  color: var(--h-lime-main) !important;
+  width: 74px !important;
+  height: 74px !important;
+  padding: 3px !important;
+  color: var(--h-green) !important;
   border: 0 !important;
   border-radius: 0 !important;
   outline: 0 !important;
@@ -35,45 +37,65 @@ html:root body .cw-widget[class][class][class][class] .cw-launcher[class] {
   background-color: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
-  /* Lime on a white host page is only 1.75:1, and the launcher is the one
-     control a visitor has to find. The first two shadows are a forest rim
-     that hugs the stroke, so the mark keeps its lime colour but gains an
-     edge that reads on white as well as on dark. */
+  /* Elevation first, then a lime bloom. The bubble supplies the edge, so the
+     hard rim the flat mark needed is gone. */
   filter:
-    drop-shadow(0 0 1px rgba(11, 47, 32, 0.92))
-    drop-shadow(0 0 2px rgba(11, 47, 32, 0.55))
-    drop-shadow(0 0 6px rgba(217, 255, 120, 0.9))
-    drop-shadow(0 0 16px rgba(185, 237, 77, 0.5))
-    drop-shadow(0 14px 22px rgba(11, 47, 32, 0.22)) !important;
+    drop-shadow(0 2px 3px rgba(11, 47, 32, 0.16))
+    drop-shadow(0 12px 20px rgba(11, 47, 32, 0.26))
+    drop-shadow(0 0 16px rgba(185, 237, 77, 0.42)) !important;
   isolation: isolate !important;
   overflow: visible !important;
-  animation: cw-logo-float 4.8s ease-in-out infinite !important;
   transition:
-    color 420ms var(--h-ease),
     filter 420ms var(--h-ease),
     transform 420ms var(--h-ease) !important;
 }
 
-html:root body .cw-widget[class][class][class][class] .cw-launcher[class]::before,
+/* The halo breathes; the button does not. A launcher that drifts under the
+   cursor is a target that moves while it is being aimed at. */
+html:root body .cw-widget[class][class][class][class] .cw-launcher[class]::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  z-index: -1 !important;
+  inset: -14% !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+  background: radial-gradient(circle, rgba(185, 237, 77, 0.5), rgba(185, 237, 77, 0) 68%) !important;
+  opacity: 0.85 !important;
+  animation: cw-launcher-halo 3.9s ease-in-out infinite !important;
+}
+
 html:root body .cw-widget[class][class][class][class] .cw-launcher[class]::after {
   content: none !important;
   display: none !important;
 }
 
 html:root body .cw-widget[class][class][class][class] .cw-launcher[class] :is(.bl, .bl--launcher, svg) {
-  width: 62px !important;
-  height: 62px !important;
+  width: 66px !important;
+  height: 66px !important;
   color: inherit !important;
-  fill: none !important;
   border: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
   filter: none !important;
 }
 
-html:root body .cw-widget[class][class][class][class] .cw-launcher[class] path {
+/* Only the line is hollow; the bubble under it is the white background. The
+   ink is a gradient here: lime where the stroke meets the page, green where
+   it crosses its own white body. */
+html:root body .cw-widget[class][class][class][class] .cw-launcher[class] .bl__ink {
   fill: none !important;
-  stroke: currentColor !important;
+  stroke: url(#bl-ink-launcher) !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-launcher[class] .bl__bubble {
+  fill: #ffffff !important;
+  stroke: none !important;
+}
+
+/* The mark keeps the drift the button gave up, at a third of the distance. */
+html:root body .cw-widget[class][class][class][class] .cw-launcher[class] .bl--launcher {
+  animation: cw-logo-float 5.4s ease-in-out infinite !important;
 }
 
 html:root body .cw-widget[class][class][class][class] .cw-launcher[class]:is(:hover, :focus-visible) {
@@ -82,14 +104,21 @@ html:root body .cw-widget[class][class][class][class] .cw-launcher[class]:is(:ho
   background: transparent !important;
   box-shadow: none !important;
   filter:
-    drop-shadow(0 0 7px rgba(185, 237, 77, 0.38))
-    drop-shadow(0 15px 24px rgba(25, 131, 79, 0.3)) !important;
+    drop-shadow(0 3px 4px rgba(11, 47, 32, 0.18))
+    drop-shadow(0 18px 28px rgba(25, 131, 79, 0.32))
+    drop-shadow(0 0 22px rgba(185, 237, 77, 0.6)) !important;
+  transform: translateY(-5px) scale(1.06) rotate(-2.5deg) !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-launcher[class]:is(:hover, :focus-visible)::before {
+  opacity: 1 !important;
   animation-play-state: paused !important;
-  transform: translateY(-5px) scale(1.07) rotate(-2deg) !important;
+  transform: scale(1.12) !important;
 }
 
 html:root body .cw-widget[class][class][class][class] .cw-launcher[class]:active {
-  transform: translateY(-1px) scale(0.97) !important;
+  transform: translateY(-1px) scale(0.96) rotate(0deg) !important;
+  transition-duration: 110ms !important;
 }
 
 /* Panel: white glass with a green halo, not a flat grey box. */
@@ -158,7 +187,7 @@ html:root body .cw-widget[class][class][class][class] .cw-panel-head__mascot[cla
   animation: cw-mascot-bob 3.7s ease-in-out infinite !important;
 }
 
-html:root body .cw-widget[class][class][class][class] .cw-panel-head__mascot[class] :is(svg, path) {
+html:root body .cw-widget[class][class][class][class] .cw-panel-head__mascot[class] .bl__ink {
   fill: none !important;
   stroke: currentColor !important;
 }
@@ -233,12 +262,15 @@ html:root body .cw-widget[class][class][class][class] :is(.cw-tabs__glass, .cw-t
     width 460ms var(--h-ease) !important;
 }
 
-html:root body .cw-widget[class][class][class][class] .cw-tabs > button[class] {
+/* The mode switch buttons carry no class attribute, so every `button[class]`
+   rule aimed at them has been missing them; the weight comes from `.cw-tabs`
+   instead. */
+html:root body .cw-widget[class][class][class][class] .cw-tabs[class] > button {
   color: var(--h-muted) !important;
   font-weight: 680 !important;
 }
 
-html:root body .cw-widget[class][class][class][class] .cw-tabs > button[class]:is([aria-selected="true"], [data-active="true"]) {
+html:root body .cw-widget[class][class][class][class] .cw-tabs[class] > button:is([aria-selected="true"], [data-active="true"], [aria-pressed="true"]) {
   color: var(--h-forest) !important;
 }
 
@@ -287,10 +319,21 @@ html:root body .cw-widget[class][class][class][class] .cw-calc-actions[class] {
 /* The mark: one stroked path that inherits its colour from the element it
    sits in. Older layers coloured the `<svg>` itself, which is why the header
    logo and the reply avatar stayed warm while their containers went lime. */
-html:root body .cw-widget[class][class][class][class] :is(.bl, .cw-avatar) :is(svg, path) {
+html:root body .cw-widget[class][class][class][class] :is(.bl, .cw-avatar) :is(svg, .bl__ink) {
   color: inherit !important;
   fill: none !important;
+}
+
+html:root body .cw-widget[class][class][class][class] :is(.bl, .cw-avatar) .bl__ink {
   stroke: currentColor !important;
+}
+
+/* The bubble is the mark's own background. Inside the panel it lands on
+   white and disappears, which is the point — it is there for the pages the
+   launcher has no control over. */
+html:root body .cw-widget[class][class][class][class] :is(.bl, .cw-avatar) .bl__bubble {
+  fill: #ffffff !important;
+  stroke: none !important;
 }
 
 /* Inside the panel the surface is white, and lime on white is too pale to
@@ -376,6 +419,23 @@ html:root body .cw-widget[class][class][class][class] :is(.cw-chat-builder__icon
 }
 
 html:root body .cw-widget[class][class][class][class] :is(.cw-chat-builder__icon, .cw-progress__back, .cw-direct-actions__icon, .cw-rowcard__icon, .cw-opt__icon) :is(svg, path) {
+  fill: none !important;
+  stroke: currentColor !important;
+}
+
+/* The line icons were the last things still taking their colour from a
+   retired token: the contact icons were lime on white (1.75:1) and the
+   builder sparkle was the old near-black. One `[class]` is what it takes to
+   outrank the finish layer, which qualifies the same selectors with a tag. */
+html:root body .cw-widget[class][class][class][class] :is(.cw-chat-builder__icon, .cw-progress__back, .cw-direct-actions__icon, .cw-rowcard__icon, .cw-opt__icon)[class],
+html:root body .cw-widget[class][class][class][class] :is(.cw-chat-builder__icon, .cw-progress__back, .cw-direct-actions__icon, .cw-rowcard__icon, .cw-opt__icon)[class] :is(svg, path) {
+  color: var(--h-green) !important;
+  stroke: currentColor !important;
+}
+
+/* An icon on the mode switch is part of its label and follows its ink. */
+html:root body .cw-widget[class][class][class][class] .cw-tabs[class] > button :is(svg, path) {
+  color: inherit !important;
   fill: none !important;
   stroke: currentColor !important;
 }
@@ -495,9 +555,73 @@ html:root body .cw-widget[class][class][class][class] .cw-panel-head__online i {
   border-color: currentColor !important;
 }
 
+/* ---------------------------------------------------------------
+   The mark draws itself once
+
+   `pathLength="100"` normalises both strokes, so one dash length draws
+   the bubble and the stem regardless of how long either path really is.
+   The white body fades in behind the line as it closes.
+   --------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  html:root body .cw-widget[class][class][class][class] :is(.cw-launcher, .cw-panel-head__mascot) .bl__ink {
+    stroke-dasharray: 100 !important;
+    animation: cw-ink-draw 1150ms var(--h-ease) 120ms both !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class] :is(.cw-launcher, .cw-panel-head__mascot) .bl__ink--inner {
+    animation-delay: 380ms !important;
+    animation-duration: 900ms !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class] :is(.cw-launcher, .cw-panel-head__mascot) .bl__bubble {
+    animation: cw-bubble-in 620ms var(--h-ease) 620ms both !important;
+  }
+
+  /* The panel assembles instead of arriving whole: the shell, then the
+     identity, then the switch, then the step. */
+  html:root body .cw-widget[class][class][class][class] .cw-panel[class] > * {
+    animation: cw-rise 520ms var(--h-ease) both !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class] .cw-panel[class] > .cw-panel-head {
+    animation-delay: 90ms !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class] .cw-panel[class] > .cw-tabs {
+    animation-delay: 160ms !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class] .cw-panel[class] > .cw-panel-body {
+    animation-delay: 225ms !important;
+  }
+}
+
+@keyframes cw-ink-draw {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes cw-bubble-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Ends on `none`, not on a zero transform: the stagger holds its last frame,
+   and a retained transform would leave a containing block on the scroller for
+   the rest of the session. */
+@keyframes cw-rise {
+  from { opacity: 0; transform: translate3d(0, 10px, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes cw-launcher-halo {
+  0%, 100% { opacity: 0.62; transform: scale(0.93); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+
 @keyframes cw-logo-float {
   0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
-  50% { transform: translate3d(0, -6px, 0) rotate(1.5deg); }
+  50% { transform: translate3d(0, -2.5px, 0) rotate(1deg); }
 }
 
 @keyframes cw-panel-enter {
@@ -576,8 +700,21 @@ html:root body .cw-widget[class][class][class][class] .cw-panel-head__online i {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html:root body .cw-widget[class][class][class][class] :is(.cw-launcher, .cw-panel, .cw-panel::before, .cw-panel-head__mascot, .cw-online-dot, .cw-panel-head__online i, .cw-msg, .cw-message, .cw-bubble) {
+  html:root body .cw-widget[class][class][class][class] :is(.cw-launcher, .cw-panel, .cw-panel::before, .cw-panel-head__mascot, .cw-online-dot, .cw-panel-head__online i, .cw-msg, .cw-message, .cw-bubble),
+  html:root body .cw-widget[class][class][class][class] :is(.cw-launcher, .cw-panel) ::before,
+  html:root body .cw-widget[class][class][class][class] .cw-panel[class] > *,
+  html:root body .cw-widget[class][class][class][class] .bl--launcher {
     animation: none !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* Nothing may be left mid-draw or mid-fade when motion is switched off. */
+  html:root body .cw-widget[class][class][class][class] .bl__ink {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class] .bl__bubble {
+    opacity: 1 !important;
   }
 }

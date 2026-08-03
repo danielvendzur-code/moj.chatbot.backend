@@ -5,18 +5,30 @@ import { readFile } from "node:fs/promises";
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 const forbiddenWarm =
   /#ffc79d|#f0a873|#f3a75a|#e58a5b|#f4c9a8|#ffe38a|255\s*,\s*199\s*,\s*157|240\s*,\s*168\s*,\s*115/i;
-const outerPath =
-  "M93 84V23C93 13 81 9 74 16L56 34L38 16C31 9 19 13 19 23V70C19 81 27 89 38 89H47V104L63 89H78";
-const innerPath = "M36 69V43L51 58C54 61 58 61 61 58L76 43V69";
+const bubblePath =
+  "M26.6 14.7L56 42L85.4 14.7C91 9.3 100 13.1 100 20.8V75.6C100 79.2 97.6 82 94 82.4L54.2 82L32.4 99.4V82H20.9C15.9 82 12 78 12 73V20.8C12 13.1 21 9.3 26.6 14.7Z";
+const outlinePath =
+  "M95.2 83.3C98.2 82 100 79.2 100 75.6V20.8C100 13.1 91 9.3 85.4 14.7L58.4 39.4C57.2 40.6 54.8 40.6 53.6 39.4L26.6 14.7C21 9.3 12 13.1 12 20.8V73C12 78 15.9 82 20.9 82H32.4V99.4L54.2 82H79.5C82.8 82 85.4 79.4 85.4 76.1V33";
+const innerPath = "M26.6 70.6V33L53.6 58.6C54.8 59.8 57.2 59.8 58.4 58.6L85.4 33";
 const escape = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-test("widget uses the approved option 1 logo", async () => {
+test("the mark is the traced logo and carries its own white bubble", async () => {
   const logo = await read("src/components/widget/BubbleLogo.tsx");
 
-  assert.match(logo, new RegExp(escape(outerPath)));
+  // Three paths, not two: the bubble is filled white so the mark supplies its
+  // own background instead of borrowing the contrast of the host page.
+  assert.equal((logo.match(/<path\b/g) ?? []).length, 3);
+  assert.match(logo, new RegExp(escape(bubblePath)));
+  assert.match(logo, new RegExp(escape(outlinePath)));
   assert.match(logo, new RegExp(escape(innerPath)));
-  assert.equal((logo.match(/<path\b/g) ?? []).length, 2);
-  assert.match(logo, /strokeWidth="8\.5"/);
+  assert.match(logo, /className="bl__bubble"[\s\S]*?fill="#ffffff"/);
+
+  // The traced line is 4.6 units in a 112 box; at avatar size that would fall
+  // under a pixel, so the weight is optically sized rather than fixed.
+  assert.match(logo, /launcher: 4\.6, header: 5\.2, avatar: 6\.6/);
+
+  // pathLength normalises both strokes so one dash length draws either.
+  assert.match(logo, /pathLength: 100/);
 });
 
 test("animated lime harmony is the final runtime authority", async () => {
@@ -101,17 +113,21 @@ test("a chosen card and a waiting button both stay readable", async () => {
   );
 });
 
-test("the launcher mark has an edge that reads on a white host page", async () => {
+test("the launcher mark reads on a white host page", async () => {
   const harmony = await read("src/professional-harmony-widget-final.css");
-  const launcher = harmony.match(
-    /\.cw-launcher\[class\] \{[\s\S]*?\n\}/,
-  )?.[0];
+  const logo = await read("src/components/widget/BubbleLogo.tsx");
+  const launcher = harmony.match(/\.cw-launcher\[class\] \{[^}]*\}/)?.[0];
 
   assert.ok(launcher, "launcher block missing");
-  // Lime on white is 1.75:1 on its own, and this is the one control a visitor
-  // has to find. A tight forest rim gives the stroke a boundary.
-  assert.match(launcher, /drop-shadow\(0 0 1px rgba\(11, 47, 32, 0\.92\)\)/);
-  assert.match(launcher, /color: var\(--h-lime-main\) !important/);
+  // A flat lime mark was 1.75:1 on white and needed a drawn-on rim. The white
+  // bubble is the edge now, so the filter can go back to being elevation.
+  assert.match(logo, /fill="#ffffff"/);
+  assert.doesNotMatch(launcher, /drop-shadow\(0 0 1px/);
+  assert.match(launcher, /drop-shadow\(0 12px 20px rgba\(11, 47, 32, 0\.26\)\)/);
+  // Lime meets the page, green crosses the white body.
+  assert.match(logo, /stopColor="#b9ed4d"/);
+  assert.match(logo, /stopColor="#19834f"/);
+  assert.match(harmony, /stroke: url\(#bl-ink-launcher\) !important/);
 });
 
 test("quick replies fit their labels on a small phone", async () => {
@@ -121,4 +137,30 @@ test("quick replies fit their labels on a small phone", async () => {
   assert.ok(small, "small-phone block missing");
   assert.match(small, /\.cw-chip\[class\]\[class\][\s\S]*padding-left: 12px !important/);
   assert.match(small, /\.cw-chip__label \{[\s\S]*font-size: 12\.8px !important/);
+});
+
+test("the launcher animates without moving the target it presents", async () => {
+  const harmony = await read("src/professional-harmony-widget-final.css");
+
+  // The halo breathes on a pseudo-element; the button itself only responds to
+  // hover and press, so the hit area never drifts while it is being aimed at.
+  assert.match(harmony, /\.cw-launcher\[class\]::before \{[\s\S]*?animation: cw-launcher-halo/);
+  assert.match(harmony, /@keyframes cw-launcher-halo/);
+  assert.match(harmony, /\.cw-launcher\[class\] \.bl--launcher \{[\s\S]*?animation: cw-logo-float/);
+  assert.doesNotMatch(harmony, /\.cw-launcher\[class\] \{[^}]*animation: cw-logo-float/);
+
+  // An !important declaration outranks an animation, so the start state lives
+  // in the keyframes and is held by `both`.
+  assert.match(harmony, /animation: cw-ink-draw 1150ms var\(--h-ease\) 120ms both/);
+  assert.match(harmony, /animation: cw-bubble-in 620ms var\(--h-ease\) 620ms both/);
+  assert.doesNotMatch(harmony, /stroke-dashoffset: 100 !important/);
+
+  // The stagger must not leave a transform on the scroller once it is done.
+  assert.match(harmony, /@keyframes cw-rise \{[\s\S]*?to \{ opacity: 1; transform: none; \}/);
+
+  // Reduced motion may not leave the mark half-drawn.
+  const reduced = harmony.match(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*$/)?.[0];
+  assert.ok(reduced, "reduce block missing");
+  assert.match(reduced, /stroke-dashoffset: 0 !important/);
+  assert.match(reduced, /\.bl__bubble \{\s*\n\s*opacity: 1 !important/);
 });
