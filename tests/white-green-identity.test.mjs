@@ -8,7 +8,7 @@ const forbiddenWarm =
 
 test("widget uses the supplied raster logo without redrawing it", async () => {
   const logo = await read("src/components/widget/BubbleLogo.tsx");
-  assert.match(logo, /data:image\/jpeg;base64,/);
+  assert.match(logo, /data:image\/(?:jpeg|webp);base64,/);
   assert.match(logo, /<img src=\{LOGO_IMAGE\} alt="" draggable=\{false\}/);
   assert.doesNotMatch(logo, /<svg\b|<path\b/);
 });
