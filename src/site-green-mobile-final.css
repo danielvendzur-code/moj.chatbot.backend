@@ -1,0 +1,10 @@
+@media(max-width:560px){
+  html:root body .cw-widget[class][class][class][class] .cw-panel[class] {inset:0!important;width:100%!important;max-width:none!important;height:100%!important;max-height:none!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+  html:root body .cw-widget[class][class][class][class] .cw-panel-head[class] {min-height:82px!important;padding-top:max(12px,env(safe-area-inset-top))!important}
+  html:root body .cw-widget[class][class][class][class] .cw-choice-grid--interest[class] .cw-rowcard[class] {min-height:102px!important;height:auto!important}
+  html:root body .cw-widget[class][class][class][class] .cw-rowcard[class] .cw-rowcard__body[class] small {display:block!important;overflow:visible!important;-webkit-box-orient:initial!important;-webkit-line-clamp:unset!important;line-clamp:unset!important}
+  html:root body .cw-widget[class][class][class][class] .cw-calc-actions[class] {padding-bottom:max(10px,env(safe-area-inset-bottom))!important}
+}
+@media(prefers-reduced-motion:reduce){
+  html:root body .cw-widget[class][class][class][class] *,html:root body .cw-widget[class][class][class][class] *::before,html:root body .cw-widget[class][class][class][class] *::after {animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
