@@ -32,27 +32,27 @@ export function installConfiguratorAutoAdvance(): void {
     widget.dataset.pointerParked = "true";
 
     let released = false;
-    const release = () => {
+    const clearParked = () => {
       if (released) return;
       released = true;
       delete widget.dataset.pointerParked;
-      widget.removeEventListener("pointermove", releaseOnRealMove);
-      widget.removeEventListener("pointerdown", release);
-      widget.removeEventListener("keydown", release);
+      widget.removeEventListener("pointermove", release);
+      widget.removeEventListener("pointerdown", clearParked);
+      widget.removeEventListener("keydown", clearParked);
       releaseParkedPointer = null;
     };
-    const releaseOnRealMove = (move: PointerEvent) => {
+    const release = (move: PointerEvent) => {
       /* React replaces the card under a stationary cursor. Browsers may emit a
          synthetic pointermove for that DOM change; only actual movement should
          restore hover styling. */
       if (Math.hypot(move.clientX - originX, move.clientY - originY) < POINTER_RELEASE_DISTANCE) return;
-      release();
+      clearParked();
     };
 
-    widget.addEventListener("pointermove", releaseOnRealMove);
-    widget.addEventListener("pointerdown", release);
-    widget.addEventListener("keydown", release);
-    releaseParkedPointer = release;
+    widget.addEventListener("pointermove", release);
+    widget.addEventListener("pointerdown", clearParked);
+    widget.addEventListener("keydown", clearParked);
+    releaseParkedPointer = clearParked;
   };
 
   document.addEventListener(
