@@ -14,7 +14,7 @@ concurrency:
 jobs:
   quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 20
     steps:
       - name: Checkout proposed changes
         uses: actions/checkout@v4
@@ -48,7 +48,7 @@ jobs:
       - name: Install browser test runtime
         run: |
           pnpm add --save-dev --lockfile=false @playwright/test@1.55.0
-          pnpm exec playwright install --with-deps chromium
+          pnpm exec playwright install chromium
 
       - name: Run desktop and mobile browser smoke tests
         shell: bash
