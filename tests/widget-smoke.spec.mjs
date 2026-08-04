@@ -85,10 +85,12 @@ test("mobile mode switching never opens the software keyboard unexpectedly", asy
   await expect(panel).toBeVisible();
   const box = await panel.boundingBox();
   const viewport = await page.evaluate(() => ({
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: document.documentElement.clientWidth,
+    height: document.documentElement.clientHeight,
   }));
   expect(box).not.toBeNull();
+  expect(Math.round(box.x)).toBe(0);
+  expect(Math.round(box.y)).toBe(0);
   expect(Math.round(box.width)).toBe(viewport.width);
   expect(Math.round(box.height)).toBe(viewport.height);
 
