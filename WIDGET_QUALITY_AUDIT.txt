@@ -1,4 +1,4 @@
-run_id=30902538434
+run_id=30926820791
 install=success
 lint=success
 build=success
@@ -21,154 +21,184 @@ test=success
 
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 99 modules transformed.
+[32m✓[39m 101 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  1.14 kB[22m[1m[22m[2m │ gzip:  0.61 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-Ccvdfbil.css  [39m[1m[2m 33.95 kB[22m[1m[22m[2m │ gzip:  7.30 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-C25cHLPR.js   [39m[1m[2m221.91 kB[22m[1m[22m[2m │ gzip: 75.03 kB[22m
-[32m✓ built in 1.20s[39m
+[2mdist/[22m[2massets/[22m[36mindex-DttylNMV.js   [39m[1m[2m246.40 kB[22m[1m[22m[2m │ gzip: 80.12 kB[22m
+[32m✓ built in 1.27s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 95 modules transformed.
+[32m✓[39m 97 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m 33.56 kB[22m[1m[22m[2m │ gzip:  7.21 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m221.75 kB[22m[1m[22m[2m │ gzip: 75.09 kB[22m
-[32m✓ built in 1.14s[39m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m246.30 kB[22m[1m[22m[2m │ gzip: 80.17 kB[22m
+[32m✓ built in 1.21s[39m
 
 ===== test =====
 
 > site-assistant-widget@0.1.0 test /home/runner/work/moj.chatbot.backend/moj.chatbot.backend
-> node --test tests/widget-contract.test.mjs tests/history-contract.test.mjs tests/white-green-identity.test.mjs -- --run
+> node --test tests/widget-contract.test.mjs tests/history-contract.test.mjs tests/white-green-identity.test.mjs tests/premium-refinement.test.mjs -- --run
 
 TAP version 13
 # Subtest: history accepts the existing Vercel KV variables without colliding with MôjPlot
 ok 1 - history accepts the existing Vercel KV variables without colliding with MôjPlot
   ---
-  duration_ms: 7.34906
+  duration_ms: 7.996322
   type: 'test'
   ...
 # Subtest: history has a normal password page and never places the password in the URL
 ok 2 - history has a normal password page and never places the password in the URL
   ---
-  duration_ms: 6.7057
+  duration_ms: 3.755177
   type: 'test'
   ...
 # Subtest: history stays private and non-indexable
 ok 3 - history stays private and non-indexable
   ---
-  duration_ms: 1.687987
+  duration_ms: 1.800499
+  type: 'test'
+  ...
+# Subtest: assistant opens as a compact product rather than an empty fullscreen canvas
+ok 4 - assistant opens as a compact product rather than an empty fullscreen canvas
+  ---
+  duration_ms: 8.122709
+  type: 'test'
+  ...
+# Subtest: tabs and starter choices keep the approved pill geometry
+ok 5 - tabs and starter choices keep the approved pill geometry
+  ---
+  duration_ms: 2.27122
+  type: 'test'
+  ...
+# Subtest: composer is one clean pill and the CTA has clear sales hierarchy
+ok 6 - composer is one clean pill and the CTA has clear sales hierarchy
+  ---
+  duration_ms: 2.624861
+  type: 'test'
+  ...
+# Subtest: programmatic composer focus cannot hide the initial interface
+ok 7 - programmatic composer focus cannot hide the initial interface
+  ---
+  duration_ms: 1.621534
+  type: 'test'
+  ...
+# Subtest: logo uses the approved open mark without a square plate
+ok 8 - logo uses the approved open mark without a square plate
+  ---
+  duration_ms: 1.374231
   type: 'test'
   ...
 # Subtest: the product stylesheet is the sole visual authority
-ok 4 - the product stylesheet is the sole visual authority
+ok 9 - the product stylesheet is the sole visual authority
   ---
-  duration_ms: 8.334499
+  duration_ms: 14.470157
   type: 'test'
   ...
 # Subtest: launcher and brand mark never jump or bounce
-ok 5 - launcher and brand mark never jump or bounce
+ok 10 - launcher and brand mark never jump or bounce
   ---
-  duration_ms: 3.611166
+  duration_ms: 3.355088
   type: 'test'
   ...
 # Subtest: header contains brand purpose rather than a fake availability state
-ok 6 - header contains brand purpose rather than a fake availability state
+ok 11 - header contains brand purpose rather than a fake availability state
   ---
-  duration_ms: 1.547537
+  duration_ms: 1.082917
   type: 'test'
   ...
 # Subtest: backward step navigation releases the tall-step height lock
-ok 7 - backward step navigation releases the tall-step height lock
+ok 12 - backward step navigation releases the tall-step height lock
   ---
-  duration_ms: 1.4418
+  duration_ms: 0.895596
   type: 'test'
   ...
 # Subtest: mobile iframe freezes and restores the parent page on iOS
-ok 8 - mobile iframe freezes and restores the parent page on iOS
+ok 13 - mobile iframe freezes and restores the parent page on iOS
   ---
-  duration_ms: 1.229063
+  duration_ms: 0.898831
   type: 'test'
   ...
 # Subtest: contact conversion surface keeps clear hierarchy
-ok 9 - contact conversion surface keeps clear hierarchy
+ok 14 - contact conversion surface keeps clear hierarchy
   ---
-  duration_ms: 2.986233
+  duration_ms: 2.243708
   type: 'test'
   ...
 # Subtest: demo and embed load one foundation and one product stylesheet
-ok 10 - demo and embed load one foundation and one product stylesheet
+ok 15 - demo and embed load one foundation and one product stylesheet
   ---
-  duration_ms: 15.632271
+  duration_ms: 7.672267
   type: 'test'
   ...
 # Subtest: widget shell uses accessible independent tabs without a draggable thumb
-ok 11 - widget shell uses accessible independent tabs without a draggable thumb
+ok 16 - widget shell uses accessible independent tabs without a draggable thumb
   ---
-  duration_ms: 5.14689
+  duration_ms: 1.953756
   type: 'test'
   ...
 # Subtest: exact vector logo remains green, crisp and motionless
-ok 12 - exact vector logo remains green, crisp and motionless
+ok 17 - exact vector logo remains green, crisp and motionless
   ---
-  duration_ms: 2.100723
+  duration_ms: 1.500387
   type: 'test'
   ...
 # Subtest: panel and mode navigation use deliberate desktop proportions
-ok 13 - panel and mode navigation use deliberate desktop proportions
+ok 18 - panel and mode navigation use deliberate desktop proportions
   ---
-  duration_ms: 1.459426
+  duration_ms: 1.066937
   type: 'test'
   ...
 # Subtest: chat hierarchy and always-visible composer remain explicit
-ok 14 - chat hierarchy and always-visible composer remain explicit
+ok 19 - chat hierarchy and always-visible composer remain explicit
   ---
-  duration_ms: 2.243265
+  duration_ms: 1.718175
   type: 'test'
   ...
 # Subtest: primary controls use the requested rounded geometry
-ok 15 - primary controls use the requested rounded geometry
+ok 20 - primary controls use the requested rounded geometry
   ---
-  duration_ms: 2.606987
+  duration_ms: 2.227408
   type: 'test'
   ...
 # Subtest: configurator selection is static, legible and auto-advances without CSS side effects
-ok 16 - configurator selection is static, legible and auto-advances without CSS side effects
+ok 21 - configurator selection is static, legible and auto-advances without CSS side effects
   ---
-  duration_ms: 1.505255
+  duration_ms: 1.585576
   type: 'test'
   ...
 # Subtest: palette stays within the website white forest lime identity
-ok 17 - palette stays within the website white forest lime identity
+ok 22 - palette stays within the website white forest lime identity
   ---
-  duration_ms: 1.024898
+  duration_ms: 1.085201
   type: 'test'
   ...
 # Subtest: mobile and reduced-motion fallbacks are first-class
-ok 18 - mobile and reduced-motion fallbacks are first-class
+ok 23 - mobile and reduced-motion fallbacks are first-class
   ---
-  duration_ms: 1.371305
+  duration_ms: 1.425236
   type: 'test'
   ...
 # Subtest: icons remain one custom rounded line family
-ok 19 - icons remain one custom rounded line family
+ok 24 - icons remain one custom rounded line family
   ---
-  duration_ms: 1.050176
+  duration_ms: 1.167725
   type: 'test'
   ...
 # Subtest: configurator remains a short five-step conversion flow
-ok 20 - configurator remains a short five-step conversion flow
+ok 25 - configurator remains a short five-step conversion flow
   ---
-  duration_ms: 1.514739
+  duration_ms: 1.706874
   type: 'test'
   ...
-1..20
-# tests 20
+1..25
+# tests 25
 # suites 0
-# pass 20
+# pass 25
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 112.617299
+# duration_ms 160.624306
