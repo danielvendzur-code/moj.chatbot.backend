@@ -7,18 +7,20 @@ import siteGreenChatCss from "../site-green-chat-final.css?inline";
 import siteGreenConfigCss from "../site-green-config-final.css?inline";
 import siteGreenMobileCss from "../site-green-mobile-final.css?inline";
 import webAlignedPolishCss from "../web-aligned-polish-final.css?inline";
+import headerTabsCorrectionCss from "../header-tabs-correction-final.css?inline";
 
 const STYLE_ID = "dv-assistant-lime-white-styles";
 
 /** Historical layers remain for layout compatibility. The site-green sheets
- * establish the finished identity and the web-aligned sheet is the final
- * authority for launcher, shell and primary-action polish. */
+ * establish the finished identity, the web-aligned sheet handles the shell,
+ * and the header/tabs correction is the final authority for the visible brand
+ * header, availability state and mode switch. */
 export function installLimeWhiteStyles(): void {
   if (document.getElementById(STYLE_ID)) return;
 
   const style = document.createElement("style");
   style.id = STYLE_ID;
   style.dataset.dvAssistantTheme = "site-white-forest-lime";
-  style.textContent = `${limeWhiteCss}\n${whiteGreenLockCss}\n${approvedOptionOneCss}\n${professionalHarmonyCss}\n${siteGreenBrandCss}\n${siteGreenChatCss}\n${siteGreenConfigCss}\n${siteGreenMobileCss}\n${webAlignedPolishCss}`;
+  style.textContent = `${limeWhiteCss}\n${whiteGreenLockCss}\n${approvedOptionOneCss}\n${professionalHarmonyCss}\n${siteGreenBrandCss}\n${siteGreenChatCss}\n${siteGreenConfigCss}\n${siteGreenMobileCss}\n${webAlignedPolishCss}\n${headerTabsCorrectionCss}`;
   document.head.appendChild(style);
 }

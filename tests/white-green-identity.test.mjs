@@ -23,7 +23,8 @@ test("the finished website palette is appended as the final widget authority", a
   const config = await read("src/site-green-config-final.css");
   const mobile = await read("src/site-green-mobile-final.css");
   const polish = await read("src/web-aligned-polish-final.css");
-  const finalCss = `${brand}\n${chat}\n${config}\n${mobile}\n${polish}`;
+  const correction = await read("src/header-tabs-correction-final.css");
+  const finalCss = `${brand}\n${chat}\n${config}\n${mobile}\n${polish}\n${correction}`;
 
   for (const file of [
     "site-green-brand-final.css",
@@ -31,9 +32,10 @@ test("the finished website palette is appended as the final widget authority", a
     "site-green-config-final.css",
     "site-green-mobile-final.css",
     "web-aligned-polish-final.css",
+    "header-tabs-correction-final.css",
   ]) assert.ok(installer.includes(file), `Missing final stylesheet ${file}`);
 
-  assert.match(installer, /webAlignedPolishCss\}`/);
+  assert.match(installer, /headerTabsCorrectionCss\}`/);
   assert.match(installer, /site-white-forest-lime/);
   for (const token of ["#d9ff78", "#b9ed4d", "#19834f", "#0f6a3e", "#0b2f20", "#fff"]) {
     assert.ok(finalCss.includes(token), `Missing finished site token ${token}`);
@@ -50,6 +52,9 @@ test("the finished website palette is appended as the final widget authority", a
   assert.match(polish, /background-size:\s*260% 260% !important/);
   assert.match(polish, /Získať návrh riešenia/);
   assert.match(polish, /\.cw-inputbar\[class\]\s*>\s*\.cw-send\[class\]:disabled[\s\S]*visibility:\s*visible !important/);
+  assert.match(correction, /Odpovedám hneď/);
+  assert.match(correction, /border-radius:\s*16px !important/);
+  assert.match(correction, /\.cw-tabs__thumb\[class\]/);
   assert.doesNotMatch(finalCss, forbiddenWarm);
 });
 
