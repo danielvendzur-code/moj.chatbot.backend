@@ -6,11 +6,14 @@ const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 const forbiddenWarm =
   /#ffc79d|#f0a873|#f3a75a|#e58a5b|#f4c9a8|#ffe38a|255\s*,\s*199\s*,\s*157|240\s*,\s*168\s*,\s*115/i;
 
-test("widget uses the supplied raster logo without redrawing it", async () => {
+test("widget uses the same exact vector mark as the website", async () => {
   const logo = await read("src/components/widget/BubbleLogo.tsx");
-  assert.match(logo, /data:image\/(?:jpeg|webp);base64,/);
-  assert.match(logo, /<img src=\{LOGO_IMAGE\} alt="" draggable=\{false\}/);
-  assert.doesNotMatch(logo, /<svg\b|<path\b/);
+  assert.match(logo, /const OUTER =/);
+  assert.match(logo, /const INNER =/);
+  assert.match(logo, /viewBox="0 0 112 112"/);
+  assert.match(logo, /strokeWidth="4\.3"/);
+  assert.match(logo, /className=\{`bl bl--\$\{size\}`\}/);
+  assert.doesNotMatch(logo, /data:image|<img\b|base64,/);
 });
 
 test("the finished website palette is appended as the final widget authority", async () => {
@@ -42,9 +45,20 @@ test("the finished website palette is appended as the final widget authority", a
   assert.match(brand, /data-assistant-open="true"/);
   assert.match(mobile, /prefers-reduced-motion:reduce/);
   assert.match(polish, /Odpoviem alebo vyskladám riešenie/);
-  assert.match(polish, /\.cw-launcher\[class\]:hover[\s\S]*transform:\s*none!important/);
-  assert.match(polish, /\.cw-inputbar\[class\]\s*>\s*\.cw-send\[class\]:disabled[\s\S]*visibility:\s*visible!important/);
+  assert.match(polish, /\.cw-launcher\[class\]:hover[\s\S]*transform:\s*none !important/);
+  assert.match(polish, /radial-gradient\(circle at center, var\(--wa-green\)/);
+  assert.match(polish, /background-size:\s*260% 260% !important/);
+  assert.match(polish, /Získať návrh riešenia/);
+  assert.match(polish, /\.cw-inputbar\[class\]\s*>\s*\.cw-send\[class\]:disabled[\s\S]*visibility:\s*visible !important/);
   assert.doesNotMatch(finalCss, forbiddenWarm);
+});
+
+test("backward step navigation releases the tall-step height lock", async () => {
+  const transition = await read("src/hooks/useStepTransition.ts");
+  assert.match(transition, /nextDirection === "forward"/);
+  assert.match(transition, /nextDirection === "backward"/);
+  assert.match(transition, /container\.style\.minHeight = ""/);
+  assert.match(transition, /direction === "backward"/);
 });
 
 test("mobile iframe freezes and restores the parent page on iOS", async () => {
