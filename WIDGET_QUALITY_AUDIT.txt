@@ -1,4 +1,4 @@
-run_id=30895531874
+run_id=30896673743
 install=success
 lint=success
 build=success
@@ -26,16 +26,16 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  1.14 kB[22m[1m[22m[2m │ gzip:  0.61 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-Dz3fBo7F.css  [39m[1m[2m193.69 kB[22m[1m[22m[2m │ gzip: 26.27 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-W4vgr13X.js   [39m[1m[2m325.99 kB[22m[1m[22m[2m │ gzip: 92.19 kB[22m
-[32m✓ built in 1.29s[39m
+[2mdist/[22m[2massets/[22m[36mindex-CFj2b9nw.js   [39m[1m[2m336.16 kB[22m[1m[22m[2m │ gzip: 88.61 kB[22m
+[32m✓ built in 845ms[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 113 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m193.33 kB[22m[1m[22m[2m │ gzip: 26.18 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m325.90 kB[22m[1m[22m[2m │ gzip: 92.22 kB[22m
-[32m✓ built in 1.36s[39m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m336.08 kB[22m[1m[22m[2m │ gzip: 88.66 kB[22m
+[32m✓ built in 826ms[39m
 
 ===== test =====
 
@@ -46,1112 +46,642 @@ TAP version 13
 # Subtest: history accepts the existing Vercel KV variables without colliding with MôjPlot
 ok 1 - history accepts the existing Vercel KV variables without colliding with MôjPlot
   ---
-  duration_ms: 9.686223
+  duration_ms: 5.537908
   type: 'test'
   ...
 # Subtest: history has a normal password page and never places the password in the URL
 ok 2 - history has a normal password page and never places the password in the URL
   ---
-  duration_ms: 4.734384
+  duration_ms: 2.861279
   type: 'test'
   ...
 # Subtest: history stays private and non-indexable
 ok 3 - history stays private and non-indexable
   ---
-  duration_ms: 3.038245
+  duration_ms: 0.968664
   type: 'test'
   ...
-# Subtest: widget uses the supplied raster logo without redrawing it
-ok 4 - widget uses the supplied raster logo without redrawing it
+# Subtest: widget uses the same exact vector mark as the website
+ok 4 - widget uses the same exact vector mark as the website
   ---
-  duration_ms: 6.898276
+  duration_ms: 4.563268
   type: 'test'
   ...
 # Subtest: the finished website palette is appended as the final widget authority
-not ok 5 - the finished website palette is appended as the final widget authority
+ok 5 - the finished website palette is appended as the final widget authority
   ---
-  duration_ms: 10.550508
+  duration_ms: 3.259948
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/white-green-identity.test.mjs:16:1'
+  ...
+# Subtest: backward step navigation releases the tall-step height lock
+ok 6 - backward step navigation releases the tall-step height lock
+  ---
+  duration_ms: 0.791384
+  type: 'test'
+  ...
+# Subtest: mobile iframe freezes and restores the parent page on iOS
+ok 7 - mobile iframe freezes and restores the parent page on iOS
+  ---
+  duration_ms: 0.801966
+  type: 'test'
+  ...
+# Subtest: demo and embed load one foundation and one authoritative redesign
+ok 8 - demo and embed load one foundation and one authoritative redesign
+  ---
+  duration_ms: 10.514104
+  type: 'test'
+  ...
+# Subtest: assistant order and interactive send feedback remain explicit
+ok 9 - assistant order and interactive send feedback remain explicit
+  ---
+  duration_ms: 0.887129
+  type: 'test'
+  ...
+# Subtest: panel has the corrected premium desktop proportions
+ok 10 - panel has the corrected premium desktop proportions
+  ---
+  duration_ms: 0.970105
+  type: 'test'
+  ...
+# Subtest: mode switch is one rounded segmented control without pill geometry
+ok 11 - mode switch is one rounded segmented control without pill geometry
+  ---
+  duration_ms: 1.326474
+  type: 'test'
+  ...
+# Subtest: the redesign uses only the website black and brand palette
+ok 12 - the redesign uses only the website black and brand palette
+  ---
+  duration_ms: 2.227709
+  type: 'test'
+  ...
+# Subtest: primary actions, quick chips and composer use intentional geometry
+ok 13 - primary actions, quick chips and composer use intentional geometry
+  ---
+  duration_ms: 1.406308
+  type: 'test'
+  ...
+# Subtest: chat chips and composer use a crisp non-liquid system
+ok 14 - chat chips and composer use a crisp non-liquid system
+  ---
+  duration_ms: 0.885369
+  type: 'test'
+  ...
+# Subtest: calculator choices keep geometry and use one static selected system
+ok 15 - calculator choices keep geometry and use one static selected system
+  ---
+  duration_ms: 1.123385
+  type: 'test'
+  ...
+# Subtest: selection indicator is one real aligned circular check
+ok 16 - selection indicator is one real aligned circular check
+  ---
+  duration_ms: 0.808419
+  type: 'test'
+  ...
+# Subtest: icons remain one custom rounded line family
+ok 17 - icons remain one custom rounded line family
+  ---
+  duration_ms: 0.869625
+  type: 'test'
+  ...
+# Subtest: chat and configurator motion remain reduced-motion safe
+ok 18 - chat and configurator motion remain reduced-motion safe
+  ---
+  duration_ms: 1.312892
+  type: 'test'
+  ...
+# Subtest: configurator remains five short steps with explicit selection guidance
+ok 19 - configurator remains five short steps with explicit selection guidance
+  ---
+  duration_ms: 0.804096
+  type: 'test'
+  ...
+# Subtest: approved lead submission keeps sweep feedback and website hierarchy
+ok 20 - approved lead submission keeps sweep feedback and website hierarchy
+  ---
+  duration_ms: 1.362408
+  type: 'test'
+  ...
+# Subtest: contact submits a real lead and keeps API protections
+ok 21 - contact submits a real lead and keeps API protections
+  ---
+  duration_ms: 0.89044
+  type: 'test'
+  ...
+# Subtest: a delivered lead is confirmed to the visitor, and a failed one is not claimed
+ok 22 - a delivered lead is confirmed to the visitor, and a failed one is not claimed
+  ---
+  duration_ms: 0.884941
+  type: 'test'
+  ...
+# Subtest: the reply streams in and the thread keeps up with it
+ok 23 - the reply streams in and the thread keeps up with it
+  ---
+  duration_ms: 3.315071
+  type: 'test'
+  ...
+# Subtest: tapping a mode never lands on the drag handler instead of the button
+ok 24 - tapping a mode never lands on the drag handler instead of the button
+  ---
+  duration_ms: 0.760786
+  type: 'test'
+  ...
+# Subtest: the finish layer removes browser blue and keeps one motion vocabulary
+ok 25 - the finish layer removes browser blue and keeps one motion vocabulary
+  ---
+  duration_ms: 1.161036
+  type: 'test'
+  ...
+# Subtest: the finish layer sizes the builder to its step and glows the contacts
+ok 26 - the finish layer sizes the builder to its step and glows the contacts
+  ---
+  duration_ms: 1.392988
+  type: 'test'
+  ...
+# Subtest: the phone keyboard folds away what is not the conversation
+ok 27 - the phone keyboard folds away what is not the conversation
+  ---
+  duration_ms: 0.781065
+  type: 'test'
+  ...
+# Subtest: consent sits with the button it gates, not below the fold
+ok 28 - consent sits with the button it gates, not below the fold
+  ---
+  duration_ms: 0.793803
+  type: 'test'
+  ...
+# Subtest: mobile full screen, safe areas and keyboard constraints remain safe
+ok 29 - mobile full screen, safe areas and keyboard constraints remain safe
+  ---
+  duration_ms: 0.587923
+  type: 'test'
+  ...
+# Subtest: final contact step scrolls and supports calls or meetings
+ok 30 - final contact step scrolls and supports calls or meetings
+  ---
+  duration_ms: 0.797192
+  type: 'test'
+  ...
+# Subtest: messages begin at the top and icon tiles stay transparent
+ok 31 - messages begin at the top and icon tiles stay transparent
+  ---
+  duration_ms: 0.834364
+  type: 'test'
+  ...
+# Subtest: final user correction centers quick replies and keeps one input shape
+ok 32 - final user correction centers quick replies and keeps one input shape
+  ---
+  duration_ms: 1.044449
+  type: 'test'
+  ...
+# Subtest: final configurator correction removes clipping, icon tiles and selected stripes
+ok 33 - final configurator correction removes clipping, icon tiles and selected stripes
+  ---
+  duration_ms: 1.238518
+  type: 'test'
+  ...
+# Subtest: the final authority exposes only charcoal, warm surfaces and peach interaction
+ok 34 - the final authority exposes only charcoal, warm surfaces and peach interaction
+  ---
+  duration_ms: 0.495275
+  type: 'test'
+  ...
+# Subtest: the six reported interaction defects stay fixed
+ok 35 - the six reported interaction defects stay fixed
+  ---
+  duration_ms: 1.067239
+  type: 'test'
+  ...
+# Subtest: starter chips retire once the conversation begins
+ok 36 - starter chips retire once the conversation begins
+  ---
+  duration_ms: 0.480444
+  type: 'test'
+  ...
+# Subtest: the composer keeps its size at every panel height
+ok 37 - the composer keeps its size at every panel height
+  ---
+  duration_ms: 0.498491
+  type: 'test'
+  ...
+# Subtest: transcripts are logged without ever costing a visitor their answer
+ok 38 - transcripts are logged without ever costing a visitor their answer
+  ---
+  duration_ms: 0.886596
+  type: 'test'
+  ...
+# Subtest: the transcript viewer is the least permissive thing here
+ok 39 - the transcript viewer is the least permissive thing here
+  ---
+  duration_ms: 1.022863
+  type: 'test'
+  ...
+# Subtest: both endpoints share one origin list so it cannot half-apply
+ok 40 - both endpoints share one origin list so it cannot half-apply
+  ---
+  duration_ms: 0.630542
+  type: 'test'
+  ...
+# Subtest: the contact step gives the form room when the keyboard is up
+ok 41 - the contact step gives the form room when the keyboard is up
+  ---
+  duration_ms: 0.550037
+  type: 'test'
+  ...
+# Subtest: focus is drawn on the control, not as a rectangle beside it
+ok 42 - focus is drawn on the control, not as a rectangle beside it
+  ---
+  duration_ms: 1.310574
+  type: 'test'
+  ...
+# Subtest: the conversation survives a reload and reset clears it
+ok 43 - the conversation survives a reload and reset clears it
+  ---
+  duration_ms: 1.891552
+  type: 'test'
+  ...
+# Subtest: an accepted lead is traceable and one bad mailbox cannot sink the other
+ok 44 - an accepted lead is traceable and one bad mailbox cannot sink the other
+  ---
+  duration_ms: 0.453801
+  type: 'test'
+  ...
+# Subtest: a refused delivery channel no longer hides the reason or skips the next one
+ok 45 - a refused delivery channel no longer hides the reason or skips the next one
+  ---
+  duration_ms: 0.710376
+  type: 'test'
+  ...
+# Subtest: info@mojchatbot.sk is the address, the personal one is the second contact
+ok 46 - info@mojchatbot.sk is the address, the personal one is the second contact
+  ---
+  duration_ms: 0.795977
+  type: 'test'
+  ...
+# Subtest: auto-advance does not leave a parked pointer lighting up the next step
+ok 47 - auto-advance does not leave a parked pointer lighting up the next step
+  ---
+  duration_ms: 0.597458
+  type: 'test'
+  ...
+# Subtest: the contact step lines up on one inset without stray rules
+ok 48 - the contact step lines up on one inset without stray rules
+  ---
+  duration_ms: 0.692029
+  type: 'test'
+  ...
+# Subtest: a new step never arrives with a chip that looks chosen
+ok 49 - a new step never arrives with a chip that looks chosen
+  ---
+  duration_ms: 0.80236
+  type: 'test'
+  ...
+# Subtest: project estimates are absent while customer-price capability remains
+ok 50 - project estimates are absent while customer-price capability remains
+  ---
+  duration_ms: 1.003245
+  type: 'test'
+  ...
+# Subtest: the step swap holds the panel height so nothing jumps
+not ok 51 - the step swap holds the panel height so nothing jumps
+  ---
+  duration_ms: 1.198026
+  type: 'test'
+  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:1120:1'
   failureType: 'testCodeFailure'
   error: |-
-    The input did not match the regular expression /\.cw-launcher\[class\]:hover[\s\S]*transform:\s*none!important/. Input:
+    The input did not match the regular expression /if \(prefersReducedMotion\(\)\) \{\s*\n\s*setVisibleStep\(step\);/. Input:
     
-    '/* =====================================================================\n' +
-      '   MÔJ CHATBOT — WEB-ALIGNED FINISH\n' +
+    'import { useEffect, useRef, useState, type RefObject } from "react";\n' +
       '\n' +
-      '   This layer is intentionally loaded last. It does not redesign the\n' +
-      '   configurator or touch its logic; it only aligns the visible shell,\n' +
-      '   launcher, navigation and primary actions with the current website.\n' +
-      '   ===================================================================== */\n' +
+      '/* How long the outgoing step is given to fade up and out. Must match\n' +
+      '   `cw-step-out` in the stylesheet. */\n' +
+      'export const STEP_EXIT_MS = 72;\n' +
+      '/* Longest incoming animation (the last staggered chip), after which the height\n' +
+      '   lock can be released without anything visibly settling. */\n' +
+      'const STEP_ENTER_MS = 640;\n' +
       '\n' +
-      'html:root body .cw-widget[class][class][class][class] {\n' +
-      '  --wa-forest: #0b2f20;\n' +
-      '  --wa-green: #19834f;\n' +
-      '  --wa-green-hover: #0f6a3e;\n' +
-      '  --wa-lime: #d9ff78;\n' +
-      '  --wa-paper: #fbfdf9;\n' +
-      '  --wa-soft: #f3f8ef;\n' +
-      '  --wa-muted: #506057;\n' +
-      '  --wa-line: rgba(11, 47, 32, 0.14);\n' +
-      '  --wa-ease: cubic-bezier(0.22, 1, 0.36, 1);\n' +
-      '}\n' +
+      'const prefersReducedMotion = (): boolean =>\n' +
+      '  typeof window !== "undefined" &&\n' +
+      '  window.matchMedia("(prefers-reduced-motion: reduce)").matches;\n' +
       '\n' +
-      '/* The supplied green logo always sits on one clean white surface. */\n' +
-      'html:root body .cw-widget[class][class][class][class]\n' +
-      '  :is(.bl, .bl--launcher, .bl--header, .bl--avatar)[class] {\n' +
-      '  display: grid !important;\n' +
-      '  place-items: center !important;\n' +
-      '  padding: 3px !important;\n' +
-      '  overflow: hidden !important;\n' +
-      '  border: 1px solid rgba(25, 131, 79, 0.18) !important;\n' +
-      '  border-radius: 50% !important;\n' +
-      '  background: #fff !important;\n' +
-      '  box-shadow: none !important;\n' +
-      '  filter: none !important;\n' +
-      '  transform: none !important;\n' +
-      '  animation: none !important;\n' +
-      '}\n' +
+      'type StepTransition = {\n' +
+      '  /* The step whose content is on screen right now. Lags `step` by one exit. */\n' +
+      '  visibleStep: number;\n' +
+      '  /* True while the old step is fading out. */\n' +
+      '  leaving: boolean;\n' +
+      '  direction: "forward" | "backward";\n' +
+      '};\n' +
       '\n' +
-      'html:root body .cw-widget[class][class][class][class] .bl img {\n' +
-      '  display: block !important;\n' +
-      '  width: 100% !important;\n' +
-      '  height: 100% !important;\n' +
-      '  max-width: none !important;\n' +
-      '  object-fit: contain !important;\n' +
-      '  object-position: center !important;\n' +
-      '  border: 0 !important;\n' +
-      '  border-radius: 50% !important;\n' +
-      '  background: #fff !important;\n' +
-      '  box-shadow: none !important;\n' +
-      '  filter: none !important;\n' +
-      '  transform: none !important;\n' +
-      '  animation: none !important;\n' +
-      '}\n' +
+      '/* Swaps one step for the next without the panel resizing under the pointer.\n' +
+      '   Forward navigation briefly holds the outgoing height while the next step\n' +
+      '   arrives. Backward navigation releases that lock immediately: otherwise a\n' +
+      '   tall contact step leaves a large empty block behind for 640 ms after Back. */\n' +
+      'export function useStepTransition(\n' +
+      '  step: number,\n' +
+      '  containerRef: RefObject<HTMLElement>,\n' +
+      '): StepTransition {\n' +
+      '  const [visibleStep, setVisibleStep] = useState(step);\n' +
+      '  const [leaving, setLeaving] = useState(false);\n' +
+      '  const [direction, setDirection] = useState<"forward" | "backward">("forward");\n' +
+      '  const releaseRef = useRef<number | null>(null);\n' +
       '\n' +
-      'html:root body .cw-widget[class][class][class][class] .bl--launcher {\n' +
-      '  width: 62px !important;\n' +
-      '  height: 62px !important;\n' +
-      '}\n' +
+      '  useEffect(() => {\n' +
+      '    if (step === visibleStep) return;\n' +
       '\n' +
-      'html:root body .cw-widget[class][class][class][class] .bl--header {\n' +
-      '  width: 46px !important;\n' +
-      '  height: 46px !important;\n' +
-      '}\n' +
+      '    const nextDirection = step > visibleStep ? "forward" : "backward";\n' +
+      '    setDirection(nextDirection);\n' +
       '\n' +
-      '/* Stable launcher: no bounce, no vertical jump and no scale pop. */\n' +
-      'html:root body .cw-widget[class][class][class][class] .cw-launcher[class] {\n' +
-      '  width: 70px !important;\n' +
-      '  height: 70px !important;\n' +
-      '  padding: 4px !important;\n' +
-      '  overflow: visible !important;\n' +
-      '  border: 1px solid rgba(25, 131, 79, 0.22) !important;\n' +
-      '  border-radius: 50% !important;\n' +
-      '  background: #fff !important;\n' +
-      '  background-image: none !important;\n' +
-      '  box-shadow:\n' +
-      '    0 18px 42px -24px rgba(11, 47, 32, 0.55),\n' +
-      '    0 0 0 5px rgba(255, 255, 255, 0.72) !important;\n' +
-      '  filter: none !important;\n' +
-      '  transform: none !important;\n' +
-      '  animation: none !important;\n' +
-      '  transition:\n' +
-      '    border-color 220ms ease,\n' +
-      '    box-shadow 320ms var(--wa-ease),\n' +
-      '    background-color 220ms ease !important;\n' +
-      '}\n' +
+      '    const container = containerRef.current;\n' +
+      '    if (releaseRef.current !== null) {\n' +
+      '      window.clearTimeout(releaseRef.current);\n' +
+      '      releaseRef.current = null;\n' +
+      '    }\n' +
       '\n' +
-      'html:root body .cw-widget[class][class][class][class] .cw-launcher[class] > .bl {\n' +
-      '  position: relative !important;\n' +
-      '  z-index: 2 !important;\n' +
-      '}\n' +
+      '    if (prefersReducedMotion()) {\n' +
+      '      if (container) container.style.minHeight = "";\n' +
+      '      setVisibleStep(step);\n' +
+      '      setLeaving(false);\n' +
+      '      return;\n' +
+      '    }\n' +
       '\n' +
-      '@media (hover: hover) and (pointer: fine) {\n' +
-      '  html:root body .cw-widget[class][class][class][class] .cw-launcher[class]:hover {\n' +
-      '    border-color: rgba(25, 131, 79, 0.42) !important;\n' +
-      '    background: #fff !important;\n' +
-      '    box-shadow:\n' +
-      '      0 22px 48px -24px rgba(11, 47, 32, 0.62),\n' +
-      '      0 0 0 6px rgba(217, 255, 120, 0.18) !important;\n' +
-      '    transform: none !important;\n' +
-      '  }\n' +
-      '}\n' +
+      '    if (container) {\n' +
+      '      if (nextDirection === "forward") {\n' +
+      '        container.style.minHeight = `${Math.ceil(container.getBoundingClientRect().height)}px`;\n' +
+      '      } else {\n' +
+      '        container.style.minHeight = "";\n' +
+      '      }\n' +
+      '    }\n' +
       '\n' +
-      'html:root body .cw-widget[class][class][class][class] .cw-launcher[class]:active {\n' +
-      '  border-color: var(--wa-green) !important;\n' +
-      '  box-shadow:\n' +
-      '    0 14px 34px -24px rgba(11, 47, 32, 0.62),\n' +
-      '    0 0 0 4px rgba(25, 131, 79, 0.12) !important;\n' +
-      '  transform: none !important;\n' +
-      '}\n' +
+      '    setLeaving(true);\n' +
+      '    const swap = window.setTimeout(() => {\n' +
+      '      setVisibleStep(step);\n' +
+      '      setLeaving(false);\n' +
+      '      if (nextDirection === "backward" && container) {\n' +
+      '        container.style.minHeight = "";\n' +
+      '      }\n' +
+      '    }, STEP_EXIT_MS);\n' +
       '\n' +
-      '/* Hover preview above the closed bubble. */\n' +
-      'html:root body .cw-widget[class][class][class][class] .cw-launcher[class]::after {\n' +
-      '  content: "Môj Chatbot\\A Odpoviem alebo vyskladám riešenie" !important;\n' +
-      '  display: block !important;\n' +
-      '  position: absolute !important;\n' +
-      '  right: 0 !important;\n' +
-      '  bottom: calc(100% + 15px) !important;\n' +
-      '  z-index: 4 !important;\n' +
-      '  width: max-content !important;\n' +
-      '  max-width: 238px !important;\n' +
-      '  padding: 12px 15px 13px !important;\n' +
-      '  border: 1px solid rgba(217, 255, 120, 0.2) !important;\n' +
-      '  border-left: 3px solid var(--wa-lime) !important;\n' +
-      '  border-radius: 17px 17px 5px 17px !important;\n' +
-      '  color: #fff !important;\n' +
-      '  background: var(--wa-forest) !important;\n' +
-      '  background-image: none !important;\n' +
-      '  box-shadow: 0 22px 48px -24px rgba(11, 47, 32, 0.72) !important;\n' +
-      '  opacity: 0 !important;\n' +
-      '  visibility: hidden !important;\n' +
-      '  pointer-events: none !important;\n' +
-      '  white-space: pre-line !important;\n' +
-      '  text-align: left !important;\n' +
-      '  font-size: 13px !important;\n' +
-      '  font-weight: 520 !important;\n' +
-      '  line-height: 1.45 !important;\n' +
-      '  letter-spacing: -0.01em !important;\n' +
-      '  transform: translateY(7px) !important;\n' +
-      '  transition:\n' +
-      '    opacity 180ms ease,\n' +
-      '    visibility 180ms ease,\n' +
-      '    transform 280ms var(--wa-ease) !important;\n' +
-      '}\n' +
+      '    return () => window.clearTimeout(swap);\n' +
+      '  }, [containerRef, step, visibleStep]);\n' +
       '\n' +
-      'html:root body .cw-widget[class][class][class][class] .cw-launcher[class]::before {\n' +
-      '  content: "" !important;\n' +
-      '  display: block !important;\n' +
-      '  position: absolute !important;\n' +
-      '  right: 17px !important;\n' +
-      '  bottom: calc(100% + 10px) !important;\n' +
-      '  z-index: 3 !important;\n' +
-      '  width: 12px !important;\n' +
-      '  height: 12px !important;\n' +
-      '  border: 0 !important;\n' +
-      '  background: var(--wa-forest) !important;\n' +
-      '  box-shadow: none !important;\n' +
-      '  opacity: 0 !important;\n' +
-      '  visibility: hidden !important;\n' +
-      '  pointer-events: none !important;\n' +
-      '  transform: translateY(7px) rotate(45deg) !important;\n' +
-      '  transition:\n' +
-      '    opacity 180ms ease,\n' +
-      '    visibility 180ms ease,\n' +
-      '    transform 280ms var(--wa-ease) !important;\n' +
-      '}\n' +
+      '  /* Once a forward step has arrived, drop its temporary height lock after the\n' +
+      '     staggered entrance. Backward steps never keep the lock. */\n' +
+      '  useEffect(() => {\n' +
+      '    if (leaving) return;\n' +
+      '    const container = containerRef.current;\n' +
+      '    if (!container || !container.style.minHeight) return;\n' +
       '\n' +
-      '@media (hover: hover) and (pointer: fine) {\n' +
-      '  html:root body .cw-widget[class][class][class][class]\n' +
-      '    .cw-launcher[class]:is(:hover, :focus-visible):not([aria-expanded="true"])::after {\n' +
-      '    opacity: 1 !important;\n' +
-      '    visibility: visible !important;\n' +
-      '    transform: translateY(0) !important;\n' +
-      '  }\n' +
+      '    if (direction === "backward") {\n' +
+      '      container.style.minHeight = "";\n' +
+      '      return;\n' +
+      '    }\n' +
       '\n' +
-      '  html:root body .cw-widget[class][class][class][class]\n' +
-      '    .cw-launcher[class]:is(:hover, :focus-visible):not([aria-expanded="true"])::before {\n' +
-      '    opacity: 1 !important;\n' +
-      '    visibility: visible !important;\n' +
-      '    transform: translateY(0) rotate(45deg) !important;\n' +
-      '  }\n' +
-      '}\n' +
+      '    releaseRef.current = window.setTimeout(() => {\n' +
+      '      releaseRef.current = null;\n' +
+      '      container.style.minHeight = "";\n' +
+      '    }, STEP_ENTER_MS);\n' +
       '\n' +
-      'html:root body .cw-widget[class][class][class][class]\n' +
-      '  .cw-launcher[class][aria-expanded="true"]::before,\n' +
-      'html:root body .cw-widget[class][class][class][class]\n' +
-      '  .cw-launcher[class][aria-expanded="true"]::after {\n' +
-      '  opacity: 0 !important;\n' +
-      '  visibility: hidden !important;\n' +
-      '}\n' +
+      '    return () => {\n' +
+      '      if (releaseRef.current !== null) window.clearTimeout(releaseRef.current);\n' +
+      '      releaseRef.current = null;\n' +
+      '    };\n' +
+      '  }, [containerRef, direction, leaving, visibleStep]);\n' +
       '\n' +
-      '/* A stronger forest header gives the white widget the same hierarchy as the site. */\n' +
-      'html:root body .cw-widget[class][class][class][class] .cw-panel-head[class] {\n' +
-      '  min-height: 82px !important;\n' +
-      '  color: #fff !important;\n' +
-      '  border: 0 !important;\n' +
-      '  border-bottom: 1px solid rgba(217, 255, 120, 0.18) !important;\n' +
-      '  background: var(--wa-forest) !important;\n' +
-      '  background-image: none !important;\n' +
-      '  box-shadow: 0 16px 34px -28px rgba(11, 47, 32, 0.7) !important;\n' +
-      '}\n' +
+      '  useEffect(\n' +
+      '    () => () => {\n' +
+      '      if (releaseRef.current !== null) window.clearTimeout(releaseRef.current);\n' +
+      '      const container = containerRef.current;\n' +
+      '      if (container) container.style.minHeight = "";\n' +
+      '    },\n' +
+      '    [containerRef],\n' +
+      '  );\n' +
       '\n' +
-      'html:root body .cw-widget[class][class][class][class] .cw-panel-head__title b {\n' +
-      '  color: #fff !important;\n' +
-      '  font-weight: 760 !important;\n' +
-      '  letter-spacing: -0.018em !important;\n' +
-      '}\n' +
-      '\n' +
-      'html:root body .cw-widget[class][class][class][class] .cw-panel-head__context[class] {\n' +
-      '  color: #c7d9ce !important;\n' +
-      '}\n' +
-      '\n' +
-      'html:root body .cw-widget[class][class][class][class] .cw-panel-head__online i,\n' +
-      'html:root body .cw-widget[class][class][class][class] .cw-online-dot[class] {\n' +
-      '  background: var(--wa-lime) !important;\n' +
-      '  box-shadow: 0 0 0 4px rgba(217, 255, 120, 0.12) !important;\n' +
-      '}\n' +
-      '\n' +
-      'html:root body .cw-widget[class][class][class][class] .cw-panel-head__actions button {\n' +
-      '  color: #dce9e1 !important;\n' +
-      '  border: 1px solid rgba(255, 255, 255, 0.1) !important;\n' +
-      '  border-radius: 999px !important;\n' +
-      '  background: rgba(255, 255, 255, 0.06) !important;\n' +
-      '  box-shadow: none !important;\n' +
-      '  transform: none !important;\n' +
-      '}\n' +
-      '\n' +
-      '@media (hover: hover) and (pointer: fine) {\n' +
-      '  html:root body .cw-widget[class][class][class][class]\n' +
-      '    .cw-panel-head__actions button:hover {\n' +
-      '    color: var(--wa-forest) !important;\n' +
-      '    border-color: var(--wa-lime) !important;\n' +
-      '    background: var(--wa-lime) !important;\n' +
-      '    box-shadow: none !important;\n' +
-      '    transform: none !important;\n' +
-      '  }\n' +
-      '}\n' +
-      '\n' +
-      '/* One rounded segmented control, visually related to the website pills. */\n' +
-      'html:root body .cw-widget[class][class][class][class] .cw-tabs[class] {\n' +
-      '  height: 58px !important;\n' +
-      '  margin: 11px 12px 0 !important;\n' +
-      '  padding: 4px !important;\n' +
-      '  gap: 4px !important;\n' +
-      '  border: 1px solid rgba(11, 47, 32, 0.13) !important;\n' +
-      '  border-radius: 999px !important;\n' +
-      '  background: var(--wa-soft) !important;\n' +
-      '  background-image: none !important;\n' +
-      '  box-shadow: inset 0 1px rgba(255, 255, 255, 0.94) !important;\n' +
-      '}\n' +
-      '\n' +
-      'html:root body .cw-widget[class][class][class][class] .cw-tabs__thumb[class] {\n' +
-      '  top: 4px !important;\n' +
-      '  bottom: 4px !important;\n' +
-      '  left: 4px !important;\n' +
-      '  width: calc((100% - 12px) / 2) !important;\n' +
-      '  border-radius: 999px !important;\n' +
-      '  background: var(--wa-green) !important;\n' +
-      '  background-image: none !important;\n' +
-      '  box-shadow: 0 12px 24px -18px rgba(11, 47, 32, 0.62) !important;\n' +
-      '}\n' +
-      '\n' +
-      'html:root body .cw-widget[class][class][class][class] .cw-tabs > button[class] {\n' +
-      '  height: 48px !important;\n' +
-      '  padding-inline: 10px !important;\n' +
-      '  border-radius: 999px !important;\n' +
-      '  color: #315244 !important;\n' +
-      '  background: transparent !important;\n' +
-      '  box-shadow: none !important;\n' +
-      '  transform: none !important;\n' +
-      '}\n' +
-      '\n' +
-      'html:root body .cw-widget[class][class][class][class]\n' +
-      '  .cw-tabs > button[class]:active {\n' +
-      '  transform: none !important;\n' +
-      '}\n' +
-      '\n' +
-      '/* The shell remains light, but no longer washed out. */\n' +
-      'html:root body .cw-widget[class][class][class][class]\n' +
-      '  :is(.cw-panel-body, .cw-conversation, .cw-calculator, .cw-calc-body, .cw-mode-view)[class] {\n' +
-      '  color: var(--sg-ink) !important;\n' +
-      '  background-color: var(--wa-paper) !important;\n' +
-      '  background-image:\n' +
-      '    radial-gradient(circle at 100% 0%, rgba(217, 255, 120, 0.08), transparent 17rem) !important;\n' +
-      '}\n' +
-      '\n' +
-      '/* Main actions share the same soft pill geometry as the website CTAs. */\n' +
-      'html:root body .cw-widget[class][class][class][class]\n' +
-      '  :is(.cw-chat-builder, .cw-next, .cw-submit)[class] {\n' +
-      '  min-height: 50px !important;\n' +
-      '  border-radius: 999px !important;\n' +
-      '  transform: none !important;\n' +
-      '  transition:\n' +
-      '    background-color 220ms ease,\n' +
-      '    border-color 220ms ease,\n' +
-      '    box-sha'... 3690 more characters
+      '  return { visibleStep, leaving, direction };\n' +
+      '}\n'
     
   code: 'ERR_ASSERTION'
   name: 'AssertionError'
   expected:
   actual: |-
-    /* =====================================================================
-       MÔJ CHATBOT — WEB-ALIGNED FINISH
+    import { useEffect, useRef, useState, type RefObject } from "react";
     
-       This layer is intentionally loaded last. It does not redesign the
-       configurator or touch its logic; it only aligns the visible shell,
-       launcher, navigation and primary actions with the current website.
-       ===================================================================== */
+    /* How long the outgoing step is given to fade up and out. Must match
+       `cw-step-out` in the stylesheet. */
+    export const STEP_EXIT_MS = 72;
+    /* Longest incoming animation (the last staggered chip), after which the height
+       lock can be released without anything visibly settling. */
+    const STEP_ENTER_MS = 640;
     
-    html:root body .cw-widget[class][class][class][class] {
-      --wa-forest: #0b2f20;
-      --wa-green: #19834f;
-      --wa-green-hover: #0f6a3e;
-      --wa-lime: #d9ff78;
-      --wa-paper: #fbfdf9;
-      --wa-soft: #f3f8ef;
-      --wa-muted: #506057;
-      --wa-line: rgba(11, 47, 32, 0.14);
-      --wa-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    const prefersReducedMotion = (): boolean =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    
+    type StepTransition = {
+      /* The step whose content is on screen right now. Lags `step` by one exit. */
+      visibleStep: number;
+      /* True while the old step is fading out. */
+      leaving: boolean;
+      direction: "forward" | "backward";
+    };
+    
+    /* Swaps one step for the next without the panel resizing under the pointer.
+       Forward navigation briefly holds the outgoing height while the next step
+       arrives. Backward navigation releases that lock immediately: otherwise a
+       tall contact step leaves a large empty block behind for 640 ms after Back. */
+    export function useStepTransition(
+      step: number,
+      containerRef: RefObject<HTMLElement>,
+    ): StepTransition {
+      const [visibleStep, setVisibleStep] = useState(step);
+      const [leaving, setLeaving] = useState(false);
+      const [direction, setDirection] = useState<"forward" | "backward">("forward");
+      const releaseRef = useRef<number | null>(null);
+    
+      useEffect(() => {
+        if (step === visibleStep) return;
+    
+        const nextDirection = step > visibleStep ? "forward" : "backward";
+        setDirection(nextDirection);
+    
+        const container = containerRef.current;
+        if (releaseRef.current !== null) {
+          window.clearTimeout(releaseRef.current);
+          releaseRef.current = null;
+        }
+    
+        if (prefersReducedMotion()) {
+          if (container) container.style.minHeight = "";
+          setVisibleStep(step);
+          setLeaving(false);
+          return;
+        }
+    
+        if (container) {
+          if (nextDirection === "forward") {
+            container.style.minHeight = `${Math.ceil(container.getBoundingClientRect().height)}px`;
+          } else {
+            container.style.minHeight = "";
+          }
+        }
+    
+        setLeaving(true);
+        const swap = window.setTimeout(() => {
+          setVisibleStep(step);
+          setLeaving(false);
+          if (nextDirection === "backward" && container) {
+            container.style.minHeight = "";
+          }
+        }, STEP_EXIT_MS);
+    
+        return () => window.clearTimeout(swap);
+      }, [containerRef, step, visibleStep]);
+    
+      /* Once a forward step has arrived, drop its temporary height lock after the
+         staggered entrance. Backward steps never keep the lock. */
+      useEffect(() => {
+        if (leaving) return;
+        const container = containerRef.current;
+        if (!container || !container.style.minHeight) return;
+    
+        if (direction === "backward") {
+          container.style.minHeight = "";
+          return;
+        }
+    
+        releaseRef.current = window.setTimeout(() => {
+          releaseRef.current = null;
+          container.style.minHeight = "";
+        }, STEP_ENTER_MS);
+    
+        return () => {
+          if (releaseRef.current !== null) window.clearTimeout(releaseRef.current);
+          releaseRef.current = null;
+        };
+      }, [containerRef, direction, leaving, visibleStep]);
+    
+      useEffect(
+        () => () => {
+          if (releaseRef.current !== null) window.clearTimeout(releaseRef.current);
+          const container = containerRef.current;
+          if (container) container.style.minHeight = "";
+        },
+        [containerRef],
+      );
+    
+      return { visibleStep, leaving, direction };
     }
     
-    /* The supplied green logo always sits on one clean white surface. */
-    html:root body .cw-widget[class][class][class][class]
-      :is(.bl, .bl--launcher, .bl--header, .bl--avatar)[class] {
-      display: grid !important;
-      place-items: center !important;
-      padding: 3px !important;
-      overflow: hidden !important;
-      border: 1px solid rgba(25, 131, 79, 0.18) !important;
-      border-radius: 50% !important;
-      background: #fff !important;
-      box-shadow: none !important;
-      filter: none !important;
-      transform: none !important;
-      animation: none !important;
-    }
-    
-    html:root body .cw-widget[class][class][class][class] .bl img {
-      display: block !important;
-      width: 100% !important;
-      height: 100% !important;
-      max-width: none !important;
-      object-fit: contain !important;
-      object-position: center !important;
-      border: 0 !important;
-      border-radius: 50% !important;
-      background: #fff !important;
-      box-shadow: none !important;
-      filter: none !important;
-      transform: none !important;
-      animation: none !important;
-    }
-    
-    html:root body .cw-widget[class][class][class][class] .bl--launcher {
-      width: 62px !important;
-      height: 62px !important;
-    }
-    
-    html:root body .cw-widget[class][class][class][class] .bl--header {
-      width: 46px !important;
-      height: 46px !important;
-    }
-    
-    /* Stable launcher: no bounce, no vertical jump and no scale pop. */
-    html:root body .cw-widget[class][class][class][class] .cw-launcher[class] {
-      width: 70px !important;
-      height: 70px !important;
-      padding: 4px !important;
-      overflow: visible !important;
-      border: 1px solid rgba(25, 131, 79, 0.22) !important;
-      border-radius: 50% !important;
-      background: #fff !important;
-      background-image: none !important;
-      box-shadow:
-        0 18px 42px -24px rgba(11, 47, 32, 0.55),
-        0 0 0 5px rgba(255, 255, 255, 0.72) !important;
-      filter: none !important;
-      transform: none !important;
-      animation: none !important;
-      transition:
-        border-color 220ms ease,
-        box-shadow 320ms var(--wa-ease),
-        background-color 220ms ease !important;
-    }
-    
-    html:root body .cw-widget[class][class][class][class] .cw-launcher[class] > .bl {
-      position: relative !important;
-      z-index: 2 !important;
-    }
-    
-    @media (hover: hover) and (pointer: fine) {
-      html:root body .cw-widget[class][class][class][class] .cw-launcher[class]:hover {
-        border-color: rgba(25, 131, 79, 0.42) !important;
-        background: #fff !important;
-        box-shadow:
-          0 22px 48px -24px rgba(11, 47, 32, 0.62),
-          0 0 0 6px rgba(217, 255, 120, 0.18) !important;
-        transform: none !important;
-      }
-    }
-    
-    html:root body .cw-widget[class][class][class][class] .cw-launcher[class]:active {
-      border-color: var(--wa-green) !important;
-      box-shadow:
-        0 14px 34px -24px rgba(11, 47, 32, 0.62),
-        0 0 0 4px rgba(25, 131, 79, 0.12) !important;
-      transform: none !important;
-    }
-    
-    /* Hover preview above the closed bubble. */
-    html:root body .cw-widget[class][class][class][class] .cw-launcher[class]::after {
-      content: "Môj Chatbot\A Odpoviem alebo vyskladám riešenie" !important;
-      display: block !important;
-      position: absolute !important;
-      right: 0 !important;
-      bottom: calc(100% + 15px) !important;
-      z-index: 4 !important;
-      width: max-content !important;
-      max-width: 238px !important;
-      padding: 12px 15px 13px !important;
-      border: 1px solid rgba(217, 255, 120, 0.2) !important;
-      border-left: 3px solid var(--wa-lime) !important;
-      border-radius: 17px 17px 5px 17px !important;
-      color: #fff !important;
-      background: var(--wa-forest) !important;
-      background-image: none !important;
-      box-shadow: 0 22px 48px -24px rgba(11, 47, 32, 0.72) !important;
-      opacity: 0 !important;
-      visibility: hidden !important;
-      pointer-events: none !important;
-      white-space: pre-line !important;
-      text-align: left !important;
-      font-size: 13px !important;
-      font-weight: 520 !important;
-      line-height: 1.45 !important;
-      letter-spacing: -0.01em !important;
-      transform: translateY(7px) !important;
-      transition:
-        opacity 180ms ease,
-        visibility 180ms ease,
-        transform 280ms var(--wa-ease) !important;
-    }
-    
-    html:root body .cw-widget[class][class][class][class] .cw-launcher[class]::before {
-      content: "" !important;
-      display: block !important;
-      position: absolute !important;
-      right: 17px !important;
-      bottom: calc(100% + 10px) !important;
-      z-index: 3 !important;
-      width: 12px !important;
-      height: 12px !important;
-      border: 0 !important;
-      background: var(--wa-forest) !important;
-      box-shadow: none !important;
-      opacity: 0 !important;
-      visibility: hidden !important;
-      pointer-events: none !important;
-      transform: translateY(7px) rotate(45deg) !important;
-      transition:
-        opacity 180ms ease,
-        visibility 180ms ease,
-        transform 280ms var(--wa-ease) !important;
-    }
-    
-    @media (hover: hover) and (pointer: fine) {
-      html:root body .cw-widget[class][class][class][class]
-        .cw-launcher[class]:is(:hover, :focus-visible):not([aria-expanded="true"])::after {
-        opacity: 1 !important;
-        visibility: visible !important;
-        transform: translateY(0) !important;
-      }
-    
-      html:root body .cw-widget[class][class][class][class]
-        .cw-launcher[class]:is(:hover, :focus-visible):not([aria-expanded="true"])::before {
-        opacity: 1 !important;
-        visibility: visible !important;
-        transform: translateY(0) rotate(45deg) !important;
-      }
-    }
-    
-    html:root body .cw-widget[class][class][class][class]
-      .cw-launcher[class][aria-expanded="true"]::before,
-    html:root body .cw-widget[class][class][class][class]
-      .cw-launcher[class][aria-expanded="true"]::after {
-      opacity: 0 !important;
-      visibility: hidden !important;
-    }
-    
-    /* A stronger forest header gives the white widget the same hierarchy as the site. */
-    html:root body .cw-widget[class][class][class][class] .cw-panel-head[class] {
-      min-height: 82px !important;
-      color: #fff !important;
-      border: 0 !important;
-      border-bottom: 1px solid rgba(217, 255, 120, 0.18) !important;
-      background: var(--wa-forest) !important;
-      background-image: none !important;
-      box-shadow: 0 16px 34px -28px rgba(11, 47, 32, 0.7) !important;
-    }
-    
-    html:root body .cw-widget[class][class][class][class] .cw-panel-head__title b {
-      color: #fff !important;
-      font-weight: 760 !important;
-      letter-spacing: -0.018em !important;
-    }
-    
-    html:root body .cw-widget[class][class][class][class] .cw-panel-head__context[class] {
-      color: #c7d9ce !important;
-    }
-    
-    html:root body .cw-widget[class][class][class][class] .cw-panel-head__online i,
-    html:root body .cw-widget[class][class][class][class] .cw-online-dot[class] {
-      background: var(--wa-lime) !important;
-      box-shadow: 0 0 0 4px rgba(217, 255, 120, 0.12) !important;
-    }
-    
-    html:root body .cw-widget[class][class][class][class] .cw-panel-head__actions button {
-      color: #dce9e1 !important;
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      border-radius: 999px !important;
-      background: rgba(255, 255, 255, 0.06) !important;
-      box-shadow: none !important;
-      transform: none !important;
-    }
-    
-    @media (hover: hover) and (pointer: fine) {
-      html:root body .cw-widget[class][class][class][class]
-        .cw-panel-head__actions button:hover {
-        color: var(--wa-forest) !important;
-        border-color: var(--wa-lime) !important;
-        background: var(--wa-lime) !important;
-        box-shadow: none !important;
-        transform: none !important;
-      }
-    }
-    
-    /* One rounded segmented control, visually related to the website pills. */
-    html:root body .cw-widget[class][class][class][class] .cw-tabs[class] {
-      height: 58px !important;
-      margin: 11px 12px 0 !important;
-      padding: 4px !important;
-      gap: 4px !important;
-      border: 1px solid rgba(11, 47, 32, 0.13) !important;
-      border-radius: 999px !important;
-      background: var(--wa-soft) !important;
-      background-image: none !important;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.94) !important;
-    }
-    
-    html:root body .cw-widget[class][class][class][class] .cw-tabs__thumb[class] {
-      top: 4px !important;
-      bottom: 4px !important;
-      left: 4px !important;
-      width: calc((100% - 12px) / 2) !important;
-      border-radius: 999px !important;
-      background: var(--wa-green) !important;
-      background-image: none !important;
-      box-shadow: 0 12px 24px -18px rgba(11, 47, 32, 0.62) !important;
-    }
-    
-    html:root body .cw-widget[class][class][class][class] .cw-tabs > button[class] {
-      height: 48px !important;
-      padding-inline: 10px !important;
-      border-radius: 999px !important;
-      color: #315244 !important;
-      background: transparent !important;
-      box-shadow: none !important;
-      transform: none !important;
-    }
-    
-    html:root body .cw-widget[class][class][class][class]
-      .cw-tabs > button[class]:active {
-      transform: none !important;
-    }
-    
-    /* The shell remains light, but no longer washed out. */
-    html:root body .cw-widget[class][class][class][class]
-      :is(.cw-panel-body, .cw-conversation, .cw-calculator, .cw-calc-body, .cw-mode-view)[class] {
-      color: var(--sg-ink) !important;
-      background-color: var(--wa-paper) !important;
-      background-image:
-        radial-gradient(circle at 100% 0%, rgba(217, 255, 120, 0.08), transparent 17rem) !important;
-    }
-    
-    /* Main actions share the same soft pill geometry as the website CTAs. */
-    html:root body .cw-widget[class][class][class][class]
-      :is(.cw-chat-builder, .cw-next, .cw-submit)[class] {
-      min-height: 50px !important;
-      border-radius: 999px !important;
-      transform: none !important;
-      transition:
-        background-color 220ms ease,
-        border-color 220ms ease,
-        box-shadow 300ms var(--wa-ease),
-        color 220ms ease !important;
-    }
-    
-    @media (hover: hover) and (pointer: fine) {
-      html:root body .cw-widget[class][class][class][class]
-        :is(.cw-chat-builder, .cw-next, .cw-submit)[class]:hover:not(:disabled) {
-        color: var(--wa-forest) !important;
-        border-color: rgba(130, 182, 30, 0.38) !important;
-        background: #ccf35f !important;
-        background-image: none !important;
-        box-shadow: 0 18px 36px -25px rgba(87, 131, 0, 0.46) !important;
-        transform: none !important;
-      }
-    }
-    
-    html:root body .cw-widget[class][class][class][class]
-      :is(.cw-chat-builder, .cw-next, .cw-submit)[class]:active:not(:disabled) {
-      transform: none !important;
-    }
-    
-    /* Quick replies fill with brand green instead of lifting away from the page. */
-    html:root body .cw-widget[class][class][class][class]
-      .cw-quick-replies .cw-chip[class] {
-      border-color: rgba(25, 131, 79, 0.22) !important;
-      border-radius: 999px !important;
-      color: #315244 !important;
-      background: #f3f8ef !important;
-      background-image: none !important;
-      box-shadow: none !important;
-      transform: none !important;
-    }
-    
-    @media (hover: hover) and (pointer: fine) {
-      html:root body .cw-widget[class][class][class][class]
-        .cw-quick-replies .cw-chip[class]:hover:not(:disabled) {
-        color: #fff !important;
-        border-color: var(--wa-green) !important;
-        background: var(--wa-green) !important;
-        background-image: none !important;
-        box-shadow: 0 14px 28px -23px rgba(11, 47, 32, 0.5) !important;
-        transform: none !important;
-      }
-    }
-    
-    html:root body .cw-widget[class][class][class][class]
-      .cw-quick-replies .cw-chip[class][data-sending="true"] {
-      color: #fff !important;
-      border-color: var(--wa-green) !important;
-      background: var(--wa-green) !important;
-      background-image: none !important;
-      transform: none !important;
-    }
-    
-    /* The send action never disappears; an empty composer has a clear disabled state. */
-    html:root body .cw-widget[class][class][class][class]
-      .cw-inputbar[class] > .cw-send[class] {
-      width: 46px !important;
-      height: 46px !important;
-      min-width: 46px !important;
-      min-height: 46px !important;
-      flex: 0 0 46px !important;
-      display: grid !important;
-      place-items: center !important;
-      border-radius: 50% !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-      transform: none !important;
-    }
-    
-    html:root body .cw-widget[class][class][class][class]
-      .cw-inputbar[class] > .cw-send[class]:disabled {
-      color: var(--wa-green) !important;
-      border: 1px solid rgba(25, 131, 79, 0.24) !important;
-      background: #eaf6df !important;
-      background-image: none !important;
-      box-shadow: none !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-    }
-    
-    html:root body .cw-widget[class][class][class][class]
-      .cw-inputbar[class] > .cw-send[class]:not(:disabled) {
-      color: #fff !important;
-      border-color: var(--wa-green) !important;
-      background: var(--wa-green) !important;
-      background-image: none !important;
-      box-shadow: 0 12px 24px -18px rgba(11, 47, 32, 0.58) !important;
-    }
-    
-    @media (max-width: 760px), (hover: none), (pointer: coarse) {
-      html:root body .cw-widget[class][class][class][class] .cw-launcher[class]::before,
-      html:root body .cw-widget[class][class][class][class] .cw-launcher[class]::after {
-        display: none !important;
-      }
-    }
-    
-    @media (prefers-reduced-motion: reduce) {
-      html:root body .cw-widget[class][class][class][class] .cw-launcher[class],
-      html:root body .cw-widget[class][class][class][class] .cw-launcher[class]::before,
-      html:root body .cw-widget[class][class][class][class] .cw-launcher[class]::after {
-        animation: none !important;
-        transition: none !important;
-        transform: none !important;
-      }
-    }
   operator: 'match'
   stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/white-green-identity.test.mjs:45:10)
+    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:1131:10)
     async Test.run (node:internal/test_runner/test:1054:7)
     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
-# Subtest: mobile iframe freezes and restores the parent page on iOS
-ok 6 - mobile iframe freezes and restores the parent page on iOS
-  ---
-  duration_ms: 6.346925
-  type: 'test'
-  ...
-# Subtest: demo and embed load one foundation and one authoritative redesign
-ok 7 - demo and embed load one foundation and one authoritative redesign
-  ---
-  duration_ms: 26.531237
-  type: 'test'
-  ...
-# Subtest: assistant order and interactive send feedback remain explicit
-ok 8 - assistant order and interactive send feedback remain explicit
-  ---
-  duration_ms: 1.405295
-  type: 'test'
-  ...
-# Subtest: panel has the corrected premium desktop proportions
-ok 9 - panel has the corrected premium desktop proportions
-  ---
-  duration_ms: 1.385968
-  type: 'test'
-  ...
-# Subtest: mode switch is one rounded segmented control without pill geometry
-ok 10 - mode switch is one rounded segmented control without pill geometry
-  ---
-  duration_ms: 3.878385
-  type: 'test'
-  ...
-# Subtest: the redesign uses only the website black and brand palette
-ok 11 - the redesign uses only the website black and brand palette
-  ---
-  duration_ms: 4.05552
-  type: 'test'
-  ...
-# Subtest: primary actions, quick chips and composer use intentional geometry
-ok 12 - primary actions, quick chips and composer use intentional geometry
-  ---
-  duration_ms: 2.249041
-  type: 'test'
-  ...
-# Subtest: chat chips and composer use a crisp non-liquid system
-ok 13 - chat chips and composer use a crisp non-liquid system
-  ---
-  duration_ms: 2.647783
-  type: 'test'
-  ...
-# Subtest: calculator choices keep geometry and use one static selected system
-ok 14 - calculator choices keep geometry and use one static selected system
-  ---
-  duration_ms: 1.785645
-  type: 'test'
-  ...
-# Subtest: selection indicator is one real aligned circular check
-ok 15 - selection indicator is one real aligned circular check
-  ---
-  duration_ms: 1.368256
-  type: 'test'
-  ...
-# Subtest: icons remain one custom rounded line family
-ok 16 - icons remain one custom rounded line family
-  ---
-  duration_ms: 1.501404
-  type: 'test'
-  ...
-# Subtest: chat and configurator motion remain reduced-motion safe
-ok 17 - chat and configurator motion remain reduced-motion safe
-  ---
-  duration_ms: 2.027738
-  type: 'test'
-  ...
-# Subtest: configurator remains five short steps with explicit selection guidance
-ok 18 - configurator remains five short steps with explicit selection guidance
-  ---
-  duration_ms: 2.07261
-  type: 'test'
-  ...
-# Subtest: approved lead submission keeps sweep feedback and website hierarchy
-ok 19 - approved lead submission keeps sweep feedback and website hierarchy
-  ---
-  duration_ms: 2.344709
-  type: 'test'
-  ...
-# Subtest: contact submits a real lead and keeps API protections
-ok 20 - contact submits a real lead and keeps API protections
-  ---
-  duration_ms: 1.363487
-  type: 'test'
-  ...
-# Subtest: a delivered lead is confirmed to the visitor, and a failed one is not claimed
-ok 21 - a delivered lead is confirmed to the visitor, and a failed one is not claimed
-  ---
-  duration_ms: 1.448716
-  type: 'test'
-  ...
-# Subtest: the reply streams in and the thread keeps up with it
-ok 22 - the reply streams in and the thread keeps up with it
-  ---
-  duration_ms: 2.530327
-  type: 'test'
-  ...
-# Subtest: tapping a mode never lands on the drag handler instead of the button
-ok 23 - tapping a mode never lands on the drag handler instead of the button
-  ---
-  duration_ms: 0.899329
-  type: 'test'
-  ...
-# Subtest: the finish layer removes browser blue and keeps one motion vocabulary
-ok 24 - the finish layer removes browser blue and keeps one motion vocabulary
-  ---
-  duration_ms: 2.574248
-  type: 'test'
-  ...
-# Subtest: the finish layer sizes the builder to its step and glows the contacts
-ok 25 - the finish layer sizes the builder to its step and glows the contacts
-  ---
-  duration_ms: 2.380416
-  type: 'test'
-  ...
-# Subtest: the phone keyboard folds away what is not the conversation
-ok 26 - the phone keyboard folds away what is not the conversation
-  ---
-  duration_ms: 2.373333
-  type: 'test'
-  ...
-# Subtest: consent sits with the button it gates, not below the fold
-ok 27 - consent sits with the button it gates, not below the fold
-  ---
-  duration_ms: 1.720224
-  type: 'test'
-  ...
-# Subtest: mobile full screen, safe areas and keyboard constraints remain safe
-ok 28 - mobile full screen, safe areas and keyboard constraints remain safe
-  ---
-  duration_ms: 1.16699
-  type: 'test'
-  ...
-# Subtest: final contact step scrolls and supports calls or meetings
-ok 29 - final contact step scrolls and supports calls or meetings
-  ---
-  duration_ms: 1.5574
-  type: 'test'
-  ...
-# Subtest: messages begin at the top and icon tiles stay transparent
-ok 30 - messages begin at the top and icon tiles stay transparent
-  ---
-  duration_ms: 2.48416
-  type: 'test'
-  ...
-# Subtest: final user correction centers quick replies and keeps one input shape
-ok 31 - final user correction centers quick replies and keeps one input shape
-  ---
-  duration_ms: 1.542271
-  type: 'test'
-  ...
-# Subtest: final configurator correction removes clipping, icon tiles and selected stripes
-ok 32 - final configurator correction removes clipping, icon tiles and selected stripes
-  ---
-  duration_ms: 1.812476
-  type: 'test'
-  ...
-# Subtest: the final authority exposes only charcoal, warm surfaces and peach interaction
-ok 33 - the final authority exposes only charcoal, warm surfaces and peach interaction
-  ---
-  duration_ms: 1.603215
-  type: 'test'
-  ...
-# Subtest: the six reported interaction defects stay fixed
-ok 34 - the six reported interaction defects stay fixed
-  ---
-  duration_ms: 1.987312
-  type: 'test'
-  ...
-# Subtest: starter chips retire once the conversation begins
-ok 35 - starter chips retire once the conversation begins
-  ---
-  duration_ms: 0.88356
-  type: 'test'
-  ...
-# Subtest: the composer keeps its size at every panel height
-ok 36 - the composer keeps its size at every panel height
-  ---
-  duration_ms: 1.009285
-  type: 'test'
-  ...
-# Subtest: transcripts are logged without ever costing a visitor their answer
-ok 37 - transcripts are logged without ever costing a visitor their answer
-  ---
-  duration_ms: 2.751763
-  type: 'test'
-  ...
-# Subtest: the transcript viewer is the least permissive thing here
-ok 38 - the transcript viewer is the least permissive thing here
-  ---
-  duration_ms: 2.021314
-  type: 'test'
-  ...
-# Subtest: both endpoints share one origin list so it cannot half-apply
-ok 39 - both endpoints share one origin list so it cannot half-apply
-  ---
-  duration_ms: 1.408
-  type: 'test'
-  ...
-# Subtest: the contact step gives the form room when the keyboard is up
-ok 40 - the contact step gives the form room when the keyboard is up
-  ---
-  duration_ms: 1.192037
-  type: 'test'
-  ...
-# Subtest: focus is drawn on the control, not as a rectangle beside it
-ok 41 - focus is drawn on the control, not as a rectangle beside it
-  ---
-  duration_ms: 1.109392
-  type: 'test'
-  ...
-# Subtest: the conversation survives a reload and reset clears it
-ok 42 - the conversation survives a reload and reset clears it
-  ---
-  duration_ms: 5.100036
-  type: 'test'
-  ...
-# Subtest: an accepted lead is traceable and one bad mailbox cannot sink the other
-ok 43 - an accepted lead is traceable and one bad mailbox cannot sink the other
-  ---
-  duration_ms: 0.820542
-  type: 'test'
-  ...
-# Subtest: a refused delivery channel no longer hides the reason or skips the next one
-ok 44 - a refused delivery channel no longer hides the reason or skips the next one
-  ---
-  duration_ms: 1.470657
-  type: 'test'
-  ...
-# Subtest: info@mojchatbot.sk is the address, the personal one is the second contact
-ok 45 - info@mojchatbot.sk is the address, the personal one is the second contact
-  ---
-  duration_ms: 1.844976
-  type: 'test'
-  ...
-# Subtest: auto-advance does not leave a parked pointer lighting up the next step
-ok 46 - auto-advance does not leave a parked pointer lighting up the next step
-  ---
-  duration_ms: 1.282355
-  type: 'test'
-  ...
-# Subtest: the contact step lines up on one inset without stray rules
-ok 47 - the contact step lines up on one inset without stray rules
-  ---
-  duration_ms: 1.260294
-  type: 'test'
-  ...
-# Subtest: a new step never arrives with a chip that looks chosen
-ok 48 - a new step never arrives with a chip that looks chosen
-  ---
-  duration_ms: 1.482519
-  type: 'test'
-  ...
-# Subtest: project estimates are absent while customer-price capability remains
-ok 49 - project estimates are absent while customer-price capability remains
-  ---
-  duration_ms: 1.959571
-  type: 'test'
-  ...
-# Subtest: the step swap holds the panel height so nothing jumps
-ok 50 - the step swap holds the panel height so nothing jumps
-  ---
-  duration_ms: 1.317952
-  type: 'test'
-  ...
 # Subtest: the progress label reads as a sentence and has room for it
-ok 51 - the progress label reads as a sentence and has room for it
+ok 52 - the progress label reads as a sentence and has room for it
   ---
-  duration_ms: 1.571585
+  duration_ms: 1.922838
   type: 'test'
   ...
 # Subtest: mobile keeps its scrolling and its pinch-zoom
-ok 52 - mobile keeps its scrolling and its pinch-zoom
+ok 53 - mobile keeps its scrolling and its pinch-zoom
   ---
-  duration_ms: 2.097067
+  duration_ms: 1.561584
   type: 'test'
   ...
 # Subtest: nothing pulses forever and nothing moves when you point at it
-ok 53 - nothing pulses forever and nothing moves when you point at it
+ok 54 - nothing pulses forever and nothing moves when you point at it
   ---
-  duration_ms: 1.928883
+  duration_ms: 1.215741
   type: 'test'
   ...
 # Subtest: icons cannot balloon and the thank-you screen is not squeezed into a grid row
-ok 54 - icons cannot balloon and the thank-you screen is not squeezed into a grid row
+ok 55 - icons cannot balloon and the thank-you screen is not squeezed into a grid row
   ---
-  duration_ms: 1.787179
+  duration_ms: 1.232807
   type: 'test'
   ...
 # Subtest: no jargon reaches the screen
-ok 55 - no jargon reaches the screen
+ok 56 - no jargon reaches the screen
   ---
-  duration_ms: 5.148909
+  duration_ms: 2.626166
   type: 'test'
   ...
 # Subtest: chips and cards lean toward the cursor without ever moving their box
-ok 56 - chips and cards lean toward the cursor without ever moving their box
+ok 57 - chips and cards lean toward the cursor without ever moving their box
   ---
-  duration_ms: 2.000857
+  duration_ms: 2.960066
   type: 'test'
   ...
 # Subtest: the iframe follows the mobile visual viewport above the software keyboard
-ok 57 - the iframe follows the mobile visual viewport above the software keyboard
+ok 58 - the iframe follows the mobile visual viewport above the software keyboard
   ---
-  duration_ms: 0.99036
+  duration_ms: 0.890066
   type: 'test'
   ...
 # Subtest: the closed iframe canvas stays transparent around the circular launcher
-ok 58 - the closed iframe canvas stays transparent around the circular launcher
+ok 59 - the closed iframe canvas stays transparent around the circular launcher
   ---
-  duration_ms: 0.96383
+  duration_ms: 0.894369
   type: 'test'
   ...
 # Subtest: the iframe returns focus to the page control that opened it
-ok 59 - the iframe returns focus to the page control that opened it
+ok 60 - the iframe returns focus to the page control that opened it
   ---
-  duration_ms: 0.837153
+  duration_ms: 0.596559
   type: 'test'
   ...
 # Subtest: options reveal one after another rather than as a block
-ok 60 - options reveal one after another rather than as a block
+ok 61 - options reveal one after another rather than as a block
   ---
-  duration_ms: 0.793142
+  duration_ms: 0.590917
   type: 'test'
   ...
 # Subtest: mode transitions preserve work and close only after the exit motion
-ok 61 - mode transitions preserve work and close only after the exit motion
+ok 62 - mode transitions preserve work and close only after the exit motion
   ---
-  duration_ms: 2.685366
+  duration_ms: 1.680011
   type: 'test'
   ...
 # Subtest: close and reopen retain mode, chat draft, history and calculator progress
-ok 62 - close and reopen retain mode, chat draft, history and calculator progress
+ok 63 - close and reopen retain mode, chat draft, history and calculator progress
   ---
-  duration_ms: 1.823746
+  duration_ms: 1.201637
   type: 'test'
   ...
 # Subtest: close button and Escape both restore focus to the launcher
-ok 63 - close button and Escape both restore focus to the launcher
+ok 64 - close button and Escape both restore focus to the launcher
   ---
-  duration_ms: 1.148876
+  duration_ms: 2.844331
   type: 'test'
   ...
 # Subtest: chat reset aborts stale work and same-tick sends are locked synchronously
-ok 64 - chat reset aborts stale work and same-tick sends are locked synchronously
+ok 65 - chat reset aborts stale work and same-tick sends are locked synchronously
   ---
-  duration_ms: 5.847923
+  duration_ms: 0.843848
   type: 'test'
   ...
 # Subtest: the summary card keeps its text off its own border
-ok 65 - the summary card keeps its text off its own border
+ok 66 - the summary card keeps its text off its own border
   ---
-  duration_ms: 1.599637
+  duration_ms: 1.063105
   type: 'test'
   ...
 # Subtest: nothing plus-shaped renders anywhere near the quick replies
-ok 66 - nothing plus-shaped renders anywhere near the quick replies
+ok 67 - nothing plus-shaped renders anywhere near the quick replies
   ---
-  duration_ms: 5.145023
+  duration_ms: 1.99567
   type: 'test'
   ...
-1..66
-# tests 66
+1..67
+# tests 67
 # suites 0
-# pass 65
+# pass 66
 # fail 1
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 242.705317
+# duration_ms 132.845927
  ELIFECYCLE  Test failed. See above for more details.
