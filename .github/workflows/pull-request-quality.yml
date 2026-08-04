@@ -85,10 +85,10 @@ jobs:
           test -f dist/widget.js
           test -f dist/widget.css
 
-          # The direct runtime must carry the unified product marker and the
+          # The direct runtime must carry the audited product marker and the
           # two exact paths of the current vector brand mark.
           grep -Fq 'unified-product-20260804-v1' dist/widget.js
-          grep -Fq 'unified-production-system' dist/widget.js
+          grep -Fq 'competition-audited-system' dist/widget.js
           grep -Fq 'M96.6 85.5C100.8 84.6 103.6 82.4' dist/widget.js
           grep -Fq 'M24 71.2V29.2L52.5 55.4' dist/widget.js
 
@@ -103,10 +103,10 @@ jobs:
           grep -Fq '.cw-calculator' dist/widget.css
 
           # Source entry points must use the single product stylesheet and must
-          # never restore the retired injected override stack or pointer tilt.
+          # never restore an injected override stack or pointer tilt.
           grep -Fq 'product-widget.css' src/main.tsx
           grep -Fq 'product-widget.css' src/embed.tsx
-          ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt' src/main.tsx
-          ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt' src/embed.tsx
-          ! grep -Eq 'assistant-redesign|approved-option-one|masterpiece-final' src/main.tsx
-          ! grep -Eq 'assistant-redesign|approved-option-one|masterpiece-final' src/embed.tsx
+          ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt|installProductRefinement' src/main.tsx
+          ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt|installProductRefinement' src/embed.tsx
+          ! grep -Eq 'assistant-redesign|approved-option-one|masterpiece-final|product-refinement.css' src/main.tsx
+          ! grep -Eq 'assistant-redesign|approved-option-one|masterpiece-final|product-refinement.css' src/embed.tsx
