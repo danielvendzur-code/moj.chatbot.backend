@@ -3,66 +3,39 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
-const forbiddenWarm =
-  /#ffc79d|#f0a873|#f3a75a|#e58a5b|#f4c9a8|#ffe38a|255\s*,\s*199\s*,\s*157|240\s*,\s*168\s*,\s*115/i;
 
-test("widget uses the same exact vector mark as the website", async () => {
-  const logo = await read("src/components/widget/BubbleLogo.tsx");
-  assert.match(logo, /const OUTER =/);
-  assert.match(logo, /const INNER =/);
-  assert.match(logo, /viewBox="0 0 112 112"/);
-  assert.match(logo, /strokeWidth="4\.3"/);
-  assert.match(logo, /className=\{`bl bl--\$\{size\}`\}/);
-  assert.doesNotMatch(logo, /data:image|<img\b|base64,/);
+test("the product stylesheet is the sole visual authority", async () => {
+  const main = await read("src/main.tsx");
+  const embed = await read("src/embed.tsx");
+  const css = await read("src/product-widget.css");
+
+  assert.match(main, /product-widget\.css/);
+  assert.match(embed, /product-widget\.css/);
+  assert.doesNotMatch(main, /installLimeWhiteStyles/);
+  assert.doesNotMatch(embed, /installLimeWhiteStyles/);
+  assert.doesNotMatch(main, /premiumTilt/);
+  assert.doesNotMatch(embed, /premiumTilt/);
+  assert.match(css, /MÔJ CHATBOT — unified product interface/);
+  assert.doesNotMatch(css, /!important/);
 });
 
-test("the finished website palette is appended as the final widget authority", async () => {
-  const installer = await read("src/lib/installLimeWhiteStyles.ts");
-  const brand = await read("src/site-green-brand-final.css");
-  const chat = await read("src/site-green-chat-final.css");
-  const config = await read("src/site-green-config-final.css");
-  const mobile = await read("src/site-green-mobile-final.css");
-  const polish = await read("src/web-aligned-polish-final.css");
-  const correction = await read("src/header-tabs-correction-final.css");
-  const finalCss = `${brand}\n${chat}\n${config}\n${mobile}\n${polish}\n${correction}`;
+test("launcher and brand mark never jump or bounce", async () => {
+  const css = await read("src/product-widget.css");
+  const logo = await read("src/components/widget/BubbleLogo.tsx");
 
-  for (const file of [
-    "site-green-brand-final.css",
-    "site-green-chat-final.css",
-    "site-green-config-final.css",
-    "site-green-mobile-final.css",
-    "web-aligned-polish-final.css",
-    "header-tabs-correction-final.css",
-  ]) assert.ok(installer.includes(file), `Missing final stylesheet ${file}`);
+  assert.match(logo, /stroke="currentColor"/);
+  assert.match(css, /\.cw-launcher:hover,[\s\S]*?transform:\s*none;/);
+  assert.match(css, /\.cw-launcher:active[\s\S]*?transform:\s*none;/);
+  assert.doesNotMatch(css, /@keyframes[^}]*bounce/i);
+  assert.doesNotMatch(css, /\.bl[^}]*transform:/s);
+});
 
-  assert.match(installer, /headerTabsCorrectionCss\}`/);
-  assert.match(installer, /site-white-forest-lime/);
-  for (const token of ["#d9ff78", "#b9ed4d", "#19834f", "#0f6a3e", "#0b2f20", "#fff"]) {
-    assert.ok(finalCss.includes(token), `Missing finished site token ${token}`);
-  }
-  assert.match(brand, /\.cw-tabs__thumb\[class\]/);
-  assert.doesNotMatch(finalCss, /\.cw-tabs__glass/);
-  assert.match(chat, /\.cw-message-row--me[\s\S]*background:var\(--sg-green\)!important/);
-  assert.match(config, /\.cw-calc-actions\[class\][\s\S]*:disabled[\s\S]*background:transparent!important/);
-  assert.match(brand, /data-assistant-open="true"/);
-  assert.match(mobile, /prefers-reduced-motion:reduce/);
-  assert.match(polish, /Odpoviem alebo vyskladám riešenie/);
-  assert.match(polish, /\.cw-launcher\[class\]:hover[\s\S]*transform:\s*none !important/);
-  assert.match(polish, /radial-gradient\(circle at center, var\(--wa-green\)/);
-  assert.match(polish, /background-size:\s*260% 260% !important/);
-  assert.match(polish, /Získať návrh riešenia/);
-  assert.match(polish, /\.cw-inputbar\[class\]\s*>\s*\.cw-send\[class\]:disabled[\s\S]*visibility:\s*visible !important/);
+test("header contains brand purpose rather than a fake availability state", async () => {
+  const widget = await read("src/components/widget/AssistantWidget.tsx");
 
-  // The final visible shell mirrors the website: lime outline mark on white,
-  // no availability badge and two independent non-pill mode tabs.
-  assert.match(correction, /color:\s*#b9ed4d !important/);
-  assert.match(correction, /\.cw-panel-head__context\[class\][\s\S]*display:\s*none !important/);
-  assert.match(correction, /\.cw-tabs__thumb\[class\][\s\S]*display:\s*none !important/);
-  assert.match(correction, /content:\s*"Chatbot" !important/);
-  assert.match(correction, /content:\s*"Konfigurátor" !important/);
-  assert.match(correction, /\.cw-tabs > button\[data-active="true"\][\s\S]*background:\s*#0b2f20 !important/);
-  assert.doesNotMatch(correction, /Odpovedám hneď|linear-gradient\(145deg/);
-  assert.doesNotMatch(finalCss, forbiddenWarm);
+  assert.match(widget, /Môj Chatbot/);
+  assert.match(widget, /AI nástroje pre váš web/);
+  assert.doesNotMatch(widget, /Online|availability|Odpovedám hneď/);
 });
 
 test("backward step navigation releases the tall-step height lock", async () => {
@@ -82,4 +55,18 @@ test("mobile iframe freezes and restores the parent page on iOS", async () => {
   assert.match(embed, /document\.body\.style\.overscrollBehavior = "none"/);
   assert.match(embed, /document\.body\.style\.position = savedBodyPosition/);
   assert.match(embed, /window\.scrollTo\(savedScrollX, savedScrollY\)/);
+});
+
+test("contact conversion surface keeps clear hierarchy", async () => {
+  const calculator = await read("src/components/widget/ToolCalculator.tsx");
+  const css = await read("src/product-widget.css");
+
+  assert.match(calculator, /Ako sa vám mám ozvať\?/);
+  assert.match(calculator, /cw-contact-methods/);
+  assert.match(calculator, /cw-lead__form/);
+  assert.match(calculator, /cw-summary/);
+  assert.match(calculator, /cw-consent/);
+  assert.match(calculator, /cw-submit cw-submit--approved/);
+  assert.match(css, /NEZÁVÄZNÝ NÁVRH/);
+  assert.match(css, /Stačí meno a kontakt/);
 });
