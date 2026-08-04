@@ -26,11 +26,9 @@ type ToolCalculatorProps = {
   onOpenChat: () => void;
 };
 
-type ContactMethod = "video" | "phone" | "meeting" | "email";
+type ContactMethod = "video" | "phone" | "email";
 
 type LeadState = {
-  /* Starts empty on purpose: a method that looks picked before the visitor
-     touched anything reads as a highlighted chip nobody chose. */
   contactMethod: ContactMethod | null;
   name: string;
   email: string;
@@ -59,16 +57,13 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CONTACT_METHODS: Array<{
   id: ContactMethod;
   label: string;
-  icon: "chat" | "phone" | "user" | "mail";
+  icon: "chat" | "phone" | "mail";
 }> = [
   { id: "phone", label: "Telefonicky", icon: "phone" },
-  { id: "video", label: "Cez video", icon: "chat" },
-  { id: "meeting", label: "Osobne", icon: "user" },
   { id: "email", label: "E-mailom", icon: "mail" },
+  { id: "video", label: "Videohovor", icon: "chat" },
 ];
 
-/* Only a control that summons the keyboard should fold the panel; a tap on a
-   choice card or the Next button must leave the layout alone. */
 const isTextField = (element: HTMLElement): boolean =>
   element instanceof HTMLInputElement
     ? element.type !== "checkbox" && element.type !== "radio"
@@ -97,12 +92,6 @@ export function ToolCalculator({
     : null;
 
   const [step, setStep] = useState(0);
-  /* The contact step is the one with a keyboard in front of it. On a phone the
-     panel shrinks to the space above that keyboard — around 380px — and the
-     header, mode switch and progress row alone eat 298 of it, leaving 64px of
-     form. The visitor ends up typing into a field they cannot see. While a
-     field here has focus the stylesheet folds the switch and the progress row
-     away; both come back the moment it is released. */
   const [composing, setComposing] = useState(false);
   const [interest, setInterest] = useState<InterestId | null>(initialInterest);
   const [customText, setCustomText] = useState("");
@@ -111,6 +100,7 @@ export function ToolCalculator({
   const [timeline, setTimeline] = useState<string | null>(null);
   const [lead, setLead] = useState<LeadState>(EMPTY_LEAD);
   const [leadError, setLeadError] = useState("");
+  const [validationAttempted, setValidationAttempted] = useState(false);
   const [sendState, setSendState] = useState<SendState>("idle");
   const [handedToMailClient, setHandedToMailClient] = useState(false);
   const [proposalNumber, setProposalNumber] = useState("");
@@ -120,8 +110,6 @@ export function ToolCalculator({
   const previousActiveRef = useRef(active);
   const thanksIconRef = useRef<HTMLSpanElement>(null);
 
-  /* The outgoing step fades up and out before the new one arrives from below,
-     and the body holds its height across the swap so nothing jumps. */
   const { visibleStep, leaving, direction } = useStepTransition(step, bodyRef);
 
   const restart = (nextInterest: InterestId | null) => {
@@ -133,6 +121,7 @@ export function ToolCalculator({
     setTimeline(null);
     setLead(EMPTY_LEAD);
     setLeadError("");
+    setValidationAttempted(false);
     setSendState("idle");
     setHandedToMailClient(false);
   };
@@ -141,8 +130,6 @@ export function ToolCalculator({
     restart(initialPreset ? PRESET_TO_INTEREST[initialPreset] : null);
   }, [initialPreset, resetToken]);
 
-  /* Move keyboard and assistive-technology users to the question that just
-     arrived. This replaces the old bare blur, which dropped focus on <body>. */
   useEffect(() => {
     bodyRef.current?.scrollTo({ top: 0 });
     const stepChanged = previousVisibleStepRef.current !== visibleStep;
@@ -168,9 +155,6 @@ export function ToolCalculator({
   const [title, subtitle] = QUESTIONS[stepId];
   const isLast = visibleStep === STEPS.length - 1;
   const questionIndex = QUESTION_STEPS.indexOf(stepId);
-
-  /* The bar is driven by a number so CSS can ease it instead of jumping. */
-  const progress = ((visibleStep + 1) / STEPS.length) * 100;
 
   const featureLabels = useMemo(
     () =>
@@ -204,14 +188,11 @@ export function ToolCalculator({
     }
   })();
 
-  /* Picking a goal no longer ticks feature boxes for the visitor. */
   const pickInterest = (id: InterestId) => {
     setInterest(id);
     track("config_interest_select", { interest: id });
   };
 
-  /* The suggestion belongs in the sentence above the options, never as a mark on
-     one of them. */
   const recommendedLabels = (interest ? RECOMMENDED_FEATURES[interest] : [])
     .map((id) => FEATURES.find((option) => option.id === id)?.label)
     .filter((label): label is string => Boolean(label));
@@ -222,6 +203,11 @@ export function ToolCalculator({
         ? current.filter((item) => item !== id)
         : [...current, id],
     );
+  };
+
+  const updateLead = (patch: Partial<LeadState>) => {
+    setLead((current) => ({ ...current, ...patch }));
+    if (leadError) setLeadError("");
   };
 
   const summaryRows: Array<[string, string]> = [
@@ -236,12 +222,26 @@ export function ToolCalculator({
     ["Hotové", labelOf(TIMELINES, timeline)],
   ];
 
+  const safeName = lead.name.trim();
+  const safeEmail = lead.email.trim();
+  const safePhone = lead.phone.trim();
+  const hasValidEmail = safeEmail ? EMAIL_PATTERN.test(safeEmail) : false;
+  const contactMethodInvalid = validationAttempted && !lead.contactMethod;
+  const nameInvalid = validationAttempted && !safeName;
+  const emailInvalid =
+    validationAttempted &&
+    ((Boolean(safeEmail) && !hasValidEmail) ||
+      (lead.contactMethod === "email" && !hasValidEmail));
+  const phoneInvalid =
+    validationAttempted &&
+    lead.contactMethod !== "email" &&
+    !safePhone &&
+    !hasValidEmail;
+
   const submitLead = async () => {
     if (sendState !== "idle") return;
-    const safeName = lead.name.trim();
-    const safeEmail = lead.email.trim();
-    const safePhone = lead.phone.trim();
-    const hasValidEmail = safeEmail ? EMAIL_PATTERN.test(safeEmail) : false;
+    setValidationAttempted(true);
+
     if (!lead.contactMethod) {
       setLeadError("Vyberte, ako sa vám mám ozvať.");
       return;
@@ -263,7 +263,7 @@ export function ToolCalculator({
       return;
     }
     if (!lead.consent) {
-      setLeadError("Potvrďte prosím, že vám môžem napísať.");
+      setLeadError("Potvrďte prosím, že vás môžem kontaktovať.");
       return;
     }
 
@@ -298,9 +298,6 @@ export function ToolCalculator({
         reference: nextProposalNumber,
         consent: true,
       });
-      /* When the server could not deliver, the visitor's own mail client is
-         opened with everything already filled in. The thank-you screen then
-         says so plainly rather than claiming a send that did not happen. */
       setHandedToMailClient(!result.delivered);
       if (result.fallback) window.location.assign(result.fallback);
       setSendState("done");
@@ -317,10 +314,6 @@ export function ToolCalculator({
   };
 
   if (sendState === "done") {
-    /* The step view lays this container out as a three-row grid (progress, body,
-       actions). The thank-you screen is a single block, so it says which view it
-       is and gets its own layout instead of being squeezed into the 48px
-       progress row. */
     return (
       <div
         className="cw-calculator"
@@ -332,32 +325,28 @@ export function ToolCalculator({
             <WidgetIcon name="check" />
           </span>
           <span className="cw-thanks__eyebrow">
-            {handedToMailClient ? "Skoro hotovo" : "Hotovo, poslal som to"}
+            {handedToMailClient ? "Skoro hotovo" : "Dopyt je odoslaný"}
           </span>
-          <h3>Ďakujem, {lead.name.trim()}.</h3>
+          <h3>Ďakujem, {safeName}.</h3>
           <p>
             {handedToMailClient
-              ? "Otvoril som vám rozpísaný e-mail — stačí ho odoslať a ozvem sa do jedného pracovného dňa."
-              : EMAIL_PATTERN.test(lead.email.trim())
-                ? "Potvrdenie som vám poslal na e-mail a ozvem sa do jedného pracovného dňa."
-                : "Ozvem sa vám do jedného pracovného dňa s návrhom ďalšieho kroku."}
+              ? "Otvoril som vám pripravený e-mail. Stačí ho odoslať a ozvem sa do jedného pracovného dňa."
+              : hasValidEmail
+                ? "Potvrdenie som poslal na e-mail. Ozvem sa do jedného pracovného dňa s konkrétnym ďalším krokom."
+                : "Ozvem sa do jedného pracovného dňa s konkrétnym ďalším krokom."}
           </p>
-          <div className="cw-thanks__grid">
+          <div className="cw-thanks__summary">
             <div>
-              <span>Web má</span>
-              {summaryRows[0][1]}
+              <span>Riešenie</span>
+              <strong>{summaryRows[0][1]}</strong>
             </div>
             <div>
-              <span>Má zvládnuť</span>
-              {featureLabels.length ? featureLabels.join(", ") : "Podľa dohody"}
-            </div>
-            <div>
-              <span>Ozvem sa na</span>
-              {lead.phone.trim() || lead.email.trim()}
+              <span>Kontakt</span>
+              <strong>{safePhone || safeEmail}</strong>
             </div>
             <div>
               <span>Číslo dopytu</span>
-              {proposalNumber}
+              <strong>{proposalNumber}</strong>
             </div>
           </div>
           <div className="cw-thanks__actions">
@@ -379,8 +368,6 @@ export function ToolCalculator({
       data-view="steps"
       data-testid="calculator-view"
       data-composing={composing || undefined}
-      /* Focus events bubble here, so one pair of handlers covers every field
-         on the step — including the ones inside the optional details block. */
       onFocusCapture={(event) => {
         if (event.target instanceof HTMLElement && isTextField(event.target)) {
           setComposing(true);
@@ -388,8 +375,6 @@ export function ToolCalculator({
       }}
       onBlurCapture={(event) => {
         const next = event.relatedTarget;
-        /* Moving between two fields is still composing; only leaving the form
-           for something that is not a field puts the panel back. */
         if (!(next instanceof HTMLElement) || !isTextField(next)) {
           setComposing(false);
         }
@@ -405,19 +390,22 @@ export function ToolCalculator({
         >
           <WidgetIcon name="arrow" className="cw-back-icon" />
         </button>
-        <div className="cw-progress__track">
-          <span
-            className="cw-progress__fill"
-            style={{ width: `${progress}%` }}
-          />
+        <div className="cw-progress__main">
+          <span className="cw-progress__count" aria-live="polite">
+            {questionIndex === -1
+              ? `Krok ${visibleStep + 1} z ${STEPS.length} · Kontakt`
+              : `Otázka ${questionIndex + 1} zo ${QUESTION_STEPS.length}`}
+          </span>
+          <div className="cw-progress__dots" aria-hidden="true">
+            {STEPS.map((item, index) => (
+              <i
+                key={item}
+                data-current={index === visibleStep || undefined}
+                data-complete={index < visibleStep || undefined}
+              />
+            ))}
+          </div>
         </div>
-        {/* One live region, so the label is spoken once per step instead of
-            reading a bare fraction. */}
-        <span className="cw-progress__count" aria-live="polite">
-          {questionIndex === -1
-            ? "Posledný krok"
-            : `Otázka ${questionIndex + 1} zo ${QUESTION_STEPS.length}`}
-        </span>
       </div>
 
       <div className="cw-calc-body" ref={bodyRef}>
@@ -437,7 +425,7 @@ export function ToolCalculator({
               {stepId === "features" && recommendedLabels.length ? (
                 <>
                   {" "}
-                  Pri tom, čo ste vybrali, sa najviac hodí{" "}
+                  Najčastejšie sa k tomu hodí{" "}
                   <b>{recommendedLabels.join(" a ").toLowerCase()}</b>.
                 </>
               ) : null}
@@ -472,15 +460,15 @@ export function ToolCalculator({
                 })}
               </div>
               {interest === "custom" ? (
-                <div className="cw-custom">
+                <label className="cw-custom">
+                  <span>Čo vás dnes najviac zdržuje?</span>
                   <textarea
                     value={customText}
                     onChange={(event) => setCustomText(event.target.value)}
-                    placeholder="Napíšte, čo vás dnes najviac zdržuje…"
-                    aria-label="Čo vás dnes zdržuje"
+                    placeholder="Napríklad opakované otázky, cenové ponuky alebo výber produktu…"
                     rows={3}
                   />
-                </div>
+                </label>
               ) : null}
             </>
           ) : null}
@@ -516,7 +504,7 @@ export function ToolCalculator({
                   data-testid="industry-tip"
                 >
                   <b>
-                    <WidgetIcon name="spark" /> Toto sa u vás najviac oplatí
+                    <WidgetIcon name="spark" /> Čo sa tu najviac oplatí
                   </b>
                   <ul>
                     {selectedIndustry.examples.map((example) => (
@@ -529,33 +517,28 @@ export function ToolCalculator({
           ) : null}
 
           {stepId === "features" ? (
-            <>
-              <div className="cw-choice-grid cw-choice-grid--features">
-                {/* No badges, hints or highlights here. Every option on a fresh
-                    step has to look exactly like every other option — the moment
-                    one of them stands out, it reads as already chosen. */}
-                {FEATURES.map((option) => {
-                  const selected = features.includes(option.id);
-                  return (
-                    <button
-                      type="button"
-                      className="cw-opt"
-                      data-testid={`feature-${option.id}`}
-                      data-selected={selected}
-                      aria-pressed={selected}
-                      key={`${stepId}-${option.id}`}
-                      onClick={() => toggleFeature(option.id)}
-                    >
-                      <span className="cw-opt__body">
-                        <b>{option.label}</b>
-                        <span>{option.description}</span>
-                      </span>
-                      <SelectionIndicator selected={selected} />
-                    </button>
-                  );
-                })}
-              </div>
-            </>
+            <div className="cw-choice-grid cw-choice-grid--features">
+              {FEATURES.map((option) => {
+                const selected = features.includes(option.id);
+                return (
+                  <button
+                    type="button"
+                    className="cw-opt"
+                    data-testid={`feature-${option.id}`}
+                    data-selected={selected}
+                    aria-pressed={selected}
+                    key={`${stepId}-${option.id}`}
+                    onClick={() => toggleFeature(option.id)}
+                  >
+                    <span className="cw-opt__body">
+                      <b>{option.label}</b>
+                      <span>{option.description}</span>
+                    </span>
+                    <SelectionIndicator selected={selected} />
+                  </button>
+                );
+              })}
+            </div>
           ) : null}
 
           {stepId === "timeline" ? (
@@ -572,8 +555,10 @@ export function ToolCalculator({
                     key={`${stepId}-${option.id}`}
                     onClick={() => setTimeline(option.id)}
                   >
-                    <b>{option.label}</b>
-                    <span>{option.description}</span>
+                    <span className="cw-vcard__copy">
+                      <b>{option.label}</b>
+                      <span>{option.description}</span>
+                    </span>
                     <SelectionIndicator selected={selected} />
                   </button>
                 );
@@ -584,11 +569,17 @@ export function ToolCalculator({
           {stepId === "contact" ? (
             <div className="cw-contact-stage">
               <div className="cw-lead">
-                <span className="cw-lead__ask">Ako sa vám mám ozvať?</span>
+                <div className="cw-lead__intro">
+                  <span>Nezáväzný dopyt</span>
+                  <strong>Ako sa vám mám ozvať?</strong>
+                  <p>Stačí meno a jeden kontakt. Ostatné údaje sú voliteľné.</p>
+                </div>
+
                 <div
                   className="cw-contact-methods"
                   role="group"
                   aria-label="Ako sa vám mám ozvať"
+                  aria-invalid={contactMethodInvalid}
                 >
                   {CONTACT_METHODS.map((method) => {
                     const selected = lead.contactMethod === method.id;
@@ -599,114 +590,113 @@ export function ToolCalculator({
                         data-selected={selected}
                         aria-pressed={selected}
                         key={`${stepId}-${method.id}`}
-                        onClick={() =>
-                          setLead({ ...lead, contactMethod: method.id })
-                        }
+                        onClick={() => updateLead({ contactMethod: method.id })}
                       >
                         <WidgetIcon name={method.icon} />
                         <span>{method.label}</span>
-                        {selected ? (
-                          <WidgetIcon
-                            name="check"
-                            className="cw-contact-method__check"
-                          />
-                        ) : null}
+                        <SelectionIndicator selected={selected} />
                       </button>
                     );
                   })}
                 </div>
+
                 <div className="cw-lead__form">
-                  <input
-                    value={lead.name}
-                    onChange={(event) =>
-                      setLead({ ...lead, name: event.target.value })
-                    }
-                    placeholder="Meno *"
-                    aria-label="Vaše meno"
-                    autoComplete="name"
-                  />
+                  <label className="cw-field">
+                    <span>Meno <em>*</em></span>
+                    <input
+                      value={lead.name}
+                      onChange={(event) => updateLead({ name: event.target.value })}
+                      placeholder="Vaše meno"
+                      autoComplete="name"
+                      aria-invalid={nameInvalid}
+                      aria-describedby={leadError ? "cw-lead-error" : undefined}
+                    />
+                  </label>
                   <div className="cw-lead__row">
-                    <input
-                      value={lead.email}
-                      onChange={(event) =>
-                        setLead({ ...lead, email: event.target.value })
-                      }
-                      placeholder={
-                        lead.contactMethod === "email"
-                          ? "Váš e-mail *"
-                          : "Váš e-mail"
-                      }
-                      aria-label="Váš e-mail"
-                      type="email"
-                      autoComplete="email"
-                    />
-                    <input
-                      value={lead.phone}
-                      onChange={(event) =>
-                        setLead({ ...lead, phone: event.target.value })
-                      }
-                      placeholder={
-                        lead.contactMethod === "email"
-                          ? "Vaše číslo"
-                          : "Vaše číslo *"
-                      }
-                      aria-label="Vaše telefónne číslo"
-                      autoComplete="tel"
-                    />
+                    <label className="cw-field">
+                      <span>E-mail {lead.contactMethod === "email" ? <em>*</em> : null}</span>
+                      <input
+                        value={lead.email}
+                        onChange={(event) => updateLead({ email: event.target.value })}
+                        placeholder="meno@firma.sk"
+                        type="email"
+                        autoComplete="email"
+                        aria-invalid={emailInvalid}
+                        aria-describedby={leadError ? "cw-lead-error" : undefined}
+                      />
+                    </label>
+                    <label className="cw-field">
+                      <span>Telefón {lead.contactMethod !== "email" ? <em>*</em> : null}</span>
+                      <input
+                        value={lead.phone}
+                        onChange={(event) => updateLead({ phone: event.target.value })}
+                        placeholder="+421 …"
+                        autoComplete="tel"
+                        inputMode="tel"
+                        aria-invalid={phoneInvalid}
+                        aria-describedby={leadError ? "cw-lead-error" : undefined}
+                      />
+                    </label>
                   </div>
+
                   <details className="cw-lead__optional">
-                    <summary>Chcem pridať firmu, web alebo vzkaz</summary>
+                    <summary>Pridať firmu, web alebo poznámku</summary>
                     <div className="cw-lead__optional-body">
                       <div className="cw-lead__row">
-                        <input
-                          value={lead.company}
-                          onChange={(event) =>
-                            setLead({ ...lead, company: event.target.value })
-                          }
-                          placeholder="Názov firmy"
-                          aria-label="Názov firmy"
-                          autoComplete="organization"
-                        />
-                        <input
-                          value={lead.web}
-                          onChange={(event) =>
-                            setLead({ ...lead, web: event.target.value })
-                          }
-                          placeholder="vasafirma.sk"
-                          aria-label="Adresa vášho webu"
-                          autoComplete="url"
-                          inputMode="url"
-                        />
+                        <label className="cw-field">
+                          <span>Firma</span>
+                          <input
+                            value={lead.company}
+                            onChange={(event) => updateLead({ company: event.target.value })}
+                            placeholder="Názov firmy"
+                            autoComplete="organization"
+                          />
+                        </label>
+                        <label className="cw-field">
+                          <span>Web</span>
+                          <input
+                            value={lead.web}
+                            onChange={(event) => updateLead({ web: event.target.value })}
+                            placeholder="vasafirma.sk"
+                            autoComplete="url"
+                            inputMode="url"
+                          />
+                        </label>
                       </div>
-                      <textarea
-                        value={lead.note}
-                        onChange={(event) =>
-                          setLead({ ...lead, note: event.target.value })
-                        }
-                        placeholder="Čo by som mal ešte vedieť?"
-                        aria-label="Vzkaz pre mňa"
-                        rows={2}
-                      />
+                      <label className="cw-field">
+                        <span>Poznámka</span>
+                        <textarea
+                          value={lead.note}
+                          onChange={(event) => updateLead({ note: event.target.value })}
+                          placeholder="Čo by som mal ešte vedieť?"
+                          rows={2}
+                        />
+                      </label>
                     </div>
                   </details>
                 </div>
               </div>
 
-              <div className="cw-summary">
-                <span className="cw-summary__label">Čo som si zapísal</span>
-                {summaryRows.map(([label, value]) => (
-                  <div className="cw-summary__row" key={label}>
-                    <span>{label}</span>
-                    <b>{value}</b>
-                  </div>
-                ))}
-                {interest === "custom" && customText.trim() ? (
-                  <div className="cw-summary__row cw-summary__row--note">
-                    <span>Napísali ste</span>
-                    <b>{customText.trim()}</b>
-                  </div>
-                ) : null}
-              </div>
+              <details className="cw-summary">
+                <summary>
+                  <span>Skontrolovať výber</span>
+                  <small>{summaryRows.length} položky</small>
+                </summary>
+                <div className="cw-summary__body">
+                  {summaryRows.map(([label, value]) => (
+                    <div className="cw-summary__row" key={label}>
+                      <span>{label}</span>
+                      <b>{value}</b>
+                    </div>
+                  ))}
+                  {interest === "custom" && customText.trim() ? (
+                    <div className="cw-summary__row cw-summary__row--note">
+                      <span>Napísali ste</span>
+                      <b>{customText.trim()}</b>
+                    </div>
+                  ) : null}
+                </div>
+              </details>
             </div>
           ) : null}
         </section>
@@ -723,23 +713,14 @@ export function ToolCalculator({
               setStep((value) => Math.min(STEPS.length - 1, value + 1))
             }
           >
-            <span>Ďalej</span>
+            <span>Pokračovať</span>
             <WidgetIcon name="arrow" />
           </button>
         </footer>
       ) : (
-        /* The sticky slot carries the action that finishes the flow. Restart
-           stays one tap away in the panel header, so it does not need to sit
-           here pushing the submit button below the fold.
-
-           Consent lives here rather than at the bottom of the scrolling form:
-           it is the one box that has to be ticked before anything can be sent,
-           so it belongs next to the button it gates, visible without scrolling.
-           The whole row is the target, and it is a control the visitor can
-           reach with one thumb. */
         <footer className="cw-calc-actions cw-calc-actions--final">
           {leadError ? (
-            <p className="cw-lead__status" role="alert">
+            <p className="cw-lead__status" id="cw-lead-error" role="alert">
               {leadError}
             </p>
           ) : null}
@@ -747,9 +728,7 @@ export function ToolCalculator({
             <input
               type="checkbox"
               checked={lead.consent}
-              onChange={(event) =>
-                setLead({ ...lead, consent: event.target.checked })
-              }
+              onChange={(event) => updateLead({ consent: event.target.checked })}
             />
             <span className="cw-consent__box" aria-hidden="true">
               <WidgetIcon name="check" />
@@ -773,7 +752,7 @@ export function ToolCalculator({
                 </>
               ) : (
                 <>
-                  <WidgetIcon name="send" /> Poslať zadanie
+                  <WidgetIcon name="send" /> Poslať nezáväzný dopyt
                 </>
               )}
             </span>
