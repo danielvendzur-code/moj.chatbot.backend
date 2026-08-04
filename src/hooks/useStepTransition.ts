@@ -1,28 +1,18 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 
-/* How long the outgoing step is given to fade up and out. Must match
-   `cw-step-out` in the stylesheet. */
 export const STEP_EXIT_MS = 72;
-/* Longest incoming animation (the last staggered chip), after which the height
-   lock can be released without anything visibly settling. */
-const STEP_ENTER_MS = 640;
+const STEP_ENTER_MS = 220;
 
 const prefersReducedMotion = (): boolean =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 type StepTransition = {
-  /* The step whose content is on screen right now. Lags `step` by one exit. */
   visibleStep: number;
-  /* True while the old step is fading out. */
   leaving: boolean;
   direction: "forward" | "backward";
 };
 
-/* Swaps one step for the next without the panel resizing under the pointer.
-   Forward navigation briefly holds the outgoing height while the next step
-   arrives. Backward navigation releases that lock immediately: otherwise a
-   tall contact step leaves a large empty block behind for 640 ms after Back. */
 export function useStepTransition(
   step: number,
   containerRef: RefObject<HTMLElement>,
@@ -71,8 +61,6 @@ export function useStepTransition(
     return () => window.clearTimeout(swap);
   }, [containerRef, step, visibleStep]);
 
-  /* Once a forward step has arrived, drop its temporary height lock after the
-     staggered entrance. Backward steps never keep the lock. */
   useEffect(() => {
     if (leaving) return;
     const container = containerRef.current;

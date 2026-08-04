@@ -31,8 +31,9 @@ test("demo and embed load one foundation and one product stylesheet", async () =
   assert.doesNotMatch(autoAdvance, /import\s+["'].*\.css/);
 });
 
-test("widget shell uses accessible independent tabs without a draggable thumb", async () => {
+test("widget shell uses open accessible tabs without a draggable capsule", async () => {
   const widget = await read("src/components/widget/AssistantWidget.tsx");
+  const css = await read("src/product-widget.css");
 
   assert.match(widget, /role="tablist"/);
   assert.match(widget, /role="tab"/);
@@ -41,8 +42,11 @@ test("widget shell uses accessible independent tabs without a draggable thumb", 
   assert.match(widget, />Chatbot</);
   assert.match(widget, />Konfigurátor</);
   assert.doesNotMatch(widget, /cw-tabs__thumb|ThumbDrag|setPointerCapture/);
-  assert.doesNotMatch(widget, /Online|Odpovedám hneď/);
-  assert.match(widget, /AI nástroje pre váš web/);
+  assert.doesNotMatch(widget, /resetSpinning|pulseReset|RESET_SPIN_MS/);
+  assert.match(widget, /Poradca a konfigurátor pre váš web/);
+  assert.match(rule(css, ".cw-tabs"), /border-bottom:/);
+  assert.doesNotMatch(rule(css, ".cw-tabs"), /border-radius:/);
+  assert.match(css, /\.cw-tabs > button\[data-active="true"\]::after/);
 });
 
 test("exact vector logo remains green, crisp and motionless", async () => {
@@ -61,22 +65,19 @@ test("exact vector logo remains green, crisp and motionless", async () => {
   assert.doesNotMatch(css, /\.bl[^}]*animation:/s);
 });
 
-test("panel and mode navigation use deliberate desktop proportions", async () => {
+test("panel proportions and hierarchy are deliberate", async () => {
   const css = await read("src/product-widget.css");
   const panel = rule(css, ".cw-panel");
-  const tabs = rule(css, ".cw-tabs");
 
-  assert.match(panel, /width:\s*min\(424px,/);
-  assert.match(panel, /height:\s*min\(704px,/);
-  assert.match(panel, /border-radius:\s*25px/);
+  assert.match(panel, /width:\s*min\(432px,/);
+  assert.match(panel, /height:\s*min\(724px,/);
+  assert.match(panel, /border-radius:\s*26px/);
   assert.match(panel, /box-shadow:/);
-  assert.match(tabs, /grid-template-columns:\s*repeat\(2,/);
-  assert.match(tabs, /border-radius:\s*17px/);
-  assert.match(css, /\.cw-tabs > button\[data-active="true"\]/);
-  assert.match(css, /background:\s*var\(--cw-green\)/);
+  assert.match(rule(css, ".cw-panel-head__title h2"), /font-size:\s*18px/);
+  assert.match(rule(css, ".cw-panel-head__title p"), /font-size:\s*12px/);
 });
 
-test("chat hierarchy and always-visible composer remain explicit", async () => {
+test("chat hierarchy is readable and the composer is always visible", async () => {
   const conversation = await read(
     "src/components/widget/AssistantConversation.tsx",
   );
@@ -90,39 +91,72 @@ test("chat hierarchy and always-visible composer remain explicit", async () => {
   assert.ok(top > -1 && top < messages);
   assert.ok(messages < chips && chips < input && input < contacts);
 
-  assert.match(conversation, /Vyskladať riešenie/);
+  assert.match(conversation, /4 otázky · približne 1 minúta/);
+  assert.match(conversation, /data-started=\{conversationStarted/);
+  assert.match(conversation, /Radšej priamo\?/);
   assert.match(conversation, /disabled=\{!input\.trim\(\) \|\| typing/);
+  assert.doesNotMatch(conversation, /flightOrigin|bubble\.animate|translate3d|getBoundingClientRect/);
+  assert.match(rule(css, ".cw-message-wrap p"), /font-size:\s*14px/);
+  assert.match(rule(css, ".cw-quick-replies .cw-chip"), /font-size:\s*12\.5px/);
   assert.match(rule(css, ".cw-inputbar > .cw-send"), /opacity:\s*1/);
   assert.match(rule(css, ".cw-inputbar > .cw-send"), /visibility:\s*visible/);
-  assert.match(
-    rule(css, ".cw-inputbar > .cw-send:disabled"),
-    /opacity:\s*1/,
-  );
+  assert.match(rule(css, ".cw-inputbar > .cw-send:disabled"), /opacity:\s*1/);
 });
 
-test("primary controls use the requested rounded geometry", async () => {
+test("direct contact is a quiet utility row rather than three mini cards", async () => {
   const css = await read("src/product-widget.css");
+  const actions = rule(css, ".cw-direct-actions");
+  const links = rule(css, ".cw-direct-actions__grid a");
 
-  assert.match(rule(css, ".cw-chat-builder"), /border-radius:\s*20px/);
-  assert.match(rule(css, ".cw-next"), /border-radius:\s*999px/);
-  assert.match(rule(css, ".cw-quick-replies .cw-chip"), /border-radius:\s*999px/);
-  assert.match(rule(css, ".cw-inputbar"), /border-radius:\s*19px/);
-  assert.match(rule(css, ".cw-rowcard"), /border-radius:\s*18px/);
-  assert.match(rule(css, ".cw-submit"), /border-radius:\s*18px/);
+  assert.match(actions, /display:\s*flex/);
+  assert.match(links, /background:\s*transparent/);
+  assert.doesNotMatch(links, /border:/);
+  assert.match(links, /font-size:\s*11\.5px/);
 });
 
-test("configurator selection is static, legible and auto-advances without CSS side effects", async () => {
+test("configurator gives perceptible selection feedback without theatrical tilt", async () => {
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
   const autoAdvance = await read("src/lib/configuratorAutoAdvance.ts");
   const css = await read("src/product-widget.css");
 
   assert.match(calculator, /function SelectionIndicator/);
   assert.match(calculator, /className="cw-selection-indicator"/);
-  assert.match(autoAdvance, /SINGLE_CHOICE_SELECTOR/);
+  assert.match(autoAdvance, /CONFIRM_MS = 300/);
   assert.match(autoAdvance, /next\.click\(\)/);
   assert.match(css, /data-confirming="true"/);
   assert.match(css, /\.cw-selection-indicator\[data-visible="true"\]/);
   assert.doesNotMatch(css, /--cw-tilt|rotateX|rotateY/);
+  assert.match(
+    css,
+    /\.cw-rowcard\[data-selected="true"\],[\s\S]*?background:\s*var\(--cw-lime-soft\)/,
+  );
+});
+
+test("progress and contact step expose clear state and labels", async () => {
+  const calculator = await read("src/components/widget/ToolCalculator.tsx");
+  const css = await read("src/product-widget.css");
+
+  assert.match(calculator, /cw-progress__dots/);
+  assert.match(calculator, /Krok \$\{visibleStep \+ 1\} z \$\{STEPS\.length\}/);
+  assert.match(calculator, /className="cw-field"/);
+  assert.match(calculator, /aria-invalid=\{nameInvalid\}/);
+  assert.match(calculator, /aria-invalid=\{emailInvalid\}/);
+  assert.match(calculator, /aria-invalid=\{phoneInvalid\}/);
+  assert.match(calculator, /<details className="cw-summary">/);
+  assert.match(calculator, /Poslať nezáväzný dopyt/);
+  assert.doesNotMatch(calculator, /label: "Osobne"/);
+  assert.match(rule(css, ".cw-progress__dots"), /grid-template-columns:\s*repeat\(5,/);
+});
+
+test("primary controls keep intentional, differentiated geometry", async () => {
+  const css = await read("src/product-widget.css");
+
+  assert.match(rule(css, ".cw-chat-builder"), /border-radius:\s*18px/);
+  assert.match(rule(css, ".cw-next"), /border-radius:\s*999px/);
+  assert.match(rule(css, ".cw-quick-replies .cw-chip"), /border-radius:\s*999px/);
+  assert.match(rule(css, ".cw-inputbar"), /border-radius:\s*19px/);
+  assert.match(rule(css, ".cw-rowcard"), /border-radius:\s*17px/);
+  assert.match(rule(css, ".cw-submit"), /border-radius:\s*17px/);
 });
 
 test("palette stays within the website white forest lime identity", async () => {
@@ -152,8 +186,11 @@ test("palette stays within the website white forest lime identity", async () => 
   }
 });
 
-test("mobile and reduced-motion fallbacks are first-class", async () => {
+test("mobile, keyboard and reduced-motion fallbacks are first-class", async () => {
   const css = await read("src/product-widget.css");
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
+  );
 
   assert.match(css, /@media \(max-width: 640px\)/);
   assert.match(css, /width:\s*100dvw/);
@@ -162,6 +199,9 @@ test("mobile and reduced-motion fallbacks are first-class", async () => {
   assert.match(css, /prefers-reduced-motion: reduce/);
   assert.match(css, /animation-duration:\s*1ms/);
   assert.match(css, /data-composing="true"/);
+  assert.match(css, /contain:\s*paint/);
+  assert.match(conversation, /canAutoFocus/);
+  assert.match(conversation, /pointer: fine/);
 });
 
 test("icons remain one custom rounded line family", async () => {

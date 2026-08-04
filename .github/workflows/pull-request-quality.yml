@@ -45,6 +45,35 @@ jobs:
       - name: Build Vercel application and direct widget
         run: pnpm build
 
+      - name: Install browser test runtime
+        run: |
+          pnpm add --save-dev --lockfile=false @playwright/test@1.55.0
+          pnpm exec playwright install chromium
+
+      - name: Run desktop and mobile browser smoke tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          pnpm exec vite preview --host 127.0.0.1 --port 4173 > /tmp/widget-vite.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+
+          ready=false
+          for _ in {1..30}; do
+            if curl -fsS http://127.0.0.1:4173/ > /dev/null; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+
+          if [ "$ready" != "true" ]; then
+            cat /tmp/widget-vite.log
+            exit 1
+          fi
+
+          pnpm exec playwright test tests/widget-smoke.spec.mjs --reporter=line --workers=1
+
       - name: Build GitHub Pages application and direct widget
         run: pnpm build:pages
 
@@ -56,10 +85,10 @@ jobs:
           test -f dist/widget.js
           test -f dist/widget.css
 
-          # The direct runtime must carry the unified product marker and the
+          # The direct runtime must carry the audited product marker and the
           # two exact paths of the current vector brand mark.
           grep -Fq 'unified-product-20260804-v1' dist/widget.js
-          grep -Fq 'unified-production-system' dist/widget.js
+          grep -Fq 'competition-audited-system' dist/widget.js
           grep -Fq 'M96.6 85.5C100.8 84.6 103.6 82.4' dist/widget.js
           grep -Fq 'M24 71.2V29.2L52.5 55.4' dist/widget.js
 
@@ -74,10 +103,10 @@ jobs:
           grep -Fq '.cw-calculator' dist/widget.css
 
           # Source entry points must use the single product stylesheet and must
-          # never restore the retired injected override stack or pointer tilt.
+          # never restore an injected override stack or pointer tilt.
           grep -Fq 'product-widget.css' src/main.tsx
           grep -Fq 'product-widget.css' src/embed.tsx
-          ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt' src/main.tsx
-          ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt' src/embed.tsx
-          ! grep -Eq 'assistant-redesign|approved-option-one|masterpiece-final' src/main.tsx
-          ! grep -Eq 'assistant-redesign|approved-option-one|masterpiece-final' src/embed.tsx
+          ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt|installProductRefinement' src/main.tsx
+          ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt|installProductRefinement' src/embed.tsx
+          ! grep -Eq 'assistant-redesign|approved-option-one|masterpiece-final|product-refinement.css' src/main.tsx
+          ! grep -Eq 'assistant-redesign|approved-option-one|masterpiece-final|product-refinement.css' src/embed.tsx

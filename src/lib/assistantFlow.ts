@@ -12,11 +12,8 @@ export type StepId =
 
 export const STEPS: StepId[] = ["interest", "industry", "features", "timeline", "contact"];
 
-/* Everything before the contact form is a question the visitor answers, so the
-   progress label can count them honestly: "Otázka 2 zo 4". */
 export const QUESTION_STEPS: StepId[] = STEPS.filter((id) => id !== "contact");
 
-/* One short sentence per question, plus a line that says why I am asking. */
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
     "Čo má web robiť za vás?",
@@ -35,8 +32,8 @@ export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
     "Podľa toho si na vás naplánujem čas.",
   ],
   contact: [
-    "Ako sa vám môžem ozvať?",
-    "Stačí meno a telefón. Ozvem sa do jedného dňa.",
+    "Kam vám môžem poslať ďalší krok?",
+    "Stačí meno a jeden kontakt. Ozvem sa do jedného pracovného dňa.",
   ],
   priority: [
     "Čo je pre vás najdôležitejšie?",
@@ -197,9 +194,6 @@ export const FEATURES: FeatureOption[] = [
     description: "Rozmery, materiál a doplnky.",
   },
   {
-    /* The system prompt already promises the calendar half of this; the option
-       only mentioned picking a time, so the two disagreed about what is on
-       offer. It says the whole thing now. */
     id: "rezervacie",
     label: "Dohodne termín",
     description: "Konzultáciu zapíše do kalendára.",
@@ -221,9 +215,6 @@ export const FEATURES: FeatureOption[] = [
   },
 ];
 
-/* Which extras usually go with a given goal. These are shown as a hint on the
-   option itself — never pre-ticked, because a chip that looks chosen before the
-   visitor touched it reads as a bug. */
 export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
   chatbot: ["faq", "dopyty"],
   calcbot: ["cena"],

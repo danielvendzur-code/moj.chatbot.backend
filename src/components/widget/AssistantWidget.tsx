@@ -32,8 +32,7 @@ const isPreset = (value: string | undefined): value is AssistantPreset =>
     value && ["calculator", "inquiry", "advisor", "booking"].includes(value),
   );
 
-const PANEL_EXIT_MS = 210;
-const RESET_SPIN_MS = 560;
+const PANEL_EXIT_MS = 170;
 
 const reducedMotion = (): boolean =>
   typeof window !== "undefined" &&
@@ -46,14 +45,9 @@ export function AssistantWidget({
   const [isClosing, setIsClosing] = useState(false);
   const [hasOpened, setHasOpened] = useState(false);
   const [mode, setMode] = useState<WidgetMode>("assistant");
-  const [modeDirection, setModeDirection] = useState<"forward" | "backward">(
-    "forward",
-  );
   const [resetToken, setResetToken] = useState(0);
-  const [resetSpinning, setResetSpinning] = useState(false);
   const [preset, setPreset] = useState<AssistantPreset | null>(null);
 
-  const resetSpinTimerRef = useRef<number | null>(null);
   const closeTimerRef = useRef<number | null>(null);
   const panelRef = useRef<HTMLElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
@@ -98,7 +92,6 @@ export function AssistantWidget({
       restoreLauncherFocusRef.current = false;
       setHasOpened(true);
       setIsClosing(false);
-      setModeDirection(nextMode === "assistant" ? "forward" : "backward");
       setMode(nextMode);
       setPreset(nextPreset);
       setIsOpen(true);
@@ -107,23 +100,9 @@ export function AssistantWidget({
     [],
   );
 
-  const pulseReset = useCallback(() => {
-    if (reducedMotion()) return;
-    if (resetSpinTimerRef.current !== null) {
-      window.clearTimeout(resetSpinTimerRef.current);
-    }
-    setResetSpinning(false);
-    window.requestAnimationFrame(() => setResetSpinning(true));
-    resetSpinTimerRef.current = window.setTimeout(() => {
-      resetSpinTimerRef.current = null;
-      setResetSpinning(false);
-    }, RESET_SPIN_MS);
-  }, []);
-
   const switchMode = useCallback(
     (nextMode: WidgetMode) => {
       if (nextMode === mode) return;
-      setModeDirection(nextMode === "assistant" ? "forward" : "backward");
       setMode(nextMode);
       track("mode_switch", { to: nextMode });
     },
@@ -133,8 +112,7 @@ export function AssistantWidget({
   const openFromOptions = useCallback(
     (options: OpenSiteAssistantOptions) => {
       const directPreset =
-        options?.preset ??
-        (isPreset(options?.entry) ? options.entry : undefined);
+        options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);
       const calculatorEntry =
         options?.entry === "builder" ||
         options?.entry === "calculator" ||
@@ -185,9 +163,6 @@ export function AssistantWidget({
       if (closeTimerRef.current !== null) {
         window.clearTimeout(closeTimerRef.current);
       }
-      if (resetSpinTimerRef.current !== null) {
-        window.clearTimeout(resetSpinTimerRef.current);
-      }
     },
     [],
   );
@@ -199,6 +174,12 @@ export function AssistantWidget({
       delete document.documentElement.dataset.assistantOpen;
     };
   }, [isOpen]);
+
+  const reset = () => {
+    setPreset(null);
+    setResetToken((value) => value + 1);
+    track("widget_reset", { mode });
+  };
 
   return (
     <div className="cw-widget">
@@ -231,25 +212,20 @@ export function AssistantWidget({
           tabIndex={-1}
         >
           <header className="cw-panel-head">
-            <span className="cw-panel-head__mascot">
+            <span className="cw-panel-head__mascot" aria-hidden="true">
               <BubbleLogo size="header" />
             </span>
             <div className="cw-panel-head__title">
               <h2 id="chameleon-widget-title">Môj Chatbot</h2>
-              <p>AI nástroje pre váš web</p>
+              <p>Poradca a konfigurátor pre váš web</p>
             </div>
             <div className="cw-panel-head__actions">
               <button
                 type="button"
                 data-testid="widget-reset"
-                data-spinning={resetSpinning || undefined}
                 aria-label="Začať odznova"
                 title="Začať odznova"
-                onClick={() => {
-                  setPreset(null);
-                  setResetToken((value) => value + 1);
-                  pulseReset();
-                }}
+                onClick={reset}
               >
                 <WidgetIcon name="reset" />
               </button>
@@ -300,7 +276,7 @@ export function AssistantWidget({
             </button>
           </nav>
 
-          <div className="cw-panel-body" data-direction={modeDirection}>
+          <div className="cw-panel-body">
             <div
               id="cw-panel-assistant"
               className="cw-mode-view"

@@ -1,6 +1,6 @@
-/* Shared embed foundation only. Component styling lives in assistant-redesign.css. */
+/* Shared embed foundation only. Component styling lives in product-widget.css. */
 .cw-widget {
-  color-scheme: dark;
+  color-scheme: light;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -79,4 +79,58 @@ html[data-embed="true"] #root {
 .bl--avatar {
   width: 27px;
   height: 27px;
+}
+
+/* Keep consent native. A transparent checkbox stretched over a wrapping label
+   can receive both the direct click and the label activation, toggling twice.
+   The browser control is more reliable, keyboard-friendly and still uses the
+   product green through accent-color. */
+.cw-widget .cw-consent > input {
+  position: static;
+  z-index: auto;
+  inset: auto;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  margin: 0;
+  opacity: 1;
+  accent-color: #19834f;
+  cursor: pointer;
+}
+
+.cw-widget .cw-consent__box {
+  display: none;
+}
+
+@keyframes cw-mobile-panel-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes cw-mobile-panel-out {
+  to { opacity: 0; }
+}
+
+/* A full-screen mobile assistant has to own the viewport while it is open.
+   Otherwise a classic scrollbar can steal 15–16 px from the fixed panel and
+   the page behind the widget can still move. A full-screen surface also fades
+   in place rather than translating the whole interface. */
+@media (max-width: 640px) {
+  html[data-assistant-open="true"],
+  html[data-assistant-open="true"] body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  .cw-widget .cw-panel {
+    width: 100vw;
+    max-width: none;
+    animation: cw-mobile-panel-in 150ms ease both;
+  }
+
+  .cw-widget .cw-panel[data-state="closing"] {
+    animation: cw-mobile-panel-out 120ms ease both;
+  }
 }
