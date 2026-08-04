@@ -1,18 +1,10 @@
 import { createRoot } from "react-dom/client";
 import { AssistantWidget } from "./components/widget/AssistantWidget";
 import { installConfiguratorAutoAdvance } from "./lib/configuratorAutoAdvance";
-import { installLimeWhiteStyles } from "./lib/installLimeWhiteStyles";
-import { installPremiumTilt } from "./lib/premiumTilt";
 import "./widget.css";
-import "./assistant-redesign.css";
-import "./approved-submit-final.css";
-import "./final-user-correction.css";
-import "./green-motion-final.css";
-import "./unified-experience-final.css";
-import "./masterpiece-final.css";
+import "./product-widget.css";
 
 installConfiguratorAutoAdvance();
-installPremiumTilt();
 
 const HOST_ID = "dv-assistant-root";
 const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
@@ -37,14 +29,12 @@ function mount(): void {
   if (existing?.childElementCount) return;
 
   ensureStylesheet();
-  installLimeWhiteStyles();
 
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "approved-option-one-20260802-v5");
-  host.setAttribute("data-dv-assistant-theme", "approved-option-one");
-  host.setAttribute("data-dv-assistant-quality", "production-verified-v5");
-  host.setAttribute("data-dv-assistant-compat", "competition-redesign-20260723-v10");
+  host.setAttribute("data-dv-assistant-version", "unified-product-20260804-v1");
+  host.setAttribute("data-dv-assistant-theme", "white-forest-lime");
+  host.setAttribute("data-dv-assistant-quality", "unified-production-system");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);
