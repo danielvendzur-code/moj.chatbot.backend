@@ -1,11 +1,10 @@
 import productRefinementCss from "../product-refinement.css?inline";
 
 const STYLE_ID = "dv-assistant-product-refinement";
-const INSTALL_FLAG = "dvAssistantProductRefinementInstalled";
 
 declare global {
   interface Window {
-    [INSTALL_FLAG]?: boolean;
+    dvAssistantProductRefinementInstalled?: boolean;
   }
 }
 
@@ -72,7 +71,7 @@ export function installProductRefinement(): void {
     document.head.appendChild(style);
   }
 
-  if (window[INSTALL_FLAG]) return;
-  window[INSTALL_FLAG] = true;
+  if (window.dvAssistantProductRefinementInstalled) return;
+  window.dvAssistantProductRefinementInstalled = true;
   protectInitialComposerState();
 }
