@@ -3,6 +3,7 @@ import { AssistantWidget } from "./components/widget/AssistantWidget";
 import { installConfiguratorAutoAdvance } from "./lib/configuratorAutoAdvance";
 import "./widget.css";
 import "./product-widget.css";
+import "./widget-polish.css";
 
 installConfiguratorAutoAdvance();
 
