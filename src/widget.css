@@ -1,6 +1,6 @@
-/* Shared embed foundation only. Component styling lives in assistant-redesign.css. */
+/* Shared embed foundation only. Component styling lives in product-widget.css. */
 .cw-widget {
-  color-scheme: dark;
+  color-scheme: light;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -79,4 +79,18 @@ html[data-embed="true"] #root {
 .bl--avatar {
   width: 27px;
   height: 27px;
+}
+
+/* A full-screen mobile assistant has to own the viewport while it is open.
+   Otherwise a classic scrollbar can steal 15–16 px from the fixed panel and
+   the page behind the widget can still move. The input remains inside the
+   panel's own flex layout, so keyboard composition continues to work. */
+@media (max-width: 640px) {
+  html[data-assistant-open="true"],
+  html[data-assistant-open="true"] body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
 }
