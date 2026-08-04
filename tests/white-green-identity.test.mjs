@@ -15,7 +15,7 @@ test("the product stylesheet is the sole visual authority", async () => {
   assert.doesNotMatch(embed, /installLimeWhiteStyles/);
   assert.doesNotMatch(main, /premiumTilt/);
   assert.doesNotMatch(embed, /premiumTilt/);
-  assert.match(css, /MÔJ CHATBOT — unified product interface/);
+  assert.match(css, /MÔJ CHATBOT — competition-audited product interface/);
   assert.doesNotMatch(css, /html:root body \.cw-widget|\[class\]\[class\]/);
 
   const importantLines = css
@@ -41,16 +41,17 @@ test("launcher and brand mark never jump or bounce", async () => {
   assert.doesNotMatch(css, /\.bl[^}]*transform:/s);
 });
 
-test("header contains brand purpose rather than a fake availability state", async () => {
+test("header contains a concrete product purpose rather than fake availability", async () => {
   const widget = await read("src/components/widget/AssistantWidget.tsx");
 
   assert.match(widget, /Môj Chatbot/);
-  assert.match(widget, /AI nástroje pre váš web/);
+  assert.match(widget, /Poradca a konfigurátor pre váš web/);
   assert.doesNotMatch(widget, /Online|availability|Odpovedám hneď/);
 });
 
-test("backward step navigation releases the tall-step height lock", async () => {
+test("backward step navigation releases the tall-step height lock quickly", async () => {
   const transition = await read("src/hooks/useStepTransition.ts");
+  assert.match(transition, /STEP_ENTER_MS = 220/);
   assert.match(transition, /nextDirection === "forward"/);
   assert.match(transition, /nextDirection === "backward"/);
   assert.match(transition, /container\.style\.minHeight = ""/);
@@ -68,16 +69,18 @@ test("mobile iframe freezes and restores the parent page on iOS", async () => {
   assert.match(embed, /window\.scrollTo\(savedScrollX, savedScrollY\)/);
 });
 
-test("contact conversion surface keeps clear hierarchy", async () => {
+test("contact conversion surface keeps clear hierarchy and visible labels", async () => {
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
   const css = await read("src/product-widget.css");
 
   assert.match(calculator, /Ako sa vám mám ozvať\?/);
+  assert.match(calculator, /Nezáväzný dopyt/);
   assert.match(calculator, /cw-contact-methods/);
   assert.match(calculator, /cw-lead__form/);
-  assert.match(calculator, /cw-summary/);
+  assert.match(calculator, /className="cw-field"/);
+  assert.match(calculator, /<details className="cw-summary">/);
   assert.match(calculator, /cw-consent/);
   assert.match(calculator, /cw-submit cw-submit--approved/);
-  assert.match(css, /NEZÁVÄZNÝ NÁVRH/);
-  assert.match(css, /Stačí meno a kontakt/);
+  assert.match(css, /\.cw-field :is\(input, textarea\)\[aria-invalid="true"\]/);
+  assert.match(css, /\.cw-summary > summary/);
 });
