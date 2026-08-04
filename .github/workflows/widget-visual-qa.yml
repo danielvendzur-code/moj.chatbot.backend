@@ -36,8 +36,11 @@ jobs:
       - name: Build widget
         run: pnpm build
 
+      - name: Install browser test runner
+        run: pnpm add --save-dev --ignore-workspace-root-check @playwright/test@1.55.0
+
       - name: Install Chromium
-        run: npx --yes playwright@1.55.0 install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Start preview server
         run: |
@@ -52,7 +55,7 @@ jobs:
           exit 1
 
       - name: Capture mobile and desktop states
-        run: npx --yes @playwright/test@1.55.0 test tests/widget-visual.spec.mjs --reporter=line --workers=1
+        run: pnpm exec playwright test tests/widget-visual.spec.mjs --reporter=line --workers=1
 
       - name: Upload visual evidence
         if: always()
