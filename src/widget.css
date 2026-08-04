@@ -81,10 +81,32 @@ html[data-embed="true"] #root {
   height: 27px;
 }
 
+/* The custom consent control keeps the native checkbox over the entire visible
+   row. It therefore remains a real keyboard and pointer target instead of a
+   one-pixel transparent input positioned at the document origin. */
+.cw-widget .cw-consent {
+  position: relative;
+}
+
+.cw-widget .cw-consent > input {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.cw-widget .cw-consent > input:focus-visible + .cw-consent__box {
+  outline: 3px solid rgba(25, 131, 79, 0.22);
+  outline-offset: 2px;
+}
+
 /* A full-screen mobile assistant has to own the viewport while it is open.
    Otherwise a classic scrollbar can steal 15–16 px from the fixed panel and
-   the page behind the widget can still move. The input remains inside the
-   panel's own flex layout, so keyboard composition continues to work. */
+   the page behind the widget can still move. */
 @media (max-width: 640px) {
   html[data-assistant-open="true"],
   html[data-assistant-open="true"] body {
@@ -92,5 +114,12 @@ html[data-embed="true"] #root {
     height: 100%;
     overflow: hidden;
     overscroll-behavior: none;
+  }
+
+  /* 100dvw excludes classic scrollbars in Chromium desktop emulation. 100vw
+     deliberately covers the complete visual viewport, matching real mobile. */
+  .cw-widget .cw-panel {
+    width: 100vw;
+    max-width: none;
   }
 }
