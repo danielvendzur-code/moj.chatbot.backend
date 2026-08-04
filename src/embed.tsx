@@ -33,9 +33,10 @@ function mount(): void {
 
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "unified-product-20260804-v2");
+  host.setAttribute("data-dv-assistant-version", "unified-product-20260804-v1");
   host.setAttribute("data-dv-assistant-theme", "white-forest-lime");
-  host.setAttribute("data-dv-assistant-quality", "proven-widget-refinement");
+  host.setAttribute("data-dv-assistant-quality", "unified-production-system");
+  host.setAttribute("data-dv-assistant-refinement", "proven-widget-20260804-v1");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);
