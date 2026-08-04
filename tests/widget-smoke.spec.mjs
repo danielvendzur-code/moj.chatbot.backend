@@ -45,7 +45,7 @@ test("desktop visitor completes the configurator and receives useful validation"
     page.getByRole("heading", { name: "Kam vám môžem poslať ďalší krok?" }),
   ).toBeVisible({ timeout: 2500 });
   await expect(page.getByText("Krok 5 z 5 · Kontakt")).toBeVisible();
-  await expect(page.getByText("Nezáväzný dopyt")).toBeVisible();
+  await expect(page.getByText("Nezáväzný dopyt", { exact: true })).toBeVisible();
 
   await page.getByTestId("lead-submit").click();
   await expect(page.getByRole("alert")).toContainText("Vyberte, ako sa vám mám ozvať");
