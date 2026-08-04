@@ -6,6 +6,7 @@ import { getInitialEmbedViewport, isEmbedMode } from "./lib/embedBridge";
 import "./preview.css";
 import "./widget.css";
 import "./product-widget.css";
+import "./product-refinement.css";
 
 installConfiguratorAutoAdvance();
 
