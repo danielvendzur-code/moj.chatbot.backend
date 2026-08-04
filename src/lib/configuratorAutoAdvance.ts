@@ -1,7 +1,7 @@
 const SINGLE_CHOICE_SELECTOR = ".cw-rowcard, .cw-scard, .cw-vcard";
 const BACK_SELECTOR = ".cw-progress__back, .cw-tabs, .cw-panel-head__actions";
 const INSTALL_FLAG = "cwConfiguratorAutoAdvance";
-const CONFIRM_MS = 300;
+const CONFIRM_MS = 520;
 const POINTER_RELEASE_DISTANCE = 8;
 
 export function installConfiguratorAutoAdvance(): void {
@@ -107,7 +107,7 @@ export function installConfiguratorAutoAdvance(): void {
           next.click();
         },
         window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? 32
+          ? 80
           : CONFIRM_MS,
       );
     },
