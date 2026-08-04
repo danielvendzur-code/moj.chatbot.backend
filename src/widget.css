@@ -81,27 +81,25 @@ html[data-embed="true"] #root {
   height: 27px;
 }
 
-/* The custom consent control keeps the native checkbox over the entire visible
-   row. It therefore remains a real keyboard and pointer target instead of a
-   one-pixel transparent input positioned at the document origin. */
-.cw-widget .cw-consent {
-  position: relative;
-}
-
+/* Keep consent native. A transparent checkbox stretched over a wrapping label
+   can receive both the direct click and the label activation, toggling twice.
+   The browser control is more reliable, keyboard-friendly and still uses the
+   product green through accent-color. */
 .cw-widget .cw-consent > input {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  position: static;
+  z-index: auto;
+  inset: auto;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
   margin: 0;
-  opacity: 0;
+  opacity: 1;
+  accent-color: #19834f;
   cursor: pointer;
 }
 
-.cw-widget .cw-consent > input:focus-visible + .cw-consent__box {
-  outline: 3px solid rgba(25, 131, 79, 0.22);
-  outline-offset: 2px;
+.cw-widget .cw-consent__box {
+  display: none;
 }
 
 /* A full-screen mobile assistant has to own the viewport while it is open.
@@ -116,8 +114,6 @@ html[data-embed="true"] #root {
     overscroll-behavior: none;
   }
 
-  /* 100dvw excludes classic scrollbars in Chromium desktop emulation. 100vw
-     deliberately covers the complete visual viewport, matching real mobile. */
   .cw-widget .cw-panel {
     width: 100vw;
     max-width: none;
