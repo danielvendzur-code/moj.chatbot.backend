@@ -9,7 +9,7 @@ const rule = (css, selector) => {
   return css.match(new RegExp(`${escaped}\\s*\\{[^}]*\\}`, "m"))?.[0] ?? "";
 };
 
-test("demo and embed load one foundation and one product stylesheet", async () => {
+test("demo and embed load the ordered static widget styles", async () => {
   const main = await read("src/main.tsx");
   const embed = await read("src/embed.tsx");
   const autoAdvance = await read("src/lib/configuratorAutoAdvance.ts");
@@ -17,23 +17,28 @@ test("demo and embed load one foundation and one product stylesheet", async () =
   assert.match(main, /preview\.css/);
   assert.match(main, /widget\.css/);
   assert.match(main, /product-widget\.css/);
-  assert.equal((main.match(/import "\.\/.*\.css";/g) ?? []).length, 3);
+  assert.match(main, /widget-polish\.css/);
+  assert.equal((main.match(/import "\.\/.*\.css";/g) ?? []).length, 4);
 
   assert.doesNotMatch(embed, /preview\.css/);
   assert.match(embed, /widget\.css/);
   assert.match(embed, /product-widget\.css/);
-  assert.equal((embed.match(/import "\.\/.*\.css";/g) ?? []).length, 2);
+  assert.match(embed, /widget-polish\.css/);
+  assert.equal((embed.match(/import "\.\/.*\.css";/g) ?? []).length, 3);
 
   for (const source of [main, embed]) {
     assert.doesNotMatch(source, /assistant-redesign|masterpiece-final|approved-submit/);
-    assert.doesNotMatch(source, /installLimeWhiteStyles|installPremiumTilt/);
+    assert.doesNotMatch(
+      source,
+      /installLimeWhiteStyles|installPremiumTilt|installProductRefinement/,
+    );
   }
   assert.doesNotMatch(autoAdvance, /import\s+["'].*\.css/);
 });
 
-test("widget shell uses open accessible tabs without a draggable capsule", async () => {
+test("widget shell uses accessible rounded mode chips without drag logic", async () => {
   const widget = await read("src/components/widget/AssistantWidget.tsx");
-  const css = await read("src/product-widget.css");
+  const polish = await read("src/widget-polish.css");
 
   assert.match(widget, /role="tablist"/);
   assert.match(widget, /role="tab"/);
@@ -44,20 +49,30 @@ test("widget shell uses open accessible tabs without a draggable capsule", async
   assert.doesNotMatch(widget, /cw-tabs__thumb|ThumbDrag|setPointerCapture/);
   assert.doesNotMatch(widget, /resetSpinning|pulseReset|RESET_SPIN_MS/);
   assert.match(widget, /Poradca a konfigurátor pre váš web/);
-  assert.match(rule(css, ".cw-tabs"), /border-bottom:/);
-  assert.doesNotMatch(rule(css, ".cw-tabs"), /border-radius:/);
-  assert.match(css, /\.cw-tabs > button\[data-active="true"\]::after/);
+  assert.match(rule(polish, ".cw-widget .cw-tabs"), /border-radius:\s*18px/);
+  assert.match(rule(polish, ".cw-widget .cw-tabs > button"), /border-radius:\s*14px/);
+  assert.match(
+    rule(polish, '.cw-widget .cw-tabs > button[data-active="true"]'),
+    /background:\s*var\(--cw-green\)/,
+  );
 });
 
-test("exact vector logo remains green, crisp and motionless", async () => {
+test("filled vector logo remains green, crisp and motionless", async () => {
   const logo = await read("src/components/widget/BubbleLogo.tsx");
   const css = await read("src/product-widget.css");
+  const polish = await read("src/widget-polish.css");
 
   assert.match(logo, /viewBox="0 0 112 112"/);
-  assert.match(logo, /strokeWidth="4\.3"/);
-  assert.doesNotMatch(logo, /<img|data:image|base64/);
-  assert.match(rule(css, ".cw-launcher"), /color:\s*var\(--cw-lime\)/);
-  assert.match(rule(css, ".cw-panel-head__mascot"), /color:\s*var\(--cw-lime\)/);
+  assert.match(logo, /className="bl__bubble"/);
+  assert.match(logo, /fill="currentColor"/);
+  assert.match(logo, /className="bl__monogram"/);
+  assert.match(logo, /stroke="white"/);
+  assert.match(logo, /strokeWidth="8"/);
+  assert.doesNotMatch(logo, /<img|data:image|base64|bl__optical-weight/);
+  assert.match(
+    rule(polish, ".cw-widget .cw-launcher,\n.cw-widget .cw-panel-head__mascot,\n.cw-widget .cw-avatar"),
+    /color:\s*var\(--cw-green\)/,
+  );
   assert.match(
     css,
     /\.cw-launcher:hover,[\s\S]*?\.cw-launcher:focus-visible\s*\{[\s\S]*?transform:\s*none;/,
@@ -77,11 +92,12 @@ test("panel proportions and hierarchy are deliberate", async () => {
   assert.match(rule(css, ".cw-panel-head__title p"), /font-size:\s*12px/);
 });
 
-test("chat hierarchy is readable and the composer is always visible", async () => {
+test("chat hierarchy is readable and selected chip text stays present", async () => {
   const conversation = await read(
     "src/components/widget/AssistantConversation.tsx",
   );
   const css = await read("src/product-widget.css");
+  const polish = await read("src/widget-polish.css");
 
   const top = conversation.indexOf('className="cw-chat-top"');
   const messages = conversation.indexOf('className="cw-messages"');
@@ -92,12 +108,18 @@ test("chat hierarchy is readable and the composer is always visible", async () =
   assert.ok(messages < chips && chips < input && input < contacts);
 
   assert.match(conversation, /4 otázky · približne 1 minúta/);
+  assert.match(conversation, /QUICK_REPLY_HOLD_MS = 360/);
+  assert.match(conversation, /activeQuickReply !== null/);
+  assert.match(conversation, /className="cw-chip__label"/);
+  assert.match(conversation, /aria-pressed=\{sending\}/);
   assert.match(conversation, /data-started=\{conversationStarted/);
   assert.match(conversation, /Radšej priamo\?/);
   assert.match(conversation, /disabled=\{!input\.trim\(\) \|\| typing/);
   assert.doesNotMatch(conversation, /flightOrigin|bubble\.animate|translate3d|getBoundingClientRect/);
   assert.match(rule(css, ".cw-message-wrap p"), /font-size:\s*14px/);
   assert.match(rule(css, ".cw-quick-replies .cw-chip"), /font-size:\s*12\.5px/);
+  assert.match(rule(polish, ".cw-widget .cw-chip__label"), /visibility:\s*visible/);
+  assert.match(rule(polish, ".cw-widget .cw-chip__label"), /opacity:\s*1/);
   assert.match(rule(css, ".cw-inputbar > .cw-send"), /opacity:\s*1/);
   assert.match(rule(css, ".cw-inputbar > .cw-send"), /visibility:\s*visible/);
   assert.match(rule(css, ".cw-inputbar > .cw-send:disabled"), /opacity:\s*1/);
@@ -114,17 +136,20 @@ test("direct contact is a quiet utility row rather than three mini cards", async
   assert.match(links, /font-size:\s*11\.5px/);
 });
 
-test("configurator gives perceptible selection feedback without theatrical tilt", async () => {
+test("configurator keeps the selected label readable before auto-advance", async () => {
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
   const autoAdvance = await read("src/lib/configuratorAutoAdvance.ts");
   const css = await read("src/product-widget.css");
+  const polish = await read("src/widget-polish.css");
 
   assert.match(calculator, /function SelectionIndicator/);
   assert.match(calculator, /className="cw-selection-indicator"/);
-  assert.match(autoAdvance, /CONFIRM_MS = 300/);
+  assert.match(autoAdvance, /CONFIRM_MS = 520/);
   assert.match(autoAdvance, /next\.click\(\)/);
   assert.match(css, /data-confirming="true"/);
   assert.match(css, /\.cw-selection-indicator\[data-visible="true"\]/);
+  assert.match(polish, /Keep the selected answer readable/);
+  assert.match(polish, /visibility:\s*visible/);
   assert.doesNotMatch(css, /--cw-tilt|rotateX|rotateY/);
   assert.match(
     css,
@@ -150,6 +175,7 @@ test("progress and contact step expose clear state and labels", async () => {
 
 test("primary controls keep intentional, differentiated geometry", async () => {
   const css = await read("src/product-widget.css");
+  const polish = await read("src/widget-polish.css");
 
   assert.match(rule(css, ".cw-chat-builder"), /border-radius:\s*18px/);
   assert.match(rule(css, ".cw-next"), /border-radius:\s*999px/);
@@ -157,6 +183,7 @@ test("primary controls keep intentional, differentiated geometry", async () => {
   assert.match(rule(css, ".cw-inputbar"), /border-radius:\s*19px/);
   assert.match(rule(css, ".cw-rowcard"), /border-radius:\s*17px/);
   assert.match(rule(css, ".cw-submit"), /border-radius:\s*17px/);
+  assert.match(rule(polish, ".cw-widget .cw-tabs"), /border-radius:\s*18px/);
 });
 
 test("palette stays within the website white forest lime identity", async () => {

@@ -50,7 +50,8 @@ const QUICK_REPLIES: QuickReply[] = [
 
 const CHAT_FALLBACK =
   "Teraz sa mi nepodarilo odpovedať. Skúste to ešte raz alebo použite priamy kontakt nižšie.";
-const QUICK_REPLY_CONFIRM_MS = 170;
+const QUICK_REPLY_CONFIRM_MS = 210;
+const QUICK_REPLY_HOLD_MS = 360;
 
 const prefersReducedMotion = (): boolean =>
   typeof window !== "undefined" &&
@@ -84,7 +85,7 @@ export function AssistantConversation({
 
   const conversationStarted = messages.some((message) => message.from === "me");
   const showQuickReplies =
-    !conversationStarted && (activeQuickReply !== null || input.trim() === "");
+    !conversationStarted || activeQuickReply !== null;
 
   const resetTokenRef = useRef(resetToken);
   useEffect(() => {
@@ -252,13 +253,17 @@ export function AssistantConversation({
 
     const commit = () => {
       quickReplyTimerRef.current = null;
-      setActiveQuickReply(null);
       void ask(question);
-      if (canAutoFocus()) {
-        window.requestAnimationFrame(() =>
-          inputRef.current?.focus({ preventScroll: true }),
-        );
-      }
+
+      quickReplyTimerRef.current = window.setTimeout(() => {
+        quickReplyTimerRef.current = null;
+        setActiveQuickReply(null);
+        if (canAutoFocus()) {
+          window.requestAnimationFrame(() =>
+            inputRef.current?.focus({ preventScroll: true }),
+          );
+        }
+      }, prefersReducedMotion() ? 120 : QUICK_REPLY_HOLD_MS);
     };
 
     if (prefersReducedMotion()) {
@@ -337,6 +342,7 @@ export function AssistantConversation({
         <div
           className="cw-quick-replies"
           aria-label="Najčastejšie otázky"
+          data-confirming={activeQuickReply !== null || undefined}
         >
           {QUICK_REPLIES.map(({ label, question }) => {
             const sending = activeQuickReply === label;
@@ -345,6 +351,7 @@ export function AssistantConversation({
                 type="button"
                 className="cw-chip"
                 data-sending={sending || undefined}
+                aria-pressed={sending}
                 disabled={typing || activeQuickReply !== null}
                 key={label}
                 title={question}

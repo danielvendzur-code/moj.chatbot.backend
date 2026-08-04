@@ -4,18 +4,22 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("the product stylesheet is the sole visual authority", async () => {
+test("the visual system is static, ordered and free of injected overrides", async () => {
   const main = await read("src/main.tsx");
   const embed = await read("src/embed.tsx");
   const css = await read("src/product-widget.css");
+  const polish = await read("src/widget-polish.css");
 
   assert.match(main, /product-widget\.css/);
+  assert.match(main, /widget-polish\.css/);
   assert.match(embed, /product-widget\.css/);
-  assert.doesNotMatch(main, /installLimeWhiteStyles/);
-  assert.doesNotMatch(embed, /installLimeWhiteStyles/);
-  assert.doesNotMatch(main, /premiumTilt/);
-  assert.doesNotMatch(embed, /premiumTilt/);
+  assert.match(embed, /widget-polish\.css/);
+  assert.doesNotMatch(main, /installLimeWhiteStyles|installProductRefinement|premiumTilt/);
+  assert.doesNotMatch(embed, /installLimeWhiteStyles|installProductRefinement|premiumTilt/);
   assert.match(css, /MÔJ CHATBOT — competition-audited product interface/);
+  assert.match(polish, /disappearing chip labels/);
+  assert.match(polish, /\.cw-widget \.cw-chip__label/);
+  assert.match(polish, /\.cw-chip\[data-sending="true"\]/);
   assert.doesNotMatch(css, /html:root body \.cw-widget|\[class\]\[class\]/);
 
   const importantLines = css
@@ -30,15 +34,22 @@ test("the product stylesheet is the sole visual authority", async () => {
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*scroll-behavior: auto !important/);
 });
 
-test("launcher and brand mark never jump or bounce", async () => {
+test("launcher and compact brand mark stay clear and motionless", async () => {
   const css = await read("src/product-widget.css");
+  const polish = await read("src/widget-polish.css");
   const logo = await read("src/components/widget/BubbleLogo.tsx");
 
-  assert.match(logo, /stroke="currentColor"/);
+  assert.match(logo, /className="bl__bubble"/);
+  assert.match(logo, /fill="currentColor"/);
+  assert.match(logo, /className="bl__monogram"/);
+  assert.match(logo, /stroke="white"/);
+  assert.match(logo, /L100 106L69 89/);
+  assert.doesNotMatch(logo, /bl__optical-weight|strokeWidth="4\.3"|strokeWidth="5\.6"/);
+  assert.match(polish, /\.cw-widget \.cw-launcher,[\s\S]*color:\s*var\(--cw-green\)/);
   assert.match(css, /\.cw-launcher:hover,[\s\S]*?transform:\s*none;/);
   assert.match(css, /\.cw-launcher:active[\s\S]*?transform:\s*none;/);
   assert.doesNotMatch(css, /@keyframes[^}]*bounce/i);
-  assert.doesNotMatch(css, /\.bl[^}]*transform:/s);
+  assert.doesNotMatch(polish, /\.bl[^}]*transform:/s);
 });
 
 test("header contains a concrete product purpose rather than fake availability", async () => {

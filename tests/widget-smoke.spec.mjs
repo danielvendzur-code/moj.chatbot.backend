@@ -9,7 +9,7 @@ const collectRuntimeErrors = (page) => {
   return errors;
 };
 
-test("desktop visitor completes the configurator and receives useful validation", async ({
+test("desktop visitor sees stable chip labels and completes the configurator", async ({
   page,
 }) => {
   const errors = collectRuntimeErrors(page);
@@ -25,12 +25,33 @@ test("desktop visitor completes the configurator and receives useful validation"
   await expect(page.getByRole("heading", { name: "Môj Chatbot" })).toBeVisible();
   await expect(page.getByText("4 otázky · približne 1 minúta")).toBeVisible();
   await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
+  await expect(page.locator(".cw-panel-head .bl__bubble")).toBeVisible();
+  await expect(page.locator(".cw-panel-head .bl__monogram")).toBeVisible();
+
+  const quickReply = page.getByRole("button", {
+    name: "Kde mi to ušetrí čas?",
+  });
+  const quickReplyLabel = quickReply.locator(".cw-chip__label");
+  await quickReply.click();
+  await expect(quickReply).toHaveAttribute("data-sending", "true");
+  await expect(quickReplyLabel).toBeVisible();
+  await expect(quickReplyLabel).toHaveText("Kde mi to ušetrí čas?");
+  await page.waitForTimeout(300);
+  await expect(quickReply).toBeVisible();
+  await expect(quickReplyLabel).toHaveText("Kde mi to ušetrí čas?");
 
   await page.getByTestId("tab-calculator").click();
   await expect(page.getByTestId("calculator-view")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Čo má web robiť za vás?" })).toBeVisible();
 
-  await page.getByTestId("interest-chatbot").click();
+  const interestChoice = page.getByTestId("interest-chatbot");
+  const interestLabel = interestChoice.locator("b");
+  await interestChoice.click();
+  await expect(interestLabel).toBeVisible();
+  await expect(interestLabel).toHaveText(/\S+/);
+  await page.waitForTimeout(300);
+  await expect(interestChoice).toBeVisible();
+  await expect(interestLabel).toHaveText(/\S+/);
   await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
 
   await page.getByTestId("industry-sluzby").click();
@@ -94,6 +115,7 @@ test("mobile mode switching never opens the software keyboard unexpectedly", asy
   expect(Math.round(box.width)).toBe(viewport.width);
   expect(Math.round(box.height)).toBe(viewport.height);
 
+  await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "17px");
   await page.getByTestId("tab-calculator").click();
   await page.getByTestId("tab-assistant").click();
   await page.waitForTimeout(120);
