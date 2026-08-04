@@ -93,7 +93,8 @@ jobs:
           grep -Fq 'M24 67V31L48 53C50.4 55.2' dist/widget.js
 
           # The emitted widget CSS must contain the identity, interaction shell
-          # and the concrete chip-label persistence fix.
+          # and the concrete chip-label persistence fix. Minifiers may remove
+          # quotes around the attribute value, so validate the stable token.
           grep -Fq '#b9ed4d' dist/widget.css
           grep -Fq '#19834f' dist/widget.css
           grep -Fq '#0b2f20' dist/widget.css
@@ -102,7 +103,7 @@ jobs:
           grep -Fq '.cw-inputbar' dist/widget.css
           grep -Fq '.cw-calculator' dist/widget.css
           grep -Fq '.cw-chip__label' dist/widget.css
-          grep -Fq 'data-sending="true"' dist/widget.css
+          grep -Fq 'data-sending' dist/widget.css
 
           # Source entry points must use only static stylesheets and never
           # restore an injected override stack or pointer tilt.
