@@ -55,6 +55,7 @@ test("desktop visitor completes the configurator and receives useful validation"
   await page.getByPlaceholder("Vaše meno").fill("Testovací návštevník");
   await page.getByPlaceholder("+421 …").fill("+421900123456");
   await page.getByRole("checkbox").check();
+  await expect(page.getByRole("checkbox")).toBeChecked();
 
   await expect(page.getByPlaceholder("Vaše meno")).toHaveAttribute("aria-invalid", "false");
   await expect(page.getByPlaceholder("+421 …")).toHaveAttribute("aria-invalid", "false");
@@ -65,19 +66,31 @@ test("desktop visitor completes the configurator and receives useful validation"
 });
 
 test("mobile mode switching never opens the software keyboard unexpectedly", async ({
-  page,
+  browser,
 }) => {
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    screen: { width: 390, height: 844 },
+    isMobile: true,
+    hasTouch: true,
+    deviceScaleFactor: 3,
+  });
+  const page = await context.newPage();
   const errors = collectRuntimeErrors(page);
-  await page.setViewportSize({ width: 390, height: 844 });
+
   await page.goto("http://127.0.0.1:4173", { waitUntil: "networkidle" });
   await page.getByTestId("widget-launcher").click();
 
   const panel = page.locator(".cw-panel");
   await expect(panel).toBeVisible();
   const box = await panel.boundingBox();
+  const viewport = await page.evaluate(() => ({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  }));
   expect(box).not.toBeNull();
-  expect(Math.round(box.width)).toBe(390);
-  expect(Math.round(box.height)).toBe(844);
+  expect(Math.round(box.width)).toBe(viewport.width);
+  expect(Math.round(box.height)).toBe(viewport.height);
 
   await page.getByTestId("tab-calculator").click();
   await page.getByTestId("tab-assistant").click();
@@ -91,4 +104,5 @@ test("mobile mode switching never opens the software keyboard unexpectedly", asy
   await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
 
   expect(errors).toEqual([]);
+  await context.close();
 });
