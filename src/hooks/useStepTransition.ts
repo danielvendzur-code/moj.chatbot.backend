@@ -45,8 +45,8 @@ export function useStepTransition(
     }
 
     if (prefersReducedMotion()) {
-      if (container) container.style.minHeight = "";
       setVisibleStep(step);
+      if (container) container.style.minHeight = "";
       setLeaving(false);
       return;
     }
