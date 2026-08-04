@@ -1,8 +1,8 @@
-run_id=30896673743
+run_id=30897155478
 install=success
 lint=success
 build=success
-test=failure
+test=success
 
 ===== lint =====
 
@@ -26,8 +26,8 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  1.14 kB[22m[1m[22m[2m │ gzip:  0.61 kB[22m
 [2mdist/[22m[2massets/[22m[35mindex-Dz3fBo7F.css  [39m[1m[2m193.69 kB[22m[1m[22m[2m │ gzip: 26.27 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-CFj2b9nw.js   [39m[1m[2m336.16 kB[22m[1m[22m[2m │ gzip: 88.61 kB[22m
-[32m✓ built in 845ms[39m
+[2mdist/[22m[2massets/[22m[36mindex-DskKgbzP.js   [39m[1m[2m336.16 kB[22m[1m[22m[2m │ gzip: 88.61 kB[22m
+[32m✓ built in 1.22s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 113 modules transformed.
@@ -35,7 +35,7 @@ rendering chunks...
 computing gzip size...
 [2mdist/[22m[35mwidget.css  [39m[1m[2m193.33 kB[22m[1m[22m[2m │ gzip: 26.18 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m336.08 kB[22m[1m[22m[2m │ gzip: 88.66 kB[22m
-[32m✓ built in 826ms[39m
+[32m✓ built in 1.33s[39m
 
 ===== test =====
 
@@ -46,642 +46,411 @@ TAP version 13
 # Subtest: history accepts the existing Vercel KV variables without colliding with MôjPlot
 ok 1 - history accepts the existing Vercel KV variables without colliding with MôjPlot
   ---
-  duration_ms: 5.537908
+  duration_ms: 9.432242
   type: 'test'
   ...
 # Subtest: history has a normal password page and never places the password in the URL
 ok 2 - history has a normal password page and never places the password in the URL
   ---
-  duration_ms: 2.861279
+  duration_ms: 5.833263
   type: 'test'
   ...
 # Subtest: history stays private and non-indexable
 ok 3 - history stays private and non-indexable
   ---
-  duration_ms: 0.968664
+  duration_ms: 2.469264
   type: 'test'
   ...
 # Subtest: widget uses the same exact vector mark as the website
 ok 4 - widget uses the same exact vector mark as the website
   ---
-  duration_ms: 4.563268
+  duration_ms: 9.114738
   type: 'test'
   ...
 # Subtest: the finished website palette is appended as the final widget authority
 ok 5 - the finished website palette is appended as the final widget authority
   ---
-  duration_ms: 3.259948
+  duration_ms: 5.189351
   type: 'test'
   ...
 # Subtest: backward step navigation releases the tall-step height lock
 ok 6 - backward step navigation releases the tall-step height lock
   ---
-  duration_ms: 0.791384
+  duration_ms: 1.043978
   type: 'test'
   ...
 # Subtest: mobile iframe freezes and restores the parent page on iOS
 ok 7 - mobile iframe freezes and restores the parent page on iOS
   ---
-  duration_ms: 0.801966
+  duration_ms: 1.271497
   type: 'test'
   ...
 # Subtest: demo and embed load one foundation and one authoritative redesign
 ok 8 - demo and embed load one foundation and one authoritative redesign
   ---
-  duration_ms: 10.514104
+  duration_ms: 20.128849
   type: 'test'
   ...
 # Subtest: assistant order and interactive send feedback remain explicit
 ok 9 - assistant order and interactive send feedback remain explicit
   ---
-  duration_ms: 0.887129
+  duration_ms: 1.573538
   type: 'test'
   ...
 # Subtest: panel has the corrected premium desktop proportions
 ok 10 - panel has the corrected premium desktop proportions
   ---
-  duration_ms: 0.970105
+  duration_ms: 1.419878
   type: 'test'
   ...
 # Subtest: mode switch is one rounded segmented control without pill geometry
 ok 11 - mode switch is one rounded segmented control without pill geometry
   ---
-  duration_ms: 1.326474
+  duration_ms: 3.339272
   type: 'test'
   ...
 # Subtest: the redesign uses only the website black and brand palette
 ok 12 - the redesign uses only the website black and brand palette
   ---
-  duration_ms: 2.227709
+  duration_ms: 3.713481
   type: 'test'
   ...
 # Subtest: primary actions, quick chips and composer use intentional geometry
 ok 13 - primary actions, quick chips and composer use intentional geometry
   ---
-  duration_ms: 1.406308
+  duration_ms: 2.080434
   type: 'test'
   ...
 # Subtest: chat chips and composer use a crisp non-liquid system
 ok 14 - chat chips and composer use a crisp non-liquid system
   ---
-  duration_ms: 0.885369
+  duration_ms: 2.748852
   type: 'test'
   ...
 # Subtest: calculator choices keep geometry and use one static selected system
 ok 15 - calculator choices keep geometry and use one static selected system
   ---
-  duration_ms: 1.123385
+  duration_ms: 2.690624
   type: 'test'
   ...
 # Subtest: selection indicator is one real aligned circular check
 ok 16 - selection indicator is one real aligned circular check
   ---
-  duration_ms: 0.808419
+  duration_ms: 1.263816
   type: 'test'
   ...
 # Subtest: icons remain one custom rounded line family
 ok 17 - icons remain one custom rounded line family
   ---
-  duration_ms: 0.869625
+  duration_ms: 1.585135
   type: 'test'
   ...
 # Subtest: chat and configurator motion remain reduced-motion safe
 ok 18 - chat and configurator motion remain reduced-motion safe
   ---
-  duration_ms: 1.312892
+  duration_ms: 1.993854
   type: 'test'
   ...
 # Subtest: configurator remains five short steps with explicit selection guidance
 ok 19 - configurator remains five short steps with explicit selection guidance
   ---
-  duration_ms: 0.804096
+  duration_ms: 1.587939
   type: 'test'
   ...
 # Subtest: approved lead submission keeps sweep feedback and website hierarchy
 ok 20 - approved lead submission keeps sweep feedback and website hierarchy
   ---
-  duration_ms: 1.362408
+  duration_ms: 1.687307
   type: 'test'
   ...
 # Subtest: contact submits a real lead and keeps API protections
 ok 21 - contact submits a real lead and keeps API protections
   ---
-  duration_ms: 0.89044
+  duration_ms: 2.45952
   type: 'test'
   ...
 # Subtest: a delivered lead is confirmed to the visitor, and a failed one is not claimed
 ok 22 - a delivered lead is confirmed to the visitor, and a failed one is not claimed
   ---
-  duration_ms: 0.884941
+  duration_ms: 2.056222
   type: 'test'
   ...
 # Subtest: the reply streams in and the thread keeps up with it
 ok 23 - the reply streams in and the thread keeps up with it
   ---
-  duration_ms: 3.315071
+  duration_ms: 8.27157
   type: 'test'
   ...
 # Subtest: tapping a mode never lands on the drag handler instead of the button
 ok 24 - tapping a mode never lands on the drag handler instead of the button
   ---
-  duration_ms: 0.760786
+  duration_ms: 1.288232
   type: 'test'
   ...
 # Subtest: the finish layer removes browser blue and keeps one motion vocabulary
 ok 25 - the finish layer removes browser blue and keeps one motion vocabulary
   ---
-  duration_ms: 1.161036
+  duration_ms: 1.992823
   type: 'test'
   ...
 # Subtest: the finish layer sizes the builder to its step and glows the contacts
 ok 26 - the finish layer sizes the builder to its step and glows the contacts
   ---
-  duration_ms: 1.392988
+  duration_ms: 1.21386
   type: 'test'
   ...
 # Subtest: the phone keyboard folds away what is not the conversation
 ok 27 - the phone keyboard folds away what is not the conversation
   ---
-  duration_ms: 0.781065
+  duration_ms: 2.03794
   type: 'test'
   ...
 # Subtest: consent sits with the button it gates, not below the fold
 ok 28 - consent sits with the button it gates, not below the fold
   ---
-  duration_ms: 0.793803
+  duration_ms: 2.88455
   type: 'test'
   ...
 # Subtest: mobile full screen, safe areas and keyboard constraints remain safe
 ok 29 - mobile full screen, safe areas and keyboard constraints remain safe
   ---
-  duration_ms: 0.587923
+  duration_ms: 1.151868
   type: 'test'
   ...
 # Subtest: final contact step scrolls and supports calls or meetings
 ok 30 - final contact step scrolls and supports calls or meetings
   ---
-  duration_ms: 0.797192
+  duration_ms: 1.447459
   type: 'test'
   ...
 # Subtest: messages begin at the top and icon tiles stay transparent
 ok 31 - messages begin at the top and icon tiles stay transparent
   ---
-  duration_ms: 0.834364
+  duration_ms: 2.936901
   type: 'test'
   ...
 # Subtest: final user correction centers quick replies and keeps one input shape
 ok 32 - final user correction centers quick replies and keeps one input shape
   ---
-  duration_ms: 1.044449
+  duration_ms: 1.425586
   type: 'test'
   ...
 # Subtest: final configurator correction removes clipping, icon tiles and selected stripes
 ok 33 - final configurator correction removes clipping, icon tiles and selected stripes
   ---
-  duration_ms: 1.238518
+  duration_ms: 1.628149
   type: 'test'
   ...
 # Subtest: the final authority exposes only charcoal, warm surfaces and peach interaction
 ok 34 - the final authority exposes only charcoal, warm surfaces and peach interaction
   ---
-  duration_ms: 0.495275
+  duration_ms: 0.86463
   type: 'test'
   ...
 # Subtest: the six reported interaction defects stay fixed
 ok 35 - the six reported interaction defects stay fixed
   ---
-  duration_ms: 1.067239
+  duration_ms: 3.030712
   type: 'test'
   ...
 # Subtest: starter chips retire once the conversation begins
 ok 36 - starter chips retire once the conversation begins
   ---
-  duration_ms: 0.480444
+  duration_ms: 1.354851
   type: 'test'
   ...
 # Subtest: the composer keeps its size at every panel height
 ok 37 - the composer keeps its size at every panel height
   ---
-  duration_ms: 0.498491
+  duration_ms: 1.957741
   type: 'test'
   ...
 # Subtest: transcripts are logged without ever costing a visitor their answer
 ok 38 - transcripts are logged without ever costing a visitor their answer
   ---
-  duration_ms: 0.886596
+  duration_ms: 1.425877
   type: 'test'
   ...
 # Subtest: the transcript viewer is the least permissive thing here
 ok 39 - the transcript viewer is the least permissive thing here
   ---
-  duration_ms: 1.022863
+  duration_ms: 1.499577
   type: 'test'
   ...
 # Subtest: both endpoints share one origin list so it cannot half-apply
 ok 40 - both endpoints share one origin list so it cannot half-apply
   ---
-  duration_ms: 0.630542
+  duration_ms: 1.252088
   type: 'test'
   ...
 # Subtest: the contact step gives the form room when the keyboard is up
 ok 41 - the contact step gives the form room when the keyboard is up
   ---
-  duration_ms: 0.550037
+  duration_ms: 1.100732
   type: 'test'
   ...
 # Subtest: focus is drawn on the control, not as a rectangle beside it
 ok 42 - focus is drawn on the control, not as a rectangle beside it
   ---
-  duration_ms: 1.310574
+  duration_ms: 1.348933
   type: 'test'
   ...
 # Subtest: the conversation survives a reload and reset clears it
 ok 43 - the conversation survives a reload and reset clears it
   ---
-  duration_ms: 1.891552
+  duration_ms: 4.18263
   type: 'test'
   ...
 # Subtest: an accepted lead is traceable and one bad mailbox cannot sink the other
 ok 44 - an accepted lead is traceable and one bad mailbox cannot sink the other
   ---
-  duration_ms: 0.453801
+  duration_ms: 0.835486
   type: 'test'
   ...
 # Subtest: a refused delivery channel no longer hides the reason or skips the next one
 ok 45 - a refused delivery channel no longer hides the reason or skips the next one
   ---
-  duration_ms: 0.710376
+  duration_ms: 1.328572
   type: 'test'
   ...
 # Subtest: info@mojchatbot.sk is the address, the personal one is the second contact
 ok 46 - info@mojchatbot.sk is the address, the personal one is the second contact
   ---
-  duration_ms: 0.795977
+  duration_ms: 2.546559
   type: 'test'
   ...
 # Subtest: auto-advance does not leave a parked pointer lighting up the next step
 ok 47 - auto-advance does not leave a parked pointer lighting up the next step
   ---
-  duration_ms: 0.597458
+  duration_ms: 1.275313
   type: 'test'
   ...
 # Subtest: the contact step lines up on one inset without stray rules
 ok 48 - the contact step lines up on one inset without stray rules
   ---
-  duration_ms: 0.692029
+  duration_ms: 1.378907
   type: 'test'
   ...
 # Subtest: a new step never arrives with a chip that looks chosen
 ok 49 - a new step never arrives with a chip that looks chosen
   ---
-  duration_ms: 0.80236
+  duration_ms: 2.589994
   type: 'test'
   ...
 # Subtest: project estimates are absent while customer-price capability remains
 ok 50 - project estimates are absent while customer-price capability remains
   ---
-  duration_ms: 1.003245
+  duration_ms: 1.820366
   type: 'test'
   ...
 # Subtest: the step swap holds the panel height so nothing jumps
-not ok 51 - the step swap holds the panel height so nothing jumps
+ok 51 - the step swap holds the panel height so nothing jumps
   ---
-  duration_ms: 1.198026
+  duration_ms: 1.278127
   type: 'test'
-  location: '/home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:1120:1'
-  failureType: 'testCodeFailure'
-  error: |-
-    The input did not match the regular expression /if \(prefersReducedMotion\(\)\) \{\s*\n\s*setVisibleStep\(step\);/. Input:
-    
-    'import { useEffect, useRef, useState, type RefObject } from "react";\n' +
-      '\n' +
-      '/* How long the outgoing step is given to fade up and out. Must match\n' +
-      '   `cw-step-out` in the stylesheet. */\n' +
-      'export const STEP_EXIT_MS = 72;\n' +
-      '/* Longest incoming animation (the last staggered chip), after which the height\n' +
-      '   lock can be released without anything visibly settling. */\n' +
-      'const STEP_ENTER_MS = 640;\n' +
-      '\n' +
-      'const prefersReducedMotion = (): boolean =>\n' +
-      '  typeof window !== "undefined" &&\n' +
-      '  window.matchMedia("(prefers-reduced-motion: reduce)").matches;\n' +
-      '\n' +
-      'type StepTransition = {\n' +
-      '  /* The step whose content is on screen right now. Lags `step` by one exit. */\n' +
-      '  visibleStep: number;\n' +
-      '  /* True while the old step is fading out. */\n' +
-      '  leaving: boolean;\n' +
-      '  direction: "forward" | "backward";\n' +
-      '};\n' +
-      '\n' +
-      '/* Swaps one step for the next without the panel resizing under the pointer.\n' +
-      '   Forward navigation briefly holds the outgoing height while the next step\n' +
-      '   arrives. Backward navigation releases that lock immediately: otherwise a\n' +
-      '   tall contact step leaves a large empty block behind for 640 ms after Back. */\n' +
-      'export function useStepTransition(\n' +
-      '  step: number,\n' +
-      '  containerRef: RefObject<HTMLElement>,\n' +
-      '): StepTransition {\n' +
-      '  const [visibleStep, setVisibleStep] = useState(step);\n' +
-      '  const [leaving, setLeaving] = useState(false);\n' +
-      '  const [direction, setDirection] = useState<"forward" | "backward">("forward");\n' +
-      '  const releaseRef = useRef<number | null>(null);\n' +
-      '\n' +
-      '  useEffect(() => {\n' +
-      '    if (step === visibleStep) return;\n' +
-      '\n' +
-      '    const nextDirection = step > visibleStep ? "forward" : "backward";\n' +
-      '    setDirection(nextDirection);\n' +
-      '\n' +
-      '    const container = containerRef.current;\n' +
-      '    if (releaseRef.current !== null) {\n' +
-      '      window.clearTimeout(releaseRef.current);\n' +
-      '      releaseRef.current = null;\n' +
-      '    }\n' +
-      '\n' +
-      '    if (prefersReducedMotion()) {\n' +
-      '      if (container) container.style.minHeight = "";\n' +
-      '      setVisibleStep(step);\n' +
-      '      setLeaving(false);\n' +
-      '      return;\n' +
-      '    }\n' +
-      '\n' +
-      '    if (container) {\n' +
-      '      if (nextDirection === "forward") {\n' +
-      '        container.style.minHeight = `${Math.ceil(container.getBoundingClientRect().height)}px`;\n' +
-      '      } else {\n' +
-      '        container.style.minHeight = "";\n' +
-      '      }\n' +
-      '    }\n' +
-      '\n' +
-      '    setLeaving(true);\n' +
-      '    const swap = window.setTimeout(() => {\n' +
-      '      setVisibleStep(step);\n' +
-      '      setLeaving(false);\n' +
-      '      if (nextDirection === "backward" && container) {\n' +
-      '        container.style.minHeight = "";\n' +
-      '      }\n' +
-      '    }, STEP_EXIT_MS);\n' +
-      '\n' +
-      '    return () => window.clearTimeout(swap);\n' +
-      '  }, [containerRef, step, visibleStep]);\n' +
-      '\n' +
-      '  /* Once a forward step has arrived, drop its temporary height lock after the\n' +
-      '     staggered entrance. Backward steps never keep the lock. */\n' +
-      '  useEffect(() => {\n' +
-      '    if (leaving) return;\n' +
-      '    const container = containerRef.current;\n' +
-      '    if (!container || !container.style.minHeight) return;\n' +
-      '\n' +
-      '    if (direction === "backward") {\n' +
-      '      container.style.minHeight = "";\n' +
-      '      return;\n' +
-      '    }\n' +
-      '\n' +
-      '    releaseRef.current = window.setTimeout(() => {\n' +
-      '      releaseRef.current = null;\n' +
-      '      container.style.minHeight = "";\n' +
-      '    }, STEP_ENTER_MS);\n' +
-      '\n' +
-      '    return () => {\n' +
-      '      if (releaseRef.current !== null) window.clearTimeout(releaseRef.current);\n' +
-      '      releaseRef.current = null;\n' +
-      '    };\n' +
-      '  }, [containerRef, direction, leaving, visibleStep]);\n' +
-      '\n' +
-      '  useEffect(\n' +
-      '    () => () => {\n' +
-      '      if (releaseRef.current !== null) window.clearTimeout(releaseRef.current);\n' +
-      '      const container = containerRef.current;\n' +
-      '      if (container) container.style.minHeight = "";\n' +
-      '    },\n' +
-      '    [containerRef],\n' +
-      '  );\n' +
-      '\n' +
-      '  return { visibleStep, leaving, direction };\n' +
-      '}\n'
-    
-  code: 'ERR_ASSERTION'
-  name: 'AssertionError'
-  expected:
-  actual: |-
-    import { useEffect, useRef, useState, type RefObject } from "react";
-    
-    /* How long the outgoing step is given to fade up and out. Must match
-       `cw-step-out` in the stylesheet. */
-    export const STEP_EXIT_MS = 72;
-    /* Longest incoming animation (the last staggered chip), after which the height
-       lock can be released without anything visibly settling. */
-    const STEP_ENTER_MS = 640;
-    
-    const prefersReducedMotion = (): boolean =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    
-    type StepTransition = {
-      /* The step whose content is on screen right now. Lags `step` by one exit. */
-      visibleStep: number;
-      /* True while the old step is fading out. */
-      leaving: boolean;
-      direction: "forward" | "backward";
-    };
-    
-    /* Swaps one step for the next without the panel resizing under the pointer.
-       Forward navigation briefly holds the outgoing height while the next step
-       arrives. Backward navigation releases that lock immediately: otherwise a
-       tall contact step leaves a large empty block behind for 640 ms after Back. */
-    export function useStepTransition(
-      step: number,
-      containerRef: RefObject<HTMLElement>,
-    ): StepTransition {
-      const [visibleStep, setVisibleStep] = useState(step);
-      const [leaving, setLeaving] = useState(false);
-      const [direction, setDirection] = useState<"forward" | "backward">("forward");
-      const releaseRef = useRef<number | null>(null);
-    
-      useEffect(() => {
-        if (step === visibleStep) return;
-    
-        const nextDirection = step > visibleStep ? "forward" : "backward";
-        setDirection(nextDirection);
-    
-        const container = containerRef.current;
-        if (releaseRef.current !== null) {
-          window.clearTimeout(releaseRef.current);
-          releaseRef.current = null;
-        }
-    
-        if (prefersReducedMotion()) {
-          if (container) container.style.minHeight = "";
-          setVisibleStep(step);
-          setLeaving(false);
-          return;
-        }
-    
-        if (container) {
-          if (nextDirection === "forward") {
-            container.style.minHeight = `${Math.ceil(container.getBoundingClientRect().height)}px`;
-          } else {
-            container.style.minHeight = "";
-          }
-        }
-    
-        setLeaving(true);
-        const swap = window.setTimeout(() => {
-          setVisibleStep(step);
-          setLeaving(false);
-          if (nextDirection === "backward" && container) {
-            container.style.minHeight = "";
-          }
-        }, STEP_EXIT_MS);
-    
-        return () => window.clearTimeout(swap);
-      }, [containerRef, step, visibleStep]);
-    
-      /* Once a forward step has arrived, drop its temporary height lock after the
-         staggered entrance. Backward steps never keep the lock. */
-      useEffect(() => {
-        if (leaving) return;
-        const container = containerRef.current;
-        if (!container || !container.style.minHeight) return;
-    
-        if (direction === "backward") {
-          container.style.minHeight = "";
-          return;
-        }
-    
-        releaseRef.current = window.setTimeout(() => {
-          releaseRef.current = null;
-          container.style.minHeight = "";
-        }, STEP_ENTER_MS);
-    
-        return () => {
-          if (releaseRef.current !== null) window.clearTimeout(releaseRef.current);
-          releaseRef.current = null;
-        };
-      }, [containerRef, direction, leaving, visibleStep]);
-    
-      useEffect(
-        () => () => {
-          if (releaseRef.current !== null) window.clearTimeout(releaseRef.current);
-          const container = containerRef.current;
-          if (container) container.style.minHeight = "";
-        },
-        [containerRef],
-      );
-    
-      return { visibleStep, leaving, direction };
-    }
-    
-  operator: 'match'
-  stack: |-
-    TestContext.<anonymous> (file:///home/runner/work/moj.chatbot.backend/moj.chatbot.backend/tests/widget-contract.test.mjs:1131:10)
-    async Test.run (node:internal/test_runner/test:1054:7)
-    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
 # Subtest: the progress label reads as a sentence and has room for it
 ok 52 - the progress label reads as a sentence and has room for it
   ---
-  duration_ms: 1.922838
+  duration_ms: 1.409352
   type: 'test'
   ...
 # Subtest: mobile keeps its scrolling and its pinch-zoom
 ok 53 - mobile keeps its scrolling and its pinch-zoom
   ---
-  duration_ms: 1.561584
+  duration_ms: 1.650442
   type: 'test'
   ...
 # Subtest: nothing pulses forever and nothing moves when you point at it
 ok 54 - nothing pulses forever and nothing moves when you point at it
   ---
-  duration_ms: 1.215741
+  duration_ms: 1.689641
   type: 'test'
   ...
 # Subtest: icons cannot balloon and the thank-you screen is not squeezed into a grid row
 ok 55 - icons cannot balloon and the thank-you screen is not squeezed into a grid row
   ---
-  duration_ms: 1.232807
+  duration_ms: 2.425138
   type: 'test'
   ...
 # Subtest: no jargon reaches the screen
 ok 56 - no jargon reaches the screen
   ---
-  duration_ms: 2.626166
+  duration_ms: 2.512048
   type: 'test'
   ...
 # Subtest: chips and cards lean toward the cursor without ever moving their box
 ok 57 - chips and cards lean toward the cursor without ever moving their box
   ---
-  duration_ms: 2.960066
+  duration_ms: 1.625866
   type: 'test'
   ...
 # Subtest: the iframe follows the mobile visual viewport above the software keyboard
 ok 58 - the iframe follows the mobile visual viewport above the software keyboard
   ---
-  duration_ms: 0.890066
+  duration_ms: 0.793904
   type: 'test'
   ...
 # Subtest: the closed iframe canvas stays transparent around the circular launcher
 ok 59 - the closed iframe canvas stays transparent around the circular launcher
   ---
-  duration_ms: 0.894369
+  duration_ms: 0.793574
   type: 'test'
   ...
 # Subtest: the iframe returns focus to the page control that opened it
 ok 60 - the iframe returns focus to the page control that opened it
   ---
-  duration_ms: 0.596559
+  duration_ms: 0.638853
   type: 'test'
   ...
 # Subtest: options reveal one after another rather than as a block
 ok 61 - options reveal one after another rather than as a block
   ---
-  duration_ms: 0.590917
+  duration_ms: 0.726794
   type: 'test'
   ...
 # Subtest: mode transitions preserve work and close only after the exit motion
 ok 62 - mode transitions preserve work and close only after the exit motion
   ---
-  duration_ms: 1.680011
+  duration_ms: 1.932043
   type: 'test'
   ...
 # Subtest: close and reopen retain mode, chat draft, history and calculator progress
 ok 63 - close and reopen retain mode, chat draft, history and calculator progress
   ---
-  duration_ms: 1.201637
+  duration_ms: 1.831613
   type: 'test'
   ...
 # Subtest: close button and Escape both restore focus to the launcher
 ok 64 - close button and Escape both restore focus to the launcher
   ---
-  duration_ms: 2.844331
+  duration_ms: 3.07712
   type: 'test'
   ...
 # Subtest: chat reset aborts stale work and same-tick sends are locked synchronously
 ok 65 - chat reset aborts stale work and same-tick sends are locked synchronously
   ---
-  duration_ms: 0.843848
+  duration_ms: 1.187641
   type: 'test'
   ...
 # Subtest: the summary card keeps its text off its own border
 ok 66 - the summary card keeps its text off its own border
   ---
-  duration_ms: 1.063105
+  duration_ms: 2.427942
   type: 'test'
   ...
 # Subtest: nothing plus-shaped renders anywhere near the quick replies
 ok 67 - nothing plus-shaped renders anywhere near the quick replies
   ---
-  duration_ms: 1.99567
+  duration_ms: 5.563931
   type: 'test'
   ...
 1..67
 # tests 67
 # suites 0
-# pass 66
-# fail 1
+# pass 67
+# fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 132.845927
- ELIFECYCLE  Test failed. See above for more details.
+# duration_ms 239.629953
