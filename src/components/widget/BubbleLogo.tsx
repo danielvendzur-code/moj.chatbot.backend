@@ -2,10 +2,10 @@ type BubbleLogoProps = {
   size: "launcher" | "header" | "avatar";
 };
 
-/* Exact Môj Chatbot silhouette from the approved identity. The two coincident
-   strokes are intentional optical compensation: the wider foundation keeps the
-   mark confident at 24–50 px, while the 4.3 px core preserves the clean rounded
-   geometry used by the full wordmark. No plate, tile or photographic backing. */
+/* Exact Môj Chatbot silhouette from the approved identity. The subtle optical
+   stroke strengthens the outline at widget sizes without closing the negative
+   space; the 4.3 px core preserves the clean rounded geometry of the wordmark.
+   There is no plate, tile, fill or photographic backing. */
 const OUTER =
   "M96.6 85.5C100.8 84.6 103.6 82.4 103.6 79.9V12.4C103.6 7.2 99.2 4.5 95.4 6.4L59.5 34.5" +
   "C57.9 36.1 54.1 36.1 52.5 34.5L18.3 6.4C14.5 4.5 8.5 7.2 8.5 12.4V78.5" +
@@ -17,13 +17,14 @@ function LogoPath({ d }: { d: string }): JSX.Element {
   return (
     <>
       <path
-        className="bl__weight"
+        className="bl__optical-weight"
         d={d}
         stroke="currentColor"
-        strokeWidth="6.5"
+        strokeWidth="5.6"
         strokeLinecap="round"
         strokeLinejoin="round"
         vectorEffect="non-scaling-stroke"
+        opacity="0.28"
       />
       <path
         className="bl__core"
