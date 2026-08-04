@@ -1,6 +1,17 @@
 import productRefinementCss from "../product-refinement.css?inline";
 
 const STYLE_ID = "dv-assistant-product-refinement";
+const FINAL_GEOMETRY_CSS = `
+.cw-widget .cw-chat-builder::after {
+  display: block;
+}
+
+@media (max-width: 380px) {
+  .cw-widget .cw-chat-builder::after {
+    display: block;
+  }
+}
+`;
 
 declare global {
   interface Window {
@@ -67,7 +78,7 @@ export function installProductRefinement(): void {
     const style = document.createElement("style");
     style.id = STYLE_ID;
     style.dataset.dvAssistantRefinement = "premium-widget-20260804-v2";
-    style.textContent = productRefinementCss;
+    style.textContent = `${productRefinementCss}\n${FINAL_GEOMETRY_CSS}`;
     document.head.appendChild(style);
   }
 
