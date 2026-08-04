@@ -19,9 +19,10 @@ type StepTransition = {
   direction: "forward" | "backward";
 };
 
-/* Swaps one step for the next without the panel resizing under the pointer:
-   the container keeps the outgoing height until the new step has arrived. With
-   reduced motion the swap is instant and no height is ever locked. */
+/* Swaps one step for the next without the panel resizing under the pointer.
+   Forward navigation briefly holds the outgoing height while the next step
+   arrives. Backward navigation releases that lock immediately: otherwise a
+   tall contact step leaves a large empty block behind for 640 ms after Back. */
 export function useStepTransition(
   step: number,
   containerRef: RefObject<HTMLElement>,
@@ -37,32 +38,50 @@ export function useStepTransition(
     const nextDirection = step > visibleStep ? "forward" : "backward";
     setDirection(nextDirection);
 
+    const container = containerRef.current;
+    if (releaseRef.current !== null) {
+      window.clearTimeout(releaseRef.current);
+      releaseRef.current = null;
+    }
+
     if (prefersReducedMotion()) {
+      if (container) container.style.minHeight = "";
       setVisibleStep(step);
+      setLeaving(false);
       return;
     }
 
-    const container = containerRef.current;
     if (container) {
-      if (releaseRef.current !== null) window.clearTimeout(releaseRef.current);
-      container.style.minHeight = `${Math.ceil(container.getBoundingClientRect().height)}px`;
+      if (nextDirection === "forward") {
+        container.style.minHeight = `${Math.ceil(container.getBoundingClientRect().height)}px`;
+      } else {
+        container.style.minHeight = "";
+      }
     }
 
     setLeaving(true);
     const swap = window.setTimeout(() => {
       setVisibleStep(step);
       setLeaving(false);
+      if (nextDirection === "backward" && container) {
+        container.style.minHeight = "";
+      }
     }, STEP_EXIT_MS);
 
     return () => window.clearTimeout(swap);
   }, [containerRef, step, visibleStep]);
 
-  /* Once the new step is in place the lock is dropped, so a taller or shorter
-     step can find its own height again. */
+  /* Once a forward step has arrived, drop its temporary height lock after the
+     staggered entrance. Backward steps never keep the lock. */
   useEffect(() => {
     if (leaving) return;
     const container = containerRef.current;
     if (!container || !container.style.minHeight) return;
+
+    if (direction === "backward") {
+      container.style.minHeight = "";
+      return;
+    }
 
     releaseRef.current = window.setTimeout(() => {
       releaseRef.current = null;
@@ -73,7 +92,16 @@ export function useStepTransition(
       if (releaseRef.current !== null) window.clearTimeout(releaseRef.current);
       releaseRef.current = null;
     };
-  }, [containerRef, leaving, visibleStep]);
+  }, [containerRef, direction, leaving, visibleStep]);
+
+  useEffect(
+    () => () => {
+      if (releaseRef.current !== null) window.clearTimeout(releaseRef.current);
+      const container = containerRef.current;
+      if (container) container.style.minHeight = "";
+    },
+    [containerRef],
+  );
 
   return { visibleStep, leaving, direction };
 }
