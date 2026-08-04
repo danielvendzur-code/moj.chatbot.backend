@@ -1,4 +1,4 @@
-run_id=30926820791
+run_id=30930324103
 install=success
 lint=success
 build=success
@@ -21,21 +21,21 @@ test=success
 
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 101 modules transformed.
+[32m✓[39m 99 modules transformed.
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  1.14 kB[22m[1m[22m[2m │ gzip:  0.61 kB[22m
-[2mdist/[22m[2massets/[22m[35mindex-Ccvdfbil.css  [39m[1m[2m 33.95 kB[22m[1m[22m[2m │ gzip:  7.30 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-DttylNMV.js   [39m[1m[2m246.40 kB[22m[1m[22m[2m │ gzip: 80.12 kB[22m
-[32m✓ built in 1.27s[39m
+[2mdist/[22m[2massets/[22m[35mindex-C62DFd49.css  [39m[1m[2m 32.09 kB[22m[1m[22m[2m │ gzip:  6.78 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-CvDDXgT7.js   [39m[1m[2m221.88 kB[22m[1m[22m[2m │ gzip: 74.86 kB[22m
+[32m✓ built in 1.25s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 97 modules transformed.
+[32m✓[39m 95 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[35mwidget.css  [39m[1m[2m 33.56 kB[22m[1m[22m[2m │ gzip:  7.21 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m246.30 kB[22m[1m[22m[2m │ gzip: 80.17 kB[22m
-[32m✓ built in 1.21s[39m
+[2mdist/[22m[35mwidget.css  [39m[1m[2m 31.70 kB[22m[1m[22m[2m │ gzip:  6.70 kB[22m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m221.71 kB[22m[1m[22m[2m │ gzip: 74.92 kB[22m
+[32m✓ built in 1.34s[39m
 
 ===== test =====
 
@@ -46,159 +46,171 @@ TAP version 13
 # Subtest: history accepts the existing Vercel KV variables without colliding with MôjPlot
 ok 1 - history accepts the existing Vercel KV variables without colliding with MôjPlot
   ---
-  duration_ms: 7.996322
+  duration_ms: 10.144222
   type: 'test'
   ...
 # Subtest: history has a normal password page and never places the password in the URL
 ok 2 - history has a normal password page and never places the password in the URL
   ---
-  duration_ms: 3.755177
+  duration_ms: 3.954795
   type: 'test'
   ...
 # Subtest: history stays private and non-indexable
 ok 3 - history stays private and non-indexable
   ---
-  duration_ms: 1.800499
+  duration_ms: 1.802907
   type: 'test'
   ...
 # Subtest: assistant opens as a compact product rather than an empty fullscreen canvas
 ok 4 - assistant opens as a compact product rather than an empty fullscreen canvas
   ---
-  duration_ms: 8.122709
+  duration_ms: 8.447355
   type: 'test'
   ...
 # Subtest: tabs and starter choices keep the approved pill geometry
 ok 5 - tabs and starter choices keep the approved pill geometry
   ---
-  duration_ms: 2.27122
+  duration_ms: 1.963837
   type: 'test'
   ...
 # Subtest: composer is one clean pill and the CTA has clear sales hierarchy
 ok 6 - composer is one clean pill and the CTA has clear sales hierarchy
   ---
-  duration_ms: 2.624861
+  duration_ms: 3.526733
   type: 'test'
   ...
 # Subtest: programmatic composer focus cannot hide the initial interface
 ok 7 - programmatic composer focus cannot hide the initial interface
   ---
-  duration_ms: 1.621534
+  duration_ms: 1.354439
   type: 'test'
   ...
 # Subtest: logo uses the approved open mark without a square plate
 ok 8 - logo uses the approved open mark without a square plate
   ---
-  duration_ms: 1.374231
+  duration_ms: 1.104643
   type: 'test'
   ...
 # Subtest: the product stylesheet is the sole visual authority
 ok 9 - the product stylesheet is the sole visual authority
   ---
-  duration_ms: 14.470157
+  duration_ms: 17.752229
   type: 'test'
   ...
 # Subtest: launcher and brand mark never jump or bounce
 ok 10 - launcher and brand mark never jump or bounce
   ---
-  duration_ms: 3.355088
+  duration_ms: 3.756735
   type: 'test'
   ...
-# Subtest: header contains brand purpose rather than a fake availability state
-ok 11 - header contains brand purpose rather than a fake availability state
+# Subtest: header contains a concrete product purpose rather than fake availability
+ok 11 - header contains a concrete product purpose rather than fake availability
   ---
-  duration_ms: 1.082917
+  duration_ms: 1.341115
   type: 'test'
   ...
-# Subtest: backward step navigation releases the tall-step height lock
-ok 12 - backward step navigation releases the tall-step height lock
+# Subtest: backward step navigation releases the tall-step height lock quickly
+ok 12 - backward step navigation releases the tall-step height lock quickly
   ---
-  duration_ms: 0.895596
+  duration_ms: 1.152442
   type: 'test'
   ...
 # Subtest: mobile iframe freezes and restores the parent page on iOS
 ok 13 - mobile iframe freezes and restores the parent page on iOS
   ---
-  duration_ms: 0.898831
+  duration_ms: 2.047775
   type: 'test'
   ...
-# Subtest: contact conversion surface keeps clear hierarchy
-ok 14 - contact conversion surface keeps clear hierarchy
+# Subtest: contact conversion surface keeps clear hierarchy and visible labels
+ok 14 - contact conversion surface keeps clear hierarchy and visible labels
   ---
-  duration_ms: 2.243708
+  duration_ms: 2.147079
   type: 'test'
   ...
 # Subtest: demo and embed load one foundation and one product stylesheet
 ok 15 - demo and embed load one foundation and one product stylesheet
   ---
-  duration_ms: 7.672267
+  duration_ms: 8.371112
   type: 'test'
   ...
-# Subtest: widget shell uses accessible independent tabs without a draggable thumb
-ok 16 - widget shell uses accessible independent tabs without a draggable thumb
+# Subtest: widget shell uses open accessible tabs without a draggable capsule
+ok 16 - widget shell uses open accessible tabs without a draggable capsule
   ---
-  duration_ms: 1.953756
+  duration_ms: 2.580238
   type: 'test'
   ...
 # Subtest: exact vector logo remains green, crisp and motionless
 ok 17 - exact vector logo remains green, crisp and motionless
   ---
-  duration_ms: 1.500387
+  duration_ms: 1.350121
   type: 'test'
   ...
-# Subtest: panel and mode navigation use deliberate desktop proportions
-ok 18 - panel and mode navigation use deliberate desktop proportions
+# Subtest: panel proportions and hierarchy are deliberate
+ok 18 - panel proportions and hierarchy are deliberate
   ---
-  duration_ms: 1.066937
+  duration_ms: 1.164845
   type: 'test'
   ...
-# Subtest: chat hierarchy and always-visible composer remain explicit
-ok 19 - chat hierarchy and always-visible composer remain explicit
+# Subtest: chat hierarchy is readable and the composer is always visible
+ok 19 - chat hierarchy is readable and the composer is always visible
   ---
-  duration_ms: 1.718175
+  duration_ms: 2.696194
   type: 'test'
   ...
-# Subtest: primary controls use the requested rounded geometry
-ok 20 - primary controls use the requested rounded geometry
+# Subtest: direct contact is a quiet utility row rather than three mini cards
+ok 20 - direct contact is a quiet utility row rather than three mini cards
   ---
-  duration_ms: 2.227408
+  duration_ms: 1.794351
   type: 'test'
   ...
-# Subtest: configurator selection is static, legible and auto-advances without CSS side effects
-ok 21 - configurator selection is static, legible and auto-advances without CSS side effects
+# Subtest: configurator gives perceptible selection feedback without theatrical tilt
+ok 21 - configurator gives perceptible selection feedback without theatrical tilt
   ---
-  duration_ms: 1.585576
+  duration_ms: 1.64462
+  type: 'test'
+  ...
+# Subtest: progress and contact step expose clear state and labels
+ok 22 - progress and contact step expose clear state and labels
+  ---
+  duration_ms: 1.249313
+  type: 'test'
+  ...
+# Subtest: primary controls keep intentional, differentiated geometry
+ok 23 - primary controls keep intentional, differentiated geometry
+  ---
+  duration_ms: 1.605057
   type: 'test'
   ...
 # Subtest: palette stays within the website white forest lime identity
-ok 22 - palette stays within the website white forest lime identity
+ok 24 - palette stays within the website white forest lime identity
   ---
-  duration_ms: 1.085201
+  duration_ms: 1.471657
   type: 'test'
   ...
-# Subtest: mobile and reduced-motion fallbacks are first-class
-ok 23 - mobile and reduced-motion fallbacks are first-class
+# Subtest: mobile, keyboard and reduced-motion fallbacks are first-class
+ok 25 - mobile, keyboard and reduced-motion fallbacks are first-class
   ---
-  duration_ms: 1.425236
+  duration_ms: 2.147604
   type: 'test'
   ...
 # Subtest: icons remain one custom rounded line family
-ok 24 - icons remain one custom rounded line family
+ok 26 - icons remain one custom rounded line family
   ---
-  duration_ms: 1.167725
+  duration_ms: 1.331617
   type: 'test'
   ...
 # Subtest: configurator remains a short five-step conversion flow
-ok 25 - configurator remains a short five-step conversion flow
+ok 27 - configurator remains a short five-step conversion flow
   ---
-  duration_ms: 1.706874
+  duration_ms: 2.252586
   type: 'test'
   ...
-1..25
-# tests 25
+1..27
+# tests 27
 # suites 0
-# pass 25
+# pass 27
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 160.624306
+# duration_ms 179.282114
