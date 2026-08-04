@@ -62,7 +62,9 @@ test("logo uses the approved open mark without a square plate", async () => {
   const logo = await read("src/components/widget/BubbleLogo.tsx");
 
   assert.doesNotMatch(logo, /bl__plate|<rect/);
-  assert.match(logo, /strokeWidth="6\.5"/);
+  assert.match(logo, /className="bl__optical-weight"/);
+  assert.match(logo, /strokeWidth="5\.6"/);
+  assert.match(logo, /opacity="0\.28"/);
   assert.match(logo, /strokeWidth="4\.3"/);
   assert.match(logo, /vectorEffect="non-scaling-stroke"/);
 });
