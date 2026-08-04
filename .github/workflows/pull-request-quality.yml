@@ -56,19 +56,28 @@ jobs:
           test -f dist/widget.js
           test -f dist/widget.css
 
-          # The runtime bundle must contain the approved version, compatibility
-          # marker and both exact paths of the current website brand mark.
-          grep -Fq 'approved-option-one-20260802-v5' dist/widget.js
-          grep -Fq 'competition-redesign-20260723-v10' dist/widget.js
+          # The direct runtime must carry the unified product marker and the
+          # two exact paths of the current vector brand mark.
+          grep -Fq 'unified-product-20260804-v1' dist/widget.js
+          grep -Fq 'unified-production-system' dist/widget.js
           grep -Fq 'M96.6 85.5C100.8 84.6 103.6 82.4' dist/widget.js
           grep -Fq 'M24 71.2V29.2L52.5 55.4' dist/widget.js
 
-          # Validate visual contracts in their source file. Vite minifies CSS
-          # timing and selectors inside widget.js, so checking the source is
-          # deterministic while the bundle checks above prove it is included.
-          grep -Fq 'approved-option-one-widget-final.css?inline' src/lib/installLimeWhiteStyles.ts
-          grep -Fq '#b9ed4d' src/approved-option-one-widget-final.css
-          grep -Fq '#19834f' src/approved-option-one-widget-final.css
-          grep -Fq '#0b2f20' src/approved-option-one-widget-final.css
-          grep -Fq 'color 520ms' src/approved-option-one-widget-final.css
-          grep -Fq 'cw-widget[class][class][class][class]' src/approved-option-one-widget-final.css
+          # The emitted widget CSS must contain the current white/forest/lime
+          # identity and the production shell, tab and composer selectors.
+          grep -Fq '#b9ed4d' dist/widget.css
+          grep -Fq '#19834f' dist/widget.css
+          grep -Fq '#0b2f20' dist/widget.css
+          grep -Fq '.cw-panel' dist/widget.css
+          grep -Fq '.cw-tabs' dist/widget.css
+          grep -Fq '.cw-inputbar' dist/widget.css
+          grep -Fq '.cw-calculator' dist/widget.css
+
+          # Source entry points must use the single product stylesheet and must
+          # never restore the retired injected override stack or pointer tilt.
+          grep -Fq 'product-widget.css' src/main.tsx
+          grep -Fq 'product-widget.css' src/embed.tsx
+          ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt' src/main.tsx
+          ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt' src/embed.tsx
+          ! grep -Eq 'assistant-redesign|approved-option-one|masterpiece-final' src/main.tsx
+          ! grep -Eq 'assistant-redesign|approved-option-one|masterpiece-final' src/embed.tsx

@@ -23,12 +23,6 @@ import { WidgetIcon } from "./WidgetIcon";
 
 type WidgetMode = "assistant" | "calculator";
 
-type ThumbDrag = {
-  pointerId: number;
-  x: number;
-  moved: boolean;
-};
-
 type AssistantWidgetProps = {
   embedMode?: boolean;
 };
@@ -39,10 +33,7 @@ const isPreset = (value: string | undefined): value is AssistantPreset =>
   );
 
 const PANEL_EXIT_MS = 210;
-/* Below this the pointer is still a tap, not a drag. */
-const DRAG_THRESHOLD_PX = 6;
-/* Matches the reset icon's sweep in the stylesheet. */
-const RESET_SPIN_MS = 620;
+const RESET_SPIN_MS = 560;
 
 const reducedMotion = (): boolean =>
   typeof window !== "undefined" &&
@@ -61,17 +52,13 @@ export function AssistantWidget({
   const [resetToken, setResetToken] = useState(0);
   const [resetSpinning, setResetSpinning] = useState(false);
   const [preset, setPreset] = useState<AssistantPreset | null>(null);
+
   const resetSpinTimerRef = useRef<number | null>(null);
+  const closeTimerRef = useRef<number | null>(null);
   const panelRef = useRef<HTMLElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
-  const tabsRef = useRef<HTMLElement>(null);
-  const thumbRef = useRef<HTMLSpanElement>(null);
   const calculatorViewRef = useRef<HTMLDivElement>(null);
   const assistantViewRef = useRef<HTMLDivElement>(null);
-  const dragRef = useRef<ThumbDrag | null>(null);
-  const suppressClickRef = useRef(false);
-  const suppressClickTimerRef = useRef<number | null>(null);
-  const closeTimerRef = useRef<number | null>(null);
   const openRef = useRef(false);
   const closingRef = useRef(false);
   const restoreLauncherFocusRef = useRef(false);
@@ -97,6 +84,7 @@ export function AssistantWidget({
     }
     closeTimerRef.current = window.setTimeout(finish, PANEL_EXIT_MS);
   }, []);
+
   useFocusTrap(panelRef, isOpen && !isClosing, close, launcherRef);
 
   const open = useCallback(
@@ -119,9 +107,6 @@ export function AssistantWidget({
     [],
   );
 
-  /* Reset clears the panel behind the visitor's back, so the button itself has
-     to acknowledge the tap. The flag is dropped and re-set on the next frame
-     so a second tap replays the sweep instead of doing nothing. */
   const pulseReset = useCallback(() => {
     if (reducedMotion()) return;
     if (resetSpinTimerRef.current !== null) {
@@ -144,74 +129,6 @@ export function AssistantWidget({
     },
     [mode],
   );
-
-  /* The switch thumb can be dragged, not only tapped. Capture is deliberately
-     *not* taken here: while an element holds pointer capture the browser
-     retargets the resulting `click` to the capturing element, so capturing on
-     pointerdown swallowed every tap on the two tab buttons — "Vyskladať
-     riešenie" looked dead. Capture is taken in `moveThumbDrag`, once the
-     pointer has actually travelled far enough to be a drag. */
-  const startThumbDrag = (pointerId: number, clientX: number) => {
-    dragRef.current = { pointerId, x: clientX, moved: false };
-  };
-
-  const moveThumbDrag = (pointerId: number, clientX: number) => {
-    const drag = dragRef.current;
-    const tabs = tabsRef.current;
-    const thumb = thumbRef.current;
-    if (!drag || drag.pointerId !== pointerId || !tabs || !thumb) return;
-    const travel = tabs.getBoundingClientRect().width / 2;
-    if (travel <= 0) return;
-    if (!drag.moved) {
-      if (Math.abs(clientX - drag.x) <= DRAG_THRESHOLD_PX) return;
-      drag.moved = true;
-      tabs.dataset.dragging = "true";
-      tabs.setPointerCapture?.(pointerId);
-    }
-    const base = mode === "assistant" ? travel : 0;
-    const next = Math.max(0, Math.min(travel, base + (clientX - drag.x)));
-    thumb.style.transform = `translateX(${next}px)`;
-  };
-
-  const endThumbDrag = (
-    pointerId: number,
-    clientX: number,
-    commit: boolean,
-  ) => {
-    const drag = dragRef.current;
-    const tabs = tabsRef.current;
-    const thumb = thumbRef.current;
-    if (!drag || drag.pointerId !== pointerId) return;
-    dragRef.current = null;
-    tabs?.removeAttribute("data-dragging");
-    if (thumb) thumb.style.transform = "";
-    if (tabs?.hasPointerCapture?.(pointerId))
-      tabs.releasePointerCapture(pointerId);
-    if (!tabs || !drag.moved) return;
-
-    suppressClickRef.current = true;
-    if (suppressClickTimerRef.current !== null) {
-      window.clearTimeout(suppressClickTimerRef.current);
-    }
-    suppressClickTimerRef.current = window.setTimeout(() => {
-      suppressClickRef.current = false;
-      suppressClickTimerRef.current = null;
-    }, 0);
-
-    if (!commit) return;
-    const travel = tabs.getBoundingClientRect().width / 2;
-    const base = mode === "assistant" ? travel : 0;
-    const next = base + (clientX - drag.x);
-    switchMode(next > travel / 2 ? "assistant" : "calculator");
-  };
-
-  const clickMode = (nextMode: WidgetMode) => {
-    if (suppressClickRef.current) {
-      suppressClickRef.current = false;
-      return;
-    }
-    switchMode(nextMode);
-  };
 
   const openFromOptions = useCallback(
     (options: OpenSiteAssistantOptions) => {
@@ -265,10 +182,8 @@ export function AssistantWidget({
 
   useEffect(
     () => () => {
-      if (closeTimerRef.current !== null)
+      if (closeTimerRef.current !== null) {
         window.clearTimeout(closeTimerRef.current);
-      if (suppressClickTimerRef.current !== null) {
-        window.clearTimeout(suppressClickTimerRef.current);
       }
       if (resetSpinTimerRef.current !== null) {
         window.clearTimeout(resetSpinTimerRef.current);
@@ -277,12 +192,6 @@ export function AssistantWidget({
     [],
   );
 
-  /* The panel used to set `overflow: hidden` on <body> while open. That makes
-     the body the scroll container, which breaks page scrolling and pinch-zoom
-     on mobile as soon as the keyboard opens. The panel is `position: fixed` and
-     stops touch scroll from reaching the page via `overscroll-behavior`, so no
-     lock on <body> is needed at all. A data flag stays available for hosts that
-     want to react to the open panel. */
   useEffect(() => {
     if (!isOpen) return;
     document.documentElement.dataset.assistantOpen = "true";
@@ -299,7 +208,7 @@ export function AssistantWidget({
         className="cw-launcher"
         ref={launcherRef}
         type="button"
-        aria-label="Otvoriť chat — navrhnem riešenie alebo odpoviem na otázky"
+        aria-label="Otvoriť Môj Chatbot"
         aria-expanded={isOpen}
         aria-controls="chameleon-widget-panel"
         onClick={() => open(mode, preset)}
@@ -322,17 +231,12 @@ export function AssistantWidget({
           tabIndex={-1}
         >
           <header className="cw-panel-head">
-            <h2 id="chameleon-widget-title" className="cw-sr-only">
-              Môj Chatbot — navrhne riešenie a odpovie na otázky
-            </h2>
             <span className="cw-panel-head__mascot">
               <BubbleLogo size="header" />
             </span>
             <div className="cw-panel-head__title">
-              <b>Môj Chatbot</b>
-              <span className="cw-panel-head__context cw-panel-head__online">
-                <i aria-hidden="true" /> Online
-              </span>
+              <h2 id="chameleon-widget-title">Môj Chatbot</h2>
+              <p>AI nástroje pre váš web</p>
             </div>
             <div className="cw-panel-head__actions">
               <button
@@ -364,67 +268,61 @@ export function AssistantWidget({
 
           <nav
             className="cw-tabs"
-            aria-label="Vyberte si, ako vám mám pomôcť"
+            aria-label="Režim asistenta"
+            role="tablist"
             data-mode={mode}
-            ref={tabsRef}
-            onPointerDown={(event) => {
-              if (
-                !event.isPrimary ||
-                (event.pointerType === "mouse" && event.button !== 0)
-              ) {
-                return;
-              }
-              startThumbDrag(event.pointerId, event.clientX);
-            }}
-            onPointerMove={(event) => {
-              if (!dragRef.current) return;
-              moveThumbDrag(event.pointerId, event.clientX);
-              if (dragRef.current?.moved) event.preventDefault();
-            }}
-            onPointerUp={(event) =>
-              endThumbDrag(event.pointerId, event.clientX, true)
-            }
-            onPointerCancel={(event) =>
-              endThumbDrag(event.pointerId, event.clientX, false)
-            }
-            onLostPointerCapture={(event) => {
-              const drag = dragRef.current;
-              if (drag?.pointerId === event.pointerId) {
-                endThumbDrag(event.pointerId, drag.x, false);
-              }
-            }}
           >
-            <span
-              className="cw-tabs__thumb"
-              aria-hidden="true"
-              ref={thumbRef}
-            />
             <button
+              id="cw-tab-assistant"
               type="button"
-              data-testid="tab-calculator"
-              data-active={mode === "calculator"}
-              aria-pressed={mode === "calculator"}
-              onClick={() => clickMode("calculator")}
-            >
-              <WidgetIcon name="calculator" />
-              <span>Vyskladať riešenie</span>
-            </button>
-            <button
-              type="button"
+              role="tab"
               data-testid="tab-assistant"
               data-active={mode === "assistant"}
-              aria-pressed={mode === "assistant"}
-              onClick={() => clickMode("assistant")}
+              aria-selected={mode === "assistant"}
+              aria-controls="cw-panel-assistant"
+              onClick={() => switchMode("assistant")}
             >
               <WidgetIcon name="chat" />
-              <span>Napísať mi</span>
+              <span>Chatbot</span>
+            </button>
+            <button
+              id="cw-tab-calculator"
+              type="button"
+              role="tab"
+              data-testid="tab-calculator"
+              data-active={mode === "calculator"}
+              aria-selected={mode === "calculator"}
+              aria-controls="cw-panel-calculator"
+              onClick={() => switchMode("calculator")}
+            >
+              <WidgetIcon name="calculator" />
+              <span>Konfigurátor</span>
             </button>
           </nav>
 
           <div className="cw-panel-body" data-direction={modeDirection}>
             <div
+              id="cw-panel-assistant"
+              className="cw-mode-view"
+              ref={assistantViewRef}
+              role="tabpanel"
+              aria-labelledby="cw-tab-assistant"
+              data-view="assistant"
+              data-active={mode === "assistant"}
+              aria-hidden={mode !== "assistant"}
+            >
+              <AssistantConversation
+                active={mode === "assistant"}
+                resetToken={resetToken}
+                onOpenCalculator={() => switchMode("calculator")}
+              />
+            </div>
+            <div
+              id="cw-panel-calculator"
               className="cw-mode-view"
               ref={calculatorViewRef}
+              role="tabpanel"
+              aria-labelledby="cw-tab-calculator"
               data-view="calculator"
               data-active={mode === "calculator"}
               aria-hidden={mode !== "calculator"}
@@ -434,19 +332,6 @@ export function AssistantWidget({
                 resetToken={resetToken}
                 initialPreset={preset}
                 onOpenChat={() => switchMode("assistant")}
-              />
-            </div>
-            <div
-              className="cw-mode-view"
-              ref={assistantViewRef}
-              data-view="assistant"
-              data-active={mode === "assistant"}
-              aria-hidden={mode !== "assistant"}
-            >
-              <AssistantConversation
-                active={mode === "assistant"}
-                resetToken={resetToken}
-                onOpenCalculator={() => switchMode("calculator")}
               />
             </div>
           </div>
