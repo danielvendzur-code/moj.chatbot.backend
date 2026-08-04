@@ -86,14 +86,14 @@ jobs:
           test -f dist/widget.css
 
           # The direct runtime must carry the audited product marker and the
-          # two exact paths of the current vector brand mark.
+          # two paths of the current filled speech-bubble brand mark.
           grep -Fq 'unified-product-20260804-v1' dist/widget.js
           grep -Fq 'competition-audited-system' dist/widget.js
-          grep -Fq 'M96.6 85.5C100.8 84.6 103.6 82.4' dist/widget.js
-          grep -Fq 'M24 71.2V29.2L52.5 55.4' dist/widget.js
+          grep -Fq 'M20 8H92C101.94 8 110 16.06' dist/widget.js
+          grep -Fq 'M24 67V31L48 53C50.4 55.2' dist/widget.js
 
-          # The emitted widget CSS must contain the current white/forest/lime
-          # identity and the production shell, tab and composer selectors.
+          # The emitted widget CSS must contain the identity, interaction shell
+          # and the concrete chip-label persistence fix.
           grep -Fq '#b9ed4d' dist/widget.css
           grep -Fq '#19834f' dist/widget.css
           grep -Fq '#0b2f20' dist/widget.css
@@ -101,11 +101,15 @@ jobs:
           grep -Fq '.cw-tabs' dist/widget.css
           grep -Fq '.cw-inputbar' dist/widget.css
           grep -Fq '.cw-calculator' dist/widget.css
+          grep -Fq '.cw-chip__label' dist/widget.css
+          grep -Fq 'data-sending="true"' dist/widget.css
 
-          # Source entry points must use the single product stylesheet and must
-          # never restore an injected override stack or pointer tilt.
+          # Source entry points must use only static stylesheets and never
+          # restore an injected override stack or pointer tilt.
           grep -Fq 'product-widget.css' src/main.tsx
+          grep -Fq 'widget-polish.css' src/main.tsx
           grep -Fq 'product-widget.css' src/embed.tsx
+          grep -Fq 'widget-polish.css' src/embed.tsx
           ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt|installProductRefinement' src/main.tsx
           ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt|installProductRefinement' src/embed.tsx
           ! grep -Eq 'assistant-redesign|approved-option-one|masterpiece-final|product-refinement.css' src/main.tsx
