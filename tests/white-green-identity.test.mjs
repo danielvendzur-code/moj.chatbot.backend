@@ -16,7 +16,18 @@ test("the product stylesheet is the sole visual authority", async () => {
   assert.doesNotMatch(main, /premiumTilt/);
   assert.doesNotMatch(embed, /premiumTilt/);
   assert.match(css, /MÔJ CHATBOT — unified product interface/);
-  assert.doesNotMatch(css, /!important/);
+  assert.doesNotMatch(css, /html:root body \.cw-widget|\[class\]\[class\]/);
+
+  const importantLines = css
+    .split("\n")
+    .filter((line) => line.includes("!important"));
+  assert.deepEqual(importantLines, [
+    "    scroll-behavior: auto !important;",
+    "    animation-duration: 1ms !important;",
+    "    animation-iteration-count: 1 !important;",
+    "    transition-duration: 1ms !important;",
+  ]);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*scroll-behavior: auto !important/);
 });
 
 test("launcher and brand mark never jump or bounce", async () => {
