@@ -52,9 +52,16 @@ test("the finished website palette is appended as the final widget authority", a
   assert.match(polish, /background-size:\s*260% 260% !important/);
   assert.match(polish, /Získať návrh riešenia/);
   assert.match(polish, /\.cw-inputbar\[class\]\s*>\s*\.cw-send\[class\]:disabled[\s\S]*visibility:\s*visible !important/);
-  assert.match(correction, /Odpovedám hneď/);
-  assert.match(correction, /border-radius:\s*16px !important/);
-  assert.match(correction, /\.cw-tabs__thumb\[class\]/);
+
+  // The final visible shell mirrors the website: lime outline mark on white,
+  // no availability badge and two independent non-pill mode tabs.
+  assert.match(correction, /color:\s*#b9ed4d !important/);
+  assert.match(correction, /\.cw-panel-head__context\[class\][\s\S]*display:\s*none !important/);
+  assert.match(correction, /\.cw-tabs__thumb\[class\][\s\S]*display:\s*none !important/);
+  assert.match(correction, /content:\s*"Chatbot" !important/);
+  assert.match(correction, /content:\s*"Konfigurátor" !important/);
+  assert.match(correction, /\.cw-tabs > button\[data-active="true"\][\s\S]*background:\s*#0b2f20 !important/);
+  assert.doesNotMatch(correction, /Odpovedám hneď|linear-gradient\(145deg/);
   assert.doesNotMatch(finalCss, forbiddenWarm);
 });
 
