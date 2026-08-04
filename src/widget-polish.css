@@ -1,0 +1,220 @@
+/*
+ * Final interaction polish.
+ * This file is a deterministic static layer loaded after product-widget.css.
+ * It fixes the concrete visual regressions found in the live interaction:
+ * disappearing chip labels, a weak logo silhouette and an overly generic tab bar.
+ */
+
+/* Brand mark ------------------------------------------------------------- */
+.cw-widget .cw-launcher,
+.cw-widget .cw-panel-head__mascot,
+.cw-widget .cw-avatar {
+  color: var(--cw-green);
+}
+
+.cw-widget .cw-launcher:hover,
+.cw-widget .cw-launcher:focus-visible {
+  color: var(--cw-green-hover);
+}
+
+.cw-widget .cw-launcher .bl--launcher {
+  width: 48px;
+  height: 48px;
+}
+
+.cw-widget .cw-panel-head__mascot .bl--header {
+  width: 42px;
+  height: 42px;
+}
+
+.cw-widget .cw-avatar .bl--avatar {
+  width: 22px;
+  height: 22px;
+}
+
+.cw-widget .bl__bubble,
+.cw-widget .bl__monogram {
+  vector-effect: non-scaling-stroke;
+}
+
+/* Chatbot / configurator switch ----------------------------------------- */
+.cw-widget .cw-tabs {
+  flex-basis: 58px;
+  gap: 4px;
+  margin: 8px 12px 0;
+  padding: 4px;
+  border: 1px solid rgba(11, 47, 32, 0.1);
+  border-radius: 18px;
+  background: var(--cw-surface);
+}
+
+.cw-widget .cw-tabs > button {
+  min-height: 42px;
+  padding-inline: 10px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  color: #56655c;
+  background: transparent;
+  transition:
+    color 170ms ease,
+    border-color 170ms ease,
+    background-color 170ms ease,
+    box-shadow 180ms ease;
+}
+
+.cw-widget .cw-tabs > button::after {
+  display: none;
+}
+
+.cw-widget .cw-tabs > button:not([data-active="true"]):hover,
+.cw-widget .cw-tabs > button:not([data-active="true"]):focus-visible {
+  color: var(--cw-green-hover);
+  border-color: rgba(25, 131, 79, 0.16);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.cw-widget .cw-tabs > button[data-active="true"] {
+  color: var(--cw-white);
+  border-color: var(--cw-green);
+  background: var(--cw-green);
+  box-shadow:
+    0 10px 20px -15px rgba(11, 47, 32, 0.74),
+    inset 0 1px rgba(255, 255, 255, 0.16);
+}
+
+/* Quick-reply chips ------------------------------------------------------ */
+.cw-widget .cw-quick-replies .cw-chip {
+  gap: 7px;
+  min-height: 42px;
+  isolation: isolate;
+}
+
+.cw-widget .cw-chip__label {
+  min-width: 0;
+  flex: 1 1 auto;
+  color: inherit;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.cw-widget .cw-quick-replies .cw-chip[data-sending="true"] {
+  color: var(--cw-white);
+  border-color: var(--cw-green);
+  background: var(--cw-green);
+  box-shadow: 0 10px 20px -16px rgba(11, 47, 32, 0.72);
+}
+
+.cw-widget .cw-quick-replies .cw-chip[data-sending="true"]::after {
+  content: "✓";
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--cw-green-hover);
+  background: var(--cw-lime-bright);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.cw-widget .cw-quick-replies .cw-chip:disabled:not([data-sending="true"]) {
+  opacity: 0.58;
+}
+
+/* Configurator selections ------------------------------------------------ */
+.cw-widget :is(
+  .cw-rowcard,
+  .cw-scard,
+  .cw-opt,
+  .cw-vcard,
+  .cw-contact-method
+)[data-selected="true"],
+.cw-widget :is(
+  .cw-rowcard,
+  .cw-scard,
+  .cw-vcard
+)[data-confirming="true"] {
+  color: var(--cw-ink);
+  border-color: var(--cw-green);
+  background: var(--cw-lime-soft);
+}
+
+.cw-widget :is(
+  .cw-rowcard[data-selected="true"],
+  .cw-rowcard[data-confirming="true"]
+) .cw-rowcard__body,
+.cw-widget .cw-opt[data-selected="true"] .cw-opt__body,
+.cw-widget :is(
+  .cw-vcard[data-selected="true"],
+  .cw-vcard[data-confirming="true"]
+) .cw-vcard__copy {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cw-widget :is(
+  .cw-rowcard[data-selected="true"],
+  .cw-rowcard[data-confirming="true"]
+) .cw-rowcard__body b,
+.cw-widget .cw-scard[data-selected="true"] b,
+.cw-widget .cw-scard[data-confirming="true"] b,
+.cw-widget .cw-opt[data-selected="true"] .cw-opt__body b,
+.cw-widget .cw-vcard[data-selected="true"] b,
+.cw-widget .cw-vcard[data-confirming="true"] b,
+.cw-widget .cw-contact-method[data-selected="true"] span {
+  color: var(--cw-forest);
+  opacity: 1;
+  visibility: visible;
+}
+
+.cw-widget :is(
+  .cw-rowcard[data-selected="true"],
+  .cw-rowcard[data-confirming="true"]
+) .cw-rowcard__body small,
+.cw-widget .cw-opt[data-selected="true"] .cw-opt__body span,
+.cw-widget .cw-vcard[data-selected="true"] .cw-vcard__copy > span,
+.cw-widget .cw-vcard[data-confirming="true"] .cw-vcard__copy > span {
+  color: var(--cw-muted);
+  opacity: 1;
+  visibility: visible;
+}
+
+.cw-widget :is(
+  .cw-rowcard,
+  .cw-scard,
+  .cw-opt,
+  .cw-vcard,
+  .cw-contact-method
+) :is(b, small, span) {
+  transition:
+    color 170ms ease,
+    opacity 170ms ease;
+}
+
+/* Keep the selected answer readable before the next step appears. */
+.cw-widget .cw-calc-step[data-leaving="true"]
+  :is(.cw-rowcard, .cw-scard, .cw-vcard)[data-selected="true"] {
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .cw-widget .cw-tabs {
+    margin: 7px 10px 0;
+    border-radius: 17px;
+  }
+
+  .cw-widget .cw-tabs > button {
+    min-height: 41px;
+    border-radius: 13px;
+    font-size: 12.7px;
+  }
+
+  .cw-widget .cw-quick-replies .cw-chip {
+    min-height: 44px;
+    padding-inline: 14px;
+    font-size: 13px;
+  }
+}
