@@ -1,12 +1,10 @@
 import { createRoot } from "react-dom/client";
 import { AssistantWidget } from "./components/widget/AssistantWidget";
 import { installConfiguratorAutoAdvance } from "./lib/configuratorAutoAdvance";
-import { installProductRefinement } from "./lib/installProductRefinement";
 import "./widget.css";
 import "./product-widget.css";
 
 installConfiguratorAutoAdvance();
-installProductRefinement();
 
 const HOST_ID = "dv-assistant-root";
 const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
@@ -36,8 +34,7 @@ function mount(): void {
   host.id = HOST_ID;
   host.setAttribute("data-dv-assistant-version", "unified-product-20260804-v1");
   host.setAttribute("data-dv-assistant-theme", "white-forest-lime");
-  host.setAttribute("data-dv-assistant-quality", "unified-production-system");
-  host.setAttribute("data-dv-assistant-refinement", "proven-widget-20260804-v1");
+  host.setAttribute("data-dv-assistant-quality", "competition-audited-system");
 
   const siteFont = window.getComputedStyle(document.body).fontFamily;
   if (siteFont) host.style.setProperty("--cw-font", siteFont);
