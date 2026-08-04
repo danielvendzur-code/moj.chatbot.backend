@@ -46,7 +46,7 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
         <path
           d={OUTER}
           stroke="currentColor"
-          strokeWidth="5.8"
+          strokeWidth="4.3"
           strokeLinecap="round"
           strokeLinejoin="round"
           vectorEffect="non-scaling-stroke"
@@ -54,7 +54,7 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
         <path
           d={INNER}
           stroke="currentColor"
-          strokeWidth="5.8"
+          strokeWidth="4.3"
           strokeLinecap="round"
           strokeLinejoin="round"
           vectorEffect="non-scaling-stroke"
