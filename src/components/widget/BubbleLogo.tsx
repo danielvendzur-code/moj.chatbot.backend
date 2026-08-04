@@ -2,14 +2,40 @@ type BubbleLogoProps = {
   size: "launcher" | "header" | "avatar";
 };
 
-/* The client's mark, cleaned onto a white background for the finished light UI.
-   The geometry is unchanged; only the former black photographic field is removed. */
-const LOGO_IMAGE = "data:image/webp;base64,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";
+/* Exact Môj Chatbot mark shared with the website. Keeping it as vector avoids
+   the blurred photographic disc and keeps the line weight clean at launcher,
+   header and message-avatar sizes. */
+const OUTER =
+  "M96.6 85.5C100.8 84.6 103.6 82.4 103.6 79.9V12.4C103.6 7.2 99.2 4.5 95.4 6.4L59.5 34.5" +
+  "C57.9 36.1 54.1 36.1 52.5 34.5L18.3 6.4C14.5 4.5 8.5 7.2 8.5 12.4V78.5" +
+  "C8.5 81.4 11 83.7 14.2 83.7H30.2L30.5 105.5L52.9 83.7H85.3C86.8 83.7 88 82.6 88 81.2V29.2";
+
+const INNER = "M24 71.2V29.2L52.5 55.4C54.1 57 57.9 57 59.5 55.4L88 29.2";
 
 export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
   return (
     <span className={`bl bl--${size}`} aria-hidden="true">
-      <img src={LOGO_IMAGE} alt="" draggable={false} />
+      <svg
+        viewBox="0 0 112 112"
+        fill="none"
+        focusable="false"
+        vectorEffect="non-scaling-stroke"
+      >
+        <path
+          d={OUTER}
+          stroke="currentColor"
+          strokeWidth="4.3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d={INNER}
+          stroke="currentColor"
+          strokeWidth="4.3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
     </span>
   );
 }
