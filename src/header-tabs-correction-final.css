@@ -1,4 +1,37 @@
 /* Final correction: stronger brand header, quiet availability state and a true segmented mode switch. */
+html:root body .cw-widget[class][class][class][class] .cw-launcher[class] {
+  color: #ffffff !important;
+  border: 0 !important;
+  background: #19834f !important;
+  background-image: linear-gradient(145deg, #19834f, #0f6a3e) !important;
+  box-shadow:
+    0 20px 46px -25px rgba(11, 47, 32, 0.66),
+    0 0 0 5px rgba(255, 255, 255, 0.9) !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-launcher .bl--launcher[class] {
+  width: 48px !important;
+  height: 48px !important;
+  color: #ffffff !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-launcher .bl svg path {
+  stroke-width: 5.5 !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html:root body .cw-widget[class][class][class][class] .cw-launcher[class]:hover,
+  html:root body .cw-widget[class][class][class][class] .cw-launcher[class]:focus-visible {
+    border: 0 !important;
+    background: #0f6a3e !important;
+    background-image: none !important;
+    box-shadow:
+      0 22px 50px -24px rgba(11, 47, 32, 0.72),
+      0 0 0 6px rgba(217, 255, 120, 0.22) !important;
+    transform: none !important;
+  }
+}
+
 html:root body .cw-widget[class][class][class][class] .cw-panel-head[class] {
   min-height: 76px !important;
   padding: 12px 14px !important;
@@ -61,9 +94,16 @@ html:root body .cw-widget[class][class][class][class] .cw-panel-head__context[cl
   color: #607068 !important;
   background: transparent !important;
   box-shadow: none !important;
-  font-size: 11.5px !important;
+  font-size: 0 !important;
   font-weight: 590 !important;
   line-height: 1.2 !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-panel-head__context[class]::after {
+  content: "Odpovedám hneď" !important;
+  color: #607068 !important;
+  font-size: 11.5px !important;
+  font-weight: 590 !important;
 }
 
 html:root body .cw-widget[class][class][class][class] .cw-panel-head__online i {
