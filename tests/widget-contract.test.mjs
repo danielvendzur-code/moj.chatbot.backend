@@ -54,7 +54,10 @@ test("exact vector logo remains green, crisp and motionless", async () => {
   assert.doesNotMatch(logo, /<img|data:image|base64/);
   assert.match(rule(css, ".cw-launcher"), /color:\s*var\(--cw-lime\)/);
   assert.match(rule(css, ".cw-panel-head__mascot"), /color:\s*var\(--cw-lime\)/);
-  assert.match(rule(css, ".cw-launcher:hover,"), /transform:\s*none/);
+  assert.match(
+    css,
+    /\.cw-launcher:hover,[\s\S]*?\.cw-launcher:focus-visible\s*\{[\s\S]*?transform:\s*none;/,
+  );
   assert.doesNotMatch(css, /\.bl[^}]*animation:/s);
 });
 
