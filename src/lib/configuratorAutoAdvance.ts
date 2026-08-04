@@ -1,7 +1,7 @@
 const SINGLE_CHOICE_SELECTOR = ".cw-rowcard, .cw-scard, .cw-vcard";
 const BACK_SELECTOR = ".cw-progress__back, .cw-tabs, .cw-panel-head__actions";
 const INSTALL_FLAG = "cwConfiguratorAutoAdvance";
-const CONFIRM_MS = 220;
+const CONFIRM_MS = 300;
 const POINTER_RELEASE_DISTANCE = 8;
 
 export function installConfiguratorAutoAdvance(): void {
