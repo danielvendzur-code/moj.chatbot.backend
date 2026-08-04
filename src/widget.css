@@ -102,9 +102,19 @@ html[data-embed="true"] #root {
   display: none;
 }
 
+@keyframes cw-mobile-panel-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes cw-mobile-panel-out {
+  to { opacity: 0; }
+}
+
 /* A full-screen mobile assistant has to own the viewport while it is open.
    Otherwise a classic scrollbar can steal 15–16 px from the fixed panel and
-   the page behind the widget can still move. */
+   the page behind the widget can still move. A full-screen surface also fades
+   in place rather than translating the whole interface. */
 @media (max-width: 640px) {
   html[data-assistant-open="true"],
   html[data-assistant-open="true"] body {
@@ -117,5 +127,10 @@ html[data-embed="true"] #root {
   .cw-widget .cw-panel {
     width: 100vw;
     max-width: none;
+    animation: cw-mobile-panel-in 150ms ease both;
+  }
+
+  .cw-widget .cw-panel[data-state="closing"] {
+    animation: cw-mobile-panel-out 120ms ease both;
   }
 }
