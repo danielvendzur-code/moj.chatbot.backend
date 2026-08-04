@@ -1,197 +1,337 @@
-/* Final correction: stronger brand header, quiet availability state and a true segmented mode switch. */
+/*
+   Header and mode navigation aligned to the actual mojchatbot.sk website.
+   This replaces the rejected green tile, removes the availability badge and
+   gives Chatbot / Konfigurátor two distinct tab surfaces instead of a pill.
+*/
+
+/* Launcher: exact lime website mark on a calm white surface. It never moves. */
 html:root body .cw-widget[class][class][class][class] .cw-launcher[class] {
-  color: #ffffff !important;
-  border: 0 !important;
-  background: #19834f !important;
-  background-image: linear-gradient(145deg, #19834f, #0f6a3e) !important;
+  width: 72px !important;
+  height: 72px !important;
+  padding: 9px !important;
+  color: #b9ed4d !important;
+  border: 1px solid rgba(11, 47, 32, 0.16) !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+  background-image: none !important;
   box-shadow:
-    0 20px 46px -25px rgba(11, 47, 32, 0.66),
+    0 20px 44px -28px rgba(11, 47, 32, 0.52),
     0 0 0 5px rgba(255, 255, 255, 0.9) !important;
+  filter: none !important;
+  transform: none !important;
+  animation: none !important;
 }
 
-html:root body .cw-widget[class][class][class][class] .cw-launcher .bl--launcher[class] {
-  width: 48px !important;
-  height: 48px !important;
-  color: #ffffff !important;
+html:root body .cw-widget[class][class][class][class]
+  .cw-launcher .bl--launcher[class] {
+  width: 52px !important;
+  height: 52px !important;
+  color: #b9ed4d !important;
+  background: transparent !important;
+  filter: none !important;
+  transform: none !important;
 }
 
-html:root body .cw-widget[class][class][class][class] .cw-launcher .bl svg path {
-  stroke-width: 5.5 !important;
+html:root body .cw-widget[class][class][class][class]
+  .cw-launcher .bl svg path {
+  stroke-width: 4.3 !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  html:root body .cw-widget[class][class][class][class] .cw-launcher[class]:hover,
-  html:root body .cw-widget[class][class][class][class] .cw-launcher[class]:focus-visible {
-    border: 0 !important;
-    background: #0f6a3e !important;
+  html:root body .cw-widget[class][class][class][class]
+    .cw-launcher[class]:is(:hover, :focus-visible) {
+    color: #a9dd3f !important;
+    border-color: rgba(11, 47, 32, 0.28) !important;
+    background: #ffffff !important;
     background-image: none !important;
     box-shadow:
-      0 22px 50px -24px rgba(11, 47, 32, 0.72),
-      0 0 0 6px rgba(217, 255, 120, 0.22) !important;
+      0 22px 48px -27px rgba(11, 47, 32, 0.58),
+      0 0 0 6px rgba(185, 237, 77, 0.15) !important;
+    filter: none !important;
     transform: none !important;
   }
 }
 
+html:root body .cw-widget[class][class][class][class]
+  .cw-launcher[class]:active {
+  color: #a9dd3f !important;
+  background: #ffffff !important;
+  transform: none !important;
+}
+
+/* Header: one clean brand row, no card around the logo and no Online badge. */
 html:root body .cw-widget[class][class][class][class] .cw-panel-head[class] {
-  min-height: 76px !important;
-  padding: 12px 14px !important;
-  gap: 12px !important;
+  min-height: 74px !important;
+  display: grid !important;
+  grid-template-columns: 48px minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 11px !important;
+  padding: 11px 12px 10px 15px !important;
+  color: #0b2f20 !important;
+  border: 0 !important;
   border-bottom: 1px solid rgba(11, 47, 32, 0.1) !important;
   background: #ffffff !important;
   background-image: none !important;
-  box-shadow: 0 12px 28px -28px rgba(11, 47, 32, 0.34) !important;
+  box-shadow: none !important;
+  overflow: visible !important;
 }
 
-html:root body .cw-widget[class][class][class][class] .cw-panel-head__mascot[class] {
+html:root body .cw-widget[class][class][class][class]
+  .cw-panel-head__mascot[class] {
   width: 48px !important;
   height: 48px !important;
-  flex: 0 0 48px !important;
+  min-width: 48px !important;
   display: grid !important;
   place-items: center !important;
-  border: 0 !important;
-  border-radius: 15px !important;
-  color: #ffffff !important;
-  background: #19834f !important;
-  background-image: linear-gradient(145deg, #19834f, #0f6a3e) !important;
-  box-shadow: 0 13px 26px -20px rgba(11, 47, 32, 0.58) !important;
-  overflow: hidden !important;
-  transform: none !important;
-}
-
-html:root body .cw-widget[class][class][class][class] .cw-panel-head__mascot .bl--header[class] {
-  width: 34px !important;
-  height: 34px !important;
-  color: #ffffff !important;
-}
-
-html:root body .cw-widget[class][class][class][class] .cw-panel-head__mascot .bl svg path {
-  stroke-width: 5.5 !important;
-}
-
-html:root body .cw-widget[class][class][class][class] .cw-panel-head__title[class] {
-  display: grid !important;
-  align-content: center !important;
-  gap: 4px !important;
-}
-
-html:root body .cw-widget[class][class][class][class] .cw-panel-head__title b {
-  color: #0b2f20 !important;
-  font-size: 17px !important;
-  font-weight: 780 !important;
-  line-height: 1.08 !important;
-  letter-spacing: -0.025em !important;
-}
-
-html:root body .cw-widget[class][class][class][class] .cw-panel-head__context[class] {
-  width: auto !important;
-  min-height: 0 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 7px !important;
   padding: 0 !important;
+  color: #b9ed4d !important;
   border: 0 !important;
   border-radius: 0 !important;
-  color: #607068 !important;
   background: transparent !important;
+  background-image: none !important;
   box-shadow: none !important;
-  font-size: 0 !important;
-  font-weight: 590 !important;
-  line-height: 1.2 !important;
+  filter: none !important;
+  transform: none !important;
+  overflow: visible !important;
 }
 
-html:root body .cw-widget[class][class][class][class] .cw-panel-head__context[class]::after {
-  content: "Odpovedám hneď" !important;
-  color: #607068 !important;
-  font-size: 11.5px !important;
-  font-weight: 590 !important;
+html:root body .cw-widget[class][class][class][class]
+  .cw-panel-head__mascot .bl--header[class] {
+  width: 45px !important;
+  height: 45px !important;
+  color: #b9ed4d !important;
+  background: transparent !important;
 }
 
-html:root body .cw-widget[class][class][class][class] .cw-panel-head__online i {
-  width: 7px !important;
-  height: 7px !important;
-  flex: 0 0 7px !important;
-  border-radius: 50% !important;
-  background: #29a968 !important;
-  box-shadow: 0 0 0 3px rgba(41, 169, 104, 0.12) !important;
+html:root body .cw-widget[class][class][class][class]
+  .cw-panel-head__mascot .bl svg path {
+  stroke-width: 4.3 !important;
 }
 
-html:root body .cw-widget[class][class][class][class] .cw-panel-head__actions button {
+html:root body .cw-widget[class][class][class][class]
+  .cw-panel-head__title[class] {
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0 !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-panel-head__title b {
+  color: #0b2f20 !important;
+  font-size: 17.5px !important;
+  font-weight: 790 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.03em !important;
+  white-space: nowrap !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-panel-head__context[class],
+html:root body .cw-widget[class][class][class][class]
+  .cw-panel-head__online[class] {
+  display: none !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-panel-head__actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-panel-head__actions button {
   width: 38px !important;
   height: 38px !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+  color: #355044 !important;
   border: 1px solid rgba(11, 47, 32, 0.1) !important;
   border-radius: 12px !important;
-  color: #355044 !important;
   background: #f7faf4 !important;
-  box-shadow: none !important;
-}
-
-/* Not a chip and not a capsule: a compact two-part segmented control. */
-html:root body .cw-widget[class][class][class][class] .cw-tabs[class] {
-  position: relative !important;
-  isolation: isolate !important;
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 6px !important;
-  height: 58px !important;
-  margin: 10px 12px 9px !important;
-  padding: 6px !important;
-  border: 1px solid rgba(11, 47, 32, 0.12) !important;
-  border-radius: 16px !important;
-  background: #eef4ea !important;
   background-image: none !important;
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.9) !important;
-  overflow: hidden !important;
-}
-
-html:root body .cw-widget[class][class][class][class] .cw-tabs__thumb[class] {
-  top: 6px !important;
-  bottom: 6px !important;
-  left: 6px !important;
-  width: calc((100% - 18px) / 2) !important;
-  border: 0 !important;
-  border-radius: 11px !important;
-  background: #ffffff !important;
-  background-image: none !important;
-  box-shadow:
-    0 8px 18px -15px rgba(11, 47, 32, 0.52),
-    inset 0 0 0 1px rgba(25, 131, 79, 0.2) !important;
-}
-
-html:root body .cw-widget[class][class][class][class] .cw-tabs > button[class] {
-  min-width: 0 !important;
-  height: 46px !important;
-  padding: 0 10px !important;
-  gap: 8px !important;
-  border: 0 !important;
-  border-radius: 11px !important;
-  color: #607068 !important;
-  background: transparent !important;
   box-shadow: none !important;
-  font-size: 12.5px !important;
-  font-weight: 690 !important;
   transform: none !important;
-}
-
-html:root body .cw-widget[class][class][class][class] .cw-tabs > button[data-active="true"] {
-  color: #0b2f20 !important;
-}
-
-html:root body .cw-widget[class][class][class][class] .cw-tabs > button svg {
-  width: 18px !important;
-  height: 18px !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  html:root body .cw-widget[class][class][class][class] .cw-tabs > button:not([data-active="true"]):hover {
-    color: #19834f !important;
-    background: rgba(255, 255, 255, 0.46) !important;
+  html:root body .cw-widget[class][class][class][class]
+    .cw-panel-head__actions button:hover {
+    color: #0b2f20 !important;
+    border-color: rgba(11, 47, 32, 0.2) !important;
+    background: #eef5e9 !important;
+    transform: none !important;
   }
 }
 
+/*
+   Mode navigation: two separate rounded rectangles. No capsule, no sliding
+   thumb, no green layer showing behind the active control.
+*/
+html:root body .cw-widget[class][class][class][class] .cw-tabs[class] {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  height: auto !important;
+  min-height: 52px !important;
+  margin: 10px 12px 9px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  isolation: isolate !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-tabs__thumb[class] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-tabs > button[class] {
+  position: relative !important;
+  z-index: 1 !important;
+  min-width: 0 !important;
+  min-height: 52px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 0 12px !important;
+  color: #315244 !important;
+  border: 1px solid rgba(11, 47, 32, 0.14) !important;
+  border-radius: 14px !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  box-shadow: 0 10px 24px -25px rgba(11, 47, 32, 0.4) !important;
+  font-size: 13px !important;
+  font-weight: 720 !important;
+  letter-spacing: -0.015em !important;
+  transform: none !important;
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-tabs > button::before,
+html:root body .cw-widget[class][class][class][class]
+  .cw-tabs > button::after {
+  content: none !important;
+  display: none !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-tabs > button[data-testid="tab-assistant"] {
+  order: 1 !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-tabs > button[data-testid="tab-calculator"] {
+  order: 2 !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-tabs > button > span {
+  font-size: 0 !important;
+  line-height: 1 !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-tabs > button[data-testid="tab-assistant"] > span::after {
+  content: "Chatbot" !important;
+  font-size: 13px !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-tabs > button[data-testid="tab-calculator"] > span::after {
+  content: "Konfigurátor" !important;
+  font-size: 13px !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-tabs > button svg {
+  width: 18px !important;
+  height: 18px !important;
+  color: currentColor !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-tabs > button[data-active="true"] {
+  color: #ffffff !important;
+  border-color: #0b2f20 !important;
+  background: #0b2f20 !important;
+  background-image: none !important;
+  box-shadow: 0 14px 28px -22px rgba(11, 47, 32, 0.5) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html:root body .cw-widget[class][class][class][class]
+    .cw-tabs > button:not([data-active="true"]):hover {
+    color: #0f6a3e !important;
+    border-color: rgba(25, 131, 79, 0.35) !important;
+    background: #f5f9f2 !important;
+    box-shadow: 0 12px 26px -23px rgba(11, 47, 32, 0.46) !important;
+    transform: none !important;
+  }
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-tabs > button:focus-visible {
+  outline: 3px solid rgba(185, 237, 77, 0.38) !important;
+  outline-offset: 2px !important;
+}
+
 @media (max-width: 420px) {
-  html:root body .cw-widget[class][class][class][class] .cw-tabs > button[class] {
-    padding-inline: 7px !important;
+  html:root body .cw-widget[class][class][class][class]
+    .cw-panel-head[class] {
+    grid-template-columns: 44px minmax(0, 1fr) auto !important;
+    gap: 9px !important;
+    padding-inline: 12px !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class]
+    .cw-panel-head__mascot[class] {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class]
+    .cw-panel-head__mascot .bl--header[class] {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class]
+    .cw-tabs[class] {
+    gap: 7px !important;
+    margin-inline: 10px !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class]
+    .cw-tabs > button[class] {
+    min-height: 50px !important;
     gap: 6px !important;
-    font-size: 11.8px !important;
+    padding-inline: 8px !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class]
+    .cw-tabs > button[data-testid="tab-assistant"] > span::after,
+  html:root body .cw-widget[class][class][class][class]
+    .cw-tabs > button[data-testid="tab-calculator"] > span::after {
+    font-size: 12.5px !important;
   }
 }
