@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("the runtime stays static and free of injected visual overrides", async () => {
+test("the visual system is static, ordered and free of injected overrides", async () => {
   const main = await read("src/main.tsx");
   const embed = await read("src/embed.tsx");
   const css = await read("src/product-widget.css");
@@ -16,8 +16,11 @@ test("the runtime stays static and free of injected visual overrides", async () 
   assert.match(embed, /widget-polish\.css/);
   assert.doesNotMatch(main, /installLimeWhiteStyles|installProductRefinement|premiumTilt/);
   assert.doesNotMatch(embed, /installLimeWhiteStyles|installProductRefinement|premiumTilt/);
-  assert.match(css, /competition-audited product interface/);
-  assert.match(polish, /final visual authority/);
+  assert.match(css, /MÔJ CHATBOT — competition-audited product interface/);
+  assert.match(polish, /disappearing chip labels/);
+  assert.match(polish, /\.cw-widget \.cw-chip__label/);
+  assert.match(polish, /\.cw-chip\[data-sending="true"\]/);
+  assert.doesNotMatch(css, /html:root body \.cw-widget|\[class\]\[class\]/);
 
   const importantLines = css
     .split("\n")
@@ -28,60 +31,67 @@ test("the runtime stays static and free of injected visual overrides", async () 
     "    animation-iteration-count: 1 !important;",
     "    transition-duration: 1ms !important;",
   ]);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*scroll-behavior: auto !important/);
 });
 
-test("the new mark is motionless and has no opaque icon tile", async () => {
-  const logo = await read("src/components/widget/BubbleLogo.tsx");
-  const polish = await read("src/widget-polish.css");
+test("launcher and compact brand mark stay clear and motionless", async () => {
   const css = await read("src/product-widget.css");
+  const polish = await read("src/widget-polish.css");
+  const logo = await read("src/components/widget/BubbleLogo.tsx");
 
-  assert.match(logo, /bl__frame/);
-  assert.match(logo, /bl__monogram/);
-  assert.match(logo, /stroke="currentColor"/);
-  assert.match(logo, /L50\.5 55L36\.5 47/);
-  assert.doesNotMatch(logo, /fill="currentColor"|stroke="white"|bl__outer|bl__inner/);
-  assert.match(polish, /\.cw-widget \.cw-panel-head__mascot[\s\S]*background:\s*transparent/);
-  assert.match(polish, /\.cw-widget \.cw-launcher[\s\S]*rgba\(236, 248, 241, 0\.68\)/);
+  assert.match(logo, /className="bl__bubble"/);
+  assert.match(logo, /fill="currentColor"/);
+  assert.match(logo, /className="bl__monogram"/);
+  assert.match(logo, /stroke="white"/);
+  assert.match(logo, /L100 106L69 89/);
+  assert.doesNotMatch(logo, /bl__optical-weight|strokeWidth="4\.3"|strokeWidth="5\.6"/);
+  assert.match(polish, /\.cw-widget \.cw-launcher,[\s\S]*color:\s*var\(--cw-green\)/);
   assert.match(css, /\.cw-launcher:hover,[\s\S]*?transform:\s*none;/);
+  assert.match(css, /\.cw-launcher:active[\s\S]*?transform:\s*none;/);
   assert.doesNotMatch(css, /@keyframes[^}]*bounce/i);
+  assert.doesNotMatch(polish, /\.bl[^}]*transform:/s);
 });
 
-test("header status contains only Online", async () => {
+test("header contains a concrete product purpose rather than fake availability", async () => {
   const widget = await read("src/components/widget/AssistantWidget.tsx");
 
   assert.match(widget, /Môj Chatbot/);
-  assert.match(widget, /cw-online-dot/);
-  assert.match(widget, />Online</);
-  assert.doesNotMatch(widget, /Odpovedám hneď|Poradca a konfigurátor|availability/i);
+  assert.match(widget, /Poradca a konfigurátor pre váš web/);
+  assert.doesNotMatch(widget, /Online|availability|Odpovedám hneď/);
 });
 
-test("back navigation releases the outgoing height immediately", async () => {
+test("backward step navigation releases the tall-step height lock quickly", async () => {
   const transition = await read("src/hooks/useStepTransition.ts");
+  assert.match(transition, /STEP_ENTER_MS = 220/);
   assert.match(transition, /nextDirection === "forward"/);
   assert.match(transition, /nextDirection === "backward"/);
   assert.match(transition, /container\.style\.minHeight = ""/);
   assert.match(transition, /direction === "backward"/);
 });
 
-test("mobile embed locks and restores the parent page", async () => {
+test("mobile iframe freezes and restores the parent page on iOS", async () => {
   const embed = await read("public/embed.js");
   assert.match(embed, /document\.body\.style\.position = "fixed"/);
   assert.match(embed, /document\.body\.style\.top = -savedScrollY \+ "px"/);
+  assert.match(embed, /document\.body\.style\.left = -savedScrollX \+ "px"/);
   assert.match(embed, /document\.documentElement\.style\.touchAction = "none"/);
+  assert.match(embed, /document\.body\.style\.overscrollBehavior = "none"/);
   assert.match(embed, /document\.body\.style\.position = savedBodyPosition/);
   assert.match(embed, /window\.scrollTo\(savedScrollX, savedScrollY\)/);
 });
 
-test("contact conversion keeps visible labels and one-contact validation", async () => {
+test("contact conversion surface keeps clear hierarchy and visible labels", async () => {
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
   const css = await read("src/product-widget.css");
 
   assert.match(calculator, /Ako sa vám mám ozvať\?/);
   assert.match(calculator, /Nezáväzný dopyt/);
+  assert.match(calculator, /cw-contact-methods/);
+  assert.match(calculator, /cw-lead__form/);
   assert.match(calculator, /className="cw-field"/);
-  assert.match(calculator, /aria-invalid=\{nameInvalid\}/);
-  assert.match(calculator, /aria-invalid=\{emailInvalid\}/);
-  assert.match(calculator, /aria-invalid=\{phoneInvalid\}/);
+  assert.match(calculator, /<details className="cw-summary">/);
   assert.match(calculator, /cw-consent/);
+  assert.match(calculator, /cw-submit cw-submit--approved/);
   assert.match(css, /\.cw-field :is\(input, textarea\)\[aria-invalid="true"\]/);
+  assert.match(css, /\.cw-summary > summary/);
 });

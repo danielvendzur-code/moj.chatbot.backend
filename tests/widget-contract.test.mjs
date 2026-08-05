@@ -9,9 +9,10 @@ const rule = (css, selector) => {
   return css.match(new RegExp(`${escaped}\\s*\\{[^}]*\\}`, "m"))?.[0] ?? "";
 };
 
-test("demo and embed load only the ordered static widget styles", async () => {
+test("demo and embed load the ordered static widget styles", async () => {
   const main = await read("src/main.tsx");
   const embed = await read("src/embed.tsx");
+  const autoAdvance = await read("src/lib/configuratorAutoAdvance.ts");
 
   assert.match(main, /preview\.css/);
   assert.match(main, /widget\.css/);
@@ -26,162 +27,239 @@ test("demo and embed load only the ordered static widget styles", async () => {
   assert.equal((embed.match(/import "\.\/.*\.css";/g) ?? []).length, 3);
 
   for (const source of [main, embed]) {
+    assert.doesNotMatch(source, /assistant-redesign|masterpiece-final|approved-submit/);
     assert.doesNotMatch(
       source,
-      /installLimeWhiteStyles|installPremiumTilt|installProductRefinement|masterpiece-final/,
+      /installLimeWhiteStyles|installPremiumTilt|installProductRefinement/,
     );
   }
+  assert.doesNotMatch(autoAdvance, /import\s+["'].*\.css/);
 });
 
-test("new logo is a clean outline mark without a tile", async () => {
-  const logo = await read("src/components/widget/BubbleLogo.tsx");
-  const polish = await read("src/widget-polish.css");
-
-  assert.match(logo, /viewBox="0 0 64 64"/);
-  assert.match(logo, /M15 12\.5H49C53\.7 12\.5/);
-  assert.match(logo, /M18 36V23L32 34\.5L46 23V36/);
-  assert.match(logo, /className="bl__frame"/);
-  assert.match(logo, /className="bl__monogram"/);
-  assert.equal((logo.match(/strokeWidth="4\.4"/g) ?? []).length, 2);
-  assert.doesNotMatch(logo, /fill="currentColor"|stroke="white"|<img|base64/);
-  assert.match(rule(polish, ".cw-widget .cw-panel-head__mascot"), /background:\s*transparent/);
-  assert.match(rule(polish, ".cw-widget .cw-panel-head__mascot"), /border:\s*0/);
-});
-
-test("launcher is translucent and shaped like a chat surface", async () => {
-  const polish = await read("src/widget-polish.css");
-  const launcher = rule(polish, ".cw-widget .cw-launcher");
-
-  assert.match(launcher, /width:\s*66px/);
-  assert.match(launcher, /border-radius:\s*23px 23px 8px 23px/);
-  assert.match(launcher, /rgba\(236, 248, 241, 0\.68\)/);
-  assert.match(launcher, /backdrop-filter:\s*blur\(18px\)/);
-  assert.doesNotMatch(launcher, /background:\s*(?:#fff|#ffffff|var\(--cw-white\))/);
-});
-
-test("header contains only the honest Online state", async () => {
-  const widget = await read("src/components/widget/AssistantWidget.tsx");
-
-  assert.match(widget, /cw-online-dot/);
-  assert.match(widget, />Online</);
-  assert.doesNotMatch(widget, /Odpovedám hneď|Poradca a konfigurátor|availability/i);
-});
-
-test("mode switch keeps the website idea without dominating the widget", async () => {
+test("widget shell uses accessible rounded mode chips without drag logic", async () => {
   const widget = await read("src/components/widget/AssistantWidget.tsx");
   const polish = await read("src/widget-polish.css");
-  const tabs = rule(polish, ".cw-widget .cw-tabs");
-  const thumb = rule(polish, ".cw-widget .cw-tabs__thumb");
 
-  assert.match(widget, /className="cw-tabs__thumb"/);
+  assert.match(widget, /role="tablist"/);
+  assert.match(widget, /role="tab"/);
+  assert.match(widget, /aria-selected=\{mode === "assistant"\}/);
+  assert.match(widget, /aria-selected=\{mode === "calculator"\}/);
   assert.match(widget, />Chatbot</);
   assert.match(widget, />Konfigurátor</);
-  assert.match(tabs, /width:\s*min\(286px,/);
-  assert.match(tabs, /min-height:\s*44px/);
-  assert.match(tabs, /flex:\s*0 0 44px/);
-  assert.match(tabs, /background:\s*#10271c/);
-  assert.match(thumb, /background:\s*var\(--cw-polish-mint\)/);
+  assert.doesNotMatch(widget, /cw-tabs__thumb|ThumbDrag|setPointerCapture/);
+  assert.doesNotMatch(widget, /resetSpinning|pulseReset|RESET_SPIN_MS/);
+  assert.match(widget, /Poradca a konfigurátor pre váš web/);
+  assert.match(rule(polish, ".cw-widget .cw-tabs"), /border-radius:\s*18px/);
+  assert.match(rule(polish, ".cw-widget .cw-tabs > button"), /border-radius:\s*14px/);
   assert.match(
-    rule(polish, '.cw-widget .cw-tabs[data-mode="calculator"] .cw-tabs__thumb'),
-    /translateX\(100%\)/,
+    rule(polish, '.cw-widget .cw-tabs > button[data-active="true"]'),
+    /background:\s*var\(--cw-green\)/,
   );
 });
 
-test("quick reply text remains present while the click is confirmed", async () => {
-  const conversation = await read("src/components/widget/AssistantConversation.tsx");
+test("filled vector logo remains green, crisp and motionless", async () => {
+  const logo = await read("src/components/widget/BubbleLogo.tsx");
+  const css = await read("src/product-widget.css");
   const polish = await read("src/widget-polish.css");
 
-  assert.match(conversation, /className="cw-chip__label"/);
+  assert.match(logo, /viewBox="0 0 112 112"/);
+  assert.match(logo, /className="bl__bubble"/);
+  assert.match(logo, /fill="currentColor"/);
+  assert.match(logo, /className="bl__monogram"/);
+  assert.match(logo, /stroke="white"/);
+  assert.match(logo, /strokeWidth="8"/);
+  assert.doesNotMatch(logo, /<img|data:image|base64|bl__optical-weight/);
+  assert.match(
+    rule(polish, ".cw-widget .cw-launcher,\n.cw-widget .cw-panel-head__mascot,\n.cw-widget .cw-avatar"),
+    /color:\s*var\(--cw-green\)/,
+  );
+  assert.match(
+    css,
+    /\.cw-launcher:hover,[\s\S]*?\.cw-launcher:focus-visible\s*\{[\s\S]*?transform:\s*none;/,
+  );
+  assert.doesNotMatch(css, /\.bl[^}]*animation:/s);
+});
+
+test("panel proportions and hierarchy are deliberate", async () => {
+  const css = await read("src/product-widget.css");
+  const panel = rule(css, ".cw-panel");
+
+  assert.match(panel, /width:\s*min\(432px,/);
+  assert.match(panel, /height:\s*min\(724px,/);
+  assert.match(panel, /border-radius:\s*26px/);
+  assert.match(panel, /box-shadow:/);
+  assert.match(rule(css, ".cw-panel-head__title h2"), /font-size:\s*18px/);
+  assert.match(rule(css, ".cw-panel-head__title p"), /font-size:\s*12px/);
+});
+
+test("chat hierarchy is readable and selected chip text stays present", async () => {
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
+  );
+  const css = await read("src/product-widget.css");
+  const polish = await read("src/widget-polish.css");
+
+  const top = conversation.indexOf('className="cw-chat-top"');
+  const messages = conversation.indexOf('className="cw-messages"');
+  const chips = conversation.indexOf('className="cw-quick-replies"');
+  const input = conversation.indexOf('className="cw-inputbar"');
+  const contacts = conversation.indexOf('className="cw-direct-actions"');
+  assert.ok(top > -1 && top < messages);
+  assert.ok(messages < chips && chips < input && input < contacts);
+
+  assert.match(conversation, /4 otázky · približne 1 minúta/);
+  assert.match(conversation, /QUICK_REPLY_HOLD_MS = 360/);
   assert.match(conversation, /activeQuickReply !== null/);
-  assert.match(rule(polish, ".cw-widget .cw-chip__label"), /opacity:\s*1/);
+  assert.match(conversation, /className="cw-chip__label"/);
+  assert.match(conversation, /aria-pressed=\{sending\}/);
+  assert.match(conversation, /data-started=\{conversationStarted/);
+  assert.match(conversation, /Radšej priamo\?/);
+  assert.match(conversation, /disabled=\{!input\.trim\(\) \|\| typing/);
+  assert.doesNotMatch(conversation, /flightOrigin|bubble\.animate|translate3d|getBoundingClientRect/);
+  assert.match(rule(css, ".cw-message-wrap p"), /font-size:\s*14px/);
+  assert.match(rule(css, ".cw-quick-replies .cw-chip"), /font-size:\s*12\.5px/);
   assert.match(rule(polish, ".cw-widget .cw-chip__label"), /visibility:\s*visible/);
-  assert.match(polish, /cw-chip\[data-sending="true"\]/);
+  assert.match(rule(polish, ".cw-widget .cw-chip__label"), /opacity:\s*1/);
+  assert.match(rule(css, ".cw-inputbar > .cw-send"), /opacity:\s*1/);
+  assert.match(rule(css, ".cw-inputbar > .cw-send"), /visibility:\s*visible/);
+  assert.match(rule(css, ".cw-inputbar > .cw-send:disabled"), /opacity:\s*1/);
 });
 
-test("selected configurator text stays visible long enough to be understood", async () => {
+test("direct contact is a quiet utility row rather than three mini cards", async () => {
+  const css = await read("src/product-widget.css");
+  const actions = rule(css, ".cw-direct-actions");
+  const links = rule(css, ".cw-direct-actions__grid a");
+
+  assert.match(actions, /display:\s*flex/);
+  assert.match(links, /background:\s*transparent/);
+  assert.doesNotMatch(links, /border:/);
+  assert.match(links, /font-size:\s*11\.5px/);
+});
+
+test("configurator keeps the selected label readable before auto-advance", async () => {
+  const calculator = await read("src/components/widget/ToolCalculator.tsx");
   const autoAdvance = await read("src/lib/configuratorAutoAdvance.ts");
+  const css = await read("src/product-widget.css");
   const polish = await read("src/widget-polish.css");
 
-  assert.match(autoAdvance, /CONFIRM_MS = 650/);
+  assert.match(calculator, /function SelectionIndicator/);
+  assert.match(calculator, /className="cw-selection-indicator"/);
+  assert.match(autoAdvance, /CONFIRM_MS = 520/);
   assert.match(autoAdvance, /next\.click\(\)/);
-  assert.match(
-    rule(polish, '.cw-widget .cw-calc-step[data-leaving="true"]'),
-    /opacity:\s*1/,
-  );
-  assert.match(
-    rule(polish, '.cw-widget .cw-calc-step[data-leaving="true"]'),
-    /animation:\s*none/,
-  );
+  assert.match(css, /data-confirming="true"/);
+  assert.match(css, /\.cw-selection-indicator\[data-visible="true"\]/);
+  assert.match(polish, /Keep the selected answer readable/);
   assert.match(polish, /visibility:\s*visible/);
-  assert.match(polish, /background:\s*var\(--cw-polish-mint-soft\)/);
-  assert.doesNotMatch(polish, /linear-gradient[^;]*(selected|confirming)/i);
-});
-
-test("progress presents four questions instead of five conflicting bars", async () => {
-  const polish = await read("src/widget-polish.css");
-
+  assert.doesNotMatch(css, /--cw-tilt|rotateX|rotateY/);
   assert.match(
-    rule(polish, ".cw-widget .cw-progress__dots"),
-    /grid-template-columns:\s*repeat\(4,/,
+    css,
+    /\.cw-rowcard\[data-selected="true"\],[\s\S]*?background:\s*var\(--cw-lime-soft\)/,
   );
-  assert.match(
-    rule(polish, ".cw-widget .cw-progress__dots i:last-child"),
-    /display:\s*none/,
-  );
-  assert.match(rule(polish, ".cw-widget .cw-progress"), /flex:\s*0 0 49px/);
-  assert.match(rule(polish, ".cw-widget .cw-progress__dots i"), /height:\s*4px/);
 });
 
-test("first-step cards are compact and readable", async () => {
-  const polish = await read("src/widget-polish.css");
-  const card = rule(polish, ".cw-widget .cw-rowcard");
+test("progress and contact step expose clear state and labels", async () => {
+  const calculator = await read("src/components/widget/ToolCalculator.tsx");
+  const css = await read("src/product-widget.css");
 
-  assert.match(card, /min-height:\s*72px/);
-  assert.match(card, /padding:\s*9px 12px/);
-  assert.match(card, /border-radius:\s*16px/);
-  assert.match(rule(polish, ".cw-widget .cw-rowcard__body b"), /font-size:\s*14\.5px/);
-  assert.match(rule(polish, ".cw-widget .cw-rowcard__body small"), /font-size:\s*11\.8px/);
+  assert.match(calculator, /cw-progress__dots/);
+  assert.match(calculator, /Krok \$\{visibleStep \+ 1\} z \$\{STEPS\.length\}/);
+  assert.match(calculator, /className="cw-field"/);
+  assert.match(calculator, /aria-invalid=\{nameInvalid\}/);
+  assert.match(calculator, /aria-invalid=\{emailInvalid\}/);
+  assert.match(calculator, /aria-invalid=\{phoneInvalid\}/);
+  assert.match(calculator, /<details className="cw-summary">/);
+  assert.match(calculator, /Poslať nezáväzný dopyt/);
+  assert.doesNotMatch(calculator, /label: "Osobne"/);
+  assert.match(rule(css, ".cw-progress__dots"), /grid-template-columns:\s*repeat\(5,/);
 });
 
-test("disabled continuation is visibly disabled, not a broken green CTA", async () => {
-  const polish = await read("src/widget-polish.css");
-  const disabled = rule(polish, ".cw-widget .cw-next:disabled");
-
-  assert.match(disabled, /color:\s*#7e8a82/);
-  assert.match(disabled, /border-color:\s*#dbe3dc/);
-  assert.match(disabled, /background:\s*#edf1ed/);
-  assert.match(disabled, /opacity:\s*1/);
-  assert.doesNotMatch(disabled, /var\(--cw-polish-green\)/);
-});
-
-test("mobile panel fills the viewport and preserves safe areas", async () => {
+test("primary controls keep intentional, differentiated geometry", async () => {
+  const css = await read("src/product-widget.css");
   const polish = await read("src/widget-polish.css");
 
-  assert.match(polish, /@media \(max-width: 640px\)/);
-  assert.match(polish, /width:\s*100vw/);
-  assert.match(polish, /height:\s*100svh/);
-  assert.match(polish, /height:\s*100dvh/);
-  assert.match(polish, /env\(safe-area-inset-top\)/);
-  assert.match(polish, /env\(safe-area-inset-bottom\)/);
-  assert.match(polish, /data-assistant-open="true"/);
+  assert.match(rule(css, ".cw-chat-builder"), /border-radius:\s*18px/);
+  assert.match(rule(css, ".cw-next"), /border-radius:\s*999px/);
+  assert.match(rule(css, ".cw-quick-replies .cw-chip"), /border-radius:\s*999px/);
+  assert.match(rule(css, ".cw-inputbar"), /border-radius:\s*19px/);
+  assert.match(rule(css, ".cw-rowcard"), /border-radius:\s*17px/);
+  assert.match(rule(css, ".cw-submit"), /border-radius:\s*17px/);
+  assert.match(rule(polish, ".cw-widget .cw-tabs"), /border-radius:\s*18px/);
 });
 
-test("palette stays in one calm green family", async () => {
-  const css = `${await read("src/product-widget.css")}\n${await read("src/widget-polish.css")}`.toLowerCase();
+test("palette stays within the website white forest lime identity", async () => {
+  const css = (await read("src/product-widget.css")).toLowerCase();
 
   for (const token of [
     "#ffffff",
-    "#fbfcf9",
-    "#1b8753",
-    "#0d3b29",
-    "#b3e9d0",
-    "#edf7f1",
-    "#10271c",
+    "#fbfcf8",
+    "#b9ed4d",
+    "#d9ff78",
+    "#19834f",
+    "#116b40",
+    "#0b2f20",
+    "#132019",
   ]) {
     assert.ok(css.includes(token), `Missing product token ${token}`);
   }
 
-  for (const retired of ["#ffc79d", "#e58a5b", "#3478f6", "#1f55c9"]) {
+  for (const retired of [
+    "#ffc79d",
+    "#e58a5b",
+    "#4db6ac",
+    "#3478f6",
+    "#1f55c9",
+  ]) {
     assert.ok(!css.includes(retired), `Retired accent ${retired} returned`);
   }
+});
+
+test("mobile, keyboard and reduced-motion fallbacks are first-class", async () => {
+  const css = await read("src/product-widget.css");
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
+  );
+
+  assert.match(css, /@media \(max-width: 640px\)/);
+  assert.match(css, /width:\s*100dvw/);
+  assert.match(css, /height:\s*100dvh/);
+  assert.match(css, /env\(safe-area-inset-top\)/);
+  assert.match(css, /prefers-reduced-motion: reduce/);
+  assert.match(css, /animation-duration:\s*1ms/);
+  assert.match(css, /data-composing="true"/);
+  assert.match(css, /contain:\s*paint/);
+  assert.match(conversation, /canAutoFocus/);
+  assert.match(conversation, /pointer: fine/);
+});
+
+test("icons remain one custom rounded line family", async () => {
+  const icons = await read("src/components/widget/WidgetIcon.tsx");
+
+  assert.match(icons, /strokeWidth="1\.85"/);
+  assert.match(icons, /strokeLinecap="round"/);
+  assert.match(icons, /strokeLinejoin="round"/);
+  for (const icon of [
+    "calculator",
+    "chat",
+    "phone",
+    "mail",
+    "spark",
+    "reset",
+    "send",
+  ]) {
+    assert.ok(icons.includes(`"${icon}"`), `Missing icon ${icon}`);
+  }
+});
+
+test("configurator remains a short five-step conversion flow", async () => {
+  const flow = await read("src/lib/assistantFlow.ts");
+  const match = flow.match(/export const STEPS:[\s\S]*?= \[([\s\S]*?)\];/);
+  assert.ok(match, "STEPS definition missing");
+  const steps = [...match[1].matchAll(/"([^"]+)"/g)].map((item) => item[1]);
+  assert.deepEqual(steps, [
+    "interest",
+    "industry",
+    "features",
+    "timeline",
+    "contact",
+  ]);
 });
