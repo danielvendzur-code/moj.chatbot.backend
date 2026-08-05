@@ -10,6 +10,27 @@ installConfiguratorAutoAdvance();
 const HOST_ID = "dv-assistant-root";
 const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
 
+const FONT_HREF =
+  "https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&display=swap";
+
+/*
+ * Inter Tight is the brand typeface — the same one mojchatbot.sk serves. The
+ * widget used to adopt the host page's font instead, so the assistant looked
+ * like a different product on every site it was embedded on. If this request
+ * fails the stack falls back to Inter and then the system sans; nothing about
+ * the layout depends on it.
+ */
+function ensureBrandFont(): void {
+  if (document.querySelector(`link[data-dv-assistant-font="true"]`)) return;
+
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = FONT_HREF;
+  link.crossOrigin = "anonymous";
+  link.dataset.dvAssistantFont = "true";
+  document.head.appendChild(link);
+}
+
 function ensureStylesheet(): void {
   if (!scriptSrc) return;
   const href = scriptSrc.replace(/widget\.js(\?.*)?$/, "widget.css$1");
@@ -30,6 +51,7 @@ function mount(): void {
   if (existing?.childElementCount) return;
 
   ensureStylesheet();
+  ensureBrandFont();
 
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
@@ -37,8 +59,6 @@ function mount(): void {
   host.setAttribute("data-dv-assistant-theme", "white-forest-lime");
   host.setAttribute("data-dv-assistant-quality", "competition-audited-system");
 
-  const siteFont = window.getComputedStyle(document.body).fontFamily;
-  if (siteFont) host.style.setProperty("--cw-font", siteFont);
   if (!existing) document.body.appendChild(host);
 
   createRoot(host).render(<AssistantWidget />);

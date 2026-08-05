@@ -6,40 +6,52 @@
 .cw-widget {
   --cw-white: #ffffff;
   --cw-paper: #f5f9f2;
-  --cw-surface: #f4f7ef;
-  --cw-surface-strong: #e9f0e2;
   --cw-mint: #edf6e7;
   --cw-lime: #b9ed4d;
   --cw-lime-bright: #d9ff78;
-  --cw-lime-deep: #9bd126;
-  --cw-lime-soft: #effbd5;
   --cw-green: #19834f;
   --cw-green-hover: #0f6a3e;
   --cw-forest: #0b2f20;
   --cw-ink: #132019;
+  --cw-ink-soft: #33423a;
   --cw-muted: #536159;
   --cw-faint: #7b887f;
   --cw-line: rgba(11, 47, 32, 0.13);
+  --cw-line-soft: rgba(11, 47, 32, 0.09);
   --cw-line-strong: rgba(25, 131, 79, 0.32);
   --cw-danger: #a93333;
   --cw-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --cw-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Glass, one recipe: a genuinely see-through fill, a blur that also lifts
+     saturation, and a rim that reads as a lit edge rather than a border.
+     0.38 is the point where host-page content stays visible through it —
+     at 0.72 the bubble simply looked white. */
+  --cw-glass-bg: rgba(255, 255, 255, 0.38);
+  --cw-glass-bg-strong: rgba(255, 255, 255, 0.52);
+  --cw-glass-blur: blur(26px) saturate(180%);
+  --cw-glass-rim:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 rgba(11, 47, 32, 0.05);
 
   /* One rounding scale, mirroring the website's geometry rules: pills for
-     chips and navigation, 20 px for controls and cards, 24 px for panels. */
+     chips, controls and answers, 20 px for text boxes, 24 px for panels. */
   --cw-r-pill: 999px;
   --cw-r-inner: 14px;
   --cw-r-card: 20px;
   --cw-r-panel: 24px;
-  --cw-font-stack: var(
-    --cw-font,
-    "Aptos",
+
+  /* Inter Tight is the website's typeface. The stack used to start at Aptos
+     and never named it, so the font index.html downloads was thrown away. */
+  --cw-font-stack:
+    "Inter Tight",
     "Inter",
-    "SF Pro Text",
+    ui-sans-serif,
+    system-ui,
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
-    sans-serif
-  );
+    sans-serif;
   color-scheme: light;
 }
 
@@ -126,10 +138,12 @@ html[data-embed="true"] .widget-preview__surface {
   border: 1px solid rgba(25, 131, 79, 0.22);
   border-radius: 50%;
   color: var(--cw-green);
-  background: rgba(255, 255, 255, 0.72);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  backdrop-filter: blur(18px) saturate(140%);
-  box-shadow: 0 20px 44px -26px rgba(11, 47, 32, 0.5);
+  background: var(--cw-glass-bg);
+  -webkit-backdrop-filter: var(--cw-glass-blur);
+  backdrop-filter: var(--cw-glass-blur);
+  box-shadow:
+    0 20px 44px -26px rgba(11, 47, 32, 0.5),
+    var(--cw-glass-rim);
   cursor: pointer;
   overflow: visible;
   transform: none;
@@ -158,10 +172,11 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-launcher:focus-visible {
   color: var(--cw-green-hover);
   border-color: rgba(25, 131, 79, 0.42);
-  background: rgba(255, 255, 255, 0.86);
+  background: var(--cw-glass-bg-strong);
   box-shadow:
     0 22px 48px -24px rgba(11, 47, 32, 0.56),
-    0 0 0 6px rgba(185, 237, 77, 0.2);
+    0 0 0 6px rgba(185, 237, 77, 0.2),
+    var(--cw-glass-rim);
   transform: none;
 }
 
@@ -309,7 +324,6 @@ html[data-embed="true"] .widget-preview__surface {
   flex: 0 0 46px;
   display: grid;
   place-items: center;
-  color: var(--cw-lime);
 }
 
 .cw-panel-head__mascot .bl--header {
@@ -317,10 +331,14 @@ html[data-embed="true"] .widget-preview__surface {
   height: 43px;
 }
 
+/* Every height here is a whole number on purpose. The mascot is 46 px and sets
+   the flex line; with the old 19.08 + 3 + 15 title the block centred at 4.46 px
+   and the odd-sized status dot landed on a half pixel, where antialiasing
+   flattened one edge and it read as clipped. 20 + 4 + 16 = 40 centres at 3. */
 .cw-panel-head__title {
   min-width: 0;
   display: grid;
-  gap: 3px;
+  gap: 4px;
 }
 
 .cw-panel-head__title h2 {
@@ -328,7 +346,7 @@ html[data-embed="true"] .widget-preview__surface {
   color: var(--cw-forest);
   font-size: 18px;
   font-weight: 790;
-  line-height: 1.06;
+  line-height: 20px;
   letter-spacing: -0.03em;
 }
 
@@ -338,30 +356,42 @@ html[data-embed="true"] .widget-preview__surface {
   margin: 0;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   color: var(--cw-green);
   font-size: 12px;
   font-weight: 620;
-  line-height: 1.25;
+  line-height: 16px;
 }
 
 .cw-panel-head__online i {
-  width: 7px;
-  height: 7px;
-  flex: 0 0 7px;
+  position: relative;
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
   border-radius: 50%;
   background: var(--cw-green);
-  animation: cw-online-breathe 2.8s ease-in-out infinite;
 }
 
-@keyframes cw-online-breathe {
-  0%, 100% {
-    opacity: 1;
-    box-shadow: 0 0 0 0 rgba(25, 131, 79, 0.34);
+/* The pulse is a separate ring that scales. Animating box-shadow spread on the
+   dot itself drew a halo straddling the same half pixel and looked scratched. */
+.cw-panel-head__online i::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--cw-green);
+  border-radius: 50%;
+  opacity: 0;
+  animation: cw-online-ring 2.8s ease-out infinite;
+}
+
+@keyframes cw-online-ring {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
   }
-  50% {
-    opacity: 0.72;
-    box-shadow: 0 0 0 4px rgba(25, 131, 79, 0);
+  70%, 100% {
+    opacity: 0;
+    transform: scale(2.4);
   }
 }
 
@@ -379,7 +409,7 @@ html[data-embed="true"] .widget-preview__surface {
   padding: 0;
   border: 1px solid transparent;
   border-radius: var(--cw-r-pill);
-  color: #526158;
+  color: var(--cw-muted);
   background: transparent;
   box-shadow: none;
   cursor: pointer;
@@ -393,7 +423,7 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-panel-head__actions button:focus-visible {
   color: var(--cw-green-hover);
   border-color: rgba(25, 131, 79, 0.18);
-  background: var(--cw-lime-soft);
+  background: var(--cw-mint);
 }
 
 .cw-panel-head__actions svg {
@@ -514,10 +544,13 @@ html[data-embed="true"] .widget-preview__surface {
   padding: 12px 13px 8px;
 }
 
-/* The one thing worth selling in the chat: a white card on the website's
-   lime wash, not a flat banner. */
+/* The one thing worth selling in the chat, as a sheet of glass: a mint tint
+   rising from the bottom, a lit top edge, and a hairline green rim. The old
+   lime radial on white just read as a smudge. */
 .cw-chat-builder {
   position: relative;
+  isolation: isolate;
+  overflow: hidden;
   width: 100%;
   min-height: 72px;
   display: grid;
@@ -525,28 +558,55 @@ html[data-embed="true"] .widget-preview__surface {
   align-items: center;
   gap: 12px;
   padding: 11px 16px 11px 12px;
-  border: 1px solid rgba(25, 131, 79, 0.2);
+  border: 1px solid rgba(25, 131, 79, 0.22);
   border-radius: var(--cw-r-panel);
   color: var(--cw-forest);
   text-align: left;
   background:
-    radial-gradient(circle at 4% 0%, rgba(185, 237, 77, 0.28), transparent 62%),
-    var(--cw-white);
-  box-shadow: 0 14px 30px -26px rgba(11, 47, 32, 0.5);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(237, 246, 231, 0.92));
+  -webkit-backdrop-filter: var(--cw-glass-blur);
+  backdrop-filter: var(--cw-glass-blur);
+  box-shadow:
+    0 14px 30px -26px rgba(11, 47, 32, 0.5),
+    var(--cw-glass-rim);
   cursor: pointer;
   transition:
     border-color 180ms var(--cw-ease),
-    background-color 180ms var(--cw-ease),
     box-shadow 180ms var(--cw-ease);
+}
+
+/* Specular sweep: one band of light crossing the glass on hover. */
+.cw-chat-builder::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0 auto 0 0;
+  width: 45%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.85),
+    transparent
+  );
+  transform: translateX(-140%);
+  pointer-events: none;
+}
+
+.cw-chat-builder:hover::after,
+.cw-chat-builder:focus-visible::after {
+  animation: cw-sheen 600ms var(--cw-ease);
+}
+
+@keyframes cw-sheen {
+  to { transform: translateX(340%); }
 }
 
 .cw-chat-builder:hover,
 .cw-chat-builder:focus-visible {
   border-color: var(--cw-green);
-  background:
-    radial-gradient(circle at 4% 0%, rgba(185, 237, 77, 0.38), transparent 62%),
-    var(--cw-paper);
-  box-shadow: 0 18px 34px -24px rgba(11, 47, 32, 0.56);
+  box-shadow:
+    0 18px 34px -24px rgba(11, 47, 32, 0.56),
+    var(--cw-glass-rim);
 }
 
 .cw-chat-builder__icon {
@@ -554,9 +614,10 @@ html[data-embed="true"] .widget-preview__surface {
   height: 44px;
   display: grid;
   place-items: center;
-  border-radius: var(--cw-r-inner);
+  border-radius: 50%;
   color: var(--cw-green);
-  background: var(--cw-mint);
+  background: var(--cw-white);
+  box-shadow: 0 2px 8px -4px rgba(11, 47, 32, 0.4);
   transition:
     color 180ms ease,
     background-color 180ms ease;
@@ -622,20 +683,55 @@ html[data-embed="true"] .widget-preview__surface {
   contain: paint;
 }
 
+/* Messages rise into place from the side they belong to. Chat UX guidance is
+   consistent that anything past ~300 ms starts reading as lag, so this and the
+   bubble's settle both stay at 240. */
 .cw-message-row {
   display: flex;
   align-items: flex-end;
   gap: 8px;
-  animation: cw-message-in 160ms ease both;
+  animation: cw-message-in 240ms var(--cw-ease) both;
 }
 
 @keyframes cw-message-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+    transform: translate3d(-10px, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 .cw-message-row--me {
   justify-content: flex-end;
+  animation-name: cw-message-in-me;
+}
+
+@keyframes cw-message-in-me {
+  from {
+    opacity: 0;
+    transform: translate3d(10px, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.cw-message-row .cw-message-wrap p {
+  animation: cw-bubble-settle 240ms var(--cw-ease) both;
+}
+
+@keyframes cw-bubble-settle {
+  from { transform: scale(0.96); }
+  to { transform: scale(1); }
+}
+
+/* A bubble that is still streaming must not re-run its settle on every token. */
+.cw-message-row[data-streaming="true"] .cw-message-wrap p {
+  animation: none;
 }
 
 .cw-avatar {
@@ -664,7 +760,7 @@ html[data-embed="true"] .widget-preview__surface {
   padding: 12px 14px;
   border: 1px solid rgba(11, 47, 32, 0.1);
   border-radius: var(--cw-r-card) var(--cw-r-card) var(--cw-r-card) 8px;
-  color: #33423a;
+  color: var(--cw-ink-soft);
   background: var(--cw-white);
   box-shadow: 0 10px 22px -22px rgba(11, 47, 32, 0.46);
   font-size: 14px;
@@ -706,20 +802,28 @@ html[data-embed="true"] .widget-preview__surface {
   background: var(--cw-white);
 }
 
+/* Dots bounce rather than blink. Movement reads as "someone is composing";
+   a fade reads as something loading. */
 .cw-typing i {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: var(--cw-green);
-  animation: cw-typing 900ms ease-in-out infinite;
+  animation: cw-typing 1.2s ease-in-out infinite;
 }
 
-.cw-typing i:nth-child(2) { animation-delay: 120ms; }
-.cw-typing i:nth-child(3) { animation-delay: 240ms; }
+.cw-typing i:nth-child(2) { animation-delay: 140ms; }
+.cw-typing i:nth-child(3) { animation-delay: 280ms; }
 
 @keyframes cw-typing {
-  0%, 65%, 100% { opacity: 0.25; }
-  32% { opacity: 1; }
+  0%, 60%, 100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
 }
 
 .cw-quick-replies {
@@ -829,6 +933,7 @@ html[data-embed="true"] .widget-preview__surface {
 }
 
 .cw-inputbar > .cw-send {
+  position: relative;
   width: 46px;
   height: 46px;
   min-width: 46px;
@@ -864,21 +969,37 @@ html[data-embed="true"] .widget-preview__surface {
 }
 
 .cw-inputbar > .cw-send:disabled {
-  color: #6a796f;
+  color: var(--cw-faint);
   border-color: rgba(11, 47, 32, 0.12);
-  background: var(--cw-surface-strong);
+  background: var(--cw-mint);
   box-shadow: none;
   opacity: 1;
   visibility: visible;
   cursor: default;
 }
 
-.cw-inputbar > .cw-send[data-waiting="true"] svg {
-  animation: cw-send-wait 850ms ease-in-out infinite;
+/* A real press. Without it the only confirmation was the message appearing,
+   which on a slow connection is a second later. */
+.cw-inputbar > .cw-send:active:not(:disabled) {
+  transform: scale(0.92);
+  transition: transform 120ms var(--cw-ease);
 }
 
-@keyframes cw-send-wait {
-  50% { opacity: 0.35; }
+/* Waiting swaps the glyph for a spinning ring — a blinking arrow looked like
+   a rendering fault rather than progress. */
+.cw-inputbar > .cw-send[data-waiting="true"] svg {
+  opacity: 0;
+}
+
+.cw-inputbar > .cw-send[data-waiting="true"]::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: var(--cw-white);
+  border-radius: 50%;
+  animation: cw-spin 700ms linear infinite;
 }
 
 /* Direct contact: three real chips. As a borderless text row they blended into
@@ -906,17 +1027,17 @@ html[data-embed="true"] .widget-preview__surface {
 
 .cw-direct-actions__grid a {
   min-width: 0;
-  min-height: 36px;
+  min-height: 42px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 6px 10px;
+  gap: 7px;
+  padding: 6px 12px;
   border: 1px solid rgba(25, 131, 79, 0.22);
   border-radius: var(--cw-r-pill);
   color: var(--cw-forest);
   background: var(--cw-white);
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 650;
   text-decoration: none;
   transition:
@@ -933,8 +1054,8 @@ html[data-embed="true"] .widget-preview__surface {
 }
 
 .cw-direct-actions__grid svg {
-  width: 15px;
-  height: 15px;
+  width: 16px;
+  height: 16px;
   color: var(--cw-green);
   transition: color 180ms ease;
 }
@@ -1155,6 +1276,33 @@ html[data-embed="true"] .widget-preview__surface {
   gap: 9px;
 }
 
+/* Options arrive one after another when a question opens. Only opacity and
+   transform move, so every card holds its space from the first frame and the
+   step never changes height mid-animation. */
+.cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > * {
+  animation: cw-option-in 360ms var(--cw-ease) both;
+}
+
+.cw-choice-grid > *:nth-child(1) { animation-delay: 60ms; }
+.cw-choice-grid > *:nth-child(2) { animation-delay: 120ms; }
+.cw-choice-grid > *:nth-child(3) { animation-delay: 180ms; }
+.cw-choice-grid > *:nth-child(4) { animation-delay: 240ms; }
+.cw-choice-grid > *:nth-child(5) { animation-delay: 300ms; }
+.cw-choice-grid > *:nth-child(6) { animation-delay: 360ms; }
+.cw-choice-grid > *:nth-child(7) { animation-delay: 420ms; }
+.cw-choice-grid > *:nth-child(n + 8) { animation-delay: 480ms; }
+
+@keyframes cw-option-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .cw-choice-grid--industry,
 .cw-choice-grid--timeline {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1192,6 +1340,8 @@ html[data-embed="true"] .widget-preview__surface {
   transform: none;
 }
 
+/* Selection reads as a lit capsule: a green rim plus a soft halo, rather than
+   a hard inset stroke that fought the rounded edge. */
 .cw-rowcard[data-selected="true"],
 .cw-rowcard[data-confirming="true"],
 .cw-scard[data-selected="true"],
@@ -1201,7 +1351,7 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-vcard[data-confirming="true"] {
   border-color: var(--cw-green);
   background: var(--cw-mint);
-  box-shadow: inset 0 0 0 1px var(--cw-green);
+  box-shadow: 0 0 0 3px rgba(25, 131, 79, 0.12);
 }
 
 /* The brief flash between "picked" and "next step" gets the darker green, so
@@ -1210,17 +1360,17 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-scard[data-confirming="true"],
 .cw-vcard[data-confirming="true"] {
   border-color: var(--cw-green-hover);
-  box-shadow: inset 0 0 0 1px var(--cw-green-hover);
+  box-shadow: 0 0 0 4px rgba(25, 131, 79, 0.18);
 }
 
 .cw-rowcard {
-  min-height: 72px;
+  min-height: 68px;
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr) 24px;
   align-items: center;
   gap: 12px;
-  padding: 11px 13px;
-  border-radius: var(--cw-r-card);
+  padding: 11px 18px 11px 11px;
+  border-radius: var(--cw-r-pill);
   text-align: left;
 }
 
@@ -1229,7 +1379,7 @@ html[data-embed="true"] .widget-preview__surface {
   height: 44px;
   display: grid;
   place-items: center;
-  border-radius: var(--cw-r-inner);
+  border-radius: 50%;
   color: var(--cw-green);
   background: var(--cw-mint);
 }
@@ -1260,49 +1410,58 @@ html[data-embed="true"] .widget-preview__surface {
   line-height: 1.35;
 }
 
+/* A capsule only reads as a capsule on a low element. As a 94 px tile with the
+   icon stacked over the label, a 999 px radius bowed the sides into an egg —
+   so the industry cards become a low row: icon, label, tick. The markup order
+   already matches, so this is columns, not new elements. It also takes about
+   110 px off the step, which lets the tip below fit without scrolling. */
 .cw-scard {
-  min-height: 94px;
+  min-height: 56px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 22px;
-  grid-template-rows: 40px auto;
+  grid-template-columns: 34px minmax(0, 1fr) 20px;
   align-items: center;
-  gap: 6px 8px;
-  padding: 13px;
-  border-radius: var(--cw-r-card);
+  gap: 9px;
+  padding: 8px 12px 8px 9px;
+  border-radius: var(--cw-r-pill);
   text-align: left;
 }
 
 .cw-scard__icon {
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   display: grid;
   place-items: center;
-  border-radius: var(--cw-r-inner);
+  border-radius: 50%;
   color: var(--cw-green);
   background: var(--cw-mint);
 }
 
+.cw-scard__icon svg {
+  width: 17px;
+  height: 17px;
+}
+
 .cw-scard b {
-  grid-column: 1 / -1;
+  min-width: 0;
   color: var(--cw-forest);
-  font-size: 12.8px;
+  font-size: 12.5px;
   font-weight: 720;
-  line-height: 1.24;
+  line-height: 1.22;
 }
 
 .cw-scard > .cw-selection-indicator {
-  grid-column: 2;
-  grid-row: 1;
+  width: 20px;
+  height: 20px;
 }
 
 .cw-opt {
-  min-height: 64px;
+  min-height: 62px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 24px;
   align-items: center;
   gap: 11px;
-  padding: 11px 13px 11px 15px;
-  border-radius: var(--cw-r-card);
+  padding: 11px 18px 11px 20px;
+  border-radius: var(--cw-r-pill);
   text-align: left;
 }
 
@@ -1321,19 +1480,19 @@ html[data-embed="true"] .widget-preview__surface {
 
 .cw-opt__body span {
   color: var(--cw-muted);
-  font-size: 11.4px;
+  font-size: 11.5px;
   font-weight: 490;
   line-height: 1.34;
 }
 
 .cw-vcard {
-  min-height: 88px;
+  min-height: 72px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 23px;
   align-items: center;
   gap: 10px;
-  padding: 13px;
-  border-radius: var(--cw-r-card);
+  padding: 12px 18px 12px 20px;
+  border-radius: var(--cw-r-pill);
   text-align: left;
 }
 
@@ -1352,7 +1511,7 @@ html[data-embed="true"] .widget-preview__surface {
 
 .cw-vcard__copy > span {
   color: var(--cw-muted);
-  font-size: 11.2px;
+  font-size: 11.5px;
   line-height: 1.34;
 }
 
@@ -1375,19 +1534,35 @@ html[data-embed="true"] .widget-preview__surface {
     transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* A small overshoot on the tick is the whole feedback loop for a tap: the
-   answer visibly lands rather than quietly changing colour. */
+/* Two things happen on a tap: the circle springs in, and the tick draws itself
+   stroke-first. That is the whole feedback loop — the answer visibly lands
+   rather than quietly changing colour. */
 .cw-selection-indicator[data-visible="true"] {
   color: var(--cw-white);
   border-color: var(--cw-green);
   background: var(--cw-green);
   opacity: 1;
-  animation: cw-tick-pop 220ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: cw-tick-pop 260ms var(--cw-spring) both;
 }
 
 @keyframes cw-tick-pop {
-  from { transform: scale(0.6); }
+  from { transform: scale(0.5); }
   to { transform: scale(1); }
+}
+
+/* 24 comfortably exceeds the check path's own length, so the dash simply
+   starts fully retracted and no measurement is needed. */
+.cw-selection-indicator svg path {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+}
+
+.cw-selection-indicator[data-visible="true"] svg path {
+  animation: cw-tick-draw 260ms var(--cw-ease) 60ms both;
+}
+
+@keyframes cw-tick-draw {
+  to { stroke-dashoffset: 0; }
 }
 
 .cw-selection-indicator svg {
@@ -1422,13 +1597,15 @@ html[data-embed="true"] .widget-preview__surface {
   box-shadow: 0 0 0 4px rgba(25, 131, 79, 0.07);
 }
 
+/* A multi-line block with a bulleted list, so it keeps the card radius — a
+   3 px accent bar against a 999 px corner renders as a crescent. */
 .cw-industry-tip {
   display: grid;
   gap: 8px;
   padding: 13px 14px;
   border-left: 3px solid var(--cw-lime);
   border-radius: var(--cw-r-card);
-  color: #335044;
+  color: var(--cw-ink-soft);
   background: var(--cw-mint);
 }
 
@@ -1454,7 +1631,7 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-calc-actions {
   flex: 0 0 auto;
   padding: 10px 13px max(13px, env(safe-area-inset-bottom));
-  border-top: 1px solid rgba(11, 47, 32, 0.09);
+  border-top: 1px solid var(--cw-line-soft);
   background: rgba(255, 255, 255, 0.97);
   box-shadow: 0 -16px 34px -34px rgba(11, 47, 32, 0.6);
 }
@@ -1638,7 +1815,7 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-summary {
   overflow: hidden;
   border: 1px solid var(--cw-line);
-  border-radius: var(--cw-r-card);
+  border-radius: var(--cw-r-pill);
   background: var(--cw-white);
 }
 
@@ -1650,7 +1827,7 @@ html[data-embed="true"] .widget-preview__surface {
   gap: 8px;
   padding: 10px 12px;
   color: var(--cw-green-hover);
-  font-size: 11.7px;
+  font-size: 11.5px;
   font-weight: 700;
   cursor: pointer;
   list-style: none;
@@ -1682,12 +1859,12 @@ html[data-embed="true"] .widget-preview__surface {
 }
 
 .cw-summary {
-  background: var(--cw-surface);
+  background: var(--cw-mint);
 }
 
 .cw-summary > summary small {
   color: var(--cw-muted);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 590;
 }
 
@@ -1710,7 +1887,7 @@ html[data-embed="true"] .widget-preview__surface {
 
 .cw-summary__row > span {
   color: var(--cw-muted);
-  font-size: 10.8px;
+  font-size: 11.5px;
   font-weight: 610;
 }
 
@@ -1735,7 +1912,7 @@ html[data-embed="true"] .widget-preview__surface {
   border-radius: var(--cw-r-inner);
   color: var(--cw-danger);
   background: #fff3f3;
-  font-size: 11.2px;
+  font-size: 11.5px;
   font-weight: 650;
   line-height: 1.35;
 }
@@ -1964,7 +2141,7 @@ html[data-embed="true"] .widget-preview__surface {
   border-radius: var(--cw-r-pill);
   color: var(--cw-white);
   background: var(--cw-green);
-  font-size: 11.7px;
+  font-size: 11.5px;
   font-weight: 710;
   cursor: pointer;
 }
@@ -2110,7 +2287,7 @@ html[data-embed="true"] .widget-preview__surface {
   }
 
   .cw-chat-builder__copy small {
-    font-size: 10.8px;
+    font-size: 11.5px;
   }
 
   .cw-message-wrap {
@@ -2140,8 +2317,8 @@ html[data-embed="true"] .widget-preview__surface {
   }
 
   .cw-scard {
-    min-height: 89px;
-    padding: 11px;
+    min-height: 54px;
+    padding: 7px 10px 7px 8px;
   }
 
   /* The segmented row stays a row on a phone too — stacking it into three

@@ -1,7 +1,9 @@
 const SINGLE_CHOICE_SELECTOR = ".cw-rowcard, .cw-scard, .cw-vcard";
 const BACK_SELECTOR = ".cw-progress__back, .cw-tabs, .cw-panel-head__actions";
 const INSTALL_FLAG = "cwConfiguratorAutoAdvance";
-const CONFIRM_MS = 520;
+/* Long enough for the tick to draw and register, short enough that the flow
+   does not feel like it is thinking about it. 520 ms read as a stall. */
+const CONFIRM_MS = 320;
 const POINTER_RELEASE_DISTANCE = 8;
 
 export function installConfiguratorAutoAdvance(): void {
