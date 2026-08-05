@@ -9,7 +9,7 @@ const collectRuntimeErrors = (page) => {
   return errors;
 };
 
-test("desktop visitor sees stable chip labels and completes the configurator", async ({
+test("desktop visitor sees the website identity and stable configurator choices", async ({
   page,
 }) => {
   const errors = collectRuntimeErrors(page);
@@ -18,15 +18,36 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
 
   const launcher = page.getByTestId("widget-launcher");
   await expect(launcher).toBeVisible();
+  const launcherSurface = await launcher.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      background: style.backgroundColor,
+      backdrop: style.backdropFilter || style.webkitBackdropFilter,
+    };
+  });
+  expect(launcherSurface.background).toBe("rgba(11, 47, 32, 0.76)");
+  expect(launcherSurface.backdrop).toContain("blur(18px)");
+  await expect(launcher.locator(".bl__outer")).toBeVisible();
+  await expect(launcher.locator(".bl__inner")).toBeVisible();
   await launcher.click();
 
   const panel = page.locator(".cw-panel");
   await expect(panel).toBeVisible();
   await expect(page.getByRole("heading", { name: "Môj Chatbot" })).toBeVisible();
+  await expect(page.getByText("Online", { exact: true })).toBeVisible();
+  await expect(page.getByText("Poradca a konfigurátor pre váš web")).toHaveCount(0);
   await expect(page.getByText("4 otázky · približne 1 minúta")).toBeVisible();
   await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
-  await expect(page.locator(".cw-panel-head .bl__bubble")).toBeVisible();
-  await expect(page.locator(".cw-panel-head .bl__monogram")).toBeVisible();
+  await expect(page.locator(".cw-panel-head .bl__outer")).toBeVisible();
+  await expect(page.locator(".cw-panel-head .bl__inner")).toBeVisible();
+
+  const tabs = page.locator(".cw-tabs");
+  const thumb = tabs.locator(".cw-tabs__thumb");
+  await expect(tabs).toHaveCSS("border-radius", "999px");
+  await expect(tabs).toHaveCSS("background-color", "rgb(16, 39, 28)");
+  await expect(thumb).toHaveCSS("background-color", "rgb(179, 233, 208)");
+  await expect(tabs.locator("svg")).toHaveCount(0);
+  const thumbBefore = await thumb.evaluate((element) => getComputedStyle(element).transform);
 
   const quickReply = page.getByRole("button", {
     name: "Kde mi to ušetrí čas?",
@@ -43,15 +64,41 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   await page.getByTestId("tab-calculator").click();
   await expect(page.getByTestId("calculator-view")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Čo má web robiť za vás?" })).toBeVisible();
+  const thumbAfter = await thumb.evaluate((element) => getComputedStyle(element).transform);
+  expect(thumbAfter).not.toBe(thumbBefore);
+  await expect(page.getByTestId("tab-calculator")).toHaveCSS("color", "rgb(11, 47, 32)");
 
   const interestChoice = page.getByTestId("interest-chatbot");
   const interestLabel = interestChoice.locator("b");
   await interestChoice.click();
+  await expect(interestChoice).toHaveAttribute("data-selected", "true");
   await expect(interestLabel).toBeVisible();
   await expect(interestLabel).toHaveText(/\S+/);
   await page.waitForTimeout(300);
-  await expect(interestChoice).toBeVisible();
-  await expect(interestLabel).toHaveText(/\S+/);
+  const selectedVisual = await interestChoice.evaluate((element) => {
+    const style = getComputedStyle(element);
+    const label = element.querySelector("b");
+    const labelStyle = label ? getComputedStyle(label) : null;
+    const step = element.closest(".cw-calc-step");
+    return {
+      opacity: style.opacity,
+      visibility: style.visibility,
+      backgroundColor: style.backgroundColor,
+      backgroundImage: style.backgroundImage,
+      labelOpacity: labelStyle?.opacity,
+      labelVisibility: labelStyle?.visibility,
+      stepOpacity: step ? getComputedStyle(step).opacity : null,
+    };
+  });
+  expect(selectedVisual).toEqual({
+    opacity: "1",
+    visibility: "visible",
+    backgroundColor: "rgb(234, 242, 232)",
+    backgroundImage: "none",
+    labelOpacity: "1",
+    labelVisibility: "visible",
+    stepOpacity: "1",
+  });
   await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
 
   await page.getByTestId("industry-sluzby").click();
@@ -86,9 +133,7 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   expect(errors).toEqual([]);
 });
 
-test("mobile mode switching never opens the software keyboard unexpectedly", async ({
-  browser,
-}) => {
+test("mobile switch and compact configurator remain usable", async ({ browser }) => {
   const context = await browser.newContext({
     viewport: { width: 390, height: 844 },
     screen: { width: 390, height: 844 },
@@ -115,8 +160,10 @@ test("mobile mode switching never opens the software keyboard unexpectedly", asy
   expect(Math.round(box.width)).toBe(viewport.width);
   expect(Math.round(box.height)).toBe(viewport.height);
 
-  await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "17px");
+  await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "999px");
   await page.getByTestId("tab-calculator").click();
+  await expect(page.locator(".cw-progress")).toBeVisible();
+  await expect(page.locator(".cw-calc-actions")).toBeVisible();
   await page.getByTestId("tab-assistant").click();
   await page.waitForTimeout(120);
 
