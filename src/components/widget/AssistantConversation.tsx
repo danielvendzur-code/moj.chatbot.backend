@@ -404,6 +404,7 @@ export function AssistantConversation({
         </button>
       </div>
 
+      {/* The former "Radšej priamo?" label is intentionally omitted. */}
       <nav className="cw-direct-actions" aria-label="Priamy kontakt">
         <div className="cw-direct-actions__grid">
           <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
