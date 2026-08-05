@@ -3,35 +3,28 @@ type BubbleLogoProps = {
 };
 
 /*
- * Compact Môj Chatbot symbol designed specifically for the widget.
- * A calm rounded speech-bubble frame, a simple M and a right-side tail stay
- * readable from the launcher down to the small message avatar. The mark has
- * no filled tile, face, eyes or duplicate outline.
+ * Compact Môj Chatbot mark for small UI surfaces.
+ * The speech bubble is the silhouette and the white M is cut directly into it,
+ * so the logo remains legible in the launcher, header and 23 px chat avatar.
+ * The tail intentionally sits on the right and the mark has no plate, double
+ * outline or decorative backing.
  */
-const FRAME =
-  "M15 12.5H49C53.7 12.5 57.5 16.3 57.5 21V38.5" +
-  "C57.5 43.2 53.7 47 49 47H42.5L50.5 55L36.5 47H15" +
-  "C10.3 47 6.5 43.2 6.5 38.5V21C6.5 16.3 10.3 12.5 15 12.5Z";
+const BUBBLE =
+  "M20 8H92C101.94 8 110 16.06 110 26V71C110 80.94 101.94 89 92 89H82L100 106L69 89H20C10.06 89 2 80.94 2 71V26C2 16.06 10.06 8 20 8Z";
 
-const MONOGRAM = "M18 36V23L32 34.5L46 23V36";
+const MONOGRAM =
+  "M24 67V31L48 53C50.4 55.2 53.6 55.2 56 53L80 31V67";
 
 export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
   return (
     <span className={`bl bl--${size}`} aria-hidden="true">
-      <svg viewBox="0 0 64 64" fill="none" focusable="false">
-        <path
-          className="bl__frame"
-          d={FRAME}
-          stroke="currentColor"
-          strokeWidth="4.4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+      <svg viewBox="0 0 112 112" fill="none" focusable="false">
+        <path className="bl__bubble" d={BUBBLE} fill="currentColor" />
         <path
           className="bl__monogram"
           d={MONOGRAM}
-          stroke="currentColor"
-          strokeWidth="4.4"
+          stroke="white"
+          strokeWidth="8"
           strokeLinecap="round"
           strokeLinejoin="round"
         />

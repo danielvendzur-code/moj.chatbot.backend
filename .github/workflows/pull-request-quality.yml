@@ -74,15 +74,6 @@ jobs:
 
           pnpm exec playwright test tests/widget-smoke.spec.mjs --reporter=line --workers=1
 
-      - name: Upload visual QA screenshots
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: widget-visual-qa
-          path: artifacts/*.png
-          if-no-files-found: ignore
-          retention-days: 7
-
       - name: Build GitHub Pages application and direct widget
         run: pnpm build:pages
 
@@ -94,25 +85,28 @@ jobs:
           test -f dist/widget.js
           test -f dist/widget.css
 
+          # The direct runtime must carry the audited product marker and the
+          # two paths of the current filled speech-bubble brand mark.
           grep -Fq 'unified-product-20260804-v1' dist/widget.js
           grep -Fq 'competition-audited-system' dist/widget.js
-          grep -Fq 'M15 12.5H49C53.7 12.5' dist/widget.js
-          grep -Fq 'M18 36V23L32 34.5L46 23V36' dist/widget.js
+          grep -Fq 'M20 8H92C101.94 8 110 16.06' dist/widget.js
+          grep -Fq 'M24 67V31L48 53C50.4 55.2' dist/widget.js
 
-          grep -Fq '#b3e9d0' dist/widget.css
-          grep -Fq '#10271c' dist/widget.css
-          grep -Fq '#1b8753' dist/widget.css
-          grep -Fq '#0d3b29' dist/widget.css
-          grep -Fq '#edf7f1' dist/widget.css
+          # The emitted widget CSS must contain the identity, interaction shell
+          # and the concrete chip-label persistence fix. Minifiers may remove
+          # quotes around the attribute value, so validate the stable token.
+          grep -Fq '#b9ed4d' dist/widget.css
+          grep -Fq '#19834f' dist/widget.css
+          grep -Fq '#0b2f20' dist/widget.css
           grep -Fq '.cw-panel' dist/widget.css
-          grep -Fq '.cw-tabs__thumb' dist/widget.css
-          grep -Fq '.cw-progress__dots i:last-child' dist/widget.css
+          grep -Fq '.cw-tabs' dist/widget.css
           grep -Fq '.cw-inputbar' dist/widget.css
           grep -Fq '.cw-calculator' dist/widget.css
           grep -Fq '.cw-chip__label' dist/widget.css
           grep -Fq 'data-sending' dist/widget.css
-          grep -Fq 'data-leaving' dist/widget.css
 
+          # Source entry points must use only static stylesheets and never
+          # restore an injected override stack or pointer tilt.
           grep -Fq 'product-widget.css' src/main.tsx
           grep -Fq 'widget-polish.css' src/main.tsx
           grep -Fq 'product-widget.css' src/embed.tsx

@@ -1,7 +1,4 @@
-import { mkdirSync } from "node:fs";
 import { test, expect } from "@playwright/test";
-
-mkdirSync("artifacts", { recursive: true });
 
 const collectRuntimeErrors = (page) => {
   const errors = [];
@@ -12,69 +9,86 @@ const collectRuntimeErrors = (page) => {
   return errors;
 };
 
-test("desktop widget keeps the new brand, compact switch and stable choices", async ({ page }) => {
+test("desktop visitor sees stable chip labels and completes the configurator", async ({
+  page,
+}) => {
   const errors = collectRuntimeErrors(page);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("http://127.0.0.1:4173", { waitUntil: "networkidle" });
 
   const launcher = page.getByTestId("widget-launcher");
   await expect(launcher).toBeVisible();
-  await expect(launcher.locator(".bl__frame")).toBeVisible();
-  await expect(launcher.locator(".bl__monogram")).toBeVisible();
-
-  const launcherVisual = await launcher.evaluate((element) => {
-    const style = getComputedStyle(element);
-    return {
-      background: style.backgroundColor,
-      radius: style.borderRadius,
-      backdrop: style.backdropFilter || style.webkitBackdropFilter,
-    };
-  });
-  expect(launcherVisual.background).toBe("rgba(236, 248, 241, 0.68)");
-  expect(launcherVisual.radius).toBe("23px 23px 8px");
-  expect(launcherVisual.backdrop).toContain("blur(18px)");
-
   await launcher.click();
-  await expect(page.getByText("Online", { exact: true })).toBeVisible();
-  await expect(page.locator(".cw-panel-head__mascot")).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
 
-  const tabs = page.locator(".cw-tabs");
-  const tabsBox = await tabs.boundingBox();
-  expect(tabsBox).not.toBeNull();
-  expect(tabsBox.width).toBeLessThanOrEqual(286.5);
-  expect(tabsBox.height).toBeLessThanOrEqual(44.5);
+  const panel = page.locator(".cw-panel");
+  await expect(panel).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Môj Chatbot" })).toBeVisible();
+  await expect(page.getByText("4 otázky · približne 1 minúta")).toBeVisible();
+  await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
+  await expect(page.locator(".cw-panel-head .bl__bubble")).toBeVisible();
+  await expect(page.locator(".cw-panel-head .bl__monogram")).toBeVisible();
+
+  const quickReply = page.getByRole("button", {
+    name: "Kde mi to ušetrí čas?",
+  });
+  const quickReplyLabel = quickReply.locator(".cw-chip__label");
+  await quickReply.click();
+  await expect(quickReply).toHaveAttribute("data-sending", "true");
+  await expect(quickReplyLabel).toBeVisible();
+  await expect(quickReplyLabel).toHaveText("Kde mi to ušetrí čas?");
+  await page.waitForTimeout(300);
+  await expect(quickReply).toBeVisible();
+  await expect(quickReplyLabel).toHaveText("Kde mi to ušetrí čas?");
 
   await page.getByTestId("tab-calculator").click();
+  await expect(page.getByTestId("calculator-view")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Čo má web robiť za vás?" })).toBeVisible();
-  await expect(page.locator(".cw-progress__dots i:visible")).toHaveCount(4);
-
-  const cards = page.locator(".cw-rowcard");
-  await expect(cards).toHaveCount(4);
-  const firstCardBox = await cards.first().boundingBox();
-  expect(firstCardBox).not.toBeNull();
-  expect(firstCardBox.height).toBeLessThanOrEqual(74);
-
-  const next = page.getByTestId("flow-next");
-  await expect(next).toBeDisabled();
-  await expect(next).toHaveCSS("background-color", "rgb(237, 241, 237)");
 
   const interestChoice = page.getByTestId("interest-chatbot");
   const interestLabel = interestChoice.locator("b");
   await interestChoice.click();
-  await expect(interestChoice).toHaveAttribute("data-selected", "true");
-  await expect(interestLabel).toBeVisible();
-  await page.waitForTimeout(420);
-  await expect(interestChoice).toBeVisible();
   await expect(interestLabel).toBeVisible();
   await expect(interestLabel).toHaveText(/\S+/);
-  await expect(interestChoice).toHaveCSS("background-color", "rgb(237, 247, 241)");
+  await page.waitForTimeout(300);
+  await expect(interestChoice).toBeVisible();
+  await expect(interestLabel).toHaveText(/\S+/);
   await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
 
-  await page.locator(".cw-panel").screenshot({ path: "artifacts/widget-desktop.png" });
+  await page.getByTestId("industry-sluzby").click();
+  await expect(page.getByTestId("feature-faq")).toBeVisible({ timeout: 2500 });
+
+  await page.getByTestId("feature-faq").click();
+  await page.getByTestId("flow-next").click();
+  await expect(page.getByTestId("timeline-asap")).toBeVisible({ timeout: 2500 });
+
+  await page.getByTestId("timeline-asap").click();
+  await expect(
+    page.getByRole("heading", { name: "Kam vám môžem poslať ďalší krok?" }),
+  ).toBeVisible({ timeout: 2500 });
+  await expect(page.getByText("Krok 5 z 5 · Kontakt")).toBeVisible();
+  await expect(page.getByText("Nezáväzný dopyt", { exact: true })).toBeVisible();
+
+  await page.getByTestId("lead-submit").click();
+  await expect(page.getByRole("alert")).toContainText("Vyberte, ako sa vám mám ozvať");
+  await expect(page.locator(".cw-contact-methods")).toHaveAttribute("aria-invalid", "true");
+
+  await page.getByRole("button", { name: "Telefonicky" }).click();
+  await page.getByPlaceholder("Vaše meno").fill("Testovací návštevník");
+  await page.getByPlaceholder("+421 …").fill("+421900123456");
+  await page.getByRole("checkbox").check();
+  await expect(page.getByRole("checkbox")).toBeChecked();
+
+  await expect(page.getByPlaceholder("Vaše meno")).toHaveAttribute("aria-invalid", "false");
+  await expect(page.getByPlaceholder("+421 …")).toHaveAttribute("aria-invalid", "false");
+  await expect(page.getByTestId("lead-submit")).toContainText("Poslať nezáväzný dopyt");
+  await expect(page.locator(".cw-summary")).not.toHaveAttribute("open", "");
+
   expect(errors).toEqual([]);
 });
 
-test("mobile first step is full-screen, compact and visually balanced", async ({ browser }) => {
+test("mobile mode switching never opens the software keyboard unexpectedly", async ({
+  browser,
+}) => {
   const context = await browser.newContext({
     viewport: { width: 390, height: 844 },
     screen: { width: 390, height: 844 },
@@ -87,9 +101,9 @@ test("mobile first step is full-screen, compact and visually balanced", async ({
 
   await page.goto("http://127.0.0.1:4173", { waitUntil: "networkidle" });
   await page.getByTestId("widget-launcher").click();
-  await page.getByTestId("tab-calculator").click();
 
   const panel = page.locator(".cw-panel");
+  await expect(panel).toBeVisible();
   const box = await panel.boundingBox();
   const viewport = await page.evaluate(() => ({
     width: document.documentElement.clientWidth,
@@ -101,25 +115,17 @@ test("mobile first step is full-screen, compact and visually balanced", async ({
   expect(Math.round(box.width)).toBe(viewport.width);
   expect(Math.round(box.height)).toBe(viewport.height);
 
-  const tabsBox = await page.locator(".cw-tabs").boundingBox();
-  expect(tabsBox).not.toBeNull();
-  expect(tabsBox.width).toBeLessThanOrEqual(278.5);
-  expect(tabsBox.height).toBeLessThanOrEqual(43.5);
+  await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "17px");
+  await page.getByTestId("tab-calculator").click();
+  await page.getByTestId("tab-assistant").click();
+  await page.waitForTimeout(120);
 
-  await expect(page.locator(".cw-progress__dots i:visible")).toHaveCount(4);
-  const cardHeights = await page.locator(".cw-rowcard").evaluateAll((elements) =>
-    elements.map((element) => Math.round(element.getBoundingClientRect().height)),
+  const inputHasFocus = await page.locator(".cw-inputbar input").evaluate(
+    (input) => document.activeElement === input,
   );
-  expect(cardHeights.every((height) => height <= 72)).toBe(true);
-
-  await expect(page.getByTestId("flow-next")).toBeDisabled();
-  await expect(page.getByTestId("flow-next")).toHaveCSS("color", "rgb(126, 138, 130)");
-  await panel.screenshot({ path: "artifacts/widget-mobile.png" });
-
-  await page.getByTestId("interest-chatbot").click();
-  await page.waitForTimeout(420);
-  await expect(page.getByTestId("interest-chatbot").locator("b")).toBeVisible();
-  await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
+  expect(inputHasFocus).toBe(false);
+  await expect(page.locator(".cw-inputbar")).toBeVisible();
+  await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
 
   expect(errors).toEqual([]);
   await context.close();

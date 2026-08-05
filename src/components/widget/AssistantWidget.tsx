@@ -217,7 +217,7 @@ export function AssistantWidget({
             </span>
             <div className="cw-panel-head__title">
               <h2 id="chameleon-widget-title">Môj Chatbot</h2>
-              <p><span className="cw-online-dot" aria-hidden="true" />Online</p>
+              <p>Poradca a konfigurátor pre váš web</p>
             </div>
             <div className="cw-panel-head__actions">
               <button
@@ -248,7 +248,6 @@ export function AssistantWidget({
             role="tablist"
             data-mode={mode}
           >
-            <span className="cw-tabs__thumb" aria-hidden="true" />
             <button
               id="cw-tab-assistant"
               type="button"
@@ -259,6 +258,7 @@ export function AssistantWidget({
               aria-controls="cw-panel-assistant"
               onClick={() => switchMode("assistant")}
             >
+              <WidgetIcon name="chat" />
               <span>Chatbot</span>
             </button>
             <button
@@ -271,6 +271,7 @@ export function AssistantWidget({
               aria-controls="cw-panel-calculator"
               onClick={() => switchMode("calculator")}
             >
+              <WidgetIcon name="calculator" />
               <span>Konfigurátor</span>
             </button>
           </nav>
