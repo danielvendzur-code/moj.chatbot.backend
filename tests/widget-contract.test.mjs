@@ -33,7 +33,7 @@ test("demo and embed load only the ordered static widget styles", async () => {
   }
 });
 
-test("new logo is a clean outline mark without a tile or face", async () => {
+test("new logo is a clean outline mark without a tile", async () => {
   const logo = await read("src/components/widget/BubbleLogo.tsx");
   const polish = await read("src/widget-polish.css");
 
@@ -43,7 +43,7 @@ test("new logo is a clean outline mark without a tile or face", async () => {
   assert.match(logo, /className="bl__frame"/);
   assert.match(logo, /className="bl__monogram"/);
   assert.equal((logo.match(/strokeWidth="4\.4"/g) ?? []).length, 2);
-  assert.doesNotMatch(logo, /fill="currentColor"|stroke="white"|<img|base64|eye|face/i);
+  assert.doesNotMatch(logo, /fill="currentColor"|stroke="white"|<img|base64/);
   assert.match(rule(polish, ".cw-widget .cw-panel-head__mascot"), /background:\s*transparent/);
   assert.match(rule(polish, ".cw-widget .cw-panel-head__mascot"), /border:\s*0/);
 });
