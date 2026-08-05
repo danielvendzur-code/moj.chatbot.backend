@@ -17,7 +17,7 @@ test("the visual system is static, ordered and free of injected overrides", asyn
   assert.doesNotMatch(main, /installLimeWhiteStyles|installProductRefinement|premiumTilt/);
   assert.doesNotMatch(embed, /installLimeWhiteStyles|installProductRefinement|premiumTilt/);
   assert.match(css, /MÔJ CHATBOT — competition-audited product interface/);
-  assert.match(polish, /disappearing chip labels/);
+  assert.match(polish, /Website-matched finishing layer/);
   assert.match(polish, /\.cw-widget \.cw-chip__label/);
   assert.match(polish, /\.cw-chip\[data-sending="true"\]/);
   assert.doesNotMatch(css, /html:root body \.cw-widget|\[class\]\[class\]/);
@@ -34,30 +34,33 @@ test("the visual system is static, ordered and free of injected overrides", asyn
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*scroll-behavior: auto !important/);
 });
 
-test("launcher and compact brand mark stay clear and motionless", async () => {
+test("launcher uses the exact website mark on translucent dark glass", async () => {
   const css = await read("src/product-widget.css");
   const polish = await read("src/widget-polish.css");
   const logo = await read("src/components/widget/BubbleLogo.tsx");
 
-  assert.match(logo, /className="bl__bubble"/);
-  assert.match(logo, /fill="currentColor"/);
-  assert.match(logo, /className="bl__monogram"/);
-  assert.match(logo, /stroke="white"/);
-  assert.match(logo, /L100 106L69 89/);
-  assert.doesNotMatch(logo, /bl__optical-weight|strokeWidth="4\.3"|strokeWidth="5\.6"/);
-  assert.match(polish, /\.cw-widget \.cw-launcher,[\s\S]*color:\s*var\(--cw-green\)/);
+  assert.match(logo, /className="bl__outer"/);
+  assert.match(logo, /className="bl__inner"/);
+  assert.match(logo, /stroke="currentColor"/);
+  assert.equal((logo.match(/strokeWidth="7"/g) ?? []).length, 2);
+  assert.match(logo, /L33\.5 104\.5L57\.5 81\.1/);
+  assert.doesNotMatch(logo, /bl__bubble|bl__monogram|fill="currentColor"|stroke="white"/);
+  assert.match(polish, /\.cw-widget \.cw-launcher\s*\{[\s\S]*color:\s*var\(--cw-lime\)/);
+  assert.match(polish, /background:\s*rgba\(11, 47, 32, 0\.76\)/);
+  assert.match(polish, /backdrop-filter:\s*blur\(18px\)/);
   assert.match(css, /\.cw-launcher:hover,[\s\S]*?transform:\s*none;/);
   assert.match(css, /\.cw-launcher:active[\s\S]*?transform:\s*none;/);
   assert.doesNotMatch(css, /@keyframes[^}]*bounce/i);
   assert.doesNotMatch(polish, /\.bl[^}]*transform:/s);
 });
 
-test("header contains a concrete product purpose rather than fake availability", async () => {
+test("header status contains only Online", async () => {
   const widget = await read("src/components/widget/AssistantWidget.tsx");
 
   assert.match(widget, /Môj Chatbot/);
-  assert.match(widget, /Poradca a konfigurátor pre váš web/);
-  assert.doesNotMatch(widget, /Online|availability|Odpovedám hneď/);
+  assert.match(widget, /cw-online-dot/);
+  assert.match(widget, />Online</);
+  assert.doesNotMatch(widget, /Poradca a konfigurátor pre váš web|Odpovedám hneď|availability/);
 });
 
 test("backward step navigation releases the tall-step height lock quickly", async () => {
