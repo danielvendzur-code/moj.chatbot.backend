@@ -363,36 +363,23 @@ html[data-embed="true"] .widget-preview__surface {
   line-height: 16px;
 }
 
+/* A solid dot inside a still halo. Every pulsing variant of this looked wrong:
+   growing the box-shadow spread smeared it across a half pixel, and a scaling
+   ::after ring scaled its own border with it, so mid-animation the dot sat in
+   a thick pale donut. Nothing here changes size, so nothing can look cut. */
 .cw-panel-head__online i {
-  position: relative;
   width: 8px;
   height: 8px;
   flex: 0 0 8px;
   border-radius: 50%;
   background: var(--cw-green);
+  box-shadow: 0 0 0 3px rgba(25, 131, 79, 0.16);
+  animation: cw-online-breathe 3s ease-in-out infinite;
 }
 
-/* The pulse is a separate ring that scales. Animating box-shadow spread on the
-   dot itself drew a halo straddling the same half pixel and looked scratched. */
-.cw-panel-head__online i::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border: 1.5px solid var(--cw-green);
-  border-radius: 50%;
-  opacity: 0;
-  animation: cw-online-ring 2.8s ease-out infinite;
-}
-
-@keyframes cw-online-ring {
-  0% {
-    opacity: 0.5;
-    transform: scale(1);
-  }
-  70%, 100% {
-    opacity: 0;
-    transform: scale(2.4);
-  }
+@keyframes cw-online-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.62; }
 }
 
 .cw-panel-head__actions {
@@ -826,31 +813,28 @@ html[data-embed="true"] .widget-preview__surface {
   }
 }
 
+/* Full-width chips. Side by side the questions wrapped onto two cramped lines
+   and the last one sat alone across the bottom, which read as a mistake. */
 .cw-quick-replies {
   flex: 0 0 auto;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 7px;
+  gap: 6px;
   padding: 0 13px 10px;
-}
-
-.cw-quick-replies .cw-chip:last-child:nth-child(odd) {
-  grid-column: 1 / -1;
 }
 
 .cw-quick-replies .cw-chip {
   min-width: 0;
-  min-height: 42px;
+  min-height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 9px 15px;
+  padding: 8px 16px;
   border: 1px solid rgba(25, 131, 79, 0.26);
   border-radius: var(--cw-r-pill);
   color: var(--cw-forest);
   background: var(--cw-white);
   box-shadow: 0 8px 18px -16px rgba(11, 47, 32, 0.4);
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 670;
   line-height: 1.2;
   text-align: center;
@@ -1163,6 +1147,79 @@ html[data-embed="true"] .widget-preview__surface {
   background: var(--cw-green-hover);
 }
 
+/* Holds a scroll container and pins the scroll cue to its bottom edge. Inside
+   the scroller the button would scroll away from the content it points at. */
+.cw-scroll-shell {
+  position: relative;
+  min-height: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.cw-scroll-fade {
+  position: absolute;
+  z-index: 1;
+  inset: auto 0 0 0;
+  height: 56px;
+  background: linear-gradient(180deg, transparent, var(--cw-paper) 78%);
+  pointer-events: none;
+  animation: cw-fade-in 220ms ease both;
+}
+
+@keyframes cw-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.cw-scroll-cue {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 8px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(25, 131, 79, 0.24);
+  border-radius: 50%;
+  color: var(--cw-green);
+  background: var(--cw-white);
+  box-shadow: 0 10px 24px -12px rgba(11, 47, 32, 0.5);
+  cursor: pointer;
+  transform: translateX(-50%);
+  animation: cw-cue-in 220ms var(--cw-ease) both;
+  transition:
+    color 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+.cw-scroll-cue:hover,
+.cw-scroll-cue:focus-visible {
+  color: var(--cw-white);
+  border-color: var(--cw-green-hover);
+  background: var(--cw-green-hover);
+}
+
+.cw-scroll-cue svg {
+  width: 17px;
+  height: 17px;
+  transform: rotate(90deg);
+}
+
+@keyframes cw-cue-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 6px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
 .cw-calc-body {
   min-height: 0;
   flex: 1 1 auto;
@@ -1248,7 +1305,7 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-q {
   margin: 0;
   color: var(--cw-forest);
-  font-size: clamp(22px, 5.5vw, 26px);
+  font-size: clamp(19px, 4.6vw, 22px);
   font-weight: 800;
   line-height: 1.08;
   letter-spacing: -0.04em;
@@ -1260,9 +1317,9 @@ html[data-embed="true"] .widget-preview__surface {
   margin: 0;
   max-width: 48ch;
   color: var(--cw-muted);
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 490;
-  line-height: 1.48;
+  line-height: 1.44;
   text-wrap: pretty;
 }
 
@@ -1279,18 +1336,22 @@ html[data-embed="true"] .widget-preview__surface {
 /* Options arrive one after another when a question opens. Only opacity and
    transform move, so every card holds its space from the first frame and the
    step never changes height mid-animation. */
+/* The delays must carry the same prefix as the shorthand above them. The
+   `animation` shorthand resets animation-delay to 0s, and it sat on a
+   higher-specificity selector than the bare `.cw-choice-grid > *:nth-child()`
+   rules — so every option animated at once and there was no stagger at all. */
 .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > * {
-  animation: cw-option-in 360ms var(--cw-ease) both;
+  animation: cw-option-in 380ms var(--cw-ease) both;
 }
 
-.cw-choice-grid > *:nth-child(1) { animation-delay: 60ms; }
-.cw-choice-grid > *:nth-child(2) { animation-delay: 120ms; }
-.cw-choice-grid > *:nth-child(3) { animation-delay: 180ms; }
-.cw-choice-grid > *:nth-child(4) { animation-delay: 240ms; }
-.cw-choice-grid > *:nth-child(5) { animation-delay: 300ms; }
-.cw-choice-grid > *:nth-child(6) { animation-delay: 360ms; }
-.cw-choice-grid > *:nth-child(7) { animation-delay: 420ms; }
-.cw-choice-grid > *:nth-child(n + 8) { animation-delay: 480ms; }
+.cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(1) { animation-delay: 70ms; }
+.cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(2) { animation-delay: 140ms; }
+.cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(3) { animation-delay: 210ms; }
+.cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(4) { animation-delay: 280ms; }
+.cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(5) { animation-delay: 350ms; }
+.cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(6) { animation-delay: 420ms; }
+.cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(7) { animation-delay: 490ms; }
+.cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(n + 8) { animation-delay: 560ms; }
 
 @keyframes cw-option-in {
   from {
@@ -1303,10 +1364,9 @@ html[data-embed="true"] .widget-preview__surface {
   }
 }
 
-.cw-choice-grid--industry,
-.cw-choice-grid--timeline {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
+/* One column, full width. Two columns left half the step empty and squeezed
+   labels like "Reštaurácia a ubytovanie" onto two cramped lines; at full width
+   every label sits on one line and the capsules fill the space they are in. */
 
 .cw-rowcard,
 .cw-scard,
@@ -1416,19 +1476,19 @@ html[data-embed="true"] .widget-preview__surface {
    already matches, so this is columns, not new elements. It also takes about
    110 px off the step, which lets the tip below fit without scrolling. */
 .cw-scard {
-  min-height: 56px;
+  min-height: 52px;
   display: grid;
-  grid-template-columns: 34px minmax(0, 1fr) 20px;
+  grid-template-columns: 32px minmax(0, 1fr) 20px;
   align-items: center;
-  gap: 9px;
-  padding: 8px 12px 8px 9px;
+  gap: 10px;
+  padding: 7px 16px 7px 8px;
   border-radius: var(--cw-r-pill);
   text-align: left;
 }
 
 .cw-scard__icon {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -1443,10 +1503,13 @@ html[data-embed="true"] .widget-preview__surface {
 
 .cw-scard b {
   min-width: 0;
+  overflow: hidden;
   color: var(--cw-forest);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 720;
-  line-height: 1.22;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cw-scard > .cw-selection-indicator {
@@ -1504,14 +1567,14 @@ html[data-embed="true"] .widget-preview__surface {
 
 .cw-vcard b {
   color: var(--cw-forest);
-  font-size: 13.2px;
+  font-size: 13px;
   font-weight: 730;
   line-height: 1.2;
 }
 
 .cw-vcard__copy > span {
   color: var(--cw-muted);
-  font-size: 11.5px;
+  font-size: 11px;
   line-height: 1.34;
 }
 
@@ -1595,37 +1658,6 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-custom textarea:focus {
   border-color: rgba(25, 131, 79, 0.52);
   box-shadow: 0 0 0 4px rgba(25, 131, 79, 0.07);
-}
-
-/* A multi-line block with a bulleted list, so it keeps the card radius — a
-   3 px accent bar against a 999 px corner renders as a crescent. */
-.cw-industry-tip {
-  display: grid;
-  gap: 8px;
-  padding: 13px 14px;
-  border-left: 3px solid var(--cw-lime);
-  border-radius: var(--cw-r-card);
-  color: var(--cw-ink-soft);
-  background: var(--cw-mint);
-}
-
-.cw-industry-tip b {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  color: var(--cw-green-hover);
-  font-size: 12px;
-  font-weight: 740;
-}
-
-.cw-industry-tip ul {
-  display: grid;
-  gap: 5px;
-  margin: 0;
-  padding-left: 18px;
-  color: var(--cw-muted);
-  font-size: 11.5px;
-  line-height: 1.4;
 }
 
 .cw-calc-actions {

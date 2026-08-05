@@ -17,6 +17,7 @@ import {
   TIMELINES,
 } from "../../lib/assistantFlow";
 import type { AssistantPreset, InterestId } from "../../types/assistant";
+import { ScrollCue } from "./ScrollCue";
 import { WidgetIcon } from "./WidgetIcon";
 
 type ToolCalculatorProps = {
@@ -162,11 +163,6 @@ export function ToolCalculator({
         (option) => option.label,
       ),
     [features],
-  );
-
-  const selectedIndustry = useMemo(
-    () => INDUSTRIES.find((option) => option.id === industry) ?? null,
-    [industry],
   );
 
   const canContinue = (() => {
@@ -408,7 +404,8 @@ export function ToolCalculator({
         </div>
       </div>
 
-      <div className="cw-calc-body" ref={bodyRef}>
+      <div className="cw-scroll-shell">
+        <div className="cw-calc-body" ref={bodyRef}>
         <section
           className="cw-calc-step"
           key={stepId}
@@ -474,46 +471,28 @@ export function ToolCalculator({
           ) : null}
 
           {stepId === "industry" ? (
-            <>
-              <div className="cw-choice-grid cw-choice-grid--industry">
-                {INDUSTRIES.map((option) => {
-                  const selected = industry === option.id;
-                  return (
-                    <button
-                      type="button"
-                      className="cw-scard"
-                      data-testid={`industry-${option.id}`}
-                      data-selected={selected}
-                      aria-pressed={selected}
-                      key={`${stepId}-${option.id}`}
-                      onClick={() => setIndustry(option.id)}
-                    >
-                      <span className="cw-scard__icon">
-                        <WidgetIcon name={option.icon} />
-                      </span>
-                      <b>{option.label}</b>
-                      <SelectionIndicator selected={selected} />
-                    </button>
-                  );
-                })}
-              </div>
-              {selectedIndustry ? (
-                <aside
-                  className="cw-industry-tip"
-                  key={selectedIndustry.id}
-                  data-testid="industry-tip"
-                >
-                  <b>
-                    <WidgetIcon name="spark" /> Čo sa tu najviac oplatí
-                  </b>
-                  <ul>
-                    {selectedIndustry.examples.map((example) => (
-                      <li key={example}>{example}</li>
-                    ))}
-                  </ul>
-                </aside>
-              ) : null}
-            </>
+            <div className="cw-choice-grid cw-choice-grid--industry">
+              {INDUSTRIES.map((option) => {
+                const selected = industry === option.id;
+                return (
+                  <button
+                    type="button"
+                    className="cw-scard"
+                    data-testid={`industry-${option.id}`}
+                    data-selected={selected}
+                    aria-pressed={selected}
+                    key={`${stepId}-${option.id}`}
+                    onClick={() => setIndustry(option.id)}
+                  >
+                    <span className="cw-scard__icon">
+                      <WidgetIcon name={option.icon} />
+                    </span>
+                    <b>{option.label}</b>
+                    <SelectionIndicator selected={selected} />
+                  </button>
+                );
+              })}
+            </div>
           ) : null}
 
           {stepId === "features" ? (
@@ -695,7 +674,9 @@ export function ToolCalculator({
               </details>
             </div>
           ) : null}
-        </section>
+          </section>
+        </div>
+        <ScrollCue targetRef={bodyRef} />
       </div>
 
       {!isLast ? (
