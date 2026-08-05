@@ -1,4 +1,4 @@
-run_id=30982776071
+run_id=31008059952
 install=success
 lint=success
 build=success
@@ -25,17 +25,17 @@ transforming...
 rendering chunks...
 computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  1.14 kB[22m[1m[22m[2m │ gzip:  0.61 kB[22m
-[2mdist/[22m[2massets/[22m[35mindex-BJLJmE1I.css  [39m[1m[2m 40.99 kB[22m[1m[22m[2m │ gzip:  8.16 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-B6wNMdzu.js   [39m[1m[2m221.85 kB[22m[1m[22m[2m │ gzip: 74.85 kB[22m
-[32m✓ built in 1.07s[39m
+[2mdist/[22m[2massets/[22m[35mindex-CxVmi1Ax.css  [39m[1m[2m 44.94 kB[22m[1m[22m[2m │ gzip:  8.93 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-Cb8k6JsA.js   [39m[1m[2m221.72 kB[22m[1m[22m[2m │ gzip: 74.78 kB[22m
+[32m✓ built in 885ms[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 96 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[35mwidget.css  [39m[1m[2m 40.59 kB[22m[1m[22m[2m │ gzip:  8.08 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m221.68 kB[22m[1m[22m[2m │ gzip: 74.90 kB[22m
-[32m✓ built in 1.07s[39m
+[2mdist/[22m[35mwidget.css  [39m[1m[2m 44.55 kB[22m[1m[22m[2m │ gzip:  8.85 kB[22m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m221.55 kB[22m[1m[22m[2m │ gzip: 74.83 kB[22m
+[32m✓ built in 761ms[39m
 
 ===== test =====
 
@@ -46,177 +46,153 @@ TAP version 13
 # Subtest: history accepts the existing Vercel KV variables without colliding with MôjPlot
 ok 1 - history accepts the existing Vercel KV variables without colliding with MôjPlot
   ---
-  duration_ms: 5.642513
+  duration_ms: 4.332035
   type: 'test'
   ...
 # Subtest: history has a normal password page and never places the password in the URL
 ok 2 - history has a normal password page and never places the password in the URL
   ---
-  duration_ms: 3.570276
+  duration_ms: 3.567555
   type: 'test'
   ...
 # Subtest: history stays private and non-indexable
 ok 3 - history stays private and non-indexable
   ---
-  duration_ms: 1.401899
+  duration_ms: 1.326641
   type: 'test'
   ...
-# Subtest: assistant opens as a compact product rather than an empty fullscreen canvas
-ok 4 - assistant opens as a compact product rather than an empty fullscreen canvas
+# Subtest: retired refinement files are not loaded by either runtime
+ok 4 - retired refinement files are not loaded by either runtime
   ---
-  duration_ms: 7.666112
+  duration_ms: 7.358436
   type: 'test'
   ...
-# Subtest: tabs and starter choices keep the approved pill geometry
-ok 5 - tabs and starter choices keep the approved pill geometry
+# Subtest: the live composer remains one clean input surface
+ok 5 - the live composer remains one clean input surface
   ---
-  duration_ms: 1.911235
+  duration_ms: 1.478521
   type: 'test'
   ...
-# Subtest: composer is one clean pill and the CTA has clear sales hierarchy
-ok 6 - composer is one clean pill and the CTA has clear sales hierarchy
+# Subtest: the replacement logo is simple enough for all three sizes
+ok 6 - the replacement logo is simple enough for all three sizes
   ---
-  duration_ms: 3.26406
+  duration_ms: 1.162491
   type: 'test'
   ...
-# Subtest: programmatic composer focus cannot hide the initial interface
-ok 7 - programmatic composer focus cannot hide the initial interface
+# Subtest: the runtime stays static and free of injected visual overrides
+ok 7 - the runtime stays static and free of injected visual overrides
   ---
-  duration_ms: 1.5226
+  duration_ms: 10.912721
   type: 'test'
   ...
-# Subtest: logo is the exact shared website mark
-ok 8 - logo is the exact shared website mark
+# Subtest: the new mark is motionless and has no opaque icon tile
+ok 8 - the new mark is motionless and has no opaque icon tile
   ---
-  duration_ms: 2.372899
-  type: 'test'
-  ...
-# Subtest: the visual system is static, ordered and free of injected overrides
-ok 9 - the visual system is static, ordered and free of injected overrides
-  ---
-  duration_ms: 10.13124
-  type: 'test'
-  ...
-# Subtest: launcher uses the exact website mark on translucent dark glass
-ok 10 - launcher uses the exact website mark on translucent dark glass
-  ---
-  duration_ms: 2.882657
+  duration_ms: 2.937768
   type: 'test'
   ...
 # Subtest: header status contains only Online
-ok 11 - header status contains only Online
+ok 9 - header status contains only Online
   ---
-  duration_ms: 0.996779
+  duration_ms: 1.992728
   type: 'test'
   ...
-# Subtest: backward step navigation releases the tall-step height lock quickly
-ok 12 - backward step navigation releases the tall-step height lock quickly
+# Subtest: back navigation releases the outgoing height immediately
+ok 10 - back navigation releases the outgoing height immediately
   ---
-  duration_ms: 0.876749
+  duration_ms: 0.833207
   type: 'test'
   ...
-# Subtest: mobile iframe freezes and restores the parent page on iOS
-ok 13 - mobile iframe freezes and restores the parent page on iOS
+# Subtest: mobile embed locks and restores the parent page
+ok 11 - mobile embed locks and restores the parent page
   ---
-  duration_ms: 0.985092
+  duration_ms: 0.808657
   type: 'test'
   ...
-# Subtest: contact conversion surface keeps clear hierarchy and visible labels
-ok 14 - contact conversion surface keeps clear hierarchy and visible labels
+# Subtest: contact conversion keeps visible labels and one-contact validation
+ok 12 - contact conversion keeps visible labels and one-contact validation
   ---
-  duration_ms: 3.192793
+  duration_ms: 2.225204
   type: 'test'
   ...
-# Subtest: demo and embed load the ordered static widget styles
-ok 15 - demo and embed load the ordered static widget styles
+# Subtest: demo and embed load only the ordered static widget styles
+ok 13 - demo and embed load only the ordered static widget styles
   ---
-  duration_ms: 7.057777
+  duration_ms: 5.752555
   type: 'test'
   ...
-# Subtest: widget uses the website sliding segmented switch
-ok 16 - widget uses the website sliding segmented switch
+# Subtest: new logo is a clean outline mark without a tile
+ok 14 - new logo is a clean outline mark without a tile
   ---
-  duration_ms: 2.135953
+  duration_ms: 2.184559
   type: 'test'
   ...
-# Subtest: vector logo is exactly the measured website mark
-ok 17 - vector logo is exactly the measured website mark
+# Subtest: launcher is translucent and shaped like a chat surface
+ok 15 - launcher is translucent and shaped like a chat surface
   ---
-  duration_ms: 1.541279
+  duration_ms: 0.891258
   type: 'test'
   ...
-# Subtest: panel proportions and hierarchy are deliberate
-ok 18 - panel proportions and hierarchy are deliberate
+# Subtest: header contains only the honest Online state
+ok 16 - header contains only the honest Online state
   ---
-  duration_ms: 1.11726
+  duration_ms: 0.74481
   type: 'test'
   ...
-# Subtest: chat hierarchy is readable and selected chip text stays present
-ok 19 - chat hierarchy is readable and selected chip text stays present
+# Subtest: mode switch keeps the website idea without dominating the widget
+ok 17 - mode switch keeps the website idea without dominating the widget
   ---
-  duration_ms: 2.820943
+  duration_ms: 1.154686
   type: 'test'
   ...
-# Subtest: direct contact is a quiet utility row rather than three mini cards
-ok 20 - direct contact is a quiet utility row rather than three mini cards
+# Subtest: quick reply text remains present while the click is confirmed
+ok 18 - quick reply text remains present while the click is confirmed
   ---
-  duration_ms: 0.938712
+  duration_ms: 1.370994
   type: 'test'
   ...
-# Subtest: configurator keeps selected text visible with one flat green state
-ok 21 - configurator keeps selected text visible with one flat green state
+# Subtest: selected configurator text stays visible long enough to be understood
+ok 19 - selected configurator text stays visible long enough to be understood
   ---
-  duration_ms: 1.64843
+  duration_ms: 1.478008
   type: 'test'
   ...
-# Subtest: configurator follows a compact Derat-style structure
-ok 22 - configurator follows a compact Derat-style structure
+# Subtest: progress presents four questions instead of five conflicting bars
+ok 20 - progress presents four questions instead of five conflicting bars
   ---
-  duration_ms: 1.257221
+  duration_ms: 0.65289
   type: 'test'
   ...
-# Subtest: progress and contact step expose clear state and labels
-ok 23 - progress and contact step expose clear state and labels
+# Subtest: first-step cards are compact and readable
+ok 21 - first-step cards are compact and readable
   ---
-  duration_ms: 1.498664
+  duration_ms: 0.885503
   type: 'test'
   ...
-# Subtest: primary controls keep intentional, differentiated geometry
-ok 24 - primary controls keep intentional, differentiated geometry
+# Subtest: disabled continuation is visibly disabled, not a broken green CTA
+ok 22 - disabled continuation is visibly disabled, not a broken green CTA
   ---
-  duration_ms: 1.922362
+  duration_ms: 0.815353
   type: 'test'
   ...
-# Subtest: palette stays within the website white forest lime identity
-ok 25 - palette stays within the website white forest lime identity
+# Subtest: mobile panel fills the viewport and preserves safe areas
+ok 23 - mobile panel fills the viewport and preserves safe areas
   ---
-  duration_ms: 2.533041
+  duration_ms: 0.61102
   type: 'test'
   ...
-# Subtest: mobile, keyboard and reduced-motion fallbacks are first-class
-ok 26 - mobile, keyboard and reduced-motion fallbacks are first-class
+# Subtest: palette stays in one calm green family
+ok 24 - palette stays in one calm green family
   ---
-  duration_ms: 1.371974
+  duration_ms: 1.146555
   type: 'test'
   ...
-# Subtest: icons remain one custom rounded line family
-ok 27 - icons remain one custom rounded line family
-  ---
-  duration_ms: 0.683738
-  type: 'test'
-  ...
-# Subtest: configurator remains a short five-step conversion flow
-ok 28 - configurator remains a short five-step conversion flow
-  ---
-  duration_ms: 1.287236
-  type: 'test'
-  ...
-1..28
-# tests 28
+1..24
+# tests 24
 # suites 0
-# pass 28
+# pass 24
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 146.366903
+# duration_ms 114.513451
