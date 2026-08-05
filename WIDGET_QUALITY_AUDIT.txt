@@ -1,4 +1,4 @@
-run_id=31023187609
+run_id=31025593192
 install=success
 lint=success
 build=success
@@ -21,21 +21,21 @@ test=success
 
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 100 modules transformed.
+[32m✓[39m 102 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[32mindex.html                 [39m[1m[2m  1.14 kB[22m[1m[22m[2m │ gzip:  0.61 kB[22m
-[2mdist/[22m[2massets/[22m[35mindex-DcgfpuUT.css  [39m[1m[2m 43.29 kB[22m[1m[22m[2m │ gzip:  8.31 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-dTfSW4y8.js   [39m[1m[2m222.13 kB[22m[1m[22m[2m │ gzip: 74.94 kB[22m
-[32m✓ built in 1.15s[39m
+[2mdist/[22m[32mindex.html                 [39m[1m[2m  1.14 kB[22m[1m[22m[2m │ gzip:  0.62 kB[22m
+[2mdist/[22m[2massets/[22m[35mindex-CIJ2kuIA.css  [39m[1m[2m 43.94 kB[22m[1m[22m[2m │ gzip:  8.37 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-DM5Xaabu.js   [39m[1m[2m223.12 kB[22m[1m[22m[2m │ gzip: 75.26 kB[22m
+[32m✓ built in 1.09s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
-[32m✓[39m 96 modules transformed.
+[32m✓[39m 98 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[35mwidget.css  [39m[1m[2m 42.90 kB[22m[1m[22m[2m │ gzip:  8.22 kB[22m
-[2mdist/[22m[36mwidget.js   [39m[1m[2m222.21 kB[22m[1m[22m[2m │ gzip: 75.08 kB[22m
-[32m✓ built in 1.16s[39m
+[2mdist/[22m[35mwidget.css  [39m[1m[2m 43.54 kB[22m[1m[22m[2m │ gzip:  8.28 kB[22m
+[2mdist/[22m[36mwidget.js   [39m[1m[2m223.19 kB[22m[1m[22m[2m │ gzip: 75.39 kB[22m
+[32m✓ built in 1.07s[39m
 
 ===== test =====
 
@@ -46,213 +46,231 @@ TAP version 13
 # Subtest: history accepts the existing Vercel KV variables without colliding with MôjPlot
 ok 1 - history accepts the existing Vercel KV variables without colliding with MôjPlot
   ---
-  duration_ms: 7.993481
+  duration_ms: 6.54162
   type: 'test'
   ...
 # Subtest: history has a normal password page and never places the password in the URL
 ok 2 - history has a normal password page and never places the password in the URL
   ---
-  duration_ms: 4.291578
+  duration_ms: 3.619174
   type: 'test'
   ...
 # Subtest: history stays private and non-indexable
 ok 3 - history stays private and non-indexable
   ---
-  duration_ms: 1.69477
+  duration_ms: 1.508384
   type: 'test'
   ...
 # Subtest: assistant opens as a compact product rather than an empty fullscreen canvas
 ok 4 - assistant opens as a compact product rather than an empty fullscreen canvas
   ---
-  duration_ms: 6.727798
+  duration_ms: 6.236066
   type: 'test'
   ...
 # Subtest: tabs and starter choices keep the approved pill geometry
 ok 5 - tabs and starter choices keep the approved pill geometry
   ---
-  duration_ms: 2.101026
+  duration_ms: 1.881919
   type: 'test'
   ...
 # Subtest: composer is one clean pill and the CTA has clear sales hierarchy
 ok 6 - composer is one clean pill and the CTA has clear sales hierarchy
   ---
-  duration_ms: 2.49552
+  duration_ms: 2.32565
   type: 'test'
   ...
 # Subtest: programmatic composer focus cannot hide the initial interface
 ok 7 - programmatic composer focus cannot hide the initial interface
   ---
-  duration_ms: 1.203849
+  duration_ms: 1.144993
   type: 'test'
   ...
 # Subtest: logo is the website's outlined mark, not a redrawn approximation
 ok 8 - logo is the website's outlined mark, not a redrawn approximation
   ---
-  duration_ms: 1.146472
+  duration_ms: 1.165564
   type: 'test'
   ...
 # Subtest: the visual system is static, ordered and free of injected overrides
 ok 9 - the visual system is static, ordered and free of injected overrides
   ---
-  duration_ms: 13.370277
+  duration_ms: 12.671444
   type: 'test'
   ...
 # Subtest: launcher and compact brand mark stay clear and motionless
 ok 10 - launcher and compact brand mark stay clear and motionless
   ---
-  duration_ms: 3.026808
+  duration_ms: 3.696183
   type: 'test'
   ...
 # Subtest: header is the brand plus a live availability state, nothing else
 ok 11 - header is the brand plus a live availability state, nothing else
   ---
-  duration_ms: 1.230248
+  duration_ms: 1.683083
   type: 'test'
   ...
 # Subtest: backward step navigation releases the tall-step height lock quickly
 ok 12 - backward step navigation releases the tall-step height lock quickly
   ---
-  duration_ms: 1.134249
+  duration_ms: 1.261887
   type: 'test'
   ...
 # Subtest: mobile iframe freezes and restores the parent page on iOS
 ok 13 - mobile iframe freezes and restores the parent page on iOS
   ---
-  duration_ms: 1.808552
+  duration_ms: 1.267275
   type: 'test'
   ...
 # Subtest: contact step fits without scrolling and keeps sending obvious
 ok 14 - contact step fits without scrolling and keeps sending obvious
   ---
-  duration_ms: 4.610351
+  duration_ms: 4.594124
   type: 'test'
   ...
 # Subtest: demo and embed load the ordered static widget styles
 ok 15 - demo and embed load the ordered static widget styles
   ---
-  duration_ms: 8.546489
+  duration_ms: 9.528613
   type: 'test'
   ...
 # Subtest: mode switch is the website's sliding segmented control
 ok 16 - mode switch is the website's sliding segmented control
   ---
-  duration_ms: 1.670716
+  duration_ms: 1.7345
   type: 'test'
   ...
 # Subtest: brand mark is the website drawing, green and motionless
 ok 17 - brand mark is the website drawing, green and motionless
   ---
-  duration_ms: 1.598051
+  duration_ms: 2.080115
   type: 'test'
   ...
 # Subtest: launcher is a translucent bubble with a hover preview
 ok 18 - launcher is a translucent bubble with a hover preview
   ---
-  duration_ms: 2.618619
+  duration_ms: 2.570964
   type: 'test'
   ...
 # Subtest: panel proportions and hierarchy are deliberate
 ok 19 - panel proportions and hierarchy are deliberate
   ---
-  duration_ms: 1.244944
+  duration_ms: 1.367514
   type: 'test'
   ...
 # Subtest: header states availability instead of carrying a tagline
 ok 20 - header states availability instead of carrying a tagline
   ---
-  duration_ms: 1.302392
+  duration_ms: 1.497358
   type: 'test'
   ...
 # Subtest: chat hierarchy is readable and selected chip text stays present
 ok 21 - chat hierarchy is readable and selected chip text stays present
   ---
-  duration_ms: 2.225668
+  duration_ms: 2.158801
   type: 'test'
   ...
 # Subtest: direct contact reads as three reachable chips
 ok 22 - direct contact reads as three reachable chips
   ---
-  duration_ms: 1.329041
+  duration_ms: 1.436176
   type: 'test'
   ...
 # Subtest: configurator keeps the selected label readable before auto-advance
 ok 23 - configurator keeps the selected label readable before auto-advance
   ---
-  duration_ms: 3.359846
+  duration_ms: 2.929848
   type: 'test'
   ...
 # Subtest: steps travel in the direction the visitor is going
 ok 24 - steps travel in the direction the visitor is going
   ---
-  duration_ms: 1.519616
+  duration_ms: 1.4994
   type: 'test'
   ...
 # Subtest: progress and contact step expose clear state and labels
 ok 25 - progress and contact step expose clear state and labels
   ---
-  duration_ms: 1.360499
+  duration_ms: 1.578618
   type: 'test'
   ...
 # Subtest: every control rounds to the shared website scale
 ok 26 - every control rounds to the shared website scale
   ---
-  duration_ms: 2.607457
+  duration_ms: 2.731744
   type: 'test'
   ...
 # Subtest: the widget always sets in the brand typeface
 ok 27 - the widget always sets in the brand typeface
   ---
-  duration_ms: 1.569999
+  duration_ms: 2.005944
   type: 'test'
   ...
 # Subtest: options arrive one after another when a question opens
 ok 28 - options arrive one after another when a question opens
   ---
-  duration_ms: 1.964944
+  duration_ms: 1.515304
   type: 'test'
   ...
 # Subtest: chat motion follows the sub-300ms guidance and moves, not blinks
 ok 29 - chat motion follows the sub-300ms guidance and moves, not blinks
   ---
-  duration_ms: 1.105475
+  duration_ms: 1.338611
+  type: 'test'
+  ...
+# Subtest: a scrollable area says so and offers to move you on
+ok 30 - a scrollable area says so and offers to move you on
+  ---
+  duration_ms: 2.428433
+  type: 'test'
+  ...
+# Subtest: picking an industry no longer opens an explanation panel
+ok 31 - picking an industry no longer opens an explanation panel
+  ---
+  duration_ms: 1.046467
+  type: 'test'
+  ...
+# Subtest: answers fill the width instead of sitting in half-empty columns
+ok 32 - answers fill the width instead of sitting in half-empty columns
+  ---
+  duration_ms: 1.632068
   type: 'test'
   ...
 # Subtest: the builder card and launcher share one glass recipe
-ok 30 - the builder card and launcher share one glass recipe
+ok 33 - the builder card and launcher share one glass recipe
   ---
-  duration_ms: 0.881609
+  duration_ms: 1.024834
   type: 'test'
   ...
 # Subtest: palette stays within the website white forest lime identity
-ok 31 - palette stays within the website white forest lime identity
+ok 34 - palette stays within the website white forest lime identity
   ---
-  duration_ms: 0.866211
+  duration_ms: 1.239374
   type: 'test'
   ...
 # Subtest: mobile, keyboard and reduced-motion fallbacks are first-class
-ok 32 - mobile, keyboard and reduced-motion fallbacks are first-class
+ok 35 - mobile, keyboard and reduced-motion fallbacks are first-class
   ---
-  duration_ms: 1.303003
+  duration_ms: 1.387214
   type: 'test'
   ...
 # Subtest: icons remain one custom rounded line family
-ok 33 - icons remain one custom rounded line family
+ok 36 - icons remain one custom rounded line family
   ---
-  duration_ms: 0.752319
+  duration_ms: 0.910975
   type: 'test'
   ...
 # Subtest: configurator remains a short five-step conversion flow
-ok 34 - configurator remains a short five-step conversion flow
+ok 37 - configurator remains a short five-step conversion flow
   ---
-  duration_ms: 0.766865
+  duration_ms: 2.697642
   type: 'test'
   ...
-1..34
-# tests 34
+1..37
+# tests 37
 # suites 0
-# pass 34
+# pass 37
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 169.803866
+# duration_ms 185.203099
