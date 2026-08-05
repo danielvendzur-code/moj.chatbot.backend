@@ -307,33 +307,28 @@
 /* Requested chip layout and sizing -------------------------------------- */
 .cw-widget .cw-quick-replies {
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 7px;
+  gap: 6px;
 }
 
 .cw-widget .cw-quick-replies .cw-chip {
   position: relative;
-  min-height: 54px;
-  padding: 9px 11px;
+  min-height: 46px;
+  padding: 7px 10px;
   overflow: hidden;
   isolation: isolate;
 }
 
-/* MojPlot-style fill: the brand colour grows from the centre while the label
-   remains above it. This is implemented only in this repository. */
+/* Single-colour fill grows cleanly from the centre. */
 .cw-widget .cw-quick-replies .cw-chip::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
   border-radius: inherit;
-  background: radial-gradient(
-    circle at center,
-    var(--cw-lime) 0%,
-    var(--cw-green) 100%
-  );
+  background: var(--cw-green);
   transform: scale(0);
   transform-origin: center;
-  transition: transform 650ms ease-out;
+  transition: transform 520ms ease-out;
 }
 
 .cw-widget .cw-quick-replies .cw-chip:is(:hover, :focus-visible)::before,
@@ -356,48 +351,43 @@
   z-index: 1;
 }
 
-/* The removed label leaves room for larger direct-contact chips. */
 .cw-widget .cw-direct-actions {
   gap: 0;
 }
 
 .cw-widget .cw-direct-actions__grid a {
-  min-height: 48px;
-  padding: 8px 12px;
-  font-size: 13px;
+  min-height: 42px;
+  padding: 7px 10px;
+  font-size: 12px;
 }
 
 .cw-widget .cw-direct-actions__grid svg {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
 }
 
-/* One compact baseline across all configurator answer shapes. Longer copy can
-   still expand naturally, but short choices no longer jump between heights. */
+/* Keep configurator choices consistent without making the panel feel empty. */
 .cw-widget .cw-choice-grid {
-  gap: 8px;
+  gap: 7px;
 }
 
 .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
-  min-height: 60px;
+  min-height: 54px;
 }
 
 .cw-widget .cw-rowcard,
 .cw-widget .cw-scard {
-  padding-block: 8px;
+  padding-block: 7px;
 }
 
-.cw-widget .cw-rowcard {
-  padding-inline: 9px 16px;
-}
-
+.cw-widget .cw-rowcard,
 .cw-widget .cw-scard {
-  padding-inline: 9px 16px;
+  padding-inline: 8px 15px;
 }
 
 .cw-widget .cw-opt,
 .cw-widget .cw-vcard {
-  padding: 9px 17px 9px 18px;
+  padding: 8px 16px 8px 17px;
 }
 
 /* Desktop keeps the supporting actions visible while the input is focused.
@@ -413,17 +403,19 @@
 @media (max-width: 640px) {
   .cw-widget .cw-quick-replies {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
   }
 
   .cw-widget .cw-quick-replies .cw-chip {
-    min-height: 52px;
-    padding: 8px 9px;
-    font-size: 12px;
+    min-height: 44px;
+    padding: 7px 8px;
+    font-size: 11.5px;
   }
 
   .cw-widget .cw-direct-actions__grid a {
-    min-height: 44px;
-    font-size: 12px;
+    min-height: 40px;
+    padding: 6px 8px;
+    font-size: 11.5px;
   }
 }
 
