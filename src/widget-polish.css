@@ -1,65 +1,140 @@
 /*
- * Final interaction polish.
- * This file is a deterministic static layer loaded after product-widget.css.
- * It fixes the concrete visual regressions found in the live interaction:
- * disappearing chip labels, a weak logo silhouette and an overly generic tab bar.
+ * Website-matched finishing layer.
+ * The brand mark and segmented control mirror mojchatbot.sk, while the
+ * configurator follows the compact, readable rhythm proven in Derat.
  */
 
-/* Brand mark ------------------------------------------------------------- */
-.cw-widget .cw-launcher,
-.cw-widget .cw-panel-head__mascot,
-.cw-widget .cw-avatar {
-  color: var(--cw-green);
+/* Exact website brand in a translucent launcher ------------------------- */
+.cw-widget .cw-launcher {
+  width: 70px;
+  height: 70px;
+  padding: 9px;
+  border: 1px solid rgba(185, 237, 77, 0.34);
+  color: var(--cw-lime);
+  background: rgba(11, 47, 32, 0.76);
+  box-shadow:
+    0 22px 48px -25px rgba(11, 47, 32, 0.78),
+    inset 0 1px rgba(255, 255, 255, 0.13);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
 }
 
 .cw-widget .cw-launcher:hover,
 .cw-widget .cw-launcher:focus-visible {
-  color: var(--cw-green-hover);
+  color: var(--cw-lime-bright);
+  border-color: rgba(217, 255, 120, 0.62);
+  background: rgba(11, 47, 32, 0.86);
+  box-shadow:
+    0 24px 52px -24px rgba(11, 47, 32, 0.82),
+    0 0 0 4px rgba(185, 237, 77, 0.12),
+    inset 0 1px rgba(255, 255, 255, 0.16);
+}
+
+.cw-widget .cw-launcher:active {
+  color: var(--cw-lime-bright);
+  background: rgba(11, 47, 32, 0.9);
 }
 
 .cw-widget .cw-launcher .bl--launcher {
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
+}
+
+.cw-widget .cw-panel-head__mascot {
+  width: 44px;
+  height: 44px;
+  flex-basis: 44px;
+  border: 1px solid rgba(185, 237, 77, 0.18);
+  border-radius: 14px;
+  color: var(--cw-lime);
+  background: rgba(11, 47, 32, 0.94);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .cw-widget .cw-panel-head__mascot .bl--header {
-  width: 42px;
-  height: 42px;
+  width: 35px;
+  height: 35px;
+}
+
+.cw-widget .cw-avatar {
+  border-color: rgba(11, 47, 32, 0.12);
+  color: var(--cw-lime);
+  background: var(--cw-forest);
 }
 
 .cw-widget .cw-avatar .bl--avatar {
-  width: 22px;
-  height: 22px;
+  width: 23px;
+  height: 23px;
 }
 
-.cw-widget .bl__bubble,
-.cw-widget .bl__monogram {
+.cw-widget :is(.bl__outer, .bl__inner) {
   vector-effect: non-scaling-stroke;
 }
 
-/* Chatbot / configurator switch ----------------------------------------- */
+/* Header says only Online ------------------------------------------------ */
+.cw-widget .cw-panel-head__title p {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--cw-muted);
+}
+
+.cw-widget .cw-online-dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: var(--cw-green);
+  box-shadow: 0 0 0 3px rgba(25, 131, 79, 0.1);
+}
+
+/* Website's Bez/S chatbotom segmented switch, scaled for the widget ------ */
 .cw-widget .cw-tabs {
-  flex-basis: 58px;
-  gap: 4px;
+  position: relative;
+  isolation: isolate;
+  flex-basis: 54px;
+  gap: 0;
   margin: 8px 12px 0;
   padding: 4px;
-  border: 1px solid rgba(11, 47, 32, 0.1);
-  border-radius: 18px;
-  background: var(--cw-surface);
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: #10271c;
+  box-shadow: inset 0 0 0 1px rgba(156, 145, 133, 0.14);
+}
+
+.cw-widget .cw-tabs__thumb {
+  position: absolute;
+  z-index: 0;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  border-radius: 999px;
+  background: #b3e9d0;
+  box-shadow: 0 10px 22px -14px rgba(179, 233, 208, 0.9);
+  transform: translateX(0);
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.cw-widget .cw-tabs[data-mode="calculator"] .cw-tabs__thumb {
+  transform: translateX(100%);
 }
 
 .cw-widget .cw-tabs > button {
+  position: relative;
+  z-index: 1;
   min-height: 42px;
-  padding-inline: 10px;
-  border: 1px solid transparent;
-  border-radius: 14px;
-  color: #56655c;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  color: #a1c4b4;
   background: transparent;
-  transition:
-    color 170ms ease,
-    border-color 170ms ease,
-    background-color 170ms ease,
-    box-shadow 180ms ease;
+  box-shadow: none;
+  font-size: 13px;
+  font-weight: 720;
+  transition: color 240ms ease;
 }
 
 .cw-widget .cw-tabs > button::after {
@@ -68,21 +143,19 @@
 
 .cw-widget .cw-tabs > button:not([data-active="true"]):hover,
 .cw-widget .cw-tabs > button:not([data-active="true"]):focus-visible {
-  color: var(--cw-green-hover);
-  border-color: rgba(25, 131, 79, 0.16);
-  background: rgba(255, 255, 255, 0.82);
+  color: var(--cw-white);
+  border-color: transparent;
+  background: transparent;
 }
 
 .cw-widget .cw-tabs > button[data-active="true"] {
-  color: var(--cw-white);
-  border-color: var(--cw-green);
-  background: var(--cw-green);
-  box-shadow:
-    0 10px 20px -15px rgba(11, 47, 32, 0.74),
-    inset 0 1px rgba(255, 255, 255, 0.16);
+  color: var(--cw-forest);
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
 }
 
-/* Quick-reply chips ------------------------------------------------------ */
+/* Quick replies: calm confirmation without a full saturated fill ---------- */
 .cw-widget .cw-quick-replies .cw-chip {
   gap: 7px;
   min-height: 42px;
@@ -95,14 +168,15 @@
   color: inherit;
   opacity: 1;
   visibility: visible;
+  filter: none;
   transform: none;
 }
 
 .cw-widget .cw-quick-replies .cw-chip[data-sending="true"] {
-  color: var(--cw-white);
-  border-color: var(--cw-green);
-  background: var(--cw-green);
-  box-shadow: 0 10px 20px -16px rgba(11, 47, 32, 0.72);
+  color: var(--cw-forest);
+  border-color: rgba(25, 131, 79, 0.42);
+  background: #eaf3e7;
+  box-shadow: inset 0 0 0 1px rgba(25, 131, 79, 0.04);
 }
 
 .cw-widget .cw-quick-replies .cw-chip[data-sending="true"]::after {
@@ -113,8 +187,8 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  color: var(--cw-green-hover);
-  background: var(--cw-lime-bright);
+  color: var(--cw-white);
+  background: var(--cw-green);
   font-size: 12px;
   font-weight: 800;
   line-height: 1;
@@ -124,7 +198,125 @@
   opacity: 0.58;
 }
 
-/* Configurator selections ------------------------------------------------ */
+/* Derat-inspired configurator rhythm ------------------------------------ */
+.cw-widget .cw-calculator {
+  background: linear-gradient(180deg, #ffffff 0%, #f7f9f5 100%);
+}
+
+.cw-widget .cw-progress {
+  min-height: 58px;
+  flex-basis: 58px;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 9px;
+  padding: 8px 13px;
+  border-bottom-color: rgba(11, 47, 32, 0.08);
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.cw-widget .cw-progress__back {
+  width: 34px;
+  height: 34px;
+  border-color: rgba(11, 47, 32, 0.12);
+  border-radius: 50%;
+  color: var(--cw-green-hover);
+  background: var(--cw-white);
+}
+
+.cw-widget .cw-progress__back:hover:not(:disabled),
+.cw-widget .cw-progress__back:focus-visible:not(:disabled) {
+  color: var(--cw-white);
+  border-color: var(--cw-green);
+  background: var(--cw-green);
+}
+
+.cw-widget .cw-progress__main {
+  gap: 6px;
+}
+
+.cw-widget .cw-progress__count {
+  color: #647169;
+  font-size: 11px;
+  font-weight: 720;
+}
+
+.cw-widget .cw-progress__dots {
+  gap: 6px;
+}
+
+.cw-widget .cw-progress__dots i {
+  height: 5px;
+  background: #dfe5dc;
+  transition:
+    height 190ms ease,
+    background-color 190ms ease,
+    box-shadow 190ms ease;
+}
+
+.cw-widget .cw-progress__dots i[data-complete="true"] {
+  background: #9ccdb4;
+}
+
+.cw-widget .cw-progress__dots i[data-current="true"] {
+  height: 9px;
+  background: var(--cw-green);
+  box-shadow: 0 4px 10px -6px rgba(11, 47, 32, 0.7);
+}
+
+.cw-widget .cw-calc-body {
+  padding: 14px 13px 16px;
+  background: transparent;
+}
+
+.cw-widget .cw-calc-step {
+  gap: 12px;
+}
+
+/* Never fade the selected card and its text out before auto-advance. */
+.cw-widget .cw-calc-step[data-leaving="true"] {
+  opacity: 1;
+  animation: none;
+  pointer-events: none;
+}
+
+.cw-widget .cw-calc-step:not([data-leaving="true"]) {
+  animation-duration: 140ms;
+}
+
+.cw-widget .cw-step-head {
+  gap: 5px;
+  padding: 0 2px 1px;
+}
+
+.cw-widget .cw-q {
+  font-size: clamp(21px, 5vw, 24px);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.cw-widget .cw-q-sub {
+  font-size: 12.5px;
+  line-height: 1.42;
+}
+
+.cw-widget .cw-choice-grid {
+  gap: 8px;
+}
+
+.cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard, .cw-contact-method) {
+  border-color: rgba(11, 47, 32, 0.11);
+  background: var(--cw-white);
+  background-image: none;
+  box-shadow: none;
+}
+
+.cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard, .cw-contact-method):is(:hover, :focus-visible):not([data-selected="true"]) {
+  border-color: rgba(25, 131, 79, 0.3);
+  background: #f5f8f3;
+  background-image: none;
+  box-shadow: 0 12px 24px -24px rgba(11, 47, 32, 0.55);
+}
+
+/* One flat green family only: no lime wash, gradient or rainbow state. */
 .cw-widget :is(
   .cw-rowcard,
   .cw-scard,
@@ -132,89 +324,204 @@
   .cw-vcard,
   .cw-contact-method
 )[data-selected="true"],
-.cw-widget :is(
-  .cw-rowcard,
-  .cw-scard,
-  .cw-vcard
-)[data-confirming="true"] {
+.cw-widget :is(.cw-rowcard, .cw-scard, .cw-vcard)[data-confirming="true"] {
   color: var(--cw-ink);
-  border-color: var(--cw-green);
-  background: var(--cw-lime-soft);
-}
-
-.cw-widget :is(
-  .cw-rowcard[data-selected="true"],
-  .cw-rowcard[data-confirming="true"]
-) .cw-rowcard__body,
-.cw-widget .cw-opt[data-selected="true"] .cw-opt__body,
-.cw-widget :is(
-  .cw-vcard[data-selected="true"],
-  .cw-vcard[data-confirming="true"]
-) .cw-vcard__copy {
+  border-color: rgba(25, 131, 79, 0.46);
+  background: #eaf2e8;
+  background-image: none;
+  box-shadow: inset 3px 0 var(--cw-green);
   opacity: 1;
   visibility: visible;
+  filter: none;
+}
+
+.cw-widget .cw-rowcard {
+  min-height: 68px;
+  grid-template-columns: 40px minmax(0, 1fr) 22px;
+  gap: 11px;
+  padding: 10px 12px;
+  border-radius: 15px;
+}
+
+.cw-widget .cw-rowcard__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  color: var(--cw-green);
+  background: #edf4ea;
+}
+
+.cw-widget :is(.cw-rowcard[data-selected="true"], .cw-rowcard[data-confirming="true"]) .cw-rowcard__icon {
+  color: var(--cw-white);
+  background: var(--cw-green);
+}
+
+.cw-widget .cw-scard {
+  min-height: 86px;
+  padding: 12px;
+  border-radius: 15px;
+}
+
+.cw-widget .cw-scard__icon {
+  width: 37px;
+  height: 37px;
+  border-radius: 11px;
+  color: var(--cw-green);
+  background: #edf4ea;
+}
+
+.cw-widget .cw-opt {
+  min-height: 60px;
+  padding: 10px 12px 10px 14px;
+  border-radius: 14px;
+}
+
+.cw-widget .cw-vcard {
+  min-height: 80px;
+  padding: 12px;
+  border-radius: 15px;
+}
+
+.cw-widget .cw-selection-indicator {
+  width: 21px;
+  height: 21px;
+  border-color: rgba(25, 131, 79, 0.24);
+  background: var(--cw-white);
+}
+
+.cw-widget .cw-selection-indicator[data-visible="true"] {
+  color: var(--cw-white);
+  border-color: var(--cw-green);
+  background: var(--cw-green);
+  box-shadow: none;
+}
+
+/* Strong text persistence for selected and confirming options. */
+.cw-widget :is(
+  .cw-rowcard[data-selected="true"],
+  .cw-rowcard[data-confirming="true"],
+  .cw-scard[data-selected="true"],
+  .cw-scard[data-confirming="true"],
+  .cw-opt[data-selected="true"],
+  .cw-vcard[data-selected="true"],
+  .cw-vcard[data-confirming="true"],
+  .cw-contact-method[data-selected="true"]
+) :is(.cw-rowcard__body, .cw-opt__body, .cw-vcard__copy, b, small, span) {
+  opacity: 1;
+  visibility: visible;
+  filter: none;
+  transform: none;
 }
 
 .cw-widget :is(
   .cw-rowcard[data-selected="true"],
   .cw-rowcard[data-confirming="true"]
 ) .cw-rowcard__body b,
-.cw-widget .cw-scard[data-selected="true"] b,
-.cw-widget .cw-scard[data-confirming="true"] b,
+.cw-widget :is(
+  .cw-scard[data-selected="true"],
+  .cw-scard[data-confirming="true"]
+) b,
 .cw-widget .cw-opt[data-selected="true"] .cw-opt__body b,
-.cw-widget .cw-vcard[data-selected="true"] b,
-.cw-widget .cw-vcard[data-confirming="true"] b,
-.cw-widget .cw-contact-method[data-selected="true"] span {
+.cw-widget :is(
+  .cw-vcard[data-selected="true"],
+  .cw-vcard[data-confirming="true"]
+) b,
+.cw-widget .cw-contact-method[data-selected="true"] > span {
   color: var(--cw-forest);
-  opacity: 1;
-  visibility: visible;
 }
 
 .cw-widget :is(
   .cw-rowcard[data-selected="true"],
   .cw-rowcard[data-confirming="true"]
 ) .cw-rowcard__body small,
-.cw-widget .cw-opt[data-selected="true"] .cw-opt__body span,
-.cw-widget .cw-vcard[data-selected="true"] .cw-vcard__copy > span,
-.cw-widget .cw-vcard[data-confirming="true"] .cw-vcard__copy > span {
-  color: var(--cw-muted);
-  opacity: 1;
-  visibility: visible;
-}
-
+.cw-widget .cw-opt[data-selected="true"] .cw-opt__body > span,
 .cw-widget :is(
-  .cw-rowcard,
-  .cw-scard,
-  .cw-opt,
-  .cw-vcard,
-  .cw-contact-method
-) :is(b, small, span) {
-  transition:
-    color 170ms ease,
-    opacity 170ms ease;
+  .cw-vcard[data-selected="true"],
+  .cw-vcard[data-confirming="true"]
+) .cw-vcard__copy > span {
+  color: var(--cw-muted);
 }
 
-/* Keep the selected answer readable before the next step appears. */
-.cw-widget .cw-calc-step[data-leaving="true"]
-  :is(.cw-rowcard, .cw-scard, .cw-vcard)[data-selected="true"] {
-  opacity: 1;
+.cw-widget .cw-industry-tip {
+  border-left-color: var(--cw-green);
+  color: #345044;
+  background: #edf4ea;
+  background-image: none;
+}
+
+.cw-widget .cw-calc-actions {
+  padding: 9px 13px max(12px, env(safe-area-inset-bottom));
+  border-top-color: rgba(11, 47, 32, 0.08);
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 -14px 28px -30px rgba(11, 47, 32, 0.55);
+}
+
+.cw-widget .cw-next {
+  min-height: 51px;
+  background: var(--cw-green);
+  background-image: none;
 }
 
 @media (max-width: 640px) {
+  .cw-widget .cw-launcher {
+    right: max(14px, env(safe-area-inset-right));
+    bottom: max(14px, env(safe-area-inset-bottom));
+    width: 66px;
+    height: 66px;
+  }
+
   .cw-widget .cw-tabs {
+    flex-basis: 52px;
     margin: 7px 10px 0;
-    border-radius: 17px;
+    padding: 4px;
+    border-radius: 999px;
   }
 
   .cw-widget .cw-tabs > button {
-    min-height: 41px;
-    border-radius: 13px;
-    font-size: 12.7px;
+    min-height: 40px;
+    border-radius: 999px;
+    font-size: 12.5px;
+  }
+
+  .cw-widget .cw-progress {
+    min-height: 55px;
+    flex-basis: 55px;
+    padding-inline: 11px;
+  }
+
+  .cw-widget .cw-calc-body {
+    padding: 12px 11px 14px;
+  }
+
+  .cw-widget .cw-q {
+    font-size: clamp(20px, 6vw, 23px);
   }
 
   .cw-widget .cw-quick-replies .cw-chip {
     min-height: 44px;
     padding-inline: 14px;
     font-size: 13px;
+  }
+}
+
+@media (max-width: 430px) {
+  .cw-widget .cw-choice-grid--industry,
+  .cw-widget .cw-choice-grid--timeline {
+    grid-template-columns: 1fr;
+  }
+
+  .cw-widget .cw-scard,
+  .cw-widget .cw-vcard {
+    min-height: 68px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-widget .cw-tabs__thumb {
+    transition: none;
+  }
+
+  .cw-widget .cw-calc-step[data-leaving="true"] {
+    animation: none;
   }
 }

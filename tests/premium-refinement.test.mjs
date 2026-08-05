@@ -58,14 +58,14 @@ test("programmatic composer focus cannot hide the initial interface", async () =
   assert.match(installer, /input\.blur\(\)/);
 });
 
-test("logo uses one filled bubble and a clear white M", async () => {
+test("logo is the exact shared website mark", async () => {
   const logo = await read("src/components/widget/BubbleLogo.tsx");
 
-  assert.doesNotMatch(logo, /bl__plate|<rect|bl__optical-weight/);
-  assert.match(logo, /className="bl__bubble"/);
-  assert.match(logo, /fill="currentColor"/);
-  assert.match(logo, /className="bl__monogram"/);
-  assert.match(logo, /stroke="white"/);
-  assert.match(logo, /strokeWidth="8"/);
-  assert.match(logo, /L100 106L69 89/);
+  assert.doesNotMatch(logo, /bl__plate|<rect|bl__bubble|bl__monogram/);
+  assert.match(logo, /className="bl__outer"/);
+  assert.match(logo, /className="bl__inner"/);
+  assert.match(logo, /stroke="currentColor"/);
+  assert.equal((logo.match(/strokeWidth="7"/g) ?? []).length, 2);
+  assert.match(logo, /M92\.9 81\.1C97\.4 80\.8 100\.6 78\.6/);
+  assert.match(logo, /M28\.6 65\.1V32\.9L53\.4 57\.5/);
 });
