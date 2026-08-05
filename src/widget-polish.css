@@ -1,8 +1,7 @@
 /*
  * Môj Chatbot — final visual authority.
- * Restores the compact rhythm of the strongest earlier builds, keeps the
- * website's green identity and removes the oversized controls introduced by
- * the last pass. No gradients are used for selected configurator states.
+ * Compact rhythm from the strongest earlier builds, one calm green palette,
+ * stable selected labels and no oversized or stacked visual controls.
  */
 
 .cw-widget {
@@ -29,7 +28,7 @@ html[data-embed="true"][data-assistant-open="true"] body {
   }
 }
 
-/* Launcher and brand ---------------------------------------------------- */
+/* Brand and launcher ---------------------------------------------------- */
 .cw-widget .cw-launcher {
   width: 66px;
   height: 66px;
@@ -154,7 +153,7 @@ html[data-embed="true"][data-assistant-open="true"] body {
   background: #f0f5f1;
 }
 
-/* Compact website-inspired mode switch -------------------------------- */
+/* Compact site-style mode switch --------------------------------------- */
 .cw-widget .cw-tabs {
   position: relative;
   isolation: isolate;
@@ -265,7 +264,7 @@ html[data-embed="true"][data-assistant-open="true"] body {
   line-height: 1;
 }
 
-/* Configurator shell and progress -------------------------------------- */
+/* Configurator ---------------------------------------------------------- */
 .cw-widget .cw-calculator {
   position: relative;
   background:
@@ -344,13 +343,23 @@ html[data-embed="true"][data-assistant-open="true"] body {
   background: transparent;
 }
 
+/* Sparse steps keep the action with the choices instead of leaving a hole. */
 .cw-widget .cw-calculator:has(
   .cw-calc-step[data-step="interest"],
-  .cw-calc-step[data-step="industry"],
   .cw-calc-step[data-step="timeline"]
 ) .cw-calc-body {
-  display: grid;
-  align-content: center;
+  flex: 0 1 auto;
+  overflow: visible;
+}
+
+.cw-widget .cw-calculator:has(
+  .cw-calc-step[data-step="interest"],
+  .cw-calc-step[data-step="timeline"]
+) .cw-calc-actions {
+  padding-top: 0;
+  border-top-color: transparent;
+  background: transparent;
+  box-shadow: none;
 }
 
 .cw-widget .cw-calc-step {
@@ -391,7 +400,7 @@ html[data-embed="true"][data-assistant-open="true"] body {
   gap: 8px;
 }
 
-/* Calm cards — compact, not form-like ---------------------------------- */
+/* Calm cards ------------------------------------------------------------ */
 .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard, .cw-contact-method) {
   border-color: var(--cw-polish-line);
   color: #183126;
@@ -564,7 +573,7 @@ html[data-embed="true"][data-assistant-open="true"] body {
   background-image: none;
 }
 
-/* Footer and CTA -------------------------------------------------------- */
+/* Footer --------------------------------------------------------------- */
 .cw-widget .cw-calc-actions {
   padding: 9px 13px max(12px, env(safe-area-inset-bottom));
   border-top-color: rgba(13, 59, 41, 0.09);
