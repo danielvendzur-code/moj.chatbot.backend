@@ -4,68 +4,34 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-const rule = (css, selector) => {
-  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  return css.match(new RegExp(`${escaped}\\s*\\{[^}]*\\}`, "m"))?.[0] ?? "";
-};
+test("retired refinement files are not loaded by either runtime", async () => {
+  const main = await read("src/main.tsx");
+  const embed = await read("src/embed.tsx");
 
-test("assistant opens as a compact product rather than an empty fullscreen canvas", async () => {
-  const css = await read("src/product-refinement.css");
-
-  assert.match(
-    rule(css, '.cw-widget .cw-panel[data-mode="assistant"]'),
-    /height:\s*min\(596px,/,
-  );
-  assert.match(css, /@media \(max-width: 640px\)/);
-  assert.match(css, /width:\s*min\(420px, calc\(100dvw - 16px\)\)/);
-  assert.doesNotMatch(css, /\.cw-widget \.cw-panel\s*\{[^}]*inset:\s*0/s);
+  for (const source of [main, embed]) {
+    assert.doesNotMatch(source, /product-refinement\.css/);
+    assert.doesNotMatch(source, /installProductRefinement/);
+    assert.doesNotMatch(source, /assistant-redesign|masterpiece-final/);
+  }
 });
 
-test("tabs and starter choices keep the approved pill geometry", async () => {
-  const css = await read("src/product-refinement.css");
+test("the live composer remains one clean input surface", async () => {
+  const css = await read("src/product-widget.css");
 
-  assert.match(rule(css, ".cw-widget .cw-tabs"), /border-radius:\s*999px/);
-  assert.match(
-    rule(css, ".cw-widget .cw-tabs > button"),
-    /border-radius:\s*999px/,
-  );
-  assert.match(
-    rule(css, ".cw-widget .cw-quick-replies .cw-chip"),
-    /border-radius:\s*999px/,
-  );
-  assert.match(css, /radial-gradient\(circle at center, #209257/);
+  assert.match(css, /\.cw-inputbar\s*\{/);
+  assert.match(css, /\.cw-inputbar input\s*\{/);
+  assert.match(css, /\.cw-inputbar > \.cw-send\s*\{/);
+  assert.match(css, /border-radius:\s*19px/);
+  assert.match(css, /\.cw-inputbar input[\s\S]*?border:\s*0/);
 });
 
-test("composer is one clean pill and the CTA has clear sales hierarchy", async () => {
-  const css = await read("src/product-refinement.css");
-
-  assert.match(rule(css, ".cw-widget .cw-inputbar"), /border-radius:\s*999px/);
-  assert.match(rule(css, ".cw-widget .cw-inputbar input"), /border:\s*0/);
-  assert.match(
-    rule(css, ".cw-widget .cw-inputbar > .cw-send"),
-    /border-radius:\s*50%/,
-  );
-  assert.match(css, /content:\s*"4 krátke otázky • bez záväzku"/);
-  assert.match(css, /content:\s*"Začať"/);
-});
-
-test("programmatic composer focus cannot hide the initial interface", async () => {
-  const installer = await read("src/lib/installProductRefinement.ts");
-
-  assert.match(installer, /lastPointerTarget/);
-  assert.match(installer, /keyboardNavigationAt/);
-  assert.match(installer, /input\.closest\("\.cw-inputbar"\)/);
-  assert.match(installer, /input\.blur\(\)/);
-});
-
-test("logo is the exact shared website mark", async () => {
+test("the replacement logo is simple enough for all three sizes", async () => {
   const logo = await read("src/components/widget/BubbleLogo.tsx");
 
-  assert.doesNotMatch(logo, /bl__plate|<rect|bl__bubble|bl__monogram/);
-  assert.match(logo, /className="bl__outer"/);
-  assert.match(logo, /className="bl__inner"/);
-  assert.match(logo, /stroke="currentColor"/);
-  assert.equal((logo.match(/strokeWidth="7"/g) ?? []).length, 2);
-  assert.match(logo, /M92\.9 81\.1C97\.4 80\.8 100\.6 78\.6/);
-  assert.match(logo, /M28\.6 65\.1V32\.9L53\.4 57\.5/);
+  assert.match(logo, /size: "launcher" \| "header" \| "avatar"/);
+  assert.match(logo, /viewBox="0 0 64 64"/);
+  assert.match(logo, /className="bl__frame"/);
+  assert.match(logo, /className="bl__monogram"/);
+  assert.equal((logo.match(/strokeWidth="4\.4"/g) ?? []).length, 2);
+  assert.doesNotMatch(logo, /<rect|fill="currentColor"|data:image|base64/);
 });
