@@ -3,38 +3,35 @@ type BubbleLogoProps = {
 };
 
 /*
- * Exact Môj Chatbot mark used by mojchatbot.sk.
- * These measured paths and the 7 px rounded stroke are shared with the
- * website BrandMark component. The widget must not reinterpret or redraw it.
+ * Compact Môj Chatbot symbol designed specifically for the widget.
+ * A calm rounded speech-bubble frame, a simple M and a right-side tail stay
+ * readable from the launcher down to the small message avatar. The mark has
+ * no filled tile, face, eyes or duplicate outline.
  */
-const OUTER =
-  "M92.9 81.1C97.4 80.8 100.6 78.6 100.6 75.6V12.6" +
-  "C100.6 7.9 96.4 5.3 93 7.6L59.9 36.7" +
-  "C58 38.5 55 38.5 53.1 36.7L20 7.6" +
-  "C16.6 5.3 12.4 7.9 12.4 12.6V76.1" +
-  "C12.4 78.9 14.7 81.1 17.5 81.1H31.7L33.5 104.5L57.5 81.1H80.9" +
-  "C82.9 81.1 84.6 79.5 84.6 77.5V32.9";
+const FRAME =
+  "M15 12.5H49C53.7 12.5 57.5 16.3 57.5 21V38.5" +
+  "C57.5 43.2 53.7 47 49 47H42.5L50.5 55L36.5 47H15" +
+  "C10.3 47 6.5 43.2 6.5 38.5V21C6.5 16.3 10.3 12.5 15 12.5Z";
 
-const INNER =
-  "M28.6 65.1V32.9L53.4 57.5C55.1 59.2 57.9 59.2 59.6 57.5L84.6 32.9";
+const MONOGRAM = "M18 36V23L32 34.5L46 23V36";
 
 export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
   return (
     <span className={`bl bl--${size}`} aria-hidden="true">
-      <svg viewBox="0 0 112 112" fill="none" focusable="false">
+      <svg viewBox="0 0 64 64" fill="none" focusable="false">
         <path
-          className="bl__outer"
-          d={OUTER}
+          className="bl__frame"
+          d={FRAME}
           stroke="currentColor"
-          strokeWidth="7"
+          strokeWidth="4.4"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
         <path
-          className="bl__inner"
-          d={INNER}
+          className="bl__monogram"
+          d={MONOGRAM}
           stroke="currentColor"
-          strokeWidth="7"
+          strokeWidth="4.4"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
