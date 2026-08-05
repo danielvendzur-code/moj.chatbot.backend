@@ -1,8 +1,9 @@
 /*
  * Final interaction polish.
  * This file is a deterministic static layer loaded after product-widget.css.
- * It fixes the concrete visual regressions found in the live interaction:
- * disappearing chip labels, a weak logo silhouette and an overly generic tab bar.
+ * It carries the brand-mark sizing, the states that have to survive an
+ * auto-advance, and the reduced-motion contract — everything that would
+ * otherwise be scattered across the main sheet.
  */
 
 /* Brand mark ------------------------------------------------------------- */
@@ -18,77 +19,47 @@
 }
 
 .cw-widget .cw-launcher .bl--launcher {
-  width: 48px;
-  height: 48px;
+  width: 46px;
+  height: 46px;
 }
 
 .cw-widget .cw-panel-head__mascot .bl--header {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
 }
 
 .cw-widget .cw-avatar .bl--avatar {
-  width: 22px;
-  height: 22px;
+  width: 21px;
+  height: 21px;
 }
 
-.cw-widget .bl__bubble,
-.cw-widget .bl__monogram {
-  vector-effect: non-scaling-stroke;
+/* The mark is an outline on a 112-unit canvas, so its 7-unit stroke has to
+   scale with the viewBox. non-scaling-stroke would pin it at 7 device pixels
+   and the counters would close up — at 46 px the mark rendered as a blob. */
+.cw-widget .bl__outer,
+.cw-widget .bl__inner {
+  vector-effect: none;
 }
 
 /* Chatbot / configurator switch ----------------------------------------- */
-.cw-widget .cw-tabs {
-  flex-basis: 58px;
-  gap: 4px;
-  margin: 8px 12px 0;
-  padding: 4px;
-  border: 1px solid rgba(11, 47, 32, 0.1);
-  border-radius: 18px;
-  background: var(--cw-surface);
-}
-
+/* The thumb is the only moving part; the labels just change colour under it. */
 .cw-widget .cw-tabs > button {
   min-height: 42px;
   padding-inline: 10px;
-  border: 1px solid transparent;
-  border-radius: 14px;
-  color: #56655c;
-  background: transparent;
-  transition:
-    color 170ms ease,
-    border-color 170ms ease,
-    background-color 170ms ease,
-    box-shadow 180ms ease;
 }
 
 .cw-widget .cw-tabs > button::after {
   display: none;
 }
 
-.cw-widget .cw-tabs > button:not([data-active="true"]):hover,
-.cw-widget .cw-tabs > button:not([data-active="true"]):focus-visible {
-  color: var(--cw-green-hover);
-  border-color: rgba(25, 131, 79, 0.16);
-  background: rgba(255, 255, 255, 0.82);
-}
-
-.cw-widget .cw-tabs > button[data-active="true"] {
-  color: var(--cw-white);
-  border-color: var(--cw-green);
-  background: var(--cw-green);
-  box-shadow:
-    0 10px 20px -15px rgba(11, 47, 32, 0.74),
-    inset 0 1px rgba(255, 255, 255, 0.16);
-}
-
 /* Quick-reply chips ------------------------------------------------------ */
 .cw-widget .cw-quick-replies .cw-chip {
   gap: 7px;
-  min-height: 42px;
   isolation: isolate;
 }
 
+/* Keep the label present while the chip confirms. An earlier version faded the
+   text out during the send animation and the chip briefly read as empty. */
 .cw-widget .cw-chip__label {
   min-width: 0;
   flex: 1 1 auto;
@@ -96,13 +67,6 @@
   opacity: 1;
   visibility: visible;
   transform: none;
-}
-
-.cw-widget .cw-quick-replies .cw-chip[data-sending="true"] {
-  color: var(--cw-white);
-  border-color: var(--cw-green);
-  background: var(--cw-green);
-  box-shadow: 0 10px 20px -16px rgba(11, 47, 32, 0.72);
 }
 
 .cw-widget .cw-quick-replies .cw-chip[data-sending="true"]::after {
@@ -129,8 +93,7 @@
   .cw-rowcard,
   .cw-scard,
   .cw-opt,
-  .cw-vcard,
-  .cw-contact-method
+  .cw-vcard
 )[data-selected="true"],
 .cw-widget :is(
   .cw-rowcard,
@@ -139,9 +102,11 @@
 )[data-confirming="true"] {
   color: var(--cw-ink);
   border-color: var(--cw-green);
-  background: var(--cw-lime-soft);
+  background: var(--cw-mint);
 }
 
+/* Keep the selected answer readable before the next step appears. Without
+   these the label could inherit a fading parent and blink out mid-transition. */
 .cw-widget :is(
   .cw-rowcard[data-selected="true"],
   .cw-rowcard[data-confirming="true"]
@@ -194,27 +159,98 @@
     opacity 170ms ease;
 }
 
-/* Keep the selected answer readable before the next step appears. */
 .cw-widget .cw-calc-step[data-leaving="true"]
   :is(.cw-rowcard, .cw-scard, .cw-vcard)[data-selected="true"] {
   opacity: 1;
 }
 
+/* Contact step ----------------------------------------------------------- */
+/* The whole step has to fit above the pinned footer. These are the last few
+   pixels: tighter question block and no gap the eye does not need. */
+.cw-widget .cw-calc-step[data-step="contact"] {
+  gap: 12px;
+}
+
+.cw-widget .cw-calc-step[data-step="contact"] .cw-step-head {
+  gap: 5px;
+}
+
+.cw-widget .cw-calc-step[data-step="contact"] .cw-q {
+  font-size: clamp(19px, 4.6vw, 22px);
+}
+
+/* Below roughly 780 px of viewport the panel is shorter than its 724 px cap —
+   on a 1280x700 laptop the contact step overflowed by 47 px and the visitor was
+   back to scrolling for the send button. These reclaim about 50 px. */
+@media (max-height: 780px) {
+  .cw-widget .cw-progress {
+    min-height: 48px;
+    flex-basis: 48px;
+  }
+
+  .cw-widget .cw-calc-body {
+    padding-block: 12px;
+  }
+
+  .cw-widget .cw-calc-step[data-step="contact"] {
+    gap: 10px;
+  }
+
+  .cw-widget .cw-calc-step[data-step="contact"] .cw-q {
+    font-size: 18px;
+  }
+
+  .cw-widget .cw-calc-step[data-step="contact"] .cw-step-head {
+    gap: 3px;
+  }
+
+  .cw-widget .cw-calc-step[data-step="contact"] .cw-q-sub {
+    font-size: 12px;
+  }
+
+  .cw-widget .cw-calc-step[data-step="contact"] .cw-lead {
+    gap: 10px;
+  }
+
+  .cw-widget .cw-calc-step[data-step="contact"] .cw-field :is(input, textarea) {
+    min-height: 44px;
+  }
+
+  .cw-widget .cw-calc-step[data-step="contact"] .cw-field {
+    gap: 4px;
+  }
+
+  .cw-widget .cw-calc-step[data-step="contact"] .cw-contact-method {
+    min-height: 40px;
+  }
+
+  .cw-widget .cw-calc-step[data-step="contact"] :is(.cw-lead__optional, .cw-summary) > summary {
+    min-height: 38px;
+  }
+}
+
+/* Motion ----------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .cw-widget .cw-tabs__thumb,
+  .cw-widget .cw-panel-head__online i,
+  .cw-widget .cw-selection-indicator,
+  .cw-widget .cw-launcher-preview,
+  .cw-widget .cw-calc-step {
+    animation-duration: 1ms;
+    animation-iteration-count: 1;
+    transition-duration: 1ms;
+  }
+}
+
 @media (max-width: 640px) {
-  .cw-widget .cw-tabs {
-    margin: 7px 10px 0;
-    border-radius: 17px;
-  }
-
-  .cw-widget .cw-tabs > button {
-    min-height: 41px;
-    border-radius: 13px;
-    font-size: 12.7px;
-  }
-
   .cw-widget .cw-quick-replies .cw-chip {
     min-height: 44px;
     padding-inline: 14px;
     font-size: 13px;
+  }
+
+  .cw-widget .cw-direct-actions__grid a {
+    min-height: 40px;
+    font-size: 11.5px;
   }
 }

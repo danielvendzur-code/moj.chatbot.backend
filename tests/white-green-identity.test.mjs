@@ -4,6 +4,11 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
+const rule = (css, selector) => {
+  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return css.match(new RegExp(`${escaped}\\s*\\{[^}]*\\}`, "m"))?.[0] ?? "";
+};
+
 test("the visual system is static, ordered and free of injected overrides", async () => {
   const main = await read("src/main.tsx");
   const embed = await read("src/embed.tsx");
@@ -17,7 +22,7 @@ test("the visual system is static, ordered and free of injected overrides", asyn
   assert.doesNotMatch(main, /installLimeWhiteStyles|installProductRefinement|premiumTilt/);
   assert.doesNotMatch(embed, /installLimeWhiteStyles|installProductRefinement|premiumTilt/);
   assert.match(css, /MÔJ CHATBOT — competition-audited product interface/);
-  assert.match(polish, /disappearing chip labels/);
+  assert.match(polish, /Final interaction polish/);
   assert.match(polish, /\.cw-widget \.cw-chip__label/);
   assert.match(polish, /\.cw-chip\[data-sending="true"\]/);
   assert.doesNotMatch(css, /html:root body \.cw-widget|\[class\]\[class\]/);
@@ -39,11 +44,11 @@ test("launcher and compact brand mark stay clear and motionless", async () => {
   const polish = await read("src/widget-polish.css");
   const logo = await read("src/components/widget/BubbleLogo.tsx");
 
-  assert.match(logo, /className="bl__bubble"/);
-  assert.match(logo, /fill="currentColor"/);
-  assert.match(logo, /className="bl__monogram"/);
-  assert.match(logo, /stroke="white"/);
-  assert.match(logo, /L100 106L69 89/);
+  assert.match(logo, /className="bl__outer"/);
+  assert.match(logo, /className="bl__inner"/);
+  assert.match(logo, /stroke="currentColor"/);
+  assert.match(logo, /strokeWidth="7"/);
+  assert.match(logo, /L33\.5 104\.5L57\.5 81\.1H80\.9/);
   assert.doesNotMatch(logo, /bl__optical-weight|strokeWidth="4\.3"|strokeWidth="5\.6"/);
   assert.match(polish, /\.cw-widget \.cw-launcher,[\s\S]*color:\s*var\(--cw-green\)/);
   assert.match(css, /\.cw-launcher:hover,[\s\S]*?transform:\s*none;/);
@@ -52,12 +57,13 @@ test("launcher and compact brand mark stay clear and motionless", async () => {
   assert.doesNotMatch(polish, /\.bl[^}]*transform:/s);
 });
 
-test("header contains a concrete product purpose rather than fake availability", async () => {
+test("header is the brand plus a live availability state, nothing else", async () => {
   const widget = await read("src/components/widget/AssistantWidget.tsx");
 
   assert.match(widget, /Môj Chatbot/);
-  assert.match(widget, /Poradca a konfigurátor pre váš web/);
-  assert.doesNotMatch(widget, /Online|availability|Odpovedám hneď/);
+  assert.match(widget, /className="cw-panel-head__online"/);
+  assert.match(widget, />\s*Online\s*</);
+  assert.doesNotMatch(widget, /Poradca a konfigurátor/);
 });
 
 test("backward step navigation releases the tall-step height lock quickly", async () => {
@@ -80,12 +86,27 @@ test("mobile iframe freezes and restores the parent page on iOS", async () => {
   assert.match(embed, /window\.scrollTo\(savedScrollX, savedScrollY\)/);
 });
 
-test("contact conversion surface keeps clear hierarchy and visible labels", async () => {
+test("contact step fits without scrolling and keeps sending obvious", async () => {
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
+  const flow = await read("src/lib/assistantFlow.ts");
   const css = await read("src/product-widget.css");
 
-  assert.match(calculator, /Ako sa vám mám ozvať\?/);
-  assert.match(calculator, /Nezáväzný dopyt/);
+  // The intro block and its restated question cost roughly 86 px — enough to
+  // push the send button under the fold on a 724 px panel.
+  assert.doesNotMatch(calculator, /cw-lead__intro/);
+  assert.doesNotMatch(calculator, /Nezáväzný dopyt/);
+  assert.doesNotMatch(calculator, /Stačí meno a jeden kontakt/);
+  assert.doesNotMatch(flow, /Stačí meno a jeden kontakt/);
+
+  // Contact methods collapse into one 44 px segmented row.
+  assert.match(rule(css, ".cw-contact-methods"), /border-radius:\s*var\(--cw-r-pill\)/);
+  assert.match(rule(css, ".cw-contact-method"), /min-height:\s*44px/);
+  // The consent is a quiet line, not a boxed card stacked above the button.
+  assert.match(rule(css, ".cw-consent"), /min-height:\s*26px/);
+  assert.match(rule(css, ".cw-consent"), /border:\s*0/);
+  // The footer stays pinned, so the button is on screen from the first frame.
+  assert.match(rule(css, ".cw-calc-actions"), /flex:\s*0 0 auto/);
+
   assert.match(calculator, /cw-contact-methods/);
   assert.match(calculator, /cw-lead__form/);
   assert.match(calculator, /className="cw-field"/);

@@ -34,6 +34,10 @@ const isPreset = (value: string | undefined): value is AssistantPreset =>
 
 const PANEL_EXIT_MS = 170;
 
+/* A horizontal drag shorter than this reads as a tap, not a swipe. The website
+   uses the same threshold on its "Bez chatbota / S chatbotom" switch. */
+const SWIPE_THRESHOLD_PX = 26;
+
 const reducedMotion = (): boolean =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -49,6 +53,7 @@ export function AssistantWidget({
   const [preset, setPreset] = useState<AssistantPreset | null>(null);
 
   const closeTimerRef = useRef<number | null>(null);
+  const swipeStartRef = useRef<number | null>(null);
   const panelRef = useRef<HTMLElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
   const calculatorViewRef = useRef<HTMLDivElement>(null);
@@ -183,19 +188,28 @@ export function AssistantWidget({
 
   return (
     <div className="cw-widget">
-      <button
-        id="chameleon-widget-launcher"
-        data-testid="widget-launcher"
-        className="cw-launcher"
-        ref={launcherRef}
-        type="button"
-        aria-label="Otvoriť Môj Chatbot"
-        aria-expanded={isOpen}
-        aria-controls="chameleon-widget-panel"
-        onClick={() => open(mode, preset)}
-      >
-        <BubbleLogo size="launcher" />
-      </button>
+      {/* The preview sits before the launcher so a hover on the bubble can
+          reveal it with a plain sibling selector, and it stays out of the
+          accessibility tree because the launcher's own label says the same. */}
+      <div className="cw-launcher-dock">
+        <div className="cw-launcher-preview" aria-hidden="true">
+          <strong>Vyskladajte si asistenta na počkanie</strong>
+          <span>Návrh riešenia máte do minúty.</span>
+        </div>
+        <button
+          id="chameleon-widget-launcher"
+          data-testid="widget-launcher"
+          className="cw-launcher"
+          ref={launcherRef}
+          type="button"
+          aria-label="Otvoriť Môj Chatbot"
+          aria-expanded={isOpen}
+          aria-controls="chameleon-widget-panel"
+          onClick={() => open(mode, preset)}
+        >
+          <BubbleLogo size="launcher" />
+        </button>
+      </div>
 
       {hasOpened ? (
         <section
@@ -217,7 +231,10 @@ export function AssistantWidget({
             </span>
             <div className="cw-panel-head__title">
               <h2 id="chameleon-widget-title">Môj Chatbot</h2>
-              <p>Poradca a konfigurátor pre váš web</p>
+              <p className="cw-panel-head__online">
+                <i aria-hidden="true" />
+                Online
+              </p>
             </div>
             <div className="cw-panel-head__actions">
               <button
@@ -247,7 +264,22 @@ export function AssistantWidget({
             aria-label="Režim asistenta"
             role="tablist"
             data-mode={mode}
+            onPointerDown={(event) => {
+              swipeStartRef.current = event.clientX;
+            }}
+            onPointerUp={(event) => {
+              const start = swipeStartRef.current;
+              swipeStartRef.current = null;
+              if (start === null) return;
+              const dx = event.clientX - start;
+              if (dx > SWIPE_THRESHOLD_PX) switchMode("calculator");
+              else if (dx < -SWIPE_THRESHOLD_PX) switchMode("assistant");
+            }}
+            onPointerCancel={() => {
+              swipeStartRef.current = null;
+            }}
           >
+            <span className="cw-tabs__thumb" aria-hidden="true" />
             <button
               id="cw-tab-assistant"
               type="button"

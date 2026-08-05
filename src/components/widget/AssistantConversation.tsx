@@ -299,7 +299,7 @@ export function AssistantConversation({
           </span>
           <span className="cw-chat-builder__copy">
             <b>Vyskladať riešenie</b>
-            <small>4 otázky · približne 1 minúta</small>
+            <small>4 otázky · návrh máte do minúty</small>
           </span>
           <WidgetIcon name="arrow" className="cw-chat-builder__arrow" />
         </button>

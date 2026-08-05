@@ -569,12 +569,9 @@ export function ToolCalculator({
           {stepId === "contact" ? (
             <div className="cw-contact-stage">
               <div className="cw-lead">
-                <div className="cw-lead__intro">
-                  <span>Nezáväzný dopyt</span>
-                  <strong>Ako sa vám mám ozvať?</strong>
-                  <p>Stačí meno a jeden kontakt. Ostatné údaje sú voliteľné.</p>
-                </div>
-
+                {/* One compact segmented row instead of three tall cards and a
+                    three-line intro: the whole contact step has to fit without
+                    scrolling, and the step heading already asks the question. */}
                 <div
                   className="cw-contact-methods"
                   role="group"
@@ -594,7 +591,6 @@ export function ToolCalculator({
                       >
                         <WidgetIcon name={method.icon} />
                         <span>{method.label}</span>
-                        <SelectionIndicator selected={selected} />
                       </button>
                     );
                   })}
@@ -679,7 +675,7 @@ export function ToolCalculator({
 
               <details className="cw-summary">
                 <summary>
-                  <span>Skontrolovať výber</span>
+                  <span>Váš výber</span>
                   <small>{summaryRows.length} položky</small>
                 </summary>
                 <div className="cw-summary__body">
