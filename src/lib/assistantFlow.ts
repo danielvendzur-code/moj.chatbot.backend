@@ -110,7 +110,7 @@ export const INDUSTRIES: IndustryOption[] = [
   },
   {
     id: "gastro",
-    label: "Restaurácia a ubytovanie",
+    label: "Reštaurácia a ubytovanie",
     icon: "food",
     examples: [
       "Rezervuje stôl alebo pobyt",

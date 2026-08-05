@@ -106,8 +106,10 @@ test("launcher is a translucent bubble with a hover preview", async () => {
   assert.match(widget, /Vyskladajte si asistenta na počkanie/);
 
   assert.match(launcher, /border-radius:\s*50%/);
-  assert.match(launcher, /background:\s*rgba\(255, 255, 255, 0\.72\)/);
-  assert.match(launcher, /backdrop-filter:\s*blur\(18px\)/);
+  assert.match(launcher, /background:\s*var\(--cw-glass-bg\)/);
+  assert.match(launcher, /backdrop-filter:\s*var\(--cw-glass-blur\)/);
+  // 0.38 is what makes it glass; at 0.72 the bubble just looked white.
+  assert.match(css, /--cw-glass-bg:\s*rgba\(255, 255, 255, 0\.38\)/);
   assert.match(launcher, /color:\s*var\(--cw-green\)/);
   // A blurred bubble with no fallback turns into a grey disc where
   // backdrop-filter is unsupported.
@@ -140,7 +142,14 @@ test("header states availability instead of carrying a tagline", async () => {
   assert.match(widget, />\s*Online\s*</);
   assert.doesNotMatch(widget, /Poradca a konfigurátor/);
   assert.match(rule(css, ".cw-panel-head__online"), /color:\s*var\(--cw-green\)/);
-  assert.match(rule(css, ".cw-panel-head__online i"), /animation:\s*cw-online-breathe/);
+  // The pulse lives on a ring pseudo-element; animating spread on the dot
+  // itself drew a halo across the same half pixel that made it look clipped.
+  assert.match(rule(css, ".cw-panel-head__online i"), /width:\s*8px/);
+  assert.match(css, /@keyframes cw-online-ring/);
+  // Whole-number line boxes keep the dot off half pixels.
+  assert.match(rule(css, ".cw-panel-head__title h2"), /line-height:\s*20px/);
+  assert.match(rule(css, ".cw-panel-head__online"), /line-height:\s*16px/);
+  assert.match(rule(css, ".cw-panel-head__title"), /gap:\s*4px/);
 });
 
 test("chat hierarchy is readable and selected chip text stays present", async () => {
@@ -167,7 +176,7 @@ test("chat hierarchy is readable and selected chip text stays present", async ()
   assert.match(conversation, /Radšej priamo\?/);
   assert.match(conversation, /disabled=\{!input\.trim\(\) \|\| typing/);
   assert.doesNotMatch(conversation, /flightOrigin|bubble\.animate|translate3d|getBoundingClientRect/);
-  assert.match(rule(css, ".cw-message-wrap p"), /font-size:\s*14px/);
+  assert.match(css, /\.cw-message-wrap p \{[^}]*font-size:\s*14px/);
   assert.match(rule(css, ".cw-quick-replies .cw-chip"), /font-size:\s*13px/);
   assert.match(
     rule(css, ".cw-quick-replies .cw-chip:hover,\n.cw-quick-replies .cw-chip:focus-visible"),
@@ -190,7 +199,7 @@ test("direct contact reads as three reachable chips", async () => {
   assert.match(links, /border:\s*1px solid rgba\(25, 131, 79, 0\.22\)/);
   assert.match(links, /border-radius:\s*var\(--cw-r-pill\)/);
   assert.match(links, /background:\s*var\(--cw-white\)/);
-  assert.match(links, /min-height:\s*36px/);
+  assert.match(links, /min-height:\s*42px/);
   assert.match(
     rule(css, ".cw-direct-actions__grid a:hover,\n.cw-direct-actions__grid a:focus-visible"),
     /background:\s*var\(--cw-mint\)/,
@@ -205,7 +214,7 @@ test("configurator keeps the selected label readable before auto-advance", async
 
   assert.match(calculator, /function SelectionIndicator/);
   assert.match(calculator, /className="cw-selection-indicator"/);
-  assert.match(autoAdvance, /CONFIRM_MS = 520/);
+  assert.match(autoAdvance, /CONFIRM_MS = 320/);
   assert.match(autoAdvance, /next\.click\(\)/);
   assert.match(css, /data-confirming="true"/);
   assert.match(css, /\.cw-selection-indicator\[data-visible="true"\]/);
@@ -256,8 +265,22 @@ test("every control rounds to the shared website scale", async () => {
   assert.match(rule(css, ".cw-submit"), /border-radius:\s*var\(--cw-r-pill\)/);
   assert.match(rule(css, ".cw-quick-replies .cw-chip"), /border-radius:\s*var\(--cw-r-pill\)/);
   assert.match(rule(css, ".cw-inputbar"), /border-radius:\s*var\(--cw-r-pill\)/);
-  assert.match(rule(css, ".cw-rowcard"), /border-radius:\s*var\(--cw-r-card\)/);
+  // Answers are capsules now, the same shape as the Pokračovať button. These
+  // selectors also end a shared base rule, so scan every block that declares
+  // them rather than only the first match.
+  for (const answer of [".cw-rowcard", ".cw-scard", ".cw-opt", ".cw-vcard"]) {
+    const blocks = css.match(
+      new RegExp(`\\${answer}\\s*\\{[^}]*\\}`, "g"),
+    );
+    assert.ok(
+      blocks?.some((block) => /border-radius:\s*var\(--cw-r-pill\)/.test(block)),
+      `${answer} is not a capsule`,
+    );
+  }
   assert.match(rule(css, ".cw-field :is(input, textarea)"), /border-radius:\s*var\(--cw-r-pill\)/);
+  // Multi-line boxes stay on the card radius — a capsule bows their sides.
+  assert.match(rule(css, ".cw-field textarea"), /border-radius:\s*var\(--cw-r-card\)/);
+  assert.match(rule(css, ".cw-custom textarea"), /border-radius:\s*var\(--cw-r-card\)/);
 
   // The scale itself: pills, one card radius, one panel radius. Stray values
   // are what made the widget look assembled from three different products.
@@ -272,6 +295,71 @@ test("every control rounds to the shared website scale", async () => {
         !line.includes("border-radius: 0;"),
     );
   assert.deepEqual(strays, ["border-radius: 2px;", "border-radius: 6px;"]);
+});
+
+test("the widget always sets in the brand typeface", async () => {
+  const css = await read("src/product-widget.css");
+  const embed = await read("src/embed.tsx");
+  const index = await read("index.html");
+
+  // index.html downloaded Inter Tight while the stack asked for Aptos first,
+  // so the brand face was fetched and then thrown away.
+  assert.match(css, /--cw-font-stack:\s*\n?\s*"Inter Tight"/);
+  assert.doesNotMatch(css, /"Aptos"/);
+  assert.doesNotMatch(css, /var\(--cw-font,/);
+  assert.match(index, /family=Inter\+Tight/);
+
+  // An embedded widget has to bring the face with it, and must no longer
+  // inherit whatever the host page happens to use.
+  assert.match(embed, /family=Inter\+Tight/);
+  assert.match(embed, /ensureBrandFont/);
+  assert.doesNotMatch(embed, /setProperty\("--cw-font"/);
+});
+
+test("options arrive one after another when a question opens", async () => {
+  const css = await read("src/product-widget.css");
+  const polish = await read("src/widget-polish.css");
+
+  assert.match(css, /@keyframes cw-option-in/);
+  assert.match(css, /\.cw-choice-grid > \*:nth-child\(1\)[^}]*animation-delay:\s*60ms/);
+  assert.match(css, /\.cw-choice-grid > \*:nth-child\(n \+ 8\)/);
+  // Only opacity and transform move, so the step never changes height.
+  const keyframe = css.match(/@keyframes cw-option-in\s*\{[\s\S]*?\n\}/)[0];
+  assert.doesNotMatch(keyframe, /height|margin|padding/);
+  // A shortened delay still trickles, so the stagger is removed outright.
+  assert.match(polish, /\.cw-widget \.cw-choice-grid > \*\s*\{\s*animation:\s*none/);
+});
+
+test("chat motion follows the sub-300ms guidance and moves, not blinks", async () => {
+  const css = await read("src/product-widget.css");
+
+  assert.match(rule(css, ".cw-message-row"), /animation:\s*cw-message-in 240ms/);
+  assert.match(rule(css, ".cw-message-row--me"), /animation-name:\s*cw-message-in-me/);
+  assert.match(css, /@keyframes cw-bubble-settle/);
+  // A settle that re-ran on every streamed token would judder the bubble.
+  assert.match(
+    rule(css, '.cw-message-row[data-streaming="true"] .cw-message-wrap p'),
+    /animation:\s*none/,
+  );
+  // Typing dots bounce; a fade reads as loading rather than composing.
+  assert.match(css, /@keyframes cw-typing\s*\{[\s\S]*?translateY\(-4px\)/);
+  assert.match(
+    rule(css, ".cw-inputbar > .cw-send:active:not(:disabled)"),
+    /transform:\s*scale\(0\.92\)/,
+  );
+});
+
+test("the builder card and launcher share one glass recipe", async () => {
+  const css = await read("src/product-widget.css");
+  const builder = rule(css, ".cw-chat-builder");
+
+  assert.match(css, /--cw-glass-blur:\s*blur\(26px\) saturate\(180%\)/);
+  assert.match(css, /--cw-glass-rim:/);
+  assert.match(builder, /backdrop-filter:\s*var\(--cw-glass-blur\)/);
+  assert.match(builder, /var\(--cw-glass-rim\)/);
+  assert.match(css, /@keyframes cw-sheen/);
+  // The muddy lime radial is what this replaced.
+  assert.doesNotMatch(builder, /radial-gradient/);
 });
 
 test("palette stays within the website white forest lime identity", async () => {

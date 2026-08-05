@@ -82,6 +82,7 @@
   font-size: 12px;
   font-weight: 800;
   line-height: 1;
+  animation: cw-tick-pop 260ms var(--cw-spring) both;
 }
 
 .cw-widget .cw-quick-replies .cw-chip:disabled:not([data-sending="true"]) {
@@ -103,6 +104,14 @@
   color: var(--cw-ink);
   border-color: var(--cw-green);
   background: var(--cw-mint);
+}
+
+/* The industry cards are a low row now, so their icon turns green on selection
+   the same way the interest cards' does. */
+.cw-widget .cw-scard[data-selected="true"] .cw-scard__icon,
+.cw-widget .cw-scard[data-confirming="true"] .cw-scard__icon {
+  color: var(--cw-white);
+  background: var(--cw-green);
 }
 
 /* Keep the selected answer readable before the next step appears. Without
@@ -167,16 +176,40 @@
 /* Contact step ----------------------------------------------------------- */
 /* The whole step has to fit above the pinned footer. These are the last few
    pixels: tighter question block and no gap the eye does not need. */
+/* Raising every label to 11.5 px and rounding the fields into capsules cost
+   about 27 px, which put the step back over the fold. These take it back. */
 .cw-widget .cw-calc-step[data-step="contact"] {
-  gap: 12px;
+  gap: 10px;
+}
+
+.cw-widget .cw-calc-step[data-step="contact"] .cw-lead {
+  gap: 10px;
+}
+
+.cw-widget .cw-calc-step[data-step="contact"] .cw-field :is(input, textarea) {
+  min-height: 46px;
+}
+
+.cw-widget .cw-calc-step[data-step="contact"]
+  :is(.cw-lead__optional, .cw-summary) > summary {
+  min-height: 36px;
+  padding-block: 7px;
+}
+
+.cw-widget .cw-calc-step[data-step="contact"] .cw-contact-method {
+  min-height: 42px;
 }
 
 .cw-widget .cw-calc-step[data-step="contact"] .cw-step-head {
-  gap: 5px;
+  gap: 4px;
 }
 
 .cw-widget .cw-calc-step[data-step="contact"] .cw-q {
-  font-size: clamp(19px, 4.6vw, 22px);
+  font-size: clamp(19px, 4.6vw, 20px);
+}
+
+.cw-widget .cw-calc-step[data-step="contact"] .cw-q-sub {
+  font-size: 12.5px;
 }
 
 /* Below roughly 780 px of viewport the panel is shorter than its 724 px cap —
@@ -232,13 +265,29 @@
 /* Motion ----------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .cw-widget .cw-tabs__thumb,
-  .cw-widget .cw-panel-head__online i,
+  .cw-widget .cw-panel-head__online i::after,
   .cw-widget .cw-selection-indicator,
+  .cw-widget .cw-selection-indicator svg path,
   .cw-widget .cw-launcher-preview,
-  .cw-widget .cw-calc-step {
+  .cw-widget .cw-calc-step,
+  .cw-widget .cw-message-row,
+  .cw-widget .cw-message-wrap p,
+  .cw-widget .cw-typing i,
+  .cw-widget .cw-chat-builder::after,
+  .cw-widget .cw-quick-replies .cw-chip[data-sending="true"]::after {
     animation-duration: 1ms;
     animation-iteration-count: 1;
     transition-duration: 1ms;
+  }
+
+  /* The staggered reveal is the one place a delay is the whole effect, so it
+     has to be zeroed rather than shortened — otherwise options still trickle. */
+  .cw-widget .cw-choice-grid > * {
+    animation: none;
+  }
+
+  .cw-widget .cw-selection-indicator svg path {
+    stroke-dashoffset: 0;
   }
 }
 
