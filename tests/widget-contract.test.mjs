@@ -142,10 +142,16 @@ test("header states availability instead of carrying a tagline", async () => {
   assert.match(widget, />\s*Online\s*</);
   assert.doesNotMatch(widget, /Poradca a konfigurátor/);
   assert.match(rule(css, ".cw-panel-head__online"), /color:\s*var\(--cw-green\)/);
-  // The pulse lives on a ring pseudo-element; animating spread on the dot
-  // itself drew a halo across the same half pixel that made it look clipped.
-  assert.match(rule(css, ".cw-panel-head__online i"), /width:\s*8px/);
-  assert.match(css, /@keyframes cw-online-ring/);
+  // Nothing about the dot may change size. A growing box-shadow spread smeared
+  // it across a half pixel and a scaling ring pseudo-element scaled its own
+  // border, leaving the dot sitting in a thick pale donut — both read as
+  // "badly cropped". Only opacity is allowed to move.
+  const dot = rule(css, ".cw-panel-head__online i");
+  assert.match(dot, /width:\s*8px/);
+  assert.match(dot, /box-shadow:\s*0 0 0 3px/);
+  assert.doesNotMatch(css, /@keyframes cw-online-ring/);
+  const breathe = css.match(/@keyframes cw-online-breathe\s*\{[\s\S]*?\n\}/)[0];
+  assert.doesNotMatch(breathe, /transform|box-shadow|scale/);
   // Whole-number line boxes keep the dot off half pixels.
   assert.match(rule(css, ".cw-panel-head__title h2"), /line-height:\s*20px/);
   assert.match(rule(css, ".cw-panel-head__online"), /line-height:\s*16px/);
@@ -177,7 +183,10 @@ test("chat hierarchy is readable and selected chip text stays present", async ()
   assert.match(conversation, /disabled=\{!input\.trim\(\) \|\| typing/);
   assert.doesNotMatch(conversation, /flightOrigin|bubble\.animate|translate3d|getBoundingClientRect/);
   assert.match(css, /\.cw-message-wrap p \{[^}]*font-size:\s*14px/);
-  assert.match(rule(css, ".cw-quick-replies .cw-chip"), /font-size:\s*13px/);
+  assert.match(rule(css, ".cw-quick-replies .cw-chip"), /font-size:\s*12\.5px/);
+  // Full width, one per row: side by side the questions wrapped and the odd
+  // one out stretched across the bottom.
+  assert.doesNotMatch(rule(css, ".cw-quick-replies"), /grid-template-columns/);
   assert.match(
     rule(css, ".cw-quick-replies .cw-chip:hover,\n.cw-quick-replies .cw-chip:focus-visible"),
     /background:\s*var\(--cw-green-hover\)/,
@@ -321,8 +330,13 @@ test("options arrive one after another when a question opens", async () => {
   const polish = await read("src/widget-polish.css");
 
   assert.match(css, /@keyframes cw-option-in/);
-  assert.match(css, /\.cw-choice-grid > \*:nth-child\(1\)[^}]*animation-delay:\s*60ms/);
-  assert.match(css, /\.cw-choice-grid > \*:nth-child\(n \+ 8\)/);
+  // The delays must sit behind the same prefix as the `animation` shorthand.
+  // The shorthand resets animation-delay to 0s, and on a higher-specificity
+  // selector it wiped every stagger — the options all arrived at once.
+  const prefix = String.raw`\.cw-calc-step:not\(\[data-leaving="true"\]\) \.cw-choice-grid > \*`;
+  assert.match(css, new RegExp(`${prefix}:nth-child\\(1\\)[^}]*animation-delay:\\s*70ms`));
+  assert.match(css, new RegExp(`${prefix}:nth-child\\(n \\+ 8\\)`));
+  assert.match(css, new RegExp(`${prefix}\\s*\\{[^}]*animation:\\s*cw-option-in`));
   // Only opacity and transform move, so the step never changes height.
   const keyframe = css.match(/@keyframes cw-option-in\s*\{[\s\S]*?\n\}/)[0];
   assert.doesNotMatch(keyframe, /height|margin|padding/);
@@ -347,6 +361,60 @@ test("chat motion follows the sub-300ms guidance and moves, not blinks", async (
     rule(css, ".cw-inputbar > .cw-send:active:not(:disabled)"),
     /transform:\s*scale\(0\.92\)/,
   );
+});
+
+test("a scrollable area says so and offers to move you on", async () => {
+  const hook = await read("src/hooks/useScrollCue.ts");
+  const cue = await read("src/components/widget/ScrollCue.tsx");
+  const calculator = await read("src/components/widget/ToolCalculator.tsx");
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
+  );
+  const css = await read("src/product-widget.css");
+
+  // React swaps the step and message nodes outright, so a ResizeObserver bound
+  // to the children present at mount goes stale and the cue never reappears.
+  assert.match(hook, /MutationObserver/);
+  assert.match(hook, /childList:\s*true/);
+  assert.match(hook, /subtree:\s*true/);
+  assert.match(hook, /ResizeObserver/);
+  assert.match(hook, /scrollBy/);
+  assert.match(hook, /prefers-reduced-motion/);
+
+  assert.match(cue, /data-testid="scroll-cue"/);
+  assert.match(cue, /cw-scroll-fade/);
+  assert.match(cue, /if \(!hasMore\) return null/);
+
+  // The cue lives beside the scroller, not inside it, or it scrolls away from
+  // the content it points at.
+  for (const source of [calculator, conversation]) {
+    assert.match(source, /className="cw-scroll-shell"/);
+    assert.match(source, /<ScrollCue targetRef=/);
+  }
+  assert.match(rule(css, ".cw-scroll-shell"), /position:\s*relative/);
+  assert.match(rule(css, ".cw-scroll-cue"), /position:\s*absolute/);
+});
+
+test("picking an industry no longer opens an explanation panel", async () => {
+  const calculator = await read("src/components/widget/ToolCalculator.tsx");
+  const css = await read("src/product-widget.css");
+
+  assert.doesNotMatch(calculator, /cw-industry-tip|industry-tip|selectedIndustry/);
+  assert.doesNotMatch(calculator, /Čo sa tu najviac oplatí/);
+  assert.doesNotMatch(css, /cw-industry-tip/);
+});
+
+test("answers fill the width instead of sitting in half-empty columns", async () => {
+  const css = await read("src/product-widget.css");
+
+  // Two columns wrapped labels like "Reštaurácia a ubytovanie" onto two
+  // cramped lines and left the other half of the step empty.
+  assert.doesNotMatch(
+    css,
+    /\.cw-choice-grid--industry[\s\S]{0,120}grid-template-columns/,
+  );
+  assert.match(rule(css, ".cw-scard b"), /white-space:\s*nowrap/);
+  assert.match(rule(css, ".cw-scard b"), /text-overflow:\s*ellipsis/);
 });
 
 test("the builder card and launcher share one glass recipe", async () => {

@@ -8,6 +8,7 @@ import {
 } from "../../lib/chatHistory";
 import { track } from "../../lib/analytics";
 import { BubbleLogo } from "./BubbleLogo";
+import { ScrollCue } from "./ScrollCue";
 import { WidgetIcon } from "./WidgetIcon";
 
 type AssistantConversationProps = {
@@ -305,7 +306,8 @@ export function AssistantConversation({
         </button>
       </div>
 
-      <div className="cw-messages" ref={messagesRef} aria-live="polite">
+      <div className="cw-scroll-shell">
+        <div className="cw-messages" ref={messagesRef} aria-live="polite">
         {messages.map((message) => (
           <div
             className={`cw-message-row cw-message-row--${message.from}`}
@@ -335,7 +337,9 @@ export function AssistantConversation({
               <i />
             </div>
           </div>
-        ) : null}
+          ) : null}
+        </div>
+        <ScrollCue targetRef={messagesRef} label="Zobraziť novšie správy" />
       </div>
 
       {showQuickReplies ? (
