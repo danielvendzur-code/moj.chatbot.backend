@@ -19,6 +19,16 @@ html[data-embed="true"][data-assistant-open="true"] body {
   background: var(--cw-polish-paper);
 }
 
+@media (min-width: 641px) {
+  .cw-widget .cw-panel[data-mode="calculator"] {
+    height: min(640px, calc(100dvh - 24px));
+  }
+
+  .cw-widget .cw-panel[data-mode="assistant"] {
+    height: min(610px, calc(100dvh - 24px));
+  }
+}
+
 /* Launcher and brand ---------------------------------------------------- */
 .cw-widget .cw-launcher {
   width: 66px;
@@ -257,7 +267,10 @@ html[data-embed="true"][data-assistant-open="true"] body {
 
 /* Configurator shell and progress -------------------------------------- */
 .cw-widget .cw-calculator {
-  background: var(--cw-polish-paper);
+  position: relative;
+  background:
+    radial-gradient(circle at 82% 94%, rgba(179, 233, 208, 0.2), transparent 38%),
+    linear-gradient(180deg, #ffffff 0%, var(--cw-polish-paper) 68%, #f4f9f6 100%);
 }
 
 .cw-widget .cw-progress {
@@ -329,6 +342,15 @@ html[data-embed="true"][data-assistant-open="true"] body {
 .cw-widget .cw-calc-body {
   padding: 14px 13px 16px;
   background: transparent;
+}
+
+.cw-widget .cw-calculator:has(
+  .cw-calc-step[data-step="interest"],
+  .cw-calc-step[data-step="industry"],
+  .cw-calc-step[data-step="timeline"]
+) .cw-calc-body {
+  display: grid;
+  align-content: center;
 }
 
 .cw-widget .cw-calc-step {
@@ -619,37 +641,37 @@ html[data-embed="true"][data-assistant-open="true"] body {
   }
 
   .cw-widget .cw-panel-head {
-    min-height: calc(64px + env(safe-area-inset-top));
-    padding: max(8px, env(safe-area-inset-top)) 9px 8px 13px;
+    min-height: calc(62px + env(safe-area-inset-top));
+    padding: max(7px, env(safe-area-inset-top)) 9px 7px 13px;
   }
 
   .cw-widget .cw-panel-head__mascot {
-    width: 40px;
-    height: 40px;
-    flex-basis: 40px;
+    width: 38px;
+    height: 38px;
+    flex-basis: 38px;
   }
 
   .cw-widget .cw-panel-head__mascot .bl--header {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
   }
 
   .cw-widget .cw-tabs {
-    width: min(278px, calc(100% - 28px));
-    min-height: 43px;
-    flex-basis: 43px;
-    margin: 8px auto 7px;
+    width: min(242px, calc(100% - 28px));
+    min-height: 39px;
+    flex-basis: 39px;
+    margin: 7px auto 6px;
   }
 
   .cw-widget .cw-tabs > button {
-    min-height: 37px;
-    font-size: 12.3px;
+    min-height: 33px;
+    font-size: 12px;
   }
 
   .cw-widget .cw-progress {
-    min-height: 47px;
-    flex-basis: 47px;
-    padding: 6px 11px;
+    min-height: 45px;
+    flex-basis: 45px;
+    padding: 5px 11px;
   }
 
   .cw-widget .cw-calc-body {
