@@ -3,28 +3,38 @@ type BubbleLogoProps = {
 };
 
 /*
- * Compact Môj Chatbot mark for small UI surfaces.
- * The speech bubble is the silhouette and the white M is cut directly into it,
- * so the logo remains legible in the launcher, header and 23 px chat avatar.
- * The tail intentionally sits on the right and the mark has no plate, double
- * outline or decorative backing.
+ * Exact Môj Chatbot mark used by mojchatbot.sk.
+ * These measured paths and the 7 px rounded stroke are shared with the
+ * website BrandMark component. The widget must not reinterpret or redraw it.
  */
-const BUBBLE =
-  "M20 8H92C101.94 8 110 16.06 110 26V71C110 80.94 101.94 89 92 89H82L100 106L69 89H20C10.06 89 2 80.94 2 71V26C2 16.06 10.06 8 20 8Z";
+const OUTER =
+  "M92.9 81.1C97.4 80.8 100.6 78.6 100.6 75.6V12.6" +
+  "C100.6 7.9 96.4 5.3 93 7.6L59.9 36.7" +
+  "C58 38.5 55 38.5 53.1 36.7L20 7.6" +
+  "C16.6 5.3 12.4 7.9 12.4 12.6V76.1" +
+  "C12.4 78.9 14.7 81.1 17.5 81.1H31.7L33.5 104.5L57.5 81.1H80.9" +
+  "C82.9 81.1 84.6 79.5 84.6 77.5V32.9";
 
-const MONOGRAM =
-  "M24 67V31L48 53C50.4 55.2 53.6 55.2 56 53L80 31V67";
+const INNER =
+  "M28.6 65.1V32.9L53.4 57.5C55.1 59.2 57.9 59.2 59.6 57.5L84.6 32.9";
 
 export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
   return (
     <span className={`bl bl--${size}`} aria-hidden="true">
       <svg viewBox="0 0 112 112" fill="none" focusable="false">
-        <path className="bl__bubble" d={BUBBLE} fill="currentColor" />
         <path
-          className="bl__monogram"
-          d={MONOGRAM}
-          stroke="white"
-          strokeWidth="8"
+          className="bl__outer"
+          d={OUTER}
+          stroke="currentColor"
+          strokeWidth="7"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          className="bl__inner"
+          d={INNER}
+          stroke="currentColor"
+          strokeWidth="7"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
