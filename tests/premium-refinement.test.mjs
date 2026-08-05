@@ -58,14 +58,14 @@ test("programmatic composer focus cannot hide the initial interface", async () =
   assert.match(installer, /input\.blur\(\)/);
 });
 
-test("logo uses one filled bubble and a clear white M", async () => {
+test("logo is the website's outlined mark, not a redrawn approximation", async () => {
   const logo = await read("src/components/widget/BubbleLogo.tsx");
 
   assert.doesNotMatch(logo, /bl__plate|<rect|bl__optical-weight/);
-  assert.match(logo, /className="bl__bubble"/);
-  assert.match(logo, /fill="currentColor"/);
-  assert.match(logo, /className="bl__monogram"/);
-  assert.match(logo, /stroke="white"/);
-  assert.match(logo, /strokeWidth="8"/);
-  assert.match(logo, /L100 106L69 89/);
+  assert.match(logo, /className="bl__outer"/);
+  assert.match(logo, /className="bl__inner"/);
+  assert.match(logo, /stroke="currentColor"/);
+  assert.match(logo, /strokeWidth="7"/);
+  assert.match(logo, /fill="none"/);
+  assert.match(logo, /M28\.6 65\.1V32\.9L53\.4 57\.5/);
 });

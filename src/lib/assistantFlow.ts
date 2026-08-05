@@ -33,7 +33,7 @@ export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   ],
   contact: [
     "Kam vám môžem poslať ďalší krok?",
-    "Stačí meno a jeden kontakt. Ozvem sa do jedného pracovného dňa.",
+    "Ozvem sa do jedného pracovného dňa.",
   ],
   priority: [
     "Čo je pre vás najdôležitejšie?",
