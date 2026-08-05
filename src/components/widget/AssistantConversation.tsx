@@ -47,6 +47,10 @@ const QUICK_REPLIES: QuickReply[] = [
     label: "Čo odo mňa potrebujete?",
     question: "Čo vám mám poslať, aby ste mi vedeli pripraviť riešenie?",
   },
+  {
+    label: "Koľko to stojí?",
+    question: "Koľko stojí chatbot alebo konfigurátor na mieru a čo je v cene?",
+  },
 ];
 
 const CHAT_FALLBACK =
@@ -400,8 +404,8 @@ export function AssistantConversation({
         </button>
       </div>
 
+      {/* The former "Radšej priamo?" label is intentionally omitted. */}
       <nav className="cw-direct-actions" aria-label="Priamy kontakt">
-        <span className="cw-direct-actions__label">Radšej priamo?</span>
         <div className="cw-direct-actions__grid">
           <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
             <WidgetIcon name="chat" />
