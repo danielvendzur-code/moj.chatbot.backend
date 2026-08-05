@@ -303,3 +303,132 @@
     font-size: 11.5px;
   }
 }
+
+/* Requested chip layout and sizing -------------------------------------- */
+.cw-widget .cw-quick-replies {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.cw-widget .cw-quick-replies .cw-chip {
+  position: relative;
+  min-height: 54px;
+  padding: 9px 11px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* MojPlot-style fill: the brand colour grows from the centre while the label
+   remains above it. This is implemented only in this repository. */
+.cw-widget .cw-quick-replies .cw-chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at center,
+    var(--cw-lime) 0%,
+    var(--cw-green) 100%
+  );
+  transform: scale(0);
+  transform-origin: center;
+  transition: transform 650ms ease-out;
+}
+
+.cw-widget .cw-quick-replies .cw-chip:is(:hover, :focus-visible)::before,
+.cw-widget .cw-quick-replies .cw-chip[data-sending="true"]::before {
+  transform: scale(1.5);
+}
+
+.cw-widget .cw-quick-replies .cw-chip:is(:hover, :focus-visible) {
+  color: var(--cw-white);
+  border-color: var(--cw-green);
+  background: var(--cw-white);
+}
+
+.cw-widget .cw-quick-replies .cw-chip:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.cw-widget .cw-chip__label {
+  position: relative;
+  z-index: 1;
+}
+
+/* The removed label leaves room for larger direct-contact chips. */
+.cw-widget .cw-direct-actions {
+  gap: 0;
+}
+
+.cw-widget .cw-direct-actions__grid a {
+  min-height: 48px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.cw-widget .cw-direct-actions__grid svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* One compact baseline across all configurator answer shapes. Longer copy can
+   still expand naturally, but short choices no longer jump between heights. */
+.cw-widget .cw-choice-grid {
+  gap: 8px;
+}
+
+.cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
+  min-height: 60px;
+}
+
+.cw-widget .cw-rowcard,
+.cw-widget .cw-scard {
+  padding-block: 8px;
+}
+
+.cw-widget .cw-rowcard {
+  padding-inline: 9px 16px;
+}
+
+.cw-widget .cw-scard {
+  padding-inline: 9px 16px;
+}
+
+.cw-widget .cw-opt,
+.cw-widget .cw-vcard {
+  padding: 9px 17px 9px 18px;
+}
+
+/* Desktop keeps the supporting actions visible while the input is focused.
+   The original hiding rule remains active on phones where the keyboard needs
+   the vertical space. */
+@media (min-width: 641px) {
+  .cw-widget .cw-conversation[data-composing="true"] .cw-quick-replies,
+  .cw-widget .cw-conversation[data-composing="true"] .cw-direct-actions {
+    display: grid;
+  }
+}
+
+@media (max-width: 640px) {
+  .cw-widget .cw-quick-replies {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cw-widget .cw-quick-replies .cw-chip {
+    min-height: 52px;
+    padding: 8px 9px;
+    font-size: 12px;
+  }
+
+  .cw-widget .cw-direct-actions__grid a {
+    min-height: 44px;
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-widget .cw-quick-replies .cw-chip::before {
+    transition-duration: 1ms;
+  }
+}
