@@ -25,8 +25,8 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   await expect(page.getByRole("heading", { name: "Môj Chatbot" })).toBeVisible();
   await expect(page.getByText("4 otázky · návrh máte do minúty")).toBeVisible();
   await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
-  await expect(page.locator(".cw-panel-head .bl__bubble")).toBeVisible();
-  await expect(page.locator(".cw-panel-head .bl__monogram")).toBeVisible();
+  await expect(page.locator(".cw-panel-head .bl__outer")).toBeVisible();
+  await expect(page.locator(".cw-panel-head .bl__inner")).toBeVisible();
 
   const quickReply = page.getByRole("button", {
     name: "Kde mi to ušetrí čas?",
