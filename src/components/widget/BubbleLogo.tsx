@@ -5,15 +5,9 @@ type BubbleLogoProps = {
 /*
  * Môj Chatbot brand mark — the same drawing the website ships.
  *
- * The geometry is copied verbatim from the site's BrandMark component and
- * public/brand/logo.svg, so the launcher, the panel header and the 22 px chat
- * avatar all carry the identical symbol the visitor already saw in the header
- * of the page. The asymmetry is intentional: the inner M's left arm ends free
- * at y 65.1 while the right one continues into the outer stroke.
- *
- * Both paths use currentColor, so the surface around the mark decides the
- * colour — emerald on the glass launcher, emerald in the header, and the same
- * emerald at avatar size.
+ * Both trajectories use pathLength=1, so the drawing animation never depends
+ * on guessed SVG lengths. The outer contour runs first and the inner M follows
+ * as the second part of the same visual pen movement.
  */
 const OUTER =
   "M92.9 81.1C97.4 80.8 100.6 78.6 100.6 75.6V12.6" +
@@ -42,6 +36,7 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
         <path
           className="bl__outer"
           d={OUTER}
+          pathLength={1}
           stroke="currentColor"
           strokeWidth="7"
           strokeLinecap="round"
@@ -50,6 +45,7 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
         <path
           className="bl__inner"
           d={INNER}
+          pathLength={1}
           stroke="currentColor"
           strokeWidth="7"
           strokeLinecap="round"
