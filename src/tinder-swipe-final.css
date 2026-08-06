@@ -1,0 +1,123 @@
+/* Final Tinder-style mode transition. Loaded after the liquid-glass layer. */
+
+.cw-widget .cw-panel {
+  transform-origin: 88% 96%;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  animation: cw-smooth-panel-in 230ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+}
+
+.cw-widget .cw-panel[data-state="closing"] {
+  pointer-events: none;
+  animation: cw-smooth-panel-out 200ms cubic-bezier(0.4, 0, 1, 1) both !important;
+}
+
+@keyframes cw-smooth-panel-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes cw-smooth-panel-out {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.985);
+  }
+}
+
+/* Keep both complete screens mounted and move them as cards. This avoids a
+   React remount and keeps the transition on the compositor. */
+.cw-widget .cw-panel-body {
+  position: relative !important;
+  isolation: isolate;
+  overflow: hidden !important;
+  contain: layout paint;
+  touch-action: pan-y;
+}
+
+.cw-widget .cw-mode-view {
+  position: absolute !important;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: block !important;
+  opacity: 0;
+  pointer-events: none;
+  backface-visibility: hidden;
+  transform-origin: 50% 86%;
+  will-change: transform, opacity;
+  animation: none !important;
+  transition:
+    transform 390ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 190ms ease !important;
+}
+
+.cw-widget
+  .cw-panel-body[data-direction="forward"]
+  .cw-mode-view[data-view="assistant"]:not([data-active="true"]),
+.cw-widget
+  .cw-panel-body[data-direction="backward"]
+  .cw-mode-view[data-view="assistant"]:not([data-active="true"]) {
+  transform: translate3d(-108%, 0, 0) rotate(-3.5deg) scale(0.985);
+}
+
+.cw-widget
+  .cw-panel-body[data-direction="forward"]
+  .cw-mode-view[data-view="calculator"]:not([data-active="true"]),
+.cw-widget
+  .cw-panel-body[data-direction="backward"]
+  .cw-mode-view[data-view="calculator"]:not([data-active="true"]) {
+  transform: translate3d(108%, 0, 0) rotate(3.5deg) scale(0.985);
+}
+
+.cw-widget .cw-mode-view[data-active="true"] {
+  z-index: 2;
+  display: block !important;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+}
+
+/* Faster one-pass logo drawing on deliberate hover only. */
+.cw-widget
+  :is(.cw-launcher, .cw-panel-head__mascot):is(:hover, :focus-visible)
+  .bl
+  path {
+  stroke-dasharray: 360;
+  animation: cw-logo-redraw-fast 350ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes cw-logo-redraw-fast {
+  from {
+    stroke-dashoffset: 360;
+    opacity: 0.62;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-widget .cw-panel,
+  .cw-widget .cw-panel[data-state="closing"],
+  .cw-widget .cw-mode-view,
+  .cw-widget
+    :is(.cw-launcher, .cw-panel-head__mascot)
+    .bl
+    path {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -1,4 +1,5 @@
 import {
+  type PointerEvent as ReactPointerEvent,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -17,12 +18,16 @@ import type {
   OpenSiteAssistantOptions,
 } from "../../types/assistant";
 import "../../liquid-glass-final.css";
+import "../../tinder-swipe-final.css";
 import { AssistantConversation } from "./AssistantConversation";
 import { BubbleLogo } from "./BubbleLogo";
 import { ToolCalculator } from "./ToolCalculator";
 import { WidgetIcon } from "./WidgetIcon";
 
 type WidgetMode = "assistant" | "calculator";
+type SwipeDirection = "forward" | "backward";
+type ActionAnimation = "reset" | "close" | null;
+type SwipeStart = { x: number; y: number };
 
 type AssistantWidgetProps = {
   embedMode?: boolean;
@@ -33,12 +38,22 @@ const isPreset = (value: string | undefined): value is AssistantPreset =>
     value && ["calculator", "product", "inquiry", "advisor", "booking"].includes(value),
   );
 
-const PANEL_EXIT_MS = 170;
+const PANEL_EXIT_MS = 220;
+const ACTION_ANIMATION_MS = 520;
 const SWIPE_THRESHOLD_PX = 26;
+const BODY_SWIPE_THRESHOLD_PX = 54;
 
 const reducedMotion = (): boolean =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const isInteractiveSwipeTarget = (target: EventTarget | null): boolean =>
+  target instanceof Element &&
+  Boolean(
+    target.closest(
+      "button, a, input, textarea, select, summary, label, [role='button'], [contenteditable='true']",
+    ),
+  );
 
 export function AssistantWidget({
   embedMode = false,
@@ -47,11 +62,17 @@ export function AssistantWidget({
   const [isClosing, setIsClosing] = useState(false);
   const [hasOpened, setHasOpened] = useState(false);
   const [mode, setMode] = useState<WidgetMode>("assistant");
+  const [transitionDirection, setTransitionDirection] =
+    useState<SwipeDirection>("forward");
+  const [actionAnimating, setActionAnimating] =
+    useState<ActionAnimation>(null);
   const [resetToken, setResetToken] = useState(0);
   const [preset, setPreset] = useState<AssistantPreset | null>(null);
 
   const closeTimerRef = useRef<number | null>(null);
-  const swipeStartRef = useRef<number | null>(null);
+  const actionTimerRef = useRef<number | null>(null);
+  const tabSwipeStartRef = useRef<SwipeStart | null>(null);
+  const bodySwipeStartRef = useRef<SwipeStart | null>(null);
   const panelRef = useRef<HTMLElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
   const calculatorViewRef = useRef<HTMLDivElement>(null);
@@ -60,9 +81,33 @@ export function AssistantWidget({
   const closingRef = useRef(false);
   const restoreLauncherFocusRef = useRef(false);
 
+  const clearActionTimer = useCallback(() => {
+    if (actionTimerRef.current !== null) {
+      window.clearTimeout(actionTimerRef.current);
+      actionTimerRef.current = null;
+    }
+  }, []);
+
+  const animateAction = useCallback(
+    (action: Exclude<ActionAnimation, null>) => {
+      clearActionTimer();
+      setActionAnimating(action);
+      if (reducedMotion()) {
+        setActionAnimating(null);
+        return;
+      }
+      actionTimerRef.current = window.setTimeout(() => {
+        actionTimerRef.current = null;
+        setActionAnimating(null);
+      }, ACTION_ANIMATION_MS);
+    },
+    [clearActionTimer],
+  );
+
   const close = useCallback(() => {
     if (!openRef.current || closingRef.current) return;
     closingRef.current = true;
+    animateAction("close");
     setIsClosing(true);
     track("widget_close");
 
@@ -80,7 +125,7 @@ export function AssistantWidget({
       return;
     }
     closeTimerRef.current = window.setTimeout(finish, PANEL_EXIT_MS);
-  }, []);
+  }, [animateAction]);
 
   useFocusTrap(panelRef, isOpen && !isClosing, close, launcherRef);
 
@@ -95,6 +140,7 @@ export function AssistantWidget({
       restoreLauncherFocusRef.current = false;
       setHasOpened(true);
       setIsClosing(false);
+      setTransitionDirection(nextMode === "calculator" ? "forward" : "backward");
       setMode(nextMode);
       setPreset(nextPreset);
       setIsOpen(true);
@@ -106,11 +152,48 @@ export function AssistantWidget({
   const switchMode = useCallback(
     (nextMode: WidgetMode) => {
       if (nextMode === mode) return;
+      setTransitionDirection(nextMode === "calculator" ? "forward" : "backward");
       setMode(nextMode);
       track("mode_switch", { to: nextMode });
     },
     [mode],
   );
+
+  const beginSwipe = (
+    event: ReactPointerEvent<HTMLElement>,
+    ref: { current: SwipeStart | null },
+    allowInteractive: boolean,
+  ) => {
+    if (!allowInteractive && isInteractiveSwipeTarget(event.target)) return;
+    ref.current = { x: event.clientX, y: event.clientY };
+    try {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    } catch {
+      // Pointer capture is optional.
+    }
+  };
+
+  const finishSwipe = (
+    event: ReactPointerEvent<HTMLElement>,
+    ref: { current: SwipeStart | null },
+    threshold: number,
+  ) => {
+    const start = ref.current;
+    ref.current = null;
+    if (!start) return;
+
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    if (Math.abs(dx) < threshold || Math.abs(dx) <= Math.abs(dy) * 1.15) {
+      return;
+    }
+
+    if (mode === "assistant" && dx < 0) {
+      switchMode("calculator");
+    } else if (mode === "calculator" && dx > 0) {
+      switchMode("assistant");
+    }
+  };
 
   const openFromOptions = useCallback(
     (options: OpenSiteAssistantOptions) => {
@@ -166,8 +249,9 @@ export function AssistantWidget({
       if (closeTimerRef.current !== null) {
         window.clearTimeout(closeTimerRef.current);
       }
+      clearActionTimer();
     },
-    [],
+    [clearActionTimer],
   );
 
   useEffect(() => {
@@ -179,6 +263,7 @@ export function AssistantWidget({
   }, [isOpen]);
 
   const reset = () => {
+    animateAction("reset");
     setPreset(null);
     setResetToken((value) => value + 1);
     track("widget_reset", { mode });
@@ -212,6 +297,7 @@ export function AssistantWidget({
           id="chameleon-widget-panel"
           className="cw-panel"
           data-mode={mode}
+          data-direction={transitionDirection}
           data-state={isClosing ? "closing" : "open"}
           hidden={!isOpen}
           aria-hidden={isClosing || !isOpen}
@@ -236,6 +322,9 @@ export function AssistantWidget({
               <button
                 type="button"
                 data-testid="widget-reset"
+                data-action-animating={
+                  actionAnimating === "reset" ? "reset" : undefined
+                }
                 aria-label="Začať odznova"
                 title="Začať odznova"
                 onClick={reset}
@@ -246,6 +335,9 @@ export function AssistantWidget({
                 type="button"
                 className="cw-panel-head__close"
                 data-testid="widget-close"
+                data-action-animating={
+                  actionAnimating === "close" ? "close" : undefined
+                }
                 aria-label="Zavrieť"
                 title="Zavrieť"
                 onClick={close}
@@ -260,19 +352,14 @@ export function AssistantWidget({
             aria-label="Výber časti"
             role="tablist"
             data-mode={mode}
-            onPointerDown={(event) => {
-              swipeStartRef.current = event.clientX;
-            }}
-            onPointerUp={(event) => {
-              const start = swipeStartRef.current;
-              swipeStartRef.current = null;
-              if (start === null) return;
-              const dx = event.clientX - start;
-              if (dx > SWIPE_THRESHOLD_PX) switchMode("calculator");
-              else if (dx < -SWIPE_THRESHOLD_PX) switchMode("assistant");
-            }}
+            onPointerDown={(event) =>
+              beginSwipe(event, tabSwipeStartRef, true)
+            }
+            onPointerUp={(event) =>
+              finishSwipe(event, tabSwipeStartRef, SWIPE_THRESHOLD_PX)
+            }
             onPointerCancel={() => {
-              swipeStartRef.current = null;
+              tabSwipeStartRef.current = null;
             }}
           >
             <span className="cw-tabs__thumb" aria-hidden="true" />
@@ -304,7 +391,20 @@ export function AssistantWidget({
             </button>
           </nav>
 
-          <div className="cw-panel-body">
+          <div
+            className="cw-panel-body"
+            data-mode={mode}
+            data-direction={transitionDirection}
+            onPointerDown={(event) =>
+              beginSwipe(event, bodySwipeStartRef, false)
+            }
+            onPointerUp={(event) =>
+              finishSwipe(event, bodySwipeStartRef, BODY_SWIPE_THRESHOLD_PX)
+            }
+            onPointerCancel={() => {
+              bodySwipeStartRef.current = null;
+            }}
+          >
             <div
               id="cw-panel-assistant"
               className="cw-mode-view"
