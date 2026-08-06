@@ -29,7 +29,7 @@ type AssistantWidgetProps = {
 
 const isPreset = (value: string | undefined): value is AssistantPreset =>
   Boolean(
-    value && ["calculator", "inquiry", "advisor", "booking"].includes(value),
+    value && ["calculator", "product", "inquiry", "advisor", "booking"].includes(value),
   );
 
 const PANEL_EXIT_MS = 170;
@@ -193,8 +193,8 @@ export function AssistantWidget({
           accessibility tree because the launcher's own label says the same. */}
       <div className="cw-launcher-dock">
         <div className="cw-launcher-preview" aria-hidden="true">
-          <strong>Vyskladajte si asistenta na počkanie</strong>
-          <span>Návrh riešenia máte do minúty.</span>
+          <strong>Vyskladajte si riešenie na počkanie</strong>
+          <span>Návrh máte do minúty.</span>
         </div>
         <button
           id="chameleon-widget-launcher"
@@ -261,7 +261,7 @@ export function AssistantWidget({
 
           <nav
             className="cw-tabs"
-            aria-label="Režim asistenta"
+            aria-label="Výber časti"
             role="tablist"
             data-mode={mode}
             onPointerDown={(event) => {
@@ -304,7 +304,7 @@ export function AssistantWidget({
               onClick={() => switchMode("calculator")}
             >
               <WidgetIcon name="calculator" />
-              <span>Konfigurátor</span>
+              <span>Vyskladať riešenie</span>
             </button>
           </nav>
 
