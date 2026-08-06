@@ -23,7 +23,7 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   const panel = page.locator(".cw-panel");
   await expect(panel).toBeVisible();
   await expect(page.getByRole("heading", { name: "Môj Chatbot" })).toBeVisible();
-  await expect(page.getByText("4 otázky · približne 1 minúta")).toBeVisible();
+  await expect(page.getByText("4 otázky · návrh máte do minúty")).toBeVisible();
   await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
   await expect(page.locator(".cw-panel-head .bl__bubble")).toBeVisible();
   await expect(page.locator(".cw-panel-head .bl__monogram")).toBeVisible();
@@ -115,7 +115,7 @@ test("mobile mode switching never opens the software keyboard unexpectedly", asy
   expect(Math.round(box.width)).toBe(viewport.width);
   expect(Math.round(box.height)).toBe(viewport.height);
 
-  await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "17px");
+  await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "999px");
   await page.getByTestId("tab-calculator").click();
   await page.getByTestId("tab-assistant").click();
   await page.waitForTimeout(120);
