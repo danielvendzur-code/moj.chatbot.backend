@@ -55,7 +55,7 @@ jobs:
       - name: Create immutable build metadata
         shell: bash
         run: |
-          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"competition-redesign-20260723-v10"},null,2))'
+          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"unified-product-20260804-v1"},null,2))'
 
       - name: Validate production artifacts
         shell: bash
@@ -72,40 +72,43 @@ jobs:
           const js = fs.readFileSync('dist/widget.js', 'utf8');
           const main = fs.readFileSync('src/main.tsx', 'utf8');
           const embed = fs.readFileSync('src/embed.tsx', 'utf8');
+          const widget = fs.readFileSync('src/components/widget/AssistantWidget.tsx', 'utf8');
           const conversation = fs.readFileSync('src/components/widget/AssistantConversation.tsx', 'utf8');
           const calculator = fs.readFileSync('src/components/widget/ToolCalculator.tsx', 'utf8');
           const flow = fs.readFileSync('src/lib/assistantFlow.ts', 'utf8');
+          const types = fs.readFileSync('src/types/assistant.ts', 'utf8');
+          const bridge = fs.readFileSync('src/lib/embedBridge.ts', 'utf8');
           const lead = fs.readFileSync('src/lib/leadApi.ts', 'utf8');
-          const finalCss = fs.readFileSync('src/approved-submit-final.css', 'utf8');
           const meta = JSON.parse(fs.readFileSync('dist/build-meta.json', 'utf8'));
 
           const must = (condition, message) => {
             if (!condition) throw new Error(message);
           };
 
-          must(js.includes('competition-redesign-20260723-v10'), 'widget version missing');
+          must(js.includes('unified-product-20260804-v1'), 'current widget version missing');
           must(css.includes('cw-choice-grid--interest'), 'interest grid missing');
           must(css.includes('cw-selection-indicator'), 'selection indicator missing');
+          must(css.includes('--cw-glass-panel'), 'liquid glass layer missing');
           must(/border-radius:\s*999px/.test(css), 'oval geometry missing');
-          must(/--mc-brand:\s*#ffc79d/i.test(css), 'brand primary missing');
-          must(main.includes('assistant-redesign') && embed.includes('assistant-redesign'), 'redesign import missing');
-          must(!main.includes('installWidgetSpotlight') && !embed.includes('installWidgetSpotlight'), 'legacy builder spotlight still mounted');
-          must(finalCss.includes('Visible widget rebuild'), 'visible widget rebuild layer missing');
-          must(finalCss.includes('.cw-contact-methods'), 'presentation method controls missing');
-          // Pinned to the stable option id, not the display copy — the label has
-          // been reworded three times and each rename silently broke the deploy.
-          must(/id:\s*"meeting"/.test(calculator), 'personal meeting option missing');
+          must(widget.includes('liquid-glass-final.css'), 'final glass import missing');
+          must(!main.includes('installWidgetSpotlight') && !embed.includes('installWidgetSpotlight'), 'legacy spotlight still mounted');
           must(calculator.includes('CONTACT_METHODS'), 'contact method options missing');
+          must(/id:\s*"video"/.test(calculator), 'video contact option missing');
           must(lead.includes('api/lead'), 'lead API missing');
           must(conversation.includes('Vyskladať riešenie'), 'builder CTA missing');
-          // Structure, not wording. Every reword of these strings has broken the
-          // deploy while the flow itself was perfectly fine.
           must(/interest:\s*\[/.test(flow), 'first question missing');
           must(/id:\s*"custom"/.test(flow), 'safe fallback option missing');
+          must(/id:\s*"tracking"/.test(flow), 'order tracking feature missing');
+          must(/id:\s*"order-change"/.test(flow), 'order change feature missing');
+          must(/id:\s*"returns"/.test(flow), 'returns feature missing');
+          must(/product:\s*"product"/.test(flow), 'product preset mapping missing');
+          must(types.includes('"product"'), 'product preset type missing');
+          must(bridge.includes('"product"'), 'product preset bridge missing');
           must(!/(#2aa|#1fa|teal|turquoise)/i.test(css), 'forbidden colour remains');
           must(!calculator.includes('cw-choice-arrow'), 'legacy choice arrow remains');
           must(!js.includes('REPLACE-ME'), 'placeholder remains');
           must(meta.sourceSha === process.env.GITHUB_SHA, 'build metadata SHA mismatch');
+          must(meta.version === 'unified-product-20260804-v1', 'build metadata version mismatch');
           NODE
 
       - name: Configure GitHub Pages
@@ -159,8 +162,8 @@ jobs:
           }
 
           verify "/" "Môj Chatbot"
-          verify "/widget.js" "competition-redesign-20260723-v10"
-          verify "/widget.css" "cw-selection-indicator"
+          verify "/widget.js" "unified-product-20260804-v1"
+          verify "/widget.css" "--cw-glass-panel"
           verify "/build-meta.json" "$SOURCE_SHA"
 
       - name: Checkout latest main for deployment record
