@@ -4,6 +4,7 @@ import { installConfiguratorAutoAdvance } from "./lib/configuratorAutoAdvance";
 import "./widget.css";
 import "./product-widget.css";
 import "./widget-polish.css";
+import "./liquid-glass-final.css";
 
 installConfiguratorAutoAdvance();
 
@@ -15,10 +16,9 @@ const FONT_HREF =
 
 /*
  * Inter Tight is the brand typeface — the same one mojchatbot.sk serves. The
- * widget used to adopt the host page's font instead, so the assistant looked
- * like a different product on every site it was embedded on. If this request
- * fails the stack falls back to Inter and then the system sans; nothing about
- * the layout depends on it.
+ * chatbot used to adopt the host page's font instead, so it looked like a
+ * different product on every site. If this request fails, the system font is
+ * used and the layout still works.
  */
 function ensureBrandFont(): void {
   if (document.querySelector(`link[data-dv-assistant-font="true"]`)) return;
@@ -55,7 +55,7 @@ function mount(): void {
 
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "unified-product-20260804-v1");
+  host.setAttribute("data-dv-assistant-version", "unified-product-20260806-v2");
   host.setAttribute("data-dv-assistant-theme", "white-forest-lime");
   host.setAttribute("data-dv-assistant-quality", "competition-audited-system");
 
