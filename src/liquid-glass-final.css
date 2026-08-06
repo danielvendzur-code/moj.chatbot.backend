@@ -1,0 +1,84 @@
+/* Final, restrained liquid-glass layer. Loaded last on purpose. */
+.cw-widget {
+  --cw-glass-panel: rgba(250, 253, 248, 0.82);
+  --cw-glass-head: rgba(255, 255, 255, 0.72);
+  --cw-glass-control: rgba(237, 246, 231, 0.72);
+  --cw-glass-thumb: rgba(255, 255, 255, 0.84);
+}
+
+.cw-widget .cw-panel {
+  background:
+    radial-gradient(circle at 88% -4%, rgba(217, 255, 120, 0.18), transparent 31%),
+    linear-gradient(155deg, rgba(255, 255, 255, 0.9), var(--cw-glass-panel));
+  -webkit-backdrop-filter: blur(30px) saturate(155%);
+  backdrop-filter: blur(30px) saturate(155%);
+  border-color: rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 44px 100px -45px rgba(11, 47, 32, 0.64),
+    0 18px 42px -30px rgba(11, 47, 32, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 0 0 1px rgba(11, 47, 32, 0.045);
+}
+
+.cw-widget .cw-panel-head {
+  background: var(--cw-glass-head);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
+  border-bottom-color: rgba(11, 47, 32, 0.09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+.cw-widget .cw-tabs {
+  border-color: rgba(255, 255, 255, 0.76);
+  background: var(--cw-glass-control);
+  -webkit-backdrop-filter: blur(18px) saturate(145%);
+  backdrop-filter: blur(18px) saturate(145%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    inset 0 -1px 0 rgba(11, 47, 32, 0.055);
+}
+
+.cw-widget .cw-tabs__thumb {
+  border-color: rgba(255, 255, 255, 0.92);
+  background: var(--cw-glass-thumb);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+  box-shadow:
+    0 12px 24px -18px rgba(11, 47, 32, 0.46),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    inset 0 -1px 0 rgba(11, 47, 32, 0.05);
+}
+
+.cw-widget .cw-launcher {
+  background:
+    radial-gradient(circle at 32% 20%, rgba(255, 255, 255, 0.86), transparent 42%),
+    rgba(255, 255, 255, 0.46);
+  -webkit-backdrop-filter: blur(24px) saturate(165%);
+  backdrop-filter: blur(24px) saturate(165%);
+  border-color: rgba(255, 255, 255, 0.74);
+  box-shadow:
+    0 22px 48px -28px rgba(11, 47, 32, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    inset 0 -1px 0 rgba(11, 47, 32, 0.06);
+}
+
+.cw-widget .cw-launcher:is(:hover, :focus-visible) {
+  background:
+    radial-gradient(circle at 32% 20%, rgba(255, 255, 255, 0.94), transparent 44%),
+    rgba(255, 255, 255, 0.58);
+  border-color: rgba(25, 131, 79, 0.26);
+  box-shadow:
+    0 24px 52px -28px rgba(11, 47, 32, 0.55),
+    0 0 0 5px rgba(185, 237, 77, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.98);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .cw-widget .cw-panel,
+  .cw-widget .cw-panel-head,
+  .cw-widget .cw-tabs,
+  .cw-widget .cw-tabs__thumb,
+  .cw-widget .cw-launcher {
+    background-color: var(--cw-white);
+  }
+}
