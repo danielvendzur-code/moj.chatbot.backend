@@ -82,3 +82,47 @@
     background-color: var(--cw-white);
   }
 }
+
+/* Keep the availability indicator crisp on every header layer. The previous
+   opacity pulse made the small circle look clipped or hollow on some screens. */
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  .cw-panel-head__online[class] {
+  color: #d9ff78 !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  .cw-panel-head__online[class]
+  i {
+  display: block !important;
+  width: 8px !important;
+  height: 8px !important;
+  flex: 0 0 8px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: #d9ff78 !important;
+  box-shadow: 0 0 0 3px rgba(217, 255, 120, 0.14) !important;
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  animation: none !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  .cw-panel-head__online[class]
+  i::before,
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  .cw-panel-head__online[class]
+  i::after {
+  content: none !important;
+  display: none !important;
+}
