@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: widget-quality
@@ -66,8 +66,19 @@ jobs:
             echo "===== test ====="
             cat /tmp/test.log 2>/dev/null || true
           } > WIDGET_QUALITY_AUDIT.txt
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add WIDGET_QUALITY_AUDIT.txt
-          git commit -m "chore: ulož widget quality audit [skip widget-quality]" || exit 0
-          git push origin HEAD:main
+
+      - name: Upload quality report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: widget-quality-${{ github.run_id }}
+          path: WIDGET_QUALITY_AUDIT.txt
+          retention-days: 14
+
+      - name: Enforce quality result
+        if: always()
+        run: |
+          test "${{ steps.install.outcome }}" = "success"
+          test "${{ steps.lint.outcome }}" = "success"
+          test "${{ steps.build.outcome }}" = "success"
+          test "${{ steps.test.outcome }}" = "success"

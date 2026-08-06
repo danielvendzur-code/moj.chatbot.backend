@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -167,12 +167,7 @@ jobs:
           verify "/widget.css" "--cw-glass-panel"
           verify "/build-meta.json" "$SOURCE_SHA"
 
-      - name: Checkout latest main for deployment record
-        uses: actions/checkout@v4
-        with:
-          ref: main
-
-      - name: Record verified widget deployment
+      - name: Save verified deployment report
         shell: bash
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
@@ -186,25 +181,20 @@ jobs:
             echo "page_url=${PAGE_URL}"
             echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           } > PAGES_DEPLOY_AUDIT.txt
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add PAGES_DEPLOY_AUDIT.txt
-          git commit -m "chore: record verified widget deployment [skip widget-quality]" || exit 0
-          git pull --rebase origin main
-          git push origin HEAD:main
+
+      - name: Upload verified deployment report
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-deploy-${{ github.run_id }}
+          path: PAGES_DEPLOY_AUDIT.txt
+          retention-days: 14
 
   diagnostics:
     if: ${{ always() && github.actor != 'github-actions[bot]' }}
     needs: [build, deploy]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout latest main for workflow status
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0
-
-      - name: Record workflow outcome
+      - name: Save workflow outcome
         shell: bash
         env:
           SOURCE_SHA: ${{ github.sha }}
@@ -219,10 +209,10 @@ jobs:
             echo "deploy_result=${DEPLOY_RESULT}"
             echo "recorded_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           } > PAGES_WORKFLOW_STATUS.txt
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add PAGES_WORKFLOW_STATUS.txt
-          git diff --cached --quiet && exit 0
-          git commit -m "chore: record chatbot Pages workflow outcome [skip widget-quality]"
-          git pull --rebase origin main
-          git push origin HEAD:main
+
+      - name: Upload workflow status
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-status-${{ github.run_id }}
+          path: PAGES_WORKFLOW_STATUS.txt
+          retention-days: 14
