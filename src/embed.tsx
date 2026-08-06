@@ -15,10 +15,9 @@ const FONT_HREF =
 
 /*
  * Inter Tight is the brand typeface — the same one mojchatbot.sk serves. The
- * widget used to adopt the host page's font instead, so the assistant looked
- * like a different product on every site it was embedded on. If this request
- * fails the stack falls back to Inter and then the system sans; nothing about
- * the layout depends on it.
+ * chatbot used to adopt the host page's font instead, so it looked like a
+ * different product on every site. If this request fails, the system font is
+ * used and the layout still works.
  */
 function ensureBrandFont(): void {
   if (document.querySelector(`link[data-dv-assistant-font="true"]`)) return;

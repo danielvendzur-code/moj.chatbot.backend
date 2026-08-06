@@ -21,6 +21,7 @@ const entries = new Set<OpenSiteAssistantOptions["entry"]>([
 
 const presets = new Set<NonNullable<OpenSiteAssistantOptions["preset"]>>([
   "calculator",
+  "product",
   "inquiry",
   "advisor",
   "booking",

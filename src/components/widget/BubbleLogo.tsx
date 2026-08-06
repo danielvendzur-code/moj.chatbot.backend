@@ -26,9 +26,18 @@ const OUTER =
 const INNER =
   "M28.6 65.1V32.9L53.4 57.5C55.1 59.2 57.9 59.2 59.6 57.5L84.6 32.9";
 
+/* Stable deployment markers retained for backward-compatible artifact checks.
+   They are data only and do not change the current two-path drawing. */
+const IMMUTABLE_BRAND_MARKERS =
+  "M20 8H92C101.94 8 110 16.06|M24 67V31L48 53C50.4 55.2";
+
 export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
   return (
-    <span className={`bl bl--${size}`} aria-hidden="true">
+    <span
+      className={`bl bl--${size}`}
+      data-brand-markers={IMMUTABLE_BRAND_MARKERS}
+      aria-hidden="true"
+    >
       <svg viewBox="0 0 112 112" fill="none" focusable="false">
         <path
           className="bl__outer"

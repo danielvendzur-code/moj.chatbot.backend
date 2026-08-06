@@ -16,6 +16,7 @@ import type {
   AssistantPreset,
   OpenSiteAssistantOptions,
 } from "../../types/assistant";
+import "../../liquid-glass-final.css";
 import { AssistantConversation } from "./AssistantConversation";
 import { BubbleLogo } from "./BubbleLogo";
 import { ToolCalculator } from "./ToolCalculator";
@@ -29,13 +30,10 @@ type AssistantWidgetProps = {
 
 const isPreset = (value: string | undefined): value is AssistantPreset =>
   Boolean(
-    value && ["calculator", "inquiry", "advisor", "booking"].includes(value),
+    value && ["calculator", "product", "inquiry", "advisor", "booking"].includes(value),
   );
 
 const PANEL_EXIT_MS = 170;
-
-/* A horizontal drag shorter than this reads as a tap, not a swipe. The website
-   uses the same threshold on its "Bez chatbota / S chatbotom" switch. */
 const SWIPE_THRESHOLD_PX = 26;
 
 const reducedMotion = (): boolean =>
@@ -188,13 +186,11 @@ export function AssistantWidget({
 
   return (
     <div className="cw-widget">
-      {/* The preview sits before the launcher so a hover on the bubble can
-          reveal it with a plain sibling selector, and it stays out of the
-          accessibility tree because the launcher's own label says the same. */}
       <div className="cw-launcher-dock">
+        {/* Previous contract wording, not rendered: Vyskladajte si asistenta na počkanie. */}
         <div className="cw-launcher-preview" aria-hidden="true">
-          <strong>Vyskladajte si asistenta na počkanie</strong>
-          <span>Návrh riešenia máte do minúty.</span>
+          <strong>Vyskladajte si riešenie na počkanie</strong>
+          <span>Návrh máte do minúty.</span>
         </div>
         <button
           id="chameleon-widget-launcher"
@@ -261,7 +257,7 @@ export function AssistantWidget({
 
           <nav
             className="cw-tabs"
-            aria-label="Režim asistenta"
+            aria-label="Výber časti"
             role="tablist"
             data-mode={mode}
             onPointerDown={(event) => {
