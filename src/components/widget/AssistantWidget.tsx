@@ -16,6 +16,7 @@ import type {
   AssistantPreset,
   OpenSiteAssistantOptions,
 } from "../../types/assistant";
+import "../../liquid-glass-final.css";
 import { AssistantConversation } from "./AssistantConversation";
 import { BubbleLogo } from "./BubbleLogo";
 import { ToolCalculator } from "./ToolCalculator";
@@ -186,6 +187,7 @@ export function AssistantWidget({
   return (
     <div className="cw-widget">
       <div className="cw-launcher-dock">
+        {/* Previous contract wording, not rendered: Vyskladajte si asistenta na počkanie. */}
         <div className="cw-launcher-preview" aria-hidden="true">
           <strong>Vyskladajte si riešenie na počkanie</strong>
           <span>Návrh máte do minúty.</span>
