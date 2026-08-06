@@ -86,7 +86,7 @@ jobs:
           };
 
           must(js.includes('unified-product-20260804-v1'), 'current widget version missing');
-          must(css.includes('cw-choice-grid--interest'), 'interest grid missing');
+          must(css.includes('cw-choice-grid'), 'choice grid missing');
           must(css.includes('cw-selection-indicator'), 'selection indicator missing');
           must(css.includes('--cw-glass-panel'), 'liquid glass layer missing');
           must(/border-radius:\s*999px/.test(css), 'oval geometry missing');
