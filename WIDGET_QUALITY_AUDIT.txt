@@ -1,4 +1,4 @@
-run_id=31093768450
+run_id=31095007094
 install=success
 lint=success
 build=success
@@ -24,18 +24,18 @@ transforming...
 [32m✓[39m 103 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[32mindex.html                 [39m[1m[2m  1.14 kB[22m[1m[22m[2m │ gzip:  0.62 kB[22m
-[2mdist/[22m[2massets/[22m[35mindex-CkAhf5eI.css  [39m[1m[2m 47.96 kB[22m[1m[22m[2m │ gzip:  9.01 kB[22m
-[2mdist/[22m[2massets/[22m[36mindex-CYCJXR3U.js   [39m[1m[2m223.79 kB[22m[1m[22m[2m │ gzip: 75.58 kB[22m
-[32m✓ built in 1.28s[39m
+[2mdist/[22m[32mindex.html                 [39m[1m[2m  1.14 kB[22m[1m[22m[2m │ gzip:  0.61 kB[22m
+[2mdist/[22m[2massets/[22m[35mindex-CtMwX-_K.css  [39m[1m[2m 48.72 kB[22m[1m[22m[2m │ gzip:  9.12 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-BdvqoFT4.js   [39m[1m[2m223.79 kB[22m[1m[22m[2m │ gzip: 75.58 kB[22m
+[32m✓ built in 1.11s[39m
 [36mvite v5.4.21 [32mbuilding for production...[36m[39m
 transforming...
 [32m✓[39m 99 modules transformed.
 rendering chunks...
 computing gzip size...
-[2mdist/[22m[35mwidget.css  [39m[1m[2m 47.57 kB[22m[1m[22m[2m │ gzip:  8.92 kB[22m
+[2mdist/[22m[35mwidget.css  [39m[1m[2m 48.33 kB[22m[1m[22m[2m │ gzip:  9.03 kB[22m
 [2mdist/[22m[36mwidget.js   [39m[1m[2m223.86 kB[22m[1m[22m[2m │ gzip: 75.71 kB[22m
-[32m✓ built in 1.23s[39m
+[32m✓ built in 1.08s[39m
 
 ===== test =====
 
@@ -46,223 +46,223 @@ TAP version 13
 # Subtest: history accepts the existing Vercel KV variables without colliding with MôjPlot
 ok 1 - history accepts the existing Vercel KV variables without colliding with MôjPlot
   ---
-  duration_ms: 5.91515
+  duration_ms: 5.921886
   type: 'test'
   ...
 # Subtest: history has a normal password page and never places the password in the URL
 ok 2 - history has a normal password page and never places the password in the URL
   ---
-  duration_ms: 3.292197
+  duration_ms: 3.485118
   type: 'test'
   ...
 # Subtest: history stays private and non-indexable
 ok 3 - history stays private and non-indexable
   ---
-  duration_ms: 2.031021
+  duration_ms: 1.431871
   type: 'test'
   ...
 # Subtest: assistant opens as a compact product rather than an empty fullscreen canvas
 ok 4 - assistant opens as a compact product rather than an empty fullscreen canvas
   ---
-  duration_ms: 8.959382
+  duration_ms: 8.178845
   type: 'test'
   ...
 # Subtest: tabs and starter choices keep the approved pill geometry
 ok 5 - tabs and starter choices keep the approved pill geometry
   ---
-  duration_ms: 2.17299
+  duration_ms: 3.174181
   type: 'test'
   ...
 # Subtest: composer is one clean pill and the CTA has clear sales hierarchy
 ok 6 - composer is one clean pill and the CTA has clear sales hierarchy
   ---
-  duration_ms: 3.38995
+  duration_ms: 2.490595
   type: 'test'
   ...
 # Subtest: programmatic composer focus cannot hide the initial interface
 ok 7 - programmatic composer focus cannot hide the initial interface
   ---
-  duration_ms: 1.447932
+  duration_ms: 2.227008
   type: 'test'
   ...
 # Subtest: logo is the website's outlined mark, not a redrawn approximation
 ok 8 - logo is the website's outlined mark, not a redrawn approximation
   ---
-  duration_ms: 1.225906
+  duration_ms: 1.267468
   type: 'test'
   ...
 # Subtest: the visual system is static, ordered and free of injected overrides
 ok 9 - the visual system is static, ordered and free of injected overrides
   ---
-  duration_ms: 12.126744
+  duration_ms: 11.230751
   type: 'test'
   ...
 # Subtest: launcher and compact brand mark stay clear and motionless
 ok 10 - launcher and compact brand mark stay clear and motionless
   ---
-  duration_ms: 4.241794
+  duration_ms: 4.416005
   type: 'test'
   ...
 # Subtest: header is the brand plus a live availability state, nothing else
 ok 11 - header is the brand plus a live availability state, nothing else
   ---
-  duration_ms: 3.731647
+  duration_ms: 2.64869
   type: 'test'
   ...
 # Subtest: backward step navigation releases the tall-step height lock quickly
 ok 12 - backward step navigation releases the tall-step height lock quickly
   ---
-  duration_ms: 2.264551
+  duration_ms: 1.701937
   type: 'test'
   ...
 # Subtest: mobile iframe freezes and restores the parent page on iOS
 ok 13 - mobile iframe freezes and restores the parent page on iOS
   ---
-  duration_ms: 1.45232
+  duration_ms: 1.755089
   type: 'test'
   ...
 # Subtest: contact step fits without scrolling and keeps sending obvious
 ok 14 - contact step fits without scrolling and keeps sending obvious
   ---
-  duration_ms: 4.014379
+  duration_ms: 3.510297
   type: 'test'
   ...
 # Subtest: demo and embed load the ordered static widget styles
 ok 15 - demo and embed load the ordered static widget styles
   ---
-  duration_ms: 8.887417
+  duration_ms: 7.911663
   type: 'test'
   ...
 # Subtest: mode switch is the website's sliding segmented control
 ok 16 - mode switch is the website's sliding segmented control
   ---
-  duration_ms: 1.5376
+  duration_ms: 1.498861
   type: 'test'
   ...
 # Subtest: brand mark is the website drawing, green and motionless
 ok 17 - brand mark is the website drawing, green and motionless
   ---
-  duration_ms: 2.048016
+  duration_ms: 1.833905
   type: 'test'
   ...
 # Subtest: launcher is a translucent bubble with a hover preview
 ok 18 - launcher is a translucent bubble with a hover preview
   ---
-  duration_ms: 2.215179
+  duration_ms: 2.033706
   type: 'test'
   ...
 # Subtest: panel proportions and hierarchy are deliberate
 ok 19 - panel proportions and hierarchy are deliberate
   ---
-  duration_ms: 1.151987
+  duration_ms: 1.104968
   type: 'test'
   ...
 # Subtest: header states availability instead of carrying a tagline
 ok 20 - header states availability instead of carrying a tagline
   ---
-  duration_ms: 1.377109
+  duration_ms: 1.2693
   type: 'test'
   ...
 # Subtest: chat hierarchy is readable and selected chip text stays present
 ok 21 - chat hierarchy is readable and selected chip text stays present
   ---
-  duration_ms: 2.096146
+  duration_ms: 1.960107
   type: 'test'
   ...
 # Subtest: direct contact reads as three reachable chips
 ok 22 - direct contact reads as three reachable chips
   ---
-  duration_ms: 1.261292
+  duration_ms: 1.139033
   type: 'test'
   ...
 # Subtest: configurator keeps the selected label readable before auto-advance
 ok 23 - configurator keeps the selected label readable before auto-advance
   ---
-  duration_ms: 3.52346
+  duration_ms: 2.627381
   type: 'test'
   ...
 # Subtest: steps travel in the direction the visitor is going
 ok 24 - steps travel in the direction the visitor is going
   ---
-  duration_ms: 1.282923
+  duration_ms: 1.247591
   type: 'test'
   ...
 # Subtest: progress and contact step expose clear state and labels
 ok 25 - progress and contact step expose clear state and labels
   ---
-  duration_ms: 1.354627
+  duration_ms: 1.225631
   type: 'test'
   ...
 # Subtest: every control rounds to the shared website scale
 ok 26 - every control rounds to the shared website scale
   ---
-  duration_ms: 2.563863
+  duration_ms: 2.492267
   type: 'test'
   ...
 # Subtest: the widget always sets in the brand typeface
 ok 27 - the widget always sets in the brand typeface
   ---
-  duration_ms: 1.968637
+  duration_ms: 1.368664
   type: 'test'
   ...
 # Subtest: options arrive one after another when a question opens
 ok 28 - options arrive one after another when a question opens
   ---
-  duration_ms: 1.54267
+  duration_ms: 2.014511
   type: 'test'
   ...
 # Subtest: chat motion follows the sub-300ms guidance and moves, not blinks
 ok 29 - chat motion follows the sub-300ms guidance and moves, not blinks
   ---
-  duration_ms: 1.075083
+  duration_ms: 1.271012
   type: 'test'
   ...
 # Subtest: a scrollable area says so and offers to move you on
 ok 30 - a scrollable area says so and offers to move you on
   ---
-  duration_ms: 2.07689
+  duration_ms: 1.77795
   type: 'test'
   ...
 # Subtest: picking an industry no longer opens an explanation panel
 ok 31 - picking an industry no longer opens an explanation panel
   ---
-  duration_ms: 1.311136
+  duration_ms: 1.330913
   type: 'test'
   ...
 # Subtest: answers fill the width instead of sitting in half-empty columns
 ok 32 - answers fill the width instead of sitting in half-empty columns
   ---
-  duration_ms: 1.839766
+  duration_ms: 1.174902
   type: 'test'
   ...
 # Subtest: the builder card and launcher share one glass recipe
 ok 33 - the builder card and launcher share one glass recipe
   ---
-  duration_ms: 1.165763
+  duration_ms: 1.075928
   type: 'test'
   ...
 # Subtest: palette stays within the website white forest lime identity
 ok 34 - palette stays within the website white forest lime identity
   ---
-  duration_ms: 1.112323
+  duration_ms: 1.734391
   type: 'test'
   ...
 # Subtest: mobile, keyboard and reduced-motion fallbacks are first-class
 ok 35 - mobile, keyboard and reduced-motion fallbacks are first-class
   ---
-  duration_ms: 1.247276
+  duration_ms: 1.442255
   type: 'test'
   ...
 # Subtest: icons remain one custom rounded line family
 ok 36 - icons remain one custom rounded line family
   ---
-  duration_ms: 0.698368
+  duration_ms: 0.743658
   type: 'test'
   ...
 # Subtest: configurator remains a short five-step conversion flow
 ok 37 - configurator remains a short five-step conversion flow
   ---
-  duration_ms: 5.420479
+  duration_ms: 4.354046
   type: 'test'
   ...
 1..37
@@ -273,4 +273,4 @@ ok 37 - configurator remains a short five-step conversion flow
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 175.558349
+# duration_ms 174.045113
