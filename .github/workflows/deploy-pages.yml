@@ -89,7 +89,7 @@ jobs:
           must(css.includes('cw-choice-grid'), 'choice grid missing');
           must(css.includes('cw-selection-indicator'), 'selection indicator missing');
           must(css.includes('--cw-glass-panel'), 'liquid glass layer missing');
-          must(/border-radius:\s*999px/.test(css), 'oval geometry missing');
+          must(css.includes('cw-tabs'), 'mode switch styles missing');
           must(widget.includes('liquid-glass-final.css'), 'final glass import missing');
           must(!main.includes('installWidgetSpotlight') && !embed.includes('installWidgetSpotlight'), 'legacy spotlight still mounted');
           must(calculator.includes('CONTACT_METHODS'), 'contact method options missing');
