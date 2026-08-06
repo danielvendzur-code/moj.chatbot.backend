@@ -33,9 +33,6 @@ const isPreset = (value: string | undefined): value is AssistantPreset =>
   );
 
 const PANEL_EXIT_MS = 170;
-
-/* A horizontal drag shorter than this reads as a tap, not a swipe. The website
-   uses the same threshold on its "Bez chatbota / S chatbotom" switch. */
 const SWIPE_THRESHOLD_PX = 26;
 
 const reducedMotion = (): boolean =>
@@ -188,9 +185,6 @@ export function AssistantWidget({
 
   return (
     <div className="cw-widget">
-      {/* The preview sits before the launcher so a hover on the bubble can
-          reveal it with a plain sibling selector, and it stays out of the
-          accessibility tree because the launcher's own label says the same. */}
       <div className="cw-launcher-dock">
         <div className="cw-launcher-preview" aria-hidden="true">
           <strong>Vyskladajte si riešenie na počkanie</strong>
@@ -304,7 +298,7 @@ export function AssistantWidget({
               onClick={() => switchMode("calculator")}
             >
               <WidgetIcon name="calculator" />
-              <span>Vyskladať riešenie</span>
+              <span>Konfigurátor</span>
             </button>
           </nav>
 
