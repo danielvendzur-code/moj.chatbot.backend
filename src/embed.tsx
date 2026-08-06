@@ -4,7 +4,6 @@ import { installConfiguratorAutoAdvance } from "./lib/configuratorAutoAdvance";
 import "./widget.css";
 import "./product-widget.css";
 import "./widget-polish.css";
-import "./liquid-glass-final.css";
 
 installConfiguratorAutoAdvance();
 
