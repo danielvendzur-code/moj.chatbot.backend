@@ -4,6 +4,14 @@
   --cw-glass-head: rgba(255, 255, 255, 0.72);
   --cw-glass-control: rgba(237, 246, 231, 0.72);
   --cw-glass-thumb: rgba(255, 255, 255, 0.84);
+  font-family: "Inter Tight", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.cw-widget button,
+.cw-widget input,
+.cw-widget textarea,
+.cw-widget select {
+  font-family: inherit;
 }
 
 .cw-widget .cw-panel {
@@ -83,13 +91,13 @@
   }
 }
 
-/* Keep the availability indicator crisp on every header layer. The previous
-   opacity pulse made the small circle look clipped or hollow on some screens. */
+/* Stable brand-green availability indicator. No pulse, glow or changing size. */
 html:root
   body
   .cw-widget[class][class][class][class]
   .cw-panel-head__online[class] {
-  color: #d9ff78 !important;
+  color: #19834f !important;
+  font-weight: 650 !important;
 }
 
 html:root
@@ -105,8 +113,8 @@ html:root
   padding: 0 !important;
   border: 0 !important;
   border-radius: 50% !important;
-  background: #d9ff78 !important;
-  box-shadow: 0 0 0 3px rgba(217, 255, 120, 0.14) !important;
+  background: #19834f !important;
+  box-shadow: none !important;
   opacity: 1 !important;
   transform: none !important;
   filter: none !important;
@@ -125,4 +133,127 @@ html:root
   i::after {
   content: none !important;
   display: none !important;
+}
+
+/* Restore the tighter, cleaner typography used before the final glass pass. */
+.cw-widget .cw-q {
+  font-family: "Inter Tight", Inter, ui-sans-serif, system-ui, sans-serif !important;
+  font-size: clamp(1.38rem, 2.1vw, 1.62rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.035em !important;
+  line-height: 1.08 !important;
+}
+
+.cw-widget .cw-q-sub {
+  font-family: "Inter Tight", Inter, ui-sans-serif, system-ui, sans-serif !important;
+  font-size: 0.94rem !important;
+  line-height: 1.45 !important;
+}
+
+.cw-widget .cw-next,
+.cw-widget .cw-submit,
+.cw-widget .cw-progress__count,
+.cw-widget .cw-rowcard b,
+.cw-widget .cw-scard b,
+.cw-widget .cw-vcard b,
+.cw-widget .cw-opt b {
+  font-family: "Inter Tight", Inter, ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* Larger answer chips where the old compact pass became too cramped. */
+.cw-widget .cw-choice-grid--timeline {
+  gap: 0.72rem !important;
+}
+
+.cw-widget .cw-choice-grid--timeline .cw-vcard {
+  min-height: 86px !important;
+  padding: 1rem 1.08rem !important;
+}
+
+.cw-widget .cw-choice-grid--timeline .cw-vcard__copy b {
+  font-size: 1.02rem !important;
+  line-height: 1.15 !important;
+}
+
+.cw-widget .cw-choice-grid--timeline .cw-vcard__copy span {
+  font-size: 0.86rem !important;
+  line-height: 1.35 !important;
+}
+
+.cw-widget .cw-choice-grid--features {
+  gap: 0.66rem !important;
+}
+
+.cw-widget .cw-choice-grid--features:not([data-ready="true"]) {
+  visibility: hidden;
+}
+
+.cw-widget .cw-choice-grid--features .cw-opt {
+  min-height: 72px !important;
+  padding: 0.88rem 1rem !important;
+}
+
+.cw-widget .cw-choice-grid--features .cw-opt b {
+  font-size: 0.96rem !important;
+}
+
+.cw-widget .cw-choice-grid--features .cw-opt span:not(.cw-selection-indicator) {
+  font-size: 0.82rem !important;
+  line-height: 1.34 !important;
+}
+
+/* Defensive fallback if an older cached bundle still contains the two basic
+   capabilities. They belong to every chatbot and are not add-on choices. */
+.cw-widget [data-testid="feature-faq"],
+.cw-widget [data-testid="feature-dopyty"] {
+  display: none !important;
+}
+
+.cw-widget .cw-opt[data-recommended="true"]:not([data-selected="true"]) {
+  border-color: rgba(25, 131, 79, 0.32) !important;
+  background: rgba(232, 247, 226, 0.8) !important;
+}
+
+/* The original deliberate header micro-interactions. */
+@keyframes cw-reset-sweep {
+  0% { transform: rotate(0deg) scale(1); }
+  48% { transform: rotate(220deg) scale(0.88); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes cw-close-turn {
+  0% { transform: rotate(0deg) scale(1); }
+  55% { transform: rotate(72deg) scale(0.86); }
+  100% { transform: rotate(90deg) scale(1); }
+}
+
+.cw-widget .cw-panel-head__actions button svg {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.cw-widget [data-testid="widget-reset"][data-action-animating="reset"] svg {
+  animation: cw-reset-sweep 480ms cubic-bezier(0.22, 1, 0.36, 1) both !important;
+}
+
+.cw-widget [data-testid="widget-close"][data-action-animating="close"] svg,
+.cw-widget .cw-panel[data-state="closing"] [data-testid="widget-close"] svg {
+  animation: cw-close-turn 180ms cubic-bezier(0.22, 1, 0.36, 1) both !important;
+}
+
+@media (max-width: 520px) {
+  .cw-widget .cw-q {
+    font-size: 1.34rem !important;
+  }
+
+  .cw-widget .cw-choice-grid--timeline .cw-vcard {
+    min-height: 82px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-widget [data-testid="widget-reset"] svg,
+  .cw-widget [data-testid="widget-close"] svg {
+    animation: none !important;
+  }
 }

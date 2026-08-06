@@ -24,8 +24,8 @@ export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
     "Poradím vám to, čo sa vo vašom odbore najviac oplatí.",
   ],
   features: [
-    "Čo všetko to má zvládnuť?",
-    "Vyberte všetko, čo má riešenie robiť za vás.",
+    "Ktoré doplnkové funkcie chcete?",
+    "Bežné odpovede a zber dopytu sú samozrejmosť. Najvhodnejšie doplnky označím vopred.",
   ],
   timeline: [
     "Kedy to chcete mať hotové?",
@@ -170,28 +170,28 @@ export type FeatureOption = {
   basic?: boolean;
 };
 
+/* Odpovedanie na otázky a odoslanie pripraveného dopytu sú súčasťou každého
+   riešenia. V tomto kroku preto zobrazujeme iba funkcie navyše. */
 export const FEATURES: FeatureOption[] = [
-  {
-    id: "faq",
-    label: "Odpovedať na otázky",
-    description: "Služby, produkty, ceny a postup.",
-    basic: true,
-  },
-  {
-    id: "dopyty",
-    label: "Posielať pripravené dopyty",
-    description: "Kontakt aj so všetkými odpoveďami.",
-    basic: true,
-  },
   {
     id: "cena",
     label: "Počítať cenu",
-    description: "Podľa rozmerov, množstva alebo pravidiel.",
+    description: "Podľa rozmerov, množstva alebo vašich pravidiel.",
   },
   {
     id: "varianty",
     label: "Konfigurovať produkt alebo službu",
     description: "Varianty, rozmery, materiál a doplnky.",
+  },
+  {
+    id: "advisor",
+    label: "Odporúčať vhodný produkt",
+    description: "Vyberie z ponuky podľa potrieb a rozpočtu zákazníka.",
+  },
+  {
+    id: "compare",
+    label: "Porovnať produkty alebo varianty",
+    description: "Ukáže hlavné rozdiely a pomôže s rozhodnutím.",
   },
   {
     id: "tracking",
@@ -209,33 +209,67 @@ export const FEATURES: FeatureOption[] = [
     description: "Zozbiera číslo objednávky, dôvod a fotografie.",
   },
   {
+    id: "stock-alert",
+    label: "Upozorniť na dostupnosť alebo cenu",
+    description: "Zákazník dostane správu, keď sa produkt vráti alebo zlacnie.",
+  },
+  {
+    id: "cart-recovery",
+    label: "Uložiť rozpracovaný výber",
+    description: "Zákazník sa môže vrátiť k výberu bez začínania odznova.",
+  },
+  {
     id: "rezervacie",
     label: "Rezervovať termíny",
-    description: "Konzultáciu zapíše do kalendára.",
+    description: "Konzultáciu alebo službu zapíše do kalendára.",
   },
   {
     id: "fotky",
-    label: "Prijímať fotky",
-    description: "Lepší odhad alebo podklady k reklamácii.",
+    label: "Prijímať fotky a prílohy",
+    description: "Podklady k odhadu, návrhu alebo reklamácii.",
+  },
+  {
+    id: "payment",
+    label: "Poslať platobný odkaz alebo zálohu",
+    description: "Po výbere ponúkne bezpečný ďalší krok k objednávke.",
+  },
+  {
+    id: "document",
+    label: "Vytvoriť ponuku alebo PDF zhrnutie",
+    description: "Z odpovedí pripraví prehľad pre zákazníka aj firmu.",
+  },
+  {
+    id: "handoff",
+    label: "Odovzdať rozhovor človeku",
+    description: "Kolega dostane celý kontext a zákazník nič neopakuje.",
   },
   {
     id: "tabulka",
     label: "Zapisovať do tabuľky alebo CRM",
-    description: "Každý dopyt na správnom mieste.",
+    description: "Každý dopyt uloží na správne miesto.",
   },
   {
     id: "jazyky",
-    label: "Odpovedať v cudzom jazyku",
-    description: "V jazyku, ktorý používa zákazník.",
+    label: "Komunikovať v cudzom jazyku",
+    description: "Automaticky použije jazyk zákazníka.",
   },
 ];
 
 export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
-  chatbot: ["faq", "dopyty"],
-  calcbot: ["cena", "dopyty"],
-  product: ["varianty", "cena", "dopyty"],
-  booking: ["rezervacie", "dopyty"],
-  custom: [],
+  chatbot: ["handoff", "tabulka", "jazyky"],
+  calcbot: ["cena", "payment", "document"],
+  product: ["varianty", "advisor", "compare"],
+  booking: ["rezervacie", "payment", "tabulka"],
+  custom: ["handoff", "document", "tabulka"],
+};
+
+export const INDUSTRY_RECOMMENDED_FEATURES: Record<string, string[]> = {
+  sluzby: ["cena", "rezervacie", "fotky", "payment", "document"],
+  eshop: ["advisor", "compare", "tracking", "order-change", "returns", "stock-alert", "cart-recovery"],
+  gastro: ["rezervacie", "jazyky", "payment", "handoff"],
+  zdravie: ["rezervacie", "payment", "jazyky", "handoff"],
+  vyroba: ["varianty", "cena", "document", "fotky", "tabulka"],
+  ine: ["handoff", "document", "tabulka", "jazyky"],
 };
 
 export type VolumeOption = {
