@@ -4,7 +4,7 @@
   transform-origin: 88% 96%;
   backface-visibility: hidden;
   will-change: transform, opacity;
-  animation: cw-smooth-panel-in 230ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+  animation: cw-smooth-panel-in 280ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
 }
 
 .cw-widget .cw-panel[data-state="closing"] {
@@ -34,8 +34,8 @@
   }
 }
 
-/* Keep both complete screens mounted and move them as cards. This avoids a
-   React remount and keeps the transition on the compositor. */
+/* Keep both complete screens mounted and move them as cards. The longer
+   transition reads as a deliberate Tinder swipe instead of a fast tab jump. */
 .cw-widget .cw-panel-body {
   position: relative !important;
   isolation: isolate;
@@ -59,8 +59,8 @@
   will-change: transform, opacity;
   animation: none !important;
   transition:
-    transform 390ms cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 190ms ease !important;
+    transform 620ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 300ms cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
 
 .cw-widget
@@ -69,7 +69,7 @@
 .cw-widget
   .cw-panel-body[data-direction="backward"]
   .cw-mode-view[data-view="assistant"]:not([data-active="true"]) {
-  transform: translate3d(-108%, 0, 0) rotate(-3.5deg) scale(0.985);
+  transform: translate3d(-104%, 0, 0) rotate(-2.4deg) scale(0.99);
 }
 
 .cw-widget
@@ -78,7 +78,7 @@
 .cw-widget
   .cw-panel-body[data-direction="backward"]
   .cw-mode-view[data-view="calculator"]:not([data-active="true"]) {
-  transform: translate3d(108%, 0, 0) rotate(3.5deg) scale(0.985);
+  transform: translate3d(104%, 0, 0) rotate(2.4deg) scale(0.99);
 }
 
 .cw-widget .cw-mode-view[data-active="true"] {
@@ -89,23 +89,86 @@
   transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
 }
 
-/* Faster one-pass logo drawing on deliberate hover only. */
+.cw-widget :is(.cw-tabs__glass, .cw-tabs__thumb) {
+  transition-duration: 560ms !important;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* The logo draws visibly when it appears and redraws slowly on hover. */
+.cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl path {
+  stroke-dasharray: 420;
+  stroke-dashoffset: 0;
+  animation: cw-logo-intro 860ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+  will-change: stroke-dashoffset, opacity;
+}
+
+.cw-widget
+  :is(.cw-launcher, .cw-panel-head__mascot)
+  .bl
+  path:nth-of-type(2) {
+  animation-delay: 120ms !important;
+}
+
+.cw-widget
+  :is(.cw-launcher, .cw-panel-head__mascot):is(:hover, :focus-visible)
+  .bl {
+  animation: cw-logo-settle 760ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+}
+
 .cw-widget
   :is(.cw-launcher, .cw-panel-head__mascot):is(:hover, :focus-visible)
   .bl
   path {
-  stroke-dasharray: 360;
-  animation: cw-logo-redraw-fast 350ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: cw-logo-redraw 760ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
 }
 
-@keyframes cw-logo-redraw-fast {
-  from {
-    stroke-dashoffset: 360;
-    opacity: 0.62;
+.cw-widget
+  :is(.cw-launcher, .cw-panel-head__mascot):is(:hover, :focus-visible)
+  .bl
+  path:nth-of-type(2) {
+  animation-delay: 100ms !important;
+}
+
+@keyframes cw-logo-intro {
+  0% {
+    stroke-dashoffset: 420;
+    opacity: 0.18;
   }
-  to {
+  70% {
+    opacity: 1;
+  }
+  100% {
     stroke-dashoffset: 0;
     opacity: 1;
+  }
+}
+
+@keyframes cw-logo-redraw {
+  0% {
+    stroke-dashoffset: 420;
+    opacity: 0.28;
+  }
+  72% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes cw-logo-settle {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  45% {
+    transform: scale(1.055) rotate(-1.8deg);
+  }
+  75% {
+    transform: scale(0.99) rotate(0.7deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
   }
 }
 
@@ -113,6 +176,10 @@
   .cw-widget .cw-panel,
   .cw-widget .cw-panel[data-state="closing"],
   .cw-widget .cw-mode-view,
+  .cw-widget :is(.cw-tabs__glass, .cw-tabs__thumb),
+  .cw-widget
+    :is(.cw-launcher, .cw-panel-head__mascot)
+    .bl,
   .cw-widget
     :is(.cw-launcher, .cw-panel-head__mascot)
     .bl
