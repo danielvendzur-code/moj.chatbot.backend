@@ -1,0 +1,89 @@
+/* Final compositor-friendly motion pass for the widget. */
+
+.cw-widget .cw-panel {
+  contain: layout paint style;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  transform: translate3d(0, 0, 0);
+  -webkit-backdrop-filter: blur(22px) saturate(145%);
+  backdrop-filter: blur(22px) saturate(145%);
+}
+
+.cw-widget .cw-panel[data-state="open"] {
+  animation: cw-panel-open-smooth 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.cw-widget .cw-panel[data-state="closing"] {
+  animation: cw-panel-close-smooth 160ms cubic-bezier(0.4, 0, 1, 1) both;
+  pointer-events: none;
+}
+
+.cw-widget .cw-launcher,
+.cw-widget .cw-tabs__thumb,
+.cw-widget .cw-mode-view,
+.cw-widget .cw-step {
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The logo stays visible at rest and redraws quickly on intentional hover. */
+.cw-widget .bl__outer {
+  --bl-trace-length: 330;
+  stroke-dasharray: var(--bl-trace-length);
+  stroke-dashoffset: 0;
+}
+
+.cw-widget .bl__inner {
+  --bl-trace-length: 115;
+  stroke-dasharray: var(--bl-trace-length);
+  stroke-dashoffset: 0;
+}
+
+.cw-widget :is(.cw-launcher, .cw-panel-head__mascot):is(:hover, :focus-visible) .bl__outer {
+  animation: cw-logo-trace 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.cw-widget :is(.cw-launcher, .cw-panel-head__mascot):is(:hover, :focus-visible) .bl__inner {
+  animation: cw-logo-trace 520ms cubic-bezier(0.16, 1, 0.3, 1) 70ms both;
+}
+
+@keyframes cw-panel-open-smooth {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes cw-panel-close-smooth {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0) scale(0.99);
+  }
+}
+
+@keyframes cw-logo-trace {
+  0% {
+    stroke-dashoffset: var(--bl-trace-length);
+    opacity: 0.42;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-widget .cw-panel[data-state],
+  .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__outer,
+  .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__inner {
+    animation: none !important;
+  }
+}
