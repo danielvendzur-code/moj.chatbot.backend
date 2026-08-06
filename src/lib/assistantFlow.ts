@@ -16,8 +16,8 @@ export const QUESTION_STEPS: StepId[] = STEPS.filter((id) => id !== "contact");
 
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
-    "Čo má web robiť za vás?",
-    "Vyberte jednu vec. Podľa nej vám navrhnem vhodné riešenie.",
+    "Aké riešenie chcete na web?",
+    "Vyberte jednu možnosť. V ďalších krokoch ju prispôsobíte svojej firme.",
   ],
   industry: [
     "Čo robí vaša firma?",
@@ -56,26 +56,26 @@ export type InterestOption = {
 export const INTERESTS: InterestOption[] = [
   {
     id: "chatbot",
-    label: "Odpovedať zákazníkom",
-    description: "Vysvetlí služby a ceny aj v noci.",
+    label: "Chatbot",
+    description: "Odpovedá zákazníkom, poradí im a pošle vám pripravený dopyt.",
     icon: "chat",
   },
   {
     id: "calcbot",
-    label: "Počítať cenu",
-    description: "Zákazník zadá rozmery a hneď vidí, koľko to stojí.",
+    label: "Chatbot s kalkulačkou",
+    description: "Vypočíta cenu, spotrebu alebo rozsah podľa vašich pravidiel.",
     icon: "calculator",
   },
   {
     id: "product",
-    label: "Pomáhať s výberom",
-    description: "Prevedie zákazníka možnosťami a doplnkami.",
+    label: "Chatbot s konfigurátorom",
+    description: "Prevedie zákazníka výberom produktu, variantov a doplnkov.",
     icon: "options",
   },
   {
     id: "custom",
-    label: "Neviem, poraďte mi",
-    description: "Napíšte, čo vás zdržuje, a ja navrhnem riešenie.",
+    label: "Riešenie na mieru",
+    description: "Popíšte, čo vás zdržuje, a navrhnem vhodný postup.",
     icon: "spark",
   },
 ];
@@ -103,9 +103,9 @@ export const INDUSTRIES: IndustryOption[] = [
     label: "E-shop a predaj",
     icon: "cart",
     examples: [
-      "Poradí, ktorý produkt sa hodí",
-      "Pomôže vybrať veľkosť a doplnky",
-      "Pošle vám hotovú objednávku",
+      "Ukáže stav objednávky a doručenia",
+      "Pomôže zmeniť alebo zrušiť objednávku",
+      "Spustí vrátenie tovaru alebo reklamáciu",
     ],
   },
   {
@@ -173,53 +173,68 @@ export type FeatureOption = {
 export const FEATURES: FeatureOption[] = [
   {
     id: "faq",
-    label: "Odpovie na otázky",
-    description: "O vašich službách, cenách a postupe.",
+    label: "Odpovedať na otázky",
+    description: "Služby, produkty, ceny a postup.",
     basic: true,
   },
   {
     id: "dopyty",
-    label: "Pošle vám kontakt",
-    description: "Aj so všetkým, čo zákazník napísal.",
+    label: "Posielať pripravené dopyty",
+    description: "Kontakt aj so všetkými odpoveďami.",
     basic: true,
   },
   {
     id: "cena",
-    label: "Spočíta cenu",
-    description: "Podľa rozmerov alebo množstva.",
+    label: "Počítať cenu",
+    description: "Podľa rozmerov, množstva alebo pravidiel.",
   },
   {
     id: "varianty",
-    label: "Pomôže vybrať",
-    description: "Rozmery, materiál a doplnky.",
+    label: "Konfigurovať produkt alebo službu",
+    description: "Varianty, rozmery, materiál a doplnky.",
+  },
+  {
+    id: "tracking",
+    label: "Sledovať objednávku",
+    description: "Stav platby, expedície a doručenia.",
+  },
+  {
+    id: "order-change",
+    label: "Zmeniť alebo zrušiť objednávku",
+    description: "Overí údaje a pripraví požiadavku pre e-shop.",
+  },
+  {
+    id: "returns",
+    label: "Riešiť vrátenie a reklamáciu",
+    description: "Zozbiera číslo objednávky, dôvod a fotografie.",
   },
   {
     id: "rezervacie",
-    label: "Dohodne termín",
+    label: "Rezervovať termíny",
     description: "Konzultáciu zapíše do kalendára.",
   },
   {
     id: "fotky",
-    label: "Prijme fotky",
-    description: "Lepší odhad pred návštevou.",
+    label: "Prijímať fotky",
+    description: "Lepší odhad alebo podklady k reklamácii.",
   },
   {
     id: "tabulka",
-    label: "Zapíše do tabuľky",
-    description: "Dopyty aj v tabuľke či CRM.",
+    label: "Zapisovať do tabuľky alebo CRM",
+    description: "Každý dopyt na správnom mieste.",
   },
   {
     id: "jazyky",
-    label: "Zvládne cudzí jazyk",
-    description: "Odpovie v jazyku zákazníka.",
+    label: "Odpovedať v cudzom jazyku",
+    description: "V jazyku, ktorý používa zákazník.",
   },
 ];
 
 export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
   chatbot: ["faq", "dopyty"],
-  calcbot: ["cena"],
-  product: ["varianty", "cena"],
-  booking: ["rezervacie"],
+  calcbot: ["cena", "dopyty"],
+  product: ["varianty", "cena", "dopyty"],
+  booking: ["rezervacie", "dopyty"],
   custom: [],
 };
 
@@ -251,6 +266,7 @@ export const TIMELINES: TimelineOption[] = [
 
 export const PRESET_TO_INTEREST: Record<AssistantPreset, InterestId> = {
   calculator: "calcbot",
+  product: "product",
   inquiry: "chatbot",
   advisor: "chatbot",
   booking: "booking",
