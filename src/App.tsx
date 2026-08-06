@@ -1,5 +1,6 @@
 import { AssistantWidget } from "./components/widget/AssistantWidget";
 import { isEmbedMode } from "./lib/embedBridge";
+import "./smooth-logo-final.css";
 
 export default function App(): JSX.Element {
   const embedMode = isEmbedMode();
