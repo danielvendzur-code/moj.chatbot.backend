@@ -1,9 +1,12 @@
 import { createRoot } from "react-dom/client";
 import { AssistantWidget } from "./components/widget/AssistantWidget";
+import { LaunchReadyRuntime } from "./components/widget/LaunchReadyRuntime";
 import { installConfiguratorAutoAdvance } from "./lib/configuratorAutoAdvance";
 import "./widget.css";
 import "./product-widget.css";
 import "./widget-polish.css";
+import "./smooth-logo-final.css";
+import "./launch-ready-final.css";
 
 installConfiguratorAutoAdvance();
 
@@ -60,7 +63,12 @@ function mount(): void {
 
   if (!existing) document.body.appendChild(host);
 
-  createRoot(host).render(<AssistantWidget />);
+  createRoot(host).render(
+    <>
+      <LaunchReadyRuntime />
+      <AssistantWidget />
+    </>,
+  );
 }
 
 if (document.readyState === "loading") {

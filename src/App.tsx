@@ -1,6 +1,8 @@
 import { AssistantWidget } from "./components/widget/AssistantWidget";
+import { LaunchReadyRuntime } from "./components/widget/LaunchReadyRuntime";
 import { isEmbedMode } from "./lib/embedBridge";
 import "./smooth-logo-final.css";
+import "./launch-ready-final.css";
 
 export default function App(): JSX.Element {
   const embedMode = isEmbedMode();
@@ -11,6 +13,7 @@ export default function App(): JSX.Element {
       aria-label={embedMode ? "AI Assistant" : "Ukážka AI Assistanta"}
     >
       {!embedMode ? <div className="widget-preview__surface" aria-hidden="true" /> : null}
+      <LaunchReadyRuntime />
       <AssistantWidget embedMode={embedMode} />
     </main>
   );

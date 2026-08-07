@@ -39,22 +39,25 @@ test("the visual system is static, ordered and free of injected overrides", asyn
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*scroll-behavior: auto !important/);
 });
 
-test("launcher and compact brand mark stay clear and motionless", async () => {
+test("launcher uses the supplied one-stroke mark and a deliberate hover redraw", async () => {
   const css = await read("src/product-widget.css");
   const polish = await read("src/widget-polish.css");
   const logo = await read("src/components/widget/BubbleLogo.tsx");
+  const final = await read("src/launch-ready-final.css");
 
-  assert.match(logo, /className="bl__outer"/);
-  assert.match(logo, /className="bl__inner"/);
+  assert.equal((logo.match(/<path\b/g) ?? []).length, 1);
+  assert.match(logo, /className="bl__stroke"/);
+  assert.match(logo, /pathLength=\{1\}/);
   assert.match(logo, /stroke="currentColor"/);
-  assert.match(logo, /strokeWidth="7"/);
-  assert.match(logo, /L33\.5 104\.5L57\.5 81\.1H80\.9/);
-  assert.doesNotMatch(logo, /bl__optical-weight|strokeWidth="4\.3"|strokeWidth="5\.6"/);
+  assert.match(logo, /strokeWidth="4\.5"/);
+  assert.match(logo, /M24 71\.2L24\.003 32\.706/);
+  assert.match(logo, /L96\.6 85\.5/);
+  assert.match(final, /cw-launch-one-stroke 2\.75s/);
+  assert.match(final, /stroke-dashoffset:\s*1/);
   assert.match(polish, /\.cw-widget \.cw-launcher,[\s\S]*color:\s*var\(--cw-green\)/);
   assert.match(css, /\.cw-launcher:hover,[\s\S]*?transform:\s*none;/);
   assert.match(css, /\.cw-launcher:active[\s\S]*?transform:\s*none;/);
   assert.doesNotMatch(css, /@keyframes[^}]*bounce/i);
-  assert.doesNotMatch(polish, /\.bl[^}]*transform:/s);
 });
 
 test("header is the brand plus a live availability state, nothing else", async () => {
@@ -91,20 +94,15 @@ test("contact step fits without scrolling and keeps sending obvious", async () =
   const flow = await read("src/lib/assistantFlow.ts");
   const css = await read("src/product-widget.css");
 
-  // The intro block and its restated question cost roughly 86 px — enough to
-  // push the send button under the fold on a 724 px panel.
   assert.doesNotMatch(calculator, /cw-lead__intro/);
   assert.doesNotMatch(calculator, /Nezáväzný dopyt/);
   assert.doesNotMatch(calculator, /Stačí meno a jeden kontakt/);
   assert.doesNotMatch(flow, /Stačí meno a jeden kontakt/);
 
-  // Contact methods collapse into one 44 px segmented row.
   assert.match(rule(css, ".cw-contact-methods"), /border-radius:\s*var\(--cw-r-pill\)/);
   assert.match(rule(css, ".cw-contact-method"), /min-height:\s*44px/);
-  // The consent is a quiet line, not a boxed card stacked above the button.
   assert.match(rule(css, ".cw-consent"), /min-height:\s*26px/);
   assert.match(rule(css, ".cw-consent"), /border:\s*0/);
-  // The footer stays pinned, so the button is on screen from the first frame.
   assert.match(rule(css, ".cw-calc-actions"), /flex:\s*0 0 auto/);
 
   assert.match(calculator, /cw-contact-methods/);
