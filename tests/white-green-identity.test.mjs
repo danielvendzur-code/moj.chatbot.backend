@@ -49,7 +49,7 @@ test("launcher uses the supplied one-stroke mark and a deliberate hover redraw",
   assert.match(logo, /className="bl__stroke"/);
   assert.match(logo, /pathLength=\{1\}/);
   assert.match(logo, /stroke="currentColor"/);
-  assert.match(logo, /strokeWidth="4\.5"/);
+  assert.match(logo, /strokeWidth="5\.5"/);
   assert.match(logo, /M24 71\.2L24\.003 32\.706/);
   assert.match(logo, /L96\.6 85\.5/);
   assert.match(final, /cw-launch-one-stroke 2\.75s/);
