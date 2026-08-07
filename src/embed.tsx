@@ -5,8 +5,7 @@ import { installConfiguratorAutoAdvance } from "./lib/configuratorAutoAdvance";
 import "./widget.css";
 import "./product-widget.css";
 import "./widget-polish.css";
-import "./smooth-logo-final.css";
-import "./launch-ready-final.css";
+import "./launch-ready-styles";
 
 installConfiguratorAutoAdvance();
 
