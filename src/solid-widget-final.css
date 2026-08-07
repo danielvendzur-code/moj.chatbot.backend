@@ -1,0 +1,223 @@
+/* Solid white widget system: no liquid glass, one chip geometry, one logo motion. */
+
+.cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
+  stroke-width: 6.25 !important;
+  stroke-dasharray: 1 !important;
+  stroke-dashoffset: 0;
+  opacity: 1;
+  animation: cw-logo-handdraw-intro 2.55s cubic-bezier(0.34, 0.04, 0.16, 1) both !important;
+  will-change: stroke-dashoffset, opacity;
+}
+
+.cw-widget :is(.cw-launcher, .cw-panel-head__mascot):is(:hover, :focus-visible, :active) .bl__stroke {
+  animation: cw-logo-handdraw-hover 3.15s cubic-bezier(0.34, 0.04, 0.16, 1) both !important;
+}
+
+@keyframes cw-logo-handdraw-intro {
+  0% { stroke-dashoffset: 1; opacity: 0.08; }
+  8% { opacity: 0.48; }
+  34% { stroke-dashoffset: 0.72; opacity: 0.9; }
+  70% { stroke-dashoffset: 0.24; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+@keyframes cw-logo-handdraw-hover {
+  0% { stroke-dashoffset: 1; opacity: 0.06; }
+  7% { opacity: 0.42; }
+  30% { stroke-dashoffset: 0.76; opacity: 0.88; }
+  66% { stroke-dashoffset: 0.28; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+.cw-widget :is(
+  .cw-panel,
+  .cw-panel-head,
+  .cw-panel-body,
+  .cw-mode-view,
+  .cw-calculator,
+  .cw-calc-body,
+  .cw-scroll-shell,
+  .cw-tabs,
+  .cw-launcher,
+  .cw-panel-head__mascot
+) {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+.cw-widget .cw-panel {
+  background: #ffffff !important;
+  border-color: rgba(11, 47, 32, 0.14) !important;
+  box-shadow: 0 28px 72px -36px rgba(11, 47, 32, 0.34) !important;
+}
+
+.cw-widget :is(.cw-panel-head, .cw-panel-body, .cw-mode-view, .cw-calculator, .cw-calc-body, .cw-scroll-shell) {
+  background: #ffffff !important;
+  background-image: none !important;
+}
+
+.cw-widget :is(.cw-launcher, .cw-panel-head__mascot) {
+  color: #19834f !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid rgba(25, 131, 79, 0.22) !important;
+  box-shadow:
+    0 16px 34px -22px rgba(11, 47, 32, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.96) !important;
+}
+
+.cw-widget .cw-panel-head__beam,
+.cw-widget .cw-tabs__glass {
+  display: none !important;
+}
+
+.cw-widget .cw-tabs {
+  padding: 4px !important;
+  border: 1px solid rgba(11, 47, 32, 0.1) !important;
+  background: #f3f7f4 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.cw-widget .cw-tabs > button {
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.cw-widget .cw-tabs > button[data-active="true"] {
+  color: #0b2f20 !important;
+  border-color: rgba(25, 131, 79, 0.2) !important;
+  background: #ffffff !important;
+  box-shadow: 0 5px 14px -10px rgba(11, 47, 32, 0.38) !important;
+}
+
+/* Question 3 is the reference geometry for every selectable answer. */
+.cw-widget .cw-calculator :is(
+  .cw-choice-grid--interest,
+  .cw-choice-grid--industry,
+  .cw-choice-grid--features,
+  .cw-choice-grid--timeline
+) {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+  width: 100% !important;
+}
+
+.cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  padding: 6px 36px 6px 10px !important;
+  gap: 8px !important;
+  border: 1px solid rgba(11, 47, 32, 0.14) !important;
+  border-radius: 999px !important;
+  color: #0b2f20 !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  text-align: left !important;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):is(:hover, :focus-visible) {
+  color: #0b2f20 !important;
+  border-color: rgba(25, 131, 79, 0.4) !important;
+  background: #ffffff !important;
+  box-shadow: 0 10px 22px -19px rgba(11, 47, 32, 0.48) !important;
+  transform: translateY(-1px) !important;
+}
+
+.cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"],
+.cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]:is(:hover, :focus-visible) {
+  color: #0b2f20 !important;
+  border-color: #19834f !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  box-shadow: inset 0 0 0 1px rgba(25, 131, 79, 0.13) !important;
+}
+
+.cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]::after {
+  content: "✓" !important;
+  position: absolute !important;
+  right: 10px !important;
+  top: 50% !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 20px !important;
+  height: 20px !important;
+  border: 1px solid rgba(25, 131, 79, 0.28) !important;
+  border-radius: 50% !important;
+  color: #19834f !important;
+  background: #edf8f1 !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+  line-height: 1 !important;
+  transform: translateY(-50%) !important;
+}
+
+.cw-widget .cw-calculator .cw-selection-indicator {
+  display: none !important;
+}
+
+.cw-widget .cw-calculator .cw-rowcard__body small,
+.cw-widget .cw-calculator .cw-opt__body > span,
+.cw-widget .cw-calculator .cw-vcard__copy > span {
+  display: none !important;
+}
+
+.cw-widget .cw-calculator :is(.cw-rowcard__body b, .cw-scard b, .cw-opt__body b, .cw-vcard__copy b) {
+  overflow: hidden !important;
+  color: #0b2f20 !important;
+  font-size: 12.4px !important;
+  font-weight: 700 !important;
+  line-height: 1.14 !important;
+  text-overflow: ellipsis !important;
+}
+
+.cw-widget .cw-calculator :is(.cw-rowcard__icon, .cw-scard__icon) {
+  flex: 0 0 28px !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  color: #19834f !important;
+  background: #f0f8f3 !important;
+}
+
+@media (max-width: 520px) {
+  .cw-widget .cw-calculator :is(
+    .cw-choice-grid--interest,
+    .cw-choice-grid--industry,
+    .cw-choice-grid--features,
+    .cw-choice-grid--timeline
+  ) {
+    gap: 6px !important;
+  }
+
+  .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
+    height: 45px !important;
+    min-height: 45px !important;
+    padding-inline: 8px 34px !important;
+  }
+
+  .cw-widget .cw-calculator :is(.cw-rowcard__body b, .cw-scard b, .cw-opt__body b, .cw-vcard__copy b) {
+    font-size: 11.8px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+}

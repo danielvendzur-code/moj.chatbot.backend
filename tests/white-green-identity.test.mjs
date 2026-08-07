@@ -39,21 +39,23 @@ test("the visual system is static, ordered and free of injected overrides", asyn
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*scroll-behavior: auto !important/);
 });
 
-test("launcher uses the supplied one-stroke mark and a deliberate hover redraw", async () => {
+test("launcher uses the supplied one-stroke mark and the solid hand-drawn redraw", async () => {
   const css = await read("src/product-widget.css");
   const polish = await read("src/widget-polish.css");
   const logo = await read("src/components/widget/BubbleLogo.tsx");
-  const final = await read("src/launch-ready-final.css");
+  const final = await read("src/solid-widget-final.css");
 
   assert.equal((logo.match(/<path\b/g) ?? []).length, 1);
   assert.match(logo, /className="bl__stroke"/);
   assert.match(logo, /pathLength=\{1\}/);
   assert.match(logo, /stroke="currentColor"/);
-  assert.match(logo, /strokeWidth="5\.5"/);
+  assert.match(logo, /strokeWidth="6\.25"/);
   assert.match(logo, /M24 71\.2L24\.003 32\.706/);
   assert.match(logo, /L96\.6 85\.5/);
-  assert.match(final, /cw-launch-one-stroke 2\.75s/);
-  assert.match(final, /stroke-dashoffset:\s*1/);
+  assert.match(final, /cw-logo-handdraw-hover 3\.15s/);
+  assert.match(final, /cw-logo-handdraw-intro 2\.55s/);
+  assert.match(final, /background: #ffffff !important/);
+  assert.match(final, /border-color: #19834f !important/);
   assert.match(polish, /\.cw-widget \.cw-launcher,[\s\S]*color:\s*var\(--cw-green\)/);
   assert.match(css, /\.cw-launcher:hover,[\s\S]*?transform:\s*none;/);
   assert.match(css, /\.cw-launcher:active[\s\S]*?transform:\s*none;/);
