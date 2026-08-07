@@ -5,6 +5,7 @@ import { submitLead as sendLead } from "../../lib/leadApi";
 import { useStepTransition } from "../../hooks/useStepTransition";
 import {
   buildProposalNumber,
+  FEATURE_IDS_BY_INTEREST,
   FEATURES,
   INDUSTRIES,
   INTERESTS,
@@ -97,7 +98,9 @@ export function ToolCalculator({
   const [interest, setInterest] = useState<InterestId | null>(initialInterest);
   const [customText, setCustomText] = useState("");
   const [industry, setIndustry] = useState<string | null>(null);
-  const [features, setFeatures] = useState<string[]>([]);
+  const [features, setFeatures] = useState<string[]>(
+    initialInterest ? RECOMMENDED_FEATURES[initialInterest] : [],
+  );
   const [timeline, setTimeline] = useState<string | null>(null);
   const [lead, setLead] = useState<LeadState>(EMPTY_LEAD);
   const [leadError, setLeadError] = useState("");
@@ -118,7 +121,7 @@ export function ToolCalculator({
     setInterest(nextInterest);
     setCustomText("");
     setIndustry(null);
-    setFeatures([]);
+    setFeatures(nextInterest ? RECOMMENDED_FEATURES[nextInterest] : []);
     setTimeline(null);
     setLead(EMPTY_LEAD);
     setLeadError("");
@@ -157,6 +160,13 @@ export function ToolCalculator({
   const isLast = visibleStep === STEPS.length - 1;
   const questionIndex = QUESTION_STEPS.indexOf(stepId);
 
+  const visibleFeatures = useMemo(() => {
+    const ids = interest ? FEATURE_IDS_BY_INTEREST[interest] : [];
+    return ids
+      .map((id) => FEATURES.find((option) => option.id === id))
+      .filter((option): option is (typeof FEATURES)[number] => Boolean(option));
+  }, [interest]);
+
   const featureLabels = useMemo(
     () =>
       FEATURES.filter((option) => features.includes(option.id)).map(
@@ -186,12 +196,9 @@ export function ToolCalculator({
 
   const pickInterest = (id: InterestId) => {
     setInterest(id);
+    setFeatures(RECOMMENDED_FEATURES[id]);
     track("config_interest_select", { interest: id });
   };
-
-  const recommendedLabels = (interest ? RECOMMENDED_FEATURES[interest] : [])
-    .map((id) => FEATURES.find((option) => option.id === id)?.label)
-    .filter((label): label is string => Boolean(label));
 
   const toggleFeature = (id: string) => {
     setFeatures((current) =>
@@ -364,6 +371,7 @@ export function ToolCalculator({
       data-view="steps"
       data-testid="calculator-view"
       data-composing={composing || undefined}
+      data-interest={interest ?? undefined}
       onFocusCapture={(event) => {
         if (event.target instanceof HTMLElement && isTextField(event.target)) {
           setComposing(true);
@@ -417,16 +425,7 @@ export function ToolCalculator({
             <h3 className="cw-q" ref={questionRef} tabIndex={-1}>
               {title}
             </h3>
-            <p className="cw-q-sub">
-              {subtitle}
-              {stepId === "features" && recommendedLabels.length ? (
-                <>
-                  {" "}
-                  Najčastejšie sa k tomu hodí{" "}
-                  <b>{recommendedLabels.join(" a ").toLowerCase()}</b>.
-                </>
-              ) : null}
-            </p>
+            <p className="cw-q-sub">{subtitle}</p>
           </header>
 
           {stepId === "interest" ? (
@@ -497,7 +496,7 @@ export function ToolCalculator({
 
           {stepId === "features" ? (
             <div className="cw-choice-grid cw-choice-grid--features">
-              {FEATURES.map((option) => {
+              {visibleFeatures.map((option) => {
                 const selected = features.includes(option.id);
                 return (
                   <button
@@ -548,9 +547,6 @@ export function ToolCalculator({
           {stepId === "contact" ? (
             <div className="cw-contact-stage">
               <div className="cw-lead">
-                {/* One compact segmented row instead of three tall cards and a
-                    three-line intro: the whole contact step has to fit without
-                    scrolling, and the step heading already asks the question. */}
                 <div
                   className="cw-contact-methods"
                   role="group"
