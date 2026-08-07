@@ -17,19 +17,19 @@ export const QUESTION_STEPS: StepId[] = STEPS.filter((id) => id !== "contact");
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
     "Aké riešenie chcete na web?",
-    "Vyberte jednu možnosť. V ďalších krokoch ju prispôsobíte svojej firme.",
+    "Vyberte jednu možnosť. Ďalšie kroky sa jej automaticky prispôsobia.",
   ],
   industry: [
     "Čo robí vaša firma?",
-    "Poradím vám to, čo sa vo vašom odbore najviac oplatí.",
+    "Vyberte odvetvie, aby som vedel prispôsobiť odporúčané funkcie.",
   ],
   features: [
     "Ktoré doplnkové funkcie chcete?",
-    "Bežné odpovede a zber dopytu sú samozrejmosť. Najvhodnejšie doplnky označím vopred.",
+    "Zobrazujem iba doplnky, ktoré dávajú zmysel pre vybraný typ riešenia.",
   ],
   timeline: [
     "Kedy to chcete mať hotové?",
-    "Podľa toho si na vás naplánujem čas.",
+    "Vyberte približný termín.",
   ],
   contact: [
     "Kam vám môžem poslať ďalší krok?",
@@ -57,7 +57,7 @@ export const INTERESTS: InterestOption[] = [
   {
     id: "chatbot",
     label: "Chatbot",
-    description: "Odpovedá zákazníkom, poradí im a pošle vám pripravený dopyt.",
+    description: "Odpovedá zákazníkom, poradí im a vybaví servisné požiadavky.",
     icon: "chat",
   },
   {
@@ -75,7 +75,7 @@ export const INTERESTS: InterestOption[] = [
   {
     id: "custom",
     label: "Riešenie na mieru",
-    description: "Popíšte, čo vás zdržuje, a navrhnem vhodný postup.",
+    description: "Poskladáme vlastný proces presne podľa vašej firmy.",
     icon: "spark",
   },
 ];
@@ -170,8 +170,6 @@ export type FeatureOption = {
   basic?: boolean;
 };
 
-/* Odpovedanie na otázky a odoslanie pripraveného dopytu sú súčasťou každého
-   riešenia. V tomto kroku preto zobrazujeme iba funkcie navyše. */
 export const FEATURES: FeatureOption[] = [
   {
     id: "cena",
@@ -211,7 +209,7 @@ export const FEATURES: FeatureOption[] = [
   {
     id: "stock-alert",
     label: "Upozorniť na dostupnosť alebo cenu",
-    description: "Zákazník dostane správu, keď sa produkt vráti alebo zlacnie.",
+    description: "Upozorní zákazníka, keď sa produkt vráti alebo zlacnie.",
   },
   {
     id: "cart-recovery",
@@ -255,9 +253,45 @@ export const FEATURES: FeatureOption[] = [
   },
 ];
 
+/* Krok 3 už nie je univerzálny zoznam. Každý typ riešenia dostane iba
+   funkcie, ktoré k nemu reálne patria. */
+export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
+  chatbot: [
+    "tracking",
+    "order-change",
+    "returns",
+    "handoff",
+    "tabulka",
+    "jazyky",
+    "stock-alert",
+    "rezervacie",
+  ],
+  calcbot: [
+    "cena",
+    "document",
+    "payment",
+    "fotky",
+    "tabulka",
+    "rezervacie",
+    "handoff",
+  ],
+  product: [
+    "varianty",
+    "advisor",
+    "compare",
+    "stock-alert",
+    "cart-recovery",
+    "payment",
+    "document",
+    "tabulka",
+  ],
+  booking: ["rezervacie", "payment", "jazyky", "tabulka", "handoff", "document"],
+  custom: ["handoff", "document", "tabulka", "jazyky", "fotky", "rezervacie", "payment"],
+};
+
 export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
-  chatbot: ["handoff", "tabulka", "jazyky"],
-  calcbot: ["cena", "payment", "document"],
+  chatbot: ["tracking", "handoff", "tabulka"],
+  calcbot: ["cena", "document", "payment"],
   product: ["varianty", "advisor", "compare"],
   booking: ["rezervacie", "payment", "tabulka"],
   custom: ["handoff", "document", "tabulka"],
@@ -293,9 +327,9 @@ export type TimelineOption = {
 
 export const TIMELINES: TimelineOption[] = [
   { id: "asap", label: "Čo najskôr", description: "Začnem, len čo mi pošlete podklady." },
-  { id: "mesiac", label: "Do mesiaca", description: "Je čas texty pekne doladiť." },
+  { id: "mesiac", label: "Do mesiaca", description: "Máme priestor všetko doladiť." },
   { id: "kvartal", label: "Za dva až tri mesiace", description: "Rozdelíme to na menšie kroky." },
-  { id: "rozhliadam", label: "Len sa pozerám", description: "Pošlem návrh, rozhodnete sa neskôr." },
+  { id: "rozhliadam", label: "Len sa pozerám", description: "Najprv si chcete ujasniť možnosti." },
 ];
 
 export const PRESET_TO_INTEREST: Record<AssistantPreset, InterestId> = {
