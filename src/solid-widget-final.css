@@ -1,21 +1,21 @@
-/* Solid white widget system: no liquid glass, one chip geometry, one logo motion. */
+/* Final widget authority: dark-green dominant, solid surfaces, large decision steps. */
 
 .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
-  stroke-width: 6.25 !important;
+  stroke-width: 7.25 !important;
   stroke-dasharray: 1 !important;
   stroke-dashoffset: 0;
   opacity: 1;
-  animation: cw-logo-handdraw-intro 2.55s cubic-bezier(0.34, 0.04, 0.16, 1) both !important;
+  animation: cw-logo-handdraw-intro 2.7s cubic-bezier(0.34, 0.04, 0.16, 1) both !important;
   will-change: stroke-dashoffset, opacity;
 }
 
 .cw-widget :is(.cw-launcher, .cw-panel-head__mascot):is(:hover, :focus-visible, :active) .bl__stroke {
-  animation: cw-logo-handdraw-hover 3.15s cubic-bezier(0.34, 0.04, 0.16, 1) both !important;
+  animation: cw-logo-handdraw-hover 3.25s cubic-bezier(0.34, 0.04, 0.16, 1) both !important;
 }
 
 @keyframes cw-logo-handdraw-intro {
   0% { stroke-dashoffset: 1; opacity: 0.08; }
-  8% { opacity: 0.48; }
+  8% { opacity: 0.46; }
   34% { stroke-dashoffset: 0.72; opacity: 0.9; }
   70% { stroke-dashoffset: 0.24; opacity: 1; }
   100% { stroke-dashoffset: 0; opacity: 1; }
@@ -47,8 +47,8 @@
 
 .cw-widget .cw-panel {
   background: #ffffff !important;
-  border-color: rgba(11, 47, 32, 0.14) !important;
-  box-shadow: 0 28px 72px -36px rgba(11, 47, 32, 0.34) !important;
+  border-color: rgba(11, 47, 32, 0.15) !important;
+  box-shadow: 0 30px 78px -38px rgba(11, 47, 32, 0.38) !important;
 }
 
 .cw-widget :is(.cw-panel-head, .cw-panel-body, .cw-mode-view, .cw-calculator, .cw-calc-body, .cw-scroll-shell) {
@@ -56,14 +56,25 @@
   background-image: none !important;
 }
 
-.cw-widget :is(.cw-launcher, .cw-panel-head__mascot) {
-  color: #19834f !important;
+/* Launcher stays a clean circular white bubble. The header logo has no tile/square at all. */
+.cw-widget .cw-launcher {
+  color: #0b2f20 !important;
   background: #ffffff !important;
   background-image: none !important;
-  border: 1px solid rgba(25, 131, 79, 0.22) !important;
-  box-shadow:
-    0 16px 34px -22px rgba(11, 47, 32, 0.42),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.96) !important;
+  border: 1px solid rgba(11, 47, 32, 0.16) !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  box-shadow: 0 18px 40px -24px rgba(11, 47, 32, 0.46) !important;
+}
+
+.cw-widget .cw-panel-head__mascot {
+  color: #0b2f20 !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
 }
 
 .cw-widget .cw-panel-head__beam,
@@ -71,10 +82,11 @@
   display: none !important;
 }
 
+/* Dark green is the dominant interaction colour. Light green is reserved for hover. */
 .cw-widget .cw-tabs {
   padding: 4px !important;
-  border: 1px solid rgba(11, 47, 32, 0.1) !important;
-  background: #f3f7f4 !important;
+  border: 1px solid rgba(11, 47, 32, 0.12) !important;
+  background: #f2f6f3 !important;
   background-image: none !important;
   box-shadow: none !important;
 }
@@ -86,37 +98,40 @@
 }
 
 .cw-widget .cw-tabs > button[data-active="true"] {
-  color: #0b2f20 !important;
-  border-color: rgba(25, 131, 79, 0.2) !important;
-  background: #ffffff !important;
-  box-shadow: 0 5px 14px -10px rgba(11, 47, 32, 0.38) !important;
+  color: #ffffff !important;
+  border-color: #0b2f20 !important;
+  background: #0b2f20 !important;
+  box-shadow: 0 8px 18px -12px rgba(11, 47, 32, 0.62) !important;
 }
 
-/* Question 3 is the reference geometry for every selectable answer. */
-.cw-widget .cw-calculator :is(
-  .cw-choice-grid--interest,
-  .cw-choice-grid--industry,
-  .cw-choice-grid--features,
-  .cw-choice-grid--timeline
-) {
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 7px !important;
-  width: 100% !important;
+@media (hover: hover) and (pointer: fine) {
+  .cw-widget .cw-tabs > button[data-active="true"]:hover,
+  .cw-widget :is(.cw-next, .cw-submit):not(:disabled):hover {
+    color: #0b2f20 !important;
+    background: #d9ff78 !important;
+    border-color: #d9ff78 !important;
+  }
 }
 
+.cw-widget :is(.cw-next, .cw-submit):not(:disabled) {
+  background: #0b2f20 !important;
+  border-color: #0b2f20 !important;
+  box-shadow: 0 14px 28px -18px rgba(11, 47, 32, 0.68) !important;
+}
+
+.cw-widget .cw-progress__dots i[data-current="true"],
+.cw-widget .cw-progress__dots i[data-complete="true"] {
+  background: #0b2f20 !important;
+}
+
+/* Base option style. Selected state stays white with dark-green outline/check. */
 .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
   position: relative !important;
   display: flex !important;
   align-items: center !important;
   min-width: 0 !important;
   width: 100% !important;
-  height: 46px !important;
-  min-height: 46px !important;
-  padding: 6px 36px 6px 10px !important;
-  gap: 8px !important;
-  border: 1px solid rgba(11, 47, 32, 0.14) !important;
-  border-radius: 999px !important;
+  border: 1px solid rgba(11, 47, 32, 0.16) !important;
   color: #0b2f20 !important;
   background: #ffffff !important;
   background-image: none !important;
@@ -127,40 +142,41 @@
   transition:
     border-color 180ms ease,
     box-shadow 180ms ease,
-    transform 180ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+    transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 180ms ease !important;
 }
 
 .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):is(:hover, :focus-visible) {
   color: #0b2f20 !important;
-  border-color: rgba(25, 131, 79, 0.4) !important;
-  background: #ffffff !important;
-  box-shadow: 0 10px 22px -19px rgba(11, 47, 32, 0.48) !important;
+  border-color: rgba(11, 47, 32, 0.5) !important;
+  background: #f4ffd7 !important;
+  box-shadow: 0 12px 24px -20px rgba(11, 47, 32, 0.5) !important;
   transform: translateY(-1px) !important;
 }
 
 .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"],
 .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]:is(:hover, :focus-visible) {
   color: #0b2f20 !important;
-  border-color: #19834f !important;
+  border-color: #0b2f20 !important;
   background: #ffffff !important;
   background-image: none !important;
-  box-shadow: inset 0 0 0 1px rgba(25, 131, 79, 0.13) !important;
+  box-shadow: inset 0 0 0 1px rgba(11, 47, 32, 0.16) !important;
 }
 
 .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]::after {
   content: "✓" !important;
   position: absolute !important;
-  right: 10px !important;
+  right: 14px !important;
   top: 50% !important;
   display: grid !important;
   place-items: center !important;
-  width: 20px !important;
-  height: 20px !important;
-  border: 1px solid rgba(25, 131, 79, 0.28) !important;
+  width: 24px !important;
+  height: 24px !important;
+  border: 1px solid rgba(11, 47, 32, 0.3) !important;
   border-radius: 50% !important;
-  color: #19834f !important;
-  background: #edf8f1 !important;
-  font-size: 12px !important;
+  color: #0b2f20 !important;
+  background: #e9f8ef !important;
+  font-size: 13px !important;
   font-weight: 850 !important;
   line-height: 1 !important;
   transform: translateY(-50%) !important;
@@ -170,48 +186,175 @@
   display: none !important;
 }
 
-.cw-widget .cw-calculator .cw-rowcard__body small,
-.cw-widget .cw-calculator .cw-opt__body > span,
-.cw-widget .cw-calculator .cw-vcard__copy > span {
-  display: none !important;
+/* STEP 1 — four large full-width choices. */
+.cw-widget .cw-calculator .cw-choice-grid--interest {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+  width: 100% !important;
 }
 
-.cw-widget .cw-calculator :is(.cw-rowcard__body b, .cw-scard b, .cw-opt__body b, .cw-vcard__copy b) {
-  overflow: hidden !important;
-  color: #0b2f20 !important;
-  font-size: 12.4px !important;
-  font-weight: 700 !important;
-  line-height: 1.14 !important;
-  text-overflow: ellipsis !important;
+.cw-widget .cw-calculator .cw-choice-grid--interest .cw-rowcard {
+  min-height: 72px !important;
+  height: 72px !important;
+  padding: 10px 48px 10px 14px !important;
+  gap: 12px !important;
+  border-radius: 24px !important;
 }
 
-.cw-widget .cw-calculator :is(.cw-rowcard__icon, .cw-scard__icon) {
-  flex: 0 0 28px !important;
-  width: 28px !important;
-  height: 28px !important;
+.cw-widget .cw-calculator .cw-choice-grid--interest .cw-rowcard__body {
+  display: grid !important;
+  gap: 3px !important;
+}
+
+.cw-widget .cw-calculator .cw-choice-grid--interest .cw-rowcard__body b {
+  font-size: 14.8px !important;
+  line-height: 1.15 !important;
+}
+
+.cw-widget .cw-calculator .cw-choice-grid--interest .cw-rowcard__body small {
+  display: block !important;
+  color: inherit !important;
+  opacity: 0.66 !important;
+  font-size: 11.7px !important;
+  line-height: 1.2 !important;
+}
+
+.cw-widget .cw-calculator .cw-choice-grid--interest .cw-rowcard__icon {
+  flex: 0 0 36px !important;
+  width: 36px !important;
+  height: 36px !important;
   border-radius: 50% !important;
-  color: #19834f !important;
-  background: #f0f8f3 !important;
+  color: #0b2f20 !important;
+  background: #eef8f1 !important;
+}
+
+/* STEP 2 — six substantial cards filling the panel in a 2 x 3 grid. */
+.cw-widget .cw-calculator .cw-choice-grid--industry {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+.cw-widget .cw-calculator .cw-choice-grid--industry .cw-scard {
+  min-height: 78px !important;
+  height: 78px !important;
+  padding: 10px 46px 10px 13px !important;
+  gap: 10px !important;
+  border-radius: 24px !important;
+}
+
+.cw-widget .cw-calculator .cw-choice-grid--industry .cw-scard b {
+  font-size: 13.4px !important;
+  line-height: 1.16 !important;
+}
+
+.cw-widget .cw-calculator .cw-choice-grid--industry .cw-scard__icon {
+  flex: 0 0 34px !important;
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 50% !important;
+  color: #0b2f20 !important;
+  background: #eef8f1 !important;
+}
+
+/* STEP 3 — contextual add-ons. It may scroll, so clarity wins over compression. */
+.cw-widget .cw-calculator .cw-choice-grid--features {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+.cw-widget .cw-calculator .cw-choice-grid--features .cw-opt {
+  min-height: 58px !important;
+  height: auto !important;
+  padding: 10px 48px 10px 14px !important;
+  border-radius: 20px !important;
+}
+
+.cw-widget .cw-calculator .cw-choice-grid--features .cw-opt__body {
+  display: grid !important;
+  gap: 2px !important;
+}
+
+.cw-widget .cw-calculator .cw-choice-grid--features .cw-opt__body b {
+  font-size: 13.3px !important;
+  line-height: 1.16 !important;
+}
+
+.cw-widget .cw-calculator .cw-choice-grid--features .cw-opt__body > span {
+  display: block !important;
+  color: inherit !important;
+  opacity: 0.64 !important;
+  font-size: 11.2px !important;
+  line-height: 1.2 !important;
+}
+
+/* STEP 4 — four large timeline choices. */
+.cw-widget .cw-calculator .cw-choice-grid--timeline {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+.cw-widget .cw-calculator .cw-choice-grid--timeline .cw-vcard {
+  min-height: 72px !important;
+  height: 72px !important;
+  padding: 10px 48px 10px 16px !important;
+  border-radius: 24px !important;
+}
+
+.cw-widget .cw-calculator .cw-choice-grid--timeline .cw-vcard__copy {
+  display: grid !important;
+  gap: 3px !important;
+}
+
+.cw-widget .cw-calculator .cw-choice-grid--timeline .cw-vcard__copy b {
+  font-size: 14.1px !important;
+  line-height: 1.15 !important;
+}
+
+.cw-widget .cw-calculator .cw-choice-grid--timeline .cw-vcard__copy > span {
+  display: block !important;
+  color: inherit !important;
+  opacity: 0.64 !important;
+  font-size: 11.5px !important;
+  line-height: 1.2 !important;
 }
 
 @media (max-width: 520px) {
-  .cw-widget .cw-calculator :is(
-    .cw-choice-grid--interest,
-    .cw-choice-grid--industry,
-    .cw-choice-grid--features,
-    .cw-choice-grid--timeline
-  ) {
-    gap: 6px !important;
+  .cw-widget .cw-calculator .cw-choice-grid--interest {
+    gap: 8px !important;
   }
 
-  .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
-    height: 45px !important;
-    min-height: 45px !important;
-    padding-inline: 8px 34px !important;
+  .cw-widget .cw-calculator .cw-choice-grid--interest .cw-rowcard {
+    min-height: 66px !important;
+    height: 66px !important;
+    padding: 8px 44px 8px 12px !important;
   }
 
-  .cw-widget .cw-calculator :is(.cw-rowcard__body b, .cw-scard b, .cw-opt__body b, .cw-vcard__copy b) {
-    font-size: 11.8px !important;
+  .cw-widget .cw-calculator .cw-choice-grid--industry {
+    gap: 8px !important;
+  }
+
+  .cw-widget .cw-calculator .cw-choice-grid--industry .cw-scard {
+    min-height: 68px !important;
+    height: 68px !important;
+    padding: 8px 42px 8px 10px !important;
+  }
+
+  .cw-widget .cw-calculator .cw-choice-grid--features .cw-opt {
+    min-height: 56px !important;
+    padding: 9px 44px 9px 12px !important;
+  }
+
+  .cw-widget .cw-calculator .cw-choice-grid--timeline .cw-vcard {
+    min-height: 66px !important;
+    height: 66px !important;
+    padding: 8px 44px 8px 14px !important;
   }
 }
 
