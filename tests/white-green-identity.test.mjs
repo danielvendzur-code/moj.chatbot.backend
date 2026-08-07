@@ -49,13 +49,13 @@ test("launcher uses the supplied one-stroke mark and the solid hand-drawn redraw
   assert.match(logo, /className="bl__stroke"/);
   assert.match(logo, /pathLength=\{1\}/);
   assert.match(logo, /stroke="currentColor"/);
-  assert.match(logo, /strokeWidth="6\.25"/);
+  assert.match(logo, /strokeWidth="7\.25"/);
   assert.match(logo, /M24 71\.2L24\.003 32\.706/);
   assert.match(logo, /L96\.6 85\.5/);
-  assert.match(final, /cw-logo-handdraw-hover 3\.15s/);
-  assert.match(final, /cw-logo-handdraw-intro 2\.55s/);
+  assert.match(final, /cw-logo-handdraw-hover 3\.25s/);
+  assert.match(final, /cw-logo-handdraw-intro 2\.7s/);
   assert.match(final, /background: #ffffff !important/);
-  assert.match(final, /border-color: #19834f !important/);
+  assert.match(final, /border-color: #0b2f20 !important/);
   assert.match(polish, /\.cw-widget \.cw-launcher,[\s\S]*color:\s*var\(--cw-green\)/);
   assert.match(css, /\.cw-launcher:hover,[\s\S]*?transform:\s*none;/);
   assert.match(css, /\.cw-launcher:active[\s\S]*?transform:\s*none;/);
