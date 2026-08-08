@@ -1,10 +1,11 @@
 /* Final interaction stability: loaded after goal-lock-final.css.
    Owns click stability, static selection confirmation, chat-chip fill and focus geometry. */
 
-/* Closed launcher hover: draw the mark, let it breathe, erase it, then draw it
-   once more and FINISH on the complete logo. Both +/-1 dash offsets are blank,
-   so the direction reset at 78% is invisible instead of flashing a stroke. */
-@keyframes cw-logo-hover-return-full {
+/* Keep the proven closed-launcher hover selector/timing from goal-lock-final.css,
+   but replace its keyframe definition so the sequence cannot finish blank.
+   The logo draws, holds, erases, resets while fully blank, then draws once more
+   and ends at offset 0: the complete mark. */
+@keyframes cw-goal-logo-hover-attention {
   0% { --cw-logo-offset: 1; }
   10% { --cw-logo-offset: 0.93; }
   30% { --cw-logo-offset: 0.52; }
@@ -14,12 +15,6 @@
   78% { --cw-logo-offset: -1; }
   78.01% { --cw-logo-offset: 1; }
   100% { --cw-logo-offset: 0; }
-}
-
-@media (hover: hover) and (pointer: fine) {
-  html:root body .cw-widget .cw-launcher[aria-expanded="false"]:is(:hover, :focus-visible) .bl__stroke {
-    animation: cw-logo-hover-return-full 5.8s linear 1 both !important;
-  }
 }
 
 /* Once the widget is open, the logo is a stable brand mark, not another moving
@@ -92,8 +87,8 @@ html:root body .cw-widget .cw-quick-replies .cw-chip::after {
 /* Tabs are click-first controls. The old white glass thumb moved for 560ms
    behind the already-green active tab, which created the visible white tail the
    user saw after every switch. Remove that decorative delayed layer entirely:
-   the green selected pill is now the only moving/state surface and updates with
-   the mode itself, with no second animation arriving afterwards. */
+   the green selected pill is now the only state surface and updates with the
+   mode itself, with no second animation arriving afterwards. */
 html:root body .cw-widget .cw-tabs {
   position: relative !important;
   z-index: 20 !important;
@@ -219,10 +214,5 @@ html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-gr
 
   html:root body .cw-widget .cw-quick-replies .cw-chip::before {
     transition-duration: 1ms !important;
-  }
-
-  html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl__stroke {
-    animation: none !important;
-    stroke-dashoffset: 0 !important;
   }
 }
