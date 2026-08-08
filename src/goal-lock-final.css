@@ -4,7 +4,7 @@
 @property --cw-logo-offset {
   syntax: "<number>";
   inherits: false;
-  initial-value: 1;
+  initial-value: 0;
 }
 
 html:root body .cw-widget {
@@ -15,11 +15,12 @@ html:root body .cw-widget {
   --goal-choice-radius: 18px;
 }
 
-/* Real one-stroke drawing. Slightly faster overall, with a deliberate start
-   and a decisive final third instead of a slow trailing finish. */
+/* Keep the logo complete and still at rest. The attention animation runs only
+   while a real pointer is hovering the mark: one slow draw, a short hold, then
+   a deliberate erase. Leaving hover restores the complete mark immediately. */
 html:root body .cw-widget .cw-launcher .bl__stroke,
 html:root body .cw-widget .cw-panel-head__mascot .bl__stroke {
-  --cw-logo-offset: 1;
+  --cw-logo-offset: 0;
   stroke: currentColor !important;
   stroke-width: 7.75 !important;
   stroke-linecap: round !important;
@@ -27,30 +28,26 @@ html:root body .cw-widget .cw-panel-head__mascot .bl__stroke {
   stroke-dasharray: 1 !important;
   stroke-dashoffset: var(--cw-logo-offset) !important;
   opacity: 1 !important;
-  animation: cw-goal-logo-intro 3.7s linear 1 both !important;
+  animation: none !important;
   will-change: stroke-dashoffset;
 }
 
-@keyframes cw-goal-logo-intro {
+@keyframes cw-goal-logo-hover-attention {
   0% { --cw-logo-offset: 1; }
-  16% { --cw-logo-offset: 0.97; }
-  42% { --cw-logo-offset: 0.73; }
-  70% { --cw-logo-offset: 0.36; }
-  100% { --cw-logo-offset: 0; }
-}
-
-@keyframes cw-goal-logo-redraw {
-  0% { --cw-logo-offset: 1; }
-  16% { --cw-logo-offset: 0.97; }
-  42% { --cw-logo-offset: 0.73; }
-  70% { --cw-logo-offset: 0.36; }
-  100% { --cw-logo-offset: 0; }
+  12% { --cw-logo-offset: 0.95; }
+  34% { --cw-logo-offset: 0.62; }
+  56% { --cw-logo-offset: 0.18; }
+  64% { --cw-logo-offset: 0; }
+  72% { --cw-logo-offset: 0; }
+  84% { --cw-logo-offset: -0.28; }
+  94% { --cw-logo-offset: -0.72; }
+  100% { --cw-logo-offset: -1; }
 }
 
 @media (hover: hover) and (pointer: fine) {
-  html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) .bl__stroke,
-  html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl__stroke {
-    animation: cw-goal-logo-redraw 3.05s linear 1 both !important;
+  html:root body .cw-widget .cw-launcher:hover .bl__stroke,
+  html:root body .cw-widget .cw-panel-head__mascot:hover .bl__stroke {
+    animation: cw-goal-logo-hover-attention 4.75s linear 1 both !important;
   }
 }
 
@@ -73,6 +70,26 @@ html:root body .cw-widget .cw-launcher {
   box-shadow: 0 18px 40px -26px rgba(25, 131, 79, 0.34) !important;
 }
 
+/* The chat-to-builder CTA must always own its pointer hit area. Historical
+   swipe/glass layers must never intercept the click that opens the configurator. */
+html:root body .cw-widget .cw-chat-top {
+  position: relative !important;
+  z-index: 6 !important;
+  pointer-events: auto !important;
+}
+
+html:root body .cw-widget .cw-chat-builder {
+  position: relative !important;
+  z-index: 7 !important;
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+  cursor: pointer !important;
+}
+
+html:root body .cw-widget .cw-chat-builder > * {
+  pointer-events: none !important;
+}
+
 /* Primary widget controls: logo green, then clearly pale green on hover. */
 html:root body .cw-widget .cw-tabs > button[data-active="true"],
 html:root body .cw-widget :is(.cw-next, .cw-submit):not(:disabled) {
@@ -92,13 +109,15 @@ html:root body .cw-widget :is(.cw-next, .cw-submit):disabled {
 
 @media (hover: hover) and (pointer: fine) {
   html:root body .cw-widget .cw-tabs > button[data-active="true"]:is(:hover, :focus-visible),
-  html:root body .cw-widget :is(.cw-next, .cw-submit):not(:disabled):is(:hover, :focus-visible) {
+  html:root body .cw-widget :is(.cw-next, .cw-submit):not(:disabled):is(:hover, :focus-visible),
+  html:root body .cw-widget .cw-quick-replies .cw-chip:not(:disabled):is(:hover, :focus-visible) {
     color: var(--goal-ink) !important;
     -webkit-text-fill-color: currentColor !important;
     border-color: var(--goal-hover-border) !important;
     background: var(--goal-hover) !important;
     background-color: var(--goal-hover) !important;
     background-image: none !important;
+    box-shadow: 0 12px 26px -20px rgba(25, 131, 79, 0.22) !important;
   }
 }
 
@@ -127,11 +146,58 @@ html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .c
     0 14px 30px -26px rgba(25, 131, 79, 0.32) !important;
 }
 
+/* Remove the legacy text ✓ pseudo-element and restore the real SVG indicator.
+   The SVG path already exists in the component, so its check can be drawn as a
+   line rather than popping in as a glyph. */
 html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]::after {
+  content: none !important;
+  display: none !important;
+}
+
+html:root body .cw-widget .cw-calculator .cw-selection-indicator {
+  position: absolute !important;
+  right: 14px !important;
+  top: 50% !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 23px !important;
+  height: 23px !important;
+  margin: 0 !important;
+  border: 1px solid rgba(25, 131, 79, 0.22) !important;
+  border-radius: 50% !important;
   color: #ffffff !important;
-  border-color: var(--goal-green) !important;
   background: var(--goal-green) !important;
   box-shadow: 0 0 0 2px #ffffff !important;
+  opacity: 0 !important;
+  transform: translateY(-50%) scale(0.78) !important;
+  transition:
+    opacity 180ms ease,
+    transform 260ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+  pointer-events: none !important;
+}
+
+html:root body .cw-widget .cw-calculator .cw-selection-indicator[data-visible="true"] {
+  opacity: 1 !important;
+  transform: translateY(-50%) scale(1) !important;
+}
+
+html:root body .cw-widget .cw-calculator .cw-selection-indicator svg {
+  width: 15px !important;
+  height: 15px !important;
+}
+
+html:root body .cw-widget .cw-calculator .cw-selection-indicator svg path {
+  stroke-dasharray: 24 !important;
+  stroke-dashoffset: 24 !important;
+}
+
+html:root body .cw-widget .cw-calculator .cw-selection-indicator[data-visible="true"] svg path {
+  animation: cw-goal-check-draw 520ms cubic-bezier(0.16, 1, 0.3, 1) 90ms both !important;
+}
+
+@keyframes cw-goal-check-draw {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
 }
 
 html:root body .cw-widget .cw-calculator :is(.cw-rowcard__icon, .cw-scard__icon) {
@@ -149,6 +215,36 @@ html:root body .cw-widget .cw-calculator :is(.cw-rowcard__icon, .cw-scard__icon)
     background-image: none !important;
     box-shadow: 0 14px 30px -24px rgba(25, 131, 79, 0.22) !important;
     transform: translateY(-1px) !important;
+  }
+}
+
+/* Better staged reveal: quick enough to keep the flow responsive, but each
+   choice has a distinct entrance instead of appearing as one block. */
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > * {
+  animation: cw-goal-option-reveal 440ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+  will-change: opacity, transform;
+}
+
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(1) { animation-delay: 45ms !important; }
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(2) { animation-delay: 90ms !important; }
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(3) { animation-delay: 135ms !important; }
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(4) { animation-delay: 180ms !important; }
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(5) { animation-delay: 225ms !important; }
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(6) { animation-delay: 270ms !important; }
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(7) { animation-delay: 315ms !important; }
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(n + 8) { animation-delay: 340ms !important; }
+
+@keyframes cw-goal-option-reveal {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0) scale(0.988);
+  }
+  58% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
   }
 }
 
@@ -182,6 +278,17 @@ html:root body .cw-widget .cw-calculator :is(.cw-rowcard__icon, .cw-scard__icon)
 @media (prefers-reduced-motion: reduce) {
   html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
     --cw-logo-offset: 0;
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+
+  html:root body .cw-widget .cw-calc-step .cw-choice-grid > * {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  html:root body .cw-widget .cw-calculator .cw-selection-indicator[data-visible="true"] svg path {
     animation: none !important;
     stroke-dashoffset: 0 !important;
   }
