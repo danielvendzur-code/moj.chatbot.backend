@@ -1,0 +1,179 @@
+/* Final widget goal lock: this is loaded after all historical layers.
+   It only owns the approved logo motion, configurator card state/size and final hover palette. */
+
+@property --cw-logo-offset {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+html:root body .cw-widget {
+  --goal-green: #19834f;
+  --goal-hover: #c9e7c7;
+  --goal-hover-border: #a7d1ac;
+  --goal-ink: #173126;
+}
+
+/* Real one-stroke drawing. Historical CSS pins stroke-dashoffset with !important,
+   therefore we animate a registered custom number and feed it to that property. */
+html:root body .cw-widget .cw-launcher .bl__stroke,
+html:root body .cw-widget .cw-panel-head__mascot .bl__stroke {
+  --cw-logo-offset: 1;
+  stroke: currentColor !important;
+  stroke-width: 7.75 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  stroke-dasharray: 1 !important;
+  stroke-dashoffset: var(--cw-logo-offset) !important;
+  opacity: 1 !important;
+  animation: cw-goal-logo-intro 4.8s cubic-bezier(0.18, 0.72, 0.18, 1) 1 both !important;
+  will-change: stroke-dashoffset;
+}
+
+@keyframes cw-goal-logo-intro {
+  from { --cw-logo-offset: 1; }
+  to { --cw-logo-offset: 0; }
+}
+
+@keyframes cw-goal-logo-redraw {
+  from { --cw-logo-offset: 1; }
+  to { --cw-logo-offset: 0; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) .bl__stroke,
+  html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl__stroke {
+    animation: cw-goal-logo-redraw 3.8s cubic-bezier(0.18, 0.72, 0.18, 1) 1 both !important;
+  }
+}
+
+/* The header mark has no square/tile; only the floating launcher is a white circle. */
+html:root body .cw-widget .cw-panel-head__mascot {
+  color: var(--goal-green) !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+html:root body .cw-widget .cw-launcher {
+  color: var(--goal-green) !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  border-color: rgba(25, 131, 79, 0.16) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 18px 40px -26px rgba(25, 131, 79, 0.34) !important;
+}
+
+/* Primary widget controls: logo green, then clearly pale green on hover. */
+html:root body .cw-widget .cw-tabs > button[data-active="true"],
+html:root body .cw-widget :is(.cw-next, .cw-submit):not(:disabled) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: currentColor !important;
+  border-color: var(--goal-green) !important;
+  background: var(--goal-green) !important;
+  background-color: var(--goal-green) !important;
+  background-image: none !important;
+}
+
+html:root body .cw-widget :is(.cw-next, .cw-submit):disabled {
+  border-color: rgba(25, 131, 79, 0.12) !important;
+  background: #edf1ed !important;
+  background-color: #edf1ed !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html:root body .cw-widget .cw-tabs > button[data-active="true"]:is(:hover, :focus-visible),
+  html:root body .cw-widget :is(.cw-next, .cw-submit):not(:disabled):is(:hover, :focus-visible) {
+    color: var(--goal-ink) !important;
+    -webkit-text-fill-color: currentColor !important;
+    border-color: var(--goal-hover-border) !important;
+    background: var(--goal-hover) !important;
+    background-color: var(--goal-hover) !important;
+    background-image: none !important;
+  }
+}
+
+/* Configurator cards are the deliberate exception: white base, green outline/check when selected. */
+html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
+  color: var(--goal-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
+  border-color: rgba(25, 131, 79, 0.2) !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  box-shadow: 0 10px 24px -24px rgba(25, 131, 79, 0.26) !important;
+}
+
+html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"],
+html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]:is(:hover, :focus-visible) {
+  color: var(--goal-ink) !important;
+  border: 2px solid var(--goal-green) !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  box-shadow:
+    0 0 0 3px rgba(25, 131, 79, 0.08),
+    0 14px 30px -26px rgba(25, 131, 79, 0.32) !important;
+}
+
+html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]::after {
+  color: #ffffff !important;
+  border-color: var(--goal-green) !important;
+  background: var(--goal-green) !important;
+  box-shadow: 0 0 0 2px #ffffff !important;
+}
+
+html:root body .cw-widget .cw-calculator :is(.cw-rowcard__icon, .cw-scard__icon) {
+  color: var(--goal-green) !important;
+  background: rgba(25, 131, 79, 0.07) !important;
+  border-color: rgba(25, 131, 79, 0.1) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):not([data-selected="true"]):is(:hover, :focus-visible) {
+    color: var(--goal-ink) !important;
+    border-color: var(--goal-hover-border) !important;
+    background: var(--goal-hover) !important;
+    background-color: var(--goal-hover) !important;
+    background-image: none !important;
+    box-shadow: 0 14px 30px -24px rgba(25, 131, 79, 0.22) !important;
+    transform: translateY(-1px) !important;
+  }
+}
+
+/* Steps 1, 2 and 4 intentionally occupy more of the visible panel.
+   Step 3 remains compact/scrollable. */
+@media (max-width: 520px) {
+  html:root body .cw-widget .cw-choice-grid--interest .cw-rowcard {
+    min-height: 80px !important;
+    height: 80px !important;
+    padding-block: 11px !important;
+  }
+
+  html:root body .cw-widget .cw-choice-grid--industry .cw-scard {
+    min-height: 86px !important;
+    height: 86px !important;
+    padding-block: 10px !important;
+  }
+
+  html:root body .cw-widget .cw-choice-grid--features .cw-opt {
+    min-height: 56px !important;
+    height: auto !important;
+  }
+
+  html:root body .cw-widget .cw-choice-grid--timeline .cw-vcard {
+    min-height: 80px !important;
+    height: 80px !important;
+    padding-block: 11px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
+    --cw-logo-offset: 0;
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+}
