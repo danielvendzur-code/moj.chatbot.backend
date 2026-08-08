@@ -1,6 +1,27 @@
 /* Final interaction stability: loaded after goal-lock-final.css.
    Owns click stability, static selection confirmation, chat-chip fill and focus geometry. */
 
+/* Closed launcher hover: draw the mark, let it breathe, erase it, then draw it
+   once more and FINISH on the complete logo. Both +/-1 dash offsets are blank,
+   so the direction reset at 78% is invisible instead of flashing a stroke. */
+@keyframes cw-logo-hover-return-full {
+  0% { --cw-logo-offset: 1; }
+  10% { --cw-logo-offset: 0.93; }
+  30% { --cw-logo-offset: 0.52; }
+  44% { --cw-logo-offset: 0; }
+  54% { --cw-logo-offset: 0; }
+  68% { --cw-logo-offset: -0.46; }
+  78% { --cw-logo-offset: -1; }
+  78.01% { --cw-logo-offset: 1; }
+  100% { --cw-logo-offset: 0; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html:root body .cw-widget .cw-launcher[aria-expanded="false"]:is(:hover, :focus-visible) .bl__stroke {
+    animation: cw-logo-hover-return-full 5.8s linear 1 both !important;
+  }
+}
+
 /* Once the widget is open, the logo is a stable brand mark, not another moving
    element. Keep the closed launcher interaction intact, but freeze both the
    header mark and the expanded launcher at their completed stroke. */
@@ -68,8 +89,11 @@ html:root body .cw-widget .cw-quick-replies .cw-chip::after {
   z-index: 1 !important;
 }
 
-/* Tabs are click-first controls. The decorative thumb can never own a hit area,
-   and the buttons remain above every historical glass/swipe layer. */
+/* Tabs are click-first controls. The old white glass thumb moved for 560ms
+   behind the already-green active tab, which created the visible white tail the
+   user saw after every switch. Remove that decorative delayed layer entirely:
+   the green selected pill is now the only moving/state surface and updates with
+   the mode itself, with no second animation arriving afterwards. */
 html:root body .cw-widget .cw-tabs {
   position: relative !important;
   z-index: 20 !important;
@@ -79,6 +103,16 @@ html:root body .cw-widget .cw-tabs {
 html:root body .cw-widget .cw-tabs__thumb,
 html:root body .cw-widget .cw-tabs__glass {
   pointer-events: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  opacity: 0 !important;
+  transition: none !important;
+  animation: none !important;
 }
 
 html:root body .cw-widget .cw-tabs > button {
@@ -185,5 +219,10 @@ html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-gr
 
   html:root body .cw-widget .cw-quick-replies .cw-chip::before {
     transition-duration: 1ms !important;
+  }
+
+  html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl__stroke {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
   }
 }
