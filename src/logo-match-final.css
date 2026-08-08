@@ -1,4 +1,5 @@
-/* Match the standalone chatbot mark to the website mark exactly. */
+/* Standalone chatbot logo matches the website mark and motion.
+   Draw once on load; redraw once on hover/focus. No infinite loop. */
 html:root body .cw-widget .cw-launcher,
 html:root body .cw-widget .cw-panel-head__mascot {
   color: #19834f !important;
@@ -11,37 +12,31 @@ html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke 
   stroke-linejoin: round !important;
   stroke-dasharray: 1 !important;
   stroke-dashoffset: 1;
-  opacity: 0.1;
-  animation: cw-approved-logo-loop 11.2s linear infinite !important;
+  opacity: 0.12;
+  animation: cw-logo-intro 4.8s cubic-bezier(0.18, 0.72, 0.18, 1) 1 both !important;
   will-change: stroke-dashoffset, opacity;
 }
 
-@keyframes cw-approved-logo-loop {
-  0% {
-    stroke-dashoffset: 1;
-    opacity: 0.1;
-    animation-timing-function: cubic-bezier(0.2, 0.72, 0.18, 1);
-  }
-  45% {
-    stroke-dashoffset: 0;
-    opacity: 1;
-  }
-  68% {
-    stroke-dashoffset: 0;
-    opacity: 1;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.35, 1);
-  }
-  98% {
-    stroke-dashoffset: 1;
-    opacity: 0.12;
-  }
-  100% {
-    stroke-dashoffset: 1;
-    opacity: 0.1;
+@keyframes cw-logo-intro {
+  0% { stroke-dashoffset: 1; opacity: 0.12; }
+  12% { opacity: 0.78; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+@keyframes cw-logo-redraw {
+  0% { stroke-dashoffset: 1; opacity: 0.18; }
+  12% { opacity: 0.8; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) .bl__stroke,
+  html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl__stroke {
+    animation: cw-logo-redraw 3.8s cubic-bezier(0.18, 0.72, 0.18, 1) 1 both !important;
   }
 }
 
-/* White circular launcher only — no square tile around the logo. */
+/* White circular launcher only — no square tile around the mark. */
 html:root body .cw-widget .cw-launcher {
   background: #ffffff !important;
   background-image: none !important;
@@ -49,6 +44,7 @@ html:root body .cw-widget .cw-launcher {
   overflow: hidden !important;
 }
 
+/* Header shows only the green mark, without any square background. */
 html:root body .cw-widget .cw-panel-head__mascot {
   background: transparent !important;
   background-image: none !important;
