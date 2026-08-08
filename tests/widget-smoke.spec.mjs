@@ -32,12 +32,14 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   });
   const quickReplyLabel = quickReply.locator(".cw-chip__label");
 
-  // Green chat chips must use the website's pale-green interaction colour.
+  // Hover stays pale green and the whole pill never shifts or scales.
   await quickReply.hover();
   await expect(quickReply).toHaveCSS("background-color", "rgb(201, 231, 199)");
+  await expect(quickReply).toHaveCSS("transform", "none");
 
   await quickReply.click();
   await expect(quickReply).toHaveAttribute("data-sending", "true");
+  await expect(quickReply).toHaveCSS("transform", "none");
   await expect(quickReplyLabel).toBeVisible();
   await expect(quickReplyLabel).toHaveText("Kde mi to ušetrí čas?");
   await page.waitForTimeout(300);
@@ -57,21 +59,33 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   const interestChoice = page.getByTestId("interest-chatbot");
   const interestLabel = interestChoice.locator("b");
   await expect(interestChoice).toHaveCSS("animation-name", "cw-goal-option-reveal");
+  await expect(interestChoice).toHaveCSS("animation-duration", "0.52s");
   await interestChoice.click();
 
+  // Selection confirmation is now static: the SVG check is immediately visible
+  // and no dash animation can leave it half-drawn or invisible.
   const selectionIndicator = interestChoice.locator(".cw-selection-indicator");
   await expect(selectionIndicator).toHaveAttribute("data-visible", "true");
+  await expect(selectionIndicator).toHaveCSS("opacity", "1");
   await expect(selectionIndicator.locator("svg path")).toHaveCSS(
     "animation-name",
-    "cw-goal-check-draw",
+    "none",
   );
 
   await expect(interestLabel).toBeVisible();
   await expect(interestLabel).toHaveText(/\S+/);
-  await page.waitForTimeout(300);
-  await expect(interestChoice).toBeVisible();
-  await expect(interestLabel).toHaveText(/\S+/);
   await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
+
+  // The click that chose step 1 must never select a card that appears underneath
+  // the same pointer position in step 2.
+  await expect(
+    page.locator('[data-testid^="industry-"][data-selected="true"]'),
+  ).toHaveCount(0);
+  await expect(page.locator(".cw-widget")).not.toHaveAttribute(
+    "data-pointer-parked",
+    "true",
+    { timeout: 1200 },
+  );
 
   await page.getByTestId("industry-sluzby").click();
   await expect(page.getByTestId("feature-jazyky")).toBeVisible({ timeout: 2500 });
