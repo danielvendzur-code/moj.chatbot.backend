@@ -1,5 +1,5 @@
-/* Final widget goal lock: this is loaded after all historical layers.
-   It only owns the approved logo motion, configurator card state/size and final hover palette. */
+/* Final widget goal lock: loaded after all historical layers.
+   Owns the approved logo motion, configurator selection state/shape and hover palette. */
 
 @property --cw-logo-offset {
   syntax: "<number>";
@@ -12,10 +12,11 @@ html:root body .cw-widget {
   --goal-hover: #c9e7c7;
   --goal-hover-border: #a7d1ac;
   --goal-ink: #173126;
+  --goal-choice-radius: 18px;
 }
 
-/* Real one-stroke drawing. Historical CSS pins stroke-dashoffset with !important,
-   therefore we animate a registered custom number and feed it to that property. */
+/* Real one-stroke drawing. Start deliberately, then accelerate through the end
+   so the line no longer jumps off the mark and stalls before completion. */
 html:root body .cw-widget .cw-launcher .bl__stroke,
 html:root body .cw-widget .cw-panel-head__mascot .bl__stroke {
   --cw-logo-offset: 1;
@@ -26,24 +27,30 @@ html:root body .cw-widget .cw-panel-head__mascot .bl__stroke {
   stroke-dasharray: 1 !important;
   stroke-dashoffset: var(--cw-logo-offset) !important;
   opacity: 1 !important;
-  animation: cw-goal-logo-intro 4.8s cubic-bezier(0.18, 0.72, 0.18, 1) 1 both !important;
+  animation: cw-goal-logo-intro 4.15s linear 1 both !important;
   will-change: stroke-dashoffset;
 }
 
 @keyframes cw-goal-logo-intro {
-  from { --cw-logo-offset: 1; }
-  to { --cw-logo-offset: 0; }
+  0% { --cw-logo-offset: 1; }
+  18% { --cw-logo-offset: 0.94; }
+  42% { --cw-logo-offset: 0.72; }
+  70% { --cw-logo-offset: 0.38; }
+  100% { --cw-logo-offset: 0; }
 }
 
 @keyframes cw-goal-logo-redraw {
-  from { --cw-logo-offset: 1; }
-  to { --cw-logo-offset: 0; }
+  0% { --cw-logo-offset: 1; }
+  18% { --cw-logo-offset: 0.94; }
+  42% { --cw-logo-offset: 0.72; }
+  70% { --cw-logo-offset: 0.38; }
+  100% { --cw-logo-offset: 0; }
 }
 
 @media (hover: hover) and (pointer: fine) {
   html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) .bl__stroke,
   html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl__stroke {
-    animation: cw-goal-logo-redraw 3.8s cubic-bezier(0.18, 0.72, 0.18, 1) 1 both !important;
+    animation: cw-goal-logo-redraw 3.45s linear 1 both !important;
   }
 }
 
@@ -95,8 +102,10 @@ html:root body .cw-widget :is(.cw-next, .cw-submit):disabled {
   }
 }
 
-/* Configurator cards are the deliberate exception: white base, green outline/check when selected. */
+/* Configurator choices: one exact shape everywhere.
+   White base, green outline/check only after selection. */
 html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
+  border-radius: var(--goal-choice-radius) !important;
   color: var(--goal-ink) !important;
   -webkit-text-fill-color: currentColor !important;
   border-color: rgba(25, 131, 79, 0.2) !important;
