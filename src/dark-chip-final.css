@@ -1,11 +1,35 @@
-/* Final chip interaction contract: forest by default, lime on hover/focus. */
+/* Final interaction palette: logo green at rest, pale lime on hover. */
+.cw-widget {
+  --mc-green: #19834f;
+  --mc-lime: #d9ff78;
+  --mc-ink: #173126;
+}
+
+.cw-widget :is(.cw-launcher, .cw-panel-head__mascot) {
+  color: var(--mc-green) !important;
+}
+
+.cw-widget .cw-tabs > button[data-active="true"],
+.cw-widget :is(.cw-next, .cw-submit):not(:disabled) {
+  color: #ffffff !important;
+  border-color: var(--mc-green) !important;
+  background: var(--mc-green) !important;
+  background-image: none !important;
+  box-shadow: 0 12px 26px -18px rgba(25, 131, 79, 0.52) !important;
+}
+
+.cw-widget .cw-progress__dots i[data-current="true"],
+.cw-widget .cw-progress__dots i[data-complete="true"] {
+  background: var(--mc-green) !important;
+}
 
 .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
   color: #ffffff !important;
-  border-color: #0b2f20 !important;
-  background: #0b2f20 !important;
+  border-color: var(--mc-green) !important;
+  background: var(--mc-green) !important;
+  background-color: var(--mc-green) !important;
   background-image: none !important;
-  box-shadow: 0 10px 24px -22px rgba(11, 47, 32, 0.72) !important;
+  box-shadow: 0 10px 24px -22px rgba(25, 131, 79, 0.58) !important;
 }
 
 .cw-widget .cw-calculator :is(
@@ -21,48 +45,107 @@
 }
 
 .cw-widget .cw-calculator :is(.cw-rowcard__icon, .cw-scard__icon) {
-  color: #d9ff78 !important;
-  background: rgba(255, 255, 255, 0.09) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: var(--mc-lime) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 
 .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] {
   color: #ffffff !important;
-  border-color: #d9ff78 !important;
-  background: #0b2f20 !important;
+  border-color: var(--mc-lime) !important;
+  background: var(--mc-green) !important;
+  background-color: var(--mc-green) !important;
   background-image: none !important;
   box-shadow:
-    inset 0 0 0 1px rgba(217, 255, 120, 0.28),
-    0 12px 26px -22px rgba(11, 47, 32, 0.78) !important;
+    inset 0 0 0 1px rgba(217, 255, 120, 0.32),
+    0 12px 28px -22px rgba(25, 131, 79, 0.62) !important;
 }
 
 .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]::after {
-  color: #0b2f20 !important;
-  border-color: #d9ff78 !important;
-  background: #d9ff78 !important;
+  color: var(--mc-green) !important;
+  border-color: var(--mc-lime) !important;
+  background: var(--mc-lime) !important;
+}
+
+/* Step 2 must never truncate labels on mobile. */
+.cw-widget .cw-choice-grid--industry .cw-scard {
+  min-height: 86px !important;
+  height: 86px !important;
+  padding: 10px 42px 10px 12px !important;
+}
+
+.cw-widget .cw-choice-grid--industry .cw-scard b {
+  display: block !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+  font-size: 13.6px !important;
+  line-height: 1.18 !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):is(:hover, :focus-visible),
-  .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]:is(:hover, :focus-visible) {
-    color: #0b2f20 !important;
-    border-color: #d9ff78 !important;
-    background: #d9ff78 !important;
+  .cw-widget .cw-tabs > button[data-active="true"]:is(:hover, :focus-visible),
+  .cw-widget :is(.cw-next, .cw-submit):not(:disabled):is(:hover, :focus-visible),
+  .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):is(:hover, :focus-visible) {
+    color: var(--mc-ink) !important;
+    border-color: var(--mc-lime) !important;
+    background: var(--mc-lime) !important;
+    background-color: var(--mc-lime) !important;
     background-image: none !important;
-    box-shadow: 0 14px 28px -20px rgba(11, 47, 32, 0.5) !important;
+    box-shadow: 0 14px 30px -20px rgba(25, 131, 79, 0.4) !important;
     transform: translateY(-1px) !important;
   }
 
-  .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard):is(:hover, :focus-visible) :is(.cw-rowcard__icon, .cw-scard__icon),
-  .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard)[data-selected="true"]:is(:hover, :focus-visible) :is(.cw-rowcard__icon, .cw-scard__icon) {
-    color: #0b2f20 !important;
-    background: rgba(11, 47, 32, 0.08) !important;
-    border-color: rgba(11, 47, 32, 0.12) !important;
+  .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard):is(:hover, :focus-visible) :is(.cw-rowcard__icon, .cw-scard__icon) {
+    color: var(--mc-ink) !important;
+    background: rgba(25, 131, 79, 0.1) !important;
+    border-color: rgba(25, 131, 79, 0.16) !important;
   }
 
   .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]:is(:hover, :focus-visible)::after {
     color: #ffffff !important;
-    border-color: #0b2f20 !important;
-    background: #0b2f20 !important;
+    border-color: var(--mc-green) !important;
+    background: var(--mc-green) !important;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):not([data-selected="true"]):active {
+    color: var(--mc-ink) !important;
+    border-color: var(--mc-lime) !important;
+    background: var(--mc-lime) !important;
+  }
+
+  .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"],
+  .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]:active {
+    color: #ffffff !important;
+    border-color: var(--mc-lime) !important;
+    background: var(--mc-green) !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .cw-widget .cw-choice-grid--industry .cw-scard {
+    min-height: 82px !important;
+    height: 82px !important;
+    padding: 9px 38px 9px 10px !important;
+    gap: 9px !important;
+  }
+
+  .cw-widget .cw-choice-grid--industry .cw-scard__icon {
+    flex: 0 0 34px !important;
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .cw-widget .cw-choice-grid--industry .cw-scard b {
+    font-size: 13px !important;
+    line-height: 1.16 !important;
   }
 }
