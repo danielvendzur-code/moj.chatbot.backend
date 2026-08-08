@@ -15,8 +15,8 @@ html:root body .cw-widget {
   --goal-choice-radius: 18px;
 }
 
-/* Real one-stroke drawing. Start deliberately, then accelerate through the end
-   so the line no longer jumps off the mark and stalls before completion. */
+/* Real one-stroke drawing. Slightly faster overall, with a deliberate start
+   and a decisive final third instead of a slow trailing finish. */
 html:root body .cw-widget .cw-launcher .bl__stroke,
 html:root body .cw-widget .cw-panel-head__mascot .bl__stroke {
   --cw-logo-offset: 1;
@@ -27,30 +27,30 @@ html:root body .cw-widget .cw-panel-head__mascot .bl__stroke {
   stroke-dasharray: 1 !important;
   stroke-dashoffset: var(--cw-logo-offset) !important;
   opacity: 1 !important;
-  animation: cw-goal-logo-intro 4.15s linear 1 both !important;
+  animation: cw-goal-logo-intro 3.7s linear 1 both !important;
   will-change: stroke-dashoffset;
 }
 
 @keyframes cw-goal-logo-intro {
   0% { --cw-logo-offset: 1; }
-  18% { --cw-logo-offset: 0.94; }
-  42% { --cw-logo-offset: 0.72; }
-  70% { --cw-logo-offset: 0.38; }
+  16% { --cw-logo-offset: 0.97; }
+  42% { --cw-logo-offset: 0.73; }
+  70% { --cw-logo-offset: 0.36; }
   100% { --cw-logo-offset: 0; }
 }
 
 @keyframes cw-goal-logo-redraw {
   0% { --cw-logo-offset: 1; }
-  18% { --cw-logo-offset: 0.94; }
-  42% { --cw-logo-offset: 0.72; }
-  70% { --cw-logo-offset: 0.38; }
+  16% { --cw-logo-offset: 0.97; }
+  42% { --cw-logo-offset: 0.73; }
+  70% { --cw-logo-offset: 0.36; }
   100% { --cw-logo-offset: 0; }
 }
 
 @media (hover: hover) and (pointer: fine) {
   html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) .bl__stroke,
   html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl__stroke {
-    animation: cw-goal-logo-redraw 3.45s linear 1 both !important;
+    animation: cw-goal-logo-redraw 3.05s linear 1 both !important;
   }
 }
 
