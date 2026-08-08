@@ -1,0 +1,68 @@
+/* Final interaction stability: loaded after goal-lock-final.css.
+   Owns only click stability, static selection confirmation and reveal timing. */
+
+/* Chat quick replies must not shift, shrink or grow when hovered/pressed/sent.
+   The pale-green colour change is enough feedback; moving the whole pill makes
+   the surrounding layout look unstable. */
+html:root body .cw-widget .cw-quick-replies .cw-chip,
+html:root body .cw-widget .cw-quick-replies .cw-chip:is(:hover, :focus-visible, :active),
+html:root body .cw-widget .cw-quick-replies .cw-chip[data-sending="true"] {
+  transform: none !important;
+}
+
+/* Remove the historical centre-expanding fill. goal-lock-final.css already
+   owns the pale-green hover surface directly on the button. */
+html:root body .cw-widget .cw-quick-replies .cw-chip::before {
+  content: none !important;
+  display: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* The check is confirmation, not decoration: show the existing SVG instantly
+   and keep it fully visible until the step changes. */
+html:root body .cw-widget .cw-calculator .cw-selection-indicator {
+  transform: translateY(-50%) scale(1) !important;
+  transition: none !important;
+}
+
+html:root body .cw-widget .cw-calculator .cw-selection-indicator[data-visible="true"] {
+  opacity: 1 !important;
+  transform: translateY(-50%) scale(1) !important;
+}
+
+html:root body .cw-widget .cw-calculator .cw-selection-indicator svg path,
+html:root body .cw-widget .cw-calculator .cw-selection-indicator[data-visible="true"] svg path {
+  stroke-dasharray: none !important;
+  stroke-dashoffset: 0 !important;
+  animation: none !important;
+}
+
+/* A choice from the old step must never click the card that appears underneath
+   it in the next step. configuratorAutoAdvance releases this short lock after
+   the hand-off or as soon as a real pointer movement proves fresh intent. */
+html:root body .cw-widget[data-pointer-parked="true"]
+  .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > * {
+  pointer-events: none !important;
+}
+
+/* Slightly slower reveal than the previous 440/45 ms rhythm. The cards still
+   arrive promptly, but each entrance is now easier to perceive. */
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > * {
+  animation-duration: 520ms !important;
+}
+
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(1) { animation-delay: 60ms !important; }
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(2) { animation-delay: 120ms !important; }
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(3) { animation-delay: 180ms !important; }
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(4) { animation-delay: 240ms !important; }
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(5) { animation-delay: 300ms !important; }
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(6) { animation-delay: 360ms !important; }
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(7) { animation-delay: 420ms !important; }
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > *:nth-child(n + 8) { animation-delay: 460ms !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  html:root body .cw-widget .cw-calc-step .cw-choice-grid > * {
+    animation: none !important;
+  }
+}
