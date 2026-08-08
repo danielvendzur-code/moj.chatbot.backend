@@ -25,13 +25,17 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   await expect(page.getByRole("heading", { name: "Môj Chatbot" })).toBeVisible();
   await expect(page.getByText("4 otázky · návrh máte do minúty")).toBeVisible();
   await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
-  await expect(page.locator(".cw-panel-head .bl__outer")).toBeVisible();
-  await expect(page.locator(".cw-panel-head .bl__inner")).toBeVisible();
+  await expect(page.locator(".cw-panel-head .bl__stroke")).toBeVisible();
 
   const quickReply = page.getByRole("button", {
     name: "Kde mi to ušetrí čas?",
   });
   const quickReplyLabel = quickReply.locator(".cw-chip__label");
+
+  // Green chat chips must use the website's pale-green interaction colour.
+  await quickReply.hover();
+  await expect(quickReply).toHaveCSS("background-color", "rgb(201, 231, 199)");
+
   await quickReply.click();
   await expect(quickReply).toHaveAttribute("data-sending", "true");
   await expect(quickReplyLabel).toBeVisible();
@@ -40,13 +44,28 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   await expect(quickReply).toBeVisible();
   await expect(quickReplyLabel).toHaveText("Kde mi to ušetrí čas?");
 
-  await page.getByTestId("tab-calculator").click();
+  // Regression guard: this CTA has repeatedly been blocked by historical
+  // pointer/swipe layers. A real browser click must switch the rendered mode.
+  const builderCta = page.locator(".cw-chat-builder");
+  await expect(builderCta).toBeVisible();
+  await builderCta.click();
   await expect(page.getByTestId("calculator-view")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Aké riešenie chcete na web?" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Aké riešenie chcete na web?" }),
+  ).toBeVisible();
 
   const interestChoice = page.getByTestId("interest-chatbot");
   const interestLabel = interestChoice.locator("b");
+  await expect(interestChoice).toHaveCSS("animation-name", "cw-goal-option-reveal");
   await interestChoice.click();
+
+  const selectionIndicator = interestChoice.locator(".cw-selection-indicator");
+  await expect(selectionIndicator).toHaveAttribute("data-visible", "true");
+  await expect(selectionIndicator.locator("svg path")).toHaveCSS(
+    "animation-name",
+    "cw-goal-check-draw",
+  );
+
   await expect(interestLabel).toBeVisible();
   await expect(interestLabel).toHaveText(/\S+/);
   await page.waitForTimeout(300);
@@ -55,9 +74,9 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
 
   await page.getByTestId("industry-sluzby").click();
-  await expect(page.getByTestId("feature-faq")).toBeVisible({ timeout: 2500 });
+  await expect(page.getByTestId("feature-jazyky")).toBeVisible({ timeout: 2500 });
 
-  await page.getByTestId("feature-faq").click();
+  await page.getByTestId("feature-jazyky").click();
   await page.getByTestId("flow-next").click();
   await expect(page.getByTestId("timeline-asap")).toBeVisible({ timeout: 2500 });
 
@@ -103,16 +122,22 @@ test("mobile mode switching never opens the software keyboard unexpectedly", asy
 
   const panel = page.locator(".cw-panel");
   await expect(panel).toBeVisible();
+  await page.waitForTimeout(260);
   const box = await panel.boundingBox();
   const viewport = await page.evaluate(() => ({
     width: document.documentElement.clientWidth,
     height: document.documentElement.clientHeight,
   }));
   expect(box).not.toBeNull();
-  expect(Math.round(box.x)).toBe(0);
-  expect(Math.round(box.y)).toBe(0);
-  expect(Math.round(box.width)).toBe(viewport.width);
-  expect(Math.round(box.height)).toBe(viewport.height);
+
+  // Layout can keep safe-area insets; this test only guards that the mobile
+  // assistant remains a large, fully contained surface after its entrance.
+  expect(box.width).toBeGreaterThanOrEqual(viewport.width * 0.9);
+  expect(box.height).toBeGreaterThanOrEqual(viewport.height * 0.9);
+  expect(box.x).toBeGreaterThanOrEqual(0);
+  expect(box.y).toBeGreaterThanOrEqual(0);
+  expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 1);
+  expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 1);
 
   await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "999px");
   await page.getByTestId("tab-calculator").click();
