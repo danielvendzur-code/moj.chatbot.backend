@@ -25,8 +25,19 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   await expect(page.getByRole("heading", { name: "Môj Chatbot" })).toBeVisible();
   await expect(page.getByText("4 otázky · návrh máte do minúty")).toBeVisible();
   await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
-  await expect(page.locator(".cw-panel-head .bl__outer")).toBeVisible();
-  await expect(page.locator(".cw-panel-head .bl__inner")).toBeVisible();
+  await expect(page.locator(".cw-panel-head .bl__stroke")).toBeVisible();
+
+  // Regression guard: this CTA has repeatedly been blocked by historical
+  // pointer/swipe layers. A real browser click must switch the rendered mode.
+  const builderCta = page.locator(".cw-chat-builder");
+  await expect(builderCta).toBeVisible();
+  await builderCta.click();
+  await expect(page.getByTestId("calculator-view")).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Aké riešenie chcete na web?" }),
+  ).toBeVisible();
+  await page.getByTestId("tab-assistant").click();
+  await expect(page.getByTestId("assistant-view")).toBeVisible();
 
   const quickReply = page.getByRole("button", {
     name: "Kde mi to ušetrí čas?",
@@ -109,10 +120,18 @@ test("mobile mode switching never opens the software keyboard unexpectedly", asy
     height: document.documentElement.clientHeight,
   }));
   expect(box).not.toBeNull();
-  expect(Math.round(box.x)).toBe(0);
-  expect(Math.round(box.y)).toBe(0);
-  expect(Math.round(box.width)).toBe(viewport.width);
-  expect(Math.round(box.height)).toBe(viewport.height);
+
+  // Current mobile shell intentionally keeps a tiny safe inset. Guard that the
+  // assistant remains effectively full-screen and fully inside the viewport,
+  // rather than hard-coding an obsolete zero-inset layout.
+  expect(box.x).toBeGreaterThanOrEqual(0);
+  expect(box.y).toBeGreaterThanOrEqual(0);
+  expect(box.x).toBeLessThanOrEqual(8);
+  expect(box.y).toBeLessThanOrEqual(8);
+  expect(box.width).toBeGreaterThanOrEqual(viewport.width - 16);
+  expect(box.height).toBeGreaterThanOrEqual(viewport.height - 16);
+  expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 1);
+  expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 1);
 
   await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "999px");
   await page.getByTestId("tab-calculator").click();
