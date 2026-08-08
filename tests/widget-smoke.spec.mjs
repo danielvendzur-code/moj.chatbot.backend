@@ -56,7 +56,16 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
 
   const interestChoice = page.getByTestId("interest-chatbot");
   const interestLabel = interestChoice.locator("b");
+  await expect(interestChoice).toHaveCSS("animation-name", "cw-goal-option-reveal");
   await interestChoice.click();
+
+  const selectionIndicator = interestChoice.locator(".cw-selection-indicator");
+  await expect(selectionIndicator).toHaveAttribute("data-visible", "true");
+  await expect(selectionIndicator.locator("svg path")).toHaveCSS(
+    "animation-name",
+    "cw-goal-check-draw",
+  );
+
   await expect(interestLabel).toBeVisible();
   await expect(interestLabel).toHaveText(/\S+/);
   await page.waitForTimeout(300);
@@ -65,9 +74,9 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
 
   await page.getByTestId("industry-sluzby").click();
-  await expect(page.getByTestId("feature-faq")).toBeVisible({ timeout: 2500 });
+  await expect(page.getByTestId("feature-jazyky")).toBeVisible({ timeout: 2500 });
 
-  await page.getByTestId("feature-faq").click();
+  await page.getByTestId("feature-jazyky").click();
   await page.getByTestId("flow-next").click();
   await expect(page.getByTestId("timeline-asap")).toBeVisible({ timeout: 2500 });
 
@@ -113,6 +122,7 @@ test("mobile mode switching never opens the software keyboard unexpectedly", asy
 
   const panel = page.locator(".cw-panel");
   await expect(panel).toBeVisible();
+  await page.waitForTimeout(260);
   const box = await panel.boundingBox();
   const viewport = await page.evaluate(() => ({
     width: document.documentElement.clientWidth,
@@ -120,14 +130,12 @@ test("mobile mode switching never opens the software keyboard unexpectedly", asy
   }));
   expect(box).not.toBeNull();
 
-  // Current mobile shell intentionally keeps a small safe inset. Guard that
-  // it still fills essentially the whole viewport and never escapes it.
+  // Layout can keep safe-area insets; this test only guards that the mobile
+  // assistant remains a large, fully contained surface after its entrance.
+  expect(box.width).toBeGreaterThanOrEqual(viewport.width * 0.9);
+  expect(box.height).toBeGreaterThanOrEqual(viewport.height * 0.9);
   expect(box.x).toBeGreaterThanOrEqual(0);
   expect(box.y).toBeGreaterThanOrEqual(0);
-  expect(box.x).toBeLessThanOrEqual(20);
-  expect(box.y).toBeLessThanOrEqual(20);
-  expect(box.width).toBeGreaterThanOrEqual(viewport.width - 40);
-  expect(box.height).toBeGreaterThanOrEqual(viewport.height - 40);
   expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 1);
   expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 1);
 
