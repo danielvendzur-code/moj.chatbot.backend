@@ -9,7 +9,23 @@ const collectRuntimeErrors = (page) => {
   return errors;
 };
 
-test("desktop visitor sees stable chip labels and completes the configurator", async ({
+const expectBackButtonInsideProgress = async (page) => {
+  const progress = page.locator(".cw-progress");
+  const back = page.locator(".cw-progress__back");
+  await expect(back).toBeVisible();
+
+  const progressBox = await progress.boundingBox();
+  const backBox = await back.boundingBox();
+  expect(progressBox).not.toBeNull();
+  expect(backBox).not.toBeNull();
+
+  expect(backBox.x - progressBox.x).toBeGreaterThanOrEqual(3);
+  expect(backBox.y - progressBox.y).toBeGreaterThanOrEqual(3);
+  expect(progressBox.x + progressBox.width - (backBox.x + backBox.width)).toBeGreaterThanOrEqual(3);
+  expect(progressBox.y + progressBox.height - (backBox.y + backBox.height)).toBeGreaterThanOrEqual(3);
+};
+
+test("desktop interactions stay clickable, unselected and visually stable", async ({
   page,
 }) => {
   const errors = collectRuntimeErrors(page);
@@ -27,15 +43,35 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
   await expect(page.locator(".cw-panel-head .bl__stroke")).toBeVisible();
 
+  // The browser focus ring belongs to the rounded composer shell, never to the
+  // rectangular text input inside it.
+  const composer = page.locator(".cw-inputbar");
+  const composerInput = composer.locator("input");
+  await composerInput.focus();
+  await expect(composer).toHaveCSS("border-radius", "999px");
+  await expect(composerInput).toHaveCSS("outline-style", "none");
+  await expect(composerInput).toHaveCSS("border-top-width", "0px");
+
   const quickReply = page.getByRole("button", {
     name: "Kde mi to ušetrí čas?",
   });
   const quickReplyLabel = quickReply.locator(".cw-chip__label");
 
-  // Hover stays pale green and the whole pill never shifts or scales.
+  // The old centre fill is back, but only the fill moves; the chip box itself
+  // must stay physically still.
   await quickReply.hover();
-  await expect(quickReply).toHaveCSS("background-color", "rgb(201, 231, 199)");
+  await page.waitForTimeout(480);
   await expect(quickReply).toHaveCSS("transform", "none");
+  const fillState = await quickReply.evaluate((chip) => {
+    const before = getComputedStyle(chip, "::before");
+    return {
+      background: before.backgroundColor,
+      transform: before.transform,
+    };
+  });
+  expect(fillState.background).toBe("rgb(201, 231, 199)");
+  expect(fillState.transform).not.toBe("none");
+  expect(fillState.transform).not.toContain("matrix(0");
 
   await quickReply.click();
   await expect(quickReply).toHaveAttribute("data-sending", "true");
@@ -46,15 +82,29 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   await expect(quickReply).toBeVisible();
   await expect(quickReplyLabel).toHaveText("Kde mi to ušetrí čas?");
 
-  // Regression guard: this CTA has repeatedly been blocked by historical
-  // pointer/swipe layers. A real browser click must switch the rendered mode.
   const builderCta = page.locator(".cw-chat-builder");
   await expect(builderCta).toBeVisible();
   await builderCta.click();
+  await expect(panel).toHaveAttribute("data-mode", "calculator");
   await expect(page.getByTestId("calculator-view")).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Aké riešenie chcete na web?" }),
   ).toBeVisible();
+
+  // Real tab clicks must work in both directions, repeatedly, regardless of the
+  // old swipe rail and its pointer capture.
+  await page.getByTestId("tab-assistant").click();
+  await expect(panel).toHaveAttribute("data-mode", "assistant");
+  await expect(page.locator('.cw-mode-view[data-view="assistant"]')).toHaveAttribute(
+    "data-active",
+    "true",
+  );
+  await page.getByTestId("tab-calculator").click();
+  await expect(panel).toHaveAttribute("data-mode", "calculator");
+  await expect(page.locator('.cw-mode-view[data-view="calculator"]')).toHaveAttribute(
+    "data-active",
+    "true",
+  );
 
   const interestChoice = page.getByTestId("interest-chatbot");
   const interestLabel = interestChoice.locator("b");
@@ -62,8 +112,6 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   await expect(interestChoice).toHaveCSS("animation-duration", "0.52s");
   await interestChoice.click();
 
-  // Selection confirmation is now static: the SVG check is immediately visible
-  // and no dash animation can leave it half-drawn or invisible.
   const selectionIndicator = interestChoice.locator(".cw-selection-indicator");
   await expect(selectionIndicator).toHaveAttribute("data-visible", "true");
   await expect(selectionIndicator).toHaveCSS("opacity", "1");
@@ -76,8 +124,7 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   await expect(interestLabel).toHaveText(/\S+/);
   await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
 
-  // The click that chose step 1 must never select a card that appears underneath
-  // the same pointer position in step 2.
+  // Nothing in step 2 may inherit the click that chose step 1.
   await expect(
     page.locator('[data-testid^="industry-"][data-selected="true"]'),
   ).toHaveCount(0);
@@ -87,8 +134,26 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
     { timeout: 1200 },
   );
 
+  // Back button must have a visible gutter on every side and really navigate.
+  await expectBackButtonInsideProgress(page);
+  await page.locator(".cw-progress__back").click();
+  await expect(
+    page.getByRole("heading", { name: "Aké riešenie chcete na web?" }),
+  ).toBeVisible({ timeout: 2000 });
+  await page.getByTestId("flow-next").click();
+  await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2000 });
+
   await page.getByTestId("industry-sluzby").click();
   await expect(page.getByTestId("feature-jazyky")).toBeVisible({ timeout: 2500 });
+
+  // Recommended ordering is allowed; selected answers are not. Step 3 must be
+  // completely blank until the visitor chooses something.
+  await expect(
+    page.locator('[data-testid^="feature-"][data-selected="true"]'),
+  ).toHaveCount(0);
+  await expect(
+    page.locator('[data-testid^="feature-"][data-recommended="true"]'),
+  ).toHaveCount(0);
 
   await page.getByTestId("feature-jazyky").click();
   await page.getByTestId("flow-next").click();
@@ -118,7 +183,7 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   expect(errors).toEqual([]);
 });
 
-test("mobile mode switching never opens the software keyboard unexpectedly", async ({
+test("mobile embed uses real taps for tabs and back navigation", async ({
   browser,
 }) => {
   const context = await browser.newContext({
@@ -131,12 +196,14 @@ test("mobile mode switching never opens the software keyboard unexpectedly", asy
   const page = await context.newPage();
   const errors = collectRuntimeErrors(page);
 
-  await page.goto("http://127.0.0.1:4173", { waitUntil: "networkidle" });
-  await page.getByTestId("widget-launcher").click();
+  await page.goto("http://127.0.0.1:4173/?embed=1&viewport=mobile", {
+    waitUntil: "networkidle",
+  });
+  await page.getByTestId("widget-launcher").tap();
 
   const panel = page.locator(".cw-panel");
   await expect(panel).toBeVisible();
-  await page.waitForTimeout(260);
+  await page.waitForTimeout(280);
   const box = await panel.boundingBox();
   const viewport = await page.evaluate(() => ({
     width: document.documentElement.clientWidth,
@@ -144,8 +211,6 @@ test("mobile mode switching never opens the software keyboard unexpectedly", asy
   }));
   expect(box).not.toBeNull();
 
-  // Layout can keep safe-area insets; this test only guards that the mobile
-  // assistant remains a large, fully contained surface after its entrance.
   expect(box.width).toBeGreaterThanOrEqual(viewport.width * 0.9);
   expect(box.height).toBeGreaterThanOrEqual(viewport.height * 0.9);
   expect(box.x).toBeGreaterThanOrEqual(0);
@@ -154,9 +219,29 @@ test("mobile mode switching never opens the software keyboard unexpectedly", asy
   expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 1);
 
   await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "999px");
-  await page.getByTestId("tab-calculator").click();
-  await page.getByTestId("tab-assistant").click();
-  await page.waitForTimeout(120);
+  await page.getByTestId("tab-calculator").tap();
+  await expect(panel).toHaveAttribute("data-mode", "calculator");
+  await expect(
+    page.getByRole("heading", { name: "Aké riešenie chcete na web?" }),
+  ).toBeVisible();
+
+  await page.getByTestId("interest-chatbot").tap();
+  await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
+  await expect(
+    page.locator('[data-testid^="industry-"][data-selected="true"]'),
+  ).toHaveCount(0);
+  await expectBackButtonInsideProgress(page);
+  await page.locator(".cw-progress__back").tap();
+  await expect(
+    page.getByRole("heading", { name: "Aké riešenie chcete na web?" }),
+  ).toBeVisible({ timeout: 2000 });
+
+  await page.getByTestId("tab-assistant").tap();
+  await expect(panel).toHaveAttribute("data-mode", "assistant");
+  await page.getByTestId("tab-calculator").tap();
+  await expect(panel).toHaveAttribute("data-mode", "calculator");
+  await page.getByTestId("tab-assistant").tap();
+  await expect(panel).toHaveAttribute("data-mode", "assistant");
 
   const inputHasFocus = await page.locator(".cw-inputbar input").evaluate(
     (input) => document.activeElement === input,

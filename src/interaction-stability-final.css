@@ -1,22 +1,122 @@
 /* Final interaction stability: loaded after goal-lock-final.css.
-   Owns only click stability, static selection confirmation and reveal timing. */
+   Owns click stability, static selection confirmation, chat-chip fill and focus geometry. */
 
-/* Chat quick replies must not shift, shrink or grow when hovered/pressed/sent.
-   The pale-green colour change is enough feedback; moving the whole pill makes
-   the surrounding layout look unstable. */
-html:root body .cw-widget .cw-quick-replies .cw-chip,
+/* Chat quick replies keep their physical box completely still. The fill itself
+   animates inside the pill, so feedback is visible without shifting layout. */
+html:root body .cw-widget .cw-quick-replies .cw-chip {
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  transform: none !important;
+}
+
 html:root body .cw-widget .cw-quick-replies .cw-chip:is(:hover, :focus-visible, :active),
 html:root body .cw-widget .cw-quick-replies .cw-chip[data-sending="true"] {
   transform: none !important;
 }
 
-/* Remove the historical centre-expanding fill. goal-lock-final.css already
-   owns the pale-green hover surface directly on the button. */
 html:root body .cw-widget .cw-quick-replies .cw-chip::before {
-  content: none !important;
-  display: none !important;
-  transform: none !important;
-  transition: none !important;
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  display: block !important;
+  border-radius: inherit !important;
+  background: var(--goal-hover, #c9e7c7) !important;
+  transform: scale(0) !important;
+  transform-origin: center !important;
+  transition: transform 440ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+  pointer-events: none !important;
+}
+
+html:root body .cw-widget .cw-quick-replies .cw-chip:not(:disabled):is(:hover, :focus-visible)::before,
+html:root body .cw-widget .cw-quick-replies .cw-chip[data-sending="true"]::before {
+  transform: scale(1.08) !important;
+}
+
+html:root body .cw-widget .cw-quick-replies .cw-chip:not(:disabled):is(:hover, :focus-visible),
+html:root body .cw-widget .cw-quick-replies .cw-chip[data-sending="true"] {
+  color: var(--goal-ink, #173126) !important;
+  -webkit-text-fill-color: currentColor !important;
+  border-color: var(--goal-hover-border, #a7d1ac) !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+html:root body .cw-widget .cw-quick-replies .cw-chip__label,
+html:root body .cw-widget .cw-quick-replies .cw-chip::after {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Tabs are click-first controls. The decorative thumb can never own a hit area,
+   and the buttons remain above every historical glass/swipe layer. */
+html:root body .cw-widget .cw-tabs {
+  position: relative !important;
+  z-index: 20 !important;
+  pointer-events: auto !important;
+}
+
+html:root body .cw-widget .cw-tabs__thumb,
+html:root body .cw-widget .cw-tabs__glass {
+  pointer-events: none !important;
+}
+
+html:root body .cw-widget .cw-tabs > button {
+  position: relative !important;
+  z-index: 2 !important;
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+}
+
+/* Give the back control a real gutter on every side. The previous 38px column
+   left its rounded edge/focus treatment visually clipped against the progress bar. */
+html:root body .cw-widget .cw-progress {
+  min-height: 60px !important;
+  grid-template-columns: 46px minmax(0, 1fr) !important;
+  gap: 10px !important;
+  padding: 8px 14px !important;
+  overflow: visible !important;
+}
+
+html:root body .cw-widget .cw-progress__back {
+  width: 40px !important;
+  height: 40px !important;
+  margin: 0 3px !important;
+  overflow: visible !important;
+  border-radius: 999px !important;
+}
+
+/* Focus belongs to the rounded composer shell, never to a rectangular browser
+   outline around the inner input. */
+html:root body .cw-widget .cw-inputbar {
+  border-radius: 999px !important;
+  overflow: visible !important;
+}
+
+html:root body .cw-widget .cw-inputbar:focus-within {
+  border-radius: 999px !important;
+  border-color: rgba(25, 131, 79, 0.5) !important;
+  box-shadow: 0 0 0 4px rgba(25, 131, 79, 0.08) !important;
+}
+
+html:root body .cw-widget .cw-inputbar input,
+html:root body .cw-widget .cw-inputbar input:focus,
+html:root body .cw-widget .cw-inputbar input:focus-visible {
+  border: 0 !important;
+  border-radius: 999px !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Recommended ordering may remain internal, but an unanswered card must never
+   look preselected. */
+html:root body .cw-widget .cw-opt[data-recommended="true"]:not([data-selected="true"]) {
+  border-color: rgba(25, 131, 79, 0.2) !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 10px 24px -24px rgba(25, 131, 79, 0.26) !important;
 }
 
 /* The check is confirmation, not decoration: show the existing SVG instantly
@@ -46,8 +146,7 @@ html:root body .cw-widget[data-pointer-parked="true"]
   pointer-events: none !important;
 }
 
-/* Slightly slower reveal than the previous 440/45 ms rhythm. The cards still
-   arrive promptly, but each entrance is now easier to perceive. */
+/* Slightly slower reveal: deliberate enough to read, still fast enough to feel responsive. */
 html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-grid > * {
   animation-duration: 520ms !important;
 }
@@ -64,5 +163,9 @@ html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) .cw-choice-gr
 @media (prefers-reduced-motion: reduce) {
   html:root body .cw-widget .cw-calc-step .cw-choice-grid > * {
     animation: none !important;
+  }
+
+  html:root body .cw-widget .cw-quick-replies .cw-chip::before {
+    transition-duration: 1ms !important;
   }
 }
