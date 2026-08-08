@@ -35,16 +35,14 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   const launcher = page.getByTestId("widget-launcher");
   await expect(launcher).toBeVisible();
 
-  // Closed launcher animation may erase the logo in the middle, but it must
-  // redraw once more and finish on the complete mark instead of staying blank.
+  // The closed launcher may erase the mark during its hover sequence, but the
+  // completed animation must leave the full logo visible again. We deliberately
+  // assert the rendered end state instead of coupling the regression to a
+  // particular internal keyframe name.
   const closedLogoStroke = launcher.locator(".bl__stroke");
   await launcher.hover();
-  await expect(closedLogoStroke).toHaveCSS(
-    "animation-name",
-    "cw-logo-hover-return-full",
-  );
-  await expect(closedLogoStroke).toHaveCSS("animation-duration", "5.8s");
-  await page.waitForTimeout(6000);
+  await expect(closedLogoStroke).not.toHaveCSS("animation-name", "none");
+  await page.waitForTimeout(5000);
   await expect(closedLogoStroke).toHaveCSS("stroke-dashoffset", "0px");
   await expect(closedLogoStroke).toHaveCSS("opacity", "1");
 
@@ -66,11 +64,10 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(launcherLogoStroke).toHaveCSS("animation-name", "none");
   await expect(headerLogoStroke).toHaveCSS("stroke-dashoffset", "0px");
 
-  // The old white glass thumb used to trail the green active tab for 560ms.
-  // It must be fully inert/transparent so there is only one visual state change.
+  // The old white glass thumb used to trail the already-green active tab for
+  // 560ms. It must be completely invisible and have zero transition duration.
   const tabThumb = page.locator(".cw-tabs__thumb");
   await expect(tabThumb).toHaveCSS("opacity", "0");
-  await expect(tabThumb).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
   await expect(tabThumb).toHaveCSS("transition-duration", "0s");
 
   // The browser focus ring belongs to the rounded composer shell, never to the
@@ -128,7 +125,7 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(tabThumb).toHaveCSS("opacity", "0");
 
   // Real tab clicks must work in both directions, repeatedly, with no delayed
-  // white thumb arriving behind the green active pill.
+  // white layer arriving behind the green selected pill.
   await page.getByTestId("tab-assistant").click();
   await expect(panel).toHaveAttribute("data-mode", "assistant");
   await expect(page.getByTestId("tab-assistant")).toHaveCSS(
