@@ -8,9 +8,9 @@ import type { InterestId } from "../types/assistant";
 const SINGLE_CHOICE_SELECTOR = ".cw-rowcard, .cw-scard, .cw-vcard";
 const BACK_SELECTOR = ".cw-progress__back, .cw-tabs, .cw-panel-head__actions";
 const INSTALL_FLAG = "cwConfiguratorAutoAdvance";
-/* The check is now static, so a short confirmation pause is enough to make the
-   selected answer register without making the flow feel delayed. */
-const CONFIRM_MS = 420;
+/* The check is static, so the original short confirmation pause is enough to
+   make the selected answer register without slowing the flow down. */
+const CONFIRM_MS = 320;
 /* A fresh step must not inherit the pointer-up/click that selected the previous
    card. Keep its choices inert only through the step hand-off, then release
    automatically even if the pointer has not moved. */
