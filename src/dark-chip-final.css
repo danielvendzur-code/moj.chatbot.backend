@@ -1,7 +1,7 @@
-/* Final interaction palette: logo green at rest, pale lime on hover. */
+/* Final interaction palette: medium logo green at rest, soft pale green on hover. */
 .cw-widget {
   --mc-green: #19834f;
-  --mc-lime: #d9ff78;
+  --mc-hover: #dcefd4;
   --mc-ink: #173126;
 }
 
@@ -15,7 +15,7 @@
   border-color: var(--mc-green) !important;
   background: var(--mc-green) !important;
   background-image: none !important;
-  box-shadow: 0 12px 26px -18px rgba(25, 131, 79, 0.52) !important;
+  box-shadow: 0 12px 26px -18px rgba(25, 131, 79, 0.46) !important;
 }
 
 .cw-widget .cw-progress__dots i[data-current="true"],
@@ -29,7 +29,7 @@
   background: var(--mc-green) !important;
   background-color: var(--mc-green) !important;
   background-image: none !important;
-  box-shadow: 0 10px 24px -22px rgba(25, 131, 79, 0.58) !important;
+  box-shadow: 0 10px 24px -22px rgba(25, 131, 79, 0.52) !important;
 }
 
 .cw-widget .cw-calculator :is(
@@ -45,26 +45,26 @@
 }
 
 .cw-widget .cw-calculator :is(.cw-rowcard__icon, .cw-scard__icon) {
-  color: var(--mc-lime) !important;
+  color: #ffffff !important;
   background: rgba(255, 255, 255, 0.12) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
 }
 
 .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] {
   color: #ffffff !important;
-  border-color: var(--mc-lime) !important;
+  border-color: rgba(220, 239, 212, 0.92) !important;
   background: var(--mc-green) !important;
   background-color: var(--mc-green) !important;
   background-image: none !important;
   box-shadow:
-    inset 0 0 0 1px rgba(217, 255, 120, 0.32),
-    0 12px 28px -22px rgba(25, 131, 79, 0.62) !important;
+    inset 0 0 0 1px rgba(220, 239, 212, 0.32),
+    0 12px 28px -22px rgba(25, 131, 79, 0.58) !important;
 }
 
 .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]::after {
   color: var(--mc-green) !important;
-  border-color: var(--mc-lime) !important;
-  background: var(--mc-lime) !important;
+  border-color: var(--mc-hover) !important;
+  background: var(--mc-hover) !important;
 }
 
 /* Step 2 must never truncate labels on mobile. */
@@ -94,18 +94,18 @@
   .cw-widget :is(.cw-next, .cw-submit):not(:disabled):is(:hover, :focus-visible),
   .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):is(:hover, :focus-visible) {
     color: var(--mc-ink) !important;
-    border-color: var(--mc-lime) !important;
-    background: var(--mc-lime) !important;
-    background-color: var(--mc-lime) !important;
+    border-color: rgba(25, 131, 79, 0.34) !important;
+    background: var(--mc-hover) !important;
+    background-color: var(--mc-hover) !important;
     background-image: none !important;
-    box-shadow: 0 14px 30px -20px rgba(25, 131, 79, 0.4) !important;
+    box-shadow: 0 14px 30px -20px rgba(25, 131, 79, 0.3) !important;
     transform: translateY(-1px) !important;
   }
 
   .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard):is(:hover, :focus-visible) :is(.cw-rowcard__icon, .cw-scard__icon) {
     color: var(--mc-ink) !important;
-    background: rgba(25, 131, 79, 0.1) !important;
-    border-color: rgba(25, 131, 79, 0.16) !important;
+    background: rgba(255, 255, 255, 0.52) !important;
+    border-color: rgba(25, 131, 79, 0.14) !important;
   }
 
   .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]:is(:hover, :focus-visible)::after {
@@ -118,14 +118,14 @@
 @media (hover: none), (pointer: coarse) {
   .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):not([data-selected="true"]):active {
     color: var(--mc-ink) !important;
-    border-color: var(--mc-lime) !important;
-    background: var(--mc-lime) !important;
+    border-color: rgba(25, 131, 79, 0.34) !important;
+    background: var(--mc-hover) !important;
   }
 
   .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"],
   .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]:active {
     color: #ffffff !important;
-    border-color: var(--mc-lime) !important;
+    border-color: rgba(220, 239, 212, 0.92) !important;
     background: var(--mc-green) !important;
   }
 }
