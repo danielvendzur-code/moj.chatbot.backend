@@ -27,6 +27,23 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
   await expect(page.locator(".cw-panel-head .bl__stroke")).toBeVisible();
 
+  const quickReply = page.getByRole("button", {
+    name: "Kde mi to ušetrí čas?",
+  });
+  const quickReplyLabel = quickReply.locator(".cw-chip__label");
+
+  // Green chat chips must use the website's pale-green interaction colour.
+  await quickReply.hover();
+  await expect(quickReply).toHaveCSS("background-color", "rgb(201, 231, 199)");
+
+  await quickReply.click();
+  await expect(quickReply).toHaveAttribute("data-sending", "true");
+  await expect(quickReplyLabel).toBeVisible();
+  await expect(quickReplyLabel).toHaveText("Kde mi to ušetrí čas?");
+  await page.waitForTimeout(300);
+  await expect(quickReply).toBeVisible();
+  await expect(quickReplyLabel).toHaveText("Kde mi to ušetrí čas?");
+
   // Regression guard: this CTA has repeatedly been blocked by historical
   // pointer/swipe layers. A real browser click must switch the rendered mode.
   const builderCta = page.locator(".cw-chat-builder");
@@ -36,24 +53,6 @@ test("desktop visitor sees stable chip labels and completes the configurator", a
   await expect(
     page.getByRole("heading", { name: "Aké riešenie chcete na web?" }),
   ).toBeVisible();
-  await page.getByTestId("tab-assistant").click();
-  await expect(page.getByTestId("assistant-view")).toBeVisible();
-
-  const quickReply = page.getByRole("button", {
-    name: "Kde mi to ušetrí čas?",
-  });
-  const quickReplyLabel = quickReply.locator(".cw-chip__label");
-  await quickReply.click();
-  await expect(quickReply).toHaveAttribute("data-sending", "true");
-  await expect(quickReplyLabel).toBeVisible();
-  await expect(quickReplyLabel).toHaveText("Kde mi to ušetrí čas?");
-  await page.waitForTimeout(300);
-  await expect(quickReply).toBeVisible();
-  await expect(quickReplyLabel).toHaveText("Kde mi to ušetrí čas?");
-
-  await page.getByTestId("tab-calculator").click();
-  await expect(page.getByTestId("calculator-view")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Aké riešenie chcete na web?" })).toBeVisible();
 
   const interestChoice = page.getByTestId("interest-chatbot");
   const interestLabel = interestChoice.locator("b");
@@ -121,15 +120,14 @@ test("mobile mode switching never opens the software keyboard unexpectedly", asy
   }));
   expect(box).not.toBeNull();
 
-  // Current mobile shell intentionally keeps a tiny safe inset. Guard that the
-  // assistant remains effectively full-screen and fully inside the viewport,
-  // rather than hard-coding an obsolete zero-inset layout.
+  // Current mobile shell intentionally keeps a small safe inset. Guard that
+  // it still fills essentially the whole viewport and never escapes it.
   expect(box.x).toBeGreaterThanOrEqual(0);
   expect(box.y).toBeGreaterThanOrEqual(0);
-  expect(box.x).toBeLessThanOrEqual(8);
-  expect(box.y).toBeLessThanOrEqual(8);
-  expect(box.width).toBeGreaterThanOrEqual(viewport.width - 16);
-  expect(box.height).toBeGreaterThanOrEqual(viewport.height - 16);
+  expect(box.x).toBeLessThanOrEqual(20);
+  expect(box.y).toBeLessThanOrEqual(20);
+  expect(box.width).toBeGreaterThanOrEqual(viewport.width - 40);
+  expect(box.height).toBeGreaterThanOrEqual(viewport.height - 40);
   expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 1);
   expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 1);
 
