@@ -49,6 +49,7 @@ const syncSelectedContext = (widget: HTMLElement): void => {
     if (nextInterest && widget.dataset.selectedInterest !== nextInterest) {
       widget.dataset.selectedInterest = nextInterest;
       delete widget.dataset.featureRecommendationContext;
+      delete widget.dataset.featureDefaultsCleared;
     }
     delete widget.dataset.selectedIndustry;
   }
@@ -81,25 +82,24 @@ const arrangeAndRecommendFeatures = (widget: HTMLElement): void => {
     ...(interest ? RECOMMENDED_FEATURES[interest] ?? [] : []),
   ]).filter((id) => FEATURES.some((feature) => feature.id === id));
   const ordered = unique([...relevant, ...FEATURES.map((feature) => feature.id)]);
-  const recommended = relevant.slice(0, 3);
 
   buttons.forEach((button) => {
     const id = optionId(button, "feature-");
     if (!id) return;
     button.style.order = String(Math.max(0, ordered.indexOf(id)));
-    if (recommended.includes(id)) button.dataset.recommended = "true";
-    else delete button.dataset.recommended;
+    delete button.dataset.recommended;
   });
 
-  const context = `${interest ?? "none"}|${industry ?? "none"}`;
-  if (widget.dataset.featureRecommendationContext !== context) {
-    widget.dataset.featureRecommendationContext = context;
-    recommended.forEach((id) => {
-      const button = grid.querySelector<HTMLButtonElement>(
-        `[data-testid="feature-${id}"]`,
-      );
-      if (button && button.dataset.selected !== "true") button.click();
-    });
+  /* ToolCalculator historically seeded this step with recommended features.
+     Clear that seed exactly once per interest selection, before the grid becomes
+     visible. From this point onward only the visitor's own clicks may select it. */
+  if (widget.dataset.featureDefaultsCleared !== "true") {
+    widget.dataset.featureDefaultsCleared = "true";
+    const seeded = buttons.filter((button) => button.dataset.selected === "true");
+    if (seeded.length) {
+      seeded.forEach((button) => button.click());
+      return;
+    }
   }
 
   grid.dataset.ready = "true";
@@ -190,6 +190,7 @@ export function installConfiguratorAutoAdvance(): void {
           delete widget.dataset.selectedInterest;
           delete widget.dataset.selectedIndustry;
           delete widget.dataset.featureRecommendationContext;
+          delete widget.dataset.featureDefaultsCleared;
         }
       }
 
@@ -208,6 +209,7 @@ export function installConfiguratorAutoAdvance(): void {
           widget.dataset.selectedInterest = interest;
           delete widget.dataset.selectedIndustry;
           delete widget.dataset.featureRecommendationContext;
+          delete widget.dataset.featureDefaultsCleared;
         }
       }
 
