@@ -1,6 +1,24 @@
 /* Final interaction stability: loaded after goal-lock-final.css.
    Owns click stability, static selection confirmation, chat-chip fill and focus geometry. */
 
+/* Once the widget is open, the logo is a stable brand mark, not another moving
+   element. Keep the closed launcher interaction intact, but freeze both the
+   header mark and the expanded launcher at their completed stroke. */
+html:root body .cw-widget .cw-panel-head__mascot .bl path,
+html:root body .cw-widget .cw-panel-head__mascot .bl__stroke,
+html:root body .cw-widget .cw-launcher[aria-expanded="true"] .bl path,
+html:root body .cw-widget .cw-launcher[aria-expanded="true"] .bl__stroke,
+html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible, :active) .bl path,
+html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible, :active) .bl__stroke,
+html:root body .cw-widget .cw-launcher[aria-expanded="true"]:is(:hover, :focus-visible, :active) .bl path,
+html:root body .cw-widget .cw-launcher[aria-expanded="true"]:is(:hover, :focus-visible, :active) .bl__stroke {
+  animation: none !important;
+  transition: none !important;
+  stroke-dashoffset: 0 !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 /* Chat quick replies keep their physical box completely still. The fill itself
    animates inside the pill, so feedback is visible without shifting layout. */
 html:root body .cw-widget .cw-quick-replies .cw-chip {
@@ -22,7 +40,7 @@ html:root body .cw-widget .cw-quick-replies .cw-chip::before {
   z-index: 0 !important;
   display: block !important;
   border-radius: inherit !important;
-  background: var(--goal-hover, #c9e7c7) !important;
+  background: #19834f !important;
   transform: scale(0) !important;
   transform-origin: center !important;
   transition: transform 440ms cubic-bezier(0.16, 1, 0.3, 1) !important;
@@ -36,9 +54,9 @@ html:root body .cw-widget .cw-quick-replies .cw-chip[data-sending="true"]::befor
 
 html:root body .cw-widget .cw-quick-replies .cw-chip:not(:disabled):is(:hover, :focus-visible),
 html:root body .cw-widget .cw-quick-replies .cw-chip[data-sending="true"] {
-  color: var(--goal-ink, #173126) !important;
-  -webkit-text-fill-color: currentColor !important;
-  border-color: var(--goal-hover-border, #a7d1ac) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #19834f !important;
   background: #ffffff !important;
   background-color: #ffffff !important;
   background-image: none !important;

@@ -41,7 +41,16 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(page.getByRole("heading", { name: "Môj Chatbot" })).toBeVisible();
   await expect(page.getByText("4 otázky · návrh máte do minúty")).toBeVisible();
   await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
-  await expect(page.locator(".cw-panel-head .bl__stroke")).toBeVisible();
+
+  // Once open, both visible brand marks are completely static. The closed
+  // launcher can still animate before opening, but no logo motion belongs inside
+  // an already-open conversation.
+  const headerLogoStroke = page.locator(".cw-panel-head .bl__stroke");
+  const launcherLogoStroke = launcher.locator(".bl__stroke");
+  await expect(headerLogoStroke).toBeVisible();
+  await expect(headerLogoStroke).toHaveCSS("animation-name", "none");
+  await expect(launcherLogoStroke).toHaveCSS("animation-name", "none");
+  await expect(headerLogoStroke).toHaveCSS("stroke-dashoffset", "0px");
 
   // The browser focus ring belongs to the rounded composer shell, never to the
   // rectangular text input inside it.
@@ -57,11 +66,12 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   });
   const quickReplyLabel = quickReply.locator(".cw-chip__label");
 
-  // The old centre fill is back, but only the fill moves; the chip box itself
-  // must stay physically still.
+  // Chat chips use the normal brand green for their centre fill. Only the fill
+  // moves; the physical chip box stays completely still.
   await quickReply.hover();
   await page.waitForTimeout(480);
   await expect(quickReply).toHaveCSS("transform", "none");
+  await expect(quickReply).toHaveCSS("color", "rgb(255, 255, 255)");
   const fillState = await quickReply.evaluate((chip) => {
     const before = getComputedStyle(chip, "::before");
     return {
@@ -69,7 +79,7 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
       transform: before.transform,
     };
   });
-  expect(fillState.background).toBe("rgb(201, 231, 199)");
+  expect(fillState.background).toBe("rgb(25, 131, 79)");
   expect(fillState.transform).not.toBe("none");
   expect(fillState.transform).not.toContain("matrix(0");
 
