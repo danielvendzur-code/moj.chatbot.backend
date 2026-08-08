@@ -1,12 +1,30 @@
-/* Final interaction palette: medium logo green at rest, soft pale green on hover. */
+/* Final interaction palette: medium logo green at rest, restrained sage on hover. */
 .cw-widget {
   --mc-green: #19834f;
-  --mc-hover: #dcefd4;
+  --mc-hover: #d6e7ce;
+  --mc-hover-border: #b9d2ae;
   --mc-ink: #173126;
 }
 
 .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) {
   color: var(--mc-green) !important;
+}
+
+/* Remove the old near-black green from visible widget chrome. */
+.cw-widget .cw-panel {
+  border-color: rgba(25, 131, 79, 0.14) !important;
+  box-shadow: 0 30px 78px -40px rgba(25, 131, 79, 0.3) !important;
+}
+
+.cw-widget .cw-launcher {
+  color: var(--mc-green) !important;
+  border-color: rgba(25, 131, 79, 0.18) !important;
+  box-shadow: 0 18px 40px -26px rgba(25, 131, 79, 0.36) !important;
+}
+
+.cw-widget .cw-tabs {
+  border-color: rgba(25, 131, 79, 0.14) !important;
+  background: #f3f7f4 !important;
 }
 
 .cw-widget .cw-tabs > button[data-active="true"],
@@ -29,7 +47,7 @@
   background: var(--mc-green) !important;
   background-color: var(--mc-green) !important;
   background-image: none !important;
-  box-shadow: 0 10px 24px -22px rgba(25, 131, 79, 0.52) !important;
+  box-shadow: 0 10px 24px -22px rgba(25, 131, 79, 0.5) !important;
 }
 
 .cw-widget .cw-calculator :is(
@@ -52,22 +70,22 @@
 
 .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] {
   color: #ffffff !important;
-  border-color: rgba(220, 239, 212, 0.92) !important;
+  border-color: rgba(214, 231, 206, 0.92) !important;
   background: var(--mc-green) !important;
   background-color: var(--mc-green) !important;
   background-image: none !important;
   box-shadow:
-    inset 0 0 0 1px rgba(220, 239, 212, 0.32),
-    0 12px 28px -22px rgba(25, 131, 79, 0.58) !important;
+    inset 0 0 0 1px rgba(214, 231, 206, 0.26),
+    0 12px 28px -22px rgba(25, 131, 79, 0.56) !important;
 }
 
 .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]::after {
   color: var(--mc-green) !important;
-  border-color: var(--mc-hover) !important;
+  border-color: var(--mc-hover-border) !important;
   background: var(--mc-hover) !important;
 }
 
-/* Step 2 must never truncate labels on mobile. */
+/* Step 2 stays readable on mobile. */
 .cw-widget .cw-choice-grid--industry .cw-scard {
   min-height: 86px !important;
   height: 86px !important;
@@ -94,17 +112,17 @@
   .cw-widget :is(.cw-next, .cw-submit):not(:disabled):is(:hover, :focus-visible),
   .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):is(:hover, :focus-visible) {
     color: var(--mc-ink) !important;
-    border-color: rgba(25, 131, 79, 0.34) !important;
+    border-color: var(--mc-hover-border) !important;
     background: var(--mc-hover) !important;
     background-color: var(--mc-hover) !important;
     background-image: none !important;
-    box-shadow: 0 14px 30px -20px rgba(25, 131, 79, 0.3) !important;
+    box-shadow: 0 14px 30px -22px rgba(25, 131, 79, 0.24) !important;
     transform: translateY(-1px) !important;
   }
 
   .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard):is(:hover, :focus-visible) :is(.cw-rowcard__icon, .cw-scard__icon) {
     color: var(--mc-ink) !important;
-    background: rgba(255, 255, 255, 0.52) !important;
+    background: rgba(255, 255, 255, 0.58) !important;
     border-color: rgba(25, 131, 79, 0.14) !important;
   }
 
@@ -118,14 +136,14 @@
 @media (hover: none), (pointer: coarse) {
   .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):not([data-selected="true"]):active {
     color: var(--mc-ink) !important;
-    border-color: rgba(25, 131, 79, 0.34) !important;
+    border-color: var(--mc-hover-border) !important;
     background: var(--mc-hover) !important;
   }
 
   .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"],
   .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]:active {
     color: #ffffff !important;
-    border-color: rgba(220, 239, 212, 0.92) !important;
+    border-color: rgba(214, 231, 206, 0.92) !important;
     background: var(--mc-green) !important;
   }
 }
