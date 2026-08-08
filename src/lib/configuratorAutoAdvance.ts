@@ -8,9 +8,13 @@ import type { InterestId } from "../types/assistant";
 const SINGLE_CHOICE_SELECTOR = ".cw-rowcard, .cw-scard, .cw-vcard";
 const BACK_SELECTOR = ".cw-progress__back, .cw-tabs, .cw-panel-head__actions";
 const INSTALL_FLAG = "cwConfiguratorAutoAdvance";
-/* Keep the original 320 ms confirmation floor, then give the new hand-drawn
-   check enough time to finish and register before the step is replaced. */
-const CONFIRM_MS = 320 + 360;
+/* The check is now static, so a short confirmation pause is enough to make the
+   selected answer register without making the flow feel delayed. */
+const CONFIRM_MS = 420;
+/* A fresh step must not inherit the pointer-up/click that selected the previous
+   card. Keep its choices inert only through the step hand-off, then release
+   automatically even if the pointer has not moved. */
+const FRESH_STEP_GUARD_MS = 360;
 const POINTER_RELEASE_DISTANCE = 8;
 const ACTION_ANIMATION_MS = 520;
 
@@ -133,13 +137,16 @@ export function installConfiguratorAutoAdvance(): void {
     widget.dataset.pointerParked = "true";
 
     let released = false;
+    let releaseTimer: number | null = null;
+
     const clearParked = () => {
       if (released) return;
       released = true;
       delete widget.dataset.pointerParked;
       widget.removeEventListener("pointermove", release);
-      widget.removeEventListener("pointerdown", clearParked);
       widget.removeEventListener("keydown", clearParked);
+      if (releaseTimer !== null) window.clearTimeout(releaseTimer);
+      releaseTimer = null;
       releaseParkedPointer = null;
     };
     const release = (move: PointerEvent) => {
@@ -153,8 +160,8 @@ export function installConfiguratorAutoAdvance(): void {
     };
 
     widget.addEventListener("pointermove", release);
-    widget.addEventListener("pointerdown", clearParked);
     widget.addEventListener("keydown", clearParked);
+    releaseTimer = window.setTimeout(clearParked, FRESH_STEP_GUARD_MS);
     releaseParkedPointer = clearParked;
   };
 
