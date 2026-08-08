@@ -1,0 +1,29 @@
+/* Match the standalone chatbot mark to the website mark exactly. */
+html:root body .cw-widget .cw-launcher,
+html:root body .cw-widget .cw-panel-head__mascot {
+  color: #19834f !important;
+}
+
+html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
+  stroke: currentColor !important;
+  stroke-width: 7.25 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+/* White circular launcher only — no square tile around the logo. */
+html:root body .cw-widget .cw-launcher {
+  background: #ffffff !important;
+  background-image: none !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+}
+
+html:root body .cw-widget .cw-panel-head__mascot {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
