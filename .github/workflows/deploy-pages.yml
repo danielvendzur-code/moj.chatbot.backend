@@ -149,7 +149,7 @@ jobs:
               if curl --location --fail --silent --show-error \
                 --header "Cache-Control: no-cache" \
                 "${BASE}${path}?verify=${SOURCE_SHA}-${attempt}" > "$body"; then
-                if grep -Fqi "$expected" "$body"; then
+                if grep -Fqi -- "$expected" "$body"; then
                   echo "verified ${path}"
                   return 0
                 fi
