@@ -85,12 +85,12 @@ jobs:
           test -f dist/widget.js
           test -f dist/widget.css
 
-          # The direct runtime must carry the audited product marker and the
-          # two paths of the current filled speech-bubble brand mark.
+          # The direct runtime must carry the audited product markers and the
+          # approved one-stroke Môj Chatbot brand mark used by BubbleLogo.
           grep -Fq 'unified-product-20260804-v1' dist/widget.js
           grep -Fq 'competition-audited-system' dist/widget.js
-          grep -Fq 'M20 8H92C101.94 8 110 16.06' dist/widget.js
-          grep -Fq 'M24 67V31L48 53C50.4 55.2' dist/widget.js
+          grep -Fq 'M24 71.2L24.003 32.706L24.036' dist/widget.js
+          grep -Fq 'bl__stroke' dist/widget.js
 
           # The emitted widget CSS must contain the identity, interaction shell
           # and the concrete chip-label persistence fix. Minifiers may remove
