@@ -8,9 +8,9 @@ import type { InterestId } from "../types/assistant";
 const SINGLE_CHOICE_SELECTOR = ".cw-rowcard, .cw-scard, .cw-vcard";
 const BACK_SELECTOR = ".cw-progress__back, .cw-tabs, .cw-panel-head__actions";
 const INSTALL_FLAG = "cwConfiguratorAutoAdvance";
-/* Long enough for the tick to draw and register, short enough that the flow
-   does not feel like it is thinking about it. 520 ms read as a stall. */
-const CONFIRM_MS = 320;
+/* Keep the original 320 ms confirmation floor, then give the new hand-drawn
+   check enough time to finish and register before the step is replaced. */
+const CONFIRM_MS = 320 + 360;
 const POINTER_RELEASE_DISTANCE = 8;
 const ACTION_ANIMATION_MS = 520;
 
