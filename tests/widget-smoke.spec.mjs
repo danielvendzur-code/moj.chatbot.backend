@@ -34,6 +34,20 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
 
   const launcher = page.getByTestId("widget-launcher");
   await expect(launcher).toBeVisible();
+
+  // Closed launcher animation may erase the logo in the middle, but it must
+  // redraw once more and finish on the complete mark instead of staying blank.
+  const closedLogoStroke = launcher.locator(".bl__stroke");
+  await launcher.hover();
+  await expect(closedLogoStroke).toHaveCSS(
+    "animation-name",
+    "cw-logo-hover-return-full",
+  );
+  await expect(closedLogoStroke).toHaveCSS("animation-duration", "5.8s");
+  await page.waitForTimeout(6000);
+  await expect(closedLogoStroke).toHaveCSS("stroke-dashoffset", "0px");
+  await expect(closedLogoStroke).toHaveCSS("opacity", "1");
+
   await launcher.click();
 
   const panel = page.locator(".cw-panel");
@@ -43,7 +57,7 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
 
   // Once open, both visible brand marks are completely static. The closed
-  // launcher can still animate before opening, but no logo motion belongs inside
+  // launcher can animate before opening, but no logo motion belongs inside
   // an already-open conversation.
   const headerLogoStroke = page.locator(".cw-panel-head .bl__stroke");
   const launcherLogoStroke = launcher.locator(".bl__stroke");
@@ -51,6 +65,13 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(headerLogoStroke).toHaveCSS("animation-name", "none");
   await expect(launcherLogoStroke).toHaveCSS("animation-name", "none");
   await expect(headerLogoStroke).toHaveCSS("stroke-dashoffset", "0px");
+
+  // The old white glass thumb used to trail the green active tab for 560ms.
+  // It must be fully inert/transparent so there is only one visual state change.
+  const tabThumb = page.locator(".cw-tabs__thumb");
+  await expect(tabThumb).toHaveCSS("opacity", "0");
+  await expect(tabThumb).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(tabThumb).toHaveCSS("transition-duration", "0s");
 
   // The browser focus ring belongs to the rounded composer shell, never to the
   // rectangular text input inside it.
@@ -100,17 +121,32 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(
     page.getByRole("heading", { name: "Aké riešenie chcete na web?" }),
   ).toBeVisible();
+  await expect(page.getByTestId("tab-calculator")).toHaveCSS(
+    "background-color",
+    "rgb(25, 131, 79)",
+  );
+  await expect(tabThumb).toHaveCSS("opacity", "0");
 
-  // Real tab clicks must work in both directions, repeatedly, regardless of the
-  // old swipe rail and its pointer capture.
+  // Real tab clicks must work in both directions, repeatedly, with no delayed
+  // white thumb arriving behind the green active pill.
   await page.getByTestId("tab-assistant").click();
   await expect(panel).toHaveAttribute("data-mode", "assistant");
+  await expect(page.getByTestId("tab-assistant")).toHaveCSS(
+    "background-color",
+    "rgb(25, 131, 79)",
+  );
+  await expect(tabThumb).toHaveCSS("opacity", "0");
   await expect(page.locator('.cw-mode-view[data-view="assistant"]')).toHaveAttribute(
     "data-active",
     "true",
   );
   await page.getByTestId("tab-calculator").click();
   await expect(panel).toHaveAttribute("data-mode", "calculator");
+  await expect(page.getByTestId("tab-calculator")).toHaveCSS(
+    "background-color",
+    "rgb(25, 131, 79)",
+  );
+  await expect(tabThumb).toHaveCSS("opacity", "0");
   await expect(page.locator('.cw-mode-view[data-view="calculator"]')).toHaveAttribute(
     "data-active",
     "true",
@@ -228,9 +264,18 @@ test("mobile embed uses real taps for tabs and back navigation", async ({
   expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 1);
   expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 1);
 
+  const tabThumb = page.locator(".cw-tabs__thumb");
   await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "999px");
+  await expect(tabThumb).toHaveCSS("opacity", "0");
+  await expect(tabThumb).toHaveCSS("transition-duration", "0s");
+
   await page.getByTestId("tab-calculator").tap();
   await expect(panel).toHaveAttribute("data-mode", "calculator");
+  await expect(page.getByTestId("tab-calculator")).toHaveCSS(
+    "background-color",
+    "rgb(25, 131, 79)",
+  );
+  await expect(tabThumb).toHaveCSS("opacity", "0");
   await expect(
     page.getByRole("heading", { name: "Aké riešenie chcete na web?" }),
   ).toBeVisible();
@@ -248,10 +293,17 @@ test("mobile embed uses real taps for tabs and back navigation", async ({
 
   await page.getByTestId("tab-assistant").tap();
   await expect(panel).toHaveAttribute("data-mode", "assistant");
+  await expect(page.getByTestId("tab-assistant")).toHaveCSS(
+    "background-color",
+    "rgb(25, 131, 79)",
+  );
+  await expect(tabThumb).toHaveCSS("opacity", "0");
   await page.getByTestId("tab-calculator").tap();
   await expect(panel).toHaveAttribute("data-mode", "calculator");
+  await expect(tabThumb).toHaveCSS("opacity", "0");
   await page.getByTestId("tab-assistant").tap();
   await expect(panel).toHaveAttribute("data-mode", "assistant");
+  await expect(tabThumb).toHaveCSS("opacity", "0");
 
   const inputHasFocus = await page.locator(".cw-inputbar input").evaluate(
     (input) => document.activeElement === input,
