@@ -6,9 +6,40 @@ html:root body .cw-widget .cw-panel-head__mascot {
 
 html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
   stroke: currentColor !important;
-  stroke-width: 7.25 !important;
+  stroke-width: 7.75 !important;
   stroke-linecap: round !important;
   stroke-linejoin: round !important;
+  stroke-dasharray: 1 !important;
+  stroke-dashoffset: 1;
+  opacity: 0.08;
+  animation: cw-approved-logo-loop 9.6s linear infinite !important;
+  will-change: stroke-dashoffset, opacity;
+}
+
+@keyframes cw-approved-logo-loop {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 0.08;
+  }
+  7% {
+    opacity: 0.62;
+  }
+  46% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  64% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  95% {
+    stroke-dashoffset: 1;
+    opacity: 0.12;
+  }
+  100% {
+    stroke-dashoffset: 1;
+    opacity: 0.08;
+  }
 }
 
 /* White circular launcher only — no square tile around the logo. */
@@ -26,4 +57,12 @@ html:root body .cw-widget .cw-panel-head__mascot {
   border-radius: 0 !important;
   box-shadow: none !important;
   overflow: visible !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+    opacity: 1 !important;
+  }
 }
