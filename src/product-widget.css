@@ -519,6 +519,7 @@ html[data-embed="true"] .widget-preview__surface {
 
 /* Chatbot */
 .cw-conversation {
+  position: relative;
   height: 100%;
   min-height: 0;
   display: flex;
@@ -1047,6 +1048,284 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-direct-actions__grid a:hover svg,
 .cw-direct-actions__grid a:focus-visible svg {
   color: var(--cw-green-hover);
+}
+
+/* Write-to-me sheet: the e-mail chip opens this over the chat instead of
+   handing the visitor to a mail client that may not exist on their phone. Same
+   surface, same rounding, same green as everything else. */
+.cw-sheet {
+  position: absolute;
+  /* Above the builder card, which a later layer pins at 7 so a swipe rail can
+     never steal its click. */
+  z-index: 12;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--cw-white);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cw-sheet {
+    animation: cw-sheet-in 260ms var(--cw-ease) both;
+  }
+}
+
+@keyframes cw-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cw-sheet__head {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 13px 15px 11px;
+  border-bottom: 1px solid var(--cw-line-soft);
+}
+
+.cw-sheet__back {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(25, 131, 79, 0.22);
+  border-radius: 50%;
+  color: var(--cw-green);
+  background: var(--cw-white);
+  cursor: pointer;
+  transition:
+    color 170ms ease,
+    border-color 170ms ease,
+    background-color 170ms ease;
+}
+
+.cw-sheet__back svg {
+  width: 17px;
+  height: 17px;
+  transform: rotate(180deg);
+}
+
+.cw-sheet__back:hover,
+.cw-sheet__back:focus-visible {
+  color: var(--cw-green-hover);
+  border-color: var(--cw-green);
+  background: var(--cw-mint);
+}
+
+.cw-sheet__title {
+  min-width: 0;
+}
+
+.cw-sheet__title h3 {
+  margin: 0;
+  color: var(--cw-forest);
+  font-size: 16px;
+  font-weight: 780;
+  line-height: 20px;
+  letter-spacing: -0.02em;
+}
+
+.cw-sheet__title p {
+  margin: 2px 0 0;
+  color: var(--cw-muted);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.cw-sheet__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 14px 15px 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.cw-sheet__foot {
+  flex: 0 0 auto;
+  display: grid;
+  gap: 8px;
+  padding: 11px 15px max(13px, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--cw-line-soft);
+  background: var(--cw-white);
+}
+
+.cw-sheet__done {
+  flex: 1 1 auto;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 11px;
+  padding: 26px 24px;
+  text-align: center;
+}
+
+.cw-sheet__done h4 {
+  margin: 0;
+  color: var(--cw-forest);
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.cw-sheet__done p {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--cw-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.cw-sheet__done-action {
+  min-height: 46px;
+  margin-top: 4px;
+  padding: 0 22px;
+  border: 1px solid var(--cw-green);
+  border-radius: var(--cw-r-pill);
+  color: var(--cw-white);
+  background: var(--cw-green);
+  font-size: 13px;
+  font-weight: 720;
+  cursor: pointer;
+}
+
+.cw-sheet__done-action:hover,
+.cw-sheet__done-action:focus-visible {
+  border-color: var(--cw-green-hover);
+  background: var(--cw-green-hover);
+}
+
+/* Photo attachments */
+.cw-photos {
+  display: grid;
+  gap: 8px;
+}
+
+.cw-photos__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cw-photos__add {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+  border: 1px dashed rgba(25, 131, 79, 0.34);
+  border-radius: var(--cw-r-pill);
+  color: var(--cw-green-hover);
+  background: var(--cw-paper);
+  font-size: 12.5px;
+  font-weight: 680;
+  cursor: pointer;
+  transition:
+    border-color 170ms ease,
+    background-color 170ms ease;
+}
+
+.cw-photos__add:hover:not(:disabled),
+.cw-photos__add:focus-visible:not(:disabled) {
+  border-color: var(--cw-green);
+  background: var(--cw-mint);
+}
+
+.cw-photos__add:disabled {
+  color: var(--cw-faint);
+  border-color: var(--cw-line);
+  background: var(--cw-paper);
+  cursor: default;
+}
+
+.cw-photos__add svg {
+  width: 16px;
+  height: 16px;
+}
+
+.cw-photos__list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cw-photos__list li {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) 30px;
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+  border: 1px solid var(--cw-line);
+  border-radius: var(--cw-r-inner);
+  background: var(--cw-white);
+}
+
+.cw-photos__list img {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--cw-r-inner);
+  object-fit: cover;
+}
+
+.cw-photos__meta {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.cw-photos__meta b {
+  overflow: hidden;
+  color: var(--cw-forest);
+  font-size: 12px;
+  font-weight: 680;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.cw-photos__meta small {
+  color: var(--cw-muted);
+  font-size: 11px;
+}
+
+.cw-photos__list li > button {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: var(--cw-muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.cw-photos__list li > button:hover,
+.cw-photos__list li > button:focus-visible {
+  color: var(--cw-forest);
+  background: var(--cw-mint);
+}
+
+.cw-photos__list li > button svg {
+  width: 14px;
+  height: 14px;
 }
 
 /* Configurator */
@@ -1718,6 +1997,36 @@ html[data-embed="true"] .widget-preview__surface {
   gap: 11px;
 }
 
+/* The three objections, answered before the first field. */
+.cw-reassure {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cw-reassure li {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px 5px 8px;
+  border: 1px solid rgba(25, 131, 79, 0.2);
+  border-radius: var(--cw-r-pill);
+  color: var(--cw-forest);
+  background: var(--cw-mint);
+  font-size: 11.5px;
+  font-weight: 660;
+  white-space: nowrap;
+}
+
+.cw-reassure svg {
+  width: 13px;
+  height: 13px;
+  color: var(--cw-green);
+}
+
 .cw-lead {
   display: grid;
   gap: 12px;
@@ -1801,6 +2110,14 @@ html[data-embed="true"] .widget-preview__surface {
   font-style: normal;
 }
 
+/* "nepovinné" has to read as a permission, not as a second label. */
+.cw-field > span small {
+  margin-left: 4px;
+  color: var(--cw-faint);
+  font-size: 10.5px;
+  font-weight: 560;
+}
+
 .cw-field :is(input, textarea) {
   width: 100%;
   min-height: 48px;
@@ -1843,12 +2160,22 @@ html[data-embed="true"] .widget-preview__surface {
   opacity: 1;
 }
 
+/* Closed, these are one-line controls and take the pill like every other one.
+   Open, a 999 px radius bows the sides of a tall box into an egg — so an open
+   disclosure becomes a card, which is the shape the scale already has for
+   boxes that hold content. */
 .cw-lead__optional,
 .cw-summary {
   overflow: hidden;
   border: 1px solid var(--cw-line);
   border-radius: var(--cw-r-pill);
   background: var(--cw-white);
+  transition: border-radius 180ms var(--cw-ease);
+}
+
+.cw-lead__optional[open],
+.cw-summary[open] {
+  border-radius: var(--cw-r-card);
 }
 
 .cw-lead__optional > summary,
@@ -1894,10 +2221,20 @@ html[data-embed="true"] .widget-preview__surface {
   background: var(--cw-mint);
 }
 
+/* The label carries the chosen solution, so it has to be allowed to shorten
+   rather than push the +/− marker off the row. */
+.cw-summary > summary > span {
+  flex: 0 0 auto;
+}
+
 .cw-summary > summary small {
+  min-width: 0;
+  overflow: hidden;
   color: var(--cw-muted);
   font-size: 11.5px;
   font-weight: 590;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .cw-summary__body {
@@ -1913,7 +2250,10 @@ html[data-embed="true"] .widget-preview__surface {
   background: rgba(255, 255, 255, 0.68);
 }
 
+/* The open card rounds its bottom corners, so the last row needs the extra
+   couple of pixels or its text sits inside the curve. */
 .cw-summary__row:last-child {
+  padding-bottom: 12px;
   border-bottom: 0;
 }
 
@@ -1947,6 +2287,18 @@ html[data-embed="true"] .widget-preview__surface {
   font-size: 11.5px;
   font-weight: 650;
   line-height: 1.35;
+}
+
+/* Replaces the consent checkbox. It says the same thing without asking for a
+   click nobody wants to make in front of a send button. */
+.cw-consent-note {
+  margin: 0;
+  padding: 0 6px;
+  color: var(--cw-faint);
+  font-size: 10.5px;
+  font-weight: 540;
+  line-height: 1.4;
+  text-align: center;
 }
 
 /* A quiet line, not a boxed card. The consent still has to be deliberate, but

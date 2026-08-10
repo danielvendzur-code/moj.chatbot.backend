@@ -8,7 +8,13 @@ import {
   type EmailLead,
 } from "./emailTemplates.js";
 
-const MAX_BODY_BYTES = 28_000;
+/* Text-only enquiries stay tiny; a lead carrying photos is bounded by what a
+   serverless request body will take at all. The browser downscales before it
+   uploads, so this is a ceiling rather than a target. */
+const MAX_BODY_BYTES = 4_300_000;
+const MAX_ATTACHMENTS = 3;
+const MAX_ATTACHMENT_BYTES = 2_500_000;
+const MAX_ATTACHMENTS_TOTAL_BYTES = 3_600_000;
 const RATE_WINDOW_MS = 15 * 60 * 1_000;
 const RATE_MAX_REQUESTS = 8;
 const RECIPIENT = process.env.LEAD_TO_EMAIL || "info@mojchatbot.sk";
@@ -28,7 +34,11 @@ const SENDER = process.env.LEAD_FROM_EMAIL || "Môj Chatbot <info@mojchatbot.sk>
 type RateState = { count: number; resetAt: number };
 type GlobalRateStore = typeof globalThis & { __dvLeadRateLimit?: Map<string, RateState> };
 type Delivery = { ok: boolean; skipped?: boolean; reason?: string; ids?: string[] };
-type LeadPayload = Partial<Record<keyof EmailLead | "consent", unknown>>;
+type LeadPayload = Partial<
+  Record<keyof EmailLead | "consent" | "attachments", unknown>
+>;
+/* Resend's own attachment shape: a filename and base64 content. */
+type MailAttachment = { filename: string; content: string; content_type?: string };
 
 const globalRateStore = globalThis as GlobalRateStore;
 const rateLimitStore =
@@ -66,6 +76,63 @@ function clean(value: unknown, max: number): string {
 
 function validEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && value.length <= 160;
+}
+
+const ALLOWED_ATTACHMENT_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/heic",
+  "application/pdf",
+]);
+
+const safeFilename = (value: unknown, index: number): string => {
+  /* Whatever the visitor's phone called the file, it becomes a plain name: no
+     path separators, no control characters, no surprises for a mail client. */
+  const raw = typeof value === "string" ? value : "";
+  const cleaned = raw
+    .replace(/[\u0000-\u001F\u007F]/g, "")
+    .replace(/[\\/]/g, "-")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 80);
+  return cleaned || `priloha-${index + 1}.jpg`;
+};
+
+/* Base64 without padding slack, so a body that claims to be an image cannot
+   smuggle anything else past the size accounting. */
+const decodedBytes = (base64: string): number =>
+  Math.floor((base64.length * 3) / 4) -
+  (base64.endsWith("==") ? 2 : base64.endsWith("=") ? 1 : 0);
+
+function parseAttachments(raw: unknown): MailAttachment[] {
+  if (!Array.isArray(raw)) return [];
+
+  const accepted: MailAttachment[] = [];
+  let total = 0;
+
+  for (const [index, item] of raw.slice(0, MAX_ATTACHMENTS).entries()) {
+    if (!item || typeof item !== "object") continue;
+    const entry = item as Record<string, unknown>;
+    const data = typeof entry.data === "string" ? entry.data.trim() : "";
+    const contentType = typeof entry.contentType === "string" ? entry.contentType : "";
+    if (!data || !/^[A-Za-z0-9+/]+={0,2}$/.test(data)) continue;
+    if (!ALLOWED_ATTACHMENT_TYPES.has(contentType)) continue;
+
+    const size = decodedBytes(data);
+    if (size <= 0 || size > MAX_ATTACHMENT_BYTES) continue;
+    if (total + size > MAX_ATTACHMENTS_TOTAL_BYTES) break;
+
+    total += size;
+    accepted.push({
+      filename: safeFilename(entry.filename, index),
+      content: data,
+      content_type: contentType,
+    });
+  }
+
+  return accepted;
 }
 
 async function resendFailure(response: Response): Promise<string> {
@@ -110,6 +177,7 @@ async function deliverWithResend(
   text: string,
   html: string,
   replyTo?: string,
+  attachments: MailAttachment[] = [],
 ): Promise<Delivery> {
   if (!process.env.RESEND_API_KEY) return { ok: false, skipped: true };
 
@@ -127,6 +195,7 @@ async function deliverWithResend(
           subject,
           text,
           html,
+          ...(attachments.length ? { attachments } : {}),
         });
         if (response.ok) {
           const id = await resendMessageId(response);
@@ -252,21 +321,44 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     reference: clean(raw.reference, 40),
   };
 
+  const attachments = parseAttachments(raw.attachments);
+  if (attachments.length) {
+    payload.attachments = attachments
+      .map((attachment) => attachment.filename)
+      .join(", ");
+  }
+
   const hasContact = Boolean(payload.phone) || validEmail(payload.email);
+  /* The quick "write to me" form asks for an address and a message and nothing
+     else, so a missing name is normal there. The address itself identifies the
+     sender well enough to put a subject line together. */
+  if (!payload.name && validEmail(payload.email)) {
+    payload.name = payload.email.split("@")[0].slice(0, 80);
+  }
   if (!payload.name || !hasContact || (payload.email && !validEmail(payload.email)) || raw.consent !== true) {
     res.status(400).json({ error: "invalid-lead" });
     return;
   }
 
+  const label = payload.source === "widget-email" ? "Nová správa" : "Nový dopyt";
   const subject = payload.reference
-    ? `Nový dopyt · ${payload.reference} · ${payload.company || payload.name}`
-    : `Nový dopyt · ${payload.company || payload.name}`;
+    ? `${label} · ${payload.reference} · ${payload.company || payload.name}`
+    : `${label} · ${payload.company || payload.name}`;
   const text = internalText(payload);
   const html = internalHtml(payload, RECIPIENT);
   const mailto = `mailto:${RECIPIENT}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
 
   const attempts: Array<[string, Delivery]> = [
-    ["resend", await deliverWithResend(subject, text, html, validEmail(payload.email) ? payload.email : undefined)],
+    [
+      "resend",
+      await deliverWithResend(
+        subject,
+        text,
+        html,
+        validEmail(payload.email) ? payload.email : undefined,
+        attachments,
+      ),
+    ],
   ];
   if (!attempts.some(([, result]) => result.ok)) {
     attempts.push(["webhook", await deliverWithWebhook(subject, text)]);
@@ -287,6 +379,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
       "lead-accepted",
       `ref=${payload.reference || "—"}`,
       `recipients=${ids.join(",") || "—"}`,
+      `attachments=${attachments.length}`,
       `autoReply=${autoReplySent}`,
     );
     res.status(200).json({ ok: true, autoReplySent, ids });

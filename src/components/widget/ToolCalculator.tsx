@@ -28,43 +28,32 @@ type ToolCalculatorProps = {
   onOpenChat: () => void;
 };
 
-type ContactMethod = "video" | "phone" | "email";
-
 type LeadState = {
-  contactMethod: ContactMethod | null;
   name: string;
   email: string;
   phone: string;
   company: string;
   web: string;
   note: string;
-  consent: boolean;
 };
 
 const EMPTY_LEAD: LeadState = {
-  contactMethod: null,
   name: "",
   email: "",
   phone: "",
   company: "",
   web: "",
   note: "",
-  consent: false,
 };
 
 type SendState = "idle" | "sending" | "done";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const CONTACT_METHODS: Array<{
-  id: ContactMethod;
-  label: string;
-  icon: "chat" | "phone" | "mail";
-}> = [
-  { id: "phone", label: "Telefonicky", icon: "phone" },
-  { id: "email", label: "E-mailom", icon: "mail" },
-  { id: "video", label: "Videohovor", icon: "chat" },
-];
+/* Three reasons to finish, in the visitor's own terms. They sit above the
+   fields because the objection ("what does this cost me?") arrives before the
+   keyboard does. */
+const REASSURANCES: string[] = ["Nezáväzné", "Do 24 hodín", "Bez registrácie"];
 
 const isTextField = (element: HTMLElement): boolean =>
   element instanceof HTMLInputElement
@@ -229,44 +218,29 @@ export function ToolCalculator({
   const safeEmail = lead.email.trim();
   const safePhone = lead.phone.trim();
   const hasValidEmail = safeEmail ? EMAIL_PATTERN.test(safeEmail) : false;
-  const contactMethodInvalid = validationAttempted && !lead.contactMethod;
   const nameInvalid = validationAttempted && !safeName;
+  /* Two fields decide it: a name, and one way to reach them. Everything the
+     step used to require on top of that — a delivery method, a consent tick —
+     was friction in front of a form nobody is obliged to fill in. */
+  const missingContact = validationAttempted && !hasValidEmail && !safePhone;
   const emailInvalid =
-    validationAttempted &&
-    ((Boolean(safeEmail) && !hasValidEmail) ||
-      (lead.contactMethod === "email" && !hasValidEmail));
-  const phoneInvalid =
-    validationAttempted &&
-    lead.contactMethod !== "email" &&
-    !safePhone &&
-    !hasValidEmail;
+    validationAttempted && ((Boolean(safeEmail) && !hasValidEmail) || missingContact);
+  const phoneInvalid = missingContact;
 
   const submitLead = async () => {
     if (sendState !== "idle") return;
     setValidationAttempted(true);
 
-    if (!lead.contactMethod) {
-      setLeadError("Vyberte, ako sa vám mám ozvať.");
-      return;
-    }
     if (!safeName) {
       setLeadError("Napíšte mi prosím svoje meno.");
       return;
     }
-    if (safeEmail && !hasValidEmail) {
+    if (safeEmail && !EMAIL_PATTERN.test(safeEmail)) {
       setLeadError("Skontrolujte prosím e-mail, niečo v ňom chýba.");
       return;
     }
-    if (lead.contactMethod === "email" && !hasValidEmail) {
-      setLeadError("Napíšte e-mail, na ktorý vám môžem odpovedať.");
-      return;
-    }
-    if (lead.contactMethod !== "email" && !safePhone && !hasValidEmail) {
-      setLeadError("Napíšte telefón alebo e-mail, aby som sa vám vedel ozvať.");
-      return;
-    }
-    if (!lead.consent) {
-      setLeadError("Potvrďte prosím, že vás môžem kontaktovať.");
+    if (!hasValidEmail && !safePhone) {
+      setLeadError("Nechajte mi e-mail alebo telefón, nech vám návrh viem poslať.");
       return;
     }
 
@@ -284,13 +258,13 @@ export function ToolCalculator({
         phone: safePhone,
         company: lead.company.trim(),
         web: lead.web.trim(),
+        /* The reference travels in its own field, so repeating it here only
+           made a lead with no note look like it carried one. */
         note: [
           lead.note.trim(),
           interest === "custom" && customText.trim()
             ? `Čo dnes riešia ručne: ${customText.trim()}`
             : "",
-          `Ozvať sa takto: ${CONTACT_METHODS.find((item) => item.id === lead.contactMethod)?.label ?? lead.contactMethod}`,
-          `Číslo dopytu: ${nextProposalNumber}`,
         ]
           .filter(Boolean)
           .join("\n\n"),
@@ -328,15 +302,15 @@ export function ToolCalculator({
             <WidgetIcon name="check" />
           </span>
           <span className="cw-thanks__eyebrow">
-            {handedToMailClient ? "Skoro hotovo" : "Dopyt je odoslaný"}
+            {handedToMailClient ? "Skoro hotovo" : "Máme to"}
           </span>
           <h3>Ďakujem, {safeName}.</h3>
           <p>
             {handedToMailClient
-              ? "Otvoril som vám pripravený e-mail. Stačí ho odoslať a ozvem sa do jedného pracovného dňa."
+              ? "Otvoril som vám pripravený e-mail. Stačí ho odoslať a návrh máte do 24 hodín."
               : hasValidEmail
-                ? "Potvrdenie som poslal na e-mail. Ozvem sa do jedného pracovného dňa s konkrétnym ďalším krokom."
-                : "Ozvem sa do jedného pracovného dňa s konkrétnym ďalším krokom."}
+                ? `Návrh vám pošlem na ${safeEmail} do 24 hodín. Potvrdenie už máte v schránke.`
+                : "Ozvem sa vám na telefón do 24 hodín s konkrétnym návrhom."}
           </p>
           <div className="cw-thanks__summary">
             <div>
@@ -344,8 +318,8 @@ export function ToolCalculator({
               <strong>{summaryRows[0][1]}</strong>
             </div>
             <div>
-              <span>Kontakt</span>
-              <strong>{safePhone || safeEmail}</strong>
+              <span>Ozvem sa na</span>
+              <strong>{safeEmail || safePhone}</strong>
             </div>
             <div>
               <span>Číslo dopytu</span>
@@ -353,10 +327,10 @@ export function ToolCalculator({
             </div>
           </div>
           <div className="cw-thanks__actions">
-            <button type="button" onClick={() => restart(null)}>
+            <button type="button" className="ghost" onClick={() => restart(null)}>
               <WidgetIcon name="reset" /> Vyskladať znova
             </button>
-            <button type="button" className="ghost" onClick={onOpenChat}>
+            <button type="button" onClick={onOpenChat}>
               Mám ešte otázku
             </button>
           </div>
@@ -546,31 +520,16 @@ export function ToolCalculator({
 
           {stepId === "contact" ? (
             <div className="cw-contact-stage">
-              <div className="cw-lead">
-                <div
-                  className="cw-contact-methods"
-                  role="group"
-                  aria-label="Ako sa vám mám ozvať"
-                  aria-invalid={contactMethodInvalid}
-                >
-                  {CONTACT_METHODS.map((method) => {
-                    const selected = lead.contactMethod === method.id;
-                    return (
-                      <button
-                        type="button"
-                        className="cw-contact-method"
-                        data-selected={selected}
-                        aria-pressed={selected}
-                        key={`${stepId}-${method.id}`}
-                        onClick={() => updateLead({ contactMethod: method.id })}
-                      >
-                        <WidgetIcon name={method.icon} />
-                        <span>{method.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
+              <ul className="cw-reassure" aria-label="Čo pre vás platí">
+                {REASSURANCES.map((item) => (
+                  <li key={item}>
+                    <WidgetIcon name="check" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
 
+              <div className="cw-lead">
                 <div className="cw-lead__form">
                   <label className="cw-field">
                     <span>Meno <em>*</em></span>
@@ -579,31 +538,40 @@ export function ToolCalculator({
                       onChange={(event) => updateLead({ name: event.target.value })}
                       placeholder="Vaše meno"
                       autoComplete="name"
+                      enterKeyHint="next"
                       aria-invalid={nameInvalid}
                       aria-describedby={leadError ? "cw-lead-error" : undefined}
                     />
                   </label>
                   <div className="cw-lead__row">
                     <label className="cw-field">
-                      <span>E-mail {lead.contactMethod === "email" ? <em>*</em> : null}</span>
+                      <span>E-mail <em>*</em></span>
                       <input
                         value={lead.email}
                         onChange={(event) => updateLead({ email: event.target.value })}
                         placeholder="meno@firma.sk"
                         type="email"
+                        inputMode="email"
                         autoComplete="email"
+                        enterKeyHint="next"
                         aria-invalid={emailInvalid}
                         aria-describedby={leadError ? "cw-lead-error" : undefined}
                       />
                     </label>
                     <label className="cw-field">
-                      <span>Telefón {lead.contactMethod !== "email" ? <em>*</em> : null}</span>
+                      <span>Telefón <small>nepovinné</small></span>
                       <input
                         value={lead.phone}
                         onChange={(event) => updateLead({ phone: event.target.value })}
                         placeholder="+421 …"
                         autoComplete="tel"
                         inputMode="tel"
+                        enterKeyHint="done"
+                        onKeyDown={(event) => {
+                          if (event.key !== "Enter") return;
+                          event.preventDefault();
+                          void submitLead();
+                        }}
                         aria-invalid={phoneInvalid}
                         aria-describedby={leadError ? "cw-lead-error" : undefined}
                       />
@@ -648,10 +616,12 @@ export function ToolCalculator({
                 </div>
               </div>
 
+              {/* Closed by default and titled with what was actually chosen —
+                  "4 položky" told the visitor nothing about their own answers. */}
               <details className="cw-summary">
                 <summary>
                   <span>Váš výber</span>
-                  <small>{summaryRows.length} položky</small>
+                  <small>{summaryRows[0][1]}</small>
                 </summary>
                 <div className="cw-summary__body">
                   {summaryRows.map(([label, value]) => (
@@ -697,19 +667,6 @@ export function ToolCalculator({
               {leadError}
             </p>
           ) : null}
-          <label className="cw-consent" data-checked={lead.consent}>
-            <input
-              type="checkbox"
-              checked={lead.consent}
-              onChange={(event) => updateLead({ consent: event.target.checked })}
-            />
-            <span className="cw-consent__box" aria-hidden="true">
-              <WidgetIcon name="check" />
-            </span>
-            <span className="cw-consent__text">
-              Súhlasím, že ma môžete kontaktovať.
-            </span>
-          </label>
           <button
             type="button"
             className="cw-submit cw-submit--approved"
@@ -725,11 +682,16 @@ export function ToolCalculator({
                 </>
               ) : (
                 <>
-                  <WidgetIcon name="send" /> Poslať nezáväzný dopyt
+                  <WidgetIcon name="send" /> Chcem nezáväzný návrh
                 </>
               )}
             </span>
           </button>
+          {/* A required tick box in front of the send button is the last thing
+              that loses a finished form. The same information, stated. */}
+          <p className="cw-consent-note">
+            Odoslaním súhlasíte, že vás môžem kontaktovať k tomuto dopytu.
+          </p>
         </footer>
       )}
     </div>

@@ -101,18 +101,39 @@ test("contact step fits without scrolling and keeps sending obvious", async () =
   assert.doesNotMatch(calculator, /Stačí meno a jeden kontakt/);
   assert.doesNotMatch(flow, /Stačí meno a jeden kontakt/);
 
-  assert.match(rule(css, ".cw-contact-methods"), /border-radius:\s*var\(--cw-r-pill\)/);
-  assert.match(rule(css, ".cw-contact-method"), /min-height:\s*44px/);
-  assert.match(rule(css, ".cw-consent"), /min-height:\s*26px/);
-  assert.match(rule(css, ".cw-consent"), /border:\s*0/);
-  assert.match(rule(css, ".cw-calc-actions"), /flex:\s*0 0 auto/);
+  // The step asks for a name and one way to reach the visitor. The delivery
+  // method picker and the consent tick box were two required interactions in
+  // front of the send button, and neither of them told me anything the fields
+  // do not.
+  assert.doesNotMatch(calculator, /cw-contact-methods|contactMethod/);
+  assert.doesNotMatch(calculator, /type="checkbox"/);
+  assert.doesNotMatch(flow, /Kam vám môžem poslať/);
+  assert.match(flow, /"Váš návrh je pripravený"/);
+  assert.match(calculator, /className="cw-consent-note"/);
+  assert.match(rule(css, ".cw-consent-note"), /font-size:\s*10\.5px/);
 
-  assert.match(calculator, /cw-contact-methods/);
+  // Nothing is free: what the visitor gets for the contact details is stated
+  // above the fields, before the keyboard covers half the panel.
+  assert.match(calculator, /REASSURANCES/);
+  assert.match(calculator, /className="cw-reassure"/);
+  assert.match(rule(css, ".cw-reassure li"), /border-radius:\s*var\(--cw-r-pill\)/);
+
+  assert.match(rule(css, ".cw-calc-actions"), /flex:\s*0 0 auto/);
   assert.match(calculator, /cw-lead__form/);
   assert.match(calculator, /className="cw-field"/);
   assert.match(calculator, /<details className="cw-summary">/);
-  assert.match(calculator, /cw-consent/);
   assert.match(calculator, /cw-submit cw-submit--approved/);
   assert.match(css, /\.cw-field :is\(input, textarea\)\[aria-invalid="true"\]/);
   assert.match(css, /\.cw-summary > summary/);
+
+  // A 999 px radius on an open disclosure bows its sides into an egg. Open, it
+  // is a card; closed, it stays the same capsule as every other one-line row.
+  assert.match(
+    rule(css, ".cw-lead__optional,\n.cw-summary"),
+    /border-radius:\s*var\(--cw-r-pill\)/,
+  );
+  assert.match(
+    rule(css, ".cw-lead__optional[open],\n.cw-summary[open]"),
+    /border-radius:\s*var\(--cw-r-card\)/,
+  );
 });

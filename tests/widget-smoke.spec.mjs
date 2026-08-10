@@ -171,24 +171,57 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
 
   await page.getByTestId("timeline-asap").click();
   await expect(
-    page.getByRole("heading", { name: "Kam vám môžem poslať ďalší krok?" }),
+    page.getByRole("heading", { name: "Váš návrh je pripravený" }),
   ).toBeVisible({ timeout: 2500 });
   await expect(page.getByText("Krok 5 z 5 · Kontakt")).toBeVisible();
 
-  await page.getByTestId("lead-submit").click();
-  await expect(page.getByRole("alert")).toContainText("Vyberte, ako sa vám mám ozvať");
-  await expect(page.locator(".cw-contact-methods")).toHaveAttribute("aria-invalid", "true");
+  // A name and one way to reach them. There is no delivery-method choice and
+  // no consent tick to get through first.
+  await expect(page.locator(".cw-contact-methods")).toHaveCount(0);
+  await expect(page.getByRole("checkbox")).toHaveCount(0);
+  await expect(page.locator(".cw-reassure li")).toHaveCount(3);
 
-  await page.getByRole("button", { name: "Telefonicky" }).click();
+  await page.getByTestId("lead-submit").click();
+  await expect(page.getByRole("alert")).toContainText("Napíšte mi prosím svoje meno");
+  await expect(page.getByPlaceholder("Vaše meno")).toHaveAttribute("aria-invalid", "true");
+
   await page.getByPlaceholder("Vaše meno").fill("Testovací návštevník");
   await page.getByPlaceholder("+421 …").fill("+421900123456");
-  await page.getByRole("checkbox").check();
-  await expect(page.getByRole("checkbox")).toBeChecked();
 
   await expect(page.getByPlaceholder("Vaše meno")).toHaveAttribute("aria-invalid", "false");
   await expect(page.getByPlaceholder("+421 …")).toHaveAttribute("aria-invalid", "false");
-  await expect(page.getByTestId("lead-submit")).toContainText("Poslať nezáväzný dopyt");
+  await expect(page.getByTestId("lead-submit")).toContainText("Chcem nezáväzný návrh");
   await expect(page.locator(".cw-summary")).not.toHaveAttribute("open", "");
+
+  expect(errors).toEqual([]);
+});
+
+test("the e-mail chip opens the message form in the widget, not a mail client", async ({
+  page,
+}) => {
+  const errors = collectRuntimeErrors(page);
+
+  await page.goto("http://127.0.0.1:4173", { waitUntil: "networkidle" });
+  await page.getByTestId("widget-launcher").click();
+  await expect(page.getByTestId("assistant-view")).toBeVisible({ timeout: 2500 });
+
+  await page.getByTestId("open-mail-form").click();
+  const sheet = page.getByTestId("mail-sheet");
+  await expect(sheet).toBeVisible({ timeout: 2000 });
+  // Its own header has to sit above the builder card, not behind it.
+  await expect(sheet.getByRole("heading", { name: "Napíšte mi" })).toBeVisible();
+
+  await page.getByTestId("mail-send").click();
+  await expect(page.getByRole("alert")).toContainText("Napíšte e-mail");
+
+  await sheet.locator('input[type="email"]').fill("navstevnik@firma.sk");
+  await page.getByTestId("mail-send").click();
+  await expect(page.getByRole("alert")).toContainText("s čím vám môžem pomôcť");
+
+  // Escape belongs to the sheet: the widget behind it stays open.
+  await sheet.locator("textarea").press("Escape");
+  await expect(sheet).toHaveCount(0);
+  await expect(page.getByTestId("assistant-view")).toBeVisible();
 
   expect(errors).toEqual([]);
 });
