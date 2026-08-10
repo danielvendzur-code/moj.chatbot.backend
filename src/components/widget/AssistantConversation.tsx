@@ -8,6 +8,7 @@ import {
 } from "../../lib/chatHistory";
 import { track } from "../../lib/analytics";
 import { BubbleLogo } from "./BubbleLogo";
+import { MessageSheet } from "./MessageSheet";
 import { ScrollCue } from "./ScrollCue";
 import { WidgetIcon } from "./WidgetIcon";
 
@@ -79,6 +80,7 @@ export function AssistantConversation({
   const [typing, setTyping] = useState(false);
   const [activeQuickReply, setActiveQuickReply] = useState<string | null>(null);
   const [composing, setComposing] = useState(false);
+  const [mailOpen, setMailOpen] = useState(false);
   const nextIdRef = useRef(restored?.nextId ?? 2);
   const messagesRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -105,6 +107,7 @@ export function AssistantConversation({
     setTyping(false);
     setActiveQuickReply(null);
     setComposing(false);
+    setMailOpen(false);
     clearHistory();
     nextIdRef.current = 2;
     if (quickReplyTimerRef.current !== null) {
@@ -415,12 +418,26 @@ export function AssistantConversation({
             <WidgetIcon name="phone" />
             <span>Zavolať</span>
           </a>
-          <a href="mailto:info@mojchatbot.sk">
+          {/* The href stays a real mailto so the chip can still be copied or
+              opened in a new tab; the click itself opens the form in place,
+              which is the part that actually works on a phone. */}
+          <a
+            href="mailto:info@mojchatbot.sk"
+            data-testid="open-mail-form"
+            aria-haspopup="dialog"
+            onClick={(event) => {
+              if (event.metaKey || event.ctrlKey || event.shiftKey) return;
+              event.preventDefault();
+              setMailOpen(true);
+            }}
+          >
             <WidgetIcon name="mail" />
             <span>E-mail</span>
           </a>
         </div>
       </nav>
+
+      {mailOpen ? <MessageSheet onClose={() => setMailOpen(false)} /> : null}
     </div>
   );
 }

@@ -3,9 +3,19 @@ const LEAD_ENDPOINT =
   "https://moj-chatbot-backend.vercel.app/api/lead";
 const FALLBACK_RECIPIENT = "info@mojchatbot.sk";
 
+/* A photo the visitor attached. `data` is raw base64 without the data: prefix,
+   which is exactly the shape Resend takes for an attachment. */
+export type LeadAttachment = {
+  filename: string;
+  contentType: string;
+  data: string;
+};
+
 export type LeadSubmission = {
   source: string;
-  name: string;
+  /* The quick message form asks only for an e-mail and a message, so the name
+     is optional there and the server derives one from the address. */
+  name?: string;
   email?: string;
   phone?: string;
   company?: string;
@@ -16,6 +26,7 @@ export type LeadSubmission = {
   features?: string;
   timeline?: string;
   reference?: string;
+  attachments?: LeadAttachment[];
   consent: boolean;
 };
 
@@ -27,10 +38,11 @@ type LeadResponse = {
 };
 
 function localFallback(payload: LeadSubmission): string {
-  const subject = `Nový dopyt — ${payload.company?.trim() || payload.name.trim()}`;
+  const name = payload.name?.trim() || payload.email?.trim() || "web";
+  const subject = `Nový dopyt — ${payload.company?.trim() || name}`;
   const body = [
     `Zdroj: ${payload.source}`,
-    `Meno: ${payload.name}`,
+    `Meno: ${name}`,
     `E-mail: ${payload.email || "neuvedený"}`,
     `Telefón: ${payload.phone || "neuvedený"}`,
     `Firma: ${payload.company || "neuvedená"}`,
@@ -44,6 +56,11 @@ function localFallback(payload: LeadSubmission): string {
     "",
     "Poznámka:",
     payload.note || "bez poznámky",
+    /* A mailto: cannot carry files, so say so rather than let the visitor
+       believe the photos went along with it. */
+    ...(payload.attachments?.length
+      ? ["", `Pozn.: prílohy (${payload.attachments.length}) priložte prosím ručne.`]
+      : []),
   ].join("\n");
   return `mailto:${FALLBACK_RECIPIENT}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
@@ -55,7 +72,13 @@ export type LeadResult = { delivered: boolean; fallback?: string };
 
 export async function submitLead(payload: LeadSubmission): Promise<LeadResult> {
   const controller = new AbortController();
-  const timeout = window.setTimeout(() => controller.abort(), 12_000);
+  /* Text alone is a keystroke; a photo on a phone connection is not. Aborting
+     an upload after 12 s would have thrown away a lead that was still on its
+     way. */
+  const timeout = window.setTimeout(
+    () => controller.abort(),
+    payload.attachments?.length ? 45_000 : 12_000,
+  );
 
   try {
     const response = await fetch(LEAD_ENDPOINT, {

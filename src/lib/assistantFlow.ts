@@ -31,9 +31,12 @@ export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
     "Kedy to chcete mať hotové?",
     "Vyberte približný termín.",
   ],
+  /* The old heading asked the visitor to pay with their contact details for
+     something vague they could not picture. This names what they get instead,
+     and says out loud that it costs nothing. */
   contact: [
-    "Kam vám môžem poslať ďalší krok?",
-    "Ozvem sa do jedného pracovného dňa.",
+    "Váš návrh je pripravený",
+    "Pošlem vám rozsah aj cenu do 24 hodín. Nezáväzne a bez registrácie.",
   ],
   priority: [
     "Čo je pre vás najdôležitejšie?",

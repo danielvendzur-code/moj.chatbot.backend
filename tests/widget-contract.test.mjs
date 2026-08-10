@@ -260,7 +260,9 @@ test("progress and contact step expose clear state and labels", async () => {
   assert.match(calculator, /aria-invalid=\{emailInvalid\}/);
   assert.match(calculator, /aria-invalid=\{phoneInvalid\}/);
   assert.match(calculator, /<details className="cw-summary">/);
-  assert.match(calculator, /Poslať nezáväzný dopyt/);
+  // First person and the thing itself: "Poslať nezáväzný dopyt" described the
+  // form's paperwork, not what the visitor is about to get.
+  assert.match(calculator, /Chcem nezáväzný návrh/);
   assert.doesNotMatch(calculator, /label: "Osobne"/);
   assert.match(rule(css, ".cw-progress__dots"), /grid-template-columns:\s*repeat\(5,/);
 });
