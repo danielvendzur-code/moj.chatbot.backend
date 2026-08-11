@@ -1,0 +1,124 @@
+name: Apple production diagnostic
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/apple-production-diagnostic.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Probe production chat from the real origin
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p diagnostic
+          endpoint='https://moj-chatbot-backend.vercel.app/api/chat'
+          questions=(
+            'Čo presne ponúkate a koľko stojí jednoduchý chatbot?'
+            'Viete mi vytvoriť e-shop a spravovať reklamy?'
+            'Môže chatbot vypočítať cenu plota podľa metrov a poslať dopyt?'
+            'Viete pridať poradcu na výber kávy do môjho existujúceho e-shopu?'
+          )
+          i=0
+          for question in "${questions[@]}"; do
+            i=$((i+1))
+            body=$(node -e 'console.log(JSON.stringify({messages:[{role:"user",content:process.argv[1]}],conversationId:"applediag-20260802-'"$i"'"}))' "$question")
+            curl --silent --show-error --location \
+              --connect-timeout 10 --max-time 40 \
+              -D "diagnostic/chat-$i.headers" \
+              -o "diagnostic/chat-$i.body" \
+              -w 'chat-'"$i"' status=%{http_code} total=%{time_total}s start=%{time_starttransfer}s size=%{size_download}\n' \
+              -H 'Origin: https://mojchatbot.sk' \
+              -H 'Content-Type: application/json' \
+              -H 'Accept: application/json' \
+              --data "$body" "$endpoint" | tee -a diagnostic/timings.txt
+            cat "diagnostic/chat-$i.body"
+            echo
+          done
+
+      - name: Probe production SSE framing
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --silent --show-error --location --no-buffer \
+            --connect-timeout 10 --max-time 40 \
+            -D diagnostic/sse.headers \
+            -o diagnostic/sse.body \
+            -w 'sse status=%{http_code} total=%{time_total}s start=%{time_starttransfer}s size=%{size_download}\n' \
+            -H 'Origin: https://mojchatbot.sk' \
+            -H 'Content-Type: application/json' \
+            -H 'Accept: text/event-stream' \
+            --data '{"messages":[{"role":"user","content":"V jednej krátkej odpovedi vysvetli, čo robí Môj Chatbot."}],"conversationId":"applediag-sse-20260802"}' \
+            'https://moj-chatbot-backend.vercel.app/api/chat' | tee -a diagnostic/timings.txt
+          cat diagnostic/sse.body
+
+      - name: Send labelled leads through both production paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p diagnostic
+          ref="APPLE-DIAG-$(date -u +%Y%m%d-%H%M%S)"
+          printf '%s\n' "$ref" > diagnostic/lead-reference.txt
+          payload=$(node -e 'console.log(JSON.stringify({source:"github-production-diagnostic",name:"Apple diagnostika",email:"info@mojchatbot.sk",phone:"+421900000000",company:"Môj Chatbot",web:"https://mojchatbot.sk",note:`${process.argv[1]} — automatický produkčný test. Prosím ignorovať.`,interest:"AI chatbot na mieru",industry:"Technológie",features:"Odpovede, kalkulačka a odoslanie dopytu",timeline:"Test teraz",reference:process.argv[1],consent:true}))' "$ref")
+
+          curl --silent --show-error --location \
+            --connect-timeout 10 --max-time 40 \
+            -D diagnostic/lead-direct.headers \
+            -o diagnostic/lead-direct.body \
+            -w 'lead-direct status=%{http_code} total=%{time_total}s start=%{time_starttransfer}s size=%{size_download}\n' \
+            -H 'Origin: https://mojchatbot.sk' \
+            -H 'Content-Type: application/json' \
+            -H 'Accept: application/json' \
+            --data "$payload" \
+            'https://moj-chatbot-backend.vercel.app/api/lead' | tee -a diagnostic/timings.txt
+
+          website_payload=$(node -e 'const p=JSON.parse(process.argv[1]); delete p.reference; console.log(JSON.stringify(p))' "$payload")
+          curl --silent --show-error --location \
+            --connect-timeout 10 --max-time 40 \
+            -D diagnostic/lead-website.headers \
+            -o diagnostic/lead-website.body \
+            -w 'lead-website status=%{http_code} total=%{time_total}s start=%{time_starttransfer}s size=%{size_download}\n' \
+            -H 'Content-Type: application/json' \
+            -H 'Accept: application/json' \
+            --data "$website_payload" \
+            'https://mojchatbot.sk/api/lead' | tee -a diagnostic/timings.txt
+
+          echo "lead-reference=$ref"
+          echo '--- direct backend ---'
+          cat diagnostic/lead-direct.body
+          echo
+          echo '--- website proxy ---'
+          cat diagnostic/lead-website.body
+          echo
+
+      - name: Inspect deployed embed and cache headers
+        shell: bash
+        run: |
+          set -euo pipefail
+          for url in \
+            'https://mojchatbot.sk/widget-loader.js' \
+            'https://danielvendzur-code.github.io/moj.chatbot.backend/embed.js' \
+            'https://danielvendzur-code.github.io/moj.chatbot.backend/widget.js'; do
+            safe=$(echo "$url" | sed 's#[^A-Za-z0-9]#_#g')
+            curl --silent --show-error --location --max-time 30 \
+              -D "diagnostic/$safe.headers" -o "diagnostic/$safe.body" "$url" || true
+            echo "--- $url ---"
+            sed -n '1,40p' "diagnostic/$safe.headers" || true
+            wc -c "diagnostic/$safe.body" || true
+            sha256sum "diagnostic/$safe.body" || true
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apple-production-diagnostic
+          path: diagnostic
+          retention-days: 2
