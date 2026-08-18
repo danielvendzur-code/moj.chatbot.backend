@@ -1,0 +1,318 @@
+/* Branch-only Môj Chatbot blue/violet product skin.
+   Loaded after the historical final layers so the live assistant belongs to the
+   same brand system as the new website without changing its interaction logic. */
+
+html:root body .widget-preview,
+html:root body .cw-widget {
+  --cw-white: #ffffff;
+  --cw-paper: #f8f9ff;
+  --cw-mint: #eef0ff;
+  --cw-lime: #7c5cfc;
+  --cw-lime-bright: #a99bff;
+  --cw-green: #5b5ef7;
+  --cw-green-hover: #5146e5;
+  --cw-forest: #0d1025;
+  --cw-ink: #15182d;
+  --cw-ink-soft: #3f465d;
+  --cw-muted: #667085;
+  --cw-faint: #8a91a6;
+  --cw-line: rgba(13, 16, 37, 0.12);
+  --cw-line-soft: rgba(13, 16, 37, 0.08);
+  --cw-line-strong: rgba(91, 94, 247, 0.3);
+  --cw-glass-bg: rgba(255, 255, 255, 0.9);
+  --cw-glass-bg-strong: #ffffff;
+  --cw-glass-blur: blur(12px) saturate(125%);
+  --cw-glass-rim: inset 0 1px 0 rgba(255, 255, 255, 0.86);
+  color-scheme: light;
+}
+
+html:root body .cw-widget {
+  --goal-green: #5b5ef7;
+  --goal-hover: #eef0ff;
+  --goal-hover-border: #c7c9ff;
+  --goal-ink: #0d1025;
+}
+
+html:root body .widget-preview {
+  color: #0d1025 !important;
+  background: #f8f9ff !important;
+}
+
+html:root body .widget-preview__surface {
+  opacity: 0 !important;
+  background: none !important;
+}
+
+html:root body .cw-widget :is(button, a, input, textarea, summary):focus-visible {
+  outline-color: rgba(91, 94, 247, 0.35) !important;
+}
+
+html:root body .cw-widget .cw-consent > input {
+  accent-color: #5b5ef7 !important;
+}
+
+/* Launcher: solid, calm and recognisable instead of a glowing AI bubble. */
+html:root body .cw-widget .cw-launcher {
+  color: #5b5ef7 !important;
+  border: 1px solid rgba(91, 94, 247, 0.2) !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 18px 42px -28px rgba(13, 16, 37, 0.34) !important;
+}
+
+html:root body .cw-widget .cw-launcher:hover,
+html:root body .cw-widget .cw-launcher:focus-visible {
+  color: #5146e5 !important;
+  border-color: rgba(91, 94, 247, 0.4) !important;
+  background: #ffffff !important;
+  box-shadow: 0 18px 42px -28px rgba(13, 16, 37, 0.34) !important;
+}
+
+html:root body .cw-widget .cw-launcher-preview {
+  color: #0d1025 !important;
+  border-color: rgba(13, 16, 37, 0.12) !important;
+  border-radius: 14px 14px 5px 14px !important;
+  background: #ffffff !important;
+  box-shadow: 0 18px 42px -30px rgba(13, 16, 37, 0.28) !important;
+}
+
+html:root body .cw-widget .cw-launcher-preview span {
+  color: #667085 !important;
+}
+
+/* Product shell */
+html:root body .cw-widget .cw-panel {
+  color: #15182d !important;
+  border-color: rgba(13, 16, 37, 0.13) !important;
+  border-radius: 20px !important;
+  background: #f8f9ff !important;
+  background-image: none !important;
+  box-shadow:
+    0 36px 90px -42px rgba(13, 16, 37, 0.44),
+    0 12px 34px -30px rgba(13, 16, 37, 0.25) !important;
+}
+
+html:root body .cw-widget .cw-panel::before,
+html:root body .cw-widget .cw-panel::after,
+html:root body .cw-widget .cw-panel-head::before,
+html:root body .cw-widget .cw-panel-head::after,
+html:root body .cw-widget .cw-tabs::before,
+html:root body .cw-widget .cw-tabs::after {
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html:root body .cw-widget .cw-panel-head {
+  color: #0d1025 !important;
+  border-color: rgba(13, 16, 37, 0.1) !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html:root body .cw-widget .cw-panel-head__mascot {
+  color: #5b5ef7 !important;
+}
+
+html:root body .cw-widget .cw-panel-head__title h2 {
+  color: #0d1025 !important;
+}
+
+html:root body .cw-widget .cw-panel-head__online {
+  color: #667085 !important;
+}
+
+html:root body .cw-widget .cw-panel-head__online i {
+  background: #5b5ef7 !important;
+  box-shadow: 0 0 0 3px rgba(91, 94, 247, 0.12) !important;
+}
+
+html:root body .cw-widget .cw-panel-head__actions button {
+  color: #667085 !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+}
+
+html:root body .cw-widget .cw-panel-head__actions button:hover,
+html:root body .cw-widget .cw-panel-head__actions button:focus-visible {
+  color: #5146e5 !important;
+  border-color: rgba(91, 94, 247, 0.18) !important;
+  background: #eef0ff !important;
+}
+
+/* Compact mode switch; blue indicates state, not decoration. */
+html:root body .cw-widget .cw-tabs {
+  border-color: rgba(13, 16, 37, 0.1) !important;
+  border-radius: 12px !important;
+  background: #eef0ff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html:root body .cw-widget .cw-tabs__thumb {
+  border-color: rgba(13, 16, 37, 0.08) !important;
+  border-radius: 9px !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  box-shadow: 0 5px 15px -12px rgba(13, 16, 37, 0.35) !important;
+}
+
+html:root body .cw-widget .cw-tabs > button {
+  color: #667085 !important;
+}
+
+html:root body .cw-widget .cw-tabs > button[data-active="true"] {
+  color: #ffffff !important;
+  border-color: #5b5ef7 !important;
+  background: #5b5ef7 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Conversation and controls */
+html:root body .cw-widget .cw-panel-body,
+html:root body .cw-widget .cw-chat,
+html:root body .cw-widget .cw-calculator {
+  color: #15182d !important;
+  background-color: #f8f9ff !important;
+  background-image: none !important;
+}
+
+html:root body .cw-widget .cw-message--assistant,
+html:root body .cw-widget .cw-bubble--assistant,
+html:root body .cw-widget .cw-assistant-message {
+  color: #15182d !important;
+  border-color: rgba(13, 16, 37, 0.09) !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html:root body .cw-widget .cw-message--user,
+html:root body .cw-widget .cw-bubble--user,
+html:root body .cw-widget .cw-user-message {
+  color: #ffffff !important;
+  border-color: #5b5ef7 !important;
+  background: #5b5ef7 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html:root body .cw-widget .cw-chip,
+html:root body .cw-widget .cw-quick-replies .cw-chip {
+  color: #333950 !important;
+  border-color: rgba(13, 16, 37, 0.11) !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html:root body .cw-widget .cw-quick-replies .cw-chip:not(:disabled):hover,
+  html:root body .cw-widget .cw-quick-replies .cw-chip:not(:disabled):focus-visible {
+    color: #0d1025 !important;
+    border-color: #c7c9ff !important;
+    background: #eef0ff !important;
+    box-shadow: none !important;
+  }
+}
+
+html:root body .cw-widget :is(input, textarea, select) {
+  color: #15182d !important;
+  border-color: rgba(13, 16, 37, 0.12) !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html:root body .cw-widget :is(input, textarea, select):focus {
+  border-color: rgba(91, 94, 247, 0.55) !important;
+  box-shadow: 0 0 0 3px rgba(91, 94, 247, 0.1) !important;
+}
+
+html:root body .cw-widget :is(.cw-next, .cw-submit):not(:disabled),
+html:root body .cw-widget .cw-chat-builder {
+  color: #ffffff !important;
+  border-color: #5b5ef7 !important;
+  background: #5b5ef7 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html:root body .cw-widget :is(.cw-next, .cw-submit):not(:disabled):hover,
+html:root body .cw-widget .cw-chat-builder:hover {
+  color: #ffffff !important;
+  border-color: #5146e5 !important;
+  background: #5146e5 !important;
+  box-shadow: none !important;
+}
+
+/* Configurator: one sober selection system. */
+html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
+  color: #0d1025 !important;
+  border-color: rgba(13, 16, 37, 0.12) !important;
+  border-radius: 12px !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] {
+  border: 2px solid #5b5ef7 !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(91, 94, 247, 0.08) !important;
+}
+
+html:root body .cw-widget .cw-calculator .cw-selection-indicator {
+  color: #ffffff !important;
+  border-color: #5b5ef7 !important;
+  background: #5b5ef7 !important;
+  box-shadow: 0 0 0 2px #ffffff !important;
+}
+
+html:root body .cw-widget .cw-calculator :is(.cw-rowcard__icon, .cw-scard__icon) {
+  color: #5b5ef7 !important;
+  border-color: rgba(91, 94, 247, 0.1) !important;
+  background: #eef0ff !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):not([data-selected="true"]):hover,
+  html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):not([data-selected="true"]):focus-visible {
+    color: #0d1025 !important;
+    border-color: #c7c9ff !important;
+    background: #eef0ff !important;
+    box-shadow: none !important;
+    transform: translateY(-1px) !important;
+  }
+}
+
+/* No magic gradients, glows or decorative spotlight layers. */
+html:root body .cw-widget [data-spotlight]::before,
+html:root body .cw-widget [data-spotlight]::after,
+html:root body .cw-widget .cw-glow,
+html:root body .cw-widget .cw-aurora {
+  opacity: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 640px) {
+  html:root body .cw-widget .cw-panel {
+    border-radius: 0 !important;
+    border-inline: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:root body .cw-widget *,
+  html:root body .cw-widget *::before,
+  html:root body .cw-widget *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
