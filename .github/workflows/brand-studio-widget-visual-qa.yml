@@ -1,0 +1,62 @@
+name: Brand studio widget visual QA
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright@1.55.0 install --with-deps chromium
+      - name: Start preview
+        shell: bash
+        run: |
+          npm run dev -- --host 127.0.0.1 --port 4173 > /tmp/widget.log 2>&1 &
+          for attempt in {1..45}; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/widget.log
+          exit 1
+      - name: Capture preview and opened widget
+        run: |
+          mkdir -p qa-widget
+          cat > widget-qa.mjs <<'EOF'
+          import { chromium } from "playwright";
+          const browser = await chromium.launch({ headless: true });
+          for (const [prefix, viewport] of [["desktop", { width: 1440, height: 900 }], ["mobile", { width: 390, height: 844 }]]) {
+            const page = await browser.newPage({ viewport });
+            await page.goto("http://127.0.0.1:4173/", { waitUntil: "networkidle" });
+            await page.waitForTimeout(900);
+            await page.screenshot({ path: `qa-widget/${prefix}-closed.png`, fullPage: false });
+            const launcher = page.locator('.cw-launcher').first();
+            await launcher.click();
+            await page.waitForTimeout(650);
+            await page.screenshot({ path: `qa-widget/${prefix}-open.png`, fullPage: false });
+            await page.close();
+          }
+          await browser.close();
+          EOF
+          node widget-qa.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: brand-studio-widget-v6
+          path: qa-widget
+          retention-days: 2
