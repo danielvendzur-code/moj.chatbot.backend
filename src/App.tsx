@@ -8,6 +8,7 @@ import "./dark-chip-final.css";
 import "./logo-match-final.css";
 import "./goal-lock-final.css";
 import "./interaction-stability-final.css";
+import "./brand-studio-blue-violet.css";
 
 export default function App(): JSX.Element {
   const embedMode = isEmbedMode();
