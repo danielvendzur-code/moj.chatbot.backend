@@ -1,0 +1,112 @@
+/* Kage-inspired surface pass for the website-matched widget.
+   Uses transparency as a contextual layer while preserving readable contrast. */
+
+html:root body .cw-widget .cw-panel {
+  background: rgba(240, 239, 231, 0.92) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.16) !important;
+  backdrop-filter: blur(18px) saturate(1.16) !important;
+  border-color: rgba(7, 27, 21, 0.28) !important;
+}
+
+html:root body .cw-widget .cw-panel-head,
+html:root body .cw-widget .cw-tabs {
+  background: rgba(7, 27, 21, 0.94) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(1.12) !important;
+  backdrop-filter: blur(12px) saturate(1.12) !important;
+}
+
+html:root body .cw-widget :is(.cw-panel-body, .cw-mode-view, .cw-conversation, .cw-calculator) {
+  background: rgba(240, 239, 231, 0.78) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(1.08) !important;
+  backdrop-filter: blur(12px) saturate(1.08) !important;
+}
+
+html:root body .cw-widget :is(.cw-calc-body, .cw-scroll-shell, .cw-chat-top) {
+  background: transparent !important;
+}
+
+html:root body .cw-widget .cw-launcher {
+  background: rgba(7, 27, 21, 0.88) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(1.18) !important;
+  backdrop-filter: blur(12px) saturate(1.18) !important;
+}
+
+html:root body .cw-widget .cw-launcher-preview {
+  background: rgba(7, 27, 21, 0.9) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(1.16) !important;
+  backdrop-filter: blur(12px) saturate(1.16) !important;
+}
+
+html:root body .cw-widget .cw-message-row--bot .cw-message-wrap,
+html:root body .cw-widget .cw-avatar,
+html:root body .cw-widget .cw-typing,
+html:root body .cw-widget .cw-quick-replies .cw-chip,
+html:root body .cw-widget .cw-inputbar,
+html:root body .cw-widget .cw-direct-actions__grid a,
+html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard),
+html:root body .cw-widget .cw-field :is(input, textarea),
+html:root body .cw-widget .cw-photos__add,
+html:root body .cw-widget .cw-photos__list li {
+  background: rgba(252, 251, 247, 0.86) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(1.06) !important;
+  backdrop-filter: blur(8px) saturate(1.06) !important;
+}
+
+html:root body .cw-widget .cw-message-row--me .cw-message-wrap,
+html:root body .cw-widget .cw-chat-builder {
+  background: rgba(18, 56, 45, 0.94) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(1.08) !important;
+  backdrop-filter: blur(8px) saturate(1.08) !important;
+}
+
+html:root body .cw-widget .cw-sheet {
+  background: rgba(240, 239, 231, 0.95) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.12) !important;
+  backdrop-filter: blur(18px) saturate(1.12) !important;
+}
+
+html:root body .cw-widget .cw-sheet__head {
+  background: rgba(7, 27, 21, 0.96) !important;
+  color: #f6f5ee !important;
+}
+
+html:root body .cw-widget .cw-sheet__title :is(h3, p),
+html:root body .cw-widget .cw-sheet__back {
+  color: inherit !important;
+}
+
+/* A thin contextual wash gives the translucent paper a brand-coloured edge
+   without turning it into generic glassmorphism. */
+html:root body .cw-widget .cw-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(145deg, rgba(200, 240, 106, 0.08), transparent 31%),
+    linear-gradient(325deg, rgba(18, 56, 45, 0.07), transparent 38%);
+}
+
+html:root body .cw-widget .cw-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 520px) {
+  html:root body .cw-widget .cw-panel {
+    background: rgba(240, 239, 231, 0.96) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(1.1) !important;
+    backdrop-filter: blur(14px) saturate(1.1) !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  html:root body .cw-widget .cw-panel,
+  html:root body .cw-widget :is(.cw-panel-body, .cw-mode-view, .cw-conversation, .cw-calculator),
+  html:root body .cw-widget .cw-sheet {
+    background: #f0efe7 !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+}
