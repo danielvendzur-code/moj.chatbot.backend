@@ -59,6 +59,38 @@ html:root body .cw-widget .cw-chat-builder {
   backdrop-filter: blur(8px) saturate(1.08) !important;
 }
 
+/* Secondary copy was too pale in the former white/green skin. Keep it clearly
+   subordinate without sacrificing readability on translucent paper. */
+html:root body .cw-widget .cw-calculator :is(
+  .cw-q-sub,
+  .cw-rowcard__body small,
+  .cw-scard small,
+  .cw-vcard__copy > span,
+  .cw-opt__body > span:not(.cw-selection-indicator)
+) {
+  color: #566159 !important;
+  opacity: 1 !important;
+}
+
+html:root body .cw-widget .cw-calculator :is(
+  .cw-rowcard,
+  .cw-scard,
+  .cw-opt,
+  .cw-vcard
+) :is(b, strong) {
+  color: #173126 !important;
+  opacity: 1 !important;
+}
+
+html:root body .cw-widget .cw-calculator :is(
+  .cw-rowcard,
+  .cw-scard,
+  .cw-opt,
+  .cw-vcard
+)[data-selected="true"] :is(b, strong, small, span) {
+  color: inherit !important;
+}
+
 html:root body .cw-widget .cw-sheet {
   background: rgba(240, 239, 231, 0.95) !important;
   -webkit-backdrop-filter: blur(18px) saturate(1.12) !important;
