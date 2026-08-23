@@ -13,7 +13,15 @@ html:root body .cw-widget {
   --aw-line: rgba(7, 27, 21, 0.14);
   --aw-shadow: 0 30px 80px -44px rgba(3, 14, 10, 0.68);
   --aw-ease: cubic-bezier(0.16, 1, 0.3, 1);
-  font-family: "Inter Tight", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-family:
+    "Inter Tight",
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif !important;
   color: var(--aw-ink) !important;
 }
 
@@ -133,7 +141,18 @@ html:root body .cw-widget .cw-panel > * {
   z-index: 1 !important;
 }
 
-html:root body .cw-widget :is(.cw-panel-body, .cw-mode-view, .cw-conversation, .cw-calculator, .cw-calc-body, .cw-scroll-shell, .cw-chat-top) {
+html:root
+  body
+  .cw-widget
+  :is(
+    .cw-panel-body,
+    .cw-mode-view,
+    .cw-conversation,
+    .cw-calculator,
+    .cw-calc-body,
+    .cw-scroll-shell,
+    .cw-chat-top
+  ) {
   background: transparent !important;
   background-image: none !important;
 }
@@ -197,7 +216,11 @@ html:root body .cw-widget .cw-panel-head__actions button {
   box-shadow: none !important;
 }
 
-html:root body .cw-widget .cw-panel-head__actions button:is(:hover, :focus-visible) {
+html:root
+  body
+  .cw-widget
+  .cw-panel-head__actions
+  button:is(:hover, :focus-visible) {
   border-color: rgba(7, 27, 21, 0.28) !important;
   background: var(--aw-pure) !important;
   color: var(--aw-forest) !important;
@@ -390,7 +413,11 @@ html:root body .cw-widget .cw-quick-replies .cw-chip {
   line-height: 1.25 !important;
 }
 
-html:root body .cw-widget .cw-quick-replies .cw-chip:not(:disabled):is(:hover, :focus-visible) {
+html:root
+  body
+  .cw-widget
+  .cw-quick-replies
+  .cw-chip:not(:disabled):is(:hover, :focus-visible) {
   border-color: rgba(18, 56, 45, 0.26) !important;
   background: var(--aw-lime-soft) !important;
   color: var(--aw-dark) !important;
@@ -555,7 +582,11 @@ html:root body .cw-widget .cw-choice-grid {
   gap: 7px !important;
 }
 
-html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
+html:root
+  body
+  .cw-widget
+  .cw-calculator
+  :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
   min-height: 58px !important;
   padding: 9px 10px !important;
   border: 1px solid rgba(7, 27, 21, 0.11) !important;
@@ -569,21 +600,35 @@ html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .c
     transform 220ms var(--aw-ease) !important;
 }
 
-html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):not([data-selected="true"]):is(:hover, :focus-visible) {
+html:root
+  body
+  .cw-widget
+  .cw-calculator
+  :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):not(
+    [data-selected="true"]
+  ):is(:hover, :focus-visible) {
   border-color: rgba(18, 56, 45, 0.28) !important;
   background: rgba(229, 248, 183, 0.55) !important;
   transform: translateY(-1px) !important;
   outline: none !important;
 }
 
-html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] {
+html:root
+  body
+  .cw-widget
+  .cw-calculator
+  :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] {
   border-color: rgba(18, 56, 45, 0.4) !important;
   background: var(--aw-lime-soft) !important;
   color: var(--aw-dark) !important;
   box-shadow: inset 3px 0 var(--aw-forest) !important;
 }
 
-html:root body .cw-widget .cw-calculator :is(.cw-rowcard__icon, .cw-scard__icon) {
+html:root
+  body
+  .cw-widget
+  .cw-calculator
+  :is(.cw-rowcard__icon, .cw-scard__icon) {
   width: 35px !important;
   height: 35px !important;
   border: 0 !important;
@@ -592,20 +637,39 @@ html:root body .cw-widget .cw-calculator :is(.cw-rowcard__icon, .cw-scard__icon)
   color: var(--aw-forest) !important;
 }
 
-html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) :is(b, strong) {
+html:root
+  body
+  .cw-widget
+  .cw-calculator
+  :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)
+  :is(b, strong) {
   color: var(--aw-forest) !important;
   font-size: 12.4px !important;
   font-weight: 720 !important;
 }
 
-html:root body .cw-widget .cw-calculator :is(.cw-rowcard__body small, .cw-scard small, .cw-vcard__copy > span, .cw-opt__body > span:not(.cw-selection-indicator)) {
+html:root
+  body
+  .cw-widget
+  .cw-calculator
+  :is(
+    .cw-rowcard__body small,
+    .cw-scard small,
+    .cw-vcard__copy > span,
+    .cw-opt__body > span:not(.cw-selection-indicator)
+  ) {
   color: #667169 !important;
   font-size: 10.5px !important;
   line-height: 1.34 !important;
   opacity: 1 !important;
 }
 
-html:root body .cw-widget .cw-calculator [data-selected="true"] :is(b, strong, small, span) {
+html:root
+  body
+  .cw-widget
+  .cw-calculator
+  [data-selected="true"]
+  :is(b, strong, small, span) {
   color: inherit !important;
 }
 
@@ -640,7 +704,10 @@ html:root body .cw-widget :is(.cw-next, .cw-submit) {
   font-weight: 720 !important;
 }
 
-html:root body .cw-widget :is(.cw-next, .cw-submit):not(:disabled):is(:hover, :focus-visible) {
+html:root
+  body
+  .cw-widget
+  :is(.cw-next, .cw-submit):not(:disabled):is(:hover, :focus-visible) {
   background: var(--aw-dark) !important;
   transform: translateY(-1px) !important;
   outline: none !important;
