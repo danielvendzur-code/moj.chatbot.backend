@@ -10,6 +10,7 @@ import "./goal-lock-final.css";
 import "./interaction-stability-final.css";
 import "./website-match-final.css";
 import "./website-match-kage-final.css";
+// Final visual authority for the production widget.
 import "./competition-final.css";
 
 export default function App(): JSX.Element {
