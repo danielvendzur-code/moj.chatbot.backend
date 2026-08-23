@@ -10,6 +10,7 @@ import "./goal-lock-final.css";
 import "./interaction-stability-final.css";
 import "./website-match-final.css";
 import "./website-match-kage-final.css";
+import "./competition-final.css";
 
 export default function App(): JSX.Element {
   const embedMode = isEmbedMode();
