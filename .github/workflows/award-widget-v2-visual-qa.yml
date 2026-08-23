@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - award/rebuild-v2-2026-08-23
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
