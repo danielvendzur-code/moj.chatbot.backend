@@ -19,6 +19,7 @@ export default function App(): JSX.Element {
   return (
     <main
       className="widget-preview"
+      data-visual-system="competition"
       aria-label={embedMode ? "AI Assistant" : "Ukážka AI Assistanta"}
     >
       {!embedMode ? <div className="widget-preview__surface" aria-hidden="true" /> : null}
