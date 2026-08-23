@@ -1,0 +1,83 @@
+name: Award widget v2 visual QA
+
+on:
+  push:
+    branches:
+      - award/rebuild-v2-2026-08-23
+
+permissions:
+  contents: read
+
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm add --save-dev --lockfile=false @playwright/test@1.55.0
+      - run: pnpm exec playwright install chromium
+      - name: Capture award widget v2
+        run: |
+          set -euo pipefail
+          pnpm exec vite preview --host 127.0.0.1 --port 4173 > /tmp/widget-v2.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=false
+          for _ in {1..30}; do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then ready=true; break; fi
+            sleep 1
+          done
+          if [ "$ready" != "true" ]; then cat /tmp/widget-v2.log; exit 1; fi
+          mkdir -p qa-results/award-widget-v2
+          node --input-type=module <<'NODE'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+          const browser = await chromium.launch({headless:true});
+          const report = { errors:[], captures:[], checks:{} };
+          const watch = page => {
+            page.on('pageerror', e => report.errors.push(`pageerror: ${e.message}`));
+            page.on('console', m => { if (m.type()==='error') report.errors.push(`console: ${m.text()}`); });
+          };
+          const shot = async (page,name) => { await page.screenshot({path:`qa-results/award-widget-v2/${name}.png`}); report.captures.push(name); };
+          const desktop = await browser.newPage({viewport:{width:1440,height:900}});
+          watch(desktop);
+          await desktop.goto('http://127.0.0.1:4173/',{waitUntil:'networkidle'});
+          await desktop.waitForTimeout(350);
+          await shot(desktop,'desktop-launcher');
+          await desktop.getByTestId('widget-launcher').click();
+          await desktop.waitForTimeout(500);
+          report.checks.panelRadius = await desktop.locator('.cw-panel').evaluate(el=>getComputedStyle(el).borderRadius);
+          report.checks.tabsRadius = await desktop.locator('.cw-tabs').evaluate(el=>getComputedStyle(el).borderRadius);
+          await shot(desktop,'desktop-chat');
+          await desktop.getByTestId('tab-calculator').click();
+          await desktop.waitForTimeout(450);
+          await shot(desktop,'desktop-configurator');
+          await desktop.getByTestId('interest-chatbot').click();
+          await desktop.waitForTimeout(500);
+          await shot(desktop,'desktop-configurator-step2');
+          const mobile = await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+          watch(mobile);
+          await mobile.goto('http://127.0.0.1:4173/?embed=1&viewport=mobile',{waitUntil:'networkidle'});
+          await mobile.getByTestId('widget-launcher').tap();
+          await mobile.waitForTimeout(450);
+          await shot(mobile,'mobile-chat');
+          await mobile.getByTestId('tab-calculator').tap();
+          await mobile.waitForTimeout(400);
+          await shot(mobile,'mobile-configurator');
+          fs.writeFileSync('qa-results/award-widget-v2/report.json',JSON.stringify(report,null,2));
+          if(report.errors.length) throw new Error(report.errors.join('\n'));
+          await browser.close();
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: award-widget-v2-visual
+          path: qa-results/award-widget-v2
