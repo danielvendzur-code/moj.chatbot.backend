@@ -42,9 +42,6 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(page.getByText("4 otázky · návrh máte do minúty")).toBeVisible();
   await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
 
-  // Once open, both visible brand marks are completely static. The closed
-  // launcher can still animate before opening, but no logo motion belongs inside
-  // an already-open conversation.
   const headerLogoStroke = page.locator(".cw-panel-head .bl__stroke");
   const launcherLogoStroke = launcher.locator(".bl__stroke");
   await expect(headerLogoStroke).toBeVisible();
@@ -52,8 +49,6 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(launcherLogoStroke).toHaveCSS("animation-name", "none");
   await expect(headerLogoStroke).toHaveCSS("stroke-dashoffset", "0px");
 
-  // The browser focus ring belongs to the rounded composer shell, never to the
-  // rectangular text input inside it.
   const composer = page.locator(".cw-inputbar");
   const composerInput = composer.locator("input");
   await composerInput.focus();
@@ -66,26 +61,14 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   });
   const quickReplyLabel = quickReply.locator(".cw-chip__label");
 
-  // Chat chips use the normal brand green for their centre fill. Only the fill
-  // moves; the physical chip box stays completely still.
+  // Editorial chips may lift by one pixel, but their contrast and hit area stay stable.
   await quickReply.hover();
   await page.waitForTimeout(480);
-  await expect(quickReply).toHaveCSS("transform", "none");
-  await expect(quickReply).toHaveCSS("color", "rgb(255, 255, 255)");
-  const fillState = await quickReply.evaluate((chip) => {
-    const before = getComputedStyle(chip, "::before");
-    return {
-      background: before.backgroundColor,
-      transform: before.transform,
-    };
-  });
-  expect(fillState.background).toBe("rgb(25, 131, 79)");
-  expect(fillState.transform).not.toBe("none");
-  expect(fillState.transform).not.toContain("matrix(0");
+  await expect(quickReply).toHaveCSS("color", "rgb(7, 27, 21)");
+  await expect(quickReply).toHaveCSS("background-color", "rgb(200, 240, 106)");
 
   await quickReply.click();
   await expect(quickReply).toHaveAttribute("data-sending", "true");
-  await expect(quickReply).toHaveCSS("transform", "none");
   await expect(quickReplyLabel).toBeVisible();
   await expect(quickReplyLabel).toHaveText("Kde mi to ušetrí čas?");
   await page.waitForTimeout(300);
@@ -101,8 +84,6 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
     page.getByRole("heading", { name: "Aké riešenie chcete na web?" }),
   ).toBeVisible();
 
-  // Real tab clicks must work in both directions, repeatedly, regardless of the
-  // old swipe rail and its pointer capture.
   await page.getByTestId("tab-assistant").click();
   await expect(panel).toHaveAttribute("data-mode", "assistant");
   await expect(page.locator('.cw-mode-view[data-view="assistant"]')).toHaveAttribute(
@@ -134,7 +115,6 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(interestLabel).toHaveText(/\S+/);
   await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
 
-  // Nothing in step 2 may inherit the click that chose step 1.
   await expect(
     page.locator('[data-testid^="industry-"][data-selected="true"]'),
   ).toHaveCount(0);
@@ -144,7 +124,6 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
     { timeout: 1200 },
   );
 
-  // Back button must have a visible gutter on every side and really navigate.
   await expectBackButtonInsideProgress(page);
   await page.locator(".cw-progress__back").click();
   await expect(
@@ -156,8 +135,6 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await page.getByTestId("industry-sluzby").click();
   await expect(page.getByTestId("feature-jazyky")).toBeVisible({ timeout: 2500 });
 
-  // Recommended ordering is allowed; selected answers are not. Step 3 must be
-  // completely blank until the visitor chooses something.
   await expect(
     page.locator('[data-testid^="feature-"][data-selected="true"]'),
   ).toHaveCount(0);
@@ -175,8 +152,6 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   ).toBeVisible({ timeout: 2500 });
   await expect(page.getByText("Krok 5 z 5 · Kontakt")).toBeVisible();
 
-  // A name and one way to reach them. There is no delivery-method choice and
-  // no consent tick to get through first.
   await expect(page.locator(".cw-contact-methods")).toHaveCount(0);
   await expect(page.getByRole("checkbox")).toHaveCount(0);
   await expect(page.locator(".cw-reassure li")).toHaveCount(3);
@@ -208,7 +183,6 @@ test("the e-mail chip opens the message form in the widget, not a mail client", 
   await page.getByTestId("open-mail-form").click();
   const sheet = page.getByTestId("mail-sheet");
   await expect(sheet).toBeVisible({ timeout: 2000 });
-  // Its own header has to sit above the builder card, not behind it.
   await expect(sheet.getByRole("heading", { name: "Napíšte mi" })).toBeVisible();
 
   await page.getByTestId("mail-send").click();
@@ -218,7 +192,6 @@ test("the e-mail chip opens the message form in the widget, not a mail client", 
   await page.getByTestId("mail-send").click();
   await expect(page.getByRole("alert")).toContainText("s čím vám môžem pomôcť");
 
-  // Escape belongs to the sheet: the widget behind it stays open.
   await sheet.locator("textarea").press("Escape");
   await expect(sheet).toHaveCount(0);
   await expect(page.getByTestId("assistant-view")).toBeVisible();
@@ -261,7 +234,7 @@ test("mobile embed uses real taps for tabs and back navigation", async ({
   expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 1);
   expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 1);
 
-  await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "999px");
+  await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "0px");
   await page.getByTestId("tab-calculator").tap();
   await expect(panel).toHaveAttribute("data-mode", "calculator");
   await expect(
