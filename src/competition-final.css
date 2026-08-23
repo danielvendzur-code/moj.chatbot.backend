@@ -2,7 +2,7 @@
    website/widget language. Functional widget behavior is intentionally untouched. */
 
 html:root body .cw-widget {
-  --cw-award-dark: #061913;
+  --cw-award-dark: #071b15;
   --cw-award-forest: #12382d;
   --cw-award-lime: #c8f06a;
   --cw-award-paper: #f1f0e8;
@@ -40,7 +40,7 @@ html:root body .cw-widget .cw-panel-head {
   min-height: 66px !important;
   padding: 0 13px !important;
   border-bottom: 1px solid rgba(246, 245, 238, 0.14) !important;
-  background: rgba(6, 25, 19, 0.97) !important;
+  background: rgba(7, 27, 21, 0.97) !important;
   -webkit-backdrop-filter: blur(12px) saturate(1.1) !important;
   backdrop-filter: blur(12px) saturate(1.1) !important;
 }
@@ -383,7 +383,7 @@ html:root body .cw-widget .cw-launcher {
   height: 62px !important;
   border-radius: 18px 18px 25px 18px !important;
   border: 1px solid rgba(200, 240, 106, 0.82) !important;
-  background: rgba(6, 25, 19, 0.92) !important;
+  background: rgba(7, 27, 21, 0.92) !important;
   box-shadow: 0 22px 54px -30px rgba(7, 27, 21, 0.78) !important;
 }
 
@@ -398,7 +398,7 @@ html:root body .cw-widget .cw-launcher-preview {
   padding: 11px 13px !important;
   border-radius: 12px !important;
   border-color: rgba(200, 240, 106, 0.28) !important;
-  background: rgba(6, 25, 19, 0.9) !important;
+  background: rgba(7, 27, 21, 0.9) !important;
 }
 
 @media (max-width: 520px) {
