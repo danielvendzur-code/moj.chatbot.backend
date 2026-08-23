@@ -1,0 +1,61 @@
+/* Logo motion — brand-only, slow and restrained. */
+
+html:root body .cw-widget .cw-panel-head__mascot {
+  width: 38px !important;
+  height: 38px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #12382d !important;
+}
+
+html:root body .cw-widget .cw-panel-head__mascot .bl,
+html:root body .cw-widget .cw-launcher .bl {
+  animation: cw-logo-chroma 8.5s ease-in-out infinite !important;
+}
+
+html:root body .cw-widget .cw-panel-head__mascot .bl {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+html:root body .cw-widget .cw-launcher {
+  border-color: rgba(200, 240, 106, 0.42) !important;
+  background: rgba(240, 239, 231, 0.16) !important;
+  color: #c8f06a !important;
+  box-shadow:
+    0 20px 48px -30px rgba(3, 14, 10, 0.82),
+    inset 0 1px rgba(255, 255, 255, 0.22) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.22) !important;
+  backdrop-filter: blur(18px) saturate(1.22) !important;
+}
+
+html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) {
+  border-color: rgba(200, 240, 106, 0.8) !important;
+  background: rgba(18, 56, 45, 0.34) !important;
+}
+
+@keyframes cw-logo-chroma {
+  0%,
+  100% {
+    color: #c8f06a;
+  }
+  28% {
+    color: #79e2b5;
+  }
+  52% {
+    color: #f4f1e0;
+  }
+  76% {
+    color: #66d39d;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:root body .cw-widget .cw-panel-head__mascot .bl,
+  html:root body .cw-widget .cw-launcher .bl {
+    animation: none !important;
+    color: #c8f06a !important;
+  }
+}
