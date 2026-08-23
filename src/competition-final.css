@@ -1,0 +1,447 @@
+/* Competition polish — calmer hierarchy, stronger legibility and one coherent
+   website/widget language. Functional widget behavior is intentionally untouched. */
+
+html:root body .cw-widget {
+  --cw-award-dark: #061913;
+  --cw-award-forest: #12382d;
+  --cw-award-lime: #c8f06a;
+  --cw-award-paper: #f1f0e8;
+  --cw-award-pure: #fbfaf6;
+  --cw-award-ink: #0a0d0b;
+  --cw-award-muted: #5b655d;
+  --cw-award-line: rgba(7, 27, 21, 0.16);
+  --cw-award-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Shell: slightly softer than the website cards so the widget feels tactile,
+   but no generic 24px SaaS rounding. */
+html:root body .cw-widget .cw-panel {
+  width: min(424px, calc(100vw - 24px)) !important;
+  height: min(738px, calc(100dvh - 24px)) !important;
+  max-height: 738px !important;
+  border: 1px solid rgba(7, 27, 21, 0.28) !important;
+  border-radius: 14px !important;
+  background: rgba(241, 240, 232, 0.94) !important;
+  box-shadow:
+    0 34px 82px -38px rgba(0, 0, 0, 0.58),
+    0 12px 30px -24px rgba(7, 27, 21, 0.42) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.12) !important;
+  backdrop-filter: blur(18px) saturate(1.12) !important;
+}
+
+html:root body .cw-widget .cw-panel::before {
+  background:
+    radial-gradient(circle at 12% 4%, rgba(200, 240, 106, 0.12), transparent 28%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.14), transparent 34%) !important;
+}
+
+/* Header is the only strong dark band. */
+html:root body .cw-widget .cw-panel-head {
+  min-height: 66px !important;
+  padding: 0 13px !important;
+  border-bottom: 1px solid rgba(246, 245, 238, 0.14) !important;
+  background: rgba(6, 25, 19, 0.97) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(1.1) !important;
+  backdrop-filter: blur(12px) saturate(1.1) !important;
+}
+
+html:root body .cw-widget .cw-panel-head__mascot {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+html:root body .cw-widget .cw-panel-head__title h2 {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.035em !important;
+}
+
+html:root body .cw-widget .cw-panel-head__online {
+  color: #b9c4bc !important;
+  font-size: 10px !important;
+}
+
+html:root body .cw-widget .cw-panel-head__actions button {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 8px !important;
+  border-color: rgba(246, 245, 238, 0.18) !important;
+}
+
+/* Mode navigation becomes a light editorial tab bar instead of a second dark
+   block. The lime accent behaves like an active chapter marker. */
+html:root body .cw-widget .cw-tabs {
+  min-height: 52px !important;
+  padding: 0 10px !important;
+  gap: 0 !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--cw-award-line) !important;
+  border-radius: 0 !important;
+  background: rgba(251, 250, 246, 0.82) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(1.08) !important;
+  backdrop-filter: blur(10px) saturate(1.08) !important;
+}
+
+html:root body .cw-widget .cw-tabs > button {
+  min-height: 51px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #687169 !important;
+  box-shadow: inset 0 -2px 0 transparent !important;
+  font-size: 12px !important;
+  font-weight: 670 !important;
+  transition: color 200ms ease, box-shadow 220ms ease, background 220ms ease !important;
+}
+
+html:root body .cw-widget .cw-tabs > button:is(:hover, :focus-visible) {
+  color: var(--cw-award-forest) !important;
+  background: rgba(200, 240, 106, 0.08) !important;
+}
+
+html:root body .cw-widget .cw-tabs > button[data-active="true"],
+html:root body .cw-widget .cw-tabs > button[data-active="true"]:is(:hover, :focus-visible) {
+  color: var(--cw-award-forest) !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: inset 0 -3px 0 var(--cw-award-lime) !important;
+}
+
+html:root body .cw-widget :is(.cw-panel-body, .cw-mode-view, .cw-conversation, .cw-calculator) {
+  background: rgba(241, 240, 232, 0.82) !important;
+}
+
+/* The builder entry is useful but should not visually compete with the whole
+   header. It becomes a calm lime-tinted utility row. */
+html:root body .cw-widget .cw-chat-top {
+  padding: 12px 12px 2px !important;
+  background: transparent !important;
+}
+
+html:root body .cw-widget .cw-chat-builder {
+  min-height: 62px !important;
+  padding: 9px 11px !important;
+  border: 1px solid rgba(18, 56, 45, 0.17) !important;
+  border-radius: 10px !important;
+  color: var(--cw-award-forest) !important;
+  background: rgba(200, 240, 106, 0.16) !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+html:root body .cw-widget .cw-chat-builder__icon {
+  width: 34px !important;
+  height: 34px !important;
+  border: 1px solid rgba(18, 56, 45, 0.18) !important;
+  border-radius: 8px !important;
+  color: var(--cw-award-forest) !important;
+  background: rgba(251, 250, 246, 0.62) !important;
+}
+
+html:root body .cw-widget .cw-chat-builder__copy b {
+  color: var(--cw-award-forest) !important;
+  font-size: 13.5px !important;
+}
+
+html:root body .cw-widget .cw-chat-builder__copy small {
+  color: #5d675f !important;
+}
+
+html:root body .cw-widget .cw-chat-builder__arrow {
+  color: var(--cw-award-forest) !important;
+}
+
+html:root body .cw-widget .cw-chat-builder:is(:hover, :focus-visible) {
+  border-color: rgba(18, 56, 45, 0.34) !important;
+  background: rgba(200, 240, 106, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Messages: slightly larger type and less card-within-card feeling. */
+html:root body .cw-widget .cw-messages {
+  padding: 14px 12px 8px !important;
+}
+
+html:root body .cw-widget .cw-message-row {
+  gap: 8px !important;
+  margin-bottom: 11px !important;
+}
+
+html:root body .cw-widget .cw-avatar {
+  width: 27px !important;
+  height: 27px !important;
+  flex-basis: 27px !important;
+  border-radius: 8px !important;
+  background: rgba(251, 250, 246, 0.9) !important;
+}
+
+html:root body .cw-widget .cw-message-wrap {
+  max-width: 86% !important;
+  padding: 10px 11px !important;
+  border-radius: 11px !important;
+}
+
+html:root body .cw-widget .cw-message-row--bot .cw-message-wrap {
+  border-color: rgba(7, 27, 21, 0.13) !important;
+  background: rgba(251, 250, 246, 0.9) !important;
+}
+
+html:root body .cw-widget .cw-message-row--me .cw-message-wrap {
+  border-color: var(--cw-award-forest) !important;
+  background: rgba(18, 56, 45, 0.96) !important;
+}
+
+html:root body .cw-widget .cw-message-wrap p {
+  font-size: 13.4px !important;
+  line-height: 1.48 !important;
+}
+
+/* Quick replies are short decisions, not tiny dashboard cards. */
+html:root body .cw-widget .cw-quick-replies {
+  gap: 7px !important;
+  padding: 7px 12px 11px !important;
+}
+
+html:root body .cw-widget .cw-quick-replies .cw-chip {
+  min-height: 43px !important;
+  padding: 8px 10px !important;
+  border-radius: 9px !important;
+  border-color: rgba(7, 27, 21, 0.14) !important;
+  background: rgba(251, 250, 246, 0.86) !important;
+  color: #173126 !important;
+  font-size: 11.4px !important;
+  line-height: 1.25 !important;
+}
+
+html:root body .cw-widget .cw-quick-replies .cw-chip:not(:disabled):is(:hover, :focus-visible) {
+  border-color: rgba(18, 56, 45, 0.28) !important;
+  background: var(--cw-award-lime) !important;
+  color: var(--cw-award-dark) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Composer. */
+html:root body .cw-widget .cw-inputbar {
+  min-height: 58px !important;
+  margin: 0 12px 9px !important;
+  padding: 5px !important;
+  border-radius: 11px !important;
+  border-color: rgba(7, 27, 21, 0.16) !important;
+  background: rgba(251, 250, 246, 0.92) !important;
+}
+
+html:root body .cw-widget .cw-inputbar:focus-within {
+  border-color: rgba(18, 56, 45, 0.48) !important;
+  box-shadow: 0 0 0 3px rgba(200, 240, 106, 0.18) !important;
+}
+
+html:root body .cw-widget .cw-send {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 9px !important;
+}
+
+/* Configurator: clearer progress, stronger question hierarchy and tactile rows. */
+html:root body .cw-widget .cw-progress {
+  min-height: 48px !important;
+  padding: 7px 10px !important;
+  border-bottom: 1px solid var(--cw-award-line) !important;
+  background: rgba(251, 250, 246, 0.74) !important;
+}
+
+html:root body .cw-widget .cw-progress__back {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 8px !important;
+}
+
+html:root body .cw-widget .cw-progress__count {
+  color: #59635b !important;
+  font-size: 10px !important;
+  letter-spacing: 0.045em !important;
+}
+
+html:root body .cw-widget .cw-progress__dots {
+  gap: 5px !important;
+}
+
+html:root body .cw-widget .cw-progress__dots i {
+  height: 3px !important;
+  border-radius: 2px !important;
+  background: rgba(7, 27, 21, 0.12) !important;
+}
+
+html:root body .cw-widget .cw-progress__dots i[data-current="true"],
+html:root body .cw-widget .cw-progress__dots i[data-complete="true"] {
+  background: var(--cw-award-lime) !important;
+}
+
+html:root body .cw-widget .cw-calc-body {
+  padding: 12px 12px 18px !important;
+}
+
+html:root body .cw-widget .cw-step-head {
+  margin-bottom: 12px !important;
+}
+
+html:root body .cw-widget .cw-q {
+  color: var(--cw-award-ink) !important;
+  font-size: 24px !important;
+  font-weight: 720 !important;
+  line-height: 1.03 !important;
+  letter-spacing: -0.045em !important;
+}
+
+html:root body .cw-widget .cw-q-sub {
+  max-width: 34ch !important;
+  margin-top: 5px !important;
+  color: #536058 !important;
+  font-size: 11.5px !important;
+  line-height: 1.4 !important;
+}
+
+html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
+  min-height: 57px !important;
+  border: 1px solid rgba(7, 27, 21, 0.14) !important;
+  border-radius: 10px !important;
+  background: rgba(251, 250, 246, 0.9) !important;
+  box-shadow: none !important;
+  transition: transform 220ms var(--cw-award-ease), border-color 200ms ease, background 200ms ease !important;
+}
+
+html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):is(:hover, :focus-visible) {
+  border-color: rgba(18, 56, 45, 0.34) !important;
+  background: rgba(200, 240, 106, 0.12) !important;
+  transform: translateX(2px) !important;
+}
+
+html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] {
+  border-color: var(--cw-award-forest) !important;
+  background: var(--cw-award-forest) !important;
+  color: #f6f5ee !important;
+  transform: none !important;
+}
+
+html:root body .cw-widget .cw-rowcard__icon,
+html:root body .cw-widget .cw-scard__icon {
+  border-radius: 7px !important;
+  background: rgba(200, 240, 106, 0.12) !important;
+}
+
+html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) :is(b, strong) {
+  color: #183126 !important;
+  font-weight: 680 !important;
+}
+
+html:root body .cw-widget .cw-calculator :is(.cw-rowcard__body small, .cw-vcard__copy > span, .cw-opt__body > span:not(.cw-selection-indicator)) {
+  color: #59655c !important;
+  font-size: 10.4px !important;
+  line-height: 1.35 !important;
+}
+
+html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] :is(b, strong, small, span) {
+  color: #f6f5ee !important;
+}
+
+html:root body .cw-widget .cw-calc-actions {
+  padding: 9px 12px 12px !important;
+  border-top: 1px solid var(--cw-award-line) !important;
+  background: rgba(241, 240, 232, 0.9) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+html:root body .cw-widget .cw-next,
+html:root body .cw-widget .cw-submit--approved {
+  min-height: 48px !important;
+  border-radius: 10px !important;
+  border: 1px solid var(--cw-award-forest) !important;
+  background: var(--cw-award-forest) !important;
+  color: #f6f5ee !important;
+  box-shadow: none !important;
+}
+
+html:root body .cw-widget .cw-next:not(:disabled):is(:hover, :focus-visible),
+html:root body .cw-widget .cw-submit--approved:not(:disabled):is(:hover, :focus-visible) {
+  border-color: var(--cw-award-lime) !important;
+  background: var(--cw-award-lime) !important;
+  color: var(--cw-award-dark) !important;
+  transform: translateY(-1px) !important;
+}
+
+html:root body .cw-widget .cw-next:disabled {
+  border-color: rgba(7, 27, 21, 0.12) !important;
+  background: rgba(7, 27, 21, 0.08) !important;
+  color: #8b948d !important;
+}
+
+/* Launcher keeps the recognizable brand mark, but feels more like a designed
+   object than a square utility button. */
+html:root body .cw-widget .cw-launcher {
+  width: 62px !important;
+  height: 62px !important;
+  border-radius: 18px 18px 25px 18px !important;
+  border: 1px solid rgba(200, 240, 106, 0.82) !important;
+  background: rgba(6, 25, 19, 0.92) !important;
+  box-shadow: 0 22px 54px -30px rgba(7, 27, 21, 0.78) !important;
+}
+
+html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) {
+  border-radius: 16px 16px 22px 16px !important;
+  background: var(--cw-award-lime) !important;
+  color: var(--cw-award-dark) !important;
+  transform: translateY(-3px) rotate(-1deg) !important;
+}
+
+html:root body .cw-widget .cw-launcher-preview {
+  padding: 11px 13px !important;
+  border-radius: 12px !important;
+  border-color: rgba(200, 240, 106, 0.28) !important;
+  background: rgba(6, 25, 19, 0.9) !important;
+}
+
+@media (max-width: 520px) {
+  html:root body .cw-widget .cw-panel {
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-height: none !important;
+    border-radius: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    background: rgba(241, 240, 232, 0.98) !important;
+  }
+
+  html:root body .cw-widget .cw-tabs {
+    min-height: 50px !important;
+  }
+
+  html:root body .cw-widget .cw-q {
+    font-size: 23px !important;
+  }
+
+  html:root body .cw-widget .cw-quick-replies {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:root body .cw-widget :is(.cw-launcher, .cw-chat-builder, .cw-quick-replies .cw-chip, .cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  html:root body .cw-widget .cw-panel,
+  html:root body .cw-widget :is(.cw-panel-body, .cw-mode-view, .cw-conversation, .cw-calculator),
+  html:root body .cw-widget .cw-tabs {
+    background: var(--cw-award-paper) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  html:root body .cw-widget .cw-panel-head {
+    background: var(--cw-award-dark) !important;
+  }
+}
