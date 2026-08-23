@@ -1,0 +1,36 @@
+name: One-shot widget brand consistency fix
+
+on:
+  push:
+    branches:
+      - competition/widget-award-pass-2026-08-23
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: competition/widget-award-pass-2026-08-23
+      - name: Align competition green with website
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('src/competition-final.css')
+          s = p.read_text()
+          s = s.replace('#061913', '#071b15')
+          s = s.replace('rgba(6, 25, 19', 'rgba(7, 27, 21')
+          p.write_text(s)
+          PY
+      - name: Commit fix
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/competition-final.css
+          git commit -m "Align competition widget green with website"
+          git push origin HEAD:competition/widget-award-pass-2026-08-23
