@@ -10,6 +10,7 @@ import "./goal-lock-final.css";
 import "./interaction-stability-final.css";
 import "./website-match-final.css";
 import "./website-match-kage-final.css";
+// Fresh award-v2 visual authority; behavior stays in the existing components.
 import "./award-widget-v2.css";
 
 export default function App(): JSX.Element {
