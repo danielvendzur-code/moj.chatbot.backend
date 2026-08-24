@@ -14,6 +14,7 @@ import "./website-match-kage-final.css";
 import "./award-widget-v2.css";
 import "./logo-chroma-v2.css";
 import "./award-widget-v3-dark.css";
+import "./award-widget-v3-dark-fixes.css";
 
 export default function App(): JSX.Element {
   const embedMode = isEmbedMode();
