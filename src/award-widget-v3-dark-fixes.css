@@ -1,0 +1,61 @@
+/* Final dark contrast corrections discovered in browser QA. */
+
+html:root body .cw-widget .cw-message-row--bot .cw-message-wrap,
+html:root body .cw-widget .cw-message-row--bot .cw-message-wrap p {
+  background: rgba(255, 255, 255, 0.055) !important;
+  background-image: none !important;
+  color: #f6f5ee !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+html:root body .cw-widget .cw-message-row--bot .cw-message-wrap p {
+  margin: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Keep the existing browser contract and create an obvious dark-mode hover state. */
+html:root body .cw-widget .cw-quick-replies .cw-chip:not(:disabled):is(:hover, :focus-visible) {
+  border-color: #c8f06a !important;
+  background: #e5f8b7 !important;
+  color: #071b15 !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+html:root body .cw-widget .cw-calc-actions {
+  border-top-color: rgba(246, 245, 238, 0.09) !important;
+  background: rgba(5, 24, 18, 0.76) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  backdrop-filter: blur(14px) !important;
+}
+
+html:root body .cw-widget .cw-next {
+  border: 1px solid #c8f06a !important;
+  background: #c8f06a !important;
+  color: #071b15 !important;
+  box-shadow: none !important;
+}
+
+html:root body .cw-widget .cw-next:not(:disabled):is(:hover, :focus-visible) {
+  background: #dcf79b !important;
+  border-color: #dcf79b !important;
+  transform: translateY(-1px) !important;
+}
+
+html:root body .cw-widget .cw-next:disabled {
+  border-color: rgba(246, 245, 238, 0.1) !important;
+  background: rgba(246, 245, 238, 0.055) !important;
+  color: #718279 !important;
+  opacity: 1 !important;
+}
+
+html:root body .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard) :is(p, span, small) {
+  -webkit-text-fill-color: currentColor !important;
+}
+
+html:root body .cw-widget .cw-field > span,
+html:root body .cw-widget .cw-consent-note,
+html:root body .cw-widget .cw-reassure,
+html:root body .cw-widget .cw-summary {
+  color: #adbbb1 !important;
+}
