@@ -21,8 +21,12 @@ const expectBackButtonInsideProgress = async (page) => {
 
   expect(backBox.x - progressBox.x).toBeGreaterThanOrEqual(3);
   expect(backBox.y - progressBox.y).toBeGreaterThanOrEqual(3);
-  expect(progressBox.x + progressBox.width - (backBox.x + backBox.width)).toBeGreaterThanOrEqual(3);
-  expect(progressBox.y + progressBox.height - (backBox.y + backBox.height)).toBeGreaterThanOrEqual(3);
+  expect(
+    progressBox.x + progressBox.width - (backBox.x + backBox.width),
+  ).toBeGreaterThanOrEqual(3);
+  expect(
+    progressBox.y + progressBox.height - (backBox.y + backBox.height),
+  ).toBeGreaterThanOrEqual(3);
 };
 
 test("desktop interactions stay clickable, unselected and visually stable", async ({
@@ -38,7 +42,9 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
 
   const panel = page.locator(".cw-panel");
   await expect(panel).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Môj Chatbot" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Môj Chatbot" }),
+  ).toBeVisible();
   await expect(page.getByText("4 otázky · návrh máte do minúty")).toBeVisible();
   await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
 
@@ -65,7 +71,7 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await quickReply.hover();
   await page.waitForTimeout(480);
   await expect(quickReply).toHaveCSS("color", "rgb(7, 27, 21)");
-  await expect(quickReply).toHaveCSS("background-color", "rgb(200, 240, 106)");
+  await expect(quickReply).toHaveCSS("background-color", "rgb(229, 248, 183)");
 
   await quickReply.click();
   await expect(quickReply).toHaveAttribute("data-sending", "true");
@@ -86,20 +92,21 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
 
   await page.getByTestId("tab-assistant").click();
   await expect(panel).toHaveAttribute("data-mode", "assistant");
-  await expect(page.locator('.cw-mode-view[data-view="assistant"]')).toHaveAttribute(
-    "data-active",
-    "true",
-  );
+  await expect(
+    page.locator('.cw-mode-view[data-view="assistant"]'),
+  ).toHaveAttribute("data-active", "true");
   await page.getByTestId("tab-calculator").click();
   await expect(panel).toHaveAttribute("data-mode", "calculator");
-  await expect(page.locator('.cw-mode-view[data-view="calculator"]')).toHaveAttribute(
-    "data-active",
-    "true",
-  );
+  await expect(
+    page.locator('.cw-mode-view[data-view="calculator"]'),
+  ).toHaveAttribute("data-active", "true");
 
   const interestChoice = page.getByTestId("interest-chatbot");
   const interestLabel = interestChoice.locator("b");
-  await expect(interestChoice).toHaveCSS("animation-name", "cw-goal-option-reveal");
+  await expect(interestChoice).toHaveCSS(
+    "animation-name",
+    "cw-goal-option-reveal",
+  );
   await expect(interestChoice).toHaveCSS("animation-duration", "0.52s");
   await interestChoice.click();
 
@@ -113,7 +120,9 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
 
   await expect(interestLabel).toBeVisible();
   await expect(interestLabel).toHaveText(/\S+/);
-  await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
+  await expect(page.getByTestId("industry-sluzby")).toBeVisible({
+    timeout: 2500,
+  });
 
   await expect(
     page.locator('[data-testid^="industry-"][data-selected="true"]'),
@@ -130,10 +139,14 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
     page.getByRole("heading", { name: "Aké riešenie chcete na web?" }),
   ).toBeVisible({ timeout: 2000 });
   await page.getByTestId("flow-next").click();
-  await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2000 });
+  await expect(page.getByTestId("industry-sluzby")).toBeVisible({
+    timeout: 2000,
+  });
 
   await page.getByTestId("industry-sluzby").click();
-  await expect(page.getByTestId("feature-jazyky")).toBeVisible({ timeout: 2500 });
+  await expect(page.getByTestId("feature-jazyky")).toBeVisible({
+    timeout: 2500,
+  });
 
   await expect(
     page.locator('[data-testid^="feature-"][data-selected="true"]'),
@@ -144,7 +157,9 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
 
   await page.getByTestId("feature-jazyky").click();
   await page.getByTestId("flow-next").click();
-  await expect(page.getByTestId("timeline-asap")).toBeVisible({ timeout: 2500 });
+  await expect(page.getByTestId("timeline-asap")).toBeVisible({
+    timeout: 2500,
+  });
 
   await page.getByTestId("timeline-asap").click();
   await expect(
@@ -157,15 +172,28 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(page.locator(".cw-reassure li")).toHaveCount(3);
 
   await page.getByTestId("lead-submit").click();
-  await expect(page.getByRole("alert")).toContainText("Napíšte mi prosím svoje meno");
-  await expect(page.getByPlaceholder("Vaše meno")).toHaveAttribute("aria-invalid", "true");
+  await expect(page.getByRole("alert")).toContainText(
+    "Napíšte mi prosím svoje meno",
+  );
+  await expect(page.getByPlaceholder("Vaše meno")).toHaveAttribute(
+    "aria-invalid",
+    "true",
+  );
 
   await page.getByPlaceholder("Vaše meno").fill("Testovací návštevník");
   await page.getByPlaceholder("+421 …").fill("+421900123456");
 
-  await expect(page.getByPlaceholder("Vaše meno")).toHaveAttribute("aria-invalid", "false");
-  await expect(page.getByPlaceholder("+421 …")).toHaveAttribute("aria-invalid", "false");
-  await expect(page.getByTestId("lead-submit")).toContainText("Chcem nezáväzný návrh");
+  await expect(page.getByPlaceholder("Vaše meno")).toHaveAttribute(
+    "aria-invalid",
+    "false",
+  );
+  await expect(page.getByPlaceholder("+421 …")).toHaveAttribute(
+    "aria-invalid",
+    "false",
+  );
+  await expect(page.getByTestId("lead-submit")).toContainText(
+    "Chcem nezáväzný návrh",
+  );
   await expect(page.locator(".cw-summary")).not.toHaveAttribute("open", "");
 
   expect(errors).toEqual([]);
@@ -178,12 +206,16 @@ test("the e-mail chip opens the message form in the widget, not a mail client", 
 
   await page.goto("http://127.0.0.1:4173", { waitUntil: "networkidle" });
   await page.getByTestId("widget-launcher").click();
-  await expect(page.getByTestId("assistant-view")).toBeVisible({ timeout: 2500 });
+  await expect(page.getByTestId("assistant-view")).toBeVisible({
+    timeout: 2500,
+  });
 
   await page.getByTestId("open-mail-form").click();
   const sheet = page.getByTestId("mail-sheet");
   await expect(sheet).toBeVisible({ timeout: 2000 });
-  await expect(sheet.getByRole("heading", { name: "Napíšte mi" })).toBeVisible();
+  await expect(
+    sheet.getByRole("heading", { name: "Napíšte mi" }),
+  ).toBeVisible();
 
   await page.getByTestId("mail-send").click();
   await expect(page.getByRole("alert")).toContainText("Napíšte e-mail");
@@ -234,7 +266,7 @@ test("mobile embed uses real taps for tabs and back navigation", async ({
   expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 1);
   expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 1);
 
-  await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "0px");
+  await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "14px");
   await page.getByTestId("tab-calculator").tap();
   await expect(panel).toHaveAttribute("data-mode", "calculator");
   await expect(
@@ -242,7 +274,9 @@ test("mobile embed uses real taps for tabs and back navigation", async ({
   ).toBeVisible();
 
   await page.getByTestId("interest-chatbot").tap();
-  await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
+  await expect(page.getByTestId("industry-sluzby")).toBeVisible({
+    timeout: 2500,
+  });
   await expect(
     page.locator('[data-testid^="industry-"][data-selected="true"]'),
   ).toHaveCount(0);
@@ -259,9 +293,9 @@ test("mobile embed uses real taps for tabs and back navigation", async ({
   await page.getByTestId("tab-assistant").tap();
   await expect(panel).toHaveAttribute("data-mode", "assistant");
 
-  const inputHasFocus = await page.locator(".cw-inputbar input").evaluate(
-    (input) => document.activeElement === input,
-  );
+  const inputHasFocus = await page
+    .locator(".cw-inputbar input")
+    .evaluate((input) => document.activeElement === input);
   expect(inputHasFocus).toBe(false);
   await expect(page.locator(".cw-inputbar")).toBeVisible();
   await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();

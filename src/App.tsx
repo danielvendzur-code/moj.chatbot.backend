@@ -10,6 +10,11 @@ import "./goal-lock-final.css";
 import "./interaction-stability-final.css";
 import "./website-match-final.css";
 import "./website-match-kage-final.css";
+// Fresh award-v2 visual authority; behavior stays in the existing components.
+import "./award-widget-v2.css";
+import "./logo-chroma-v2.css";
+import "./award-widget-v3-dark.css";
+import "./award-widget-v3-dark-fixes.css";
 
 export default function App(): JSX.Element {
   const embedMode = isEmbedMode();
@@ -19,7 +24,9 @@ export default function App(): JSX.Element {
       className="widget-preview"
       aria-label={embedMode ? "AI Assistant" : "Ukážka AI Assistanta"}
     >
-      {!embedMode ? <div className="widget-preview__surface" aria-hidden="true" /> : null}
+      {!embedMode ? (
+        <div className="widget-preview__surface" aria-hidden="true" />
+      ) : null}
       <LaunchReadyRuntime />
       <AssistantWidget embedMode={embedMode} />
     </main>
