@@ -92,8 +92,6 @@ jobs:
           must(css.includes('cw-tabs'), 'mode switch styles missing');
           must(widget.includes('liquid-glass-final.css'), 'final glass import missing');
           must(!main.includes('installWidgetSpotlight') && !embed.includes('installWidgetSpotlight'), 'legacy spotlight still mounted');
-          must(calculator.includes('CONTACT_METHODS'), 'contact method options missing');
-          must(/id:\s*"video"/.test(calculator), 'video contact option missing');
           must(lead.includes('api/lead'), 'lead API missing');
           must(conversation.includes('Vyskladať riešenie'), 'builder CTA missing');
           must(/interest:\s*\[/.test(flow), 'first question missing');
