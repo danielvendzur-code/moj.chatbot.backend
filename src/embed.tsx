@@ -56,8 +56,8 @@ function mount(): void {
 
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "restored-soft-20260825-v1");
-  host.setAttribute("data-dv-assistant-theme", "soft-white-forest-sage");
+  host.setAttribute("data-dv-assistant-version", "restored-web-palette-20260825-v2");
+  host.setAttribute("data-dv-assistant-theme", "website-paper-forest-lime");
   host.setAttribute("data-dv-assistant-quality", "archived-layout-restrained-palette");
 
   if (!existing) document.body.appendChild(host);

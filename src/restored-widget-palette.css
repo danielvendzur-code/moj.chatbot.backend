@@ -2,21 +2,22 @@
    This file intentionally changes colour only; the saved geometry and flow remain authoritative. */
 
 html:root body .cw-widget {
-  --restored-forest: #1b5a45;
-  --restored-forest-deep: #163f33;
-  --restored-sage: #b9d76f;
-  --restored-paper: #fbfcf8;
-  --restored-soft: #f1f4ee;
-  --restored-ink: #17352b;
-  --restored-muted: #68766f;
-  --restored-line: rgba(27, 90, 69, 0.16);
+  --restored-forest: #12382d;
+  --restored-forest-deep: #071b15;
+  --restored-lime: #c8f06a;
+  --restored-paper: #fcfbf7;
+  --restored-soft: #f0efe7;
+  --restored-lime-soft: #f3f9df;
+  --restored-ink: #0b0e0c;
+  --restored-muted: #646b65;
+  --restored-line: rgba(7, 27, 21, 0.15);
   --mc-green: var(--restored-forest);
-  --mc-hover: #e6eee3;
-  --mc-hover-border: #b8cbbc;
+  --mc-hover: var(--restored-lime);
+  --mc-hover-border: var(--restored-lime);
   --mc-ink: var(--restored-ink);
   --goal-green: var(--restored-forest);
-  --goal-hover: #e6eee3;
-  --goal-hover-border: #b8cbbc;
+  --goal-hover: var(--restored-lime);
+  --goal-hover-border: var(--restored-lime);
   --goal-ink: var(--restored-ink);
   color: var(--restored-ink) !important;
 }
@@ -25,7 +26,7 @@ html:root body .cw-widget .cw-panel {
   border-color: var(--restored-line) !important;
   background: var(--restored-paper) !important;
   background-image: none !important;
-  box-shadow: 0 30px 72px -40px rgba(22, 63, 51, 0.34) !important;
+  box-shadow: 0 30px 72px -40px rgba(7, 27, 21, 0.34) !important;
 }
 
 html:root body .cw-widget :is(
@@ -46,10 +47,10 @@ html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) {
 }
 
 html:root body .cw-widget .cw-launcher {
-  border-color: var(--restored-line) !important;
+  border-color: rgba(200, 240, 106, 0.88) !important;
   background: var(--restored-paper) !important;
   background-image: none !important;
-  box-shadow: 0 18px 42px -26px rgba(22, 63, 51, 0.38) !important;
+  box-shadow: 0 18px 42px -26px rgba(7, 27, 21, 0.4) !important;
 }
 
 html:root body .cw-widget .cw-panel-head {
@@ -66,7 +67,8 @@ html:root body .cw-widget .cw-panel-head__online {
 }
 
 html:root body .cw-widget .cw-panel-head__online i {
-  background: var(--restored-forest) !important;
+  background: var(--restored-lime) !important;
+  box-shadow: 0 0 0 2px rgba(18, 56, 45, 0.12) !important;
 }
 
 html:root body .cw-widget .cw-tabs {
@@ -86,21 +88,21 @@ html:root body .cw-widget :is(.cw-next, .cw-submit):not(:disabled) {
   border-color: var(--restored-forest) !important;
   background: var(--restored-forest) !important;
   background-image: none !important;
-  box-shadow: 0 12px 26px -19px rgba(22, 63, 51, 0.38) !important;
+  box-shadow: 0 12px 26px -19px rgba(7, 27, 21, 0.38) !important;
 }
 
 html:root body .cw-widget .cw-chat-builder {
   color: var(--restored-ink) !important;
-  border-color: var(--restored-line) !important;
-  background: #f4f7ef !important;
+  border-color: rgba(200, 240, 106, 0.72) !important;
+  background: var(--restored-lime-soft) !important;
   background-image: none !important;
-  box-shadow: 0 13px 30px -26px rgba(22, 63, 51, 0.35) !important;
+  box-shadow: 0 13px 30px -26px rgba(7, 27, 21, 0.28) !important;
 }
 
 html:root body .cw-widget .cw-chat-builder__icon {
-  color: var(--restored-forest) !important;
-  border-color: rgba(27, 90, 69, 0.13) !important;
-  background: var(--restored-paper) !important;
+  color: var(--restored-forest-deep) !important;
+  border-color: var(--restored-lime) !important;
+  background: var(--restored-lime) !important;
 }
 
 html:root body .cw-widget .cw-chat-builder__copy :is(b, small),
@@ -139,9 +141,9 @@ html:root body .cw-widget .cw-message-row--me .cw-message-wrap {
 
 html:root body .cw-widget .cw-send:not(:disabled),
 html:root body .cw-widget .cw-progress__dots i:is([data-current="true"], [data-complete="true"]) {
-  color: #ffffff !important;
-  border-color: var(--restored-forest) !important;
-  background: var(--restored-forest) !important;
+  color: var(--restored-forest-deep) !important;
+  border-color: var(--restored-lime) !important;
+  background: var(--restored-lime) !important;
   background-image: none !important;
 }
 
@@ -160,21 +162,21 @@ html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .c
 
 html:root body .cw-widget .cw-calculator :is(.cw-rowcard__icon, .cw-scard__icon) {
   color: var(--restored-forest) !important;
-  border-color: rgba(27, 90, 69, 0.1) !important;
-  background: #eef4ec !important;
+  border-color: rgba(200, 240, 106, 0.62) !important;
+  background: var(--restored-lime-soft) !important;
 }
 
 html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] {
   color: var(--restored-ink) !important;
   border-color: var(--restored-forest) !important;
-  background: #ffffff !important;
-  box-shadow: 0 0 0 3px rgba(27, 90, 69, 0.07) !important;
+  background: var(--restored-lime-soft) !important;
+  box-shadow: 0 0 0 3px rgba(200, 240, 106, 0.2) !important;
 }
 
 html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]::after {
-  color: #ffffff !important;
-  border-color: var(--restored-forest) !important;
-  background: var(--restored-forest) !important;
+  color: var(--restored-forest-deep) !important;
+  border-color: var(--restored-lime) !important;
+  background: var(--restored-lime) !important;
   box-shadow: 0 0 0 2px #ffffff !important;
 }
 
@@ -182,10 +184,10 @@ html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .c
   html:root body .cw-widget .cw-tabs > button[data-active="true"]:is(:hover, :focus-visible),
   html:root body .cw-widget :is(.cw-next, .cw-submit):not(:disabled):is(:hover, :focus-visible),
   html:root body .cw-widget .cw-quick-replies .cw-chip:not(:disabled):is(:hover, :focus-visible) {
-    color: var(--restored-ink) !important;
+    color: var(--restored-forest-deep) !important;
     -webkit-text-fill-color: currentColor !important;
-    border-color: #c6d7bd !important;
-    background: #e6eee3 !important;
+    border-color: var(--restored-lime) !important;
+    background: var(--restored-lime) !important;
     background-image: none !important;
   }
 }

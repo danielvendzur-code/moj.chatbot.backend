@@ -80,8 +80,9 @@ test("the archived rounded widget is restored with a colour-only final layer", a
     assert.doesNotMatch(source, /premium-widget-refinement|website-match-final|website-match-kage-final/);
   }
 
-  assert.match(palette, /--restored-forest:\s*#1b5a45/);
-  assert.match(palette, /--restored-paper:\s*#fbfcf8/);
-  assert.match(palette, /--restored-sage:\s*#b9d76f/);
+  assert.match(palette, /--restored-forest:\s*#12382d/);
+  assert.match(palette, /--restored-paper:\s*#fcfbf7/);
+  assert.match(palette, /--restored-lime:\s*#c8f06a/);
+  assert.match(palette, /background:\s*var\(--restored-lime\)\s*!important/);
   assert.doesNotMatch(palette, /border-radius|linear-gradient|radial-gradient/);
 });

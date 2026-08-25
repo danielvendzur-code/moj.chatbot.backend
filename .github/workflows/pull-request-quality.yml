@@ -87,7 +87,7 @@ jobs:
 
           # The direct runtime must carry the restored product markers and the
           # approved one-stroke Môj Chatbot brand mark used by BubbleLogo.
-          grep -Fq 'restored-soft-20260825-v1' dist/widget.js
+          grep -Fq 'restored-web-palette-20260825-v2' dist/widget.js
           grep -Fq 'archived-layout-restrained-palette' dist/widget.js
           grep -Fq 'M24 71.2L24.003 32.706L24.036' dist/widget.js
           grep -Fq 'bl__stroke' dist/widget.js
@@ -95,9 +95,9 @@ jobs:
           # The emitted widget CSS must contain the identity, interaction shell
           # and the concrete chip-label persistence fix. Minifiers may remove
           # quotes around the attribute value, so validate the stable token.
-          grep -Fq '#b9d76f' dist/widget.css
-          grep -Fq '#1b5a45' dist/widget.css
-          grep -Fq '#fbfcf8' dist/widget.css
+          grep -Fq '#c8f06a' dist/widget.css
+          grep -Fq '#12382d' dist/widget.css
+          grep -Fq '#fcfbf7' dist/widget.css
           grep -Fq '.cw-panel' dist/widget.css
           grep -Fq '.cw-tabs' dist/widget.css
           grep -Fq '.cw-inputbar' dist/widget.css
