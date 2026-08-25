@@ -85,6 +85,11 @@ test("the archived rounded widget is restored with a colour-only final layer", a
   assert.match(palette, /--restored-lime:\s*#c8f06a/);
   assert.match(palette, /background:\s*var\(--restored-lime\)\s*!important/);
   assert.match(palette, /\.cw-tabs\s*>\s*button\[data-active="true"\][\s\S]*background:\s*var\(--restored-forest\)\s*!important/);
+  assert.match(palette, /\.cw-chat-builder\s*\{[\s\S]*?background:\s*rgba\(18, 56, 45, 0\.065\)\s*!important/);
+  assert.match(palette, /\.cw-chat-builder__icon\s*\{[\s\S]*?background:\s*rgba\(18, 56, 45, 0\.09\)\s*!important/);
+  assert.match(palette, /\.cw-chat-builder:is\(:hover, :focus-visible\)[\s\S]*?background:\s*var\(--restored-forest\)\s*!important/);
+  assert.match(palette, /\.cw-quick-replies \.cw-chip::before[\s\S]*?background:\s*var\(--restored-lime\)\s*!important/);
+  assert.match(palette, /\.cw-quick-replies \.cw-chip::before[\s\S]*?transition:\s*transform 680ms/);
   assert.match(palette, /\.cw-calculator[\s\S]*\[data-selected="true"\][\s\S]*background:\s*var\(--restored-forest\)\s*!important/);
   assert.doesNotMatch(palette, /border-radius|linear-gradient|radial-gradient/);
 });

@@ -65,7 +65,18 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await quickReply.hover();
   await page.waitForTimeout(480);
   await expect(quickReply).toHaveCSS("color", "rgb(7, 27, 21)");
-  await expect(quickReply).toHaveCSS("background-color", "rgb(200, 240, 106)");
+  await expect(quickReply).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await expect
+    .poll(() => quickReply.evaluate((element) => getComputedStyle(element, "::before").backgroundColor))
+    .toBe("rgb(200, 240, 106)");
+
+  await page.mouse.move(0, 0);
+  await page.waitForTimeout(760);
+  await expect(quickReply).toHaveCSS("color", "rgb(11, 14, 12)");
+  await expect(quickReply).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await expect
+    .poll(() => quickReply.evaluate((element) => getComputedStyle(element, "::before").backgroundColor))
+    .toBe("rgb(200, 240, 106)");
 
   await quickReply.click();
   await expect(quickReply).toHaveAttribute("data-sending", "true");

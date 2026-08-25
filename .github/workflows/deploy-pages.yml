@@ -55,7 +55,7 @@ jobs:
       - name: Create immutable build metadata
         shell: bash
         run: |
-          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"restored-web-palette-20260825-v3"},null,2))'
+          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"restored-web-palette-20260825-v5"},null,2))'
 
       - name: Validate production artifacts
         shell: bash
@@ -85,7 +85,7 @@ jobs:
             if (!condition) throw new Error(message);
           };
 
-          must(js.includes('restored-web-palette-20260825-v3'), 'current widget version missing');
+          must(js.includes('restored-web-palette-20260825-v5'), 'current widget version missing');
           must(css.includes('cw-choice-grid'), 'choice grid missing');
           must(css.includes('cw-selection-indicator'), 'selection indicator missing');
           must(css.includes('--cw-glass-panel'), 'liquid glass layer missing');
@@ -106,7 +106,7 @@ jobs:
           must(!calculator.includes('cw-choice-arrow'), 'legacy choice arrow remains');
           must(!js.includes('REPLACE-ME'), 'placeholder remains');
           must(meta.sourceSha === process.env.GITHUB_SHA, 'build metadata SHA mismatch');
-          must(meta.version === 'restored-web-palette-20260825-v3', 'build metadata version mismatch');
+          must(meta.version === 'restored-web-palette-20260825-v5', 'build metadata version mismatch');
           NODE
 
       - name: Configure GitHub Pages
@@ -161,7 +161,7 @@ jobs:
           }
 
           verify "/" "Môj Chatbot"
-          verify "/widget.js" "restored-web-palette-20260825-v3"
+          verify "/widget.js" "restored-web-palette-20260825-v5"
           verify "/widget.css" "--restored-forest"
           verify "/build-meta.json" "$SOURCE_SHA"
 
