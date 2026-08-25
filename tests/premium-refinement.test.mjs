@@ -69,3 +69,19 @@ test("logo is the website's outlined mark, not a redrawn approximation", async (
   assert.match(logo, /fill="none"/);
   assert.match(logo, /M28\.6 65\.1V32\.9L53\.4 57\.5/);
 });
+
+test("the archived rounded widget is restored with a colour-only final layer", async () => {
+  const app = await read("src/App.tsx");
+  const embedStyles = await read("src/launch-ready-styles.ts");
+  const palette = await read("src/restored-widget-palette.css");
+
+  for (const source of [app, embedStyles]) {
+    assert.match(source, /restored-widget-palette\.css/);
+    assert.doesNotMatch(source, /premium-widget-refinement|website-match-final|website-match-kage-final/);
+  }
+
+  assert.match(palette, /--restored-forest:\s*#1b5a45/);
+  assert.match(palette, /--restored-paper:\s*#fbfcf8/);
+  assert.match(palette, /--restored-sage:\s*#b9d76f/);
+  assert.doesNotMatch(palette, /border-radius|linear-gradient|radial-gradient/);
+});

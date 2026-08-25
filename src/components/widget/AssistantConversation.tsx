@@ -303,7 +303,7 @@ export function AssistantConversation({
           onClick={openCalculator}
         >
           <span className="cw-chat-builder__icon" aria-hidden="true">
-            <WidgetIcon name="spark" />
+            01
           </span>
           <span className="cw-chat-builder__copy">
             <b>Vyskladať riešenie</b>
