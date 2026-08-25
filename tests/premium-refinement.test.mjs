@@ -84,5 +84,7 @@ test("the archived rounded widget is restored with a colour-only final layer", a
   assert.match(palette, /--restored-paper:\s*#fcfbf7/);
   assert.match(palette, /--restored-lime:\s*#c8f06a/);
   assert.match(palette, /background:\s*var\(--restored-lime\)\s*!important/);
+  assert.match(palette, /\.cw-tabs\s*>\s*button\[data-active="true"\][\s\S]*background:\s*var\(--restored-forest\)\s*!important/);
+  assert.match(palette, /\.cw-calculator[\s\S]*\[data-selected="true"\][\s\S]*background:\s*var\(--restored-forest\)\s*!important/);
   assert.doesNotMatch(palette, /border-radius|linear-gradient|radial-gradient/);
 });

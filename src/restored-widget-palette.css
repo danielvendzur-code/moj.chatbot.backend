@@ -167,10 +167,19 @@ html:root body .cw-widget .cw-calculator :is(.cw-rowcard__icon, .cw-scard__icon)
 }
 
 html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] {
-  color: var(--restored-ink) !important;
+  color: #ffffff !important;
   border-color: var(--restored-forest) !important;
-  background: var(--restored-lime-soft) !important;
-  box-shadow: 0 0 0 3px rgba(200, 240, 106, 0.2) !important;
+  background: var(--restored-forest) !important;
+  box-shadow: 0 0 0 3px rgba(18, 56, 45, 0.12) !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-calculator[class]
+  :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"][data-selected="true"] {
+  color: #ffffff !important;
+  border-color: var(--restored-forest) !important;
+  background: var(--restored-forest) !important;
+  background-image: none !important;
+  box-shadow: 0 0 0 3px rgba(18, 56, 45, 0.12) !important;
 }
 
 html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]::after {
@@ -180,14 +189,67 @@ html:root body .cw-widget .cw-calculator :is(.cw-rowcard, .cw-scard, .cw-opt, .c
   box-shadow: 0 0 0 2px #ffffff !important;
 }
 
+html:root body .cw-widget .cw-calculator
+  :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]
+  :is(b, small, span:not(.cw-selection-indicator)) {
+  color: #ffffff !important;
+}
+
+html:root body .cw-widget .cw-calculator
+  :is(.cw-rowcard, .cw-scard)[data-selected="true"]
+  :is(.cw-rowcard__icon, .cw-scard__icon) {
+  color: var(--restored-forest-deep) !important;
+  border-color: var(--restored-lime) !important;
+  background: var(--restored-lime) !important;
+}
+
 @media (hover: hover) and (pointer: fine) {
-  html:root body .cw-widget .cw-tabs > button[data-active="true"]:is(:hover, :focus-visible),
-  html:root body .cw-widget :is(.cw-next, .cw-submit):not(:disabled):is(:hover, :focus-visible),
-  html:root body .cw-widget .cw-quick-replies .cw-chip:not(:disabled):is(:hover, :focus-visible) {
+  html:root body .cw-widget .cw-tabs > button[data-active="true"]:is(:hover, :focus-visible) {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border-color: var(--restored-forest) !important;
+    background: var(--restored-forest) !important;
+    background-image: none !important;
+  }
+
+  html:root body .cw-widget .cw-quick-replies .cw-chip:not(:disabled):is(:hover, :focus-visible),
+  html:root body .cw-widget :is(.cw-next, .cw-submit):not(:disabled):is(:hover, :focus-visible) {
     color: var(--restored-forest-deep) !important;
     -webkit-text-fill-color: currentColor !important;
     border-color: var(--restored-lime) !important;
     background: var(--restored-lime) !important;
     background-image: none !important;
+  }
+
+  html:root body .cw-widget .cw-quick-replies .cw-chip:not(:disabled):is(:hover, :focus-visible)::before {
+    opacity: 0 !important;
+    background: transparent !important;
+  }
+
+  html:root body .cw-widget .cw-calculator
+    :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):not([data-selected="true"]):is(:hover, :focus-visible) {
+    color: #ffffff !important;
+    border-color: var(--restored-forest) !important;
+    background: var(--restored-forest) !important;
+    background-image: none !important;
+    box-shadow: 0 12px 24px -20px rgba(7, 27, 21, 0.48) !important;
+  }
+
+  html:root body .cw-widget .cw-calculator
+    :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):not([data-selected="true"]):is(:hover, :focus-visible)
+    :is(b, small, span:not(.cw-selection-indicator)) {
+    color: #ffffff !important;
+  }
+
+  html:root body .cw-widget .cw-calculator
+    :is(.cw-rowcard, .cw-scard):not([data-selected="true"]):is(:hover, :focus-visible)
+    :is(.cw-rowcard__icon, .cw-scard__icon) {
+    color: var(--restored-forest-deep) !important;
+    border-color: var(--restored-lime) !important;
+    background: var(--restored-lime) !important;
+  }
+
+  html:root body .cw-widget .cw-submit.cw-submit--approved:not(:disabled):is(:hover, :focus-visible)::before {
+    opacity: 0 !important;
   }
 }
