@@ -80,6 +80,22 @@ test("a plain message is not emailed as a configurator brief with holes in it", 
   assert.match(templates, /lead\.attachments \? row\("Prílohy"/);
 });
 
+test("coffee preview leads keep their company, website and exact demo in a dedicated auto-reply", async () => {
+  const templates = await read("api/emailTemplates.ts");
+
+  // This contract is intentionally source based: generic website leads keep the
+  // ordinary confirmation, while a personalized coffee preview gets its own.
+  assert.match(templates, /coffee-demo-\[a-z0-9-\]/i);
+  assert.match(templates, /const coffeeDemoHref =/);
+  assert.match(templates, /Ukážka:\\s\*\(https\?:\\\/\\\/\[\^\\s\]\+\)/);
+  assert.match(templates, /const coffeeOwnerNote =/);
+  assert.match(templates, /Máme uložený váš firemný web aj konkrétnu ukážku/);
+  assert.match(templates, /Otvoriť vašu ukážku/);
+  assert.match(templates, /Prejdeme konkrétnu ukážku/);
+  assert.match(templates, /čo prípadne napojiť na váš e-shop/);
+  assert.match(templates, /if \(isCoffeeDemoLead\(lead\)\) return coffeeConfirmationHtml/);
+});
+
 test("the mail sheet is a real surface in the widget's own language", async () => {
   const css = await read("src/product-widget.css");
 
