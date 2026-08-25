@@ -303,7 +303,13 @@ export function AssistantConversation({
           onClick={openCalculator}
         >
           <span className="cw-chat-builder__icon" aria-hidden="true">
-            01
+            <svg className="cw-builder-click-cue" viewBox="0 0 24 24" fill="none">
+              <path
+                className="cw-builder-click-cue__pointer"
+                d="M8.2 4.4v10.4l2.85-2.35 2.25 5.15 2.35-1.05-2.2-5.05 3.35-.2L8.2 4.4Z"
+              />
+              <path className="cw-builder-click-cue__rays" d="M4.9 4.7 3.45 3.25M4.1 8H2M8.1 2V.25" />
+            </svg>
           </span>
           <span className="cw-chat-builder__copy">
             <b>Vyskladať riešenie</b>

@@ -105,6 +105,60 @@ html:root body .cw-widget .cw-chat-builder__icon {
   background: rgba(18, 56, 45, 0.09) !important;
 }
 
+html:root body .cw-widget .cw-builder-click-cue {
+  width: 22px !important;
+  height: 22px !important;
+  overflow: visible !important;
+  color: inherit !important;
+  stroke: currentColor !important;
+  stroke-width: 1.65 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+html:root body .cw-widget .cw-builder-click-cue__pointer {
+  fill: rgba(18, 56, 45, 0.08) !important;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cw-builder-click-pointer 1.9s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+html:root body .cw-widget .cw-builder-click-cue__rays {
+  fill: none !important;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cw-builder-click-rays 1.9s ease-in-out infinite;
+}
+
+@keyframes cw-builder-click-pointer {
+  0%,
+  34%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  48% {
+    transform: translate(1px, -1px) scale(0.94);
+  }
+  62% {
+    transform: translate(1px, -1px) scale(1);
+  }
+}
+
+@keyframes cw-builder-click-rays {
+  0%,
+  28%,
+  68%,
+  100% {
+    opacity: 0.42;
+    transform: scale(0.9);
+  }
+  46%,
+  58% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 html:root body .cw-widget .cw-chat-builder__copy :is(b, small),
 html:root body .cw-widget .cw-chat-builder__arrow {
   color: inherit !important;
@@ -282,6 +336,10 @@ html:root body .cw-widget .cw-calculator
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html:root body .cw-widget :is(.cw-builder-click-cue__pointer, .cw-builder-click-cue__rays) {
+    animation: none !important;
+  }
+
   html:root body .cw-widget .cw-quick-replies .cw-chip::before {
     transition-duration: 1ms !important;
   }
