@@ -9,6 +9,7 @@ import "./logo-match-final.css";
 import "./goal-lock-final.css";
 import "./interaction-stability-final.css";
 import "./restored-widget-palette.css";
+import "./premium-motion-system.css";
 
 export default function App(): JSX.Element {
   const embedMode = isEmbedMode();
@@ -18,7 +19,9 @@ export default function App(): JSX.Element {
       className="widget-preview"
       aria-label={embedMode ? "AI Assistant" : "Ukážka AI Assistanta"}
     >
-      {!embedMode ? <div className="widget-preview__surface" aria-hidden="true" /> : null}
+      {!embedMode ? (
+        <div className="widget-preview__surface" aria-hidden="true" />
+      ) : null}
       <LaunchReadyRuntime />
       <AssistantWidget embedMode={embedMode} />
     </main>

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 
-export const STEP_EXIT_MS = 72;
-const STEP_ENTER_MS = 220;
+export const STEP_EXIT_MS = 170;
+const STEP_ENTER_MS = 560;
 
 const prefersReducedMotion = (): boolean =>
   typeof window !== "undefined" &&

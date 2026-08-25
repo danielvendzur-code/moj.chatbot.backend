@@ -1,0 +1,252 @@
+/* Final motion layer shared by the standalone preview and the production embed.
+   It preserves the restored rounded layout and changes only motion and colour details. */
+
+html:root body .cw-widget .cw-launcher {
+  color: #c8f06a !important;
+  border: 1px solid rgba(200, 240, 106, 0.72) !important;
+  background: rgba(7, 27, 21, 0.14) !important;
+  background-color: rgba(7, 27, 21, 0.14) !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: blur(12px) saturate(1.08) !important;
+  backdrop-filter: blur(12px) saturate(1.08) !important;
+  box-shadow:
+    0 18px 40px -28px rgba(7, 27, 21, 0.7),
+    inset 0 0 0 1px rgba(246, 245, 238, 0.08) !important;
+}
+
+html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) {
+  color: #f6f5ee !important;
+  border-color: #c8f06a !important;
+  background: rgba(18, 56, 45, 0.34) !important;
+  box-shadow:
+    0 22px 46px -28px rgba(7, 27, 21, 0.82),
+    inset 0 0 0 1px rgba(200, 240, 106, 0.2) !important;
+}
+
+/* The closed mark continuously draws, rests and erases. The open/header mark
+   remains still so it never distracts from the conversation. */
+html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl .bl__outer {
+  animation: cw-logo-breathe-outer 5.8s cubic-bezier(0.16, 1, 0.3, 1) infinite !important;
+}
+
+html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl .bl__inner {
+  animation: cw-logo-breathe-inner 5.8s cubic-bezier(0.16, 1, 0.3, 1) infinite !important;
+}
+
+@keyframes cw-logo-breathe-outer {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 0.18;
+  }
+  24%,
+  68% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  92%,
+  100% {
+    stroke-dashoffset: -1;
+    opacity: 0.18;
+  }
+}
+
+@keyframes cw-logo-breathe-inner {
+  0%,
+  13% {
+    stroke-dashoffset: -1;
+    opacity: 0.12;
+  }
+  36%,
+  68% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  86%,
+  100% {
+    stroke-dashoffset: 1;
+    opacity: 0.12;
+  }
+}
+
+/* No shine through the CTA. Its calm border pulse is the only idle cue. */
+html:root body .cw-widget .cw-chat-builder {
+  border: 1px solid rgba(18, 56, 45, 0.42) !important;
+  background: #fcfbf7 !important;
+  background-color: #fcfbf7 !important;
+  background-image: none !important;
+  box-shadow: inset 0 0 0 0 rgba(18, 56, 45, 0) !important;
+  animation: cw-builder-border-breathe 3.8s ease-in-out infinite;
+}
+
+html:root body .cw-widget .cw-chat-builder::after {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+}
+
+@keyframes cw-builder-border-breathe {
+  0%,
+  100% {
+    border-color: rgba(18, 56, 45, 0.28);
+    box-shadow: inset 0 0 0 0 rgba(18, 56, 45, 0);
+  }
+  50% {
+    border-color: rgba(110, 151, 55, 0.86);
+    box-shadow: inset 0 0 0 1px rgba(18, 56, 45, 0.08);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html:root body .cw-widget .cw-chat-builder:is(:hover, :focus-visible) {
+    color: #ffffff !important;
+    border-color: #12382d !important;
+    background: #12382d !important;
+    background-color: #12382d !important;
+    background-image: none !important;
+    animation-play-state: paused;
+  }
+
+  html:root
+    body
+    .cw-widget
+    .cw-calculator
+    :is(.cw-rowcard, .cw-scard):not([data-selected="true"]):is(
+      :hover,
+      :focus-visible
+    )
+    :is(.cw-rowcard__icon, .cw-scard__icon) {
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.28) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+}
+
+/* A full step visibly travels in the selected direction. Options then settle
+   in sequence without changing layout height. */
+html:root body .cw-widget .cw-calc-step[data-leaving="true"] {
+  animation: cw-premium-step-out 170ms cubic-bezier(0.4, 0, 1, 1) both !important;
+}
+
+html:root body .cw-widget .cw-calc-step:not([data-leaving="true"]) {
+  animation: cw-premium-step-in 560ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+}
+
+html:root
+  body
+  .cw-widget
+  .cw-calc-step[data-direction="backward"][data-leaving="true"] {
+  animation-name: cw-premium-step-out-back !important;
+}
+
+html:root
+  body
+  .cw-widget
+  .cw-calc-step[data-direction="backward"]:not([data-leaving="true"]) {
+  animation-name: cw-premium-step-in-back !important;
+}
+
+@keyframes cw-premium-step-in {
+  from {
+    opacity: 0.28;
+    transform: translate3d(28px, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes cw-premium-step-out {
+  to {
+    opacity: 0.28;
+    transform: translate3d(-24px, -4px, 0);
+  }
+}
+
+@keyframes cw-premium-step-in-back {
+  from {
+    opacity: 0.28;
+    transform: translate3d(-28px, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes cw-premium-step-out-back {
+  to {
+    opacity: 0.28;
+    transform: translate3d(24px, -4px, 0);
+  }
+}
+
+html:root body .cw-widget .cw-message-row {
+  animation-duration: 460ms !important;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+html:root body .cw-widget .cw-message-row--me .cw-message-wrap {
+  transform-origin: 92% 100%;
+  animation: cw-message-sent-settle 540ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+html:root body .cw-widget .cw-send[data-sending="true"] svg {
+  animation: cw-send-flight 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+html:root body .cw-widget .cw-submit[data-state="sending"] .cw-submit__content {
+  animation: cw-submit-settle 720ms ease-in-out infinite alternate;
+}
+
+@keyframes cw-message-sent-settle {
+  0% {
+    opacity: 0;
+    transform: translate3d(16px, 8px, 0) scale(0.94);
+  }
+  64% {
+    opacity: 1;
+    transform: translate3d(-1px, 0, 0) scale(1.012);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes cw-send-flight {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0);
+  }
+  44% {
+    opacity: 0;
+    transform: translate3d(11px, -11px, 0) rotate(-8deg);
+  }
+  45% {
+    opacity: 0;
+    transform: translate3d(-8px, 8px, 0) rotate(-8deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0);
+  }
+}
+
+@keyframes cw-submit-settle {
+  to {
+    transform: translateY(-1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:root body .cw-widget .cw-launcher .bl :is(.bl__outer, .bl__inner),
+  html:root body .cw-widget .cw-chat-builder,
+  html:root body .cw-widget .cw-calc-step,
+  html:root body .cw-widget .cw-message-row,
+  html:root body .cw-widget .cw-message-row--me .cw-message-wrap,
+  html:root body .cw-widget .cw-send svg,
+  html:root body .cw-widget .cw-submit__content {
+    animation: none !important;
+  }
+}

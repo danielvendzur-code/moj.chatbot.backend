@@ -78,6 +78,7 @@ export function AssistantConversation({
   );
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
+  const [sendAnimating, setSendAnimating] = useState(false);
   const [activeQuickReply, setActiveQuickReply] = useState<string | null>(null);
   const [composing, setComposing] = useState(false);
   const [mailOpen, setMailOpen] = useState(false);
@@ -85,14 +86,14 @@ export function AssistantConversation({
   const messagesRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const quickReplyTimerRef = useRef<number | null>(null);
+  const sendAnimationTimerRef = useRef<number | null>(null);
   const requestEpochRef = useRef(0);
   const requestAbortRef = useRef<AbortController | null>(null);
   const inFlightRef = useRef(false);
   const previousActiveRef = useRef(active);
 
   const conversationStarted = messages.some((message) => message.from === "me");
-  const showQuickReplies =
-    !conversationStarted || activeQuickReply !== null;
+  const showQuickReplies = !conversationStarted || activeQuickReply !== null;
 
   const resetTokenRef = useRef(resetToken);
   useEffect(() => {
@@ -105,6 +106,7 @@ export function AssistantConversation({
     setMessages(INITIAL_MESSAGES);
     setInput("");
     setTyping(false);
+    setSendAnimating(false);
     setActiveQuickReply(null);
     setComposing(false);
     setMailOpen(false);
@@ -114,12 +116,19 @@ export function AssistantConversation({
       window.clearTimeout(quickReplyTimerRef.current);
       quickReplyTimerRef.current = null;
     }
+    if (sendAnimationTimerRef.current !== null) {
+      window.clearTimeout(sendAnimationTimerRef.current);
+      sendAnimationTimerRef.current = null;
+    }
   }, [resetToken]);
 
   useEffect(
     () => () => {
       if (quickReplyTimerRef.current !== null) {
         window.clearTimeout(quickReplyTimerRef.current);
+      }
+      if (sendAnimationTimerRef.current !== null) {
+        window.clearTimeout(sendAnimationTimerRef.current);
       }
       requestEpochRef.current += 1;
       requestAbortRef.current?.abort();
@@ -252,6 +261,16 @@ export function AssistantConversation({
     const value = input.trim();
     if (!value || typing || activeQuickReply) return;
     setInput("");
+    if (!prefersReducedMotion()) {
+      setSendAnimating(true);
+      if (sendAnimationTimerRef.current !== null) {
+        window.clearTimeout(sendAnimationTimerRef.current);
+      }
+      sendAnimationTimerRef.current = window.setTimeout(() => {
+        sendAnimationTimerRef.current = null;
+        setSendAnimating(false);
+      }, 620);
+    }
     void ask(value);
   };
 
@@ -263,15 +282,18 @@ export function AssistantConversation({
       quickReplyTimerRef.current = null;
       void ask(question);
 
-      quickReplyTimerRef.current = window.setTimeout(() => {
-        quickReplyTimerRef.current = null;
-        setActiveQuickReply(null);
-        if (canAutoFocus()) {
-          window.requestAnimationFrame(() =>
-            inputRef.current?.focus({ preventScroll: true }),
-          );
-        }
-      }, prefersReducedMotion() ? 120 : QUICK_REPLY_HOLD_MS);
+      quickReplyTimerRef.current = window.setTimeout(
+        () => {
+          quickReplyTimerRef.current = null;
+          setActiveQuickReply(null);
+          if (canAutoFocus()) {
+            window.requestAnimationFrame(() =>
+              inputRef.current?.focus({ preventScroll: true }),
+            );
+          }
+        },
+        prefersReducedMotion() ? 120 : QUICK_REPLY_HOLD_MS,
+      );
     };
 
     if (prefersReducedMotion()) {
@@ -303,12 +325,19 @@ export function AssistantConversation({
           onClick={openCalculator}
         >
           <span className="cw-chat-builder__icon" aria-hidden="true">
-            <svg className="cw-builder-click-cue" viewBox="0 0 24 24" fill="none">
+            <svg
+              className="cw-builder-click-cue"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
               <path
                 className="cw-builder-click-cue__pointer"
                 d="M8.2 4.4v10.4l2.85-2.35 2.25 5.15 2.35-1.05-2.2-5.05 3.35-.2L8.2 4.4Z"
               />
-              <path className="cw-builder-click-cue__rays" d="M4.9 4.7 3.45 3.25M4.1 8H2M8.1 2V.25" />
+              <path
+                className="cw-builder-click-cue__rays"
+                d="M4.9 4.7 3.45 3.25M4.1 8H2M8.1 2V.25"
+              />
             </svg>
           </span>
           <span className="cw-chat-builder__copy">
@@ -321,35 +350,39 @@ export function AssistantConversation({
 
       <div className="cw-scroll-shell">
         <div className="cw-messages" ref={messagesRef} aria-live="polite">
-        {messages.map((message) => (
-          <div
-            className={`cw-message-row cw-message-row--${message.from}`}
-            data-message-id={message.id}
-            data-streaming={message.streaming || undefined}
-            key={message.id}
-          >
-            {message.from === "bot" ? (
+          {messages.map((message) => (
+            <div
+              className={`cw-message-row cw-message-row--${message.from}`}
+              data-message-id={message.id}
+              data-streaming={message.streaming || undefined}
+              key={message.id}
+            >
+              {message.from === "bot" ? (
+                <span className="cw-avatar" aria-hidden="true">
+                  <BubbleLogo size="avatar" />
+                </span>
+              ) : null}
+              <div className="cw-message-wrap">
+                <p>{message.text}</p>
+              </div>
+            </div>
+          ))}
+
+          {typing ? (
+            <div className="cw-message-row cw-message-row--bot">
               <span className="cw-avatar" aria-hidden="true">
                 <BubbleLogo size="avatar" />
               </span>
-            ) : null}
-            <div className="cw-message-wrap">
-              <p>{message.text}</p>
+              <div
+                className="cw-typing"
+                role="status"
+                aria-label="Píšem odpoveď"
+              >
+                <i />
+                <i />
+                <i />
+              </div>
             </div>
-          </div>
-        ))}
-
-        {typing ? (
-          <div className="cw-message-row cw-message-row--bot">
-            <span className="cw-avatar" aria-hidden="true">
-              <BubbleLogo size="avatar" />
-            </span>
-            <div className="cw-typing" role="status" aria-label="Píšem odpoveď">
-              <i />
-              <i />
-              <i />
-            </div>
-          </div>
           ) : null}
         </div>
         <ScrollCue targetRef={messagesRef} label="Zobraziť novšie správy" />
@@ -405,6 +438,7 @@ export function AssistantConversation({
           type="button"
           className="cw-send"
           data-waiting={typing || undefined}
+          data-sending={sendAnimating || undefined}
           onClick={submit}
           disabled={!input.trim() || typing || activeQuickReply !== null}
           aria-label="Odoslať správu"

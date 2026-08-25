@@ -19,8 +19,14 @@ test("the visual system is static, ordered and free of injected overrides", asyn
   assert.match(main, /widget-polish\.css/);
   assert.match(embed, /product-widget\.css/);
   assert.match(embed, /widget-polish\.css/);
-  assert.doesNotMatch(main, /installLimeWhiteStyles|installProductRefinement|premiumTilt/);
-  assert.doesNotMatch(embed, /installLimeWhiteStyles|installProductRefinement|premiumTilt/);
+  assert.doesNotMatch(
+    main,
+    /installLimeWhiteStyles|installProductRefinement|premiumTilt/,
+  );
+  assert.doesNotMatch(
+    embed,
+    /installLimeWhiteStyles|installProductRefinement|premiumTilt/,
+  );
   assert.match(css, /MÔJ CHATBOT — competition-audited product interface/);
   assert.match(polish, /Final interaction polish/);
   assert.match(polish, /\.cw-widget \.cw-chip__label/);
@@ -36,7 +42,10 @@ test("the visual system is static, ordered and free of injected overrides", asyn
     "    animation-iteration-count: 1 !important;",
     "    transition-duration: 1ms !important;",
   ]);
-  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*scroll-behavior: auto !important/);
+  assert.match(
+    css,
+    /@media \(prefers-reduced-motion: reduce\)[\s\S]*scroll-behavior: auto !important/,
+  );
 });
 
 test("launcher uses the supplied one-stroke mark and the solid hand-drawn redraw", async () => {
@@ -56,7 +65,10 @@ test("launcher uses the supplied one-stroke mark and the solid hand-drawn redraw
   assert.match(final, /cw-logo-handdraw-intro 2\.7s/);
   assert.match(final, /background: #ffffff !important/);
   assert.match(final, /border-color: #0b2f20 !important/);
-  assert.match(polish, /\.cw-widget \.cw-launcher,[\s\S]*color:\s*var\(--cw-green\)/);
+  assert.match(
+    polish,
+    /\.cw-widget \.cw-launcher,[\s\S]*color:\s*var\(--cw-green\)/,
+  );
   assert.match(css, /\.cw-launcher:hover,[\s\S]*?transform:\s*none;/);
   assert.match(css, /\.cw-launcher:active[\s\S]*?transform:\s*none;/);
   assert.doesNotMatch(css, /@keyframes[^}]*bounce/i);
@@ -73,7 +85,7 @@ test("header is the brand plus a live availability state, nothing else", async (
 
 test("backward step navigation releases the tall-step height lock quickly", async () => {
   const transition = await read("src/hooks/useStepTransition.ts");
-  assert.match(transition, /STEP_ENTER_MS = 220/);
+  assert.match(transition, /STEP_ENTER_MS = 560/);
   assert.match(transition, /nextDirection === "forward"/);
   assert.match(transition, /nextDirection === "backward"/);
   assert.match(transition, /container\.style\.minHeight = ""/);
@@ -116,7 +128,10 @@ test("contact step fits without scrolling and keeps sending obvious", async () =
   // above the fields, before the keyboard covers half the panel.
   assert.match(calculator, /REASSURANCES/);
   assert.match(calculator, /className="cw-reassure"/);
-  assert.match(rule(css, ".cw-reassure li"), /border-radius:\s*var\(--cw-r-pill\)/);
+  assert.match(
+    rule(css, ".cw-reassure li"),
+    /border-radius:\s*var\(--cw-r-pill\)/,
+  );
 
   assert.match(rule(css, ".cw-calc-actions"), /flex:\s*0 0 auto/);
   assert.match(calculator, /cw-lead__form/);

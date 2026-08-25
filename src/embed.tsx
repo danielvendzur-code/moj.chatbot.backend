@@ -10,7 +10,8 @@ import "./launch-ready-styles";
 installConfiguratorAutoAdvance();
 
 const HOST_ID = "dv-assistant-root";
-const scriptSrc = (document.currentScript as HTMLScriptElement | null)?.src ?? "";
+const scriptSrc =
+  (document.currentScript as HTMLScriptElement | null)?.src ?? "";
 
 const FONT_HREF =
   "https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&display=swap";
@@ -56,9 +57,12 @@ function mount(): void {
 
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "restored-web-palette-20260825-v6");
+  host.setAttribute("data-dv-assistant-version", "premium-motion-20260825-v7");
   host.setAttribute("data-dv-assistant-theme", "website-paper-forest-lime");
-  host.setAttribute("data-dv-assistant-quality", "archived-layout-restrained-palette");
+  host.setAttribute(
+    "data-dv-assistant-quality",
+    "archived-layout-restrained-palette",
+  );
 
   if (!existing) document.body.appendChild(host);
 
