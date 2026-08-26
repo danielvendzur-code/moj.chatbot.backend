@@ -87,7 +87,7 @@ jobs:
 
           # The direct runtime must carry the restored product markers and the
           # approved one-stroke Môj Chatbot brand mark used by BubbleLogo.
-          grep -Fq 'premium-motion-20260825-v7' dist/widget.js
+          grep -Fq 'premium-motion-20260826-v8' dist/widget.js
           grep -Fq 'archived-layout-restrained-palette' dist/widget.js
           grep -Fq 'M24 71.2L24.003 32.706L24.036' dist/widget.js
           grep -Fq 'bl__stroke' dist/widget.js
