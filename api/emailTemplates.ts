@@ -23,6 +23,30 @@ const webHref = (value: string) => {
 
 const phoneHref = (value: string) => (value ? `tel:${value.replace(/[^\d+]/g, "")}` : "");
 
+const isCoffeeDemoLead = (lead: EmailLead): boolean =>
+  /^coffee-demo-[a-z0-9-]+$/i.test(lead.source || "");
+
+/**
+ * Coffee preview CTAs place the exact preview URL into the prefilled note.
+ * Keeping the URL inside the normal lead payload means older forms and the
+ * central /api/lead contract remain backwards compatible.
+ */
+const coffeeDemoHref = (lead: EmailLead): string => {
+  if (!isCoffeeDemoLead(lead) || !lead.note) return "";
+  const match = lead.note.match(/(?:^|\n)Ukážka:\s*(https?:\/\/[^\s]+)/i);
+  return match ? webHref(match[1]) : "";
+};
+
+/** Only the owner's optional text, without the auto-prefilled routing copy. */
+const coffeeOwnerNote = (lead: EmailLead): string => {
+  if (!isCoffeeDemoLead(lead) || !lead.note) return lead.note || "";
+  return lead.note
+    .replace(/^Mám záujem o kávového poradcu[^\n]*\.?\s*/i, "")
+    .replace(/(?:^|\n)Ukážka:\s*https?:\/\/[^\s]+\s*/i, "")
+    .replace(/(?:^|\n)Doplňujúca poznámka:\s*/i, "")
+    .trim();
+};
+
 const shell = (recipient: string, preheader: string, content: string) => `<!doctype html>
 <html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="x-apple-disable-message-reformatting"><title>Môj Chatbot</title>
 <style>@media(max-width:640px){.shell{width:100%!important}.pad{padding-left:20px!important;padding-right:20px!important}.hero{padding:28px 20px!important}.title{font-size:28px!important}.stack{display:block!important;width:100%!important;text-align:left!important;padding:0!important}.button{display:block!important;text-align:center!important}}</style></head>
@@ -52,6 +76,7 @@ const hasBrief = (lead: EmailLead): boolean =>
   Boolean(lead.interest || lead.industry || lead.features || lead.timeline);
 
 export function internalText(lead: EmailLead): string {
+  const demo = coffeeDemoHref(lead);
   return [
     `Zdroj: ${lead.source || "web"}`,
     `Meno: ${lead.name}`,
@@ -59,6 +84,7 @@ export function internalText(lead: EmailLead): string {
     `Telefón: ${lead.phone || "neuvedený"}`,
     `Firma: ${lead.company || "neuvedená"}`,
     `Web: ${lead.web || "neuvedený"}`,
+    ...(demo ? [`Ukážka: ${demo}`] : []),
     "",
     ...(hasBrief(lead)
       ? [
@@ -72,7 +98,7 @@ export function internalText(lead: EmailLead): string {
     ...(lead.attachments ? [`Prílohy: ${lead.attachments}`] : []),
     "",
     hasBrief(lead) ? "Poznámka:" : "Správa:",
-    lead.note || "bez poznámky",
+    isCoffeeDemoLead(lead) ? coffeeOwnerNote(lead) || "bez doplňujúcej poznámky" : lead.note || "bez poznámky",
   ].join("\n");
 }
 
@@ -81,26 +107,59 @@ export function internalHtml(lead: EmailLead, recipient: string): string {
   const brief = hasBrief(lead);
   const phone = phoneHref(lead.phone);
   const web = webHref(lead.web);
+  const demo = coffeeDemoHref(lead);
+  const coffee = isCoffeeDemoLead(lead);
+  const shownNote = coffee ? coffeeOwnerNote(lead) : lead.note;
   const action = lead.email
     ? `mailto:${encodeURIComponent(lead.email)}?subject=${encodeURIComponent(`Re: ${lead.reference ? `${lead.reference} · ` : ""}Môj Chatbot`)}`
     : phone;
-  return shell(recipient, `${brief ? "Nový dopyt" : "Nová správa"} od ${title}`, `${header(brief ? "Nový dopyt" : "Nová správa")}
-<tr><td class="hero" style="padding:36px;background:#17130f"><span style="display:inline-block;padding:7px 11px;border:1px solid rgba(255,199,157,.28);border-radius:999px;background:rgba(255,199,157,.1);color:#ffc79d;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase">${esc(lead.reference || "bez čísla")}</span><h1 class="title" style="margin:18px 0 8px;color:#fff8f1;font-size:34px;line-height:1.15;letter-spacing:-.045em">${esc(title)}</h1><p style="margin:0;color:#bdb3aa;font-size:15px;line-height:1.65">${brief ? "Nový kontakt odoslal zadanie" : "Nový kontakt napísal správu"} cez ${esc(lead.source || "web")}.${lead.attachments ? ` Priložil aj: ${esc(lead.attachments)}.` : ""}</p></td></tr>
-<tr><td class="pad" style="padding:28px 36px 0"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#fff6ef;border:1px solid #f2d8c5;border-radius:16px"><tr><td style="padding:18px 20px"><div style="color:#9a5d32;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase">Priorita</div><div style="margin-top:5px;font-size:16px;font-weight:750">Dopyt čaká na spracovanie</div><div style="margin-top:4px;color:#756a61;font-size:13px;line-height:1.55">Odpoveď môže ísť priamo zákazníkovi cez tlačidlo nižšie.</div></td></tr></table></td></tr>
-${section("Kontakt", `${row("Meno", lead.name)}${row("E-mail", lead.email || "neuvedený", lead.email ? `mailto:${lead.email}` : "")}${row("Telefón", lead.phone || "neuvedený", phone)}${row("Firma", lead.company || "neuvedená")}${row("Web", lead.web || "neuvedený", web)}`)}
+  return shell(recipient, `${brief ? "Nový dopyt" : "Nová správa"} od ${title}`, `${header(coffee ? "Lead z ukážky" : brief ? "Nový dopyt" : "Nová správa")}
+<tr><td class="hero" style="padding:36px;background:#17130f"><span style="display:inline-block;padding:7px 11px;border:1px solid rgba(255,199,157,.28);border-radius:999px;background:rgba(255,199,157,.1);color:#ffc79d;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase">${esc(coffee ? "personalizovaná ukážka" : lead.reference || "bez čísla")}</span><h1 class="title" style="margin:18px 0 8px;color:#fff8f1;font-size:34px;line-height:1.15;letter-spacing:-.045em">${esc(title)}</h1><p style="margin:0;color:#bdb3aa;font-size:15px;line-height:1.65">${coffee ? "Majiteľ reagoval na pripravenú coffee ukážku" : brief ? "Nový kontakt odoslal zadanie" : "Nový kontakt napísal správu"} cez ${esc(lead.source || "web")}.${lead.attachments ? ` Priložil aj: ${esc(lead.attachments)}.` : ""}</p></td></tr>
+${demo ? `<tr><td class="pad" style="padding:28px 36px 0"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f1f7ef;border:1px solid #d8e8d2;border-radius:16px"><tr><td style="padding:18px 20px"><div style="color:#3f6f39;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase">Konkrétna ukážka</div><div style="margin-top:5px;font-size:16px;font-weight:750">Otvoriť presne to, čo majiteľ videl</div><a href="${esc(demo)}" style="display:inline-block;margin-top:12px;padding:11px 15px;border-radius:10px;background:#17130f;color:#fff8f1;text-decoration:none;font-size:13px;font-weight:750">Otvoriť ukážku ↗</a></td></tr></table></td></tr>` : `<tr><td class="pad" style="padding:28px 36px 0"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#fff6ef;border:1px solid #f2d8c5;border-radius:16px"><tr><td style="padding:18px 20px"><div style="color:#9a5d32;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase">Priorita</div><div style="margin-top:5px;font-size:16px;font-weight:750">Dopyt čaká na spracovanie</div><div style="margin-top:4px;color:#756a61;font-size:13px;line-height:1.55">Odpoveď môže ísť priamo zákazníkovi cez tlačidlo nižšie.</div></td></tr></table></td></tr>`}
+${section("Kontakt", `${row("Meno", lead.name)}${row("E-mail", lead.email || "neuvedený", lead.email ? `mailto:${lead.email}` : "")}${row("Telefón", lead.phone || "neuvedený", phone)}${row("Firma", lead.company || "neuvedená")}${row("Web", lead.web || "neuvedený", web)}${demo ? row("Ukážka", "Otvoriť personalizovanú ukážku", demo) : ""}`)}
 ${section(
     brief ? "Zadanie" : "Detaily",
     brief
       ? `${row("Riešenie", lead.interest || "neuvedené")}${row("Odvetvie", lead.industry || "neuvedené")}${row("Funkcie", lead.features || "neuvedené")}${row("Termín", lead.timeline || "neuvedený")}${row("Zdroj", lead.source || "web")}${lead.attachments ? row("Prílohy", lead.attachments) : ""}`
       : `${row("Zdroj", lead.source || "web")}${row("Číslo dopytu", lead.reference || "neuvedené")}${lead.attachments ? row("Prílohy", lead.attachments) : ""}`,
   )}
-<tr><td class="pad" style="padding:26px 36px 0"><h2 style="margin:0 0 10px;font-size:18px">${brief ? "Poznámka" : "Správa"}</h2><div style="padding:18px 20px;border-radius:16px;background:#f6f2ee;color:#3f3832;font-size:14px;line-height:1.7">${multiline(lead.note || "Bez poznámky")}</div></td></tr>
+<tr><td class="pad" style="padding:26px 36px 0"><h2 style="margin:0 0 10px;font-size:18px">${coffee ? "Doplňujúca poznámka" : brief ? "Poznámka" : "Správa"}</h2><div style="padding:18px 20px;border-radius:16px;background:#f6f2ee;color:#3f3832;font-size:14px;line-height:1.7">${multiline(shownNote || (coffee ? "Bez doplňujúcej poznámky" : "Bez poznámky"))}</div></td></tr>
 <tr><td class="pad" style="padding:28px 36px 36px"><table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td class="stack"><a class="button" href="${esc(action)}" style="display:inline-block;padding:14px 20px;border-radius:12px;background:#17130f;color:#fff8f1;text-decoration:none;font-size:14px;font-weight:750">${lead.email ? "Odpovedať na dopyt" : "Zavolať kontaktu"}</a></td><td class="stack" align="right" style="padding-left:16px;color:#8b7f75;font-size:12px;line-height:1.55">Prijaté cez systém<br>Môj Chatbot</td></tr></table></td></tr>`);
 }
 
 export function confirmationText(lead: EmailLead, recipient: string): string {
   const firstName = lead.name.split(/\s+/)[0] || lead.name;
   const brief = hasBrief(lead);
+  const coffee = isCoffeeDemoLead(lead);
+  const demo = coffeeDemoHref(lead);
+
+  if (coffee) {
+    return [
+      `Dobrý deň, ${firstName},`,
+      "",
+      `ďakujeme za záujem o kávového poradcu${lead.company ? ` pre ${lead.company}` : ""}.`,
+      "Máme uložený váš firemný web aj konkrétnu ukážku, z ktorej ste nám napísali, takže ich nemusíte posielať znova.",
+      "",
+      lead.company ? `Firma: ${lead.company}` : "",
+      lead.web ? `Web: ${lead.web}` : "",
+      demo ? `Vaša ukážka: ${demo}` : "",
+      lead.timeline ? `Termín: ${lead.timeline}` : "",
+      "",
+      "Čo bude nasledovať:",
+      "• prejdeme si vašu konkrétnu ukážku a firemný web,",
+      "• skontrolujeme, čo treba doladiť pred nasadením a čo má byť napojené na e-shop,",
+      "• ozveme sa vám najneskôr do jedného pracovného dňa s konkrétnym ďalším krokom.",
+      "",
+      coffeeOwnerNote(lead) ? `Vaša poznámka:\n${coffeeOwnerNote(lead)}` : "",
+      "",
+      "Ak chcete niečo doplniť, stačí odpovedať na tento e-mail.",
+      "",
+      "Tím Môj Chatbot",
+      `Môj Chatbot — ${recipient}, +421 948 699 433`,
+      "mojchatbot.sk",
+    ].filter(Boolean).join("\n");
+  }
+
   return [
     `Dobrý deň, ${firstName},`,
     "",
@@ -137,7 +196,34 @@ export function confirmationText(lead: EmailLead, recipient: string): string {
 
 const summary = (label: string, value: string) => `<tr><td valign="top" width="112" style="padding:9px 0;color:#8b7f75;font-size:12px">${esc(label)}</td><td valign="top" style="padding:9px 0 9px 14px;color:#17130f;font-size:14px;font-weight:650;line-height:1.55">${esc(value)}</td></tr>`;
 
+function coffeeConfirmationHtml(lead: EmailLead, recipient: string): string {
+  const firstName = lead.name.split(/\s+/)[0] || lead.name;
+  const demo = coffeeDemoHref(lead);
+  const web = webHref(lead.web);
+  const ownerNote = coffeeOwnerNote(lead);
+  const company = lead.company || "vašu pražiareň";
+  const recap = [
+    lead.company ? summary("Firma", lead.company) : "",
+    lead.web ? summary("Web", lead.web) : "",
+    summary("Riešenie", lead.interest || "Kávový poradca pre e-shop"),
+    lead.timeline ? summary("Termín", lead.timeline) : "",
+  ].join("");
+
+  return shell(
+    recipient,
+    `Máme vašu ukážku pre ${company}. Nemusíte nám znova posielať web ani odkaz.`,
+    `${header("Vaša ukážka")}
+<tr><td class="hero" align="center" style="padding:42px 36px 34px;background:#17130f"><div style="width:54px;height:54px;line-height:54px;margin:0 auto 20px;border-radius:18px;background:#ffc79d;color:#17130f;font-size:25px;font-weight:900">✓</div><div style="color:#ffc79d;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase">Záujem sme prijali</div><h1 class="title" style="margin:12px 0;color:#fff8f1;font-size:34px;line-height:1.15;letter-spacing:-.045em">Ďakujeme, ${esc(firstName)}.</h1><p style="max-width:510px;margin:0 auto;color:#c8beb5;font-size:15px;line-height:1.7">Máme uložený web ${esc(company)} aj konkrétnu ukážku, z ktorej ste nám napísali. Nemusíte nám ich posielať znova.</p></td></tr>
+<tr><td class="pad" style="padding:30px 36px 0"><h2 style="margin:0 0 12px;font-size:18px">Máme pripravený kontext</h2><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f7f3ef;border-radius:16px"><tr><td style="padding:14px 20px"><table role="presentation" width="100%" cellspacing="0" cellpadding="0">${recap}</table></td></tr></table>${demo ? `<a class="button" href="${esc(demo)}" style="display:block;margin-top:14px;padding:14px 20px;border-radius:12px;background:#17130f;color:#fff8f1;text-decoration:none;text-align:center;font-size:14px;font-weight:750">Otvoriť vašu ukážku ↗</a>` : ""}${!demo && web ? `<a class="button" href="${esc(web)}" style="display:block;margin-top:14px;padding:14px 20px;border-radius:12px;background:#17130f;color:#fff8f1;text-decoration:none;text-align:center;font-size:14px;font-weight:750">Otvoriť váš web ↗</a>` : ""}</td></tr>
+<tr><td class="pad" style="padding:28px 36px 0"><h2 style="margin:0 0 14px;font-size:18px">Čo bude nasledovať</h2><table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td width="38" valign="top"><div style="width:30px;height:30px;line-height:30px;border-radius:10px;background:#fff1e6;color:#9a5d32;font-size:13px;font-weight:800;text-align:center">1</div></td><td style="padding:3px 0 16px 12px;color:#3f3832;font-size:14px;line-height:1.6"><strong style="color:#17130f">Prejdeme konkrétnu ukážku</strong><br>Skontrolujeme obsah, výber kávy, chat a cestu zákazníka k produktu.</td></tr><tr><td width="38" valign="top"><div style="width:30px;height:30px;line-height:30px;border-radius:10px;background:#fff1e6;color:#9a5d32;font-size:13px;font-weight:800;text-align:center">2</div></td><td style="padding:3px 0 16px 12px;color:#3f3832;font-size:14px;line-height:1.6"><strong style="color:#17130f">Doriešime nasadenie</strong><br>Povieme presne, čo ešte upraviť a čo prípadne napojiť na váš e-shop.</td></tr><tr><td width="38" valign="top"><div style="width:30px;height:30px;line-height:30px;border-radius:10px;background:#17130f;color:#ffc79d;font-size:13px;font-weight:800;text-align:center">3</div></td><td style="padding:3px 0 0 12px;color:#3f3832;font-size:14px;line-height:1.6"><strong style="color:#17130f">Ozveme sa vám</strong><br>Najneskôr do jedného pracovného dňa s konkrétnym ďalším krokom.</td></tr></table></td></tr>
+${ownerNote ? `<tr><td class="pad" style="padding:28px 36px 0"><h2 style="margin:0 0 10px;font-size:18px">Vaša poznámka</h2><div style="padding:18px 20px;border-radius:16px;background:#f6f2ee;color:#3f3832;font-size:14px;line-height:1.7">${multiline(ownerNote)}</div></td></tr>` : ""}
+<tr><td class="pad" style="padding:30px 36px 36px"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#fff6ef;border:1px solid #f2d8c5;border-radius:16px"><tr><td style="padding:20px"><div style="font-size:15px;font-weight:750">Chcete niečo doplniť?</div><div style="margin-top:5px;color:#756a61;font-size:13px;line-height:1.6">Stačí odpovedať na tento e-mail. Váš web aj ukážku už máme priradené k dopytu.</div><a href="mailto:${esc(recipient)}" style="display:inline-block;margin-top:16px;padding:12px 17px;border-radius:11px;background:#17130f;color:#fff8f1;text-decoration:none;font-size:13px;font-weight:750">Doplniť informácie</a></td></tr></table><div style="margin-top:26px;color:#3f3832;font-size:14px;line-height:1.65">S pozdravom,<br><strong style="color:#17130f">Tím Môj Chatbot</strong></div></td></tr>`,
+  );
+}
+
 export function confirmationHtml(lead: EmailLead, recipient: string): string {
+  if (isCoffeeDemoLead(lead)) return coffeeConfirmationHtml(lead, recipient);
+
   const firstName = lead.name.split(/\s+/)[0] || lead.name;
   const brief = hasBrief(lead);
   const received = brief ? "Dopyt sme prijali" : "Správu sme prijali";
