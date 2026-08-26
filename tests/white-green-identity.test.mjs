@@ -53,6 +53,7 @@ test("launcher uses the supplied one-stroke mark and the solid hand-drawn redraw
   const polish = await read("src/widget-polish.css");
   const logo = await read("src/components/widget/BubbleLogo.tsx");
   const final = await read("src/solid-widget-final.css");
+  const motion = await read("src/premium-motion-system.css");
 
   assert.equal((logo.match(/<path\b/g) ?? []).length, 1);
   assert.match(logo, /className="bl__stroke"/);
@@ -63,6 +64,11 @@ test("launcher uses the supplied one-stroke mark and the solid hand-drawn redraw
   assert.match(logo, /L96\.6 85\.5/);
   assert.match(final, /cw-logo-handdraw-hover 3\.25s/);
   assert.match(final, /cw-logo-handdraw-intro 2\.7s/);
+  assert.match(
+    motion,
+    /\.cw-launcher\[aria-expanded="false"\] \.bl__stroke[\s\S]*cw-logo-one-line-cycle 6\.6s linear infinite/,
+  );
+  assert.match(motion, /@keyframes cw-logo-one-line-cycle/);
   assert.match(final, /background: #ffffff !important/);
   assert.match(final, /border-color: #0b2f20 !important/);
   assert.match(
