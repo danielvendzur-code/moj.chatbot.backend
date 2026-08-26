@@ -17,6 +17,22 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
       aria-hidden="true"
     >
       <svg viewBox="0 0 112 112" fill="none" focusable="false">
+        {size === "launcher" ? (
+          <defs>
+            <linearGradient
+              id="cw-launcher-surface-gradient"
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+              <stop className="bl__surface-stop bl__surface-stop--1" offset="0%" stopColor="#c8f06a" />
+              <stop className="bl__surface-stop bl__surface-stop--2" offset="47%" stopColor="#c8f06a" />
+              <stop className="bl__surface-stop bl__surface-stop--3" offset="53%" stopColor="#c8f06a" />
+              <stop className="bl__surface-stop bl__surface-stop--4" offset="100%" stopColor="#c8f06a" />
+            </linearGradient>
+          </defs>
+        ) : null}
         <path
           className="bl__stroke"
           d={ONE_STROKE}

@@ -23,6 +23,33 @@ html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) {
     inset 0 0 0 1px rgba(200, 240, 106, 0.2) !important;
 }
 
+/* The one-stroke mark is painted by the live surface gradient. When the
+   launcher crosses a section boundary, only the corresponding part changes. */
+html:root body .cw-widget .cw-launcher .bl--launcher .bl__stroke {
+  stroke: url(#cw-launcher-surface-gradient) !important;
+}
+
+/* The parent page reports the real surface under the transparent iframe. */
+html:root body .cw-widget .cw-launcher[data-surface-tone="light"] {
+  color: #12382d !important;
+  border-color: rgba(18, 56, 45, 0.58) !important;
+  background: rgba(246, 245, 238, 0.16) !important;
+  background-color: rgba(246, 245, 238, 0.16) !important;
+  box-shadow:
+    0 20px 42px -28px rgba(7, 27, 21, 0.62),
+    inset 0 0 0 1px rgba(246, 245, 238, 0.22) !important;
+}
+
+html:root
+  body
+  .cw-widget
+  .cw-launcher[data-surface-tone="light"]:is(:hover, :focus-visible) {
+  color: #071b15 !important;
+  border-color: rgba(18, 56, 45, 0.82) !important;
+  background: rgba(18, 56, 45, 0.2) !important;
+  background-color: rgba(18, 56, 45, 0.2) !important;
+}
+
 /* The closed mark continuously draws, rests and erases. The open/header mark
    remains still so it never distracts from the conversation. */
 html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl .bl__outer {
@@ -96,7 +123,7 @@ html:root body .cw-widget .cw-chat-builder {
   background-color: #fcfbf7 !important;
   background-image: none !important;
   box-shadow: inset 0 0 0 0 rgba(18, 56, 45, 0) !important;
-  animation: cw-builder-border-breathe 3.8s ease-in-out infinite;
+  animation: cw-builder-border-breathe 4.8s ease-in-out infinite;
 }
 
 html:root body .cw-widget .cw-chat-builder::after {
@@ -117,6 +144,53 @@ html:root body .cw-widget .cw-chat-builder::after {
   }
 }
 
+html:root body .cw-widget .cw-chat-builder__arrow {
+  transform-origin: center;
+  animation: cw-builder-arrow-invite 2.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+@keyframes cw-builder-arrow-invite {
+  0%,
+  58%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  72% {
+    transform: translate3d(3px, -3px, 0);
+  }
+  84% {
+    transform: translate3d(1px, -1px, 0);
+  }
+}
+
+/* One dark-green moving thumb. The active button does not add a second white
+   or green layer while the slider is travelling. */
+html:root body .cw-widget[class][class][class][class] .cw-tabs__thumb[class] {
+  border-color: #12382d !important;
+  background: #12382d !important;
+  background-color: #12382d !important;
+  box-shadow: none !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-tabs > button[data-active="true"] {
+  border-color: transparent !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html:root
+  body
+  .cw-widget[class][class][class][class]
+  .cw-calculator[class]
+  :is(.cw-rowcard[class], .cw-scard[class])[data-selected="true"]
+  :is(.cw-rowcard__icon[class], .cw-scard__icon[class]) {
+  color: #12382d !important;
+  border-color: #ffffff !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
 @media (hover: hover) and (pointer: fine) {
   html:root body .cw-widget .cw-chat-builder:is(:hover, :focus-visible) {
     color: #ffffff !important;
@@ -129,16 +203,14 @@ html:root body .cw-widget .cw-chat-builder::after {
 
   html:root
     body
-    .cw-widget
-    .cw-calculator
-    :is(.cw-rowcard, .cw-scard):not([data-selected="true"]):is(
-      :hover,
-      :focus-visible
-    )
-    :is(.cw-rowcard__icon, .cw-scard__icon) {
-    color: #ffffff !important;
-    border-color: rgba(255, 255, 255, 0.28) !important;
-    background: rgba(255, 255, 255, 0.1) !important;
+    .cw-widget[class][class][class][class]
+    .cw-calculator[class]
+    :is(.cw-rowcard[class], .cw-scard[class]):is(:hover, :focus-visible)
+    :is(.cw-rowcard__icon[class], .cw-scard__icon[class]) {
+    color: #12382d !important;
+    border-color: #ffffff !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
   }
 }
 
@@ -264,6 +336,7 @@ html:root body .cw-widget .cw-submit[data-state="sending"] .cw-submit__content {
   html:root body .cw-widget .cw-launcher .bl__stroke,
   html:root body .cw-widget .cw-launcher .bl :is(.bl__outer, .bl__inner),
   html:root body .cw-widget .cw-chat-builder,
+  html:root body .cw-widget .cw-chat-builder__arrow,
   html:root body .cw-widget .cw-calc-step,
   html:root body .cw-widget .cw-message-row,
   html:root body .cw-widget .cw-message-row--me .cw-message-wrap,

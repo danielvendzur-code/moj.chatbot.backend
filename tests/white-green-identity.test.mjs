@@ -80,6 +80,25 @@ test("launcher uses the supplied one-stroke mark and the solid hand-drawn redraw
   assert.doesNotMatch(css, /@keyframes[^}]*bounce/i);
 });
 
+test("transparent launcher adapts to the host surface and option icons turn white on hover", async () => {
+  const embed = await read("public/embed.js");
+  const runtime = await read("src/components/widget/LaunchReadyRuntime.tsx");
+  const motion = await read("src/premium-motion-system.css");
+
+  assert.match(embed, /document\.elementsFromPoint/);
+  assert.match(embed, /closest\("\[data-nav-tone\]"\)/);
+  assert.match(embed, /postToWidget\("surface-tone"/);
+  assert.match(runtime, /data\.type !== "surface-tone"/);
+  assert.match(runtime, /launcher\.dataset\.surfaceTone = tone/);
+  assert.match(runtime, /document\.elementsFromPoint/);
+  assert.match(runtime, /closest\("\.cw-widget"\)/);
+  assert.match(motion, /\.cw-launcher\[data-surface-tone="light"\]/);
+  assert.match(
+    motion,
+    /:is\(\.cw-rowcard\[class\], \.cw-scard\[class\]\):is\(:hover, :focus-visible\)[\s\S]*background: #ffffff !important/,
+  );
+});
+
 test("header is the brand plus a live availability state, nothing else", async () => {
   const widget = await read("src/components/widget/AssistantWidget.tsx");
 

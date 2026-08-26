@@ -48,6 +48,8 @@
     var mobileMedia = window.matchMedia(MOBILE_QUERY);
     var visualViewport = window.visualViewport;
     var visualViewportFrame = 0;
+    var surfaceToneFrame = 0;
+    var surfaceTone = "";
     var ready = false;
     var open = false;
     var pendingOpen = null;
@@ -149,6 +151,70 @@
       frame.contentWindow.postMessage(message, widgetOrigin);
     }
 
+    function colourLuminance(value) {
+      var match = String(value || "").match(/rgba?\(([^)]+)\)/i);
+      if (!match) return null;
+      var parts = match[1].split(",").map(function (part) { return Number.parseFloat(part); });
+      if (parts.length < 3 || parts.some(function (part) { return !Number.isFinite(part); })) return null;
+      if (parts.length > 3 && parts[3] < 0.18) return null;
+      var channels = parts.slice(0, 3).map(function (channel) {
+        var normalized = Math.max(0, Math.min(255, channel)) / 255;
+        return normalized <= 0.03928 ? normalized / 12.92 : Math.pow((normalized + 0.055) / 1.055, 2.4);
+      });
+      return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+    }
+
+    function toneAtPoint(x, y) {
+      var stack = document.elementsFromPoint(x, y);
+      var candidate = stack.find(function (element) { return element !== host; }) || document.body;
+      var toned = candidate.closest && candidate.closest("[data-nav-tone]");
+      var declared = toned && toned.getAttribute("data-nav-tone");
+      if (declared === "light" || declared === "dark") return declared;
+
+      var current = candidate;
+      while (current && current instanceof Element) {
+        var luminance = colourLuminance(window.getComputedStyle(current).backgroundColor);
+        if (luminance !== null) return luminance > 0.5 ? "light" : "dark";
+        current = current.parentElement;
+      }
+      return "light";
+    }
+
+    function surfaceProfileBelowLauncher() {
+      var rect = frame.getBoundingClientRect();
+      var x = Math.max(0, Math.min(window.innerWidth - 1, rect.right - 56));
+      var top = Math.max(0, rect.bottom - 104);
+      var bottom = Math.min(window.innerHeight - 1, rect.bottom - 16);
+      var sampleCount = 13;
+      var tones = Array.from({ length: sampleCount }, function (_, index) {
+        var ratio = index / (sampleCount - 1);
+        return toneAtPoint(x, top + (bottom - top) * ratio);
+      });
+      var topTone = tones[0];
+      var bottomTone = tones[tones.length - 1];
+      var tone = tones[Math.floor(tones.length / 2)];
+      var boundary = 50;
+      if (topTone !== bottomTone) {
+        var transitionIndex = tones.findIndex(function (sample) { return sample !== topTone; });
+        if (transitionIndex > 0) boundary = ((transitionIndex - 0.5) / (sampleCount - 1)) * 100;
+      }
+      return { tone: tone, topTone: topTone, bottomTone: bottomTone, boundary: boundary };
+    }
+
+    function syncSurfaceTone() {
+      surfaceToneFrame = 0;
+      var profile = surfaceProfileBelowLauncher();
+      var signature = [profile.tone, profile.topTone, profile.bottomTone, Math.round(profile.boundary)].join(":");
+      if (signature === surfaceTone) return;
+      surfaceTone = signature;
+      if (ready) postToWidget("surface-tone", profile);
+    }
+
+    function scheduleSurfaceToneSync() {
+      if (surfaceToneFrame || open) return;
+      surfaceToneFrame = window.requestAnimationFrame(syncSurfaceTone);
+    }
+
     function lockParentPage() {
       if (pageLocked || !isMobile()) return;
       pageLocked = true;
@@ -201,6 +267,7 @@
       frame.classList.toggle("is-open", open);
       syncVisualViewport();
       if (open) lockParentPage(); else unlockParentPage();
+      if (!open) scheduleSurfaceToneSync();
     }
 
     function sendViewport() {
@@ -236,6 +303,8 @@
         frame.classList.add("is-ready");
         applyOpenState(data.open === true);
         sendViewport();
+        surfaceTone = "";
+        scheduleSurfaceToneSync();
         sendPendingOpen();
         return;
       }
@@ -268,6 +337,8 @@
     syncSiteMenu();
     window.addEventListener(OPEN_EVENT, onOpenEvent);
     window.addEventListener("message", onMessage);
+    window.addEventListener("scroll", scheduleSurfaceToneSync, { passive: true });
+    window.addEventListener("resize", scheduleSurfaceToneSync, { passive: true });
     if (visualViewport) {
       visualViewport.addEventListener("resize", scheduleVisualViewportSync, { passive: true });
       visualViewport.addEventListener("scroll", scheduleVisualViewportSync, { passive: true });
@@ -280,12 +351,16 @@
       returnFocusElement = null;
       if (visualViewportFrame) window.cancelAnimationFrame(visualViewportFrame);
       visualViewportFrame = 0;
+      if (surfaceToneFrame) window.cancelAnimationFrame(surfaceToneFrame);
+      surfaceToneFrame = 0;
       if (visualViewport) {
         visualViewport.removeEventListener("resize", scheduleVisualViewportSync);
         visualViewport.removeEventListener("scroll", scheduleVisualViewportSync);
       }
       window.removeEventListener(OPEN_EVENT, onOpenEvent);
       window.removeEventListener("message", onMessage);
+      window.removeEventListener("scroll", scheduleSurfaceToneSync);
+      window.removeEventListener("resize", scheduleSurfaceToneSync);
       if (typeof mobileMedia.removeEventListener === "function") mobileMedia.removeEventListener("change", onViewportChange);
       else if (typeof mobileMedia.removeListener === "function") mobileMedia.removeListener(onViewportChange);
       if (window.openSiteAssistant === publicOpen) delete window.openSiteAssistant;
