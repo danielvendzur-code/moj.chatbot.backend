@@ -10,6 +10,7 @@ import "./goal-lock-final.css";
 import "./interaction-stability-final.css";
 import "./restored-widget-palette.css";
 import "./premium-motion-system.css";
+import "./requested-august-widget.css";
 
 export default function App(): JSX.Element {
   const embedMode = isEmbedMode();

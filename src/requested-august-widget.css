@@ -1,0 +1,227 @@
+/* Requested interaction polish. This is the final authority in both preview and embed builds. */
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-chat-builder[class] .cw-chat-builder__arrow[class],
+html:root body .cw-widget[class][class][class][class]
+  .cw-chat-builder[class]:is(:hover, :focus-visible) .cw-chat-builder__arrow[class] {
+  transform: none !important;
+  animation: none !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html:root body .cw-widget[class][class][class][class]
+    .cw-chat-builder[class]:is(:hover, :focus-visible) .cw-chat-builder__arrow[class] {
+    color: #ffffff !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class]
+    .cw-chat-builder[class]:is(:hover, :focus-visible) .cw-builder-click-cue__pointer {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+    stroke: #ffffff !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class]
+    .cw-chat-builder[class]:is(:hover, :focus-visible) .cw-builder-click-cue__rays {
+    color: #ffffff !important;
+    fill: none !important;
+    stroke: #ffffff !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html:root body .cw-widget[class][class][class][class]
+    .cw-chat-builder[class]:is(:hover, :focus-visible) .cw-builder-click-cue__pointer {
+    animation: cw-requested-pointer-cue 780ms cubic-bezier(0.16, 1, 0.3, 1) infinite alternate !important;
+    transform-origin: 45% 45%;
+  }
+
+  html:root body .cw-widget[class][class][class][class]
+    .cw-chat-builder[class]:is(:hover, :focus-visible) .cw-builder-click-cue__rays {
+    animation: cw-requested-pointer-rays 780ms ease-in-out infinite alternate !important;
+  }
+}
+
+@keyframes cw-requested-pointer-cue {
+  from { transform: translate3d(-1px, 1px, 0) rotate(-1deg); }
+  to { transform: translate3d(4px, -3px, 0) rotate(2deg); }
+}
+
+@keyframes cw-requested-pointer-rays {
+  from { opacity: 0.48; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1.08); }
+}
+
+/* The assistant mark in the thread uses the same dark forest ink as the header. */
+html:root body .cw-widget[class][class][class][class]
+  .cw-message-row--bot[class] .cw-avatar[class] {
+  color: #0b2f20 !important;
+  border-color: rgba(11, 47, 32, 0.18) !important;
+  background: #edf2e8 !important;
+  box-shadow: none !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-message-row--bot[class] .cw-avatar[class] :is(.bl, svg, path) {
+  color: #0b2f20 !important;
+}
+
+/* A restrained selection ring with a drawn confirmation instead of a flat dot. */
+html:root body .cw-widget[class][class][class][class]
+  .cw-calculator[class] .cw-selection-indicator[class] {
+  width: 26px !important;
+  height: 26px !important;
+  display: grid !important;
+  place-items: center !important;
+  color: transparent !important;
+  border: 1px solid rgba(11, 47, 32, 0.3) !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.72) !important;
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.45) !important;
+  opacity: 0.62 !important;
+  transform: scale(0.88) !important;
+  transition:
+    color 220ms ease,
+    opacity 220ms ease,
+    transform 380ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 220ms ease,
+    background-color 220ms ease !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-calculator[class] .cw-selection-indicator[class][data-visible="true"] {
+  color: #0b2f20 !important;
+  border-color: #ffffff !important;
+  background: #ffffff !important;
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  box-shadow: 0 8px 18px -13px rgba(11, 47, 32, 0.7) !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-calculator[class] .cw-selection-indicator[class] svg {
+  width: 15px !important;
+  height: 15px !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-calculator[class] .cw-selection-indicator[class] svg path {
+  color: inherit !important;
+  stroke: currentColor !important;
+  stroke-width: 2.35 !important;
+  stroke-dasharray: 24 !important;
+  stroke-dashoffset: 24 !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-calculator[class]
+  :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]
+  .cw-selection-indicator[class][data-visible="true"] svg path {
+  color: #0b2f20 !important;
+  stroke: #0b2f20 !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:root body .cw-widget[class][class][class][class]
+    .cw-calculator[class] .cw-selection-indicator[class][data-visible="true"] svg path {
+    animation: cw-requested-check-draw 420ms cubic-bezier(0.16, 1, 0.3, 1) 70ms forwards !important;
+  }
+}
+
+@keyframes cw-requested-check-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Sending reads as a short flight with a quiet trail; the completed view keeps its existing check. */
+html:root body .cw-widget[class][class][class][class] .cw-send-flight[class] {
+  position: relative !important;
+  width: 28px !important;
+  height: 18px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  overflow: visible !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-send-flight[class] svg {
+  position: relative !important;
+  z-index: 2 !important;
+  width: 17px !important;
+  height: 17px !important;
+  color: currentColor !important;
+}
+
+html:root body .cw-widget[class][class][class][class] .cw-send-flight[class] i {
+  position: absolute !important;
+  z-index: 1 !important;
+  right: 15px !important;
+  width: 15px !important;
+  height: 1px !important;
+  border-radius: 999px !important;
+  background: currentColor !important;
+  opacity: 0.45 !important;
+  transform-origin: right center !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-submit[class][data-state="sending"] {
+  color: #ffffff !important;
+  border-color: #0b2f20 !important;
+  background: #0b2f20 !important;
+  background-image: none !important;
+  opacity: 1 !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-submit[class][data-state="sending"] .cw-submit__content[class],
+html:root body .cw-widget[class][class][class][class]
+  .cw-submit[class][data-state="sending"] .cw-submit__content[class] :is(span, svg, path, i) {
+  color: #ffffff !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:root body .cw-widget[class][class][class][class]
+    .cw-submit[class][data-state="sending"] .cw-send-flight[class] svg {
+    animation: cw-requested-send-flight 820ms cubic-bezier(0.22, 1, 0.36, 1) infinite !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class]
+    .cw-submit[class][data-state="sending"] .cw-send-flight[class] i {
+    animation: cw-requested-send-trail 820ms ease-in-out infinite !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class]
+    .cw-send[class][data-sending="true"] svg {
+    animation: cw-requested-chat-send 460ms cubic-bezier(0.22, 1, 0.36, 1) both !important;
+  }
+}
+
+@keyframes cw-requested-send-flight {
+  0% { opacity: 0.45; transform: translate3d(-7px, 2px, 0) rotate(-5deg); }
+  45% { opacity: 1; }
+  100% { opacity: 0.55; transform: translate3d(8px, -2px, 0) rotate(2deg); }
+}
+
+@keyframes cw-requested-send-trail {
+  0% { opacity: 0; transform: scaleX(0.2); }
+  38% { opacity: 0.5; transform: scaleX(1); }
+  100% { opacity: 0; transform: translateX(8px) scaleX(0.25); }
+}
+
+@keyframes cw-requested-chat-send {
+  0% { opacity: 0.65; transform: translate3d(-3px, 2px, 0) rotate(-5deg); }
+  100% { opacity: 1; transform: translate3d(4px, -3px, 0) rotate(1deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:root body .cw-widget .cw-send-flight,
+  html:root body .cw-widget .cw-send-flight *,
+  html:root body .cw-widget .cw-selection-indicator,
+  html:root body .cw-widget .cw-selection-indicator * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  html:root body .cw-widget .cw-selection-indicator[data-visible="true"] svg path {
+    stroke-dashoffset: 0 !important;
+  }
+}

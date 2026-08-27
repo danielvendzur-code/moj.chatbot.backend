@@ -678,7 +678,11 @@ export function ToolCalculator({
             <span className="cw-submit__content">
               {sendState === "sending" ? (
                 <>
-                  <span className="cw-spinner" aria-hidden="true" /> Posielam…
+                  <span className="cw-send-flight" aria-hidden="true">
+                    <WidgetIcon name="send" />
+                    <i />
+                  </span>
+                  Posielam…
                 </>
               ) : (
                 <>

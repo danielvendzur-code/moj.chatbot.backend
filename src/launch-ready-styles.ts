@@ -7,3 +7,4 @@ import "./goal-lock-final.css";
 import "./interaction-stability-final.css";
 import "./restored-widget-palette.css";
 import "./premium-motion-system.css";
+import "./requested-august-widget.css";
