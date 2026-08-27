@@ -1,81 +1,47 @@
-/* Final contact-chip polish only. Imported after the existing requested August layer. */
+/* Final contact-chip glow only. No layout, hit-area or overflow changes. */
 
 html:root body .cw-widget[class][class][class][class] .cw-direct-actions__grid a {
-  --cw-contact-ink: #d8e7df;
-  --cw-contact-glow: rgba(200, 240, 106, 0.2);
-  --cw-contact-tint: rgba(200, 240, 106, 0.055);
-  position: relative !important;
-  isolation: isolate !important;
-  overflow: hidden !important;
-  color: #dbe6e0 !important;
-  background:
-    radial-gradient(circle at 50% 0%, var(--cw-contact-tint), transparent 72%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012)) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.07),
-    inset 0 0 0 1px rgba(230, 239, 233, 0.08),
-    0 12px 28px -25px var(--cw-contact-glow) !important;
+  --cw-contact-glow: rgba(200, 240, 106, 0.24);
   transition:
     transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
-    color 180ms ease,
-    background 220ms ease,
     box-shadow 220ms ease !important;
 }
 
 html:root body .cw-widget[class][class][class][class] .cw-direct-actions__grid a:nth-child(1) {
-  --cw-contact-ink: #54d98b;
-  --cw-contact-glow: rgba(84, 217, 139, 0.62);
-  --cw-contact-tint: rgba(84, 217, 139, 0.13);
+  --cw-contact-glow: rgba(84, 217, 139, 0.58);
 }
 
 html:root body .cw-widget[class][class][class][class] .cw-direct-actions__grid a:nth-child(2) {
-  --cw-contact-ink: #67c7d9;
-  --cw-contact-glow: rgba(103, 199, 217, 0.6);
-  --cw-contact-tint: rgba(103, 199, 217, 0.12);
+  --cw-contact-glow: rgba(103, 199, 217, 0.56);
 }
 
 html:root body .cw-widget[class][class][class][class] .cw-direct-actions__grid a:nth-child(3) {
-  --cw-contact-ink: #b59af4;
-  --cw-contact-glow: rgba(181, 154, 244, 0.6);
-  --cw-contact-tint: rgba(181, 154, 244, 0.12);
+  --cw-contact-glow: rgba(181, 154, 244, 0.56);
 }
 
 html:root body .cw-widget[class][class][class][class] .cw-direct-actions__grid a > svg {
-  width: 17px !important;
-  height: 17px !important;
-  color: var(--cw-contact-ink) !important;
   filter: drop-shadow(0 0 7px var(--cw-contact-glow)) !important;
   transition:
-    color 180ms ease,
     filter 220ms ease,
     transform 220ms cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 html:root body .cw-widget[class][class][class][class]
   .cw-direct-actions__grid a:is(:hover, :focus-visible) {
-  color: #ffffff !important;
-  background:
-    radial-gradient(circle at 50% 0%, var(--cw-contact-tint), transparent 66%),
-    linear-gradient(180deg, rgba(24, 34, 29, 0.98), rgba(11, 17, 14, 0.98)) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.09),
-    inset 0 0 0 1px color-mix(in srgb, var(--cw-contact-ink) 38%, transparent),
-    0 18px 34px -20px var(--cw-contact-glow),
-    0 0 24px -17px var(--cw-contact-glow) !important;
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.09),
+    0 16px 30px -20px var(--cw-contact-glow),
+    0 0 22px -16px var(--cw-contact-glow) !important;
   transform: translateY(-2px) !important;
 }
 
 html:root body .cw-widget[class][class][class][class]
   .cw-direct-actions__grid a:is(:hover, :focus-visible) > svg {
-  color: #ffffff !important;
   filter:
     drop-shadow(0 0 8px var(--cw-contact-glow))
-    drop-shadow(0 0 14px var(--cw-contact-glow)) !important;
-  transform: translateY(-1px) scale(1.06) !important;
-}
-
-html:root body .cw-widget[class][class][class][class] .cw-direct-actions__grid a:active {
-  transform: translateY(0) scale(0.985) !important;
+    drop-shadow(0 0 13px var(--cw-contact-glow)) !important;
+  transform: scale(1.05) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
