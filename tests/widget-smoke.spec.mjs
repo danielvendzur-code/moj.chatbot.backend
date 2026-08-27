@@ -245,7 +245,7 @@ test("mobile embed uses real taps for tabs and back navigation", async ({
   expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 1);
   expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 1);
 
-  await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "0px");
+  await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "999px");
   await page.getByTestId("tab-calculator").tap();
   await expect(panel).toHaveAttribute("data-mode", "calculator");
   await expect(
