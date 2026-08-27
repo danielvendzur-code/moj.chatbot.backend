@@ -1,1 +1,0 @@
-Baseline browser-smoke diagnostic for current main. No runtime source changes.
