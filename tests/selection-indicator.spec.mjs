@@ -21,13 +21,31 @@ const readSelectionSnapshot = async (card) =>
     const cardStyle = getComputedStyle(element);
     const indicatorStyle = getComputedStyle(indicator);
     const pathStyle = getComputedStyle(path);
+    const offsetParent = indicator.offsetParent;
     return {
       selected: element.getAttribute("data-selected"),
       confirming: element.getAttribute("data-confirming"),
       cardBackground: cardStyle.backgroundColor,
       cardBorder: cardStyle.borderTopColor,
+      cardPosition: cardStyle.position,
+      cardTransform: cardStyle.transform,
+      cardPaddingTop: cardStyle.paddingTop,
+      cardPaddingBottom: cardStyle.paddingBottom,
+      cardTop: cardBox.top,
+      cardHeight: cardBox.height,
       indicatorOpacity: indicatorStyle.opacity,
       indicatorBackground: indicatorStyle.backgroundColor,
+      indicatorPosition: indicatorStyle.position,
+      indicatorTop: indicatorStyle.top,
+      indicatorBottom: indicatorStyle.bottom,
+      indicatorMarginTop: indicatorStyle.marginTop,
+      indicatorMarginBottom: indicatorStyle.marginBottom,
+      indicatorTransform: indicatorStyle.transform,
+      indicatorTopPx: indicatorBox.top,
+      indicatorHeight: indicatorBox.height,
+      offsetParentTag: offsetParent?.tagName ?? null,
+      offsetParentClass: offsetParent instanceof HTMLElement ? offsetParent.className : null,
+      offsetParentTestId: offsetParent instanceof HTMLElement ? offsetParent.dataset.testid ?? null : null,
       checkStroke: pathStyle.stroke,
       cardCenterY: cardBox.top + cardBox.height / 2,
       indicatorCenterY: indicatorBox.top + indicatorBox.height / 2,
@@ -55,6 +73,7 @@ test("selection check is centered and selected cards stay light at rest", async 
   });
 
   const snapshot = await readSelectionSnapshot(selectedCard);
+  console.log("DESKTOP_SELECTION_SNAPSHOT", JSON.stringify(snapshot));
   expect(snapshot.selected).toBe("true");
   expect(snapshot.cardBackground).toBe("rgb(248, 251, 245)");
   expect(snapshot.cardBorder).toBe("rgb(25, 131, 79)");
@@ -90,6 +109,7 @@ test("mobile selection uses the same centered check without hover-only dark fill
   });
 
   const snapshot = await readSelectionSnapshot(card);
+  console.log("MOBILE_SELECTION_SNAPSHOT", JSON.stringify(snapshot));
   expect(snapshot.cardBackground).toBe("rgb(248, 251, 245)");
   expect(snapshot.cardBorder).toBe("rgb(25, 131, 79)");
   expect(snapshot.indicatorOpacity).toBe("1");
