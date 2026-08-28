@@ -9,16 +9,30 @@ const mobileContext = {
   reducedMotion: "no-preference",
 };
 
-function containsDrawAndReverseErase(values) {
-  const firstHigh = values.findIndex((value) => value > 0.9);
-  if (firstHigh < 0) return false;
+function measureDirectionalSteps(values) {
+  let drawingSteps = 0;
+  let erasingSteps = 0;
+  let largestDrawingStep = 0;
+  let largestErasingStep = 0;
 
-  const lowAfterHigh = values.findIndex(
-    (value, index) => index > firstHigh && value < 0.1,
-  );
-  if (lowAfterHigh < 0) return false;
+  for (let index = 1; index < values.length; index += 1) {
+    const delta = values[index] - values[index - 1];
+    if (delta < -0.02) {
+      drawingSteps += 1;
+      largestDrawingStep = Math.max(largestDrawingStep, -delta);
+    }
+    if (delta > 0.02) {
+      erasingSteps += 1;
+      largestErasingStep = Math.max(largestErasingStep, delta);
+    }
+  }
 
-  return values.some((value, index) => index > lowAfterHigh && value > 0.9);
+  return {
+    drawingSteps,
+    erasingSteps,
+    largestDrawingStep,
+    largestErasingStep,
+  };
 }
 
 async function verifyReverseErase(launcher) {
@@ -57,7 +71,16 @@ async function verifyReverseErase(launcher) {
   expect(Math.min(...result.values)).toBeLessThan(0.08);
   expect(Math.max(...result.values)).toBeGreaterThan(0.92);
   expect(result.values.some((value) => value > 0.2 && value < 0.8)).toBe(true);
-  expect(containsDrawAndReverseErase(result.values)).toBe(true);
+
+  const direction = measureDirectionalSteps(result.values);
+  expect(direction.drawingSteps).toBeGreaterThan(8);
+  expect(direction.erasingSteps).toBeGreaterThan(8);
+  expect(direction.largestDrawingStep).toBeGreaterThan(0.02);
+  expect(direction.largestErasingStep).toBeGreaterThan(0.02);
+
+  const directionRatio = direction.drawingSteps / direction.erasingSteps;
+  expect(directionRatio).toBeGreaterThan(0.55);
+  expect(directionRatio).toBeLessThan(1.8);
 
   const largestComputedDifference = result.values.reduce(
     (largest, value, index) =>
