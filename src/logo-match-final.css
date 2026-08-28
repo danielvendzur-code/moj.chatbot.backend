@@ -1,13 +1,12 @@
 /* Final authority for the approved one-stroke chatbot mark.
-   Desktop keeps the already-working registered-offset implementation. Touch
-   devices use a separate SVG path whose stroke-dashoffset is animated directly,
-   avoiding Safari/WebKit custom-property interpolation issues. */
+   Desktop keeps the already-working registered-offset motion. On touch/mobile
+   the exact same SVG path animates stroke-dashoffset directly so Safari/WebKit
+   draws and erases the line progressively without a reset or fade. */
 html:root body .cw-widget .cw-launcher,
 html:root body .cw-widget .cw-panel-head__mascot {
   color: #19834f !important;
 }
 
-/* Desktop / fine-pointer path. */
 html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
   --cw-logo-offset: 1;
   stroke: currentColor !important;
@@ -23,10 +22,6 @@ html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke 
 html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) .bl__stroke,
 html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl__stroke {
   animation: cw-logo-draw-erase-loop 5.4s linear infinite both !important;
-}
-
-html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__mobile-stroke {
-  display: none;
 }
 
 @keyframes cw-logo-draw-erase-loop {
@@ -46,24 +41,14 @@ html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__mobile-
   }
 }
 
-/* Safari-safe mobile path. The line takes the same time to draw and to erase:
-   5%→35% forward, 50%→80% backwards. No opacity reset is used. */
+/* Safari-safe mobile motion on the same, single brand path.
+   Draw and reverse erase both occupy 30% of the 5.4s cycle (~1.62s). */
 @media (max-width: 760px), (pointer: coarse), (hover: none) {
-  html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
-    display: none !important;
-  }
-
-  html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__mobile-stroke {
-    display: inline !important;
-    stroke: currentColor !important;
-    stroke-width: 7.75 !important;
-    stroke-linecap: round !important;
-    stroke-linejoin: round !important;
-    stroke-dasharray: 1 1 !important;
+  html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke,
+  html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) .bl__stroke,
+  html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl__stroke {
     stroke-dashoffset: 1;
-    opacity: 1 !important;
     animation: cw-mobile-logo-draw-erase-loop 5.4s linear infinite both !important;
-    will-change: stroke-dashoffset;
   }
 }
 
@@ -105,13 +90,8 @@ html:root body .cw-widget .cw-panel-head__mascot {
 @media (prefers-reduced-motion: reduce) {
   html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
     --cw-logo-offset: 0;
-    display: inline !important;
+    stroke-dashoffset: 0 !important;
     animation: none !important;
     opacity: 1 !important;
-  }
-
-  html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__mobile-stroke {
-    display: none !important;
-    animation: none !important;
   }
 }
