@@ -66,10 +66,16 @@ html:root body .cw-widget[class][class][class][class]
   color: #0b2f20 !important;
 }
 
-/* Selection: light at rest, dark green only on intentional hover/focus. */
+/* Selection: both the selected and the short auto-confirm state stay light.
+   Older layers styled data-confirming separately, which caused a dark flash on
+   touch before the next step. The only dark treatment left is a real fine-
+   pointer hover/focus below. */
 html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class]
-  :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"] {
+  :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):is(
+    [data-selected="true"],
+    [data-confirming="true"]
+  ) {
   color: #173126 !important;
   -webkit-text-fill-color: currentColor !important;
   border: 2px solid #19834f !important;
@@ -79,11 +85,15 @@ html:root body .cw-widget[class][class][class][class]
   box-shadow:
     0 0 0 3px rgba(25, 131, 79, 0.07),
     0 14px 28px -26px rgba(25, 131, 79, 0.3) !important;
+  transition: none !important;
 }
 
 html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class]
-  :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]::after {
+  :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):is(
+    [data-selected="true"],
+    [data-confirming="true"]
+  )::after {
   content: none !important;
   display: none !important;
 }
@@ -91,7 +101,10 @@ html:root body .cw-widget[class][class][class][class]
 @media (hover: hover) and (pointer: fine) {
   html:root body .cw-widget[class][class][class][class]
     .cw-calculator[class]
-    :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]:is(:hover, :focus-visible) {
+    :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):is(
+      [data-selected="true"],
+      [data-confirming="true"]
+    ):is(:hover, :focus-visible) {
     color: #ffffff !important;
     -webkit-text-fill-color: currentColor !important;
     border-color: #0b2f20 !important;
@@ -167,7 +180,10 @@ html:root body .cw-widget[class][class][class][class]
 
 html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class]
-  :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]
+  :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):is(
+    [data-selected="true"],
+    [data-confirming="true"]
+  )
   .cw-selection-indicator[class][data-visible="true"] svg path {
   color: #ffffff !important;
   stroke: #ffffff !important;
@@ -179,7 +195,10 @@ html:root body .cw-widget[class][class][class][class]
 @media (hover: hover) and (pointer: fine) {
   html:root body .cw-widget[class][class][class][class]
     .cw-calculator[class]
-    :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]:is(:hover, :focus-visible)
+    :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):is(
+      [data-selected="true"],
+      [data-confirming="true"]
+    ):is(:hover, :focus-visible)
     .cw-selection-indicator[class][data-visible="true"] {
     color: #071b15 !important;
     border-color: #c8f06a !important;
@@ -189,7 +208,10 @@ html:root body .cw-widget[class][class][class][class]
 
   html:root body .cw-widget[class][class][class][class]
     .cw-calculator[class]
-    :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]:is(:hover, :focus-visible)
+    :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):is(
+      [data-selected="true"],
+      [data-confirming="true"]
+    ):is(:hover, :focus-visible)
     .cw-selection-indicator[class][data-visible="true"] svg path {
     color: #071b15 !important;
     stroke: #071b15 !important;
