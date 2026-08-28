@@ -15,9 +15,9 @@ html:root body .cw-widget {
   --goal-choice-radius: 18px;
 }
 
-/* Keep the logo complete and still at rest. The attention animation runs only
-   while a real pointer is hovering the mark: one slow draw, a short hold, then
-   a deliberate erase. Leaving hover restores the complete mark immediately. */
+/* Keep the logo complete at rest. stroke-dashoffset intentionally remains a
+   normal declaration so the final logo layer can animate the same SVG path
+   directly on WebKit/Safari instead of relying on custom-property interpolation. */
 html:root body .cw-widget .cw-launcher .bl__stroke,
 html:root body .cw-widget .cw-panel-head__mascot .bl__stroke {
   --cw-logo-offset: 0;
@@ -26,7 +26,7 @@ html:root body .cw-widget .cw-panel-head__mascot .bl__stroke {
   stroke-linecap: round !important;
   stroke-linejoin: round !important;
   stroke-dasharray: 1 !important;
-  stroke-dashoffset: var(--cw-logo-offset) !important;
+  stroke-dashoffset: var(--cw-logo-offset);
   opacity: 1 !important;
   animation: none !important;
   will-change: stroke-dashoffset;
