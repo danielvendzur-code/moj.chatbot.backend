@@ -42,6 +42,15 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
           strokeLinecap="round"
           strokeLinejoin="round"
         />
+        <path
+          className="bl__mobile-stroke"
+          d={ONE_STROKE}
+          pathLength={1}
+          stroke="currentColor"
+          strokeWidth="7.25"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
     </span>
   );
