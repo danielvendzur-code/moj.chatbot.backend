@@ -1,21 +1,15 @@
 import { test, expect } from "@playwright/test";
 
-test("mobile logo draws and progressively erases on the same SVG stroke", async ({ browser }) => {
-  const context = await browser.newContext({
-    viewport: { width: 390, height: 844 },
-    screen: { width: 390, height: 844 },
-    isMobile: true,
-    hasTouch: true,
-    deviceScaleFactor: 3,
-    reducedMotion: "no-preference",
-  });
-  const page = await context.newPage();
+const mobileContext = {
+  viewport: { width: 390, height: 844 },
+  screen: { width: 390, height: 844 },
+  isMobile: true,
+  hasTouch: true,
+  deviceScaleFactor: 3,
+  reducedMotion: "no-preference",
+};
 
-  await page.goto("http://127.0.0.1:4173/?embed=1&viewport=mobile", {
-    waitUntil: "networkidle",
-  });
-
-  const launcher = page.getByTestId("widget-launcher");
+async function verifyReverseErase(launcher) {
   await expect(launcher).toBeVisible();
 
   const stroke = launcher.locator(".bl__stroke");
@@ -27,10 +21,7 @@ test("mobile logo draws and progressively erases on the same SVG stroke", async 
   const samples = await stroke.evaluate((element) => {
     const animation = element
       .getAnimations()
-      .find(
-        (item) =>
-          !(item instanceof CSSAnimation) || item.animationName === "cw-mobile-logo-draw-erase-loop",
-      );
+      .find((item) => item.animationName === "cw-mobile-logo-draw-erase-loop");
     if (!animation) throw new Error("Mobile logo CSS animation is not running");
 
     animation.pause();
@@ -54,6 +45,39 @@ test("mobile logo draws and progressively erases on the same SVG stroke", async 
   expect(samples.erasing).toBeGreaterThan(0.12);
   expect(samples.erasing).toBeLessThan(0.9);
   expect(samples.hidden).toBeGreaterThan(0.95);
+}
 
+test("mobile preview draws and progressively erases the single SVG stroke", async ({ browser }) => {
+  const context = await browser.newContext(mobileContext);
+  const page = await context.newPage();
+
+  await page.goto("http://127.0.0.1:4173/?embed=1&viewport=mobile", {
+    waitUntil: "networkidle",
+  });
+
+  await verifyReverseErase(page.getByTestId("widget-launcher"));
+  await context.close();
+});
+
+test("production widget assets keep the same reverse erase on mobile", async ({ browser }) => {
+  const context = await browser.newContext(mobileContext);
+  const page = await context.newPage();
+
+  await page.setContent(
+    `<!doctype html>
+      <html>
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="stylesheet" href="http://127.0.0.1:4173/widget.css" />
+        </head>
+        <body>
+          <script src="http://127.0.0.1:4173/widget.js"></script>
+        </body>
+      </html>`,
+    { waitUntil: "networkidle" },
+  );
+
+  const launcher = page.locator("#dv-assistant-root [data-testid='widget-launcher']");
+  await verifyReverseErase(launcher);
   await context.close();
 });
