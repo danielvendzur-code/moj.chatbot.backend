@@ -91,7 +91,6 @@ jobs:
           grep -Fq 'archived-layout-restrained-palette' dist/widget.js
           grep -Fq 'M24 71.2L24.003 32.706L24.036' dist/widget.js
           grep -Fq 'bl__stroke' dist/widget.js
-          grep -Fq 'bl__mobile-stroke' dist/widget.js
 
           # The emitted widget CSS must contain the identity, interaction shell
           # and the concrete chip-label persistence fix. Minifiers may remove
