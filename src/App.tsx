@@ -12,6 +12,7 @@ import "./premium-motion-system.css";
 import "./requested-august-widget.css";
 import "./contact-chip-glow-final.css";
 import "./logo-match-final.css";
+import "./selection-indicator-authority.css";
 
 export default function App(): JSX.Element {
   const embedMode = isEmbedMode();
