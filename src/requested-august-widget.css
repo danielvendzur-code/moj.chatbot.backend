@@ -66,7 +66,21 @@ html:root body .cw-widget[class][class][class][class]
   color: #0b2f20 !important;
 }
 
-/* One centered selection indicator. The older pseudo-check is explicitly disabled. */
+/* Selection: light at rest, dark green only on intentional hover/focus. */
+html:root body .cw-widget[class][class][class][class]
+  .cw-calculator[class]
+  :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"] {
+  color: #173126 !important;
+  -webkit-text-fill-color: currentColor !important;
+  border: 2px solid #19834f !important;
+  background: #f8fbf5 !important;
+  background-color: #f8fbf5 !important;
+  background-image: none !important;
+  box-shadow:
+    0 0 0 3px rgba(25, 131, 79, 0.07),
+    0 14px 28px -26px rgba(25, 131, 79, 0.3) !important;
+}
+
 html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class]
   :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]::after {
@@ -74,58 +88,78 @@ html:root body .cw-widget[class][class][class][class]
   display: none !important;
 }
 
+@media (hover: hover) and (pointer: fine) {
+  html:root body .cw-widget[class][class][class][class]
+    .cw-calculator[class]
+    :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]:is(:hover, :focus-visible) {
+    color: #ffffff !important;
+    -webkit-text-fill-color: currentColor !important;
+    border-color: #0b2f20 !important;
+    background: #0b2f20 !important;
+    background-color: #0b2f20 !important;
+    box-shadow: 0 14px 30px -24px rgba(11, 47, 32, 0.38) !important;
+  }
+}
+
+/* One actual check. Unselected options do not show a misleading grey circle. */
 html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class] .cw-selection-indicator[class] {
-  flex: 0 0 26px !important;
-  width: 26px !important;
-  height: 26px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  align-self: center !important;
-  margin-left: auto !important;
+  position: absolute !important;
+  right: 14px !important;
+  top: 50% !important;
+  flex: 0 0 24px !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: grid !important;
+  place-items: center !important;
+  align-self: auto !important;
+  margin: 0 !important;
   padding: 0 !important;
   color: transparent !important;
-  border: 1px solid rgba(11, 47, 32, 0.3) !important;
+  border: 1px solid rgba(25, 131, 79, 0.2) !important;
   border-radius: 50% !important;
-  background: rgba(255, 255, 255, 0.72) !important;
-  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.45) !important;
-  opacity: 0.62 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
   line-height: 0 !important;
-  transform: scale(0.88) !important;
+  transform: translateY(-50%) scale(0.86) !important;
+  transform-origin: center !important;
   transition:
-    color 180ms ease,
-    opacity 180ms ease,
-    transform 240ms cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 180ms ease,
-    background-color 180ms ease !important;
+    color 160ms ease,
+    opacity 160ms ease,
+    transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 160ms ease,
+    background-color 160ms ease !important;
+  pointer-events: none !important;
 }
 
 html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class] .cw-selection-indicator[class][data-visible="true"] {
-  color: #0b2f20 !important;
-  border-color: #ffffff !important;
-  background: #ffffff !important;
+  color: #ffffff !important;
+  border-color: #19834f !important;
+  background: #19834f !important;
   opacity: 1 !important;
-  transform: scale(1) !important;
-  box-shadow: 0 8px 18px -13px rgba(11, 47, 32, 0.7) !important;
+  transform: translateY(-50%) scale(1) !important;
+  box-shadow: 0 0 0 2px #f8fbf5 !important;
 }
 
 html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class] .cw-selection-indicator[class] svg {
-  width: 15px !important;
-  height: 15px !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 14px !important;
+  height: 14px !important;
   display: block !important;
-  margin: 0 !important;
+  margin: auto !important;
   overflow: visible !important;
-  transform: none !important;
+  transform: translate(0.25px, -0.35px) !important;
 }
 
 html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class] .cw-selection-indicator[class] svg path {
   color: inherit !important;
   stroke: currentColor !important;
-  stroke-width: 2.35 !important;
+  stroke-width: 2.5 !important;
   stroke-dasharray: none !important;
   stroke-dashoffset: 0 !important;
   animation: none !important;
@@ -135,11 +169,31 @@ html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class]
   :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]
   .cw-selection-indicator[class][data-visible="true"] svg path {
-  color: #0b2f20 !important;
-  stroke: #0b2f20 !important;
+  color: #ffffff !important;
+  stroke: #ffffff !important;
   stroke-dasharray: none !important;
   stroke-dashoffset: 0 !important;
   animation: none !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html:root body .cw-widget[class][class][class][class]
+    .cw-calculator[class]
+    :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]:is(:hover, :focus-visible)
+    .cw-selection-indicator[class][data-visible="true"] {
+    color: #071b15 !important;
+    border-color: #c8f06a !important;
+    background: #c8f06a !important;
+    box-shadow: 0 0 0 2px #0b2f20 !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class]
+    .cw-calculator[class]
+    :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt)[data-selected="true"]:is(:hover, :focus-visible)
+    .cw-selection-indicator[class][data-visible="true"] svg path {
+    color: #071b15 !important;
+    stroke: #071b15 !important;
+  }
 }
 
 /* Sending reads as a short flight with a quiet trail; the completed view keeps its existing check. */
