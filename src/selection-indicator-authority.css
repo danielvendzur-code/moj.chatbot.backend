@@ -1,13 +1,23 @@
 /* Final selection-indicator authority shared by preview and production embed.
-   Confirmation must be immediate: the option already auto-advances after a short
-   pause, so fading the check itself only creates a misleading empty state. */
+   Confirmation must be immediate and geometrically centered. */
+html:root body .cw-widget[class][class][class][class]
+  .cw-calculator[class]
+  :is(.cw-rowcard[class], .cw-scard[class], .cw-vcard[class], .cw-opt[class]) {
+  position: relative !important;
+}
+
 html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class] .cw-selection-indicator[class] {
+  top: 0 !important;
+  bottom: 0 !important;
+  margin-top: auto !important;
+  margin-bottom: auto !important;
+  transform: none !important;
   transition: none !important;
 }
 
 html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class] .cw-selection-indicator[class][data-visible="true"] {
   opacity: 1 !important;
-  transform: translateY(-50%) scale(1) !important;
+  transform: none !important;
 }
