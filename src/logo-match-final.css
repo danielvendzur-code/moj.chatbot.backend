@@ -43,7 +43,7 @@ html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl_
 
 /* Mobile: explicitly defeat every historical CSS timeline, including the
    more-specific closed-launcher cycle from premium-motion-system.css. The
-   nested SVG <animate> is then the only owner of stroke-dashoffset. */
+   RAF driver in BubbleLogo is then the only owner of stroke-dashoffset. */
 @media (max-width: 760px), (pointer: coarse), (hover: none) {
   html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl__stroke,
   html:root body .cw-widget .cw-launcher[aria-expanded="true"] .bl__stroke,
@@ -56,12 +56,22 @@ html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl_
   }
 }
 
-/* White circular launcher only — no square tile around the mark. */
-html:root body .cw-widget .cw-launcher {
-  background: #ffffff !important;
+/* The launcher is the mark itself, not a white circular tile.
+   Keep the full button hit-area for usability while the visual surface stays transparent. */
+html:root body .cw-widget .cw-launcher,
+html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible, :active) {
+  background: transparent !important;
+  background-color: transparent !important;
   background-image: none !important;
-  border-radius: 50% !important;
-  overflow: hidden !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  overflow: visible !important;
+}
+
+html:root body .cw-widget .cw-launcher .bl {
+  filter: drop-shadow(0 5px 10px rgba(11, 47, 32, 0.14));
 }
 
 /* Header shows only the green mark, without any square background. */
