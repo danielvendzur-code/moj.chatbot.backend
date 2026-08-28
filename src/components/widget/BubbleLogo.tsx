@@ -10,31 +10,61 @@ const ONE_STROKE =
 
 const LEGACY_GEOMETRY_MARKERS =
   'className="bl__outer" className="bl__inner" strokeWidth="7" M28.6 65.1V32.9L53.4 57.5 L33.5 104.5L57.5 81.1H80.9';
+const MOBILE_LOGO_CYCLE_MS = 5400;
+
+function mobileLogoOffset(progress: number): number {
+  if (progress < 0.05) return 1;
+  if (progress < 0.35) return 1 - (progress - 0.05) / 0.3;
+  if (progress < 0.5) return 0;
+  if (progress < 0.8) return (progress - 0.5) / 0.3;
+  return 1;
+}
 
 export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
-  const mobileMotionRef = useRef<SVGAnimateElement | null>(null);
+  const strokeRef = useRef<SVGPathElement | null>(null);
 
   useEffect(() => {
     if (size === "avatar") return undefined;
 
-    const animation = mobileMotionRef.current;
-    if (!animation) return undefined;
+    const stroke = strokeRef.current;
+    if (!stroke) return undefined;
 
     const mobileQuery = window.matchMedia(
       "(max-width: 760px), (pointer: coarse), (hover: none)",
     );
     const reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
+
+    const clearFrame = () => {
+      if (!frame) return;
+      window.cancelAnimationFrame(frame);
+      frame = 0;
+    };
 
     const syncMotion = () => {
-      try {
-        animation.endElement();
-      } catch {
-        // The SMIL animation may not have started yet.
+      clearFrame();
+      stroke.style.removeProperty("stroke-dashoffset");
+      stroke.style.removeProperty("stroke-dasharray");
+
+      if (reducedQuery.matches) {
+        stroke.style.setProperty("stroke-dashoffset", "0", "important");
+        return;
       }
 
-      if (mobileQuery.matches && !reducedQuery.matches) {
-        animation.beginElement();
-      }
+      if (!mobileQuery.matches) return;
+
+      stroke.style.setProperty("stroke-dasharray", "1 1", "important");
+      const startedAt = performance.now();
+
+      const tick = (now: number) => {
+        const progress = ((now - startedAt) % MOBILE_LOGO_CYCLE_MS) / MOBILE_LOGO_CYCLE_MS;
+        const offset = mobileLogoOffset(progress);
+        stroke.style.setProperty("stroke-dashoffset", offset.toFixed(4), "important");
+        stroke.dataset.mobileLogoOffset = offset.toFixed(4);
+        frame = window.requestAnimationFrame(tick);
+      };
+
+      tick(startedAt);
     };
 
     syncMotion();
@@ -42,13 +72,12 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
     reducedQuery.addEventListener("change", syncMotion);
 
     return () => {
+      clearFrame();
       mobileQuery.removeEventListener("change", syncMotion);
       reducedQuery.removeEventListener("change", syncMotion);
-      try {
-        animation.endElement();
-      } catch {
-        // Unmount after a non-started animation is safe.
-      }
+      stroke.style.removeProperty("stroke-dashoffset");
+      stroke.style.removeProperty("stroke-dasharray");
+      delete stroke.dataset.mobileLogoOffset;
     };
   }, [size]);
 
@@ -76,29 +105,16 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
           </defs>
         ) : null}
         <path
+          ref={strokeRef}
           className="bl__stroke"
+          data-mobile-logo-motion={size === "avatar" ? undefined : "raf"}
           d={ONE_STROKE}
           pathLength={1}
           stroke="currentColor"
           strokeWidth="7.25"
           strokeLinecap="round"
           strokeLinejoin="round"
-        >
-          {size !== "avatar" ? (
-            <animate
-              ref={mobileMotionRef}
-              data-mobile-logo-motion="true"
-              attributeName="stroke-dashoffset"
-              values="1;1;0;0;1;1"
-              keyTimes="0;0.05;0.35;0.5;0.8;1"
-              dur="5.4s"
-              repeatCount="indefinite"
-              calcMode="linear"
-              begin="indefinite"
-              fill="freeze"
-            />
-          ) : null}
-        </path>
+        />
       </svg>
     </span>
   );
