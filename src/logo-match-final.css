@@ -1,5 +1,6 @@
-/* Standalone chatbot logo matches the website mark and motion.
-   Draw once on load; redraw once on hover/focus. No infinite loop. */
+/* Standalone chatbot logo matches the website mark and uses the approved
+   single-stroke geometry. The line draws forward, rests, erases backwards
+   along the same path, rests while hidden, and then draws again. */
 html:root body .cw-widget .cw-launcher,
 html:root body .cw-widget .cw-panel-head__mascot {
   color: #19834f !important;
@@ -10,29 +11,35 @@ html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke 
   stroke-width: 7.75 !important;
   stroke-linecap: round !important;
   stroke-linejoin: round !important;
-  stroke-dasharray: 1 !important;
+  stroke-dasharray: 1 1 !important;
   stroke-dashoffset: 1;
-  opacity: 0.12;
-  animation: cw-logo-intro 4.8s cubic-bezier(0.18, 0.72, 0.18, 1) 1 both !important;
-  will-change: stroke-dashoffset, opacity;
+  opacity: 1;
+  animation: cw-logo-draw-erase-loop 5.2s linear infinite both !important;
+  will-change: stroke-dashoffset;
 }
 
-@keyframes cw-logo-intro {
-  0% { stroke-dashoffset: 1; opacity: 0.12; }
-  12% { opacity: 0.78; }
-  100% { stroke-dashoffset: 0; opacity: 1; }
-}
+@keyframes cw-logo-draw-erase-loop {
+  /* Draw from the beginning of the approved one-stroke path. */
+  0% {
+    stroke-dashoffset: 1;
+  }
+  30% {
+    stroke-dashoffset: 0;
+  }
 
-@keyframes cw-logo-redraw {
-  0% { stroke-dashoffset: 1; opacity: 0.18; }
-  12% { opacity: 0.8; }
-  100% { stroke-dashoffset: 0; opacity: 1; }
-}
+  /* Let the complete mark remain readable for a moment. */
+  44% {
+    stroke-dashoffset: 0;
+  }
 
-@media (hover: hover) and (pointer: fine) {
-  html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) .bl__stroke,
-  html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl__stroke {
-    animation: cw-logo-redraw 3.8s cubic-bezier(0.18, 0.72, 0.18, 1) 1 both !important;
+  /* Increasing the same dash offset progressively undraws the path in reverse. */
+  76% {
+    stroke-dashoffset: 1;
+  }
+
+  /* Match the first frame before the loop restarts so there is no instant reset. */
+  100% {
+    stroke-dashoffset: 1;
   }
 }
 
