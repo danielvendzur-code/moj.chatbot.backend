@@ -9,72 +9,63 @@ const mobileContext = {
   reducedMotion: "no-preference",
 };
 
+function containsDrawAndReverseErase(values) {
+  const firstHigh = values.findIndex((value) => value > 0.9);
+  if (firstHigh < 0) return false;
+
+  const lowAfterHigh = values.findIndex(
+    (value, index) => index > firstHigh && value < 0.1,
+  );
+  if (lowAfterHigh < 0) return false;
+
+  return values.some((value, index) => index > lowAfterHigh && value > 0.9);
+}
+
 async function verifyReverseErase(launcher) {
   await expect(launcher).toBeVisible();
 
-  const stroke = launcher.locator(".bl__stroke");
-  const nativeMotion = stroke.locator('animate[data-mobile-logo-motion="true"]');
+  const stroke = launcher.locator('.bl__stroke[data-mobile-logo-motion="raf"]');
   await expect(stroke).toHaveCount(1);
   await expect(stroke).toBeVisible();
-  await expect(nativeMotion).toHaveCount(1);
   await expect(stroke).toHaveCSS("animation-name", "none");
 
   const result = await stroke.evaluate(async (element) => {
-    const animation = element.querySelector('animate[data-mobile-logo-motion="true"]');
-    const svg = element.ownerSVGElement;
-    if (!animation || !svg) throw new Error("Native mobile logo animation is missing");
+    const values = [];
+    const computedValues = [];
+    const started = performance.now();
 
-    const paint = () =>
-      new Promise((resolve) =>
-        requestAnimationFrame(() => requestAnimationFrame(resolve)),
-      );
-
-    await paint();
-
-    let autoStarted = true;
-    try {
-      animation.getStartTime();
-    } catch {
-      autoStarted = false;
+    while (performance.now() - started < 5700) {
+      const dataValue = Number.parseFloat(element.dataset.mobileLogoOffset ?? "NaN");
+      const computedValue = Number.parseFloat(getComputedStyle(element).strokeDashoffset);
+      if (Number.isFinite(dataValue) && Number.isFinite(computedValue)) {
+        values.push(dataValue);
+        computedValues.push(computedValue);
+      }
+      await new Promise((resolve) => window.setTimeout(resolve, 90));
     }
 
-    animation.endElement();
-    animation.beginElement();
-    await paint();
-    const start = svg.getCurrentTime();
-    svg.pauseAnimations();
-
-    const readAt = (seconds) => {
-      svg.setCurrentTime(start + seconds);
-      return Number.parseFloat(getComputedStyle(element).strokeDashoffset);
-    };
-
     return {
-      autoStarted,
-      values: animation.getAttribute("values"),
-      keyTimes: animation.getAttribute("keyTimes"),
-      duration: animation.getAttribute("dur"),
-      repeatCount: animation.getAttribute("repeatCount"),
-      samples: {
-        drawing: readAt(1),
-        complete: readAt(2.3),
-        erasing: readAt(3.5),
-        hidden: readAt(5),
-      },
+      values,
+      computedValues,
+      priority: element.style.getPropertyPriority("stroke-dashoffset"),
+      inlineOffset: element.style.getPropertyValue("stroke-dashoffset"),
     };
   });
 
-  expect(result.autoStarted).toBe(true);
-  expect(result.values).toBe("1;1;0;0;1;1");
-  expect(result.keyTimes).toBe("0;0.05;0.35;0.5;0.8;1");
-  expect(result.duration).toBe("5.4s");
-  expect(result.repeatCount).toBe("indefinite");
-  expect(result.samples.complete).toBeLessThan(0.05);
-  expect(result.samples.drawing).toBeGreaterThan(0.12);
-  expect(result.samples.drawing).toBeLessThan(0.9);
-  expect(result.samples.erasing).toBeGreaterThan(0.12);
-  expect(result.samples.erasing).toBeLessThan(0.9);
-  expect(result.samples.hidden).toBeGreaterThan(0.95);
+  expect(result.priority).toBe("important");
+  expect(result.values.length).toBeGreaterThan(45);
+  expect(Math.min(...result.values)).toBeLessThan(0.08);
+  expect(Math.max(...result.values)).toBeGreaterThan(0.92);
+  expect(result.values.some((value) => value > 0.2 && value < 0.8)).toBe(true);
+  expect(containsDrawAndReverseErase(result.values)).toBe(true);
+
+  const largestComputedDifference = result.values.reduce(
+    (largest, value, index) =>
+      Math.max(largest, Math.abs(value - result.computedValues[index])),
+    0,
+  );
+  expect(largestComputedDifference).toBeLessThan(0.03);
+  expect(Number.parseFloat(result.inlineOffset)).toBeGreaterThanOrEqual(0);
 }
 
 test("mobile preview draws and progressively erases the single SVG stroke", async ({ browser }) => {
