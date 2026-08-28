@@ -1,13 +1,13 @@
 /* Final authority for the approved one-stroke chatbot mark.
-   The path is drawn from start to finish, held complete, then physically
-   undrawn from the final point back to the first point before drawing again.
-   We animate the registered offset variable because an older goal-lock layer
-   intentionally owns stroke-dashoffset with !important. */
+   Desktop keeps the already-working registered-offset implementation. Touch
+   devices use a separate SVG path whose stroke-dashoffset is animated directly,
+   avoiding Safari/WebKit custom-property interpolation issues. */
 html:root body .cw-widget .cw-launcher,
 html:root body .cw-widget .cw-panel-head__mascot {
   color: #19834f !important;
 }
 
+/* Desktop / fine-pointer path. */
 html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
   --cw-logo-offset: 1;
   stroke: currentColor !important;
@@ -20,38 +20,67 @@ html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke 
   will-change: stroke-dashoffset;
 }
 
-/* Keep the same loop even when desktop hover/focus selectors from older layers
-   become more specific. Mobile and desktop therefore show identical motion. */
 html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) .bl__stroke,
 html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl__stroke {
   animation: cw-logo-draw-erase-loop 5.4s linear infinite both !important;
 }
 
+html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__mobile-stroke {
+  display: none;
+}
+
 @keyframes cw-logo-draw-erase-loop {
-  /* Hidden: the whole dash sits before the visible path. */
   0%,
   5% {
     --cw-logo-offset: 1;
   }
-
-  /* Draw progressively from the first point to the final point. */
-  34% {
+  35% {
     --cw-logo-offset: 0;
   }
-
-  /* Hold the complete logo long enough to read it. */
   50% {
     --cw-logo-offset: 0;
   }
-
-  /* Positive offset removes the visible dash from the path end backwards. */
-  82% {
-    --cw-logo-offset: 1;
-  }
-
-  /* Remain completely erased before the next forward draw starts. */
+  80%,
   100% {
     --cw-logo-offset: 1;
+  }
+}
+
+/* Safari-safe mobile path. The line takes the same time to draw and to erase:
+   5%→35% forward, 50%→80% backwards. No opacity reset is used. */
+@media (max-width: 760px), (pointer: coarse), (hover: none) {
+  html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
+    display: none !important;
+  }
+
+  html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__mobile-stroke {
+    display: inline !important;
+    stroke: currentColor !important;
+    stroke-width: 7.75 !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+    stroke-dasharray: 1 1 !important;
+    stroke-dashoffset: 1;
+    opacity: 1 !important;
+    animation: cw-mobile-logo-draw-erase-loop 5.4s linear infinite both !important;
+    will-change: stroke-dashoffset;
+  }
+}
+
+@keyframes cw-mobile-logo-draw-erase-loop {
+  0%,
+  5% {
+    stroke-dashoffset: 1;
+  }
+  35% {
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dashoffset: 0;
+  }
+  80%,
+  100% {
+    stroke-dashoffset: 1;
   }
 }
 
@@ -76,7 +105,13 @@ html:root body .cw-widget .cw-panel-head__mascot {
 @media (prefers-reduced-motion: reduce) {
   html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
     --cw-logo-offset: 0;
+    display: inline !important;
     animation: none !important;
     opacity: 1 !important;
+  }
+
+  html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__mobile-stroke {
+    display: none !important;
+    animation: none !important;
   }
 }
