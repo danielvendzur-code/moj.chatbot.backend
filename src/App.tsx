@@ -5,13 +5,13 @@ import "./smooth-logo-final.css";
 import "./launch-ready-final.css";
 import "./solid-widget-final.css";
 import "./dark-chip-final.css";
-import "./logo-match-final.css";
 import "./goal-lock-final.css";
 import "./interaction-stability-final.css";
 import "./restored-widget-palette.css";
 import "./premium-motion-system.css";
 import "./requested-august-widget.css";
 import "./contact-chip-glow-final.css";
+import "./logo-match-final.css";
 
 export default function App(): JSX.Element {
   const embedMode = isEmbedMode();

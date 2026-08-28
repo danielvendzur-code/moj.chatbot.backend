@@ -1,45 +1,57 @@
-/* Standalone chatbot logo matches the website mark and uses the approved
-   single-stroke geometry. The line draws forward, rests, erases backwards
-   along the same path, rests while hidden, and then draws again. */
+/* Final authority for the approved one-stroke chatbot mark.
+   The path is drawn from start to finish, held complete, then physically
+   undrawn from the final point back to the first point before drawing again.
+   We animate the registered offset variable because an older goal-lock layer
+   intentionally owns stroke-dashoffset with !important. */
 html:root body .cw-widget .cw-launcher,
 html:root body .cw-widget .cw-panel-head__mascot {
   color: #19834f !important;
 }
 
 html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
+  --cw-logo-offset: 1;
   stroke: currentColor !important;
   stroke-width: 7.75 !important;
   stroke-linecap: round !important;
   stroke-linejoin: round !important;
   stroke-dasharray: 1 1 !important;
-  stroke-dashoffset: 1;
-  opacity: 1;
-  animation: cw-logo-draw-erase-loop 5.2s linear infinite both !important;
+  opacity: 1 !important;
+  animation: cw-logo-draw-erase-loop 5.4s linear infinite both !important;
   will-change: stroke-dashoffset;
 }
 
+/* Keep the same loop even when desktop hover/focus selectors from older layers
+   become more specific. Mobile and desktop therefore show identical motion. */
+html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) .bl__stroke,
+html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl__stroke {
+  animation: cw-logo-draw-erase-loop 5.4s linear infinite both !important;
+}
+
 @keyframes cw-logo-draw-erase-loop {
-  /* Draw from the beginning of the approved one-stroke path. */
-  0% {
-    stroke-dashoffset: 1;
-  }
-  30% {
-    stroke-dashoffset: 0;
+  /* Hidden: the whole dash sits before the visible path. */
+  0%,
+  5% {
+    --cw-logo-offset: 1;
   }
 
-  /* Let the complete mark remain readable for a moment. */
-  44% {
-    stroke-dashoffset: 0;
+  /* Draw progressively from the first point to the final point. */
+  34% {
+    --cw-logo-offset: 0;
   }
 
-  /* Increasing the same dash offset progressively undraws the path in reverse. */
-  76% {
-    stroke-dashoffset: 1;
+  /* Hold the complete logo long enough to read it. */
+  50% {
+    --cw-logo-offset: 0;
   }
 
-  /* Match the first frame before the loop restarts so there is no instant reset. */
+  /* Positive offset removes the visible dash from the path end backwards. */
+  82% {
+    --cw-logo-offset: 1;
+  }
+
+  /* Remain completely erased before the next forward draw starts. */
   100% {
-    stroke-dashoffset: 1;
+    --cw-logo-offset: 1;
   }
 }
 
@@ -63,8 +75,8 @@ html:root body .cw-widget .cw-panel-head__mascot {
 
 @media (prefers-reduced-motion: reduce) {
   html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
+    --cw-logo-offset: 0;
     animation: none !important;
-    stroke-dashoffset: 0 !important;
     opacity: 1 !important;
   }
 }
