@@ -1,17 +1,22 @@
 /* Final selection-indicator authority shared by preview and production embed.
-   Confirmation must be immediate and geometrically centered. */
+   Confirmation is immediate and centered by the option row's own flex layout,
+   so vertical padding can never push the check off-axis. */
 html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class]
   :is(.cw-rowcard[class], .cw-scard[class], .cw-vcard[class], .cw-opt[class]) {
   position: relative !important;
+  padding-right: 14px !important;
 }
 
 html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class] .cw-selection-indicator[class] {
-  top: 0 !important;
-  bottom: 0 !important;
-  margin-top: auto !important;
-  margin-bottom: auto !important;
+  position: static !important;
+  inset: auto !important;
+  flex: 0 0 24px !important;
+  width: 24px !important;
+  height: 24px !important;
+  align-self: center !important;
+  margin: 0 0 0 auto !important;
   transform: none !important;
   transition: none !important;
 }
