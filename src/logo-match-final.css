@@ -1,7 +1,7 @@
 /* Final authority for the approved one-stroke chatbot mark.
-   Desktop keeps the already-working registered-offset motion. On touch/mobile
-   the exact same SVG path animates stroke-dashoffset directly so Safari/WebKit
-   draws and erases the line progressively without a reset or fade. */
+   Desktop keeps the already-working registered-offset motion. Touch/mobile
+   disables competing CSS logo timelines so the SVG's native animate element
+   can draw and reverse-erase the exact same path reliably in Safari/WebKit. */
 html:root body .cw-widget .cw-launcher,
 html:root body .cw-widget .cw-panel-head__mascot {
   color: #19834f !important;
@@ -41,36 +41,18 @@ html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl_
   }
 }
 
-/* Safari-safe mobile motion on the same, single brand path.
-   The closed launcher selector intentionally matches the legacy
-   premium-motion specificity, and this stylesheet is loaded last in both the
-   preview and direct embed. Draw and reverse erase each take ~1.62s. */
+/* Mobile: explicitly defeat every historical CSS timeline, including the
+   more-specific closed-launcher cycle from premium-motion-system.css. The
+   nested SVG <animate> is then the only owner of stroke-dashoffset. */
 @media (max-width: 760px), (pointer: coarse), (hover: none) {
   html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl__stroke,
   html:root body .cw-widget .cw-launcher[aria-expanded="true"] .bl__stroke,
   html:root body .cw-widget .cw-panel-head__mascot .bl__stroke {
     --cw-logo-offset: 0;
     stroke-dasharray: 1 1 !important;
-    stroke-dashoffset: 1;
     opacity: 1 !important;
-    animation: cw-mobile-logo-draw-erase-loop 5.4s linear infinite both !important;
-  }
-}
-
-@keyframes cw-mobile-logo-draw-erase-loop {
-  0%,
-  5% {
-    stroke-dashoffset: 1;
-  }
-  35% {
-    stroke-dashoffset: 0;
-  }
-  50% {
-    stroke-dashoffset: 0;
-  }
-  80%,
-  100% {
-    stroke-dashoffset: 1;
+    animation: none !important;
+    will-change: auto;
   }
 }
 
