@@ -67,15 +67,17 @@ html:root body .cw-widget[class][class][class][class]
 }
 
 /* Selection: both the selected and the short auto-confirm state stay light.
-   Older layers styled data-confirming separately, which caused a dark flash on
-   touch before the next step. The only dark treatment left is a real fine-
-   pointer hover/focus below. */
+   The doubled class attributes on the option are deliberate specificity: the
+   restored palette contains an older duplicated data-selected selector. This
+   final authority must beat it instead of relying only on source order. */
 html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class]
-  :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):is(
-    [data-selected="true"],
-    [data-confirming="true"]
-  ) {
+  :is(
+    .cw-rowcard[class][class],
+    .cw-scard[class][class],
+    .cw-vcard[class][class],
+    .cw-opt[class][class]
+  ):is([data-selected="true"], [data-confirming="true"]) {
   color: #173126 !important;
   -webkit-text-fill-color: currentColor !important;
   border: 2px solid #19834f !important;
@@ -88,12 +90,38 @@ html:root body .cw-widget[class][class][class][class]
   transition: none !important;
 }
 
+/* Older palette rules also forced selected copy to white. Keep the copy dark
+   on the light selected surface while leaving the SVG indicator independently
+   controlled below. */
 html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class]
-  :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):is(
-    [data-selected="true"],
-    [data-confirming="true"]
-  )::after {
+  :is(
+    .cw-rowcard[class][class],
+    .cw-scard[class][class],
+    .cw-vcard[class][class],
+    .cw-opt[class][class]
+  ):is([data-selected="true"], [data-confirming="true"])
+  :is(
+    .cw-rowcard__body b,
+    .cw-rowcard__body small,
+    .cw-scard > b,
+    .cw-opt__body b,
+    .cw-opt__body > span,
+    .cw-vcard__copy b,
+    .cw-vcard__copy > span
+  ) {
+  color: #173126 !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+html:root body .cw-widget[class][class][class][class]
+  .cw-calculator[class]
+  :is(
+    .cw-rowcard[class][class],
+    .cw-scard[class][class],
+    .cw-vcard[class][class],
+    .cw-opt[class][class]
+  ):is([data-selected="true"], [data-confirming="true"])::after {
   content: none !important;
   display: none !important;
 }
@@ -101,16 +129,39 @@ html:root body .cw-widget[class][class][class][class]
 @media (hover: hover) and (pointer: fine) {
   html:root body .cw-widget[class][class][class][class]
     .cw-calculator[class]
-    :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):is(
-      [data-selected="true"],
-      [data-confirming="true"]
-    ):is(:hover, :focus-visible) {
+    :is(
+      .cw-rowcard[class][class],
+      .cw-scard[class][class],
+      .cw-vcard[class][class],
+      .cw-opt[class][class]
+    ):is([data-selected="true"], [data-confirming="true"]):is(:hover, :focus-visible) {
     color: #ffffff !important;
     -webkit-text-fill-color: currentColor !important;
     border-color: #0b2f20 !important;
     background: #0b2f20 !important;
     background-color: #0b2f20 !important;
     box-shadow: 0 14px 30px -24px rgba(11, 47, 32, 0.38) !important;
+  }
+
+  html:root body .cw-widget[class][class][class][class]
+    .cw-calculator[class]
+    :is(
+      .cw-rowcard[class][class],
+      .cw-scard[class][class],
+      .cw-vcard[class][class],
+      .cw-opt[class][class]
+    ):is([data-selected="true"], [data-confirming="true"]):is(:hover, :focus-visible)
+    :is(
+      .cw-rowcard__body b,
+      .cw-rowcard__body small,
+      .cw-scard > b,
+      .cw-opt__body b,
+      .cw-opt__body > span,
+      .cw-vcard__copy b,
+      .cw-vcard__copy > span
+    ) {
+    color: #ffffff !important;
+    -webkit-text-fill-color: currentColor !important;
   }
 }
 
@@ -180,10 +231,12 @@ html:root body .cw-widget[class][class][class][class]
 
 html:root body .cw-widget[class][class][class][class]
   .cw-calculator[class]
-  :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):is(
-    [data-selected="true"],
-    [data-confirming="true"]
-  )
+  :is(
+    .cw-rowcard[class][class],
+    .cw-scard[class][class],
+    .cw-vcard[class][class],
+    .cw-opt[class][class]
+  ):is([data-selected="true"], [data-confirming="true"])
   .cw-selection-indicator[class][data-visible="true"] svg path {
   color: #ffffff !important;
   stroke: #ffffff !important;
@@ -195,10 +248,12 @@ html:root body .cw-widget[class][class][class][class]
 @media (hover: hover) and (pointer: fine) {
   html:root body .cw-widget[class][class][class][class]
     .cw-calculator[class]
-    :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):is(
-      [data-selected="true"],
-      [data-confirming="true"]
-    ):is(:hover, :focus-visible)
+    :is(
+      .cw-rowcard[class][class],
+      .cw-scard[class][class],
+      .cw-vcard[class][class],
+      .cw-opt[class][class]
+    ):is([data-selected="true"], [data-confirming="true"]):is(:hover, :focus-visible)
     .cw-selection-indicator[class][data-visible="true"] {
     color: #071b15 !important;
     border-color: #c8f06a !important;
@@ -208,10 +263,12 @@ html:root body .cw-widget[class][class][class][class]
 
   html:root body .cw-widget[class][class][class][class]
     .cw-calculator[class]
-    :is(.cw-rowcard, .cw-scard, .cw-vcard, .cw-opt):is(
-      [data-selected="true"],
-      [data-confirming="true"]
-    ):is(:hover, :focus-visible)
+    :is(
+      .cw-rowcard[class][class],
+      .cw-scard[class][class],
+      .cw-vcard[class][class],
+      .cw-opt[class][class]
+    ):is([data-selected="true"], [data-confirming="true"]):is(:hover, :focus-visible)
     .cw-selection-indicator[class][data-visible="true"] svg path {
     color: #071b15 !important;
     stroke: #071b15 !important;
