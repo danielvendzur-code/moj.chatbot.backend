@@ -72,7 +72,7 @@ jobs:
             exit 1
           fi
 
-          pnpm exec playwright test tests/widget-smoke.spec.mjs tests/mobile-logo-motion.spec.mjs --reporter=line --workers=1
+          pnpm exec playwright test tests/widget-smoke.spec.mjs tests/mobile-logo-motion.spec.mjs tests/selection-indicator.spec.mjs --reporter=line --workers=1
 
       - name: Build GitHub Pages application and direct widget
         run: pnpm build:pages
