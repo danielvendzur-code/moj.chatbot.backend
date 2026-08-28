@@ -72,7 +72,7 @@ jobs:
             exit 1
           fi
 
-          pnpm exec playwright test tests/widget-smoke.spec.mjs --reporter=line --workers=1
+          pnpm exec playwright test tests/widget-smoke.spec.mjs tests/mobile-logo-motion.spec.mjs --reporter=line --workers=1
 
       - name: Build GitHub Pages application and direct widget
         run: pnpm build:pages
@@ -91,6 +91,9 @@ jobs:
           grep -Fq 'archived-layout-restrained-palette' dist/widget.js
           grep -Fq 'M24 71.2L24.003 32.706L24.036' dist/widget.js
           grep -Fq 'bl__stroke' dist/widget.js
+          grep -Fq 'data-mobile-logo-motion' dist/widget.js
+          grep -Fq 'stroke-dashoffset' dist/widget.js
+          grep -Fq 'mobileLogoOffset' dist/widget.js
 
           # The emitted widget CSS must contain the identity, interaction shell
           # and the concrete chip-label persistence fix. Minifiers may remove
