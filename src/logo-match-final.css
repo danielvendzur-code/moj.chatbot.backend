@@ -42,12 +42,17 @@ html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl_
 }
 
 /* Safari-safe mobile motion on the same, single brand path.
-   Draw and reverse erase both occupy 30% of the 5.4s cycle (~1.62s). */
+   The closed launcher selector intentionally matches the legacy
+   premium-motion specificity, and this stylesheet is loaded last in both the
+   preview and direct embed. Draw and reverse erase each take ~1.62s. */
 @media (max-width: 760px), (pointer: coarse), (hover: none) {
-  html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke,
-  html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) .bl__stroke,
-  html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl__stroke {
+  html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl__stroke,
+  html:root body .cw-widget .cw-launcher[aria-expanded="true"] .bl__stroke,
+  html:root body .cw-widget .cw-panel-head__mascot .bl__stroke {
+    --cw-logo-offset: 0;
+    stroke-dasharray: 1 1 !important;
     stroke-dashoffset: 1;
+    opacity: 1 !important;
     animation: cw-mobile-logo-draw-erase-loop 5.4s linear infinite both !important;
   }
 }
