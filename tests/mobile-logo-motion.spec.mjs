@@ -18,22 +18,25 @@ test("mobile logo draws and progressively erases on the same SVG stroke", async 
   const launcher = page.getByTestId("widget-launcher");
   await expect(launcher).toBeVisible();
 
-  const desktopStroke = launcher.locator(".bl__stroke");
-  const mobileStroke = launcher.locator(".bl__mobile-stroke");
-  await expect(desktopStroke).toHaveCSS("display", "none");
-  await expect(mobileStroke).toBeVisible();
-  await expect(mobileStroke).toHaveCSS("animation-name", "cw-mobile-logo-draw-erase-loop");
-  await expect(mobileStroke).toHaveCSS("animation-duration", "5.4s");
+  const stroke = launcher.locator(".bl__stroke");
+  await expect(stroke).toHaveCount(1);
+  await expect(stroke).toBeVisible();
+  await expect(stroke).toHaveCSS("animation-name", "cw-mobile-logo-draw-erase-loop");
+  await expect(stroke).toHaveCSS("animation-duration", "5.4s");
 
-  const samples = await mobileStroke.evaluate((element) => {
-    const animation = element.getAnimations().find((item) =>
-      item instanceof CSSAnimation ? item.animationName === "cw-mobile-logo-draw-erase-loop" : true,
-    );
+  const samples = await stroke.evaluate((element) => {
+    const animation = element
+      .getAnimations()
+      .find(
+        (item) =>
+          !(item instanceof CSSAnimation) || item.animationName === "cw-mobile-logo-draw-erase-loop",
+      );
     if (!animation) throw new Error("Mobile logo CSS animation is not running");
 
     animation.pause();
     const readAt = (time) => {
       animation.currentTime = time;
+      void element.getBoundingClientRect();
       return Number.parseFloat(getComputedStyle(element).strokeDashoffset);
     };
 
