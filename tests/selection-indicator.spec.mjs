@@ -12,7 +12,7 @@ test("selection check is centered and selected cards stay light at rest", async 
   await openCalculator(page);
 
   const selectedCard = page.getByTestId("interest-chatbot");
-  const untouchedCard = page.getByTestId("interest-calculator");
+  const untouchedCard = page.getByTestId("interest-calcbot");
   const untouchedIndicator = untouchedCard.locator(".cw-selection-indicator");
 
   await expect(untouchedIndicator).toHaveCSS("opacity", "0");
@@ -20,6 +20,7 @@ test("selection check is centered and selected cards stay light at rest", async 
 
   const indicator = selectedCard.locator(".cw-selection-indicator");
   const check = indicator.locator("svg");
+  await expect(indicator).toHaveAttribute("data-visible", "true");
   await expect(indicator).toHaveCSS("opacity", "1");
   await expect(selectedCard).toHaveCSS("background-color", "rgb(248, 251, 245)");
   await expect(selectedCard).toHaveCSS("border-top-color", "rgb(25, 131, 79)");
@@ -63,12 +64,13 @@ test("mobile selection uses the same centered check without hover-only dark fill
   await page.getByTestId("tab-calculator").tap();
 
   const card = page.getByTestId("interest-chatbot");
-  const untouched = page.getByTestId("interest-calculator");
+  const untouched = page.getByTestId("interest-calcbot");
   await expect(untouched.locator(".cw-selection-indicator")).toHaveCSS("opacity", "0");
   await card.tap();
 
   await expect(card).toHaveCSS("background-color", "rgb(248, 251, 245)");
   const indicator = card.locator(".cw-selection-indicator");
+  await expect(indicator).toHaveAttribute("data-visible", "true");
   await expect(indicator).toHaveCSS("opacity", "1");
 
   const deltaY = await card.evaluate((element) => {
