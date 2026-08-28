@@ -12,12 +12,16 @@ const readSelectionSnapshot = async (card) =>
     const indicator = element.querySelector(".cw-selection-indicator");
     const svg = indicator?.querySelector("svg");
     const path = svg?.querySelector("path");
+    const icon = element.querySelector(".cw-rowcard__icon");
+    const body = element.querySelector(".cw-rowcard__body");
     if (!(indicator instanceof HTMLElement) || !(svg instanceof SVGElement) || !(path instanceof SVGElement)) {
       throw new Error("Selection indicator geometry is missing");
     }
     const cardBox = element.getBoundingClientRect();
     const indicatorBox = indicator.getBoundingClientRect();
     const svgBox = svg.getBoundingClientRect();
+    const iconBox = icon?.getBoundingClientRect();
+    const bodyBox = body?.getBoundingClientRect();
     const cardStyle = getComputedStyle(element);
     const indicatorStyle = getComputedStyle(indicator);
     const pathStyle = getComputedStyle(path);
@@ -28,19 +32,39 @@ const readSelectionSnapshot = async (card) =>
       cardBackground: cardStyle.backgroundColor,
       cardBorder: cardStyle.borderTopColor,
       cardPosition: cardStyle.position,
+      cardDisplay: cardStyle.display,
+      cardAlignItems: cardStyle.alignItems,
+      cardJustifyContent: cardStyle.justifyContent,
+      cardBoxSizing: cardStyle.boxSizing,
+      cardComputedHeight: cardStyle.height,
+      cardMinHeight: cardStyle.minHeight,
+      cardBorderTopWidth: cardStyle.borderTopWidth,
+      cardBorderBottomWidth: cardStyle.borderBottomWidth,
+      cardGridTemplateRows: cardStyle.gridTemplateRows,
+      cardGridTemplateColumns: cardStyle.gridTemplateColumns,
       cardTransform: cardStyle.transform,
       cardPaddingTop: cardStyle.paddingTop,
       cardPaddingBottom: cardStyle.paddingBottom,
       cardTop: cardBox.top,
       cardHeight: cardBox.height,
+      iconTop: iconBox?.top ?? null,
+      iconHeight: iconBox?.height ?? null,
+      iconCenterY: iconBox ? iconBox.top + iconBox.height / 2 : null,
+      bodyTop: bodyBox?.top ?? null,
+      bodyHeight: bodyBox?.height ?? null,
+      bodyCenterY: bodyBox ? bodyBox.top + bodyBox.height / 2 : null,
       indicatorOpacity: indicatorStyle.opacity,
       indicatorBackground: indicatorStyle.backgroundColor,
       indicatorPosition: indicatorStyle.position,
+      indicatorDisplay: indicatorStyle.display,
+      indicatorAlignSelf: indicatorStyle.alignSelf,
+      indicatorBoxSizing: indicatorStyle.boxSizing,
       indicatorTop: indicatorStyle.top,
       indicatorBottom: indicatorStyle.bottom,
       indicatorMarginTop: indicatorStyle.marginTop,
       indicatorMarginBottom: indicatorStyle.marginBottom,
       indicatorTransform: indicatorStyle.transform,
+      indicatorTransformOrigin: indicatorStyle.transformOrigin,
       indicatorTopPx: indicatorBox.top,
       indicatorHeight: indicatorBox.height,
       offsetParentTag: offsetParent?.tagName ?? null,
@@ -63,9 +87,6 @@ test("selection check is centered and selected cards stay light at rest", async 
   const untouchedCard = page.getByTestId("interest-calcbot");
   await expect(untouchedCard.locator(".cw-selection-indicator")).toHaveCSS("opacity", "0");
 
-  /* Programmatic click deliberately avoids a pointer hover. Existing smoke tests
-     separately cover real mouse/touch interaction; this test measures the resting
-     selected state before the 320ms auto-advance hand-off. */
   await selectedCard.evaluate((element) => element.click());
   await page.waitForFunction(() => {
     const card = document.querySelector('[data-testid="interest-chatbot"]');
