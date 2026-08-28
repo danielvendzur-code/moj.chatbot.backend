@@ -91,6 +91,8 @@ jobs:
           grep -Fq 'archived-layout-restrained-palette' dist/widget.js
           grep -Fq 'M24 71.2L24.003 32.706L24.036' dist/widget.js
           grep -Fq 'bl__stroke' dist/widget.js
+          grep -Fq 'data-mobile-logo-motion' dist/widget.js
+          grep -Fq '1;1;0;0;1;1' dist/widget.js
 
           # The emitted widget CSS must contain the identity, interaction shell
           # and the concrete chip-label persistence fix. Minifiers may remove
@@ -104,7 +106,6 @@ jobs:
           grep -Fq '.cw-calculator' dist/widget.css
           grep -Fq '.cw-chip__label' dist/widget.css
           grep -Fq 'data-sending' dist/widget.css
-          grep -Fq 'cw-mobile-logo-draw-erase-loop' dist/widget.css
 
           # Source entry points must use only static stylesheets and never
           # restore an injected override stack or pointer tilt.
