@@ -13,48 +13,62 @@ async function verifyReverseErase(launcher) {
   await expect(launcher).toBeVisible();
 
   const stroke = launcher.locator(".bl__stroke");
+  const nativeMotion = stroke.locator('animate[data-mobile-logo-motion="true"]');
   await expect(stroke).toHaveCount(1);
   await expect(stroke).toBeVisible();
-  await expect(stroke).toHaveCSS("animation-name", "cw-mobile-logo-draw-erase-loop");
-  await expect(stroke).toHaveCSS("animation-duration", "5.4s");
+  await expect(nativeMotion).toHaveCount(1);
+  await expect(stroke).toHaveCSS("animation-name", "none");
 
   const result = await stroke.evaluate(async (element) => {
-    const animation = element
-      .getAnimations()
-      .find((item) => item.animationName === "cw-mobile-logo-draw-erase-loop");
-    if (!animation) throw new Error("Mobile logo CSS animation is not running");
+    const animation = element.querySelector('animate[data-mobile-logo-motion="true"]');
+    const svg = element.ownerSVGElement;
+    if (!animation || !svg) throw new Error("Native mobile logo animation is missing");
 
-    animation.pause();
     const paint = () =>
       new Promise((resolve) =>
         requestAnimationFrame(() => requestAnimationFrame(resolve)),
       );
-    const readAt = async (time) => {
-      animation.currentTime = time;
-      await paint();
+
+    await paint();
+
+    let autoStarted = true;
+    try {
+      animation.getStartTime();
+    } catch {
+      autoStarted = false;
+    }
+
+    animation.endElement();
+    animation.beginElement();
+    await paint();
+    const start = svg.getCurrentTime();
+    svg.pauseAnimations();
+
+    const readAt = (seconds) => {
+      svg.setCurrentTime(start + seconds);
       return Number.parseFloat(getComputedStyle(element).strokeDashoffset);
     };
 
-    const keyframes = animation.effect
-      ?.getKeyframes()
-      .map((frame) => ({
-        offset: frame.offset,
-        strokeDashoffset: frame.strokeDashoffset ?? null,
-      }));
-
     return {
-      keyframes,
+      autoStarted,
+      values: animation.getAttribute("values"),
+      keyTimes: animation.getAttribute("keyTimes"),
+      duration: animation.getAttribute("dur"),
+      repeatCount: animation.getAttribute("repeatCount"),
       samples: {
-        drawing: await readAt(1000),
-        complete: await readAt(2300),
-        erasing: await readAt(3500),
-        hidden: await readAt(5000),
+        drawing: readAt(1),
+        complete: readAt(2.3),
+        erasing: readAt(3.5),
+        hidden: readAt(5),
       },
     };
   });
 
-  expect(result.keyframes?.some((frame) => frame.strokeDashoffset === "1px")).toBe(true);
-  expect(result.keyframes?.some((frame) => frame.strokeDashoffset === "0px")).toBe(true);
+  expect(result.autoStarted).toBe(true);
+  expect(result.values).toBe("1;1;0;0;1;1");
+  expect(result.keyTimes).toBe("0;0.05;0.35;0.5;0.8;1");
+  expect(result.duration).toBe("5.4s");
+  expect(result.repeatCount).toBe("indefinite");
   expect(result.samples.complete).toBeLessThan(0.05);
   expect(result.samples.drawing).toBeGreaterThan(0.12);
   expect(result.samples.drawing).toBeLessThan(0.9);
