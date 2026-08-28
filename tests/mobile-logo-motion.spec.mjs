@@ -18,33 +18,49 @@ async function verifyReverseErase(launcher) {
   await expect(stroke).toHaveCSS("animation-name", "cw-mobile-logo-draw-erase-loop");
   await expect(stroke).toHaveCSS("animation-duration", "5.4s");
 
-  const samples = await stroke.evaluate((element) => {
+  const result = await stroke.evaluate(async (element) => {
     const animation = element
       .getAnimations()
       .find((item) => item.animationName === "cw-mobile-logo-draw-erase-loop");
     if (!animation) throw new Error("Mobile logo CSS animation is not running");
 
     animation.pause();
-    const readAt = (time) => {
+    const paint = () =>
+      new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve)),
+      );
+    const readAt = async (time) => {
       animation.currentTime = time;
-      void element.getBoundingClientRect();
+      await paint();
       return Number.parseFloat(getComputedStyle(element).strokeDashoffset);
     };
 
+    const keyframes = animation.effect
+      ?.getKeyframes()
+      .map((frame) => ({
+        offset: frame.offset,
+        strokeDashoffset: frame.strokeDashoffset ?? null,
+      }));
+
     return {
-      drawing: readAt(1000),
-      complete: readAt(2300),
-      erasing: readAt(3500),
-      hidden: readAt(5000),
+      keyframes,
+      samples: {
+        drawing: await readAt(1000),
+        complete: await readAt(2300),
+        erasing: await readAt(3500),
+        hidden: await readAt(5000),
+      },
     };
   });
 
-  expect(samples.complete).toBeLessThan(0.05);
-  expect(samples.drawing).toBeGreaterThan(0.12);
-  expect(samples.drawing).toBeLessThan(0.9);
-  expect(samples.erasing).toBeGreaterThan(0.12);
-  expect(samples.erasing).toBeLessThan(0.9);
-  expect(samples.hidden).toBeGreaterThan(0.95);
+  expect(result.keyframes?.some((frame) => frame.strokeDashoffset === "1px")).toBe(true);
+  expect(result.keyframes?.some((frame) => frame.strokeDashoffset === "0px")).toBe(true);
+  expect(result.samples.complete).toBeLessThan(0.05);
+  expect(result.samples.drawing).toBeGreaterThan(0.12);
+  expect(result.samples.drawing).toBeLessThan(0.9);
+  expect(result.samples.erasing).toBeGreaterThan(0.12);
+  expect(result.samples.erasing).toBeLessThan(0.9);
+  expect(result.samples.hidden).toBeGreaterThan(0.95);
 }
 
 test("mobile preview draws and progressively erases the single SVG stroke", async ({ browser }) => {
