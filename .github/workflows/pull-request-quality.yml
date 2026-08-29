@@ -85,9 +85,9 @@ jobs:
           test -f dist/widget.js
           test -f dist/widget.css
 
-          # The direct runtime must carry the restored product markers and the
-          # approved one-stroke Môj Chatbot brand mark used by BubbleLogo.
-          grep -Fq 'premium-motion-20260826-v10' dist/widget.js
+          # The direct runtime must carry the current release marker, product
+          # markers and the approved one-stroke Môj Chatbot brand mark.
+          grep -Fq 'premium-motion-20260829-v13' dist/widget.js
           grep -Fq 'archived-layout-restrained-palette' dist/widget.js
           grep -Fq 'M24 71.2L24.003 32.706L24.036' dist/widget.js
           grep -Fq 'bl__stroke' dist/widget.js
@@ -95,9 +95,8 @@ jobs:
           grep -Fq 'stroke-dashoffset' dist/widget.js
           grep -Fq 'mobileLogoOffset' dist/widget.js
 
-          # The emitted widget CSS must contain the identity, interaction shell
-          # and the concrete chip-label persistence fix. Minifiers may remove
-          # quotes around the attribute value, so validate the stable token.
+          # The emitted widget CSS must contain the identity, interaction shell,
+          # chip-label persistence fix and the production host launcher authority.
           grep -Fq '#c8f06a' dist/widget.css
           grep -Fq '#12382d' dist/widget.css
           grep -Fq '#fcfbf7' dist/widget.css
@@ -107,6 +106,7 @@ jobs:
           grep -Fq '.cw-calculator' dist/widget.css
           grep -Fq '.cw-chip__label' dist/widget.css
           grep -Fq 'data-sending' dist/widget.css
+          grep -Fq '#dv-assistant-root' dist/widget.css
 
           # Source entry points must use only static stylesheets and never
           # restore an injected override stack or pointer tilt.

@@ -57,7 +57,7 @@ function mount(): void {
 
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "premium-motion-20260826-v10");
+  host.setAttribute("data-dv-assistant-version", "premium-motion-20260829-v13");
   host.setAttribute("data-dv-assistant-theme", "website-paper-forest-lime");
   host.setAttribute(
     "data-dv-assistant-quality",
