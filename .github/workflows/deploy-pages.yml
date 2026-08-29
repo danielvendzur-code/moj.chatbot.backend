@@ -55,7 +55,7 @@ jobs:
       - name: Create immutable build metadata
         shell: bash
         run: |
-          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"premium-motion-20260826-v10"},null,2))'
+          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"premium-motion-20260829-v13"},null,2))'
 
       - name: Validate production artifacts
         shell: bash
@@ -85,7 +85,8 @@ jobs:
             if (!condition) throw new Error(message);
           };
 
-          must(js.includes('premium-motion-20260826-v10'), 'current widget version missing');
+          must(js.includes('premium-motion-20260829-v13'), 'current widget version missing');
+          must(css.includes('#dv-assistant-root'), 'production embed launcher authority missing');
           must(css.includes('cw-choice-grid'), 'choice grid missing');
           must(css.includes('cw-selection-indicator'), 'selection indicator missing');
           must(css.includes('--cw-glass-panel'), 'liquid glass layer missing');
@@ -106,7 +107,7 @@ jobs:
           must(!calculator.includes('cw-choice-arrow'), 'legacy choice arrow remains');
           must(!js.includes('REPLACE-ME'), 'placeholder remains');
           must(meta.sourceSha === process.env.GITHUB_SHA, 'build metadata SHA mismatch');
-          must(meta.version === 'premium-motion-20260826-v10', 'build metadata version mismatch');
+          must(meta.version === 'premium-motion-20260829-v13', 'build metadata version mismatch');
           NODE
 
       - name: Configure GitHub Pages
@@ -161,7 +162,8 @@ jobs:
           }
 
           verify "/" "Môj Chatbot"
-          verify "/widget.js" "premium-motion-20260826-v10"
+          verify "/widget.js" "premium-motion-20260829-v13"
+          verify "/widget.css" "#dv-assistant-root"
           verify "/widget.css" "--restored-forest"
           verify "/build-meta.json" "$SOURCE_SHA"
 
