@@ -40,20 +40,30 @@ async function verifyReverseErase(launcher) {
 
   const stroke = launcher.locator('.bl__stroke[data-mobile-logo-motion="raf"]');
   await expect(stroke).toHaveCount(1);
-  await expect(stroke).toBeVisible();
   await expect(stroke).toHaveCSS("animation-name", "none");
 
   const result = await stroke.evaluate(async (element) => {
     const values = [];
     const computedValues = [];
+    const opacityValues = [];
+    const dataOpacityValues = [];
     const started = performance.now();
 
     while (performance.now() - started < 5700) {
       const dataValue = Number.parseFloat(element.dataset.mobileLogoOffset ?? "NaN");
       const computedValue = Number.parseFloat(getComputedStyle(element).strokeDashoffset);
-      if (Number.isFinite(dataValue) && Number.isFinite(computedValue)) {
+      const opacityValue = Number.parseFloat(getComputedStyle(element).opacity);
+      const dataOpacityValue = Number.parseFloat(element.dataset.mobileLogoOpacity ?? "NaN");
+      if (
+        Number.isFinite(dataValue) &&
+        Number.isFinite(computedValue) &&
+        Number.isFinite(opacityValue) &&
+        Number.isFinite(dataOpacityValue)
+      ) {
         values.push(dataValue);
         computedValues.push(computedValue);
+        opacityValues.push(opacityValue);
+        dataOpacityValues.push(dataOpacityValue);
       }
       await new Promise((resolve) => window.setTimeout(resolve, 90));
     }
@@ -61,12 +71,16 @@ async function verifyReverseErase(launcher) {
     return {
       values,
       computedValues,
+      opacityValues,
+      dataOpacityValues,
       priority: element.style.getPropertyPriority("stroke-dashoffset"),
+      opacityPriority: element.style.getPropertyPriority("opacity"),
       inlineOffset: element.style.getPropertyValue("stroke-dashoffset"),
     };
   });
 
   expect(result.priority).toBe("important");
+  expect(result.opacityPriority).toBe("important");
   expect(result.values.length).toBeGreaterThan(45);
   expect(Math.min(...result.values)).toBeLessThan(0.08);
   expect(Math.max(...result.values)).toBeGreaterThan(0.92);
@@ -88,6 +102,26 @@ async function verifyReverseErase(launcher) {
     0,
   );
   expect(largestComputedDifference).toBeLessThan(0.03);
+
+  const largestOpacityDifference = result.opacityValues.reduce(
+    (largest, value, index) =>
+      Math.max(largest, Math.abs(value - result.dataOpacityValues[index])),
+    0,
+  );
+  expect(largestOpacityDifference).toBeLessThan(0.03);
+
+  const erasedSamples = result.values
+    .map((offset, index) => ({ offset, opacity: result.opacityValues[index] }))
+    .filter(({ offset }) => offset >= 0.995);
+  expect(erasedSamples.length).toBeGreaterThan(1);
+  expect(erasedSamples.every(({ opacity }) => opacity <= 0.01)).toBe(true);
+
+  const drawnSamples = result.values
+    .map((offset, index) => ({ offset, opacity: result.opacityValues[index] }))
+    .filter(({ offset }) => offset <= 0.9);
+  expect(drawnSamples.length).toBeGreaterThan(10);
+  expect(drawnSamples.every(({ opacity }) => opacity >= 0.99)).toBe(true);
+
   expect(Number.parseFloat(result.inlineOffset)).toBeGreaterThanOrEqual(0);
 }
 

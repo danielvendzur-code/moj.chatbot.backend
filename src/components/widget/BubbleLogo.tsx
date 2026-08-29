@@ -20,6 +20,14 @@ function mobileLogoOffset(progress: number): number {
   return 1;
 }
 
+function mobileLogoOpacity(offset: number): number {
+  const fadeStart = 0.965;
+  const hiddenAt = 0.995;
+  if (offset <= fadeStart) return 1;
+  if (offset >= hiddenAt) return 0;
+  return 1 - (offset - fadeStart) / (hiddenAt - fadeStart);
+}
+
 export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
   const strokeRef = useRef<SVGPathElement | null>(null);
 
@@ -45,9 +53,13 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
       clearFrame();
       stroke.style.removeProperty("stroke-dashoffset");
       stroke.style.removeProperty("stroke-dasharray");
+      stroke.style.removeProperty("opacity");
+      delete stroke.dataset.mobileLogoOffset;
+      delete stroke.dataset.mobileLogoOpacity;
 
       if (reducedQuery.matches) {
         stroke.style.setProperty("stroke-dashoffset", "0", "important");
+        stroke.style.setProperty("opacity", "1", "important");
         return;
       }
 
@@ -59,8 +71,11 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
       const tick = (now: number) => {
         const progress = ((now - startedAt) % MOBILE_LOGO_CYCLE_MS) / MOBILE_LOGO_CYCLE_MS;
         const offset = mobileLogoOffset(progress);
+        const opacity = mobileLogoOpacity(offset);
         stroke.style.setProperty("stroke-dashoffset", offset.toFixed(4), "important");
+        stroke.style.setProperty("opacity", opacity.toFixed(4), "important");
         stroke.dataset.mobileLogoOffset = offset.toFixed(4);
+        stroke.dataset.mobileLogoOpacity = opacity.toFixed(4);
         frame = window.requestAnimationFrame(tick);
       };
 
@@ -77,7 +92,9 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
       reducedQuery.removeEventListener("change", syncMotion);
       stroke.style.removeProperty("stroke-dashoffset");
       stroke.style.removeProperty("stroke-dasharray");
+      stroke.style.removeProperty("opacity");
       delete stroke.dataset.mobileLogoOffset;
+      delete stroke.dataset.mobileLogoOpacity;
     };
   }, [size]);
 
