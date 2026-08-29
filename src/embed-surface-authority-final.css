@@ -1,18 +1,52 @@
 /* Final visual authority for the actual embedded launcher.
-   The public website mounts the widget inside #dv-assistant-root. Using the
-   host id here deliberately outranks historical !important launcher skins
-   while keeping the button's full 72px hit target. */
+   The public website mounts the widget inside #dv-assistant-root. This layer
+   deliberately outranks historical solid/transparent skins while preserving
+   the full hit target and the approved one-stroke mark. The launcher is a
+   real circular bubble again, but its surface stays almost transparent. */
 html:root body #dv-assistant-root .cw-widget .cw-launcher,
 html:root body #dv-assistant-root .cw-widget .cw-launcher[aria-expanded="false"],
-html:root body #dv-assistant-root .cw-widget .cw-launcher[aria-expanded="true"],
-html:root body #dv-assistant-root .cw-widget .cw-launcher:is(:hover, :focus, :focus-visible, :active) {
-  background: transparent !important;
-  background-color: transparent !important;
+html:root body #dv-assistant-root .cw-widget .cw-launcher[aria-expanded="true"] {
+  border: 1px solid rgba(200, 240, 106, 0.28) !important;
+  border-radius: 50% !important;
+  background: rgba(7, 27, 21, 0.055) !important;
+  background-color: rgba(7, 27, 21, 0.055) !important;
   background-image: none !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
+  box-shadow:
+    0 14px 34px -30px rgba(7, 27, 21, 0.46),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(1.04) !important;
+  backdrop-filter: blur(10px) saturate(1.04) !important;
+  overflow: hidden !important;
+}
+
+html:root body #dv-assistant-root .cw-widget .cw-launcher[data-surface-tone="light"] {
+  border-color: rgba(18, 56, 45, 0.24) !important;
+  background: rgba(246, 245, 238, 0.065) !important;
+  background-color: rgba(246, 245, 238, 0.065) !important;
+  box-shadow:
+    0 14px 34px -30px rgba(7, 27, 21, 0.38),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.09) !important;
+}
+
+html:root body #dv-assistant-root .cw-widget .cw-launcher:is(:hover, :focus, :focus-visible, :active) {
+  border-color: rgba(200, 240, 106, 0.42) !important;
+  background: rgba(7, 27, 21, 0.095) !important;
+  background-color: rgba(7, 27, 21, 0.095) !important;
+  background-image: none !important;
+  box-shadow:
+    0 16px 38px -29px rgba(7, 27, 21, 0.54),
+    inset 0 0 0 1px rgba(200, 240, 106, 0.08) !important;
+  -webkit-backdrop-filter: blur(11px) saturate(1.05) !important;
+  backdrop-filter: blur(11px) saturate(1.05) !important;
+}
+
+html:root body #dv-assistant-root .cw-widget .cw-launcher[data-surface-tone="light"]:is(:hover, :focus, :focus-visible, :active) {
+  border-color: rgba(18, 56, 45, 0.38) !important;
+  background: rgba(246, 245, 238, 0.105) !important;
+  background-color: rgba(246, 245, 238, 0.105) !important;
+  box-shadow:
+    0 16px 38px -29px rgba(7, 27, 21, 0.44),
+    inset 0 0 0 1px rgba(18, 56, 45, 0.045) !important;
 }
 
 html:root body #dv-assistant-root .cw-widget .cw-launcher::before,
@@ -25,5 +59,4 @@ html:root body #dv-assistant-root .cw-widget .cw-launcher::after {
 
 html:root body #dv-assistant-root .cw-widget .cw-launcher .bl {
   background: transparent !important;
-  box-shadow: none !important;
 }
