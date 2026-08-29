@@ -1,0 +1,29 @@
+/* Final visual authority for the actual embedded launcher.
+   The public website mounts the widget inside #dv-assistant-root. Using the
+   host id here deliberately outranks historical !important launcher skins
+   while keeping the button's full 72px hit target. */
+html:root body #dv-assistant-root .cw-widget .cw-launcher,
+html:root body #dv-assistant-root .cw-widget .cw-launcher[aria-expanded="false"],
+html:root body #dv-assistant-root .cw-widget .cw-launcher[aria-expanded="true"],
+html:root body #dv-assistant-root .cw-widget .cw-launcher:is(:hover, :focus, :focus-visible, :active) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html:root body #dv-assistant-root .cw-widget .cw-launcher::before,
+html:root body #dv-assistant-root .cw-widget .cw-launcher::after {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html:root body #dv-assistant-root .cw-widget .cw-launcher .bl {
+  background: transparent !important;
+  box-shadow: none !important;
+}
