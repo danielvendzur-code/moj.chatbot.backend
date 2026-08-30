@@ -7,7 +7,11 @@ html:root body .cw-widget .cw-panel-head__mascot {
   color: #19834f !important;
 }
 
-html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
+/* Match the specificity of the historical closed-launcher selector exactly.
+   Both layers use !important, so a lower-specificity final rule would still
+   lose to premium-motion-system.css even when loaded later. */
+html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl .bl__stroke,
+html:root body .cw-widget .cw-panel-head__mascot .bl .bl__stroke {
   --cw-logo-offset: 1;
   stroke: currentColor !important;
   stroke-width: 7.75 !important;
@@ -19,8 +23,13 @@ html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke 
   will-change: stroke-dashoffset;
 }
 
-html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) .bl__stroke,
-html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl__stroke {
+html:root
+  body
+  .cw-widget
+  .cw-launcher[aria-expanded="false"]:is(:hover, :focus-visible)
+  .bl
+  .bl__stroke,
+html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl .bl__stroke {
   animation: cw-logo-draw-erase-loop 5.4s linear infinite both !important;
 }
 
@@ -45,9 +54,9 @@ html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl_
    more-specific closed-launcher cycle from premium-motion-system.css. The
    RAF driver in BubbleLogo is then the only owner of stroke-dashoffset. */
 @media (max-width: 760px), (pointer: coarse), (hover: none) {
-  html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl__stroke,
-  html:root body .cw-widget .cw-launcher[aria-expanded="true"] .bl__stroke,
-  html:root body .cw-widget .cw-panel-head__mascot .bl__stroke {
+  html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl .bl__stroke,
+  html:root body .cw-widget .cw-launcher[aria-expanded="true"] .bl .bl__stroke,
+  html:root body .cw-widget .cw-panel-head__mascot .bl .bl__stroke {
     --cw-logo-offset: 0;
     stroke-dasharray: 1 1 !important;
     opacity: 1 !important;
@@ -85,7 +94,9 @@ html:root body .cw-widget .cw-panel-head__mascot {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
+  html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl .bl__stroke,
+  html:root body .cw-widget .cw-launcher[aria-expanded="true"] .bl .bl__stroke,
+  html:root body .cw-widget .cw-panel-head__mascot .bl .bl__stroke {
     --cw-logo-offset: 0;
     stroke-dashoffset: 0 !important;
     animation: none !important;
