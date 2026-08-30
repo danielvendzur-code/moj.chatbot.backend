@@ -9,6 +9,15 @@ const mobileContext = {
   reducedMotion: "no-preference",
 };
 
+const desktopContext = {
+  viewport: { width: 1280, height: 800 },
+  screen: { width: 1280, height: 800 },
+  isMobile: false,
+  hasTouch: false,
+  deviceScaleFactor: 1,
+  reducedMotion: "no-preference",
+};
+
 function measureDirectionalSteps(values) {
   let drawingSteps = 0;
   let erasingSteps = 0;
@@ -125,6 +134,39 @@ async function verifyReverseErase(launcher) {
   expect(Number.parseFloat(result.inlineOffset)).toBeGreaterThanOrEqual(0);
 }
 
+async function verifyDesktopDrawErase(launcher) {
+  await expect(launcher).toBeVisible();
+  await expect(launcher).toHaveAttribute("aria-expanded", "false");
+
+  const stroke = launcher.locator(".bl__stroke");
+  await expect(stroke).toHaveCount(1);
+  await expect(stroke).toHaveCSS("animation-name", "cw-logo-draw-erase-loop");
+
+  const values = await stroke.evaluate(async (element) => {
+    const samples = [];
+    const started = performance.now();
+
+    while (performance.now() - started < 5700) {
+      const value = Number.parseFloat(getComputedStyle(element).strokeDashoffset);
+      if (Number.isFinite(value)) samples.push(value);
+      await new Promise((resolve) => window.setTimeout(resolve, 90));
+    }
+
+    return samples;
+  });
+
+  expect(values.length).toBeGreaterThan(45);
+  expect(Math.min(...values)).toBeLessThan(0.08);
+  expect(Math.max(...values)).toBeGreaterThan(0.92);
+  expect(values.some((value) => value > 0.2 && value < 0.8)).toBe(true);
+
+  const direction = measureDirectionalSteps(values);
+  expect(direction.drawingSteps).toBeGreaterThan(8);
+  expect(direction.erasingSteps).toBeGreaterThan(8);
+  expect(direction.largestDrawingStep).toBeGreaterThan(0.02);
+  expect(direction.largestErasingStep).toBeGreaterThan(0.02);
+}
+
 test("mobile preview draws and progressively erases the single SVG stroke", async ({ browser }) => {
   const context = await browser.newContext(mobileContext);
   const page = await context.newPage();
@@ -157,5 +199,39 @@ test("production widget assets keep the same reverse erase on mobile", async ({ 
 
   const launcher = page.locator("#dv-assistant-root [data-testid='widget-launcher']");
   await verifyReverseErase(launcher);
+  await context.close();
+});
+
+test("desktop preview continuously draws and erases the closed launcher logo", async ({ browser }) => {
+  const context = await browser.newContext(desktopContext);
+  const page = await context.newPage();
+
+  await page.goto("http://127.0.0.1:4173/?embed=1", { waitUntil: "networkidle" });
+  await verifyDesktopDrawErase(page.getByTestId("widget-launcher"));
+
+  await context.close();
+});
+
+test("production widget assets keep desktop draw and erase motion", async ({ browser }) => {
+  const context = await browser.newContext(desktopContext);
+  const page = await context.newPage();
+
+  await page.setContent(
+    `<!doctype html>
+      <html>
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="stylesheet" href="http://127.0.0.1:4173/widget.css" />
+        </head>
+        <body>
+          <script src="http://127.0.0.1:4173/widget.js"></script>
+        </body>
+      </html>`,
+    { waitUntil: "networkidle" },
+  );
+
+  const launcher = page.locator("#dv-assistant-root [data-testid='widget-launcher']");
+  await verifyDesktopDrawErase(launcher);
+
   await context.close();
 });
