@@ -49,33 +49,53 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
       frame = 0;
     };
 
-    const syncMotion = () => {
-      clearFrame();
+    const clearInlineMotion = () => {
+      stroke.style.removeProperty("animation");
       stroke.style.removeProperty("stroke-dashoffset");
       stroke.style.removeProperty("stroke-dasharray");
       stroke.style.removeProperty("opacity");
       delete stroke.dataset.mobileLogoOffset;
       delete stroke.dataset.mobileLogoOpacity;
+    };
+
+    const syncMotion = () => {
+      clearFrame();
+      clearInlineMotion();
 
       if (reducedQuery.matches) {
+        stroke.style.setProperty("animation", "none", "important");
         stroke.style.setProperty("stroke-dashoffset", "0", "important");
         stroke.style.setProperty("opacity", "1", "important");
         return;
       }
 
-      if (!mobileQuery.matches) return;
+      const shouldDriveWithRaf = size === "launcher" || mobileQuery.matches;
+      if (!shouldDriveWithRaf) return;
 
+      stroke.style.setProperty("animation", "none", "important");
       stroke.style.setProperty("stroke-dasharray", "1 1", "important");
-      const startedAt = performance.now();
+
+      const launcher = size === "launcher" ? stroke.closest(".cw-launcher") : null;
+      let startedAt = performance.now();
+      let wasExpanded = launcher?.getAttribute("aria-expanded") === "true";
 
       const tick = (now: number) => {
-        const progress = ((now - startedAt) % MOBILE_LOGO_CYCLE_MS) / MOBILE_LOGO_CYCLE_MS;
-        const offset = mobileLogoOffset(progress);
-        const opacity = mobileLogoOpacity(offset);
+        const isExpanded = launcher?.getAttribute("aria-expanded") === "true";
+        let offset = 0;
+        let opacity = 1;
+
+        if (!isExpanded) {
+          if (wasExpanded) startedAt = now;
+          const progress = ((now - startedAt) % MOBILE_LOGO_CYCLE_MS) / MOBILE_LOGO_CYCLE_MS;
+          offset = mobileLogoOffset(progress);
+          opacity = mobileLogoOpacity(offset);
+        }
+
         stroke.style.setProperty("stroke-dashoffset", offset.toFixed(4), "important");
         stroke.style.setProperty("opacity", opacity.toFixed(4), "important");
         stroke.dataset.mobileLogoOffset = offset.toFixed(4);
         stroke.dataset.mobileLogoOpacity = opacity.toFixed(4);
+        wasExpanded = isExpanded;
         frame = window.requestAnimationFrame(tick);
       };
 
@@ -90,11 +110,7 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
       clearFrame();
       mobileQuery.removeEventListener("change", syncMotion);
       reducedQuery.removeEventListener("change", syncMotion);
-      stroke.style.removeProperty("stroke-dashoffset");
-      stroke.style.removeProperty("stroke-dasharray");
-      stroke.style.removeProperty("opacity");
-      delete stroke.dataset.mobileLogoOffset;
-      delete stroke.dataset.mobileLogoOpacity;
+      clearInlineMotion();
     };
   }, [size]);
 
