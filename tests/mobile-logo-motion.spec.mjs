@@ -9,6 +9,15 @@ const mobileContext = {
   reducedMotion: "no-preference",
 };
 
+const desktopContext = {
+  viewport: { width: 1280, height: 800 },
+  screen: { width: 1280, height: 800 },
+  isMobile: false,
+  hasTouch: false,
+  deviceScaleFactor: 1,
+  reducedMotion: "no-preference",
+};
+
 function measureDirectionalSteps(values) {
   let drawingSteps = 0;
   let erasingSteps = 0;
@@ -37,6 +46,7 @@ function measureDirectionalSteps(values) {
 
 async function verifyReverseErase(launcher) {
   await expect(launcher).toBeVisible();
+  await expect(launcher).toHaveAttribute("aria-expanded", "false");
 
   const stroke = launcher.locator('.bl__stroke[data-mobile-logo-motion="raf"]');
   await expect(stroke).toHaveCount(1);
@@ -157,5 +167,39 @@ test("production widget assets keep the same reverse erase on mobile", async ({ 
 
   const launcher = page.locator("#dv-assistant-root [data-testid='widget-launcher']");
   await verifyReverseErase(launcher);
+  await context.close();
+});
+
+test("desktop preview continuously draws and erases the closed launcher logo", async ({ browser }) => {
+  const context = await browser.newContext(desktopContext);
+  const page = await context.newPage();
+
+  await page.goto("http://127.0.0.1:4173/?embed=1", { waitUntil: "networkidle" });
+  await verifyReverseErase(page.getByTestId("widget-launcher"));
+
+  await context.close();
+});
+
+test("production widget assets keep desktop draw and erase motion", async ({ browser }) => {
+  const context = await browser.newContext(desktopContext);
+  const page = await context.newPage();
+
+  await page.setContent(
+    `<!doctype html>
+      <html>
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="stylesheet" href="http://127.0.0.1:4173/widget.css" />
+        </head>
+        <body>
+          <script src="http://127.0.0.1:4173/widget.js"></script>
+        </body>
+      </html>`,
+    { waitUntil: "networkidle" },
+  );
+
+  const launcher = page.locator("#dv-assistant-root [data-testid='widget-launcher']");
+  await verifyReverseErase(launcher);
+
   await context.close();
 });

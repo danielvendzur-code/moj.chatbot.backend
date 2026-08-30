@@ -1,56 +1,41 @@
 /* Final authority for the approved one-stroke chatbot mark.
-   Desktop keeps the already-working registered-offset motion. Touch/mobile
-   disables competing CSS logo timelines so the SVG's native animate element
-   can draw and reverse-erase the exact same path reliably in Safari/WebKit. */
+   BubbleLogo owns the closed-launcher draw/erase timeline with RAF on desktop
+   and touch devices. This layer disables every historical CSS logo timeline so
+   there is exactly one motion owner and no cascade-dependent behaviour. */
 html:root body .cw-widget .cw-launcher,
 html:root body .cw-widget .cw-panel-head__mascot {
   color: #19834f !important;
 }
 
-html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
-  --cw-logo-offset: 1;
+html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl .bl__stroke,
+html:root body .cw-widget .cw-launcher[aria-expanded="true"] .bl .bl__stroke {
   stroke: currentColor !important;
   stroke-width: 7.75 !important;
   stroke-linecap: round !important;
   stroke-linejoin: round !important;
   stroke-dasharray: 1 1 !important;
-  opacity: 1 !important;
-  animation: cw-logo-draw-erase-loop 5.4s linear infinite both !important;
+  animation: none !important;
   will-change: stroke-dashoffset;
 }
 
-html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) .bl__stroke,
-html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl__stroke {
-  animation: cw-logo-draw-erase-loop 5.4s linear infinite both !important;
+html:root
+  body
+  .cw-widget
+  .cw-launcher:is(:hover, :focus-visible, :active)
+  .bl
+  .bl__stroke {
+  animation: none !important;
 }
 
-@keyframes cw-logo-draw-erase-loop {
-  0%,
-  5% {
-    --cw-logo-offset: 1;
-  }
-  35% {
-    --cw-logo-offset: 0;
-  }
-  50% {
-    --cw-logo-offset: 0;
-  }
-  80%,
-  100% {
-    --cw-logo-offset: 1;
-  }
-}
-
-/* Mobile: explicitly defeat every historical CSS timeline, including the
-   more-specific closed-launcher cycle from premium-motion-system.css. The
-   RAF driver in BubbleLogo is then the only owner of stroke-dashoffset. */
+/* Mobile/header CSS stays motionless as well. On touch devices BubbleLogo's RAF
+   continues to own the launcher path, while the open panel remains a stable
+   brand surface. */
 @media (max-width: 760px), (pointer: coarse), (hover: none) {
-  html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl__stroke,
-  html:root body .cw-widget .cw-launcher[aria-expanded="true"] .bl__stroke,
-  html:root body .cw-widget .cw-panel-head__mascot .bl__stroke {
+  html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl .bl__stroke,
+  html:root body .cw-widget .cw-launcher[aria-expanded="true"] .bl .bl__stroke,
+  html:root body .cw-widget .cw-panel-head__mascot .bl .bl__stroke {
     --cw-logo-offset: 0;
     stroke-dasharray: 1 1 !important;
-    opacity: 1 !important;
     animation: none !important;
     will-change: auto;
   }
@@ -85,7 +70,9 @@ html:root body .cw-widget .cw-panel-head__mascot {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html:root body .cw-widget :is(.cw-launcher, .cw-panel-head__mascot) .bl__stroke {
+  html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl .bl__stroke,
+  html:root body .cw-widget .cw-launcher[aria-expanded="true"] .bl .bl__stroke,
+  html:root body .cw-widget .cw-panel-head__mascot .bl .bl__stroke {
     --cw-logo-offset: 0;
     stroke-dashoffset: 0 !important;
     animation: none !important;
