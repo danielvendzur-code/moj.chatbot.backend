@@ -46,6 +46,7 @@ function measureDirectionalSteps(values) {
 
 async function verifyReverseErase(launcher) {
   await expect(launcher).toBeVisible();
+  await expect(launcher).toHaveAttribute("aria-expanded", "false");
 
   const stroke = launcher.locator('.bl__stroke[data-mobile-logo-motion="raf"]');
   await expect(stroke).toHaveCount(1);
@@ -134,39 +135,6 @@ async function verifyReverseErase(launcher) {
   expect(Number.parseFloat(result.inlineOffset)).toBeGreaterThanOrEqual(0);
 }
 
-async function verifyDesktopDrawErase(launcher) {
-  await expect(launcher).toBeVisible();
-  await expect(launcher).toHaveAttribute("aria-expanded", "false");
-
-  const stroke = launcher.locator(".bl__stroke");
-  await expect(stroke).toHaveCount(1);
-  await expect(stroke).toHaveCSS("animation-name", "cw-logo-draw-erase-loop");
-
-  const values = await stroke.evaluate(async (element) => {
-    const samples = [];
-    const started = performance.now();
-
-    while (performance.now() - started < 5700) {
-      const value = Number.parseFloat(getComputedStyle(element).strokeDashoffset);
-      if (Number.isFinite(value)) samples.push(value);
-      await new Promise((resolve) => window.setTimeout(resolve, 90));
-    }
-
-    return samples;
-  });
-
-  expect(values.length).toBeGreaterThan(45);
-  expect(Math.min(...values)).toBeLessThan(0.08);
-  expect(Math.max(...values)).toBeGreaterThan(0.92);
-  expect(values.some((value) => value > 0.2 && value < 0.8)).toBe(true);
-
-  const direction = measureDirectionalSteps(values);
-  expect(direction.drawingSteps).toBeGreaterThan(8);
-  expect(direction.erasingSteps).toBeGreaterThan(8);
-  expect(direction.largestDrawingStep).toBeGreaterThan(0.02);
-  expect(direction.largestErasingStep).toBeGreaterThan(0.02);
-}
-
 test("mobile preview draws and progressively erases the single SVG stroke", async ({ browser }) => {
   const context = await browser.newContext(mobileContext);
   const page = await context.newPage();
@@ -207,7 +175,7 @@ test("desktop preview continuously draws and erases the closed launcher logo", a
   const page = await context.newPage();
 
   await page.goto("http://127.0.0.1:4173/?embed=1", { waitUntil: "networkidle" });
-  await verifyDesktopDrawErase(page.getByTestId("widget-launcher"));
+  await verifyReverseErase(page.getByTestId("widget-launcher"));
 
   await context.close();
 });
@@ -231,7 +199,7 @@ test("production widget assets keep desktop draw and erase motion", async ({ bro
   );
 
   const launcher = page.locator("#dv-assistant-root [data-testid='widget-launcher']");
-  await verifyDesktopDrawErase(launcher);
+  await verifyReverseErase(launcher);
 
   await context.close();
 });
