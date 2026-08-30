@@ -1,7 +1,7 @@
 /* Final authority for the approved one-stroke chatbot mark.
-   Desktop keeps the already-working registered-offset motion. Touch/mobile
-   disables competing CSS logo timelines so the SVG's native animate element
-   can draw and reverse-erase the exact same path reliably in Safari/WebKit. */
+   Desktop animates the SVG stroke directly so drawing and reverse erasing do
+   not depend on custom-property interpolation. Touch/mobile keeps the RAF
+   driver in BubbleLogo, which is more reliable in Safari/WebKit. */
 html:root body .cw-widget .cw-launcher,
 html:root body .cw-widget .cw-panel-head__mascot {
   color: #19834f !important;
@@ -27,17 +27,17 @@ html:root body .cw-widget .cw-panel-head__mascot:is(:hover, :focus-visible) .bl_
 @keyframes cw-logo-draw-erase-loop {
   0%,
   5% {
-    --cw-logo-offset: 1;
+    stroke-dashoffset: 1;
   }
   35% {
-    --cw-logo-offset: 0;
+    stroke-dashoffset: 0;
   }
   50% {
-    --cw-logo-offset: 0;
+    stroke-dashoffset: 0;
   }
   80%,
   100% {
-    --cw-logo-offset: 1;
+    stroke-dashoffset: 1;
   }
 }
 
