@@ -27,9 +27,8 @@ html:root
   animation: none !important;
 }
 
-/* Mobile/header CSS stays motionless as well. On touch devices BubbleLogo's RAF
-   continues to own the launcher path, while the open panel remains a stable
-   brand surface. */
+/* Mobile/header CSS stays motionless as well. BubbleLogo's RAF owns only the
+   closed launcher path, while the open panel/header stays a stable brand mark. */
 @media (max-width: 760px), (pointer: coarse), (hover: none) {
   html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl .bl__stroke,
   html:root body .cw-widget .cw-launcher[aria-expanded="true"] .bl .bl__stroke,
@@ -41,18 +40,17 @@ html:root
   }
 }
 
-/* The launcher is the mark itself, not a white circular tile.
-   Keep the full button hit-area for usability while the visual surface stays transparent. */
+/* Restored approved launcher geometry from the pre-transparent version:
+   a single white circular surface around the one-stroke company mark. */
 html:root body .cw-widget .cw-launcher,
 html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible, :active) {
-  background: transparent !important;
-  background-color: transparent !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
   background-image: none !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
-  overflow: visible !important;
 }
 
 html:root body .cw-widget .cw-launcher .bl {
