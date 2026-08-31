@@ -1,3 +1,5 @@
+@import "./logo-match-final.css";
+
 /* Shared embed foundation only. Component styling lives in product-widget.css. */
 .cw-widget {
   color-scheme: light;
