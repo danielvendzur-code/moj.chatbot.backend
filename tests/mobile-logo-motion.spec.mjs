@@ -47,6 +47,8 @@ function measureDirectionalSteps(values) {
 async function verifyReverseErase(launcher) {
   await expect(launcher).toBeVisible();
   await expect(launcher).toHaveAttribute("aria-expanded", "false");
+  await expect(launcher).toHaveCSS("border-radius", "50%");
+  await expect(launcher).toHaveCSS("background-color", "rgb(255, 255, 255)");
 
   const stroke = launcher.locator('.bl__stroke[data-mobile-logo-motion="raf"]');
   await expect(stroke).toHaveCount(1);
@@ -57,6 +59,8 @@ async function verifyReverseErase(launcher) {
     const computedValues = [];
     const opacityValues = [];
     const dataOpacityValues = [];
+    const colorValues = [];
+    const dataColorValues = [];
     const started = performance.now();
 
     while (performance.now() - started < 5700) {
@@ -64,16 +68,21 @@ async function verifyReverseErase(launcher) {
       const computedValue = Number.parseFloat(getComputedStyle(element).strokeDashoffset);
       const opacityValue = Number.parseFloat(getComputedStyle(element).opacity);
       const dataOpacityValue = Number.parseFloat(element.dataset.mobileLogoOpacity ?? "NaN");
+      const colorValue = getComputedStyle(element).color;
+      const dataColorValue = element.dataset.logoColor ?? "";
       if (
         Number.isFinite(dataValue) &&
         Number.isFinite(computedValue) &&
         Number.isFinite(opacityValue) &&
-        Number.isFinite(dataOpacityValue)
+        Number.isFinite(dataOpacityValue) &&
+        dataColorValue
       ) {
         values.push(dataValue);
         computedValues.push(computedValue);
         opacityValues.push(opacityValue);
         dataOpacityValues.push(dataOpacityValue);
+        colorValues.push(colorValue);
+        dataColorValues.push(dataColorValue);
       }
       await new Promise((resolve) => window.setTimeout(resolve, 90));
     }
@@ -83,14 +92,18 @@ async function verifyReverseErase(launcher) {
       computedValues,
       opacityValues,
       dataOpacityValues,
+      colorValues,
+      dataColorValues,
       priority: element.style.getPropertyPriority("stroke-dashoffset"),
       opacityPriority: element.style.getPropertyPriority("opacity"),
+      colorPriority: element.style.getPropertyPriority("color"),
       inlineOffset: element.style.getPropertyValue("stroke-dashoffset"),
     };
   });
 
   expect(result.priority).toBe("important");
   expect(result.opacityPriority).toBe("important");
+  expect(result.colorPriority).toBe("important");
   expect(result.values.length).toBeGreaterThan(45);
   expect(Math.min(...result.values)).toBeLessThan(0.08);
   expect(Math.max(...result.values)).toBeGreaterThan(0.92);
@@ -120,6 +133,11 @@ async function verifyReverseErase(launcher) {
   );
   expect(largestOpacityDifference).toBeLessThan(0.03);
 
+  expect(result.colorValues).toContain("rgb(11, 47, 32)");
+  expect(result.colorValues).toContain("rgb(185, 237, 77)");
+  expect(new Set(result.colorValues).size).toBeGreaterThan(10);
+  expect(result.colorValues).toEqual(result.dataColorValues);
+
   const erasedSamples = result.values
     .map((offset, index) => ({ offset, opacity: result.opacityValues[index] }))
     .filter(({ offset }) => offset >= 0.995);
@@ -135,7 +153,7 @@ async function verifyReverseErase(launcher) {
   expect(Number.parseFloat(result.inlineOffset)).toBeGreaterThanOrEqual(0);
 }
 
-test("mobile preview draws and progressively erases the single SVG stroke", async ({ browser }) => {
+test("mobile preview draws, erases and cycles dark-to-pale inside a round launcher", async ({ browser }) => {
   const context = await browser.newContext(mobileContext);
   const page = await context.newPage();
 
@@ -147,7 +165,7 @@ test("mobile preview draws and progressively erases the single SVG stroke", asyn
   await context.close();
 });
 
-test("production widget assets keep the same reverse erase on mobile", async ({ browser }) => {
+test("production widget assets keep the same round animated launcher on mobile", async ({ browser }) => {
   const context = await browser.newContext(mobileContext);
   const page = await context.newPage();
 
@@ -170,7 +188,7 @@ test("production widget assets keep the same reverse erase on mobile", async ({ 
   await context.close();
 });
 
-test("desktop preview continuously draws and erases the closed launcher logo", async ({ browser }) => {
+test("desktop preview keeps the same round draw erase and color cycle", async ({ browser }) => {
   const context = await browser.newContext(desktopContext);
   const page = await context.newPage();
 
@@ -180,7 +198,7 @@ test("desktop preview continuously draws and erases the closed launcher logo", a
   await context.close();
 });
 
-test("production widget assets keep desktop draw and erase motion", async ({ browser }) => {
+test("production widget assets keep the desktop round launcher motion", async ({ browser }) => {
   const context = await browser.newContext(desktopContext);
   const page = await context.newPage();
 
