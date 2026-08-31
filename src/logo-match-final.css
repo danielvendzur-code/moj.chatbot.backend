@@ -56,7 +56,7 @@ html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible, :active) {
 }
 
 html:root body .cw-widget .cw-launcher .bl {
-  filter: drop-shadow(0 5px 10px rgba(11, 47, 32, 0.14));
+  filter: none !important;
 }
 
 /* Header shows only the green mark, without any square background. */
