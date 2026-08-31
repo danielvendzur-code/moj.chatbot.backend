@@ -14,15 +14,15 @@
     "test": "node --test tests/widget-contract.test.mjs tests/history-contract.test.mjs tests/white-green-identity.test.mjs tests/premium-refinement.test.mjs tests/lead-contact.test.mjs"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.115.0",
+    "@anthropic-ai/sdk": "^0.122.0",
     "animejs": "^4.5.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
     "@vercel/node": "^5.1.0",
     "typescript": "^5.7.2",
     "vite": "^5.4.14"
