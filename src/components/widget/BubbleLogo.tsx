@@ -10,13 +10,13 @@ const ONE_STROKE =
 
 const LEGACY_GEOMETRY_MARKERS =
   'className="bl__outer" className="bl__inner" strokeWidth="7" M28.6 65.1V32.9L53.4 57.5 L33.5 104.5L57.5 81.1H80.9';
-const MOBILE_LOGO_CYCLE_MS = 5400;
+const MOBILE_LOGO_CYCLE_MS = 4000;
 
 function mobileLogoOffset(progress: number): number {
-  if (progress < 0.05) return 1;
-  if (progress < 0.35) return 1 - (progress - 0.05) / 0.3;
-  if (progress < 0.5) return 0;
-  if (progress < 0.8) return (progress - 0.5) / 0.3;
+  if (progress < 0.01) return 1;
+  if (progress < 0.36) return 1 - (progress - 0.01) / 0.35;
+  if (progress < 0.52) return 0;
+  if (progress < 0.87) return (progress - 0.52) / 0.35;
   return 1;
 }
 
