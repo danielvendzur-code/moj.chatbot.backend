@@ -44,6 +44,29 @@ function measureDirectionalSteps(values) {
   };
 }
 
+function longestErasedRun(values, times) {
+  let startedAt = null;
+  let longest = 0;
+
+  for (let index = 0; index < values.length; index += 1) {
+    if (values[index] >= 0.995) {
+      if (startedAt === null) startedAt = times[index];
+      continue;
+    }
+
+    if (startedAt !== null) {
+      longest = Math.max(longest, times[index - 1] - startedAt);
+      startedAt = null;
+    }
+  }
+
+  if (startedAt !== null && times.length) {
+    longest = Math.max(longest, times[times.length - 1] - startedAt);
+  }
+
+  return longest;
+}
+
 async function verifyReverseErase(launcher) {
   await expect(launcher).toBeVisible();
   await expect(launcher).toHaveAttribute("aria-expanded", "false");
@@ -57,6 +80,7 @@ async function verifyReverseErase(launcher) {
     const computedValues = [];
     const opacityValues = [];
     const dataOpacityValues = [];
+    const times = [];
     const started = performance.now();
 
     while (performance.now() - started < 5700) {
@@ -74,6 +98,7 @@ async function verifyReverseErase(launcher) {
         computedValues.push(computedValue);
         opacityValues.push(opacityValue);
         dataOpacityValues.push(dataOpacityValue);
+        times.push(performance.now() - started);
       }
       await new Promise((resolve) => window.setTimeout(resolve, 90));
     }
@@ -83,6 +108,7 @@ async function verifyReverseErase(launcher) {
       computedValues,
       opacityValues,
       dataOpacityValues,
+      times,
       priority: element.style.getPropertyPriority("stroke-dashoffset"),
       opacityPriority: element.style.getPropertyPriority("opacity"),
       inlineOffset: element.style.getPropertyValue("stroke-dashoffset"),
@@ -126,6 +152,11 @@ async function verifyReverseErase(launcher) {
   expect(erasedSamples.length).toBeGreaterThan(1);
   expect(erasedSamples.every(({ opacity }) => opacity <= 0.01)).toBe(true);
 
+  // The erased endpoint must not sit empty for the old ~1.35 s pause. Sampling
+  // every 90 ms gives enough margin for scheduling jitter while locking the new
+  // sub-second restart behaviour in a real browser.
+  expect(longestErasedRun(result.values, result.times)).toBeLessThan(900);
+
   const drawnSamples = result.values
     .map((offset, index) => ({ offset, opacity: result.opacityValues[index] }))
     .filter(({ offset }) => offset <= 0.9);
@@ -133,6 +164,23 @@ async function verifyReverseErase(launcher) {
   expect(drawnSamples.every(({ opacity }) => opacity >= 0.99)).toBe(true);
 
   expect(Number.parseFloat(result.inlineOffset)).toBeGreaterThanOrEqual(0);
+}
+
+async function verifyProductionSurface(launcher) {
+  const resting = await launcher.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      borderTopWidth: style.borderTopWidth,
+      boxShadow: style.boxShadow,
+      backgroundColor: style.backgroundColor,
+      borderRadius: style.borderRadius,
+    };
+  });
+
+  expect(resting.borderTopWidth).toBe("0px");
+  expect(resting.boxShadow).toBe("none");
+  expect(resting.borderRadius).toBe("50%");
+  expect(resting.backgroundColor).not.toBe("rgb(255, 255, 255)");
 }
 
 test("mobile preview draws and progressively erases the single SVG stroke", async ({ browser }) => {
@@ -166,6 +214,7 @@ test("production widget assets keep the same reverse erase on mobile", async ({ 
   );
 
   const launcher = page.locator("#dv-assistant-root [data-testid='widget-launcher']");
+  await verifyProductionSurface(launcher);
   await verifyReverseErase(launcher);
   await context.close();
 });
@@ -199,7 +248,12 @@ test("production widget assets keep desktop draw and erase motion", async ({ bro
   );
 
   const launcher = page.locator("#dv-assistant-root [data-testid='widget-launcher']");
+  await verifyProductionSurface(launcher);
   await verifyReverseErase(launcher);
+
+  await launcher.hover();
+  const hoveredBackground = await launcher.evaluate((element) => getComputedStyle(element).backgroundColor);
+  expect(hoveredBackground).not.toBe("rgb(255, 255, 255)");
 
   await context.close();
 });
