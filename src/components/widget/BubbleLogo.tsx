@@ -10,9 +10,12 @@ const ONE_STROKE =
 
 const LEGACY_GEOMETRY_MARKERS =
   'className="bl__outer" className="bl__inner" strokeWidth="7" M28.6 65.1V32.9L53.4 57.5 L33.5 104.5L57.5 81.1H80.9';
-const MOBILE_LOGO_CYCLE_MS = 5400;
+const LOGO_CYCLE_MS = 5400;
+const BRAND_GREEN = "rgb(25, 131, 79)";
+const DARK_LOGO = [11, 47, 32] as const;
+const PALE_LOGO = [185, 237, 77] as const;
 
-function mobileLogoOffset(progress: number): number {
+function logoOffset(progress: number): number {
   if (progress < 0.05) return 1;
   if (progress < 0.35) return 1 - (progress - 0.05) / 0.3;
   if (progress < 0.5) return 0;
@@ -20,7 +23,7 @@ function mobileLogoOffset(progress: number): number {
   return 1;
 }
 
-function mobileLogoOpacity(offset: number): number {
+function logoOpacity(offset: number): number {
   const fadeStart = 0.965;
   const hiddenAt = 0.995;
   if (offset <= fadeStart) return 1;
@@ -28,18 +31,30 @@ function mobileLogoOpacity(offset: number): number {
   return 1 - (offset - fadeStart) / (hiddenAt - fadeStart);
 }
 
+function logoColor(progress: number): string {
+  let mix = 0;
+  if (progress >= 0.05 && progress < 0.35) {
+    mix = (progress - 0.05) / 0.3;
+  } else if (progress >= 0.35 && progress < 0.5) {
+    mix = 1;
+  } else if (progress >= 0.5 && progress < 0.8) {
+    mix = 1 - (progress - 0.5) / 0.3;
+  }
+
+  const channel = (index: 0 | 1 | 2) =>
+    Math.round(DARK_LOGO[index] + (PALE_LOGO[index] - DARK_LOGO[index]) * mix);
+  return `rgb(${channel(0)}, ${channel(1)}, ${channel(2)})`;
+}
+
 export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
   const strokeRef = useRef<SVGPathElement | null>(null);
 
   useEffect(() => {
-    if (size === "avatar") return undefined;
+    if (size !== "launcher") return undefined;
 
     const stroke = strokeRef.current;
     if (!stroke) return undefined;
 
-    const mobileQuery = window.matchMedia(
-      "(max-width: 760px), (pointer: coarse), (hover: none)",
-    );
     const reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
 
@@ -54,8 +69,10 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
       stroke.style.removeProperty("stroke-dashoffset");
       stroke.style.removeProperty("stroke-dasharray");
       stroke.style.removeProperty("opacity");
+      stroke.style.removeProperty("color");
       delete stroke.dataset.mobileLogoOffset;
       delete stroke.dataset.mobileLogoOpacity;
+      delete stroke.dataset.logoColor;
     };
 
     const syncMotion = () => {
@@ -66,16 +83,14 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
         stroke.style.setProperty("animation", "none", "important");
         stroke.style.setProperty("stroke-dashoffset", "0", "important");
         stroke.style.setProperty("opacity", "1", "important");
+        stroke.style.setProperty("color", BRAND_GREEN, "important");
         return;
       }
-
-      const shouldDriveWithRaf = size === "launcher" || mobileQuery.matches;
-      if (!shouldDriveWithRaf) return;
 
       stroke.style.setProperty("animation", "none", "important");
       stroke.style.setProperty("stroke-dasharray", "1 1", "important");
 
-      const launcher = size === "launcher" ? stroke.closest(".cw-launcher") : null;
+      const launcher = stroke.closest(".cw-launcher");
       let startedAt = performance.now();
       let wasExpanded = launcher?.getAttribute("aria-expanded") === "true";
 
@@ -83,18 +98,22 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
         const isExpanded = launcher?.getAttribute("aria-expanded") === "true";
         let offset = 0;
         let opacity = 1;
+        let color = BRAND_GREEN;
 
         if (!isExpanded) {
           if (wasExpanded) startedAt = now;
-          const progress = ((now - startedAt) % MOBILE_LOGO_CYCLE_MS) / MOBILE_LOGO_CYCLE_MS;
-          offset = mobileLogoOffset(progress);
-          opacity = mobileLogoOpacity(offset);
+          const progress = ((now - startedAt) % LOGO_CYCLE_MS) / LOGO_CYCLE_MS;
+          offset = logoOffset(progress);
+          opacity = logoOpacity(offset);
+          color = logoColor(progress);
         }
 
         stroke.style.setProperty("stroke-dashoffset", offset.toFixed(4), "important");
         stroke.style.setProperty("opacity", opacity.toFixed(4), "important");
+        stroke.style.setProperty("color", color, "important");
         stroke.dataset.mobileLogoOffset = offset.toFixed(4);
         stroke.dataset.mobileLogoOpacity = opacity.toFixed(4);
+        stroke.dataset.logoColor = color;
         wasExpanded = isExpanded;
         frame = window.requestAnimationFrame(tick);
       };
@@ -103,12 +122,10 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
     };
 
     syncMotion();
-    mobileQuery.addEventListener("change", syncMotion);
     reducedQuery.addEventListener("change", syncMotion);
 
     return () => {
       clearFrame();
-      mobileQuery.removeEventListener("change", syncMotion);
       reducedQuery.removeEventListener("change", syncMotion);
       clearInlineMotion();
     };
@@ -140,7 +157,7 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
         <path
           ref={strokeRef}
           className="bl__stroke"
-          data-mobile-logo-motion={size === "avatar" ? undefined : "raf"}
+          data-mobile-logo-motion={size === "launcher" ? "raf" : undefined}
           d={ONE_STROKE}
           pathLength={1}
           stroke="currentColor"
