@@ -70,7 +70,7 @@ test("logo is the website's outlined mark, not a redrawn approximation", async (
   assert.match(logo, /M28\.6 65\.1V32\.9L53\.4 57\.5/);
 });
 
-test("launcher restarts quickly after erase and has no ring or white hover", async () => {
+test("launcher restarts quickly after erase and keeps a restrained visible edge", async () => {
   const logo = await read("src/components/widget/BubbleLogo.tsx");
   const logoCss = await read("src/logo-match-final.css");
   const surface = await read("src/embed-surface-authority-final.css");
@@ -78,9 +78,9 @@ test("launcher restarts quickly after erase and has no ring or white hover", asy
   assert.match(logo, /MOBILE_LOGO_CYCLE_MS = 4000/);
   assert.match(logo, /progress < 0\.01/);
   assert.match(logo, /progress < 0\.87/);
-  assert.match(surface, /border:\s*0\s*!important/);
-  assert.match(surface, /box-shadow:\s*none\s*!important/g);
-  assert.match(surface, /rgba\(200, 240, 106, 0\.14\)/);
+  assert.match(surface, /border:\s*1px solid rgba\(200, 240, 106, 0\.28\)\s*!important/);
+  assert.match(surface, /border-color:\s*rgba\(18, 56, 45, 0\.24\)\s*!important/);
+  assert.match(surface, /background:\s*rgba\(7, 27, 21, 0\.095\)\s*!important/);
   assert.doesNotMatch(surface, /background(?:-color)?:\s*(?:#fff|#ffffff|rgb\(255,\s*255,\s*255\))/i);
   assert.match(logoCss, /\.cw-launcher \.bl[\s\S]*filter:\s*none\s*!important/);
 });
