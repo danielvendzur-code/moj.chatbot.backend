@@ -60,3 +60,28 @@ html:root body #dv-assistant-root .cw-widget .cw-launcher .bl {
   background: transparent !important;
   filter: none !important;
 }
+
+/* Configurator selection mark: use a centered SVG instead of a font glyph.
+   Font checkmarks have asymmetric baselines and looked visibly off-centre in
+   the circular control at the right edge of selected options. */
+html:root body #dv-assistant-root .cw-widget .cw-calculator
+  :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]::after {
+  content: "" !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  width: 24px !important;
+  height: 24px !important;
+  right: 14px !important;
+  top: 50% !important;
+  border: 1px solid rgba(7, 27, 21, 0.24) !important;
+  border-radius: 50% !important;
+  background-color: #c8f06a !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.4 8.2 6.5 11 12.7 4.8' fill='none' stroke='%23071b15' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: 50% 50% !important;
+  background-size: 13px 13px !important;
+  box-shadow: 0 0 0 2px #ffffff !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  transform: translateY(-50%) !important;
+}
