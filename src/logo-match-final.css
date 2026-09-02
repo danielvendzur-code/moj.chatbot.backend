@@ -1,21 +1,47 @@
 /* Final authority for the approved one-stroke chatbot mark.
    BubbleLogo owns the closed-launcher draw/erase timeline with RAF on desktop
    and touch devices. This layer disables every historical CSS logo timeline so
-   there is exactly one motion owner and no cascade-dependent behaviour. */
-html:root body .cw-widget .cw-launcher,
+   there is exactly one motion owner and no cascade-dependent behaviour.
+
+   The launcher itself is different from the static header mascot: its stroke is
+   painted by the live surface gradient. The parent embed reports the actual
+   page tone underneath the transparent iframe and LaunchReadyRuntime updates
+   the four gradient stops. This keeps the mark dark on light sections, lime on
+   dark sections, and allows a clean split when the launcher crosses a section
+   boundary. */
 html:root body .cw-widget .cw-panel-head__mascot {
   color: #19834f !important;
 }
 
+html:root body .cw-widget .cw-launcher {
+  color: #c8f06a !important;
+}
+
+html:root body .cw-widget .cw-launcher[data-surface-tone="light"] {
+  color: #12382d !important;
+}
+
 html:root body .cw-widget .cw-launcher[aria-expanded="false"] .bl .bl__stroke,
 html:root body .cw-widget .cw-launcher[aria-expanded="true"] .bl .bl__stroke {
-  stroke: currentColor !important;
   stroke-width: 7.75 !important;
   stroke-linecap: round !important;
   stroke-linejoin: round !important;
   stroke-dasharray: 1 1 !important;
   animation: none !important;
   will-change: stroke-dashoffset;
+}
+
+/* Do not replace this with currentColor. The adaptive gradient is what makes
+   the closed launcher remain legible while the page beneath it changes tone. */
+html:root body .cw-widget .cw-launcher .bl--launcher .bl__stroke {
+  stroke: url(#cw-launcher-surface-gradient) !important;
+}
+
+html:root body .cw-widget .cw-panel-head__mascot .bl .bl__stroke {
+  stroke: currentColor !important;
+  stroke-width: 7.75 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
 }
 
 html:root
