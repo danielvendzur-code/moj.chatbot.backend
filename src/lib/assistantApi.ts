@@ -55,7 +55,7 @@ export function localAssistantReply(question: string): string {
   const normalized = question.toLocaleLowerCase("sk");
 
   if (/cen|koľko|rozpočet|stojí|suma/.test(normalized)) {
-    return "Cena závisí od toho, čo má riešenie robiť a s čím sa má prepojiť. Vo „Vyskladať riešenie“ mi označte potrebné funkcie a Daniel sa vám ozve s konkrétnym návrhom.";
+    return "Na webe je chatbot alebo poradca od 347 €, kalkulačka alebo konfigurátor od 447 € a technická prevádzka 10 € mesačne. Konečná cena závisí od rozsahu a napojení; vo „Vyskladať riešenie“ označte, čo potrebujete, a konkrétna ponuka uvedie aj DPH a celkovú cenu.";
   }
   if (/kalkula|výpočet|odhad/.test(normalized)) {
     return "Zákazník zadá napríklad rozmery alebo množstvo a chatbot mu hneď povie cenu — podľa pravidiel, ktoré si určíte vy. Vám potom pošle jeho kontakt aj s tým, čo si vybral.";
