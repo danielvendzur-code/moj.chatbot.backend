@@ -96,6 +96,7 @@ export function ToolCalculator({
   const [validationAttempted, setValidationAttempted] = useState(false);
   const [sendState, setSendState] = useState<SendState>("idle");
   const [handedToMailClient, setHandedToMailClient] = useState(false);
+  const [fallbackHref, setFallbackHref] = useState("");
   const [proposalNumber, setProposalNumber] = useState("");
   const bodyRef = useRef<HTMLDivElement>(null);
   const questionRef = useRef<HTMLHeadingElement>(null);
@@ -276,7 +277,7 @@ export function ToolCalculator({
         consent: true,
       });
       setHandedToMailClient(!result.delivered);
-      if (result.fallback) window.location.assign(result.fallback);
+      setFallbackHref(result.delivered ? "" : result.fallback ?? "");
       setSendState("done");
       track("lead_submit_success", { delivered: result.delivered });
     } catch (error) {
@@ -307,7 +308,7 @@ export function ToolCalculator({
           <h3>Ďakujem, {safeName}.</h3>
           <p>
             {handedToMailClient
-              ? "Otvoril som vám pripravený e-mail. Stačí ho odoslať a návrh máte do 24 hodín."
+              ? "Automatické odoslanie sa nepodarilo dokončiť. Váš výber zostal uložený na tejto obrazovke a nižšie môžete jedným klikom otvoriť pripravený e-mail."
               : hasValidEmail
                 ? `Návrh vám pošlem na ${safeEmail} do 24 hodín. Potvrdenie už máte v schránke.`
                 : "Ozvem sa vám na telefón do 24 hodín s konkrétnym návrhom."}
@@ -327,9 +328,19 @@ export function ToolCalculator({
             </div>
           </div>
           <div className="cw-thanks__actions">
-            <button type="button" className="ghost" onClick={() => restart(null)}>
-              <WidgetIcon name="reset" /> Vyskladať znova
-            </button>
+            {fallbackHref ? (
+              <button
+                type="button"
+                className="ghost"
+                onClick={() => window.location.assign(fallbackHref)}
+              >
+                <WidgetIcon name="send" /> Otvoriť pripravený e-mail
+              </button>
+            ) : (
+              <button type="button" className="ghost" onClick={() => restart(null)}>
+                <WidgetIcon name="reset" /> Vyskladať znova
+              </button>
+            )}
             <button type="button" onClick={onOpenChat}>
               Mám ešte otázku
             </button>
