@@ -694,7 +694,14 @@ export function ToolCalculator({
           {/* A required tick box in front of the send button is the last thing
               that loses a finished form. The same information, stated. */}
           <p className="cw-consent-note">
-            Odoslaním súhlasíte, že vás môžem kontaktovať k tomuto dopytu.
+            Odoslaním požiadate Venaco s.r.o. o kontakt k tomuto dopytu.{" "}
+            <a
+              href="https://mojchatbot.sk/ochrana-udajov"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Ochrana osobných údajov
+            </a>
           </p>
         </footer>
       )}
