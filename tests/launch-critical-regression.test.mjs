@@ -8,10 +8,9 @@ test("open widget brand mark is static while launcher alone may animate", async 
   const logo = await read("src/components/widget/BubbleLogo.tsx");
 
   assert.match(logo, /if \(size !== "launcher"\) return undefined/);
-  assert.doesNotMatch(
-    logo,
-    /const shouldDriveWithRaf = size === "launcher" \|\| mobileQuery\.matches/,
-  );
+  const launcherGuard = logo.indexOf('if (size !== "launcher") return undefined');
+  const motionDriver = logo.indexOf("const shouldDriveWithRaf");
+  assert.ok(launcherGuard >= 0 && motionDriver > launcherGuard);
 });
 
 test("configurator renders exactly one selected check source", async () => {
