@@ -1189,6 +1189,13 @@ html[data-embed="true"] .widget-preview__surface {
   line-height: 1.5;
 }
 
+.cw-sheet__done-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
 .cw-sheet__done-action {
   min-height: 46px;
   margin-top: 4px;
@@ -1205,6 +1212,17 @@ html[data-embed="true"] .widget-preview__surface {
 .cw-sheet__done-action:hover,
 .cw-sheet__done-action:focus-visible {
   border-color: var(--cw-green-hover);
+  background: var(--cw-green-hover);
+}
+
+.cw-sheet__done-action--secondary {
+  color: var(--cw-green-hover);
+  background: transparent;
+}
+
+.cw-sheet__done-action--secondary:hover,
+.cw-sheet__done-action--secondary:focus-visible {
+  color: var(--cw-white);
   background: var(--cw-green-hover);
 }
 
