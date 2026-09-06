@@ -42,6 +42,7 @@ export function MessageSheet({ onClose }: MessageSheetProps): JSX.Element {
   const [error, setError] = useState("");
   const [sendState, setSendState] = useState<SendState>("idle");
   const [handedToMailClient, setHandedToMailClient] = useState(false);
+  const [fallbackHref, setFallbackHref] = useState("");
   const emailRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const doneIconRef = useRef<HTMLSpanElement>(null);
@@ -122,7 +123,7 @@ export function MessageSheet({ onClose }: MessageSheetProps): JSX.Element {
         consent: true,
       });
       setHandedToMailClient(!result.delivered);
-      if (result.fallback) window.location.assign(result.fallback);
+      setFallbackHref(result.delivered ? "" : result.fallback ?? "");
       setSendState("done");
       track("mail_form_success", { delivered: result.delivered });
     } catch (failure) {
@@ -180,12 +181,22 @@ export function MessageSheet({ onClose }: MessageSheetProps): JSX.Element {
           <h4>Ďakujem za správu.</h4>
           <p>
             {handedToMailClient
-              ? "Otvoril som vám pripravený e-mail — stačí ho odoslať."
+              ? "Automatické odoslanie sa nepodarilo dokončiť. Správa zostala na tejto obrazovke a môžete ju otvoriť ako pripravený e-mail."
               : `Potvrdenie som poslal na ${email.trim()}. Odpoviem vám čo najskôr.`}
           </p>
-          <button type="button" className="cw-sheet__done-action" onClick={onClose}>
-            Späť do chatu
-          </button>
+          {fallbackHref ? (
+            <button
+              type="button"
+              className="cw-sheet__done-action"
+              onClick={() => window.location.assign(fallbackHref)}
+            >
+              Otvoriť pripravený e-mail
+            </button>
+          ) : (
+            <button type="button" className="cw-sheet__done-action" onClick={onClose}>
+              Späť do chatu
+            </button>
+          )}
         </div>
       ) : (
         <>
