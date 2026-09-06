@@ -184,19 +184,24 @@ export function MessageSheet({ onClose }: MessageSheetProps): JSX.Element {
               ? "Automatické odoslanie sa nepodarilo dokončiť. Správa zostala na tejto obrazovke a môžete ju otvoriť ako pripravený e-mail."
               : `Potvrdenie som poslal na ${email.trim()}. Odpoviem vám čo najskôr.`}
           </p>
-          {fallbackHref ? (
+          <div className="cw-sheet__done-actions">
+            {fallbackHref ? (
+              <button
+                type="button"
+                className="cw-sheet__done-action"
+                onClick={() => window.location.assign(fallbackHref)}
+              >
+                Otvoriť pripravený e-mail
+              </button>
+            ) : null}
             <button
               type="button"
-              className="cw-sheet__done-action"
-              onClick={() => window.location.assign(fallbackHref)}
+              className={fallbackHref ? "cw-sheet__done-action cw-sheet__done-action--secondary" : "cw-sheet__done-action"}
+              onClick={onClose}
             >
-              Otvoriť pripravený e-mail
-            </button>
-          ) : (
-            <button type="button" className="cw-sheet__done-action" onClick={onClose}>
               Späť do chatu
             </button>
-          )}
+          </div>
         </div>
       ) : (
         <>
