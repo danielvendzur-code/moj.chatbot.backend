@@ -987,6 +987,26 @@ html[data-embed="true"] .widget-preview__surface {
   animation: cw-spin 700ms linear infinite;
 }
 
+.cw-chat-privacy {
+  flex: 0 0 auto;
+  margin: -1px 15px 7px;
+  color: var(--cw-faint);
+  font-size: 10.5px;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.cw-chat-privacy a {
+  color: var(--cw-muted);
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.cw-chat-privacy a:is(:hover, :focus-visible) {
+  color: var(--cw-green-hover);
+}
+
 /* Direct contact: three real chips. As a borderless text row they blended into
    the background and nobody read them as reachable. */
 .cw-direct-actions {
