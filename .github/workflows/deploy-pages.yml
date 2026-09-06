@@ -167,6 +167,52 @@ jobs:
           verify "/widget.css" "--restored-forest"
           verify "/build-meta.json" "$SOURCE_SHA"
 
+      - name: Verify live backend and Sonnet response
+        shell: bash
+        run: |
+          set -euo pipefail
+          BACKEND="https://moj-chatbot-backend.vercel.app"
+          HEALTH="/tmp/moj-chatbot-health.json"
+          CHAT="/tmp/moj-chatbot-chat.json"
+
+          for attempt in {1..12}; do
+            if curl --location --fail --silent --show-error \
+              --header "Cache-Control: no-cache" \
+              "$BACKEND/api/health?verify=${{ github.sha }}-$attempt" > "$HEALTH"; then
+              if node -e '
+                const fs = require("fs");
+                const body = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+                if (body.ok !== true || body.chatModel !== "claude-sonnet-4-6") process.exit(1);
+              ' "$HEALTH"; then
+                break
+              fi
+            fi
+            if [ "$attempt" -eq 12 ]; then
+              echo "Backend health verification failed"
+              cat "$HEALTH" 2>/dev/null || true
+              exit 1
+            fi
+            sleep 5
+          done
+
+          STATUS="$(curl --location --silent --show-error \
+            --output "$CHAT" \
+            --write-out "%{http_code}" \
+            --request POST \
+            --header "Origin: https://mojchatbot.sk" \
+            --header "Content-Type: application/json" \
+            --header "Accept: application/json" \
+            --data '{"messages":[{"role":"user","content":"Firma ručne počíta cenu podľa rozmerov. Aké riešenie by ste odporučili?"}]}' \
+            "$BACKEND/api/chat")"
+
+          test "$STATUS" = "200"
+          node -e '
+            const fs = require("fs");
+            const body = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+            if (typeof body.reply !== "string" || body.reply.trim().length < 20) process.exit(1);
+            if (!/kalkula|výpo|cena/i.test(body.reply)) process.exit(1);
+          ' "$CHAT"
+
       - name: Save verified deployment report
         shell: bash
         env:
