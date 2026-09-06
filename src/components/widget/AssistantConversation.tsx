@@ -447,6 +447,13 @@ export function AssistantConversation({
         </button>
       </div>
 
+      <p className="cw-chat-privacy">
+        Otázky sa spracujú na odpoveď a krátkodobo sa môžu uložiť do histórie chatu.{" "}
+        <a href="https://mojchatbot.sk/ochrana-udajov" target="_blank" rel="noreferrer">
+          Súkromie
+        </a>
+      </p>
+
       {/* The former "Radšej priamo?" label is intentionally omitted. */}
       <nav className="cw-direct-actions" aria-label="Priamy kontakt">
         <div className="cw-direct-actions__grid">
