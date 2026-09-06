@@ -17,6 +17,9 @@ const MAX_ATTACHMENT_BYTES = 2_500_000;
 const MAX_ATTACHMENTS_TOTAL_BYTES = 3_600_000;
 const RATE_WINDOW_MS = 15 * 60 * 1_000;
 const RATE_MAX_REQUESTS = 8;
+const RESEND_TIMEOUT_MS = 5_500;
+const CONFIRMATION_TIMEOUT_MS = 3_000;
+const WEBHOOK_TIMEOUT_MS = 2_500;
 const RECIPIENT = process.env.LEAD_TO_EMAIL || "info@mojchatbot.sk";
 const SECOND_CONTACT =
   process.env.LEAD_CC_EMAIL === undefined
@@ -148,15 +151,36 @@ async function resendFailure(response: Response): Promise<string> {
   return `resend-${response.status}${detail ? ` ${detail}` : ""}`;
 }
 
-async function sendWithResend(payload: Record<string, unknown>): Promise<Response> {
-  return fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-      "Content-Type": "application/json",
+async function fetchWithTimeout(
+  url: string,
+  init: RequestInit,
+  timeoutMs: number,
+): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function sendWithResend(
+  payload: Record<string, unknown>,
+  timeoutMs = RESEND_TIMEOUT_MS,
+): Promise<Response> {
+  return fetchWithTimeout(
+    "https://api.resend.com/emails",
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ from: SENDER, ...payload }),
     },
-    body: JSON.stringify({ from: SENDER, ...payload }),
-  });
+    timeoutMs,
+  );
 }
 
 /* Resend answers an accepted send with the message id. Accepted is not the
@@ -232,15 +256,18 @@ async function sendConfirmation(payload: EmailLead): Promise<boolean | undefined
   if (!process.env.RESEND_API_KEY) return false;
   if (!validEmail(payload.email)) return;
   try {
-    const response = await sendWithResend({
-      to: [payload.email],
-      reply_to: RECIPIENT,
-      subject: payload.reference
-        ? `Dopyt sme prijali · ${payload.reference}`
-        : "Dopyt sme prijali · Môj Chatbot",
-      text: confirmationText(payload, RECIPIENT),
-      html: confirmationHtml(payload, RECIPIENT),
-    });
+    const response = await sendWithResend(
+      {
+        to: [payload.email],
+        reply_to: RECIPIENT,
+        subject: payload.reference
+          ? `Dopyt sme prijali · ${payload.reference}`
+          : "Dopyt sme prijali · Môj Chatbot",
+        text: confirmationText(payload, RECIPIENT),
+        html: confirmationHtml(payload, RECIPIENT),
+      },
+      CONFIRMATION_TIMEOUT_MS,
+    );
     if (!response.ok) throw new Error(await resendFailure(response));
     return true;
   } catch (error) {
@@ -253,11 +280,15 @@ async function deliverWithWebhook(subject: string, text: string): Promise<Delive
   const url = process.env.LEAD_WEBHOOK_URL;
   if (!url) return { ok: false, skipped: true };
   try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ subject, text, recipient: RECIPIENT }),
-    });
+    const response = await fetchWithTimeout(
+      url,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subject, text, recipient: RECIPIENT }),
+      },
+      WEBHOOK_TIMEOUT_MS,
+    );
     return response.ok ? { ok: true } : { ok: false, reason: `webhook-${response.status}` };
   } catch (error) {
     return { ok: false, reason: `webhook-unreachable: ${String(error).slice(0, 200)}` };
