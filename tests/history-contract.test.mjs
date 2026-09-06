@@ -43,3 +43,17 @@ test("history stays private and non-indexable", async () => {
   assert.match(handler, /timingSafeEqual/);
   assert.match(handler, /const MIN_TOKEN_LENGTH = 24/);
 });
+
+
+test("browser conversation identity expires with the 24 hour local history", async () => {
+  const history = await read("src/lib/chatHistory.ts");
+  const conversation = await read("src/components/widget/AssistantConversation.tsx");
+
+  assert.match(history, /const MAX_AGE_MS = 24 \* 60 \* 60 \* 1_000/);
+  assert.match(history, /type StoredConversation = \{ id: string; createdAt: number \}/);
+  assert.match(history, /Date\.now\(\) - existing\.createdAt <= MAX_AGE_MS/);
+  assert.match(history, /store\.setItem\(CONVERSATION_KEY, JSON\.stringify\(record\)\)/);
+  assert.match(history, /store\.removeItem\(CONVERSATION_KEY\)/);
+  assert.match(conversation, /krátkodobo sa môžu uložiť do histórie chatu/);
+  assert.match(conversation, /https:\/\/mojchatbot\.sk\/ochrana-udajov/);
+});
