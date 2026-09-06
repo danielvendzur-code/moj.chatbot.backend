@@ -32,7 +32,10 @@ export function BubbleLogo({ size }: BubbleLogoProps): JSX.Element {
   const strokeRef = useRef<SVGPathElement | null>(null);
 
   useEffect(() => {
-    if (size === "avatar") return undefined;
+    /* The open panel's brand mark is an identity element, not a loading cue.
+       Only the floating launcher is allowed to loop; the header and message
+       avatar stay completely still once rendered. */
+    if (size !== "launcher") return undefined;
 
     const stroke = strokeRef.current;
     if (!stroke) return undefined;
