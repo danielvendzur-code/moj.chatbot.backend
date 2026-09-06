@@ -67,10 +67,10 @@ export function localAssistantReply(question: string): string {
     return "Áno. Chatbot zistí, čo zákazník potrebuje, ponúkne voľný termín, zapíše ho do kalendára a potvrdenie pošle jemu aj vám.";
   }
   if (/ako dlho|termín realiz|spustenie|hotov/.test(normalized)) {
-    return "Jednoduchý chatbot zvládnem za niekoľko dní. Ak má aj počítať ceny alebo rezervovať termíny, potrebujem trochu viac času. Presne vám to poviem, keď mi napíšete, čo potrebujete.";
+    return "Termín závisí od rozsahu, počtu krokov a napojení. Keď mi stručne napíšete, čo má riešenie robiť, poviem vám konkrétny postup a realistický termín bez odhadovania naslepo.";
   }
   if (/web|vložiť|integr|wordpress|shopify/.test(normalized)) {
-    return "Váš web prerábať netreba. Chatbot doň pridám tak, aby ladil s vašimi farbami, fungoval na mobile a dopyty vám posielal na e-mail, do kalendára alebo do tabuľky.";
+    return "Vo väčšine prípadov netreba prerábať celý web. Riešenie sa pridá na existujúcu stránku, vizuálne sa prispôsobí značke a konkrétne napojenia sa potvrdia podľa vášho webu a systému.";
   }
   if (/kontakt|zavola|email|e-mail/.test(normalized)) {
     return "Napíšte na info@mojchatbot.sk alebo zavolajte na +421 948 699 433. Najrýchlejšie je vyskladať riešenie priamo tu — ozvem sa vám do jedného dňa.";
