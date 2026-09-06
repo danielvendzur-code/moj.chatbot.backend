@@ -5,6 +5,7 @@
    yourself to the same assistant over and over. */
 
 const STORAGE_KEY = "dv-assistant-chat-v1";
+const CONVERSATION_KEY = "dv-assistant-conversation-v1";
 /* Long enough that coming back after lunch continues the thread, short enough
    that a conversation from last week does not resurface as if it were live. */
 const MAX_AGE_MS = 24 * 60 * 60 * 1_000;
@@ -14,6 +15,7 @@ const MAX_TURNS = 40;
 
 export type StoredMessage = { id: number; from: "bot" | "me"; text: string };
 type Stored = { savedAt: number; nextId: number; messages: StoredMessage[] };
+type StoredConversation = { id: string; createdAt: number };
 
 /* Private browsing and blocked storage both throw on access rather than
    returning null, so every entry point is guarded. History is a convenience;
@@ -43,6 +45,7 @@ export function loadHistory(): { messages: StoredMessage[]; nextId: number } | n
       !Array.isArray(parsed.messages)
     ) {
       store.removeItem(STORAGE_KEY);
+      store.removeItem(CONVERSATION_KEY);
       return null;
     }
 
@@ -94,22 +97,39 @@ export function saveHistory(messages: StoredMessage[], nextId: number): void {
   }
 }
 
-const CONVERSATION_KEY = "dv-assistant-conversation-v1";
-
-/* A stable id so the server can group a visitor's turns into one readable
-   transcript. It identifies the conversation, not the person: it is random,
-   carries nothing about them, and a reset mints a new one. */
+/* A stable id lets the server group one short-lived thread into one readable
+   transcript. It is random and carries no identity data. The id expires with
+   the local chat after 24 hours so a visitor returning days later cannot be
+   silently linked back to an older server-side transcript. */
 export function conversationId(): string {
   const store = storage();
   if (!store) return "";
   try {
-    const existing = store.getItem(CONVERSATION_KEY);
-    if (existing && /^[A-Za-z0-9_-]{8,64}$/.test(existing)) return existing;
+    const raw = store.getItem(CONVERSATION_KEY);
+    if (raw) {
+      try {
+        const existing = JSON.parse(raw) as Partial<StoredConversation>;
+        if (
+          typeof existing.id === "string" &&
+          /^[A-Za-z0-9_-]{8,64}$/.test(existing.id) &&
+          typeof existing.createdAt === "number" &&
+          Date.now() - existing.createdAt <= MAX_AGE_MS
+        ) {
+          return existing.id;
+        }
+      } catch {
+        /* Old releases stored a bare id. Rotate it instead of extending its
+           lifetime indefinitely after the privacy boundary changed. */
+      }
+      store.removeItem(CONVERSATION_KEY);
+    }
+
     const fresh =
       typeof crypto !== "undefined" && "randomUUID" in crypto
         ? crypto.randomUUID().replace(/-/g, "")
         : `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 12)}`;
-    store.setItem(CONVERSATION_KEY, fresh);
+    const record: StoredConversation = { id: fresh, createdAt: Date.now() };
+    store.setItem(CONVERSATION_KEY, JSON.stringify(record));
     return fresh;
   } catch {
     return "";
