@@ -107,7 +107,7 @@
 
     function normalizeOptions(value) {
       var validEntries = ["recommend", "builder", "calculator", "inquiry", "advisor", "booking"];
-      var validPresets = ["calculator", "inquiry", "advisor", "booking"];
+      var validPresets = ["calculator", "product", "inquiry", "advisor", "booking"];
       var entry = value && validEntries.indexOf(value.entry) >= 0 ? value.entry : "builder";
       var preset = value && validPresets.indexOf(value.preset) >= 0 ? value.preset : undefined;
       return preset ? { entry: entry, preset: preset } : { entry: entry };
