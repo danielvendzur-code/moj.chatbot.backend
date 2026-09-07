@@ -513,3 +513,17 @@ test("configurator remains a short five-step conversion flow", async () => {
     "contact",
   ]);
 });
+
+test("all public embed presets stay in parity with the typed widget bridge", async () => {
+  const types = await read("src/types/assistant.ts");
+  const bridge = await read("src/lib/embedBridge.ts");
+  const widget = await read("src/components/widget/AssistantWidget.tsx");
+  const iframeEmbed = await read("public/embed.js");
+
+  for (const preset of ["calculator", "product", "inquiry", "advisor", "booking"]) {
+    assert.match(types, new RegExp(`\\| "${preset}"`));
+    assert.ok(bridge.includes(`"${preset}"`), `Embed bridge lost preset ${preset}`);
+    assert.ok(widget.includes(`"${preset}"`), `Widget lost preset ${preset}`);
+    assert.ok(iframeEmbed.includes(`"${preset}"`), `Iframe embed lost preset ${preset}`);
+  }
+});
