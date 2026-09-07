@@ -261,6 +261,10 @@ test("progress and contact step expose clear state and labels", async () => {
   assert.match(calculator, /aria-invalid=\{nameInvalid\}/);
   assert.match(calculator, /aria-invalid=\{emailInvalid\}/);
   assert.match(calculator, /aria-invalid=\{phoneInvalid\}/);
+  assert.match(calculator, /E-mail <small>alebo telefón<\/small>/);
+  assert.match(calculator, /Telefón <small>alebo e-mail<\/small>/);
+  assert.doesNotMatch(calculator, /E-mail <em>\*<\/em>/);
+  assert.doesNotMatch(calculator, /Telefón <small>nepovinné<\/small>/);
   assert.match(calculator, /<details className="cw-summary">/);
   // First person and the thing itself: "Poslať nezáväzný dopyt" described the
   // form's paperwork, not what the visitor is about to get.
