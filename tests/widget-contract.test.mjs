@@ -513,3 +513,34 @@ test("configurator remains a short five-step conversion flow", async () => {
     "contact",
   ]);
 });
+
+test("solution picker exposes standalone and combined products explicitly", async () => {
+  const flow = await read("src/lib/assistantFlow.ts");
+  const calculator = await read("src/components/widget/ToolCalculator.tsx");
+  const finalCss = await read("src/sep08-picker-final.css");
+  const embed = await read("public/embed.js");
+
+  for (const label of [
+    "Chatbot",
+    "Kalkulačka",
+    "Konfigurátor",
+    "Chatbot + kalkulačka",
+    "Chatbot + konfigurátor",
+    "Riešenie na mieru",
+  ]) {
+    assert.ok(flow.includes(`label: "${label}"`), `Missing solution choice: ${label}`);
+  }
+
+  assert.match(flow, /badge: "Samostatne"/);
+  assert.match(flow, /badge: "Spojené"/);
+  assert.match(flow, /calculator: "calculator"/);
+  assert.match(flow, /product: "configurator"/);
+  assert.match(calculator, /cw-rowcard__title/);
+  assert.match(calculator, /E-mail <small>alebo telefón<\/small>/);
+  assert.match(calculator, /Telefón <small>alebo e-mail<\/small>/);
+  assert.doesNotMatch(calculator, /E-mail <em>\*<\/em>/);
+  assert.doesNotMatch(calculator, /Telefón <small>nepovinné<\/small>/);
+  assert.match(finalCss, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.match(finalCss, /transform:\s*none !important/);
+  assert.match(embed, /validPresets = \["calculator", "product", "inquiry", "advisor", "booking"\]/);
+});

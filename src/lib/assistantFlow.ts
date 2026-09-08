@@ -17,7 +17,7 @@ export const QUESTION_STEPS: StepId[] = STEPS.filter((id) => id !== "contact");
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
     "Aké riešenie chcete na web?",
-    "Vyberte jednu možnosť. Ďalšie kroky sa jej automaticky prispôsobia.",
+    "Vyberte samostatný nástroj alebo spojené riešenie. Ďalšie kroky sa výberu prispôsobia.",
   ],
   industry: [
     "Čo robí vaša firma?",
@@ -60,25 +60,43 @@ export const INTERESTS: InterestOption[] = [
   {
     id: "chatbot",
     label: "Chatbot",
-    description: "Odpovedá zákazníkom, poradí im a vybaví servisné požiadavky.",
+    badge: "Samostatne",
+    description: "Samostatne odpovedá, radí a vybavuje otázky zákazníkov.",
     icon: "chat",
   },
   {
+    id: "calculator",
+    label: "Kalkulačka",
+    badge: "Samostatne",
+    description: "Samostatný výpočet ceny, spotreby alebo rozsahu bez chatbota.",
+    icon: "calculator",
+  },
+  {
+    id: "configurator",
+    label: "Konfigurátor",
+    badge: "Samostatne",
+    description: "Samostatný krokový výber variantov, rozmerov, farieb a doplnkov.",
+    icon: "options",
+  },
+  {
     id: "calcbot",
-    label: "Chatbot s kalkulačkou",
-    description: "Vypočíta cenu, spotrebu alebo rozsah podľa vašich pravidiel.",
+    label: "Chatbot + kalkulačka",
+    badge: "Spojené",
+    description: "Chatbot poradí a v rovnakom rozhraní vie aj vypočítať výsledok.",
     icon: "calculator",
   },
   {
     id: "product",
-    label: "Chatbot s konfigurátorom",
-    description: "Prevedie zákazníka výberom produktu, variantov a doplnkov.",
+    label: "Chatbot + konfigurátor",
+    badge: "Spojené",
+    description: "Chatbot vysvetlí možnosti a následne prevedie zákazníka výberom.",
     icon: "options",
   },
   {
     id: "custom",
     label: "Riešenie na mieru",
-    description: "Poskladáme vlastný proces presne podľa vašej firmy.",
+    badge: "Na mieru",
+    description: "Poskladáme viac funkcií do jedného procesu presne podľa vašej firmy.",
     icon: "spark",
   },
 ];
@@ -260,6 +278,7 @@ export const FEATURES: FeatureOption[] = [
    funkcie, ktoré k nemu reálne patria. */
 export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
   chatbot: [
+    "advisor",
     "tracking",
     "order-change",
     "returns",
@@ -269,8 +288,24 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
     "stock-alert",
     "rezervacie",
   ],
+  calculator: [
+    "cena",
+    "document",
+    "payment",
+    "fotky",
+    "tabulka",
+  ],
+  configurator: [
+    "varianty",
+    "compare",
+    "cart-recovery",
+    "payment",
+    "document",
+    "tabulka",
+  ],
   calcbot: [
     "cena",
+    "advisor",
     "document",
     "payment",
     "fotky",
@@ -293,8 +328,10 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
 };
 
 export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
-  chatbot: ["tracking", "handoff", "tabulka"],
-  calcbot: ["cena", "document", "payment"],
+  chatbot: ["advisor", "handoff", "tabulka"],
+  calculator: ["cena", "document"],
+  configurator: ["varianty", "compare"],
+  calcbot: ["cena", "advisor", "document"],
   product: ["varianty", "advisor", "compare"],
   booking: ["rezervacie", "payment", "tabulka"],
   custom: ["handoff", "document", "tabulka"],
@@ -336,8 +373,8 @@ export const TIMELINES: TimelineOption[] = [
 ];
 
 export const PRESET_TO_INTEREST: Record<AssistantPreset, InterestId> = {
-  calculator: "calcbot",
-  product: "product",
+  calculator: "calculator",
+  product: "configurator",
   inquiry: "chatbot",
   advisor: "chatbot",
   booking: "booking",
