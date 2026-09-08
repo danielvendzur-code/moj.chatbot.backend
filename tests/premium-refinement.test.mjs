@@ -70,7 +70,7 @@ test("logo is the website's outlined mark, not a redrawn approximation", async (
   assert.match(logo, /M28\.6 65\.1V32\.9L53\.4 57\.5/);
 });
 
-test("launcher restarts quickly after erase and remains the mark itself", async () => {
+test("launcher restarts quickly after erase and keeps the restored bordered glass circle", async () => {
   const logo = await read("src/components/widget/BubbleLogo.tsx");
   const logoCss = await read("src/logo-match-final.css");
   const surface = await read("src/embed-surface-authority-final.css");
@@ -78,13 +78,15 @@ test("launcher restarts quickly after erase and remains the mark itself", async 
   assert.match(logo, /MOBILE_LOGO_CYCLE_MS = 4000/);
   assert.match(logo, /progress < 0\.01/);
   assert.match(logo, /progress < 0\.87/);
-  assert.match(surface, /border:\s*0\s*!important/);
-  assert.match(surface, /background:\s*transparent\s*!important/);
-  assert.match(surface, /box-shadow:\s*none\s*!important/);
-  assert.match(surface, /backdrop-filter:\s*none\s*!important/);
-  const launcherSurface = surface.slice(0, surface.indexOf("/* One source of truth"));
-  assert.doesNotMatch(launcherSurface, /border:\s*1px solid/);
-  assert.doesNotMatch(surface, /background(?:-color)?:\s*(?:#fff|#ffffff|rgb\(255,\s*255,\s*255\))/i);
+  assert.match(surface, /border:\s*1px solid rgba\(25, 131, 79, 0\.22\)\s*!important/);
+  assert.match(surface, /background:\s*var\(--cw-glass-bg\)\s*!important/);
+  assert.match(surface, /box-shadow:[\s\S]*var\(--cw-glass-rim\)\s*!important/);
+  assert.match(surface, /backdrop-filter:\s*var\(--cw-glass-blur\)\s*!important/);
+  assert.match(surface, /border-color:\s*rgba\(25, 131, 79, 0\.42\)\s*!important/);
+  assert.doesNotMatch(
+    surface,
+    /background(?:-color)?:\s*(?:#fff|#ffffff|rgb\(255,\s*255,\s*255\))/i,
+  );
   assert.match(logoCss, /\.cw-launcher \.bl[\s\S]*filter:\s*none\s*!important/);
 });
 
