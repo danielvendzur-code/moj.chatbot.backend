@@ -1,22 +1,39 @@
 /* Final visual authority for the actual embedded launcher.
-   The approved launcher is the one-stroke mark itself. Keep the large circular
-   hit area, but no visible disc, border, shadow or hover tile around it. */
+   Restore the bordered glass circle from the approved earlier launcher while
+   preserving the current adaptive one-stroke mark and its full hit area. */
 html:root body #dv-assistant-root .cw-widget .cw-launcher,
 html:root body #dv-assistant-root .cw-widget .cw-launcher[aria-expanded="false"],
 html:root body #dv-assistant-root .cw-widget .cw-launcher[aria-expanded="true"],
-html:root body #dv-assistant-root .cw-widget .cw-launcher:is(:hover, :focus, :focus-visible, :active),
-html:root body #dv-assistant-root .cw-widget .cw-launcher[data-surface-tone="light"],
-html:root body #dv-assistant-root .cw-widget .cw-launcher[data-surface-tone="light"]:is(:hover, :focus, :focus-visible, :active) {
-  border: 0 !important;
+html:root body #dv-assistant-root .cw-widget .cw-launcher[data-surface-tone="light"] {
+  border: 1px solid rgba(25, 131, 79, 0.22) !important;
   border-radius: 50% !important;
-  background: transparent !important;
-  background-color: transparent !important;
+  background: var(--cw-glass-bg) !important;
+  background-color: var(--cw-glass-bg) !important;
   background-image: none !important;
-  box-shadow: none !important;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-  overflow: visible !important;
+  box-shadow:
+    0 20px 44px -26px rgba(11, 47, 32, 0.5),
+    var(--cw-glass-rim) !important;
+  -webkit-backdrop-filter: var(--cw-glass-blur) !important;
+  backdrop-filter: var(--cw-glass-blur) !important;
+  overflow: hidden !important;
   transform: none !important;
+}
+
+html:root body #dv-assistant-root .cw-widget .cw-launcher:is(:hover, :focus, :focus-visible),
+html:root body #dv-assistant-root .cw-widget .cw-launcher[data-surface-tone="light"]:is(:hover, :focus, :focus-visible) {
+  border-color: rgba(25, 131, 79, 0.42) !important;
+  background: var(--cw-glass-bg-strong) !important;
+  background-color: var(--cw-glass-bg-strong) !important;
+  box-shadow:
+    0 22px 48px -24px rgba(11, 47, 32, 0.56),
+    0 0 0 6px rgba(185, 237, 77, 0.2),
+    var(--cw-glass-rim) !important;
+}
+
+html:root body #dv-assistant-root .cw-widget .cw-launcher:active,
+html:root body #dv-assistant-root .cw-widget .cw-launcher[data-surface-tone="light"]:active {
+  border-color: var(--cw-green) !important;
+  box-shadow: 0 14px 34px -24px rgba(11, 47, 32, 0.6) !important;
 }
 
 html:root body #dv-assistant-root .cw-widget .cw-launcher::before,

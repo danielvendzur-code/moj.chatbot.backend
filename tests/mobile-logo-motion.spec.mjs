@@ -171,15 +171,20 @@ async function verifyProductionSurface(launcher) {
     const style = getComputedStyle(element);
     return {
       borderTopWidth: style.borderTopWidth,
+      borderTopStyle: style.borderTopStyle,
+      borderTopColor: style.borderTopColor,
       boxShadow: style.boxShadow,
       backgroundColor: style.backgroundColor,
       borderRadius: style.borderRadius,
     };
   });
 
-  expect(resting.borderTopWidth).toBe("0px");
-  expect(resting.boxShadow).toBe("none");
+  expect(resting.borderTopWidth).toBe("1px");
+  expect(resting.borderTopStyle).toBe("solid");
+  expect(resting.borderTopColor).not.toBe("rgba(0, 0, 0, 0)");
+  expect(resting.boxShadow).not.toBe("none");
   expect(resting.borderRadius).toBe("50%");
+  expect(resting.backgroundColor).not.toBe("rgba(0, 0, 0, 0)");
   expect(resting.backgroundColor).not.toBe("rgb(255, 255, 255)");
 }
 
