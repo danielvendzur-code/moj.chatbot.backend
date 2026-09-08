@@ -17,7 +17,7 @@ export const QUESTION_STEPS: StepId[] = STEPS.filter((id) => id !== "contact");
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
     "Aké riešenie chcete na web?",
-    "Vyberte jednu možnosť. Ďalšie kroky sa jej automaticky prispôsobia.",
+    "Vyberte samostatný nástroj alebo spojené riešenie. Ďalšie kroky sa výberu prispôsobia.",
   ],
   industry: [
     "Čo robí vaša firma?",
