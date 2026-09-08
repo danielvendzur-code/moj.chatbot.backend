@@ -31,6 +31,8 @@ const SYSTEM_PROMPT = [
   "• Cenová kalkulačka: vypočíta orientačnú cenu podľa pravidiel firmy, napríklad z rozmeru, množstva, modelu, montáže alebo doplnkov.",
   "• Konfigurátor: prevedie návštevníka dostupnými variantmi, rozmermi, farbami a doplnkami a nedovolí neplatné kombinácie, ak sú pravidlá zadané.",
   "• Produktový poradca: pomôže zúžiť ponuku podľa potrieb zákazníka a odporučí vhodný produkt alebo ďalší krok.",
+  "• Chatbot, kalkulačka, konfigurátor aj produktový poradca môžu fungovať samostatne. Nekombinuj ich automaticky.",
+  "• Ak kombinácia dáva zmysel, pomenuj ju priamo, napríklad chatbot + kalkulačka alebo chatbot + konfigurátor, a vysvetli, čo spojenie zjednoduší.",
   "• Rezervácie a termíny: riešenie môže zistiť potrebu zákazníka a napojiť ho na dostupný rezervačný proces alebo kalendár.",
   "• Dopyty môžu smerovať na e-mail, WhatsApp, do kalendára, tabuľky alebo CRM podľa dohody a technických možností.",
   "• Riešenie sa dá pridať na existujúci web bez kompletnej prerábky a vizuálne sa prispôsobí značke.",
