@@ -67,18 +67,36 @@ html:root
   }
 }
 
-/* The launcher is the mark itself, not a white circular tile.
-   Keep the full button hit-area for usability while the visual surface stays transparent. */
-html:root body .cw-widget .cw-launcher,
-html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible, :active) {
-  background: transparent !important;
-  background-color: transparent !important;
+/* Restore the bordered circular launcher used before the transparent-mark
+   regression. Keep the current adaptive stroke, but bring back the old
+   translucent bubble, green hairline and restrained depth. */
+html:root body .cw-widget .cw-launcher {
+  background: var(--cw-glass-bg) !important;
+  background-color: var(--cw-glass-bg) !important;
   background-image: none !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-  overflow: visible !important;
+  border: 1px solid rgba(25, 131, 79, 0.22) !important;
+  border-radius: 50% !important;
+  box-shadow:
+    0 20px 44px -26px rgba(11, 47, 32, 0.5),
+    var(--cw-glass-rim) !important;
+  -webkit-backdrop-filter: var(--cw-glass-blur) !important;
+  backdrop-filter: var(--cw-glass-blur) !important;
+  overflow: hidden !important;
+}
+
+html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible) {
+  background: var(--cw-glass-bg-strong) !important;
+  background-color: var(--cw-glass-bg-strong) !important;
+  border-color: rgba(25, 131, 79, 0.42) !important;
+  box-shadow:
+    0 22px 48px -24px rgba(11, 47, 32, 0.56),
+    0 0 0 6px rgba(185, 237, 77, 0.2),
+    var(--cw-glass-rim) !important;
+}
+
+html:root body .cw-widget .cw-launcher:active {
+  border-color: var(--cw-green) !important;
+  box-shadow: 0 14px 34px -24px rgba(11, 47, 32, 0.6) !important;
 }
 
 html:root body .cw-widget .cw-launcher .bl {
