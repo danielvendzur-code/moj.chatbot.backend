@@ -18,7 +18,14 @@ export type OpenSiteAssistantOptions = {
   preset?: AssistantPreset;
 };
 
-export type InterestId = "chatbot" | "calcbot" | "product" | "booking" | "custom";
+export type InterestId =
+  | "chatbot"
+  | "calculator"
+  | "configurator"
+  | "calcbot"
+  | "product"
+  | "booking"
+  | "custom";
 
 declare global {
   interface Window {
