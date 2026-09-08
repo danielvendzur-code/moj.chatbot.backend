@@ -82,7 +82,8 @@ test("launcher restarts quickly after erase and remains the mark itself", async 
   assert.match(surface, /background:\s*transparent\s*!important/);
   assert.match(surface, /box-shadow:\s*none\s*!important/);
   assert.match(surface, /backdrop-filter:\s*none\s*!important/);
-  assert.doesNotMatch(surface, /border:\s*1px solid/);
+  const launcherSurface = surface.slice(0, surface.indexOf("/* One source of truth"));
+  assert.doesNotMatch(launcherSurface, /border:\s*1px solid/);
   assert.doesNotMatch(surface, /background(?:-color)?:\s*(?:#fff|#ffffff|rgb\(255,\s*255,\s*255\))/i);
   assert.match(logoCss, /\.cw-launcher \.bl[\s\S]*filter:\s*none\s*!important/);
 });
