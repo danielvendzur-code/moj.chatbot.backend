@@ -432,7 +432,10 @@ export function ToolCalculator({
                         <WidgetIcon name={option.icon} />
                       </span>
                       <span className="cw-rowcard__body">
-                        <b>{option.label}</b>
+                        <span className="cw-rowcard__title">
+                          <b>{option.label}</b>
+                          {option.badge ? <em>{option.badge}</em> : null}
+                        </span>
                         <small>{option.description}</small>
                       </span>
                       <SelectionIndicator selected={selected} />
@@ -556,7 +559,7 @@ export function ToolCalculator({
                   </label>
                   <div className="cw-lead__row">
                     <label className="cw-field">
-                      <span>E-mail <em>*</em></span>
+                      <span>E-mail <small>alebo telefón</small></span>
                       <input
                         value={lead.email}
                         onChange={(event) => updateLead({ email: event.target.value })}
@@ -570,7 +573,7 @@ export function ToolCalculator({
                       />
                     </label>
                     <label className="cw-field">
-                      <span>Telefón <small>nepovinné</small></span>
+                      <span>Telefón <small>alebo e-mail</small></span>
                       <input
                         value={lead.phone}
                         onChange={(event) => updateLead({ phone: event.target.value })}
