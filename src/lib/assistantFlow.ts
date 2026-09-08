@@ -60,25 +60,37 @@ export const INTERESTS: InterestOption[] = [
   {
     id: "chatbot",
     label: "Chatbot",
-    description: "Odpovedá zákazníkom, poradí im a vybaví servisné požiadavky.",
+    description: "Samostatne odpovedá, radí a vybavuje otázky zákazníkov.",
     icon: "chat",
   },
   {
+    id: "calculator",
+    label: "Kalkulačka",
+    description: "Samostatný výpočet ceny, spotreby alebo rozsahu bez chatbota.",
+    icon: "calculator",
+  },
+  {
+    id: "configurator",
+    label: "Konfigurátor",
+    description: "Samostatný krokový výber variantov, rozmerov, farieb a doplnkov.",
+    icon: "options",
+  },
+  {
     id: "calcbot",
-    label: "Chatbot s kalkulačkou",
-    description: "Vypočíta cenu, spotrebu alebo rozsah podľa vašich pravidiel.",
+    label: "Chatbot + kalkulačka",
+    description: "Chatbot poradí a v rovnakom rozhraní vie aj vypočítať výsledok.",
     icon: "calculator",
   },
   {
     id: "product",
-    label: "Chatbot s konfigurátorom",
-    description: "Prevedie zákazníka výberom produktu, variantov a doplnkov.",
+    label: "Chatbot + konfigurátor",
+    description: "Chatbot vysvetlí možnosti a následne prevedie zákazníka výberom.",
     icon: "options",
   },
   {
     id: "custom",
     label: "Riešenie na mieru",
-    description: "Poskladáme vlastný proces presne podľa vašej firmy.",
+    description: "Poskladáme viac funkcií do jedného procesu presne podľa vašej firmy.",
     icon: "spark",
   },
 ];
@@ -260,6 +272,7 @@ export const FEATURES: FeatureOption[] = [
    funkcie, ktoré k nemu reálne patria. */
 export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
   chatbot: [
+    "advisor",
     "tracking",
     "order-change",
     "returns",
@@ -269,8 +282,24 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
     "stock-alert",
     "rezervacie",
   ],
+  calculator: [
+    "cena",
+    "document",
+    "payment",
+    "fotky",
+    "tabulka",
+  ],
+  configurator: [
+    "varianty",
+    "compare",
+    "cart-recovery",
+    "payment",
+    "document",
+    "tabulka",
+  ],
   calcbot: [
     "cena",
+    "advisor",
     "document",
     "payment",
     "fotky",
@@ -293,8 +322,10 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
 };
 
 export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
-  chatbot: ["tracking", "handoff", "tabulka"],
-  calcbot: ["cena", "document", "payment"],
+  chatbot: ["advisor", "handoff", "tabulka"],
+  calculator: ["cena", "document"],
+  configurator: ["varianty", "compare"],
+  calcbot: ["cena", "advisor", "document"],
   product: ["varianty", "advisor", "compare"],
   booking: ["rezervacie", "payment", "tabulka"],
   custom: ["handoff", "document", "tabulka"],
@@ -336,8 +367,8 @@ export const TIMELINES: TimelineOption[] = [
 ];
 
 export const PRESET_TO_INTEREST: Record<AssistantPreset, InterestId> = {
-  calculator: "calcbot",
-  product: "product",
+  calculator: "calculator",
+  product: "configurator",
   inquiry: "chatbot",
   advisor: "chatbot",
   booking: "booking",
