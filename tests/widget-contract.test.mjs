@@ -535,12 +535,17 @@ test("solution picker exposes standalone and combined products explicitly", asyn
   assert.match(flow, /badge: "Spojené"/);
   assert.match(flow, /calculator: "calculator"/);
   assert.match(flow, /product: "configurator"/);
+  assert.match(calculator, /cw-interest-groups/);
+  assert.match(calculator, /Samostatné riešenia/);
+  assert.match(calculator, /Spojené riešenia/);
+  assert.match(calculator, /Na mieru/);
   assert.match(calculator, /cw-rowcard__title/);
   assert.match(calculator, /E-mail <small>alebo telefón<\/small>/);
   assert.match(calculator, /Telefón <small>alebo e-mail<\/small>/);
   assert.doesNotMatch(calculator, /E-mail <em>\*<\/em>/);
   assert.doesNotMatch(calculator, /Telefón <small>nepovinné<\/small>/);
-  assert.match(finalCss, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.doesNotMatch(calculator, /cw-consent-note|Ochrana osobných údajov/);
+  assert.match(finalCss, /grid-template-columns:\s*1fr !important/);
   assert.match(finalCss, /transform:\s*none !important/);
   assert.match(embed, /validPresets = \["calculator", "product", "inquiry", "advisor", "booking"\]/);
 });
