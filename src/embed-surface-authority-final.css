@@ -1,39 +1,58 @@
 /* Final visual authority for the actual embedded launcher.
-   Restore the bordered glass circle from the approved earlier launcher while
-   preserving the current adaptive one-stroke mark and its full hit area. */
+   Light host sections keep the approved glass bubble. Dark/green host sections
+   get a deeper forest surface so the launcher belongs to the page instead of
+   looking like a pale disc floating above it. Hover changes contrast only:
+   there is deliberately no outer glow ring. */
 html:root body #dv-assistant-root .cw-widget .cw-launcher,
 html:root body #dv-assistant-root .cw-widget .cw-launcher[aria-expanded="false"],
-html:root body #dv-assistant-root .cw-widget .cw-launcher[aria-expanded="true"],
-html:root body #dv-assistant-root .cw-widget .cw-launcher[data-surface-tone="light"] {
-  border: 1px solid rgba(25, 131, 79, 0.22) !important;
+html:root body #dv-assistant-root .cw-widget .cw-launcher[aria-expanded="true"] {
+  border: 1px solid rgba(200, 240, 106, 0.34) !important;
   border-radius: 50% !important;
-  background: var(--cw-glass-bg) !important;
-  background-color: var(--cw-glass-bg) !important;
+  background: rgba(18, 56, 45, 0.92) !important;
+  background-color: rgba(18, 56, 45, 0.92) !important;
   background-image: none !important;
-  box-shadow:
-    0 20px 44px -26px rgba(11, 47, 32, 0.5),
-    var(--cw-glass-rim) !important;
-  -webkit-backdrop-filter: var(--cw-glass-blur) !important;
-  backdrop-filter: var(--cw-glass-blur) !important;
+  box-shadow: 0 16px 34px -28px rgba(0, 0, 0, 0.7) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(135%) !important;
+  backdrop-filter: blur(16px) saturate(135%) !important;
   overflow: hidden !important;
   transform: none !important;
 }
 
-html:root body #dv-assistant-root .cw-widget .cw-launcher:is(:hover, :focus, :focus-visible),
+html:root body #dv-assistant-root .cw-widget .cw-launcher[data-surface-tone="light"] {
+  border-color: rgba(25, 131, 79, 0.22) !important;
+  background: var(--cw-glass-bg) !important;
+  background-color: var(--cw-glass-bg) !important;
+  box-shadow:
+    0 18px 38px -30px rgba(11, 47, 32, 0.46),
+    var(--cw-glass-rim) !important;
+  -webkit-backdrop-filter: var(--cw-glass-blur) !important;
+  backdrop-filter: var(--cw-glass-blur) !important;
+}
+
+html:root body #dv-assistant-root .cw-widget .cw-launcher:not([data-surface-tone="light"]):is(:hover, :focus, :focus-visible) {
+  border-color: rgba(200, 240, 106, 0.5) !important;
+  background: rgba(18, 56, 45, 0.98) !important;
+  background-color: rgba(18, 56, 45, 0.98) !important;
+  box-shadow: 0 14px 30px -25px rgba(0, 0, 0, 0.62) !important;
+}
+
 html:root body #dv-assistant-root .cw-widget .cw-launcher[data-surface-tone="light"]:is(:hover, :focus, :focus-visible) {
-  border-color: rgba(25, 131, 79, 0.42) !important;
+  border-color: rgba(25, 131, 79, 0.32) !important;
   background: var(--cw-glass-bg-strong) !important;
   background-color: var(--cw-glass-bg-strong) !important;
   box-shadow:
-    0 22px 48px -24px rgba(11, 47, 32, 0.56),
-    0 0 0 6px rgba(185, 237, 77, 0.2),
+    0 14px 30px -26px rgba(11, 47, 32, 0.46),
     var(--cw-glass-rim) !important;
 }
 
-html:root body #dv-assistant-root .cw-widget .cw-launcher:active,
+html:root body #dv-assistant-root .cw-widget .cw-launcher:active {
+  border-color: rgba(200, 240, 106, 0.62) !important;
+  box-shadow: 0 10px 24px -22px rgba(0, 0, 0, 0.62) !important;
+}
+
 html:root body #dv-assistant-root .cw-widget .cw-launcher[data-surface-tone="light"]:active {
   border-color: var(--cw-green) !important;
-  box-shadow: 0 14px 34px -24px rgba(11, 47, 32, 0.6) !important;
+  box-shadow: 0 10px 24px -22px rgba(11, 47, 32, 0.5) !important;
 }
 
 html:root body #dv-assistant-root .cw-widget .cw-launcher::before,

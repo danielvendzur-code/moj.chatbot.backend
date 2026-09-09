@@ -1,9 +1,9 @@
-/* September 8 — clearer solution picker.
-   Standalone and combined tools are explicit, cards stay still on hover, and
-   labels/descriptions are large enough to scan without squinting. */
+/* Clear solution picker.
+   The first configurator question is grouped by product logic instead of
+   presenting six equal cards with tiny badges. */
 
 .cw-widget .cw-calc-step[data-step="interest"] {
-  gap: 12px !important;
+  gap: 10px !important;
 }
 
 .cw-widget .cw-calc-step[data-step="interest"] .cw-q {
@@ -18,78 +18,114 @@
   line-height: 1.42 !important;
 }
 
+.cw-widget .cw-interest-groups {
+  display: grid;
+  gap: 9px;
+}
+
+.cw-widget .cw-interest-group {
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid rgba(11, 47, 32, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.cw-widget .cw-interest-group[data-group="combined"] {
+  border-color: rgba(18, 56, 45, 0.18);
+  background: rgba(18, 56, 45, 0.045);
+}
+
+.cw-widget .cw-interest-group[data-group="custom"] {
+  border-color: rgba(126, 164, 55, 0.24);
+  background: rgba(200, 240, 106, 0.12);
+}
+
+.cw-widget .cw-interest-group__head {
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 3px;
+}
+
+.cw-widget .cw-interest-group__head strong {
+  flex: 0 0 auto;
+  color: #0b2f20;
+  font-size: 11px;
+  font-weight: 790;
+  line-height: 1.2;
+  letter-spacing: 0.015em;
+}
+
+.cw-widget .cw-interest-group__head span {
+  min-width: 0;
+  color: #66736c;
+  font-size: 9.8px;
+  font-weight: 560;
+  line-height: 1.25;
+  text-align: right;
+}
+
 .cw-widget .cw-choice-grid--interest {
   display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 8px !important;
+  grid-template-columns: 1fr !important;
+  gap: 5px !important;
 }
 
 .cw-widget .cw-choice-grid--interest .cw-rowcard {
-  min-height: 88px !important;
-  grid-template-columns: 36px minmax(0, 1fr) 20px !important;
-  gap: 9px !important;
-  padding: 10px 11px 10px 9px !important;
-  border: 1px solid rgba(11, 47, 32, 0.16) !important;
-  border-radius: 14px !important;
+  min-height: 58px !important;
+  grid-template-columns: 32px minmax(0, 1fr) 20px !important;
+  gap: 8px !important;
+  padding: 7px 9px !important;
+  border: 1px solid rgba(11, 47, 32, 0.14) !important;
+  border-radius: 12px !important;
   background: #ffffff !important;
   box-shadow: none !important;
   transform: none !important;
   transition:
-    border-color 160ms ease,
-    background-color 160ms ease !important;
+    border-color 150ms ease,
+    background-color 150ms ease !important;
 }
 
 .cw-widget .cw-choice-grid--interest .cw-rowcard__icon {
-  width: 36px !important;
-  height: 36px !important;
-  border-radius: 10px !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 9px !important;
 }
 
 .cw-widget .cw-choice-grid--interest .cw-rowcard__body {
-  gap: 5px !important;
+  min-width: 0;
+  gap: 2px !important;
 }
 
 .cw-widget .cw-choice-grid--interest .cw-rowcard__title {
   min-width: 0;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 5px;
+  display: block;
 }
 
 .cw-widget .cw-choice-grid--interest .cw-rowcard__title b {
   color: #0b2f20 !important;
-  font-size: 13.5px !important;
+  font-size: 12.8px !important;
   font-weight: 780 !important;
   line-height: 1.15 !important;
 }
 
-.cw-widget .cw-choice-grid--interest .cw-rowcard__title em {
-  min-height: 20px;
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 6px;
-  border-radius: 999px;
-  background: #edf5ee;
-  color: #35604d;
-  font-size: 9.5px;
-  font-style: normal;
-  font-weight: 760;
-  line-height: 1;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-}
-
 .cw-widget .cw-choice-grid--interest .cw-rowcard__body > small {
+  display: block;
+  overflow: hidden;
   color: #5b6962 !important;
-  font-size: 11.5px !important;
+  font-size: 10.5px !important;
   font-weight: 520 !important;
-  line-height: 1.34 !important;
+  line-height: 1.28 !important;
+  text-overflow: ellipsis;
 }
 
 .cw-widget .cw-choice-grid--interest .cw-rowcard:is(:hover, :focus-visible) {
-  border-color: rgba(11, 47, 32, 0.42) !important;
-  background: #f7faf7 !important;
+  border-color: rgba(11, 47, 32, 0.34) !important;
+  background: #f8faf7 !important;
   box-shadow: none !important;
   transform: none !important;
 }
@@ -108,17 +144,11 @@
   color: #ffffff !important;
 }
 
-.cw-widget .cw-choice-grid--interest .cw-rowcard[data-selected="true"] .cw-rowcard__title em {
-  background: #d9ff78 !important;
-  color: #0b2f20 !important;
-}
-
 .cw-widget .cw-choice-grid--interest .cw-rowcard[data-selected="true"] .cw-rowcard__icon {
   color: #0b2f20 !important;
   background: #d9ff78 !important;
 }
 
-/* Other configurator controls also stay physically still on hover. */
 .cw-widget :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard):is(:hover, :focus-visible) {
   transform: none !important;
 }
@@ -127,30 +157,38 @@
   box-shadow: none !important;
 }
 
-/* Contact labels describe the actual validation rule: name + either contact. */
 .cw-widget .cw-field > span small {
   color: #6a766f;
   font-size: 10.5px;
   font-weight: 600;
 }
 
-/* The launcher is the mark itself, never a transparent 1px tile. */
-html:root body .cw-widget .cw-launcher,
-html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible, :active) {
-  border: 0 !important;
-}
-
 @media (max-width: 560px) {
-  .cw-widget .cw-choice-grid--interest {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 6px !important;
+  .cw-widget .cw-interest-groups {
+    gap: 7px;
+  }
+
+  .cw-widget .cw-interest-group {
+    gap: 5px;
+    padding: 7px;
+    border-radius: 14px;
+  }
+
+  .cw-widget .cw-interest-group__head {
+    display: grid;
+    gap: 2px;
+  }
+
+  .cw-widget .cw-interest-group__head span {
+    font-size: 9.4px;
+    text-align: left;
   }
 
   .cw-widget .cw-choice-grid--interest .cw-rowcard {
-    min-height: 90px !important;
+    min-height: 56px !important;
     grid-template-columns: 30px minmax(0, 1fr) 18px !important;
-    gap: 6px !important;
-    padding: 8px 7px !important;
+    gap: 7px !important;
+    padding: 6px 8px !important;
   }
 
   .cw-widget .cw-choice-grid--interest .cw-rowcard__icon {
@@ -158,34 +196,28 @@ html:root body .cw-widget .cw-launcher:is(:hover, :focus-visible, :active) {
     height: 30px !important;
   }
 
-  .cw-widget .cw-choice-grid--interest .cw-rowcard__title {
-    gap: 4px;
-  }
-
   .cw-widget .cw-choice-grid--interest .cw-rowcard__title b {
-    font-size: 11.8px !important;
-  }
-
-  .cw-widget .cw-choice-grid--interest .cw-rowcard__title em {
-    min-height: 18px;
-    padding: 3px 5px;
-    font-size: 8.5px;
+    font-size: 12px !important;
   }
 
   .cw-widget .cw-choice-grid--interest .cw-rowcard__body > small {
-    font-size: 10.2px !important;
-    line-height: 1.28 !important;
+    font-size: 9.9px !important;
+    line-height: 1.24 !important;
   }
 }
 
 @media (max-height: 700px) and (min-width: 561px) {
+  .cw-widget .cw-interest-group {
+    padding-block: 6px;
+  }
+
   .cw-widget .cw-choice-grid--interest .cw-rowcard {
-    min-height: 78px !important;
-    padding-block: 8px !important;
+    min-height: 52px !important;
+    padding-block: 6px !important;
   }
 
   .cw-widget .cw-choice-grid--interest .cw-rowcard__body > small {
-    font-size: 10.8px !important;
+    font-size: 9.9px !important;
   }
 }
 

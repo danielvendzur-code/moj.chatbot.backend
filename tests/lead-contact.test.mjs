@@ -28,7 +28,7 @@ test("the e-mail chip writes the message here instead of handing over a mailto",
   assert.match(sheet, /accept="image\/\*"/);
   assert.match(sheet, /Pridať fotku \(nepovinné\)/);
   assert.doesNotMatch(sheet, /type="checkbox"/);
-  assert.match(sheet, /className="cw-consent-note"/);
+  assert.doesNotMatch(sheet, /cw-consent-note|Ochrana osobných údajov/);
   // Escape closes the sheet; without stopping it the panel handler underneath
   // closes the whole widget and the typed message is gone.
   assert.match(sheet, /stopImmediatePropagation/);
