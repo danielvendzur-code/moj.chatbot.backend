@@ -146,8 +146,7 @@ test("contact step fits without scrolling and keeps sending obvious", async () =
   assert.doesNotMatch(calculator, /type="checkbox"/);
   assert.doesNotMatch(flow, /Kam vám môžem poslať/);
   assert.match(flow, /"Váš návrh je pripravený"/);
-  assert.match(calculator, /className="cw-consent-note"/);
-  assert.match(rule(css, ".cw-consent-note"), /font-size:\s*10\.5px/);
+  assert.doesNotMatch(calculator, /cw-consent-note|Ochrana osobných údajov/);
 
   // Nothing is free: what the visitor gets for the contact details is stated
   // above the fields, before the keyboard covers half the panel.
