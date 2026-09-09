@@ -17,7 +17,7 @@ export const QUESTION_STEPS: StepId[] = STEPS.filter((id) => id !== "contact");
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
     "Aké riešenie chcete na web?",
-    "Vyberte samostatný nástroj alebo spojené riešenie. Ďalšie kroky sa výberu prispôsobia.",
+    "Najprv vyberte samostatný nástroj, spojené riešenie alebo riešenie na mieru.",
   ],
   industry: [
     "Čo robí vaša firma?",
@@ -61,42 +61,42 @@ export const INTERESTS: InterestOption[] = [
     id: "chatbot",
     label: "Chatbot",
     badge: "Samostatne",
-    description: "Samostatne odpovedá, radí a vybavuje otázky zákazníkov.",
+    description: "Odpovedá, radí a zbiera pripravené dopyty.",
     icon: "chat",
   },
   {
     id: "calculator",
     label: "Kalkulačka",
     badge: "Samostatne",
-    description: "Samostatný výpočet ceny, spotreby alebo rozsahu bez chatbota.",
+    description: "Počíta cenu, spotrebu alebo rozsah podľa vašich pravidiel.",
     icon: "calculator",
   },
   {
     id: "configurator",
     label: "Konfigurátor",
     badge: "Samostatne",
-    description: "Samostatný krokový výber variantov, rozmerov, farieb a doplnkov.",
+    description: "Prevedie výberom variantov, rozmerov, farieb a doplnkov.",
     icon: "options",
   },
   {
     id: "calcbot",
     label: "Chatbot + kalkulačka",
     badge: "Spojené",
-    description: "Chatbot poradí a v rovnakom rozhraní vie aj vypočítať výsledok.",
+    description: "Najprv poradí, potom v tom istom okne vypočíta výsledok.",
     icon: "calculator",
   },
   {
     id: "product",
     label: "Chatbot + konfigurátor",
     badge: "Spojené",
-    description: "Chatbot vysvetlí možnosti a následne prevedie zákazníka výberom.",
+    description: "Vysvetlí možnosti a prevedie zákazníka celým výberom.",
     icon: "options",
   },
   {
     id: "custom",
     label: "Riešenie na mieru",
     badge: "Na mieru",
-    description: "Poskladáme viac funkcií do jedného procesu presne podľa vašej firmy.",
+    description: "Spojíme funkcie do jedného procesu podľa vašej firmy.",
     icon: "spark",
   },
 ];
