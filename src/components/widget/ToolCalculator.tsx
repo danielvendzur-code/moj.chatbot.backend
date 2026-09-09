@@ -55,6 +55,32 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
    keyboard does. */
 const REASSURANCES: string[] = ["Nezáväzné", "Do 24 hodín", "Bez registrácie"];
 
+const INTEREST_GROUPS: Array<{
+  id: "standalone" | "combined" | "custom";
+  label: string;
+  description: string;
+  items: InterestId[];
+}> = [
+  {
+    id: "standalone",
+    label: "Samostatné riešenia",
+    description: "Jeden nástroj, jedna jasná úloha.",
+    items: ["chatbot", "calculator", "configurator"],
+  },
+  {
+    id: "combined",
+    label: "Spojené riešenia",
+    description: "Chatbot spolu s výpočtom alebo výberom.",
+    items: ["calcbot", "product"],
+  },
+  {
+    id: "custom",
+    label: "Na mieru",
+    description: "Keď potrebujete spojiť viac vecí inak.",
+    items: ["custom"],
+  },
+];
+
 const isTextField = (element: HTMLElement): boolean =>
   element instanceof HTMLInputElement
     ? element.type !== "checkbox" && element.type !== "radio"
@@ -415,33 +441,53 @@ export function ToolCalculator({
 
           {stepId === "interest" ? (
             <>
-              <div className="cw-choice-grid cw-choice-grid--interest">
-                {INTERESTS.map((option) => {
-                  const selected = interest === option.id;
-                  return (
-                    <button
-                      type="button"
-                      className="cw-rowcard"
-                      data-testid={`interest-${option.id}`}
-                      data-selected={selected}
-                      aria-pressed={selected}
-                      key={`${stepId}-${option.id}`}
-                      onClick={() => pickInterest(option.id)}
-                    >
-                      <span className="cw-rowcard__icon">
-                        <WidgetIcon name={option.icon} />
-                      </span>
-                      <span className="cw-rowcard__body">
-                        <span className="cw-rowcard__title">
-                          <b>{option.label}</b>
-                          {option.badge ? <em>{option.badge}</em> : null}
-                        </span>
-                        <small>{option.description}</small>
-                      </span>
-                      <SelectionIndicator selected={selected} />
-                    </button>
-                  );
-                })}
+              <div className="cw-interest-groups">
+                {INTEREST_GROUPS.map((group) => (
+                  <section
+                    className="cw-interest-group"
+                    data-group={group.id}
+                    key={group.id}
+                    aria-labelledby={`cw-interest-group-${group.id}`}
+                  >
+                    <header className="cw-interest-group__head">
+                      <strong id={`cw-interest-group-${group.id}`}>
+                        {group.label}
+                      </strong>
+                      <span>{group.description}</span>
+                    </header>
+                    <div className="cw-choice-grid cw-choice-grid--interest">
+                      {group.items.map((interestId) => {
+                        const option = INTERESTS.find(
+                          (item) => item.id === interestId,
+                        );
+                        if (!option) return null;
+                        const selected = interest === option.id;
+                        return (
+                          <button
+                            type="button"
+                            className="cw-rowcard"
+                            data-testid={`interest-${option.id}`}
+                            data-selected={selected}
+                            aria-pressed={selected}
+                            key={`${stepId}-${option.id}`}
+                            onClick={() => pickInterest(option.id)}
+                          >
+                            <span className="cw-rowcard__icon">
+                              <WidgetIcon name={option.icon} />
+                            </span>
+                            <span className="cw-rowcard__body">
+                              <span className="cw-rowcard__title">
+                                <b>{option.label}</b>
+                              </span>
+                              <small>{option.description}</small>
+                            </span>
+                            <SelectionIndicator selected={selected} />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </section>
+                ))}
               </div>
               {interest === "custom" ? (
                 <label className="cw-custom">
@@ -705,18 +751,6 @@ export function ToolCalculator({
               )}
             </span>
           </button>
-          {/* A required tick box in front of the send button is the last thing
-              that loses a finished form. The same information, stated. */}
-          <p className="cw-consent-note">
-            Odoslaním požiadate Venaco s.r.o. o kontakt k tomuto dopytu.{" "}
-            <a
-              href="https://mojchatbot.sk/ochrana-udajov"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Ochrana osobných údajov
-            </a>
-          </p>
         </footer>
       )}
     </div>
