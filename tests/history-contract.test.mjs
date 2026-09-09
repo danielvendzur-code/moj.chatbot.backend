@@ -54,6 +54,5 @@ test("browser conversation identity expires with the 24 hour local history", asy
   assert.match(history, /Date\.now\(\) - existing\.createdAt <= MAX_AGE_MS/);
   assert.match(history, /store\.setItem\(CONVERSATION_KEY, JSON\.stringify\(record\)\)/);
   assert.match(history, /store\.removeItem\(CONVERSATION_KEY\)/);
-  assert.match(conversation, /krátkodobo sa môžu uložiť do histórie chatu/);
-  assert.match(conversation, /https:\/\/mojchatbot\.sk\/ochrana-udajov/);
+  assert.doesNotMatch(conversation, /cw-chat-privacy|Súkromie|ochrana-udajov/);
 });
