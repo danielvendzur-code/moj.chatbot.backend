@@ -325,16 +325,6 @@ export function MessageSheet({ onClose }: MessageSheetProps): JSX.Element {
                 )}
               </span>
             </button>
-            <p className="cw-consent-note">
-              Odoslaním požiadate Venaco s.r.o. o kontakt k tejto správe.{" "}
-              <a
-                href="https://mojchatbot.sk/ochrana-udajov"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Ochrana osobných údajov
-              </a>
-            </p>
           </footer>
         </>
       )}
