@@ -95,12 +95,13 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
     page.getByRole("heading", { name: "Čo chcete pridať na web?" }),
   ).toBeVisible();
 
-  // The first screen must be immediately understandable: exactly the three
-  // primary tools, no combined/custom product taxonomy competing with them.
+  // The first screen has four top-level choices. The old specific combined
+  // variant and custom taxonomy remain hidden so they do not compete here.
   await expect(page.getByTestId("interest-chatbot")).toBeVisible();
-  await expect(page.getByTestId("interest-configurator")).toBeVisible();
   await expect(page.getByTestId("interest-calculator")).toBeVisible();
-  await expect(page.getByTestId("interest-calcbot")).toBeHidden();
+  await expect(page.getByTestId("interest-configurator")).toBeVisible();
+  await expect(page.getByTestId("interest-calcbot")).toBeVisible();
+  await expect(page.getByTestId("interest-calcbot")).toContainText("Kombinované riešenie");
   await expect(page.getByTestId("interest-product")).toBeHidden();
   await expect(page.getByTestId("interest-custom")).toBeHidden();
 
@@ -280,8 +281,9 @@ test("mobile embed uses real taps for tabs and back navigation", async ({
   ).toBeVisible();
 
   await expect(page.getByTestId("interest-chatbot")).toBeVisible();
-  await expect(page.getByTestId("interest-configurator")).toBeVisible();
   await expect(page.getByTestId("interest-calculator")).toBeVisible();
+  await expect(page.getByTestId("interest-configurator")).toBeVisible();
+  await expect(page.getByTestId("interest-calcbot")).toBeVisible();
   await page.getByTestId("interest-chatbot").tap();
   await expect(page.getByTestId("feature-leads")).toBeVisible({ timeout: 2500 });
   await expect(page.getByTestId("feature-answers")).toHaveCount(0);
