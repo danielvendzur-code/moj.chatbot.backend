@@ -10,22 +10,22 @@ export type StepId =
   | "timeline"
   | "contact";
 
-export const STEPS: StepId[] = ["interest", "industry", "features", "timeline", "contact"];
+export const STEPS: StepId[] = ["interest", "features", "industry", "timeline", "contact"];
 
 export const QUESTION_STEPS: StepId[] = STEPS.filter((id) => id !== "contact");
 
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
-    "Aké riešenie chcete na web?",
-    "Najprv vyberte samostatný nástroj, spojené riešenie alebo riešenie na mieru.",
+    "Čo chcete pridať na web?",
+    "Vyberte Chatbot, Konfigurátor alebo Kalkulačku. V ďalšom kroku si zvolíte, čo má riešenie robiť.",
   ],
   industry: [
     "Čo robí vaša firma?",
-    "Vyberte odvetvie, aby som vedel prispôsobiť odporúčané funkcie.",
+    "Vyberte odvetvie, aby som vedel návrh lepšie prispôsobiť vašej ponuke.",
   ],
   features: [
-    "Ktoré doplnkové funkcie chcete?",
-    "Zobrazujem iba doplnky, ktoré dávajú zmysel pre vybraný typ riešenia.",
+    "Čo má toto riešenie robiť?",
+    "Vyberte jednu alebo viac možností. Zobrazujem iba funkcie, ktoré dávajú zmysel pre zvolený typ.",
   ],
   timeline: [
     "Kedy to chcete mať hotové?",
@@ -193,14 +193,59 @@ export type FeatureOption = {
 
 export const FEATURES: FeatureOption[] = [
   {
+    id: "answers",
+    label: "Odpovedať na otázky zákazníkov",
+    description: "Ponuka, dostupnosť, doprava, služby a bežné otázky priamo na webe.",
+  },
+  {
+    id: "leads",
+    label: "Zbierať dopyty a kontakty",
+    description: "Zistí, čo zákazník potrebuje, a odošle firme pripravený kontakt.",
+  },
+  {
     id: "cena",
-    label: "Počítať cenu",
-    description: "Podľa rozmerov, množstva alebo vašich pravidiel.",
+    label: "Počítať orientačnú cenu",
+    description: "Podľa rozmerov, množstva, variantu alebo vašich pravidiel.",
+  },
+  {
+    id: "calc-dimensions",
+    label: "Počítať podľa rozmerov",
+    description: "Dĺžka, šírka, plocha, objem alebo iné rozmery.",
+  },
+  {
+    id: "calc-quantity",
+    label: "Počítať podľa množstva",
+    description: "Kusy, metre, balenia alebo iné množstvo.",
+  },
+  {
+    id: "calc-variant",
+    label: "Počítať podľa typu alebo modelu",
+    description: "Cena sa mení podľa zvoleného produktu, variantu alebo služby.",
+  },
+  {
+    id: "calc-extras",
+    label: "Pripočítať montáž, dopravu a doplnky",
+    description: "Do výsledku zahrnie voliteľné položky a príplatky.",
   },
   {
     id: "varianty",
-    label: "Konfigurovať produkt alebo službu",
-    description: "Varianty, rozmery, materiál a doplnky.",
+    label: "Skladať variant produktu alebo služby",
+    description: "Prevedie zákazníka jednotlivými voľbami v správnom poradí.",
+  },
+  {
+    id: "dimensions",
+    label: "Vyberať rozmery a množstvo",
+    description: "Rozmery, počet kusov alebo rozsah zákazky.",
+  },
+  {
+    id: "materials",
+    label: "Vyberať farby a materiály",
+    description: "Zobrazí iba reálne dostupné farby, povrchy a materiály.",
+  },
+  {
+    id: "addons",
+    label: "Vyberať doplnky a príslušenstvo",
+    description: "Voliteľné prvky pridá k hlavnej zostave prehľadne na jednom mieste.",
   },
   {
     id: "advisor",
@@ -274,38 +319,47 @@ export const FEATURES: FeatureOption[] = [
   },
 ];
 
-/* Krok 3 už nie je univerzálny zoznam. Každý typ riešenia dostane iba
-   funkcie, ktoré k nemu reálne patria. */
+/* Druhá otázka je zámerne kontextová: po výbere nástroja sa zobrazia iba
+   úlohy, ktoré preň dávajú zmysel. Návštevník môže označiť viac možností. */
 export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
   chatbot: [
+    "answers",
     "advisor",
+    "leads",
     "tracking",
     "order-change",
     "returns",
+    "rezervacie",
     "handoff",
-    "tabulka",
     "jazyky",
     "stock-alert",
-    "rezervacie",
   ],
   calculator: [
     "cena",
+    "calc-dimensions",
+    "calc-quantity",
+    "calc-variant",
+    "calc-extras",
     "document",
-    "payment",
     "fotky",
     "tabulka",
   ],
   configurator: [
     "varianty",
+    "dimensions",
+    "materials",
+    "addons",
+    "cena",
+    "fotky",
     "compare",
-    "cart-recovery",
-    "payment",
     "document",
     "tabulka",
   ],
   calcbot: [
+    "answers",
     "cena",
     "advisor",
+    "leads",
     "document",
     "payment",
     "fotky",
@@ -315,23 +369,25 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
   ],
   product: [
     "varianty",
+    "dimensions",
+    "materials",
+    "addons",
     "advisor",
     "compare",
     "stock-alert",
     "cart-recovery",
-    "payment",
     "document",
     "tabulka",
   ],
   booking: ["rezervacie", "payment", "jazyky", "tabulka", "handoff", "document"],
-  custom: ["handoff", "document", "tabulka", "jazyky", "fotky", "rezervacie", "payment"],
+  custom: ["answers", "leads", "handoff", "document", "tabulka", "jazyky", "fotky", "rezervacie", "payment"],
 };
 
 export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
-  chatbot: ["advisor", "handoff", "tabulka"],
-  calculator: ["cena", "document"],
-  configurator: ["varianty", "compare"],
-  calcbot: ["cena", "advisor", "document"],
+  chatbot: [],
+  calculator: [],
+  configurator: [],
+  calcbot: ["cena", "answers", "leads"],
   product: ["varianty", "advisor", "compare"],
   booking: ["rezervacie", "payment", "tabulka"],
   custom: ["handoff", "document", "tabulka"],
@@ -339,11 +395,11 @@ export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
 
 export const INDUSTRY_RECOMMENDED_FEATURES: Record<string, string[]> = {
   sluzby: ["cena", "rezervacie", "fotky", "payment", "document"],
-  eshop: ["advisor", "compare", "tracking", "order-change", "returns", "stock-alert", "cart-recovery"],
-  gastro: ["rezervacie", "jazyky", "payment", "handoff"],
-  zdravie: ["rezervacie", "payment", "jazyky", "handoff"],
-  vyroba: ["varianty", "cena", "document", "fotky", "tabulka"],
-  ine: ["handoff", "document", "tabulka", "jazyky"],
+  eshop: ["answers", "advisor", "compare", "tracking", "order-change", "returns", "stock-alert", "cart-recovery"],
+  gastro: ["answers", "rezervacie", "jazyky", "payment", "handoff"],
+  zdravie: ["answers", "rezervacie", "payment", "jazyky", "handoff"],
+  vyroba: ["varianty", "dimensions", "materials", "cena", "document", "fotky", "tabulka"],
+  ine: ["answers", "leads", "handoff", "document", "tabulka", "jazyky"],
 };
 
 export type VolumeOption = {
