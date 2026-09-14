@@ -92,8 +92,17 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(panel).toHaveAttribute("data-mode", "calculator");
   await expect(page.getByTestId("calculator-view")).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Aké riešenie chcete na web?" }),
+    page.getByRole("heading", { name: "Čo chcete pridať na web?" }),
   ).toBeVisible();
+
+  // The first screen must be immediately understandable: exactly the three
+  // primary tools, no combined/custom product taxonomy competing with them.
+  await expect(page.getByTestId("interest-chatbot")).toBeVisible();
+  await expect(page.getByTestId("interest-configurator")).toBeVisible();
+  await expect(page.getByTestId("interest-calculator")).toBeVisible();
+  await expect(page.getByTestId("interest-calcbot")).toBeHidden();
+  await expect(page.getByTestId("interest-product")).toBeHidden();
+  await expect(page.getByTestId("interest-custom")).toBeHidden();
 
   await page.getByTestId("tab-assistant").click();
   await expect(panel).toHaveAttribute("data-mode", "assistant");
@@ -124,10 +133,14 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
 
   await expect(interestLabel).toBeVisible();
   await expect(interestLabel).toHaveText(/\S+/);
-  await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
+  await expect(page.getByTestId("feature-answers")).toBeVisible({ timeout: 2500 });
+  await expect(page.getByTestId("feature-leads")).toBeVisible();
 
   await expect(
-    page.locator('[data-testid^="industry-"][data-selected="true"]'),
+    page.locator('[data-testid^="feature-"][data-selected="true"]'),
+  ).toHaveCount(0);
+  await expect(
+    page.locator('[data-testid^="feature-"][data-recommended="true"]'),
   ).toHaveCount(0);
   await expect(page.locator(".cw-widget")).not.toHaveAttribute(
     "data-pointer-parked",
@@ -138,23 +151,27 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expectBackButtonInsideProgress(page);
   await page.locator(".cw-progress__back").click();
   await expect(
-    page.getByRole("heading", { name: "Aké riešenie chcete na web?" }),
+    page.getByRole("heading", { name: "Čo chcete pridať na web?" }),
   ).toBeVisible({ timeout: 2000 });
   await page.getByTestId("flow-next").click();
-  await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2000 });
+  await expect(page.getByTestId("feature-jazyky")).toBeVisible({ timeout: 2000 });
 
-  await page.getByTestId("industry-sluzby").click();
-  await expect(page.getByTestId("feature-jazyky")).toBeVisible({ timeout: 2500 });
-
+  // Step two is intentionally multi-select. Nothing advances until the user
+  // explicitly presses Continue.
+  await page.getByTestId("feature-jazyky").click();
+  await expect(page.getByTestId("feature-jazyky")).toHaveAttribute("data-selected", "true");
+  await expect(page.getByTestId("feature-answers")).toBeVisible();
+  await page.getByTestId("feature-answers").click();
   await expect(
     page.locator('[data-testid^="feature-"][data-selected="true"]'),
-  ).toHaveCount(0);
-  await expect(
-    page.locator('[data-testid^="feature-"][data-recommended="true"]'),
-  ).toHaveCount(0);
-
-  await page.getByTestId("feature-jazyky").click();
+  ).toHaveCount(2);
   await page.getByTestId("flow-next").click();
+  await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
+
+  await expect(
+    page.locator('[data-testid^="industry-"][data-selected="true"]'),
+  ).toHaveCount(0);
+  await page.getByTestId("industry-sluzby").click();
   await expect(page.getByTestId("timeline-asap")).toBeVisible({ timeout: 2500 });
 
   await page.getByTestId("timeline-asap").click();
@@ -249,18 +266,21 @@ test("mobile embed uses real taps for tabs and back navigation", async ({
   await page.getByTestId("tab-calculator").tap();
   await expect(panel).toHaveAttribute("data-mode", "calculator");
   await expect(
-    page.getByRole("heading", { name: "Aké riešenie chcete na web?" }),
+    page.getByRole("heading", { name: "Čo chcete pridať na web?" }),
   ).toBeVisible();
 
+  await expect(page.getByTestId("interest-chatbot")).toBeVisible();
+  await expect(page.getByTestId("interest-configurator")).toBeVisible();
+  await expect(page.getByTestId("interest-calculator")).toBeVisible();
   await page.getByTestId("interest-chatbot").tap();
-  await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
+  await expect(page.getByTestId("feature-answers")).toBeVisible({ timeout: 2500 });
   await expect(
-    page.locator('[data-testid^="industry-"][data-selected="true"]'),
+    page.locator('[data-testid^="feature-"][data-selected="true"]'),
   ).toHaveCount(0);
   await expectBackButtonInsideProgress(page);
   await page.locator(".cw-progress__back").tap();
   await expect(
-    page.getByRole("heading", { name: "Aké riešenie chcete na web?" }),
+    page.getByRole("heading", { name: "Čo chcete pridať na web?" }),
   ).toBeVisible({ timeout: 2000 });
 
   await page.getByTestId("tab-assistant").tap();
