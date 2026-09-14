@@ -1,6 +1,7 @@
 /* Clear solution picker.
-   The first configurator question is grouped by product logic instead of
-   presenting six equal cards with tiny badges. */
+   The first question now asks only for the primary tool. Combined/custom
+   products stay supported internally for presets, but are intentionally not
+   shown in this first-choice UI. */
 
 .cw-widget .cw-calc-step[data-step="interest"] {
   gap: 10px !important;
@@ -21,6 +22,37 @@
 .cw-widget .cw-interest-groups {
   display: grid;
   gap: 9px;
+}
+
+/* Product requirement: first screen = exactly Chatbot / Konfigurátor /
+   Kalkulačka. Legacy combined/custom choices remain in the data model so old
+   deep links keep working, but they do not compete for attention here. */
+.cw-widget .cw-interest-group[data-group="combined"],
+.cw-widget .cw-interest-group[data-group="custom"] {
+  display: none !important;
+}
+
+.cw-widget .cw-interest-group[data-group="standalone"] {
+  gap: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.cw-widget .cw-interest-group[data-group="standalone"] > .cw-interest-group__head {
+  display: none !important;
+}
+
+.cw-widget .cw-interest-group[data-group="standalone"] .cw-rowcard[data-testid="interest-chatbot"] {
+  order: 1;
+}
+
+.cw-widget .cw-interest-group[data-group="standalone"] .cw-rowcard[data-testid="interest-configurator"] {
+  order: 2;
+}
+
+.cw-widget .cw-interest-group[data-group="standalone"] .cw-rowcard[data-testid="interest-calculator"] {
+  order: 3;
 }
 
 .cw-widget .cw-interest-group {
@@ -72,14 +104,14 @@
 .cw-widget .cw-choice-grid--interest {
   display: grid !important;
   grid-template-columns: 1fr !important;
-  gap: 5px !important;
+  gap: 7px !important;
 }
 
 .cw-widget .cw-choice-grid--interest .cw-rowcard {
-  min-height: 58px !important;
-  grid-template-columns: 32px minmax(0, 1fr) 20px !important;
-  gap: 8px !important;
-  padding: 7px 9px !important;
+  min-height: 62px !important;
+  grid-template-columns: 34px minmax(0, 1fr) 20px !important;
+  gap: 9px !important;
+  padding: 8px 10px !important;
   border: 1px solid rgba(11, 47, 32, 0.14) !important;
   border-radius: 12px !important;
   background: #ffffff !important;
@@ -91,8 +123,8 @@
 }
 
 .cw-widget .cw-choice-grid--interest .cw-rowcard__icon {
-  width: 32px !important;
-  height: 32px !important;
+  width: 34px !important;
+  height: 34px !important;
   border-radius: 9px !important;
 }
 
@@ -108,7 +140,7 @@
 
 .cw-widget .cw-choice-grid--interest .cw-rowcard__title b {
   color: #0b2f20 !important;
-  font-size: 12.8px !important;
+  font-size: 13.2px !important;
   font-weight: 780 !important;
   line-height: 1.15 !important;
 }
@@ -117,7 +149,7 @@
   display: block;
   overflow: hidden;
   color: #5b6962 !important;
-  font-size: 10.5px !important;
+  font-size: 10.7px !important;
   font-weight: 520 !important;
   line-height: 1.28 !important;
   text-overflow: ellipsis;
@@ -174,6 +206,10 @@
     border-radius: 14px;
   }
 
+  .cw-widget .cw-interest-group[data-group="standalone"] {
+    padding: 0;
+  }
+
   .cw-widget .cw-interest-group__head {
     display: grid;
     gap: 2px;
@@ -185,10 +221,10 @@
   }
 
   .cw-widget .cw-choice-grid--interest .cw-rowcard {
-    min-height: 56px !important;
+    min-height: 58px !important;
     grid-template-columns: 30px minmax(0, 1fr) 18px !important;
     gap: 7px !important;
-    padding: 6px 8px !important;
+    padding: 7px 8px !important;
   }
 
   .cw-widget .cw-choice-grid--interest .cw-rowcard__icon {
@@ -197,7 +233,7 @@
   }
 
   .cw-widget .cw-choice-grid--interest .cw-rowcard__title b {
-    font-size: 12px !important;
+    font-size: 12.2px !important;
   }
 
   .cw-widget .cw-choice-grid--interest .cw-rowcard__body > small {
@@ -211,8 +247,12 @@
     padding-block: 6px;
   }
 
+  .cw-widget .cw-interest-group[data-group="standalone"] {
+    padding-block: 0;
+  }
+
   .cw-widget .cw-choice-grid--interest .cw-rowcard {
-    min-height: 52px !important;
+    min-height: 54px !important;
     padding-block: 6px !important;
   }
 
