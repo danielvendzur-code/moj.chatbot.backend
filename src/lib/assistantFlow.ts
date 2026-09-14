@@ -25,7 +25,7 @@ export const QUESTION_STEPS: StepId[] = STEPS.filter((id) => id !== "contact");
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
     "Čo chcete pridať na web?",
-    "Najprv vyberte nástroj. Potom doplnkové funkcie a až následne konkrétne nastavenie.",
+    "Vyberte Chatbot, Kalkulačku, Konfigurátor alebo Kombinované riešenie. Potom pokračujete doplnkami.",
   ],
   features: [
     "Ktoré doplnkové funkcie chcete?",
@@ -92,10 +92,10 @@ export const INTERESTS: InterestOption[] = [
   },
   {
     id: "calcbot",
-    label: "Chatbot + kalkulačka",
+    label: "Kombinované riešenie",
     badge: "Spojené",
-    description: "Najprv poradí, potom v tom istom okne vypočíta výsledok.",
-    icon: "calculator",
+    description: "Spojí chatbot, kalkulačku a/alebo konfigurátor do jedného riešenia.",
+    icon: "spark",
   },
   {
     id: "product",
@@ -482,11 +482,17 @@ export const DETAIL_IDS_BY_INTEREST: Record<InterestId, string[]> = {
     "chat-offer",
     "chat-pricing",
     "chat-availability",
+    "chat-orders",
+    "chat-custom",
     "calc-price",
     "calc-dimensions-detail",
     "calc-quantity-detail",
     "calc-variant-detail",
     "calc-extras-detail",
+    "config-variant",
+    "config-dimensions",
+    "config-materials",
+    "config-addons",
   ],
   product: [
     "chat-offer",
