@@ -1,7 +1,7 @@
 /* Clear solution picker.
-   The first question now asks only for the primary tool. Combined/custom
-   products stay supported internally for presets, but are intentionally not
-   shown in this first-choice UI. */
+   The first question asks for one of four top-level choices: Chatbot,
+   Kalkulačka, Konfigurátor or one generic combined solution. Legacy detailed
+   combined/custom products stay supported internally but do not compete here. */
 
 .cw-widget .cw-calc-step[data-step="interest"] {
   gap: 10px !important;
@@ -21,25 +21,28 @@
 
 .cw-widget .cw-interest-groups {
   display: grid;
-  gap: 9px;
+  gap: 7px;
 }
 
-/* Product requirement: first screen = exactly Chatbot / Konfigurátor /
-   Kalkulačka. Legacy combined/custom choices remain in the data model so old
-   deep links keep working, but they do not compete for attention here. */
-.cw-widget .cw-interest-group[data-group="combined"],
-.cw-widget .cw-interest-group[data-group="custom"] {
+/* Product requirement: first screen = Chatbot / Kalkulačka / Konfigurátor /
+   Kombinované riešenie. The generic combined card reuses the backwards-
+   compatible calcbot id; the older specific product and custom choice stay
+   hidden. */
+.cw-widget .cw-interest-group[data-group="custom"],
+.cw-widget .cw-interest-group[data-group="combined"] .cw-rowcard[data-testid="interest-product"] {
   display: none !important;
 }
 
-.cw-widget .cw-interest-group[data-group="standalone"] {
+.cw-widget .cw-interest-group[data-group="standalone"],
+.cw-widget .cw-interest-group[data-group="combined"] {
   gap: 0;
   padding: 0;
   border: 0;
   background: transparent;
 }
 
-.cw-widget .cw-interest-group[data-group="standalone"] > .cw-interest-group__head {
+.cw-widget .cw-interest-group[data-group="standalone"] > .cw-interest-group__head,
+.cw-widget .cw-interest-group[data-group="combined"] > .cw-interest-group__head {
   display: none !important;
 }
 
@@ -47,11 +50,11 @@
   order: 1;
 }
 
-.cw-widget .cw-interest-group[data-group="standalone"] .cw-rowcard[data-testid="interest-configurator"] {
+.cw-widget .cw-interest-group[data-group="standalone"] .cw-rowcard[data-testid="interest-calculator"] {
   order: 2;
 }
 
-.cw-widget .cw-interest-group[data-group="standalone"] .cw-rowcard[data-testid="interest-calculator"] {
+.cw-widget .cw-interest-group[data-group="standalone"] .cw-rowcard[data-testid="interest-configurator"] {
   order: 3;
 }
 
@@ -62,11 +65,6 @@
   border: 1px solid rgba(11, 47, 32, 0.12);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.62);
-}
-
-.cw-widget .cw-interest-group[data-group="combined"] {
-  border-color: rgba(18, 56, 45, 0.18);
-  background: rgba(18, 56, 45, 0.045);
 }
 
 .cw-widget .cw-interest-group[data-group="custom"] {
@@ -206,7 +204,8 @@
     border-radius: 14px;
   }
 
-  .cw-widget .cw-interest-group[data-group="standalone"] {
+  .cw-widget .cw-interest-group[data-group="standalone"],
+  .cw-widget .cw-interest-group[data-group="combined"] {
     padding: 0;
   }
 
@@ -247,7 +246,8 @@
     padding-block: 6px;
   }
 
-  .cw-widget .cw-interest-group[data-group="standalone"] {
+  .cw-widget .cw-interest-group[data-group="standalone"],
+  .cw-widget .cw-interest-group[data-group="combined"] {
     padding-block: 0;
   }
 
