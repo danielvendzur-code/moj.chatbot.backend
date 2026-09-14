@@ -236,10 +236,10 @@ test("steps travel in the direction the visitor is going", async () => {
 
 test("progress and contact step expose clear state and labels", async () => {
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
-  const css = await read("src/product-widget.css");
 
   assert.match(calculator, /cw-progress__dots/);
   assert.match(calculator, /Krok \$\{visibleStep \+ 1\} z \$\{STEPS\.length\}/);
+  assert.match(calculator, /gridTemplateColumns:\s*`repeat\(\$\{STEPS\.length\}/);
   assert.match(calculator, /className="cw-field"/);
   assert.match(calculator, /aria-invalid=\{nameInvalid\}/);
   assert.match(calculator, /aria-invalid=\{emailInvalid\}/);
@@ -247,7 +247,6 @@ test("progress and contact step expose clear state and labels", async () => {
   assert.match(calculator, /<details className="cw-summary">/);
   assert.match(calculator, /Chcem nezáväzný návrh/);
   assert.doesNotMatch(calculator, /label: "Osobne"/);
-  assert.match(rule(css, ".cw-progress__dots"), /grid-template-columns:\s*repeat\(5,/);
 });
 
 test("every control rounds to the shared website scale", async () => {
@@ -423,7 +422,7 @@ test("icons remain one custom rounded line family", async () => {
   }
 });
 
-test("configurator remains a short five-step conversion flow with capabilities second", async () => {
+test("configurator asks add-ons second and concrete tool details third", async () => {
   const flow = await read("src/lib/assistantFlow.ts");
   const match = flow.match(/export const STEPS:[\s\S]*?= \[([\s\S]*?)\];/);
   assert.ok(match, "STEPS definition missing");
@@ -431,13 +430,14 @@ test("configurator remains a short five-step conversion flow with capabilities s
   assert.deepEqual(steps, [
     "interest",
     "features",
+    "details",
     "industry",
     "timeline",
     "contact",
   ]);
 });
 
-test("solution picker shows three primary tools and contextual multi-select capabilities", async () => {
+test("solution picker separates optional add-ons from concrete tool configuration", async () => {
   const flow = await read("src/lib/assistantFlow.ts");
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
   const finalCss = await read("src/sep08-picker-final.css");
@@ -458,16 +458,44 @@ test("solution picker shows three primary tools and contextual multi-select capa
   assert.match(finalCss, /interest-configurator/);
   assert.match(finalCss, /interest-calculator/);
 
-  assert.match(flow, /"Čo má toto riešenie robiť\?"/);
-  assert.match(flow, /"Vyberte jednu alebo viac možností/);
-  assert.match(flow, /id: "answers"/);
-  assert.match(flow, /id: "leads"/);
-  assert.match(flow, /id: "calc-dimensions"/);
-  assert.match(flow, /id: "materials"/);
-  assert.match(flow, /id: "addons"/);
-  assert.match(flow, /chatbot:\s*\[[\s\S]*?"answers"[\s\S]*?"leads"/);
-  assert.match(flow, /calculator:\s*\[[\s\S]*?"calc-dimensions"[\s\S]*?"calc-extras"/);
-  assert.match(flow, /configurator:\s*\[[\s\S]*?"dimensions"[\s\S]*?"materials"[\s\S]*?"addons"/);
+  assert.match(flow, /"Ktoré doplnkové funkcie chcete\?"/);
+  assert.match(flow, /"Sú voliteľné\. Vyberte pokojne viac možností alebo pokračujte bez nich\."/);
+  assert.match(flow, /"Čo konkrétne má riešenie riešiť\?"/);
+  assert.match(flow, /export const DETAILS:/);
+  assert.match(flow, /export const DETAIL_IDS_BY_INTEREST:/);
+
+  const featureMap = flow.match(/export const FEATURE_IDS_BY_INTEREST:[\s\S]*?\n};/)?.[0] ?? "";
+  const detailMap = flow.match(/export const DETAIL_IDS_BY_INTEREST:[\s\S]*?\n};/)?.[0] ?? "";
+  const listFor = (source, key) =>
+    source.match(new RegExp(`${key}:\\s*\\[([\\s\\S]*?)\\]`))?.[1] ?? "";
+
+  const chatbotAddons = listFor(featureMap, "chatbot");
+  const calculatorAddons = listFor(featureMap, "calculator");
+  const configuratorAddons = listFor(featureMap, "configurator");
+  assert.match(chatbotAddons, /"leads"/);
+  assert.match(chatbotAddons, /"jazyky"/);
+  assert.doesNotMatch(chatbotAddons, /"answers"/);
+  assert.match(calculatorAddons, /"document"/);
+  assert.match(calculatorAddons, /"fotky"/);
+  assert.doesNotMatch(calculatorAddons, /"calc-dimensions"|"calc-quantity"|"calc-variant"/);
+  assert.match(configuratorAddons, /"compare"/);
+  assert.match(configuratorAddons, /"document"/);
+  assert.doesNotMatch(configuratorAddons, /"dimensions"|"materials"|"addons"|"varianty"/);
+
+  const chatbotDetails = listFor(detailMap, "chatbot");
+  const calculatorDetails = listFor(detailMap, "calculator");
+  const configuratorDetails = listFor(detailMap, "configurator");
+  assert.match(chatbotDetails, /"chat-offer"/);
+  assert.match(chatbotDetails, /"chat-pricing"/);
+  assert.match(calculatorDetails, /"calc-price"/);
+  assert.match(calculatorDetails, /"calc-dimensions-detail"/);
+  assert.match(configuratorDetails, /"config-variant"/);
+  assert.match(configuratorDetails, /"config-materials"/);
+  assert.match(configuratorDetails, /"config-addons"/);
+
+  assert.match(calculator, /case "features":\s*\n\s*return true;/);
+  assert.match(calculator, /case "details":\s*\n\s*return details\.length > 0;/);
+  assert.match(calculator, /data-testid=\{`detail-\$\{option\.id\}`\}/);
   assert.match(flow, /chatbot:\s*\[\],\s*\n\s*calculator:\s*\[\],\s*\n\s*configurator:\s*\[\]/);
 
   assert.match(calculator, /cw-rowcard__title/);

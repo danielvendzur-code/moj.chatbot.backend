@@ -3,29 +3,41 @@ import type { WidgetIconName } from "../components/widget/WidgetIcon";
 
 export type StepId =
   | "interest"
+  | "features"
+  | "details"
   | "industry"
   | "priority"
-  | "features"
   | "volume"
   | "timeline"
   | "contact";
 
-export const STEPS: StepId[] = ["interest", "features", "industry", "timeline", "contact"];
+export const STEPS: StepId[] = [
+  "interest",
+  "features",
+  "details",
+  "industry",
+  "timeline",
+  "contact",
+];
 
 export const QUESTION_STEPS: StepId[] = STEPS.filter((id) => id !== "contact");
 
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
     "Čo chcete pridať na web?",
-    "Vyberte Chatbot, Konfigurátor alebo Kalkulačku. V ďalšom kroku si zvolíte, čo má riešenie robiť.",
+    "Najprv vyberte nástroj. Potom doplnkové funkcie a až následne konkrétne nastavenie.",
+  ],
+  features: [
+    "Ktoré doplnkové funkcie chcete?",
+    "Sú voliteľné. Vyberte pokojne viac možností alebo pokračujte bez nich.",
+  ],
+  details: [
+    "Čo konkrétne má riešenie riešiť?",
+    "Teraz nastavte, s čím má vybraný nástroj pracovať. Môžete vybrať viac možností.",
   ],
   industry: [
     "Čo robí vaša firma?",
     "Vyberte odvetvie, aby som vedel návrh lepšie prispôsobiť vašej ponuke.",
-  ],
-  features: [
-    "Čo má toto riešenie robiť?",
-    "Vyberte jednu alebo viac možností. Zobrazujem iba funkcie, ktoré dávajú zmysel pre zvolený typ.",
   ],
   timeline: [
     "Kedy to chcete mať hotové?",
@@ -319,11 +331,10 @@ export const FEATURES: FeatureOption[] = [
   },
 ];
 
-/* Druhá otázka je zámerne kontextová: po výbere nástroja sa zobrazia iba
-   úlohy, ktoré preň dávajú zmysel. Návštevník môže označiť viac možností. */
+/* Krok 2 obsahuje iba doplnkové funkcie k zvolenému nástroju. Jadro nástroja
+   sa pýta až v nasledujúcom kroku cez DETAILS. */
 export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
   chatbot: [
-    "answers",
     "advisor",
     "leads",
     "tracking",
@@ -334,30 +345,17 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
     "jazyky",
     "stock-alert",
   ],
-  calculator: [
-    "cena",
-    "calc-dimensions",
-    "calc-quantity",
-    "calc-variant",
-    "calc-extras",
-    "document",
-    "fotky",
-    "tabulka",
-  ],
+  calculator: ["document", "fotky", "tabulka", "payment"],
   configurator: [
-    "varianty",
-    "dimensions",
-    "materials",
-    "addons",
     "cena",
-    "fotky",
     "compare",
+    "fotky",
     "document",
     "tabulka",
+    "cart-recovery",
+    "payment",
   ],
   calcbot: [
-    "answers",
-    "cena",
     "advisor",
     "leads",
     "document",
@@ -368,38 +366,172 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
     "handoff",
   ],
   product: [
-    "varianty",
-    "dimensions",
-    "materials",
-    "addons",
     "advisor",
     "compare",
     "stock-alert",
     "cart-recovery",
     "document",
     "tabulka",
+    "payment",
   ],
-  booking: ["rezervacie", "payment", "jazyky", "tabulka", "handoff", "document"],
-  custom: ["answers", "leads", "handoff", "document", "tabulka", "jazyky", "fotky", "rezervacie", "payment"],
+  booking: ["payment", "jazyky", "tabulka", "handoff", "document"],
+  custom: ["leads", "handoff", "document", "tabulka", "jazyky", "fotky", "rezervacie", "payment"],
+};
+
+export type DetailOption = {
+  id: string;
+  label: string;
+  description: string;
+};
+
+export const DETAILS: DetailOption[] = [
+  {
+    id: "chat-offer",
+    label: "Ponuka a služby",
+    description: "Čo ponúkate, čo jednotlivé služby zahŕňajú a pre koho sú.",
+  },
+  {
+    id: "chat-pricing",
+    label: "Ceny a cenník",
+    description: "Ceny, balíky, príplatky a podmienky vašej ponuky.",
+  },
+  {
+    id: "chat-availability",
+    label: "Dostupnosť a termíny",
+    description: "Kedy je služba alebo produkt dostupný a aké sú možnosti termínu.",
+  },
+  {
+    id: "chat-orders",
+    label: "Objednávky a doprava",
+    description: "Objednanie, doručenie, stav a bežné otázky po nákupe.",
+  },
+  {
+    id: "chat-custom",
+    label: "Vlastné otázky",
+    description: "Konkrétne témy a odpovede podľa vašej firmy.",
+  },
+  {
+    id: "calc-price",
+    label: "Cena",
+    description: "Orientačná alebo výsledná cena podľa vašich pravidiel.",
+  },
+  {
+    id: "calc-dimensions-detail",
+    label: "Rozmery, plocha alebo objem",
+    description: "Dĺžka, šírka, výška, plocha, objem alebo iné rozmery.",
+  },
+  {
+    id: "calc-quantity-detail",
+    label: "Množstvo",
+    description: "Kusy, metre, balenia alebo iná jednotka množstva.",
+  },
+  {
+    id: "calc-variant-detail",
+    label: "Typ alebo model",
+    description: "Výsledok sa mení podľa produktu, variantu alebo druhu služby.",
+  },
+  {
+    id: "calc-extras-detail",
+    label: "Montáž, doprava a príplatky",
+    description: "Voliteľné položky, doprava, montáž a ďalšie pravidlá výsledku.",
+  },
+  {
+    id: "config-variant",
+    label: "Variant alebo model",
+    description: "Zákazník vyberá typ produktu, služby alebo zostavy.",
+  },
+  {
+    id: "config-dimensions",
+    label: "Rozmery a množstvo",
+    description: "Rozmery, počet kusov alebo rozsah zákazky.",
+  },
+  {
+    id: "config-materials",
+    label: "Farby a materiály",
+    description: "Farby, povrchy, materiály a ďalšie vizuálne varianty.",
+  },
+  {
+    id: "config-addons",
+    label: "Doplnky a príslušenstvo",
+    description: "Voliteľné prvky, ktoré sa pridávajú k hlavnej konfigurácii.",
+  },
+];
+
+export const DETAIL_IDS_BY_INTEREST: Record<InterestId, string[]> = {
+  chatbot: [
+    "chat-offer",
+    "chat-pricing",
+    "chat-availability",
+    "chat-orders",
+    "chat-custom",
+  ],
+  calculator: [
+    "calc-price",
+    "calc-dimensions-detail",
+    "calc-quantity-detail",
+    "calc-variant-detail",
+    "calc-extras-detail",
+  ],
+  configurator: [
+    "config-variant",
+    "config-dimensions",
+    "config-materials",
+    "config-addons",
+  ],
+  calcbot: [
+    "chat-offer",
+    "chat-pricing",
+    "chat-availability",
+    "calc-price",
+    "calc-dimensions-detail",
+    "calc-quantity-detail",
+    "calc-variant-detail",
+    "calc-extras-detail",
+  ],
+  product: [
+    "chat-offer",
+    "chat-pricing",
+    "config-variant",
+    "config-dimensions",
+    "config-materials",
+    "config-addons",
+  ],
+  booking: ["chat-availability", "chat-offer", "chat-custom"],
+  custom: [
+    "chat-offer",
+    "chat-pricing",
+    "chat-availability",
+    "chat-orders",
+    "chat-custom",
+    "calc-price",
+    "calc-dimensions-detail",
+    "calc-quantity-detail",
+    "calc-variant-detail",
+    "calc-extras-detail",
+    "config-variant",
+    "config-dimensions",
+    "config-materials",
+    "config-addons",
+  ],
 };
 
 export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
   chatbot: [],
   calculator: [],
   configurator: [],
-  calcbot: ["cena", "answers", "leads"],
-  product: ["varianty", "advisor", "compare"],
-  booking: ["rezervacie", "payment", "tabulka"],
-  custom: ["handoff", "document", "tabulka"],
+  calcbot: [],
+  product: [],
+  booking: [],
+  custom: [],
 };
 
 export const INDUSTRY_RECOMMENDED_FEATURES: Record<string, string[]> = {
-  sluzby: ["cena", "rezervacie", "fotky", "payment", "document"],
-  eshop: ["answers", "advisor", "compare", "tracking", "order-change", "returns", "stock-alert", "cart-recovery"],
-  gastro: ["answers", "rezervacie", "jazyky", "payment", "handoff"],
-  zdravie: ["answers", "rezervacie", "payment", "jazyky", "handoff"],
-  vyroba: ["varianty", "dimensions", "materials", "cena", "document", "fotky", "tabulka"],
-  ine: ["answers", "leads", "handoff", "document", "tabulka", "jazyky"],
+  sluzby: ["rezervacie", "fotky", "payment", "document"],
+  eshop: ["advisor", "tracking", "order-change", "returns", "stock-alert", "cart-recovery"],
+  gastro: ["rezervacie", "jazyky", "payment", "handoff"],
+  zdravie: ["rezervacie", "payment", "jazyky", "handoff"],
+  vyroba: ["document", "fotky", "tabulka", "compare"],
+  ine: ["leads", "handoff", "document", "tabulka", "jazyky"],
 };
 
 export type VolumeOption = {

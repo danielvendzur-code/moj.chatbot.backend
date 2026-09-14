@@ -5,6 +5,8 @@ import { submitLead as sendLead } from "../../lib/leadApi";
 import { useStepTransition } from "../../hooks/useStepTransition";
 import {
   buildProposalNumber,
+  DETAIL_IDS_BY_INTEREST,
+  DETAILS,
   FEATURE_IDS_BY_INTEREST,
   FEATURES,
   INDUSTRIES,
@@ -116,6 +118,7 @@ export function ToolCalculator({
   const [features, setFeatures] = useState<string[]>(
     initialInterest ? RECOMMENDED_FEATURES[initialInterest] : [],
   );
+  const [details, setDetails] = useState<string[]>([]);
   const [timeline, setTimeline] = useState<string | null>(null);
   const [lead, setLead] = useState<LeadState>(EMPTY_LEAD);
   const [leadError, setLeadError] = useState("");
@@ -138,6 +141,7 @@ export function ToolCalculator({
     setCustomText("");
     setIndustry(null);
     setFeatures(nextInterest ? RECOMMENDED_FEATURES[nextInterest] : []);
+    setDetails([]);
     setTimeline(null);
     setLead(EMPTY_LEAD);
     setLeadError("");
@@ -183,12 +187,27 @@ export function ToolCalculator({
       .filter((option): option is (typeof FEATURES)[number] => Boolean(option));
   }, [interest]);
 
+  const visibleDetails = useMemo(() => {
+    const ids = interest ? DETAIL_IDS_BY_INTEREST[interest] : [];
+    return ids
+      .map((id) => DETAILS.find((option) => option.id === id))
+      .filter((option): option is (typeof DETAILS)[number] => Boolean(option));
+  }, [interest]);
+
   const featureLabels = useMemo(
     () =>
       FEATURES.filter((option) => features.includes(option.id)).map(
         (option) => option.label,
       ),
     [features],
+  );
+
+  const detailLabels = useMemo(
+    () =>
+      DETAILS.filter((option) => details.includes(option.id)).map(
+        (option) => option.label,
+      ),
+    [details],
   );
 
   const canContinue = (() => {
@@ -199,10 +218,12 @@ export function ToolCalculator({
           interest !== null &&
           (interest !== "custom" || customText.trim().length > 0)
         );
+      case "features":
+        return true;
+      case "details":
+        return details.length > 0;
       case "industry":
         return industry !== null;
-      case "features":
-        return features.length > 0;
       case "timeline":
         return timeline !== null;
       default:
@@ -213,11 +234,20 @@ export function ToolCalculator({
   const pickInterest = (id: InterestId) => {
     setInterest(id);
     setFeatures(RECOMMENDED_FEATURES[id]);
+    setDetails([]);
     track("config_interest_select", { interest: id });
   };
 
   const toggleFeature = (id: string) => {
     setFeatures((current) =>
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id],
+    );
+  };
+
+  const toggleDetail = (id: string) => {
+    setDetails((current) =>
       current.includes(id)
         ? current.filter((item) => item !== id)
         : [...current, id],
@@ -236,8 +266,12 @@ export function ToolCalculator({
         ? "Poradiť mi, čo sa hodí"
         : labelOf(INTERESTS, interest),
     ],
+    [
+      "Doplnkové funkcie",
+      featureLabels.length ? featureLabels.join(", ") : "Bez doplnkov",
+    ],
+    ["Konkrétne", detailLabels.length ? detailLabels.join(", ") : "—"],
     ["Vaša firma", labelOf(INDUSTRIES, industry)],
-    ["Má zvládnuť", featureLabels.length ? featureLabels.join(", ") : "—"],
     ["Hotové", labelOf(TIMELINES, timeline)],
   ];
 
@@ -296,9 +330,12 @@ export function ToolCalculator({
           .filter(Boolean)
           .join("\n\n"),
         interest: summaryRows[0][1],
-        industry: summaryRows[1][1],
-        features: featureLabels.join(", "),
-        timeline: summaryRows[3][1],
+        industry: summaryRows[3][1],
+        features: [
+          `Doplnkové funkcie: ${featureLabels.length ? featureLabels.join(", ") : "bez doplnkov"}`,
+          `Konkrétne nastavenie: ${detailLabels.join(", ")}`,
+        ].join(" | "),
+        timeline: summaryRows[4][1],
         reference: nextProposalNumber,
         consent: true,
       });
@@ -411,7 +448,11 @@ export function ToolCalculator({
               ? `Krok ${visibleStep + 1} z ${STEPS.length} · Kontakt`
               : `Otázka ${questionIndex + 1} zo ${QUESTION_STEPS.length}`}
           </span>
-          <div className="cw-progress__dots" aria-hidden="true">
+          <div
+            className="cw-progress__dots"
+            aria-hidden="true"
+            style={{ gridTemplateColumns: `repeat(${STEPS.length}, minmax(0, 1fr))` }}
+          >
             {STEPS.map((item, index) => (
               <i
                 key={item}
@@ -503,31 +544,6 @@ export function ToolCalculator({
             </>
           ) : null}
 
-          {stepId === "industry" ? (
-            <div className="cw-choice-grid cw-choice-grid--industry">
-              {INDUSTRIES.map((option) => {
-                const selected = industry === option.id;
-                return (
-                  <button
-                    type="button"
-                    className="cw-scard"
-                    data-testid={`industry-${option.id}`}
-                    data-selected={selected}
-                    aria-pressed={selected}
-                    key={`${stepId}-${option.id}`}
-                    onClick={() => setIndustry(option.id)}
-                  >
-                    <span className="cw-scard__icon">
-                      <WidgetIcon name={option.icon} />
-                    </span>
-                    <b>{option.label}</b>
-                    <SelectionIndicator selected={selected} />
-                  </button>
-                );
-              })}
-            </div>
-          ) : null}
-
           {stepId === "features" ? (
             <div className="cw-choice-grid cw-choice-grid--features">
               {visibleFeatures.map((option) => {
@@ -546,6 +562,56 @@ export function ToolCalculator({
                       <b>{option.label}</b>
                       <span>{option.description}</span>
                     </span>
+                    <SelectionIndicator selected={selected} />
+                  </button>
+                );
+              })}
+            </div>
+          ) : null}
+
+          {stepId === "details" ? (
+            <div className="cw-choice-grid cw-choice-grid--features cw-choice-grid--details">
+              {visibleDetails.map((option) => {
+                const selected = details.includes(option.id);
+                return (
+                  <button
+                    type="button"
+                    className="cw-opt"
+                    data-testid={`detail-${option.id}`}
+                    data-selected={selected}
+                    aria-pressed={selected}
+                    key={`${stepId}-${option.id}`}
+                    onClick={() => toggleDetail(option.id)}
+                  >
+                    <span className="cw-opt__body">
+                      <b>{option.label}</b>
+                      <span>{option.description}</span>
+                    </span>
+                    <SelectionIndicator selected={selected} />
+                  </button>
+                );
+              })}
+            </div>
+          ) : null}
+
+          {stepId === "industry" ? (
+            <div className="cw-choice-grid cw-choice-grid--industry">
+              {INDUSTRIES.map((option) => {
+                const selected = industry === option.id;
+                return (
+                  <button
+                    type="button"
+                    className="cw-scard"
+                    data-testid={`industry-${option.id}`}
+                    data-selected={selected}
+                    aria-pressed={selected}
+                    key={`${stepId}-${option.id}`}
+                    onClick={() => setIndustry(option.id)}
+                  >
+                    <span className="cw-scard__icon">
+                      <WidgetIcon name={option.icon} />
+                    </span>
+                    <b>{option.label}</b>
                     <SelectionIndicator selected={selected} />
                   </button>
                 );

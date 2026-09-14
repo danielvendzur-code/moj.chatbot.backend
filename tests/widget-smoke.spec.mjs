@@ -133,8 +133,10 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
 
   await expect(interestLabel).toBeVisible();
   await expect(interestLabel).toHaveText(/\S+/);
-  await expect(page.getByTestId("feature-answers")).toBeVisible({ timeout: 2500 });
+  await expect(page.getByRole("heading", { name: "Ktoré doplnkové funkcie chcete?" })).toBeVisible({ timeout: 2500 });
   await expect(page.getByTestId("feature-leads")).toBeVisible();
+  await expect(page.getByTestId("feature-jazyky")).toBeVisible();
+  await expect(page.getByTestId("feature-answers")).toHaveCount(0);
 
   await expect(
     page.locator('[data-testid^="feature-"][data-selected="true"]'),
@@ -156,18 +158,26 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await page.getByTestId("flow-next").click();
   await expect(page.getByTestId("feature-jazyky")).toBeVisible({ timeout: 2000 });
 
-  // Step two is intentionally multi-select. Nothing advances until the user
-  // explicitly presses Continue.
+  // Step two contains only optional add-ons. Core chatbot topics are asked on
+  // the next screen, not mixed into these choices.
   await page.getByTestId("feature-jazyky").click();
   await expect(page.getByTestId("feature-jazyky")).toHaveAttribute("data-selected", "true");
-  await expect(page.getByTestId("feature-answers")).toBeVisible();
-  await page.getByTestId("feature-answers").click();
+  await page.getByTestId("feature-leads").click();
   await expect(
     page.locator('[data-testid^="feature-"][data-selected="true"]'),
   ).toHaveCount(2);
   await page.getByTestId("flow-next").click();
-  await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
 
+  await expect(
+    page.getByRole("heading", { name: "Čo konkrétne má riešenie riešiť?" }),
+  ).toBeVisible({ timeout: 2500 });
+  await expect(page.getByTestId("detail-chat-offer")).toBeVisible();
+  await expect(page.getByTestId("detail-chat-pricing")).toBeVisible();
+  await page.getByTestId("detail-chat-offer").click();
+  await expect(page.getByTestId("detail-chat-offer")).toHaveAttribute("data-selected", "true");
+  await page.getByTestId("flow-next").click();
+
+  await expect(page.getByTestId("industry-sluzby")).toBeVisible({ timeout: 2500 });
   await expect(
     page.locator('[data-testid^="industry-"][data-selected="true"]'),
   ).toHaveCount(0);
@@ -178,7 +188,7 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(
     page.getByRole("heading", { name: "Váš návrh je pripravený" }),
   ).toBeVisible({ timeout: 2500 });
-  await expect(page.getByText("Krok 5 z 5 · Kontakt")).toBeVisible();
+  await expect(page.getByText("Krok 6 z 6 · Kontakt")).toBeVisible();
 
   await expect(page.locator(".cw-contact-methods")).toHaveCount(0);
   await expect(page.getByRole("checkbox")).toHaveCount(0);
@@ -273,7 +283,8 @@ test("mobile embed uses real taps for tabs and back navigation", async ({
   await expect(page.getByTestId("interest-configurator")).toBeVisible();
   await expect(page.getByTestId("interest-calculator")).toBeVisible();
   await page.getByTestId("interest-chatbot").tap();
-  await expect(page.getByTestId("feature-answers")).toBeVisible({ timeout: 2500 });
+  await expect(page.getByTestId("feature-leads")).toBeVisible({ timeout: 2500 });
+  await expect(page.getByTestId("feature-answers")).toHaveCount(0);
   await expect(
     page.locator('[data-testid^="feature-"][data-selected="true"]'),
   ).toHaveCount(0);
