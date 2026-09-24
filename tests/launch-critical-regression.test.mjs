@@ -62,7 +62,7 @@ test("sales assistant uses Sonnet 4.6 with grounded product context", async () =
   assert.match(chat, /const MODEL = "claude-sonnet-4-6"/);
   assert.match(chat, /Chatbot alebo produktový poradca: od 347 €/);
   assert.match(chat, /Kalkulačka alebo konfigurátor: od 447 €/);
-  assert.match(chat, /Technická prevádzka: 10 € mesačne/);
+  assert.match(chat, /Technická prevádzka: od 10 € mesačne/);
   assert.match(chat, /Najprv odpovedz na otázku/);
   assert.match(chat, /Nevymýšľaj zľavy, úspory, návratnosť ani falošnú urgenciu/);
   assert.match(chat, /Koverta, DERAT, Môj Plot a WEBKO/);
