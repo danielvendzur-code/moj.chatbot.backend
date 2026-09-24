@@ -73,7 +73,7 @@ const INTEREST_GROUPS: Array<{
     id: "combined",
     label: "Spojené riešenia",
     description: "Chatbot spolu s výpočtom alebo výberom.",
-    items: ["calcbot", "product"],
+    items: ["calcbot", "product", "all"],
   },
   {
     id: "custom",

@@ -102,6 +102,8 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(page.getByTestId("interest-configurator")).toBeVisible();
   await expect(page.getByTestId("interest-calcbot")).toBeVisible();
   await expect(page.getByTestId("interest-calcbot")).toContainText("Kombinované riešenie");
+  await expect(page.getByTestId("interest-all")).toBeVisible();
+  await expect(page.getByTestId("interest-all")).toContainText("Všetko spolu");
   await expect(page.getByTestId("interest-product")).toBeHidden();
   await expect(page.getByTestId("interest-custom")).toBeHidden();
 
