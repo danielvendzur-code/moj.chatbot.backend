@@ -677,5 +677,45 @@ html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-interest-group[d
 }
 
 html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-interest-group[data-group="combined"] {
-  flex-grow: 1 !important;
+  flex-grow: 2 !important;
+}
+
+/* Päť volieb v prvom kroku: nižšie karty a jednoriadkové popisy, bez scrollu. */
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-interest-groups {
+  gap: 7px !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-interest-group .cw-choice-grid {
+  gap: 7px !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-interest-group .cw-rowcard {
+  min-height: 50px !important;
+  padding-block: 8px !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-rowcard__body small {
+  display: block !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+}
+
+html:root body .cw-widget .cw-rowcard[data-testid="interest-all"] {
+  border-color: rgba(18, 55, 45, 0.35) !important;
+}
+
+/* Dvanásť tém pri „Všetko spolu“: tesnejšie riadky, aby sa zmestili. */
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(11)) > button {
+  min-height: 40px !important;
+  padding-block: 6px !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(11)) {
+  gap: 5px !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(11)) .cw-opt__body b {
+  font-size: 13px !important;
+  line-height: 1.2 !important;
 }

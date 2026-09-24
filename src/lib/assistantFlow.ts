@@ -25,7 +25,7 @@ export const QUESTION_STEPS: StepId[] = STEPS.filter((id) => id !== "contact");
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
     "Čo chcete pridať na web?",
-    "Vyberte Chatbot, Kalkulačku, Konfigurátor alebo Kombinované riešenie. Potom pokračujete doplnkami.",
+    "Jeden nástroj, kombinácia alebo všetko spolu. Potom pokračujete doplnkami.",
   ],
   features: [
     "Ktoré doplnkové funkcie chcete?",
@@ -94,8 +94,15 @@ export const INTERESTS: InterestOption[] = [
     id: "calcbot",
     label: "Kombinované riešenie",
     badge: "Spojené",
-    description: "Spojí chatbot, kalkulačku a/alebo konfigurátor do jedného riešenia.",
+    description: "Chatbot s kalkulačkou, konfigurátorom alebo poradcom v jednom.",
     icon: "spark",
+  },
+  {
+    id: "all",
+    label: "Všetko spolu",
+    badge: "Kompletné",
+    description: "Chatbot, kalkulačka, konfigurátor aj poradca v jednom nástroji.",
+    icon: "check",
   },
   {
     id: "product",
@@ -410,6 +417,18 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
     "payment",
   ],
   booking: ["payment", "jazyky", "tabulka", "handoff", "document"],
+  all: [
+    "advisor",
+    "viz-3d",
+    "leads",
+    "compare",
+    "document",
+    "payment",
+    "fotky",
+    "tabulka",
+    "rezervacie",
+    "handoff",
+  ],
   custom: ["leads", "handoff", "document", "tabulka", "jazyky", "fotky", "rezervacie", "payment"],
 };
 
@@ -550,6 +569,20 @@ export const DETAIL_IDS_BY_INTEREST: Record<InterestId, string[]> = {
     "config-addons",
   ],
   booking: ["chat-availability", "chat-offer", "chat-custom"],
+  all: [
+    "chat-offer",
+    "chat-pricing",
+    "chat-availability",
+    "chat-orders",
+    "calc-price",
+    "calc-dimensions-detail",
+    "calc-variant-detail",
+    "calc-extras-detail",
+    "config-variant",
+    "config-materials",
+    "config-addons",
+    "config-roof",
+  ],
   custom: [
     "chat-offer",
     "chat-pricing",
@@ -575,6 +608,7 @@ export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
   calcbot: [],
   product: [],
   booking: [],
+  all: [],
   custom: [],
 };
 

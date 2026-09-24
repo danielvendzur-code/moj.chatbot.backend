@@ -23,6 +23,7 @@ export type InterestId =
   | "calculator"
   | "configurator"
   | "calcbot"
+  | "all"
   | "product"
   | "booking"
   | "custom";
