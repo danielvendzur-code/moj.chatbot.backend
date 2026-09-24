@@ -61,7 +61,7 @@ export function localAssistantReply(question: string): string {
     return "Zákazník zadá napríklad rozmery alebo množstvo a chatbot mu hneď povie cenu — podľa pravidiel, ktoré si určíte vy. Vám potom pošle jeho kontakt aj s tým, čo si vybral.";
   }
   if (/konfigur|produkt|variant|dopln/.test(normalized)) {
-    return "Chatbot sa zákazníka postupne spýta na rozmery, materiál, farbu aj doplnky. Vy dostanete hotový dopyt, ktorý už len naceníte.";
+    return "Konfigurátor prevedie zákazníka rozmerom, farbou, strechou aj doplnkami a zostavu môže ukázať v 3D — tak ako pri prístreškoch Koverta. Cena sa mení hneď a vy dostanete dopyt aj s hotovou zostavou.";
   }
   if (/rezerv|termín|kalendár/.test(normalized)) {
     return "Áno. Chatbot zistí, čo zákazník potrebuje, ponúkne voľný termín, zapíše ho do kalendára a potvrdenie pošle jemu aj vám.";
