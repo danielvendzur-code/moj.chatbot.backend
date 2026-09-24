@@ -87,7 +87,7 @@ export const INTERESTS: InterestOption[] = [
     id: "configurator",
     label: "Konfigurátor",
     badge: "Samostatne",
-    description: "Prevedie výberom variantov, rozmerov, farieb a doplnkov.",
+    description: "Prevedie výberom variantov, rozmerov, farieb a doplnkov — aj s 3D náhľadom.",
     icon: "options",
   },
   {
@@ -159,6 +159,16 @@ export const INDUSTRIES: IndustryOption[] = [
       "Klient si vyberie službu a termín",
       "Dozvie sa, čo si má priniesť",
       "Cenník má hneď pred sebou",
+    ],
+  },
+  {
+    id: "stavba",
+    label: "Dom, záhrada a stavba",
+    icon: "home",
+    examples: [
+      "Zákazník si poskladá prístrešok alebo pergolu v 3D",
+      "Cena sa mení hneď s rozmerom a farbou",
+      "Dopyt príde aj s hotovou zostavou",
     ],
   },
   {
@@ -270,6 +280,26 @@ export const FEATURES: FeatureOption[] = [
     description: "Ukáže hlavné rozdiely a pomôže s rozhodnutím.",
   },
   {
+    id: "viz-3d",
+    label: "Ukázať zostavu v 3D",
+    description: "Zákazník otáča model, mení pohľad a hneď vidí, čo si skladá.",
+  },
+  {
+    id: "scene",
+    label: "Ukázať zostavu v prostredí",
+    description: "Auto, nábytok alebo postava v scéne ukážu skutočnú mierku.",
+  },
+  {
+    id: "rules",
+    label: "Strážiť technické pravidlá",
+    description: "Nedovolí rozmer ani kombináciu, ktorú neviete vyrobiť alebo namontovať.",
+  },
+  {
+    id: "share-link",
+    label: "Uložiť zostavu do odkazu",
+    description: "Výber sa dá poslať ďalej alebo otvoriť neskôr presne tak, ako bol.",
+  },
+  {
     id: "tracking",
     label: "Sledovať objednávku",
     description: "Stav platby, expedície a doručenia.",
@@ -347,7 +377,11 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
   ],
   calculator: ["document", "fotky", "tabulka", "payment"],
   configurator: [
+    "viz-3d",
     "cena",
+    "scene",
+    "rules",
+    "share-link",
     "compare",
     "fotky",
     "document",
@@ -367,6 +401,7 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
   ],
   product: [
     "advisor",
+    "viz-3d",
     "compare",
     "stock-alert",
     "cart-recovery",
@@ -455,6 +490,16 @@ export const DETAILS: DetailOption[] = [
     label: "Doplnky a príslušenstvo",
     description: "Voliteľné prvky, ktoré sa pridávajú k hlavnej konfigurácii.",
   },
+  {
+    id: "config-placement",
+    label: "Umiestnenie a osadenie",
+    description: "Samostatne, pri stene alebo v rohu — podľa toho sa mení konštrukcia.",
+  },
+  {
+    id: "config-roof",
+    label: "Strecha, výplne a tienenie",
+    description: "Typ strechy, bočné steny, lamely alebo rolety ako súčasť zostavy.",
+  },
 ];
 
 export const DETAIL_IDS_BY_INTEREST: Record<InterestId, string[]> = {
@@ -477,6 +522,8 @@ export const DETAIL_IDS_BY_INTEREST: Record<InterestId, string[]> = {
     "config-dimensions",
     "config-materials",
     "config-addons",
+    "config-placement",
+    "config-roof",
   ],
   calcbot: [
     "chat-offer",
@@ -536,6 +583,7 @@ export const INDUSTRY_RECOMMENDED_FEATURES: Record<string, string[]> = {
   eshop: ["advisor", "tracking", "order-change", "returns", "stock-alert", "cart-recovery"],
   gastro: ["rezervacie", "jazyky", "payment", "handoff"],
   zdravie: ["rezervacie", "payment", "jazyky", "handoff"],
+  stavba: ["viz-3d", "scene", "rules", "document", "fotky"],
   vyroba: ["document", "fotky", "tabulka", "compare"],
   ine: ["leads", "handoff", "document", "tabulka", "jazyky"],
 };

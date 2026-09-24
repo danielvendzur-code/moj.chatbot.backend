@@ -424,3 +424,258 @@
     transition-duration: 1ms;
   }
 }
+
+/* Nepárny počet odvetví: posledná voľba sa roztiahne na celý riadok,
+   aby nezostala osamotená v polovici mriežky. */
+.cw-choice-grid--industry > .cw-scard:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+/* ==========================================================================
+   Krok vyplní celý panel — bez scrollovania a bez prázdneho miesta.
+   Každý krok sa roztiahne na výšku panela a voľby si rozdelia dostupné
+   miesto rovnakým dielom. Pri mnohých voľbách sa usporiadajú do dvoch
+   stĺpcov a skryje sa ich popis, takže sa zmestia bez posúvania. Písmo
+   nikdy neklesne pod 13 px. Posúvanie ostáva len ako poistka pre veľmi
+   nízke okná.
+   ========================================================================== */
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-scroll-shell {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-calc-body {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  padding-bottom: 8px !important;
+  scrollbar-gutter: auto !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-calc-step {
+  display: flex !important;
+  flex: 1 0 auto !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  min-height: 100% !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-step-head {
+  flex: 0 0 auto !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-scroll-cue,
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-scroll-fade {
+  display: none !important;
+}
+
+/* Mriežky volieb vyplnia zvyšok výšky. */
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-calc-step > [class*="cw-choice-grid"] {
+  display: grid !important;
+  flex: 1 1 auto !important;
+  grid-auto-rows: minmax(0, 1fr) !important;
+  align-content: stretch !important;
+  gap: 7px !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-calc-step > [class*="cw-choice-grid"] > button {
+  height: auto !important;
+  min-height: 44px !important;
+  margin: 0 !important;
+}
+
+/* Prvý krok: viditeľné skupiny si rozdelia výšku. */
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-interest-groups {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  min-height: 0 !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-interest-group:not([data-group="custom"]) {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-interest-group .cw-choice-grid {
+  display: grid !important;
+  flex: 1 1 auto !important;
+  grid-auto-rows: minmax(0, 1fr) !important;
+  gap: 8px !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-interest-group .cw-rowcard {
+  height: auto !important;
+  min-height: 56px !important;
+}
+
+/* Veľa volieb: dva stĺpce, len názov. */
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(7)) {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(7)) .cw-opt {
+  align-items: center !important;
+  padding: 10px 34px 10px 12px !important;
+  position: relative !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(7)) .cw-opt__body > span {
+  display: none !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(7)) .cw-opt__body b {
+  display: -webkit-box !important;
+  overflow: hidden !important;
+  font-size: 13.5px !important;
+  line-height: 1.25 !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(7)) .cw-opt > :last-child {
+  position: absolute !important;
+  top: 50% !important;
+  right: 10px !important;
+  margin: 0 !important;
+  transform: translateY(-50%) !important;
+}
+
+/* Kontakt: ubezpečenie hore, polia v strede, zhrnutie výberu dole. */
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-contact-stage {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  min-height: 0 !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-contact-stage .cw-lead__form {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: clamp(8px, 2vh, 16px) !important;
+}
+
+/* Nepárny počet volieb v dvoch stĺpcoch: posledná vyplní celý riadok. */
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(6)) > :last-child:nth-child(odd) {
+  grid-column: 1 / -1 !important;
+}
+
+/* Od šiestich volieb dva stĺpce aj v kroku „Čo má riešenie riešiť“. */
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(6)) {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(6)) .cw-opt {
+  align-items: center !important;
+  padding: 10px 34px 10px 12px !important;
+  position: relative !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(6)) .cw-opt__body > span {
+  display: none !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(6)) .cw-opt__body b {
+  display: -webkit-box !important;
+  overflow: hidden !important;
+  font-size: 13.5px !important;
+  line-height: 1.25 !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(6)) .cw-opt > :last-child {
+  position: absolute !important;
+  top: 50% !important;
+  right: 10px !important;
+  margin: 0 !important;
+  transform: translateY(-50%) !important;
+}
+
+/* Nízke okno: popisy volieb a prvého kroku sa skrátia na jeden riadok. */
+@media (max-height: 800px) {
+  html:root body .cw-widget .cw-calculator[data-view="steps"] :is(.cw-opt__body > span, .cw-rowcard__body small, .cw-vcard__copy > span) {
+    display: block !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-q-sub {
+    display: none !important;
+  }
+}
+
+/* Kombinované riešenia majú až štrnásť tém: tri stĺpce, aby sa zmestili. */
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(13)) {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(13)) > :last-child:nth-child(odd) {
+  grid-column: auto !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(13)) .cw-opt {
+  padding: 8px 26px 8px 10px !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(13)) .cw-opt > :last-child {
+  right: 6px !important;
+  scale: 0.85;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(13)) .cw-opt__body b {
+  font-size: 13px !important;
+}
+
+@media (max-height: 800px) {
+  html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-calc-step > [class*="cw-choice-grid"] {
+    gap: 6px !important;
+  }
+
+  html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-calc-step > [class*="cw-choice-grid"] > button {
+    min-height: 40px !important;
+    padding-block: 7px !important;
+  }
+
+  html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-calc-step {
+    gap: 8px !important;
+  }
+}
+
+/* Tri stĺpce: bez krúžku, výber ukáže tmavá karta, slová sa delia. */
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(13)) .cw-opt {
+  padding: 8px 10px !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(13)) .cw-opt .cw-selection-indicator.cw-selection-indicator {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-choice-grid--features:has(> :nth-child(13)) .cw-opt__body b {
+  hyphens: auto !important;
+  overflow-wrap: anywhere !important;
+  -webkit-line-clamp: 4 !important;
+}
+
+/* Skupiny v prvom kroku dostanú výšku podľa počtu volieb, nie rovnakým dielom. */
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-interest-group[data-group="standalone"] {
+  flex-grow: 3 !important;
+}
+
+html:root body .cw-widget .cw-calculator[data-view="steps"] .cw-interest-group[data-group="combined"] {
+  flex-grow: 1 !important;
+}

@@ -10,6 +10,7 @@ export type WidgetIconName =
   | "factory"
   | "food"
   | "heart"
+  | "home"
   | "inquiry"
   | "mail"
   | "options"
@@ -60,6 +61,12 @@ const PATHS: Record<WidgetIconName, JSX.Element> = {
     <>
       <path d="M4 20V10.8l5 2.9v-3.4l5 2.9V7.5h5.5V20" />
       <path d="M3 20h18M8 20v-3.5h3.5V20" />
+    </>
+  ),
+  home: (
+    <>
+      <path d="M3.5 11.2 12 4.5l8.5 6.7" />
+      <path d="M5.8 9.6V19.5h12.4V9.6M10 19.5v-5h4v5" />
     </>
   ),
   food: (
