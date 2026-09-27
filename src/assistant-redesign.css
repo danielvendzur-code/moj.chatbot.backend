@@ -1302,21 +1302,9 @@ html[data-embed="true"] .widget-preview__surface {
   display: none;
 }
 
-.cw-rowcard[data-testid="interest-chatbot"] .cw-rowcard__icon::before {
-  content: "💬";
-}
 
-.cw-rowcard[data-testid="interest-calcbot"] .cw-rowcard__icon::before {
-  content: "🧮";
-}
 
-.cw-rowcard[data-testid="interest-product"] .cw-rowcard__icon::before {
-  content: "🎛️";
-}
 
-.cw-rowcard[data-testid="interest-custom"] .cw-rowcard__icon::before {
-  content: "✨";
-}
 
 .cw-rowcard__body {
   grid-column: 1 / 4;
@@ -1373,29 +1361,11 @@ html[data-embed="true"] .widget-preview__surface {
   display: none;
 }
 
-.cw-scard[data-testid="industry-sluzby"] .cw-scard__icon::before {
-  content: "🛠️";
-}
 
-.cw-scard[data-testid="industry-eshop"] .cw-scard__icon::before {
-  content: "🛍️";
-}
 
-.cw-scard[data-testid="industry-gastro"] .cw-scard__icon::before {
-  content: "🍽️";
-}
 
-.cw-scard[data-testid="industry-zdravie"] .cw-scard__icon::before {
-  content: "💆";
-}
 
-.cw-scard[data-testid="industry-vyroba"] .cw-scard__icon::before {
-  content: "🏭";
-}
 
-.cw-scard[data-testid="industry-ine"] .cw-scard__icon::before {
-  content: "🧩";
-}
 
 .cw-scard b {
   color: inherit;
@@ -1437,45 +1407,15 @@ html[data-embed="true"] .widget-preview__surface {
   filter: drop-shadow(0 7px 11px rgba(0, 0, 0, 0.22));
 }
 
-.cw-opt[data-testid="feature-faq"]::before {
-  content: "💬";
-}
 
-.cw-opt[data-testid="feature-dopyty"]::before {
-  content: "📋";
-}
 
-.cw-opt[data-testid="feature-cena"]::before {
-  content: "🧮";
-}
 
-.cw-opt[data-testid="feature-varianty"]::before {
-  content: "🎛️";
-}
 
-.cw-opt[data-testid="feature-rezervacie"]::before {
-  content: "📅";
-}
 
-.cw-opt[data-testid="feature-fotky"]::before {
-  content: "📎";
-}
 
-.cw-vcard[data-testid="timeline-asap"]::before {
-  content: "⚡";
-}
 
-.cw-vcard[data-testid="timeline-mesiac"]::before {
-  content: "🗓️";
-}
 
-.cw-vcard[data-testid="timeline-kvartal"]::before {
-  content: "🧭";
-}
 
-.cw-vcard[data-testid="timeline-rozhliadam"]::before {
-  content: "🔎";
-}
 
 .cw-opt__body,
 .cw-vcard > b,
