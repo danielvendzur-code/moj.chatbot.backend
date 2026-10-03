@@ -325,20 +325,7 @@ export function AssistantConversation({
           onClick={openCalculator}
         >
           <span className="cw-chat-builder__icon" aria-hidden="true">
-            <svg
-              className="cw-builder-click-cue"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                className="cw-builder-click-cue__pointer"
-                d="M8.2 4.4v10.4l2.85-2.35 2.25 5.15 2.35-1.05-2.2-5.05 3.35-.2L8.2 4.4Z"
-              />
-              <path
-                className="cw-builder-click-cue__rays"
-                d="M4.9 4.7 3.45 3.25M4.1 8H2M8.1 2V.25"
-              />
-            </svg>
+            <WidgetIcon name="options" />
           </span>
           <span className="cw-chat-builder__copy">
             <b>Vyskladať riešenie</b>
@@ -391,9 +378,10 @@ export function AssistantConversation({
       {showQuickReplies ? (
         <div
           className="cw-quick-replies"
-          aria-label="Najčastejšie otázky"
+          aria-label="Často sa pýtajú"
           data-confirming={activeQuickReply !== null || undefined}
         >
+          <span className="cw-quick-replies__title" aria-hidden="true">Často sa pýtajú</span>
           {QUICK_REPLIES.map(({ label, question }) => {
             const sending = activeQuickReply === label;
             return (
@@ -408,6 +396,7 @@ export function AssistantConversation({
                 onClick={() => chooseQuickReply(label, question)}
               >
                 <span className="cw-chip__label">{label}</span>
+                <span className="cw-chip__arrow" aria-hidden="true">→</span>
               </button>
             );
           })}

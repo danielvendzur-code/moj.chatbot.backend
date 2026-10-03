@@ -166,7 +166,7 @@ test("chat hierarchy is readable and selected chip text stays present", async ()
   assert.match(conversation, /QUICK_REPLY_HOLD_MS = 360/);
   assert.match(conversation, /activeQuickReply !== null/);
   assert.match(conversation, /className="cw-chip__label"/);
-  assert.match(conversation, /className="cw-builder-click-cue"/);
+  assert.match(conversation, /<WidgetIcon name="options" \/>/);
   assert.doesNotMatch(conversation, />\s*01\s*</);
   assert.match(conversation, /aria-pressed=\{sending\}/);
   assert.match(conversation, /data-started=\{conversationStarted/);

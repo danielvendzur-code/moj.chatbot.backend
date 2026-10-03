@@ -1,3 +1,4 @@
+import faqQuickRepliesCss from "../faq-quick-replies-final.css?inline";
 import limeWhiteCss from "../lime-white-widget-final.css?inline";
 import whiteGreenLockCss from "../white-green-identity-lock.css?inline";
 import approvedOptionOneCss from "../approved-option-one-widget-final.css?inline";
@@ -21,6 +22,6 @@ export function installLimeWhiteStyles(): void {
   const style = document.createElement("style");
   style.id = STYLE_ID;
   style.dataset.dvAssistantTheme = "site-white-forest-lime";
-  style.textContent = `${limeWhiteCss}\n${whiteGreenLockCss}\n${approvedOptionOneCss}\n${professionalHarmonyCss}\n${siteGreenBrandCss}\n${siteGreenChatCss}\n${siteGreenConfigCss}\n${siteGreenMobileCss}\n${webAlignedPolishCss}\n${headerTabsCorrectionCss}`;
+  style.textContent = `${limeWhiteCss}\n${whiteGreenLockCss}\n${approvedOptionOneCss}\n${professionalHarmonyCss}\n${siteGreenBrandCss}\n${siteGreenChatCss}\n${siteGreenConfigCss}\n${siteGreenMobileCss}\n${webAlignedPolishCss}\n${headerTabsCorrectionCss}\n${faqQuickRepliesCss}`;
   document.head.appendChild(style);
 }
