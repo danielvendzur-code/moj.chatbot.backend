@@ -100,7 +100,7 @@ jobs:
           must(/id:\s*"tracking"/.test(flow), 'order tracking feature missing');
           must(/id:\s*"order-change"/.test(flow), 'order change feature missing');
           must(/id:\s*"returns"/.test(flow), 'returns feature missing');
-          must(/product:\s*"product"/.test(flow), 'product preset mapping missing');
+          must(/product:\s*"configurator"/.test(flow), 'product configurator preset mapping missing');
           must(types.includes('"product"'), 'product preset type missing');
           must(bridge.includes('"product"'), 'product preset bridge missing');
           must(!/(#2aa|#1fa|teal|turquoise)/i.test(css), 'forbidden colour remains');
