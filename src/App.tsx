@@ -13,6 +13,7 @@ import "./requested-august-widget.css";
 import "./contact-chip-glow-final.css";
 import "./logo-match-final.css";
 import "./sep08-picker-final.css";
+import "./faq-quick-replies-final.css";
 
 export default function App(): JSX.Element {
   const embedMode = isEmbedMode();

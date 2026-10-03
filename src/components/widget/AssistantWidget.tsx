@@ -288,7 +288,13 @@ export function AssistantWidget({
           aria-controls="chameleon-widget-panel"
           onClick={() => open(mode, preset)}
         >
-          <BubbleLogo size="launcher" />
+          <svg className="cw-launcher__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 3.5a8.5 8.5 0 0 0-7.4 12.7L3.5 20.5l4.4-1.1A8.5 8.5 0 1 0 12 3.5Z" />
+            <circle cx="8.3" cy="12" r=".9" fill="currentColor" stroke="none" />
+            <circle cx="12" cy="12" r=".9" fill="currentColor" stroke="none" />
+            <circle cx="15.7" cy="12" r=".9" fill="currentColor" stroke="none" />
+          </svg>
         </button>
       </div>
 
