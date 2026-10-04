@@ -12,5 +12,16 @@
     "api/chat.ts": {
       "maxDuration": 30
     }
-  }
+  },
+  "headers": [
+    {
+      "source": "/widget.css",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ]
 }
