@@ -1,12 +1,13 @@
 import { test, expect } from "@playwright/test";
 
-const home = "http://127.0.0.1:3000";
+const home = process.env.PREMIUM_WEB_ORIGIN || "http://127.0.0.1:3000";
 
 test("desktop hero, FAQ keyboard controls, comparison and CTA work together", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(home, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Odmietnuť analytiku" }).click();
   await expect(page.locator("#top img")).toHaveCount(3);
   await expect(page.locator("#pred-a-po article")).toHaveCount(2);
   await expect(page.locator(".redesign-cursor")).toHaveCount(0);
@@ -47,6 +48,7 @@ test("mobile navigation closes with Escape and outside click, touch keeps native
   });
   const page = await context.newPage();
   await page.goto(home, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Odmietnuť analytiku" }).click();
   const toggle = page.locator(".redesign-menu-toggle");
   await toggle.click();
   await expect(toggle).toHaveAttribute("aria-expanded", "true");

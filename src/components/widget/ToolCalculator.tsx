@@ -1,3 +1,4 @@
+import { PrivacyNotice } from "./PrivacyNotice";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { drawCheck } from "../../lib/motion";
 import { track } from "../../lib/analytics";
@@ -850,6 +851,8 @@ export function ToolCalculator({
                     </details>
                   </div>
                 </div>
+
+                <PrivacyNotice />
 
                 {/* Closed by default and titled with what was actually chosen —
                   "4 položky" told the visitor nothing about their own answers. */}

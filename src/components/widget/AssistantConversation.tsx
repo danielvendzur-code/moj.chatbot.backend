@@ -1,3 +1,4 @@
+import { PrivacyNotice } from "./PrivacyNotice";
 import { useEffect, useRef, useState } from "react";
 import { sendChat, type ChatTurn } from "../../lib/assistantApi";
 import {
@@ -378,6 +379,8 @@ export function AssistantConversation({
           })}
         </div>
       ) : null}
+
+      <PrivacyNotice chat />
 
       <div
         className="cw-inputbar"

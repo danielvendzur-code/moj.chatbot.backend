@@ -1,3 +1,4 @@
+import { PrivacyNotice } from "./PrivacyNotice";
 import { useEffect, useId, useRef, useState } from "react";
 import { track } from "../../lib/analytics";
 import { buildProposalNumber } from "../../lib/assistantFlow";
@@ -296,6 +297,7 @@ export function MessageSheet({ onClose }: MessageSheetProps): JSX.Element {
           </div>
 
           <footer className="cw-sheet__foot">
+            <PrivacyNotice />
             {error ? (
               <p className="cw-lead__status" role="alert">
                 {error}

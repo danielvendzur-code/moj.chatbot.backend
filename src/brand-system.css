@@ -292,3 +292,21 @@ html:root
   color: var(--cw-lime) !important;
   -webkit-text-fill-color: var(--cw-lime) !important;
 }
+
+/* Privacy information stays close to the action, including on touch screens. */
+html body .cw-widget .cw-privacy-notice {
+  flex: 0 0 auto;
+  margin: 8px 16px;
+  color: #56605a;
+  font: 400 11px/1.45 'Geist', system-ui, sans-serif;
+}
+html body .cw-widget .cw-privacy-notice a {
+  color: #101713;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+html body .cw-widget .cw-privacy-notice a:focus-visible {
+  outline: 2px solid #1f5b47;
+  outline-offset: 2px;
+}
+html body .cw-widget .cw-sheet__foot .cw-privacy-notice { margin: 0 0 8px; }
