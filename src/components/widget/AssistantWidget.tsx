@@ -274,8 +274,8 @@ export function AssistantWidget({
       <div className="cw-launcher-dock">
         {/* Previous contract wording, not rendered: Vyskladajte si asistenta na počkanie. */}
         <div className="cw-launcher-preview" aria-hidden="true">
-          <strong>Vyskladajte si riešenie na počkanie</strong>
-          <span>Návrh máte do minúty.</span>
+          <strong>Otázka k vášmu webu?</strong>
+          <span>Napíšte nám, s čím potrebujete pomôcť.</span>
         </div>
         <button
           id="chameleon-widget-launcher"
@@ -424,7 +424,6 @@ export function AssistantWidget({
               <AssistantConversation
                 active={mode === "assistant"}
                 resetToken={resetToken}
-                onOpenCalculator={() => switchMode("calculator")}
               />
             </div>
             <div

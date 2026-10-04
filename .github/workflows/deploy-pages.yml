@@ -55,7 +55,7 @@ jobs:
       - name: Create immutable build metadata
         shell: bash
         run: |
-          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"premium-motion-20260829-v14"},null,2))'
+          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"premium-redesign-20261004-v16"},null,2))'
 
       - name: Validate production artifacts
         shell: bash
@@ -85,7 +85,7 @@ jobs:
             if (!condition) throw new Error(message);
           };
 
-          must(js.includes('premium-motion-20260829-v14'), 'current widget version missing');
+          must(js.includes('premium-redesign-20261004-v16'), 'current widget version missing');
           must(css.includes('#dv-assistant-root'), 'production embed launcher authority missing');
           must(css.includes('cw-choice-grid'), 'choice grid missing');
           must(css.includes('cw-selection-indicator'), 'selection indicator missing');
@@ -94,7 +94,10 @@ jobs:
           must(widget.includes('liquid-glass-final.css'), 'final glass import missing');
           must(!main.includes('installWidgetSpotlight') && !embed.includes('installWidgetSpotlight'), 'legacy spotlight still mounted');
           must(lead.includes('api/lead'), 'lead API missing');
-          must(conversation.includes('Vyskladať riešenie'), 'builder CTA missing');
+          must(!conversation.includes('cw-chat-builder'), 'removed quick builder card remains');
+          must(flow.includes('Ktoré riešenia chcete kombinovať?'), 'combination question missing');
+          must(/advisor:\s*"advisor"/.test(flow), 'advisor preset missing');
+          must(fs.existsSync('dist/fonts/brand.css'), 'self-hosted brand font missing');
           must(/interest:\s*\[/.test(flow), 'first question missing');
           must(/id:\s*"custom"/.test(flow), 'safe fallback option missing');
           must(/id:\s*"tracking"/.test(flow), 'order tracking feature missing');
@@ -107,7 +110,7 @@ jobs:
           must(!calculator.includes('cw-choice-arrow'), 'legacy choice arrow remains');
           must(!js.includes('REPLACE-ME'), 'placeholder remains');
           must(meta.sourceSha === process.env.GITHUB_SHA, 'build metadata SHA mismatch');
-          must(meta.version === 'premium-motion-20260829-v14', 'build metadata version mismatch');
+          must(meta.version === 'premium-redesign-20261004-v16', 'build metadata version mismatch');
           NODE
 
       - name: Configure GitHub Pages
@@ -162,7 +165,7 @@ jobs:
           }
 
           verify "/" "Môj Chatbot"
-          verify "/widget.js" "premium-motion-20260829-v14"
+          verify "/widget.js" "premium-redesign-20261004-v16"
           verify "/widget.css" "#dv-assistant-root"
           verify "/widget.css" "--restored-forest"
           verify "/build-meta.json" "$SOURCE_SHA"

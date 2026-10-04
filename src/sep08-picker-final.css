@@ -24,15 +24,6 @@
   gap: 7px;
 }
 
-/* Product requirement: first screen = Chatbot / Kalkulačka / Konfigurátor /
-   Kombinované riešenie. The generic combined card reuses the backwards-
-   compatible calcbot id; the older specific product and custom choice stay
-   hidden. */
-.cw-widget .cw-interest-group[data-group="custom"],
-.cw-widget .cw-interest-group[data-group="combined"] .cw-rowcard[data-testid="interest-product"] {
-  display: none !important;
-}
-
 .cw-widget .cw-interest-group[data-group="standalone"],
 .cw-widget .cw-interest-group[data-group="combined"] {
   gap: 0;

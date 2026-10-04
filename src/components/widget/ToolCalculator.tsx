@@ -1,3 +1,4 @@
+import { PrivacyNotice } from "./PrivacyNotice";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { drawCheck } from "../../lib/motion";
 import { track } from "../../lib/analytics";
@@ -13,10 +14,14 @@ import {
   INTERESTS,
   labelOf,
   PRESET_TO_INTEREST,
-  QUESTION_STEPS,
   QUESTIONS,
+  COMBINABLE_TOOLS,
+  isCombinedInterest,
+  stepsForInterest,
+  optionIdsForTools,
+  detailsQuestion,
+  type ToolId,
   RECOMMENDED_FEATURES,
-  STEPS,
   TIMELINES,
 } from "../../lib/assistantFlow";
 import type { AssistantPreset, InterestId } from "../../types/assistant";
@@ -67,13 +72,13 @@ const INTEREST_GROUPS: Array<{
     id: "standalone",
     label: "Samostatné riešenia",
     description: "Jeden nástroj, jedna jasná úloha.",
-    items: ["chatbot", "calculator", "configurator"],
+    items: ["chatbot", "calculator", "configurator", "advisor"],
   },
   {
     id: "combined",
     label: "Spojené riešenia",
-    description: "Chatbot spolu s výpočtom alebo výberom.",
-    items: ["calcbot", "product", "all"],
+    description: "Vy rozhodnete, ktoré nástroje majú spolupracovať.",
+    items: ["calcbot"],
   },
   {
     id: "custom",
@@ -114,6 +119,12 @@ export function ToolCalculator({
   const [composing, setComposing] = useState(false);
   const [interest, setInterest] = useState<InterestId | null>(initialInterest);
   const [customText, setCustomText] = useState("");
+  const [combination, setCombination] = useState<ToolId[]>([]);
+  const flowSteps = useMemo(() => stepsForInterest(interest), [interest]);
+  const questionSteps = useMemo(
+    () => flowSteps.filter((id) => id !== "contact"),
+    [flowSteps],
+  );
   const [industry, setIndustry] = useState<string | null>(null);
   const [features, setFeatures] = useState<string[]>(
     initialInterest ? RECOMMENDED_FEATURES[initialInterest] : [],
@@ -139,6 +150,7 @@ export function ToolCalculator({
     setStep(0);
     setInterest(nextInterest);
     setCustomText("");
+    setCombination([]);
     setIndustry(null);
     setFeatures(nextInterest ? RECOMMENDED_FEATURES[nextInterest] : []);
     setDetails([]);
@@ -166,33 +178,43 @@ export function ToolCalculator({
       );
     }
     track("config_step_view", {
-      step: STEPS[visibleStep],
+      step: flowSteps[visibleStep],
       index: visibleStep + 1,
     });
-  }, [active, visibleStep, resetToken]);
+  }, [active, visibleStep, resetToken, flowSteps]);
 
   useEffect(() => {
     if (sendState === "done") drawCheck(thanksIconRef.current);
   }, [sendState]);
 
-  const stepId = STEPS[visibleStep];
-  const [title, subtitle] = QUESTIONS[stepId];
-  const isLast = visibleStep === STEPS.length - 1;
-  const questionIndex = QUESTION_STEPS.indexOf(stepId);
+  const stepId = flowSteps[visibleStep];
+  const [title, subtitle] =
+    stepId === "details" ? detailsQuestion(interest) : QUESTIONS[stepId];
+  const isLast = visibleStep === flowSteps.length - 1;
+  const questionIndex =
+    stepId === "contact" ? -1 : questionSteps.indexOf(stepId);
 
   const visibleFeatures = useMemo(() => {
-    const ids = interest ? FEATURE_IDS_BY_INTEREST[interest] : [];
+    const ids = optionIdsForTools(
+      FEATURE_IDS_BY_INTEREST,
+      interest,
+      combination,
+    );
     return ids
       .map((id) => FEATURES.find((option) => option.id === id))
       .filter((option): option is (typeof FEATURES)[number] => Boolean(option));
-  }, [interest]);
+  }, [interest, combination]);
 
   const visibleDetails = useMemo(() => {
-    const ids = interest ? DETAIL_IDS_BY_INTEREST[interest] : [];
+    const ids = optionIdsForTools(
+      DETAIL_IDS_BY_INTEREST,
+      interest,
+      combination,
+    );
     return ids
       .map((id) => DETAILS.find((option) => option.id === id))
       .filter((option): option is (typeof DETAILS)[number] => Boolean(option));
-  }, [interest]);
+  }, [interest, combination]);
 
   const featureLabels = useMemo(
     () =>
@@ -218,6 +240,8 @@ export function ToolCalculator({
           interest !== null &&
           (interest !== "custom" || customText.trim().length > 0)
         );
+      case "solutions":
+        return combination.length >= 2;
       case "features":
         return true;
       case "details":
@@ -232,10 +256,35 @@ export function ToolCalculator({
   })();
 
   const pickInterest = (id: InterestId) => {
+    if (id === interest) return;
     setInterest(id);
+    setCombination([]);
     setFeatures(RECOMMENDED_FEATURES[id]);
     setDetails([]);
     track("config_interest_select", { interest: id });
+  };
+
+  const toggleTool = (id: ToolId) => {
+    const next = combination.includes(id)
+      ? combination.filter((item) => item !== id)
+      : [...combination, id];
+    setCombination(next);
+    const allowedFeatures = optionIdsForTools(
+      FEATURE_IDS_BY_INTEREST,
+      interest,
+      next,
+    );
+    const allowedDetails = optionIdsForTools(
+      DETAIL_IDS_BY_INTEREST,
+      interest,
+      next,
+    );
+    setFeatures((current) =>
+      current.filter((item) => allowedFeatures.includes(item)),
+    );
+    setDetails((current) =>
+      current.filter((item) => allowedDetails.includes(item)),
+    );
   };
 
   const toggleFeature = (id: string) => {
@@ -264,7 +313,9 @@ export function ToolCalculator({
       "Web má",
       interest === "custom"
         ? "Poradiť mi, čo sa hodí"
-        : labelOf(INTERESTS, interest),
+        : isCombinedInterest(interest)
+          ? combination.map((id) => labelOf(INTERESTS, id)).join(" + ")
+          : labelOf(INTERESTS, interest),
     ],
     [
       "Doplnkové funkcie",
@@ -285,7 +336,8 @@ export function ToolCalculator({
      was friction in front of a form nobody is obliged to fill in. */
   const missingContact = validationAttempted && !hasValidEmail && !safePhone;
   const emailInvalid =
-    validationAttempted && ((Boolean(safeEmail) && !hasValidEmail) || missingContact);
+    validationAttempted &&
+    ((Boolean(safeEmail) && !hasValidEmail) || missingContact);
   const phoneInvalid = missingContact;
 
   const submitLead = async () => {
@@ -301,7 +353,9 @@ export function ToolCalculator({
       return;
     }
     if (!hasValidEmail && !safePhone) {
-      setLeadError("Nechajte mi e-mail alebo telefón, nech vám návrh viem poslať.");
+      setLeadError(
+        "Nechajte mi e-mail alebo telefón, nech vám návrh viem poslať.",
+      );
       return;
     }
 
@@ -340,7 +394,7 @@ export function ToolCalculator({
         consent: true,
       });
       setHandedToMailClient(!result.delivered);
-      setFallbackHref(result.delivered ? "" : result.fallback ?? "");
+      setFallbackHref(result.delivered ? "" : (result.fallback ?? ""));
       setSendState("done");
       track("lead_submit_success", { delivered: result.delivered });
     } catch (error) {
@@ -392,15 +446,15 @@ export function ToolCalculator({
           </div>
           <div className="cw-thanks__actions">
             {fallbackHref ? (
+              <a className="ghost" href={fallbackHref}>
+                <WidgetIcon name="send" /> Otvoriť pripravený e-mail
+              </a>
+            ) : (
               <button
                 type="button"
                 className="ghost"
-                onClick={() => window.location.assign(fallbackHref)}
+                onClick={() => restart(null)}
               >
-                <WidgetIcon name="send" /> Otvoriť pripravený e-mail
-              </button>
-            ) : (
-              <button type="button" className="ghost" onClick={() => restart(null)}>
                 <WidgetIcon name="reset" /> Vyskladať znova
               </button>
             )}
@@ -445,15 +499,17 @@ export function ToolCalculator({
         <div className="cw-progress__main">
           <span className="cw-progress__count" aria-live="polite">
             {questionIndex === -1
-              ? `Krok ${visibleStep + 1} z ${STEPS.length} · Kontakt`
-              : `Otázka ${questionIndex + 1} zo ${QUESTION_STEPS.length}`}
+              ? `Krok ${visibleStep + 1} z ${flowSteps.length} · Kontakt`
+              : `Otázka ${questionIndex + 1} zo ${questionSteps.length}`}
           </span>
           <div
             className="cw-progress__dots"
             aria-hidden="true"
-            style={{ gridTemplateColumns: `repeat(${STEPS.length}, minmax(0, 1fr))` }}
+            style={{
+              gridTemplateColumns: `repeat(${flowSteps.length}, minmax(0, 1fr))`,
+            }}
           >
-            {STEPS.map((item, index) => (
+            {flowSteps.map((item, index) => (
               <i
                 key={item}
                 data-current={index === visibleStep || undefined}
@@ -466,306 +522,362 @@ export function ToolCalculator({
 
       <div className="cw-scroll-shell">
         <div className="cw-calc-body" ref={bodyRef}>
-        <section
-          className="cw-calc-step"
-          key={stepId}
-          data-step={stepId}
-          data-leaving={leaving || undefined}
-          data-direction={direction}
-        >
-          <header className="cw-step-head">
-            <h3 className="cw-q" ref={questionRef} tabIndex={-1}>
-              {title}
-            </h3>
-            <p className="cw-q-sub">{subtitle}</p>
-          </header>
+          <section
+            className="cw-calc-step"
+            key={stepId}
+            data-step={stepId}
+            data-leaving={leaving || undefined}
+            data-direction={direction}
+          >
+            <header className="cw-step-head">
+              <h3 className="cw-q" ref={questionRef} tabIndex={-1}>
+                {title}
+              </h3>
+              <p className="cw-q-sub">{subtitle}</p>
+            </header>
 
-          {stepId === "interest" ? (
-            <>
-              <div className="cw-interest-groups">
-                {INTEREST_GROUPS.map((group) => (
-                  <section
-                    className="cw-interest-group"
-                    data-group={group.id}
-                    key={group.id}
-                    aria-labelledby={`cw-interest-group-${group.id}`}
-                  >
-                    <header className="cw-interest-group__head">
-                      <strong id={`cw-interest-group-${group.id}`}>
-                        {group.label}
-                      </strong>
-                      <span>{group.description}</span>
-                    </header>
-                    <div className="cw-choice-grid cw-choice-grid--interest">
-                      {group.items.map((interestId) => {
-                        const option = INTERESTS.find(
-                          (item) => item.id === interestId,
-                        );
-                        if (!option) return null;
-                        const selected = interest === option.id;
-                        return (
-                          <button
-                            type="button"
-                            className="cw-rowcard"
-                            data-testid={`interest-${option.id}`}
-                            data-selected={selected}
-                            aria-pressed={selected}
-                            key={`${stepId}-${option.id}`}
-                            onClick={() => pickInterest(option.id)}
-                          >
-                            <span className="cw-rowcard__icon">
-                              <WidgetIcon name={option.icon} />
-                            </span>
-                            <span className="cw-rowcard__body">
-                              <span className="cw-rowcard__title">
-                                <b>{option.label}</b>
+            {stepId === "interest" ? (
+              <>
+                <div className="cw-interest-groups">
+                  {INTEREST_GROUPS.map((group) => (
+                    <section
+                      className="cw-interest-group"
+                      data-group={group.id}
+                      key={group.id}
+                      aria-labelledby={`cw-interest-group-${group.id}`}
+                    >
+                      <header className="cw-interest-group__head">
+                        <strong id={`cw-interest-group-${group.id}`}>
+                          {group.label}
+                        </strong>
+                        <span>{group.description}</span>
+                      </header>
+                      <div className="cw-choice-grid cw-choice-grid--interest">
+                        {group.items.map((interestId) => {
+                          const option = INTERESTS.find(
+                            (item) => item.id === interestId,
+                          );
+                          if (!option) return null;
+                          const selected = interest === option.id;
+                          return (
+                            <button
+                              type="button"
+                              className="cw-rowcard"
+                              data-testid={`interest-${option.id}`}
+                              data-selected={selected}
+                              aria-pressed={selected}
+                              key={`${stepId}-${option.id}`}
+                              onClick={() => pickInterest(option.id)}
+                            >
+                              <span className="cw-rowcard__icon">
+                                <WidgetIcon name={option.icon} />
                               </span>
-                              <small>{option.description}</small>
-                            </span>
-                            <SelectionIndicator selected={selected} />
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </section>
-                ))}
-              </div>
-              {interest === "custom" ? (
-                <label className="cw-custom">
-                  <span>Čo vás dnes najviac zdržuje?</span>
-                  <textarea
-                    value={customText}
-                    onChange={(event) => setCustomText(event.target.value)}
-                    placeholder="Napríklad opakované otázky, cenové ponuky alebo výber produktu…"
-                    rows={3}
-                  />
-                </label>
-              ) : null}
-            </>
-          ) : null}
-
-          {stepId === "features" ? (
-            <div className="cw-choice-grid cw-choice-grid--features">
-              {visibleFeatures.map((option) => {
-                const selected = features.includes(option.id);
-                return (
-                  <button
-                    type="button"
-                    className="cw-opt"
-                    data-testid={`feature-${option.id}`}
-                    data-selected={selected}
-                    aria-pressed={selected}
-                    key={`${stepId}-${option.id}`}
-                    onClick={() => toggleFeature(option.id)}
-                  >
-                    <span className="cw-opt__body">
-                      <b>{option.label}</b>
-                      <span>{option.description}</span>
-                    </span>
-                    <SelectionIndicator selected={selected} />
-                  </button>
-                );
-              })}
-            </div>
-          ) : null}
-
-          {stepId === "details" ? (
-            <div className="cw-choice-grid cw-choice-grid--features cw-choice-grid--details">
-              {visibleDetails.map((option) => {
-                const selected = details.includes(option.id);
-                return (
-                  <button
-                    type="button"
-                    className="cw-opt"
-                    data-testid={`detail-${option.id}`}
-                    data-selected={selected}
-                    aria-pressed={selected}
-                    key={`${stepId}-${option.id}`}
-                    onClick={() => toggleDetail(option.id)}
-                  >
-                    <span className="cw-opt__body">
-                      <b>{option.label}</b>
-                      <span>{option.description}</span>
-                    </span>
-                    <SelectionIndicator selected={selected} />
-                  </button>
-                );
-              })}
-            </div>
-          ) : null}
-
-          {stepId === "industry" ? (
-            <div className="cw-choice-grid cw-choice-grid--industry">
-              {INDUSTRIES.map((option) => {
-                const selected = industry === option.id;
-                return (
-                  <button
-                    type="button"
-                    className="cw-scard"
-                    data-testid={`industry-${option.id}`}
-                    data-selected={selected}
-                    aria-pressed={selected}
-                    key={`${stepId}-${option.id}`}
-                    onClick={() => setIndustry(option.id)}
-                  >
-                    <span className="cw-scard__icon">
-                      <WidgetIcon name={option.icon} />
-                    </span>
-                    <b>{option.label}</b>
-                    <SelectionIndicator selected={selected} />
-                  </button>
-                );
-              })}
-            </div>
-          ) : null}
-
-          {stepId === "timeline" ? (
-            <div className="cw-choice-grid cw-choice-grid--timeline">
-              {TIMELINES.map((option) => {
-                const selected = timeline === option.id;
-                return (
-                  <button
-                    type="button"
-                    className="cw-vcard"
-                    data-testid={`timeline-${option.id}`}
-                    data-selected={selected}
-                    aria-pressed={selected}
-                    key={`${stepId}-${option.id}`}
-                    onClick={() => setTimeline(option.id)}
-                  >
-                    <span className="cw-vcard__copy">
-                      <b>{option.label}</b>
-                      <span>{option.description}</span>
-                    </span>
-                    <SelectionIndicator selected={selected} />
-                  </button>
-                );
-              })}
-            </div>
-          ) : null}
-
-          {stepId === "contact" ? (
-            <div className="cw-contact-stage">
-              <ul className="cw-reassure" aria-label="Čo pre vás platí">
-                {REASSURANCES.map((item) => (
-                  <li key={item}>
-                    <WidgetIcon name="check" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="cw-lead">
-                <div className="cw-lead__form">
-                  <label className="cw-field">
-                    <span>Meno <em>*</em></span>
-                    <input
-                      value={lead.name}
-                      onChange={(event) => updateLead({ name: event.target.value })}
-                      placeholder="Vaše meno"
-                      autoComplete="name"
-                      enterKeyHint="next"
-                      aria-invalid={nameInvalid}
-                      aria-describedby={leadError ? "cw-lead-error" : undefined}
+                              <span className="cw-rowcard__body">
+                                <span className="cw-rowcard__title">
+                                  <b>{option.label}</b>
+                                </span>
+                                <small>{option.description}</small>
+                              </span>
+                              <SelectionIndicator selected={selected} />
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </section>
+                  ))}
+                </div>
+                {interest === "custom" ? (
+                  <label className="cw-custom">
+                    <span>Čo vás dnes najviac zdržuje?</span>
+                    <textarea
+                      value={customText}
+                      onChange={(event) => setCustomText(event.target.value)}
+                      placeholder="Napríklad opakované otázky, cenové ponuky alebo výber produktu…"
+                      rows={3}
                     />
                   </label>
-                  <div className="cw-lead__row">
-                    <label className="cw-field">
-                      <span>E-mail <small>alebo telefón</small></span>
-                      <input
-                        value={lead.email}
-                        onChange={(event) => updateLead({ email: event.target.value })}
-                        placeholder="meno@firma.sk"
-                        type="email"
-                        inputMode="email"
-                        autoComplete="email"
-                        enterKeyHint="next"
-                        aria-invalid={emailInvalid}
-                        aria-describedby={leadError ? "cw-lead-error" : undefined}
-                      />
-                    </label>
-                    <label className="cw-field">
-                      <span>Telefón <small>alebo e-mail</small></span>
-                      <input
-                        value={lead.phone}
-                        onChange={(event) => updateLead({ phone: event.target.value })}
-                        placeholder="+421 …"
-                        autoComplete="tel"
-                        inputMode="tel"
-                        enterKeyHint="done"
-                        onKeyDown={(event) => {
-                          if (event.key !== "Enter") return;
-                          event.preventDefault();
-                          void submitLead();
-                        }}
-                        aria-invalid={phoneInvalid}
-                        aria-describedby={leadError ? "cw-lead-error" : undefined}
-                      />
-                    </label>
-                  </div>
+                ) : null}
+              </>
+            ) : null}
 
-                  <details className="cw-lead__optional">
-                    <summary>Pridať firmu, web alebo poznámku</summary>
-                    <div className="cw-lead__optional-body">
-                      <div className="cw-lead__row">
-                        <label className="cw-field">
-                          <span>Firma</span>
-                          <input
-                            value={lead.company}
-                            onChange={(event) => updateLead({ company: event.target.value })}
-                            placeholder="Názov firmy"
-                            autoComplete="organization"
-                          />
-                        </label>
-                        <label className="cw-field">
-                          <span>Web</span>
-                          <input
-                            value={lead.web}
-                            onChange={(event) => updateLead({ web: event.target.value })}
-                            placeholder="vasafirma.sk"
-                            autoComplete="url"
-                            inputMode="url"
-                          />
-                        </label>
-                      </div>
+            {stepId === "solutions" ? (
+              <div className="cw-choice-grid cw-choice-grid--solutions">
+                {COMBINABLE_TOOLS.map((option) => {
+                  const selected = combination.includes(option.id);
+                  return (
+                    <button
+                      type="button"
+                      className="cw-opt"
+                      data-testid={`solution-${option.id}`}
+                      data-selected={selected}
+                      aria-pressed={selected}
+                      key={option.id}
+                      onClick={() => toggleTool(option.id)}
+                    >
+                      <span className="cw-opt__body">
+                        <b>{option.label}</b>
+                        <span>{option.description}</span>
+                      </span>
+                      <SelectionIndicator selected={selected} />
+                    </button>
+                  );
+                })}
+                <p className="cw-combination-hint" role="status">
+                  {combination.length < 2
+                    ? "Označte aspoň dva nástroje."
+                    : `${combination.length} nástroje vo vašej kombinácii.`}
+                </p>
+              </div>
+            ) : null}
+
+            {stepId === "features" ? (
+              <div className="cw-choice-grid cw-choice-grid--features">
+                {visibleFeatures.map((option) => {
+                  const selected = features.includes(option.id);
+                  return (
+                    <button
+                      type="button"
+                      className="cw-opt"
+                      data-testid={`feature-${option.id}`}
+                      data-selected={selected}
+                      aria-pressed={selected}
+                      key={`${stepId}-${option.id}`}
+                      onClick={() => toggleFeature(option.id)}
+                    >
+                      <span className="cw-opt__body">
+                        <b>{option.label}</b>
+                        <span>{option.description}</span>
+                      </span>
+                      <SelectionIndicator selected={selected} />
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+
+            {stepId === "details" ? (
+              <div className="cw-choice-grid cw-choice-grid--features cw-choice-grid--details">
+                {visibleDetails.map((option) => {
+                  const selected = details.includes(option.id);
+                  return (
+                    <button
+                      type="button"
+                      className="cw-opt"
+                      data-testid={`detail-${option.id}`}
+                      data-selected={selected}
+                      aria-pressed={selected}
+                      key={`${stepId}-${option.id}`}
+                      onClick={() => toggleDetail(option.id)}
+                    >
+                      <span className="cw-opt__body">
+                        <b>{option.label}</b>
+                        <span>{option.description}</span>
+                      </span>
+                      <SelectionIndicator selected={selected} />
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+
+            {stepId === "industry" ? (
+              <div className="cw-choice-grid cw-choice-grid--industry">
+                {INDUSTRIES.map((option) => {
+                  const selected = industry === option.id;
+                  return (
+                    <button
+                      type="button"
+                      className="cw-scard"
+                      data-testid={`industry-${option.id}`}
+                      data-selected={selected}
+                      aria-pressed={selected}
+                      key={`${stepId}-${option.id}`}
+                      onClick={() => setIndustry(option.id)}
+                    >
+                      <span className="cw-scard__icon">
+                        <WidgetIcon name={option.icon} />
+                      </span>
+                      <b>{option.label}</b>
+                      <SelectionIndicator selected={selected} />
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+
+            {stepId === "timeline" ? (
+              <div className="cw-choice-grid cw-choice-grid--timeline">
+                {TIMELINES.map((option) => {
+                  const selected = timeline === option.id;
+                  return (
+                    <button
+                      type="button"
+                      className="cw-vcard"
+                      data-testid={`timeline-${option.id}`}
+                      data-selected={selected}
+                      aria-pressed={selected}
+                      key={`${stepId}-${option.id}`}
+                      onClick={() => setTimeline(option.id)}
+                    >
+                      <span className="cw-vcard__copy">
+                        <b>{option.label}</b>
+                        <span>{option.description}</span>
+                      </span>
+                      <SelectionIndicator selected={selected} />
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+
+            {stepId === "contact" ? (
+              <div className="cw-contact-stage">
+                <ul className="cw-reassure" aria-label="Čo pre vás platí">
+                  {REASSURANCES.map((item) => (
+                    <li key={item}>
+                      <WidgetIcon name="check" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="cw-lead">
+                  <div className="cw-lead__form">
+                    <label className="cw-field">
+                      <span>
+                        Meno <em>*</em>
+                      </span>
+                      <input
+                        value={lead.name}
+                        onChange={(event) =>
+                          updateLead({ name: event.target.value })
+                        }
+                        placeholder="Vaše meno"
+                        autoComplete="name"
+                        enterKeyHint="next"
+                        aria-invalid={nameInvalid}
+                        aria-describedby={
+                          leadError ? "cw-lead-error" : undefined
+                        }
+                      />
+                    </label>
+                    <div className="cw-lead__row">
                       <label className="cw-field">
-                        <span>Poznámka</span>
-                        <textarea
-                          value={lead.note}
-                          onChange={(event) => updateLead({ note: event.target.value })}
-                          placeholder="Čo by som mal ešte vedieť?"
-                          rows={2}
+                        <span>
+                          E-mail <small>alebo telefón</small>
+                        </span>
+                        <input
+                          value={lead.email}
+                          onChange={(event) =>
+                            updateLead({ email: event.target.value })
+                          }
+                          placeholder="meno@firma.sk"
+                          type="email"
+                          inputMode="email"
+                          autoComplete="email"
+                          enterKeyHint="next"
+                          aria-invalid={emailInvalid}
+                          aria-describedby={
+                            leadError ? "cw-lead-error" : undefined
+                          }
+                        />
+                      </label>
+                      <label className="cw-field">
+                        <span>
+                          Telefón <small>alebo e-mail</small>
+                        </span>
+                        <input
+                          value={lead.phone}
+                          onChange={(event) =>
+                            updateLead({ phone: event.target.value })
+                          }
+                          placeholder="+421 …"
+                          autoComplete="tel"
+                          inputMode="tel"
+                          enterKeyHint="done"
+                          onKeyDown={(event) => {
+                            if (event.key !== "Enter") return;
+                            event.preventDefault();
+                            void submitLead();
+                          }}
+                          aria-invalid={phoneInvalid}
+                          aria-describedby={
+                            leadError ? "cw-lead-error" : undefined
+                          }
                         />
                       </label>
                     </div>
-                  </details>
-                </div>
-              </div>
 
-              {/* Closed by default and titled with what was actually chosen —
-                  "4 položky" told the visitor nothing about their own answers. */}
-              <details className="cw-summary">
-                <summary>
-                  <span>Váš výber</span>
-                  <small>{summaryRows[0][1]}</small>
-                </summary>
-                <div className="cw-summary__body">
-                  {summaryRows.map(([label, value]) => (
-                    <div className="cw-summary__row" key={label}>
-                      <span>{label}</span>
-                      <b>{value}</b>
-                    </div>
-                  ))}
-                  {interest === "custom" && customText.trim() ? (
-                    <div className="cw-summary__row cw-summary__row--note">
-                      <span>Napísali ste</span>
-                      <b>{customText.trim()}</b>
-                    </div>
-                  ) : null}
+                    <details className="cw-lead__optional">
+                      <summary>Pridať firmu, web alebo poznámku</summary>
+                      <div className="cw-lead__optional-body">
+                        <div className="cw-lead__row">
+                          <label className="cw-field">
+                            <span>Firma</span>
+                            <input
+                              value={lead.company}
+                              onChange={(event) =>
+                                updateLead({ company: event.target.value })
+                              }
+                              placeholder="Názov firmy"
+                              autoComplete="organization"
+                            />
+                          </label>
+                          <label className="cw-field">
+                            <span>Web</span>
+                            <input
+                              value={lead.web}
+                              onChange={(event) =>
+                                updateLead({ web: event.target.value })
+                              }
+                              placeholder="vasafirma.sk"
+                              autoComplete="url"
+                              inputMode="url"
+                            />
+                          </label>
+                        </div>
+                        <label className="cw-field">
+                          <span>Poznámka</span>
+                          <textarea
+                            value={lead.note}
+                            onChange={(event) =>
+                              updateLead({ note: event.target.value })
+                            }
+                            placeholder="Čo by som mal ešte vedieť?"
+                            rows={2}
+                          />
+                        </label>
+                      </div>
+                    </details>
+                  </div>
                 </div>
-              </details>
-            </div>
-          ) : null}
+
+                <PrivacyNotice />
+
+                {/* Closed by default and titled with what was actually chosen —
+                  "4 položky" told the visitor nothing about their own answers. */}
+                <details className="cw-summary">
+                  <summary>
+                    <span>Váš výber</span>
+                    <small>{summaryRows[0][1]}</small>
+                  </summary>
+                  <div className="cw-summary__body">
+                    {summaryRows.map(([label, value]) => (
+                      <div className="cw-summary__row" key={label}>
+                        <span>{label}</span>
+                        <b>{value}</b>
+                      </div>
+                    ))}
+                    {interest === "custom" && customText.trim() ? (
+                      <div className="cw-summary__row cw-summary__row--note">
+                        <span>Napísali ste</span>
+                        <b>{customText.trim()}</b>
+                      </div>
+                    ) : null}
+                  </div>
+                </details>
+              </div>
+            ) : null}
           </section>
         </div>
         <ScrollCue targetRef={bodyRef} />
@@ -779,7 +891,7 @@ export function ToolCalculator({
             data-testid="flow-next"
             disabled={!canContinue}
             onClick={() =>
-              setStep((value) => Math.min(STEPS.length - 1, value + 1))
+              setStep((value) => Math.min(flowSteps.length - 1, value + 1))
             }
           >
             <span>Pokračovať</span>

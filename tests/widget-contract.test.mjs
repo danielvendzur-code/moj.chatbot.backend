@@ -18,7 +18,7 @@ test("demo and embed load the ordered static widget styles", async () => {
   assert.match(main, /widget\.css/);
   assert.match(main, /product-widget\.css/);
   assert.match(main, /widget-polish\.css/);
-  assert.equal((main.match(/import "\.\/.*\.css";/g) ?? []).length, 4);
+  assert.equal((main.match(/import "\.\/.*\.css";/g) ?? []).length, 5);
 
   assert.doesNotMatch(embed, /preview\.css/);
   assert.match(embed, /widget\.css/);
@@ -27,7 +27,10 @@ test("demo and embed load the ordered static widget styles", async () => {
   assert.equal((embed.match(/import "\.\/.*\.css";/g) ?? []).length, 3);
 
   for (const source of [main, embed]) {
-    assert.doesNotMatch(source, /assistant-redesign|masterpiece-final|approved-submit/);
+    assert.doesNotMatch(
+      source,
+      /assistant-redesign|masterpiece-final|approved-submit/,
+    );
     assert.doesNotMatch(
       source,
       /installLimeWhiteStyles|installPremiumTilt|installProductRefinement/,
@@ -137,7 +140,10 @@ test("header states availability instead of carrying a tagline", async () => {
   assert.match(widget, /className="cw-panel-head__online"/);
   assert.match(widget, />\s*Online\s*</);
   assert.doesNotMatch(widget, /Poradca a konfigurátor/);
-  assert.match(rule(css, ".cw-panel-head__online"), /color:\s*var\(--cw-green\)/);
+  assert.match(
+    rule(css, ".cw-panel-head__online"),
+    /color:\s*var\(--cw-green\)/,
+  );
   const dot = rule(css, ".cw-panel-head__online i");
   assert.match(dot, /width:\s*8px/);
   assert.match(dot, /box-shadow:\s*0 0 0 3px/);
@@ -150,37 +156,45 @@ test("header states availability instead of carrying a tagline", async () => {
 });
 
 test("chat hierarchy is readable and selected chip text stays present", async () => {
-  const conversation = await read("src/components/widget/AssistantConversation.tsx");
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
+  );
   const css = await read("src/product-widget.css");
   const polish = await read("src/widget-polish.css");
 
-  const top = conversation.indexOf('className="cw-chat-top"');
   const messages = conversation.indexOf('className="cw-messages"');
   const chips = conversation.indexOf('className="cw-quick-replies"');
   const input = conversation.indexOf('className="cw-inputbar"');
   const contacts = conversation.indexOf('className="cw-direct-actions"');
-  assert.ok(top > -1 && top < messages);
+  assert.doesNotMatch(conversation, /cw-chat-builder|Vyskladať riešenie/);
   assert.ok(messages < chips && chips < input && input < contacts);
 
-  assert.match(conversation, /4 otázky · návrh máte do minúty/);
   assert.match(conversation, /QUICK_REPLY_HOLD_MS = 360/);
   assert.match(conversation, /activeQuickReply !== null/);
   assert.match(conversation, /className="cw-chip__label"/);
-  assert.match(conversation, /<WidgetIcon name="options" \/>/);
   assert.doesNotMatch(conversation, />\s*01\s*</);
   assert.match(conversation, /aria-pressed=\{sending\}/);
   assert.match(conversation, /data-started=\{conversationStarted/);
   assert.match(conversation, /Radšej priamo\?/);
   assert.match(conversation, /disabled=\{!input\.trim\(\) \|\| typing/);
-  assert.doesNotMatch(conversation, /flightOrigin|bubble\.animate|translate3d|getBoundingClientRect/);
+  assert.doesNotMatch(
+    conversation,
+    /flightOrigin|bubble\.animate|translate3d|getBoundingClientRect/,
+  );
   assert.match(css, /\.cw-message-wrap p \{[^}]*font-size:\s*14px/);
   assert.match(rule(css, ".cw-quick-replies .cw-chip"), /font-size:\s*12\.5px/);
   assert.doesNotMatch(rule(css, ".cw-quick-replies"), /grid-template-columns/);
   assert.match(
-    rule(css, ".cw-quick-replies .cw-chip:hover,\n.cw-quick-replies .cw-chip:focus-visible"),
+    rule(
+      css,
+      ".cw-quick-replies .cw-chip:hover,\n.cw-quick-replies .cw-chip:focus-visible",
+    ),
     /background:\s*var\(--cw-green-hover\)/,
   );
-  assert.match(rule(polish, ".cw-widget .cw-chip__label"), /visibility:\s*visible/);
+  assert.match(
+    rule(polish, ".cw-widget .cw-chip__label"),
+    /visibility:\s*visible/,
+  );
   assert.match(rule(polish, ".cw-widget .cw-chip__label"), /opacity:\s*1/);
   assert.match(rule(css, ".cw-inputbar > .cw-send"), /opacity:\s*1/);
   assert.match(rule(css, ".cw-inputbar > .cw-send"), /visibility:\s*visible/);
@@ -198,7 +212,10 @@ test("direct contact reads as three reachable chips", async () => {
   assert.match(links, /background:\s*var\(--cw-white\)/);
   assert.match(links, /min-height:\s*42px/);
   assert.match(
-    rule(css, ".cw-direct-actions__grid a:hover,\n.cw-direct-actions__grid a:focus-visible"),
+    rule(
+      css,
+      ".cw-direct-actions__grid a:hover,\n.cw-direct-actions__grid a:focus-visible",
+    ),
     /background:\s*var\(--cw-mint\)/,
   );
 });
@@ -238,8 +255,14 @@ test("progress and contact step expose clear state and labels", async () => {
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
 
   assert.match(calculator, /cw-progress__dots/);
-  assert.match(calculator, /Krok \$\{visibleStep \+ 1\} z \$\{STEPS\.length\}/);
-  assert.match(calculator, /gridTemplateColumns:\s*`repeat\(\$\{STEPS\.length\}/);
+  assert.match(
+    calculator,
+    /Krok \$\{visibleStep \+ 1\} z \$\{flowSteps\.length\}/,
+  );
+  assert.match(
+    calculator,
+    /gridTemplateColumns:\s*`repeat\(\$\{flowSteps\.length\}/,
+  );
   assert.match(calculator, /className="cw-field"/);
   assert.match(calculator, /aria-invalid=\{nameInvalid\}/);
   assert.match(calculator, /aria-invalid=\{emailInvalid\}/);
@@ -253,21 +276,41 @@ test("every control rounds to the shared website scale", async () => {
   const css = await read("src/product-widget.css");
 
   assert.match(rule(css, ".cw-panel"), /border-radius:\s*var\(--cw-r-panel\)/);
-  assert.match(rule(css, ".cw-chat-builder"), /border-radius:\s*var\(--cw-r-panel\)/);
+  assert.match(
+    rule(css, ".cw-chat-builder"),
+    /border-radius:\s*var\(--cw-r-panel\)/,
+  );
   assert.match(rule(css, ".cw-next"), /border-radius:\s*var\(--cw-r-pill\)/);
   assert.match(rule(css, ".cw-submit"), /border-radius:\s*var\(--cw-r-pill\)/);
-  assert.match(rule(css, ".cw-quick-replies .cw-chip"), /border-radius:\s*var\(--cw-r-pill\)/);
-  assert.match(rule(css, ".cw-inputbar"), /border-radius:\s*var\(--cw-r-pill\)/);
+  assert.match(
+    rule(css, ".cw-quick-replies .cw-chip"),
+    /border-radius:\s*var\(--cw-r-pill\)/,
+  );
+  assert.match(
+    rule(css, ".cw-inputbar"),
+    /border-radius:\s*var\(--cw-r-pill\)/,
+  );
   for (const answer of [".cw-rowcard", ".cw-scard", ".cw-opt", ".cw-vcard"]) {
     const blocks = css.match(new RegExp(`\\${answer}\\s*\\{[^}]*\\}`, "g"));
     assert.ok(
-      blocks?.some((block) => /border-radius:\s*var\(--cw-r-pill\)/.test(block)),
+      blocks?.some((block) =>
+        /border-radius:\s*var\(--cw-r-pill\)/.test(block),
+      ),
       `${answer} is not a capsule`,
     );
   }
-  assert.match(rule(css, ".cw-field :is(input, textarea)"), /border-radius:\s*var\(--cw-r-pill\)/);
-  assert.match(rule(css, ".cw-field textarea"), /border-radius:\s*var\(--cw-r-card\)/);
-  assert.match(rule(css, ".cw-custom textarea"), /border-radius:\s*var\(--cw-r-card\)/);
+  assert.match(
+    rule(css, ".cw-field :is(input, textarea)"),
+    /border-radius:\s*var\(--cw-r-pill\)/,
+  );
+  assert.match(
+    rule(css, ".cw-field textarea"),
+    /border-radius:\s*var\(--cw-r-card\)/,
+  );
+  assert.match(
+    rule(css, ".cw-custom textarea"),
+    /border-radius:\s*var\(--cw-r-card\)/,
+  );
 
   const strays = css
     .split("\n")
@@ -290,8 +333,9 @@ test("the widget always sets in the brand typeface", async () => {
   assert.match(css, /--cw-font-stack:\s*\n?\s*"Inter Tight"/);
   assert.doesNotMatch(css, /"Aptos"/);
   assert.doesNotMatch(css, /var\(--cw-font,/);
-  assert.match(index, /family=Inter\+Tight/);
-  assert.match(embed, /family=Inter\+Tight/);
+  assert.match(index, /fonts\/brand\.css/);
+  assert.match(embed, /fonts\/brand\.css/);
+  assert.doesNotMatch(embed, /fonts\.googleapis\.com/);
   assert.match(embed, /ensureBrandFont/);
   assert.doesNotMatch(embed, /setProperty\("--cw-font"/);
 });
@@ -302,18 +346,33 @@ test("options arrive one after another when a question opens", async () => {
 
   assert.match(css, /@keyframes cw-option-in/);
   const prefix = String.raw`\.cw-calc-step:not\(\[data-leaving="true"\]\) \.cw-choice-grid > \*`;
-  assert.match(css, new RegExp(`${prefix}:nth-child\\(1\\)[^}]*animation-delay:\\s*70ms`));
+  assert.match(
+    css,
+    new RegExp(`${prefix}:nth-child\\(1\\)[^}]*animation-delay:\\s*70ms`),
+  );
   assert.match(css, new RegExp(`${prefix}:nth-child\\(n \\+ 8\\)`));
-  assert.match(css, new RegExp(`${prefix}\\s*\\{[^}]*animation:\\s*cw-option-in`));
+  assert.match(
+    css,
+    new RegExp(`${prefix}\\s*\\{[^}]*animation:\\s*cw-option-in`),
+  );
   const keyframe = css.match(/@keyframes cw-option-in\s*\{[\s\S]*?\n\}/)[0];
   assert.doesNotMatch(keyframe, /height|margin|padding/);
-  assert.match(polish, /\.cw-widget \.cw-choice-grid > \*\s*\{\s*animation:\s*none/);
+  assert.match(
+    polish,
+    /\.cw-widget \.cw-choice-grid > \*\s*\{\s*animation:\s*none/,
+  );
 });
 
 test("chat motion follows the sub-300ms guidance and moves, not blinks", async () => {
   const css = await read("src/product-widget.css");
-  assert.match(rule(css, ".cw-message-row"), /animation:\s*cw-message-in 240ms/);
-  assert.match(rule(css, ".cw-message-row--me"), /animation-name:\s*cw-message-in-me/);
+  assert.match(
+    rule(css, ".cw-message-row"),
+    /animation:\s*cw-message-in 240ms/,
+  );
+  assert.match(
+    rule(css, ".cw-message-row--me"),
+    /animation-name:\s*cw-message-in-me/,
+  );
   assert.match(css, /@keyframes cw-bubble-settle/);
   assert.match(
     rule(css, '.cw-message-row[data-streaming="true"] .cw-message-wrap p'),
@@ -330,7 +389,9 @@ test("a scrollable area says so and offers to move you on", async () => {
   const hook = await read("src/hooks/useScrollCue.ts");
   const cue = await read("src/components/widget/ScrollCue.tsx");
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
-  const conversation = await read("src/components/widget/AssistantConversation.tsx");
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
+  );
   const css = await read("src/product-widget.css");
 
   assert.match(hook, /MutationObserver/);
@@ -353,14 +414,20 @@ test("a scrollable area says so and offers to move you on", async () => {
 test("picking an industry no longer opens an explanation panel", async () => {
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
   const css = await read("src/product-widget.css");
-  assert.doesNotMatch(calculator, /cw-industry-tip|industry-tip|selectedIndustry/);
+  assert.doesNotMatch(
+    calculator,
+    /cw-industry-tip|industry-tip|selectedIndustry/,
+  );
   assert.doesNotMatch(calculator, /Čo sa tu najviac oplatí/);
   assert.doesNotMatch(css, /cw-industry-tip/);
 });
 
 test("answers fill the width instead of sitting in half-empty columns", async () => {
   const css = await read("src/product-widget.css");
-  assert.doesNotMatch(css, /\.cw-choice-grid--industry[\s\S]{0,120}grid-template-columns/);
+  assert.doesNotMatch(
+    css,
+    /\.cw-choice-grid--industry[\s\S]{0,120}grid-template-columns/,
+  );
   assert.match(rule(css, ".cw-scard b"), /white-space:\s*nowrap/);
   assert.match(rule(css, ".cw-scard b"), /text-overflow:\s*ellipsis/);
 });
@@ -392,14 +459,22 @@ test("palette stays within the website white forest lime identity", async () => 
   ]) {
     assert.ok(css.includes(token), `Missing product token ${token}`);
   }
-  for (const retired of ["#ffc79d", "#e58a5b", "#4db6ac", "#3478f6", "#1f55c9"]) {
+  for (const retired of [
+    "#ffc79d",
+    "#e58a5b",
+    "#4db6ac",
+    "#3478f6",
+    "#1f55c9",
+  ]) {
     assert.ok(!css.includes(retired), `Retired accent ${retired} returned`);
   }
 });
 
 test("mobile, keyboard and reduced-motion fallbacks are first-class", async () => {
   const css = await read("src/product-widget.css");
-  const conversation = await read("src/components/widget/AssistantConversation.tsx");
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
+  );
   assert.match(css, /@media \(max-width: 640px\)/);
   assert.match(css, /width:\s*100dvw/);
   assert.match(css, /height:\s*100dvh/);
@@ -417,7 +492,15 @@ test("icons remain one custom rounded line family", async () => {
   assert.match(icons, /strokeWidth="1\.85"/);
   assert.match(icons, /strokeLinecap="round"/);
   assert.match(icons, /strokeLinejoin="round"/);
-  for (const icon of ["calculator", "chat", "phone", "mail", "spark", "reset", "send"]) {
+  for (const icon of [
+    "calculator",
+    "chat",
+    "phone",
+    "mail",
+    "spark",
+    "reset",
+    "send",
+  ]) {
     assert.ok(icons.includes(`"${icon}"`), `Missing icon ${icon}`);
   }
 });
@@ -443,8 +526,16 @@ test("solution picker separates optional add-ons from concrete tool configuratio
   const finalCss = await read("src/sep08-picker-final.css");
   const embed = await read("public/embed.js");
 
-  for (const label of ["Chatbot", "Kalkulačka", "Konfigurátor"]) {
-    assert.ok(flow.includes(`label: "${label}"`), `Missing primary solution choice: ${label}`);
+  for (const label of [
+    "Chatbot",
+    "Kalkulačka",
+    "3D konfigurátor",
+    "Interaktívny poradca",
+  ]) {
+    assert.ok(
+      flow.includes(`label: "${label}"`),
+      `Missing primary solution choice: ${label}`,
+    );
   }
 
   // Legacy combined presets stay in the data model for backwards-compatible
@@ -452,20 +543,26 @@ test("solution picker separates optional add-ons from concrete tool configuratio
   assert.match(calculator, /cw-interest-groups/);
   assert.match(calculator, /Samostatné riešenia/);
   assert.match(finalCss, /data-group="combined"/);
-  assert.match(finalCss, /data-group="custom"/);
-  assert.match(finalCss, /display:\s*none !important/);
+  assert.match(calculator, /items: \["calcbot"\]/);
+  assert.match(calculator, /combination\.length >= 2/);
+  assert.match(flow, /Ktoré riešenia chcete kombinovať\?/);
   assert.match(finalCss, /interest-chatbot/);
   assert.match(finalCss, /interest-configurator/);
   assert.match(finalCss, /interest-calculator/);
 
   assert.match(flow, /"Ktoré doplnkové funkcie chcete\?"/);
-  assert.match(flow, /"Sú voliteľné\. Vyberte pokojne viac možností alebo pokračujte bez nich\."/);
+  assert.match(
+    flow,
+    /"Sú voliteľné\. Vyberte pokojne viac možností alebo pokračujte bez nich\."/,
+  );
   assert.match(flow, /"Čo konkrétne má riešenie riešiť\?"/);
   assert.match(flow, /export const DETAILS:/);
   assert.match(flow, /export const DETAIL_IDS_BY_INTEREST:/);
 
-  const featureMap = flow.match(/export const FEATURE_IDS_BY_INTEREST:[\s\S]*?\n};/)?.[0] ?? "";
-  const detailMap = flow.match(/export const DETAIL_IDS_BY_INTEREST:[\s\S]*?\n};/)?.[0] ?? "";
+  const featureMap =
+    flow.match(/export const FEATURE_IDS_BY_INTEREST:[\s\S]*?\n};/)?.[0] ?? "";
+  const detailMap =
+    flow.match(/export const DETAIL_IDS_BY_INTEREST:[\s\S]*?\n};/)?.[0] ?? "";
   const listFor = (source, key) =>
     source.match(new RegExp(`${key}:\\s*\\[([\\s\\S]*?)\\]`))?.[1] ?? "";
 
@@ -477,10 +574,16 @@ test("solution picker separates optional add-ons from concrete tool configuratio
   assert.doesNotMatch(chatbotAddons, /"answers"/);
   assert.match(calculatorAddons, /"document"/);
   assert.match(calculatorAddons, /"fotky"/);
-  assert.doesNotMatch(calculatorAddons, /"calc-dimensions"|"calc-quantity"|"calc-variant"/);
+  assert.doesNotMatch(
+    calculatorAddons,
+    /"calc-dimensions"|"calc-quantity"|"calc-variant"/,
+  );
   assert.match(configuratorAddons, /"compare"/);
   assert.match(configuratorAddons, /"document"/);
-  assert.doesNotMatch(configuratorAddons, /"dimensions"|"materials"|"addons"|"varianty"/);
+  assert.doesNotMatch(
+    configuratorAddons,
+    /"dimensions"|"materials"|"addons"|"varianty"/,
+  );
 
   const chatbotDetails = listFor(detailMap, "chatbot");
   const calculatorDetails = listFor(detailMap, "calculator");
@@ -494,9 +597,15 @@ test("solution picker separates optional add-ons from concrete tool configuratio
   assert.match(configuratorDetails, /"config-addons"/);
 
   assert.match(calculator, /case "features":\s*\n\s*return true;/);
-  assert.match(calculator, /case "details":\s*\n\s*return details\.length > 0;/);
+  assert.match(
+    calculator,
+    /case "details":\s*\n\s*return details\.length > 0;/,
+  );
   assert.match(calculator, /data-testid=\{`detail-\$\{option\.id\}`\}/);
-  assert.match(flow, /chatbot:\s*\[\],\s*\n\s*calculator:\s*\[\],\s*\n\s*configurator:\s*\[\]/);
+  assert.match(
+    flow,
+    /chatbot:\s*\[\],\s*\n\s*calculator:\s*\[\],\s*\n\s*configurator:\s*\[\]/,
+  );
 
   assert.match(calculator, /cw-rowcard__title/);
   assert.match(calculator, /E-mail <small>alebo telefón<\/small>/);

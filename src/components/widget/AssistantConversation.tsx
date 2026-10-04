@@ -1,3 +1,4 @@
+import { PrivacyNotice } from "./PrivacyNotice";
 import { useEffect, useRef, useState } from "react";
 import { sendChat, type ChatTurn } from "../../lib/assistantApi";
 import {
@@ -15,7 +16,6 @@ import { WidgetIcon } from "./WidgetIcon";
 type AssistantConversationProps = {
   active: boolean;
   resetToken: number;
-  onOpenCalculator: () => void;
 };
 
 type ChatMessage = {
@@ -70,7 +70,6 @@ const canAutoFocus = (): boolean =>
 export function AssistantConversation({
   active,
   resetToken,
-  onOpenCalculator,
 }: AssistantConversationProps): JSX.Element {
   const restored = useRef(loadHistory()).current;
   const [messages, setMessages] = useState<ChatMessage[]>(
@@ -306,11 +305,6 @@ export function AssistantConversation({
     );
   };
 
-  const openCalculator = () => {
-    track("chat_builder_open");
-    onOpenCalculator();
-  };
-
   return (
     <div
       className="cw-conversation"
@@ -318,23 +312,6 @@ export function AssistantConversation({
       data-composing={composing || undefined}
       data-started={conversationStarted || undefined}
     >
-      <div className="cw-chat-top">
-        <button
-          type="button"
-          className="cw-chat-builder"
-          onClick={openCalculator}
-        >
-          <span className="cw-chat-builder__icon" aria-hidden="true">
-            <WidgetIcon name="options" />
-          </span>
-          <span className="cw-chat-builder__copy">
-            <b>Vyskladať riešenie</b>
-            <small>4 otázky · návrh máte do minúty</small>
-          </span>
-          <WidgetIcon name="arrow" className="cw-chat-builder__arrow" />
-        </button>
-      </div>
-
       <div className="cw-scroll-shell">
         <div className="cw-messages" ref={messagesRef} aria-live="polite">
           {messages.map((message) => (
@@ -402,6 +379,8 @@ export function AssistantConversation({
           })}
         </div>
       ) : null}
+
+      <PrivacyNotice chat />
 
       <div
         className="cw-inputbar"

@@ -12,3 +12,5 @@ import "./logo-match-final.css";
 import "./sep08-picker-final.css";
 import "./embed-surface-authority-final.css";
 import "./faq-quick-replies-final.css";
+
+import "./brand-system.css";

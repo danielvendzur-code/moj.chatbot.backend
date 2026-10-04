@@ -68,7 +68,7 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(
     page.getByRole("heading", { name: "Môj Chatbot" }),
   ).toBeVisible();
-  await expect(page.getByText("4 otázky · návrh máte do minúty")).toBeVisible();
+  await expect(page.locator(".cw-chat-builder")).toHaveCount(0);
   await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
 
   const headerLogoStroke = page.locator(".cw-panel-head .bl__stroke");
@@ -99,7 +99,7 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(quickReply).toHaveCSS("border-top-width", "1px");
 
   await page.mouse.move(0, 0);
-  await expect(quickReply).toHaveCSS("color", "rgb(14, 21, 18)");
+  await expect(quickReply).toHaveCSS("color", "rgb(16, 23, 19)");
   await expect(quickReply).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
 
   await quickReply.click();
@@ -110,9 +110,7 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(quickReply).toBeVisible();
   await expect(quickReplyLabel).toHaveText("Kde mi to ušetrí čas?");
 
-  const builderCta = page.locator(".cw-chat-builder");
-  await expect(builderCta).toBeVisible();
-  await builderCta.click();
+  await page.getByTestId("tab-calculator").click();
   await expect(panel).toHaveAttribute("data-mode", "calculator");
   await expect(page.getByTestId("calculator-view")).toBeVisible();
   await expect(
@@ -128,10 +126,10 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await expect(page.getByTestId("interest-calcbot")).toContainText(
     "Kombinované riešenie",
   );
-  await expect(page.getByTestId("interest-all")).toBeVisible();
-  await expect(page.getByTestId("interest-all")).toContainText("Všetko spolu");
+  await expect(page.getByTestId("interest-advisor")).toBeVisible();
+  await expect(page.getByTestId("interest-all")).toHaveCount(0);
   await expect(page.getByTestId("interest-product")).toBeHidden();
-  await expect(page.getByTestId("interest-custom")).toBeHidden();
+  await expect(page.getByTestId("interest-custom")).toBeVisible();
 
   await page.getByTestId("tab-assistant").click();
   await expect(panel).toHaveAttribute("data-mode", "assistant");
@@ -206,7 +204,7 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   await page.getByTestId("flow-next").click();
 
   await expect(
-    page.getByRole("heading", { name: "Čo konkrétne má riešenie riešiť?" }),
+    page.getByRole("heading", { name: "S čím má chatbot pomáhať?" }),
   ).toBeVisible({ timeout: 2500 });
   await expect(page.getByTestId("detail-chat-offer")).toBeVisible();
   await expect(page.getByTestId("detail-chat-pricing")).toBeVisible();

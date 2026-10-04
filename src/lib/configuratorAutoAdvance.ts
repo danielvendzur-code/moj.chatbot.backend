@@ -78,10 +78,13 @@ const arrangeAndRecommendFeatures = (widget: HTMLElement): void => {
   const interest = widget.dataset.selectedInterest as InterestId | undefined;
   const industry = widget.dataset.selectedIndustry;
   const relevant = unique([
-    ...(industry ? INDUSTRY_RECOMMENDED_FEATURES[industry] ?? [] : []),
-    ...(interest ? RECOMMENDED_FEATURES[interest] ?? [] : []),
+    ...(industry ? (INDUSTRY_RECOMMENDED_FEATURES[industry] ?? []) : []),
+    ...(interest ? (RECOMMENDED_FEATURES[interest] ?? []) : []),
   ]).filter((id) => FEATURES.some((feature) => feature.id === id));
-  const ordered = unique([...relevant, ...FEATURES.map((feature) => feature.id)]);
+  const ordered = unique([
+    ...relevant,
+    ...FEATURES.map((feature) => feature.id),
+  ]);
 
   buttons.forEach((button) => {
     const id = optionId(button, "feature-");
@@ -89,18 +92,6 @@ const arrangeAndRecommendFeatures = (widget: HTMLElement): void => {
     button.style.order = String(Math.max(0, ordered.indexOf(id)));
     delete button.dataset.recommended;
   });
-
-  /* ToolCalculator historically seeded this step with recommended features.
-     Clear that seed exactly once per interest selection, before the grid becomes
-     visible. From this point onward only the visitor's own clicks may select it. */
-  if (widget.dataset.featureDefaultsCleared !== "true") {
-    widget.dataset.featureDefaultsCleared = "true";
-    const seeded = buttons.filter((button) => button.dataset.selected === "true");
-    if (seeded.length) {
-      seeded.forEach((button) => button.click());
-      return;
-    }
-  }
 
   grid.dataset.ready = "true";
 };
@@ -132,7 +123,11 @@ export function installConfiguratorAutoAdvance(): void {
     releaseParkedPointer?.();
   };
 
-  const guardFreshStep = (widget: HTMLElement, originX: number, originY: number) => {
+  const guardFreshStep = (
+    widget: HTMLElement,
+    originX: number,
+    originY: number,
+  ) => {
     releaseParkedPointer?.();
     widget.dataset.pointerParked = "true";
 
@@ -205,7 +200,11 @@ export function installConfiguratorAutoAdvance(): void {
       if (interestButton) {
         const widget = interestButton.closest<HTMLElement>(".cw-widget");
         const interest = optionId(interestButton, "interest-");
-        if (widget && interest) {
+        if (
+          widget &&
+          interest &&
+          widget.dataset.selectedInterest !== interest
+        ) {
           widget.dataset.selectedInterest = interest;
           delete widget.dataset.selectedIndustry;
           delete widget.dataset.featureRecommendationContext;
