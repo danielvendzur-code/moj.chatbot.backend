@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useLauncherSurface } from "../../hooks/useLauncherSurface";
 import { useFocusTrap } from "../../hooks/useFocusTrap";
 import {
   installSiteAssistantGlobal,
@@ -59,6 +60,7 @@ export function AssistantWidget({
   const actionTimerRef = useRef<number | null>(null);
   const panelRef = useRef<HTMLElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
+  const launcherSurface = useLauncherSurface(launcherRef, isOpen);
   const calculatorViewRef = useRef<HTMLDivElement>(null);
   const assistantViewRef = useRef<HTMLDivElement>(null);
   const openRef = useRef(false);
@@ -222,6 +224,7 @@ export function AssistantWidget({
           id="chameleon-widget-launcher"
           data-testid="widget-launcher"
           className="cw-launcher"
+          data-surface={launcherSurface}
           ref={launcherRef}
           type="button"
           aria-label="Otvoriť Môj Chatbot"
@@ -229,7 +232,10 @@ export function AssistantWidget({
           aria-controls="chameleon-widget-panel"
           onClick={() => open(mode, preset)}
         >
-          <BubbleLogo size="launcher" />
+          <BubbleLogo
+            size="launcher"
+            tone={launcherSurface === "dark" ? "brand" : "paper"}
+          />
         </button>
       </div>
 

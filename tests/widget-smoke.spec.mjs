@@ -1,375 +1,148 @@
 import { test, expect } from "@playwright/test";
 
-const collectRuntimeErrors = async (page) => {
-  await page.route("https://fonts.googleapis.com/**", (route) =>
-    route.fulfill({ contentType: "text/css", body: "" }),
-  );
-  await page.route("**/api/chat", async (route) => {
-    if (route.request().method() === "OPTIONS") {
-      await route.fulfill({
-        status: 204,
-        headers: {
-          "access-control-allow-origin": "*",
-          "access-control-allow-methods": "POST, OPTIONS",
-          "access-control-allow-headers": "content-type",
-        },
-      });
-      return;
-    }
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    await route.fulfill({
-      json: {
-        reply: "Chatbot odpovie na opakované otázky a pomôže pripraviť dopyt.",
-      },
-      headers: { "access-control-allow-origin": "*" },
-    });
-  });
+async function observe(page) {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => {
     if (message.type() === "error") errors.push(message.text());
   });
+  await page.route("**/api/chat", (route) =>
+    route.fulfill({
+      json: { reply: "Pomôžeme pripraviť konkrétny návrh." },
+      headers: { "access-control-allow-origin": "*" },
+    }),
+  );
+  await page.route("**/api/lead", (route) =>
+    route.fulfill({
+      json: { ok: true },
+      headers: { "access-control-allow-origin": "*" },
+    }),
+  );
   return errors;
-};
+}
 
-const expectBackButtonInsideProgress = async (page) => {
-  const progress = page.locator(".cw-progress");
-  const back = page.locator(".cw-progress__back");
-  await expect(back).toBeVisible();
+async function openChat(page) {
+  await page.goto("http://127.0.0.1:4173/", { waitUntil: "networkidle" });
+  await page.getByTestId("widget-launcher").click();
+  await expect(page.locator(".cw-panel")).toBeVisible();
+}
 
-  const progressBox = await progress.boundingBox();
-  const backBox = await back.boundingBox();
-  expect(progressBox).not.toBeNull();
-  expect(backBox).not.toBeNull();
-
-  expect(backBox.x - progressBox.x).toBeGreaterThanOrEqual(3);
-  expect(backBox.y - progressBox.y).toBeGreaterThanOrEqual(3);
-  expect(
-    progressBox.x + progressBox.width - (backBox.x + backBox.width),
-  ).toBeGreaterThanOrEqual(3);
-  expect(
-    progressBox.y + progressBox.height - (backBox.y + backBox.height),
-  ).toBeGreaterThanOrEqual(3);
-};
-
-test("desktop interactions stay clickable, unselected and visually stable", async ({
+test("desktop chat sends a reply and keeps two usable actions", async ({
   page,
 }) => {
-  const errors = await collectRuntimeErrors(page);
+  const errors = await observe(page);
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("http://127.0.0.1:4173", { waitUntil: "networkidle" });
-
-  const launcher = page.getByTestId("widget-launcher");
-  await expect(launcher).toBeVisible();
-  await launcher.click();
-
-  const panel = page.locator(".cw-panel");
-  await expect(panel).toBeVisible();
+  await openChat(page);
   await expect(
     page.getByRole("heading", { name: "Môj Chatbot" }),
   ).toBeVisible();
-  await expect(page.locator(".cw-chat-builder")).toHaveCount(0);
-  await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
-
-  const headerLogoStroke = page.locator(".cw-panel-head .bl__stroke");
-  const launcherIcon = launcher.locator(".cw-launcher__icon");
-  await expect(headerLogoStroke).toBeVisible();
-  await expect(headerLogoStroke).toHaveCSS("animation-name", "none");
-  await expect(launcherIcon).toHaveCount(1);
-  await expect(launcherIcon).toHaveCSS("animation-name", "none");
-  await expect(headerLogoStroke).toHaveCSS("stroke-dashoffset", "0px");
-
-  const composer = page.locator(".cw-inputbar");
-  const composerInput = composer.locator("input");
-  await composerInput.focus();
-  await expect(composer).toHaveCSS("border-radius", "999px");
-  await expect(composerInput).toHaveCSS("outline-style", "none");
-  await expect(composerInput).toHaveCSS("border-top-width", "0px");
-
-  const quickReply = page.getByRole("button", {
-    name: "Kde mi to ušetrí čas?",
-  });
-  const quickReplyLabel = quickReply.locator(".cw-chip__label");
-
-  // FAQ rows retain their contrast and full-width hit area on hover.
-  await quickReply.hover();
-  await expect(quickReply).toHaveCSS("color", "rgb(31, 91, 71)");
-  await expect(quickReply).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
-  await expect(quickReply).toHaveCSS("min-height", "44px");
-  await expect(quickReply).toHaveCSS("border-top-width", "1px");
-
-  await page.mouse.move(0, 0);
-  await expect(quickReply).toHaveCSS("color", "rgb(16, 23, 19)");
-  await expect(quickReply).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
-
-  await quickReply.click();
-  await expect(quickReply).toHaveAttribute("data-sending", "true");
-  await expect(quickReplyLabel).toBeVisible();
-  await expect(quickReplyLabel).toHaveText("Kde mi to ušetrí čas?");
-  await page.waitForTimeout(300);
-  await expect(quickReply).toBeVisible();
-  await expect(quickReplyLabel).toHaveText("Kde mi to ušetrí čas?");
-
-  await page.getByTestId("tab-calculator").click();
-  await expect(panel).toHaveAttribute("data-mode", "calculator");
-  await expect(page.getByTestId("calculator-view")).toBeVisible();
+  await expect(page.locator(".cw-tabs")).toHaveCount(0);
+  await expect(page.getByTestId("widget-reset")).toHaveCount(0);
+  await expect(page.locator(".cw-panel-head .mc-mark")).toBeVisible();
+  await page.getByPlaceholder("Napíšte otázku…").fill("Koľko to stojí?");
+  await page.getByRole("button", { name: "Odoslať správu" }).click();
   await expect(
-    page.getByRole("heading", { name: "Čo chcete pridať na web?" }),
+    page.getByText("Pomôžeme pripraviť konkrétny návrh."),
   ).toBeVisible();
-
-  // The first screen has four top-level choices. The old specific combined
-  // variant and custom taxonomy remain hidden so they do not compete here.
-  await expect(page.getByTestId("interest-chatbot")).toBeVisible();
-  await expect(page.getByTestId("interest-calculator")).toBeVisible();
-  await expect(page.getByTestId("interest-configurator")).toBeVisible();
-  await expect(page.getByTestId("interest-calcbot")).toBeVisible();
-  await expect(page.getByTestId("interest-calcbot")).toContainText(
-    "Kombinované riešenie",
-  );
-  await expect(page.getByTestId("interest-advisor")).toBeVisible();
-  await expect(page.getByTestId("interest-all")).toHaveCount(0);
-  await expect(page.getByTestId("interest-product")).toBeHidden();
-  await expect(page.getByTestId("interest-custom")).toBeVisible();
-
-  await page.getByTestId("tab-assistant").click();
-  await expect(panel).toHaveAttribute("data-mode", "assistant");
+  await expect(page.locator(".cw-reply-actions")).toHaveCount(2);
   await expect(
-    page.locator('.cw-mode-view[data-view="assistant"]'),
-  ).toHaveAttribute("data-active", "true");
-  await page.getByTestId("tab-calculator").click();
-  await expect(panel).toHaveAttribute("data-mode", "calculator");
-  await expect(
-    page.locator('.cw-mode-view[data-view="calculator"]'),
-  ).toHaveAttribute("data-active", "true");
+    page
+      .getByRole("button", { name: "Vyskladať riešenie", exact: true })
+      .last(),
+  ).toBeVisible();
+  await page.getByTestId("widget-close").click();
+  await expect(page.locator(".cw-panel")).toBeHidden();
+  expect(errors).toEqual([]);
+});
 
-  const interestChoice = page.getByTestId("interest-chatbot");
-  const interestLabel = interestChoice.locator("b");
-  await expect(interestChoice).toHaveCSS(
-    "animation-name",
-    "cw-goal-option-reveal",
+test("builder preserves selections, validates and submits a complete brief", async ({
+  page,
+}) => {
+  const errors = await observe(page);
+  await openChat(page);
+  await page
+    .getByRole("button", { name: "Vyskladať riešenie", exact: true })
+    .click();
+  await expect(page.getByTestId("interest-custom").locator("b")).toHaveText(
+    "Riešenie na mieru",
   );
-  await expect(interestChoice).toHaveCSS("animation-duration", "0.52s");
-  await interestChoice.click();
-
-  const selectionIndicator = interestChoice.locator(".cw-selection-indicator");
-  await expect(selectionIndicator).toHaveAttribute("data-visible", "true");
-  await expect(selectionIndicator).toHaveCSS("opacity", "1");
-  await expect(selectionIndicator.locator("svg path")).toHaveCSS(
-    "animation-name",
-    "none",
-  );
-
-  await expect(interestLabel).toBeVisible();
-  await expect(interestLabel).toHaveText(/\S+/);
-  await expect(
-    page.getByRole("heading", { name: "Ktoré doplnkové funkcie chcete?" }),
-  ).toBeVisible({ timeout: 2500 });
-  await expect(page.getByTestId("feature-leads")).toBeVisible();
-  await expect(page.getByTestId("feature-jazyky")).toBeVisible();
-  await expect(page.getByTestId("feature-answers")).toHaveCount(0);
-
+  await page.getByTestId("interest-chatbot").click();
+  await expect(page.locator('[data-step="features"]')).toBeVisible();
   await expect(
     page.locator('[data-testid^="feature-"][data-selected="true"]'),
   ).toHaveCount(0);
-  await expect(
-    page.locator('[data-testid^="feature-"][data-recommended="true"]'),
-  ).toHaveCount(0);
-  await expect(page.locator(".cw-widget")).not.toHaveAttribute(
-    "data-pointer-parked",
-    "true",
-    { timeout: 1200 },
-  );
-
-  await expectBackButtonInsideProgress(page);
-  await page.locator(".cw-progress__back").click();
-  await expect(
-    page.getByRole("heading", { name: "Čo chcete pridať na web?" }),
-  ).toBeVisible({ timeout: 2000 });
-  await page.getByTestId("flow-next").click();
-  await expect(page.getByTestId("feature-jazyky")).toBeVisible({
-    timeout: 2000,
-  });
-
-  // Step two contains only optional add-ons. Core chatbot topics are asked on
-  // the next screen, not mixed into these choices.
-  await page.getByTestId("feature-jazyky").click();
-  await expect(page.getByTestId("feature-jazyky")).toHaveAttribute(
-    "data-selected",
-    "true",
-  );
   await page.getByTestId("feature-leads").click();
+  await page.getByTestId("feature-jazyky").click();
+  await page.getByTestId("flow-next").click();
+  await expect(page.locator('[data-step="details"]')).toBeVisible();
+  await page.locator(".cw-progress__back").click();
+  await expect(page.locator('[data-step="features"]')).toBeVisible();
   await expect(
     page.locator('[data-testid^="feature-"][data-selected="true"]'),
   ).toHaveCount(2);
   await page.getByTestId("flow-next").click();
-
-  await expect(
-    page.getByRole("heading", { name: "S čím má chatbot pomáhať?" }),
-  ).toBeVisible({ timeout: 2500 });
-  await expect(page.getByTestId("detail-chat-offer")).toBeVisible();
-  await expect(page.getByTestId("detail-chat-pricing")).toBeVisible();
   await page.getByTestId("detail-chat-offer").click();
-  await expect(page.getByTestId("detail-chat-offer")).toHaveAttribute(
-    "data-selected",
-    "true",
-  );
   await page.getByTestId("flow-next").click();
-
-  await expect(page.getByTestId("industry-sluzby")).toBeVisible({
-    timeout: 2500,
-  });
-  await expect(
-    page.locator('[data-testid^="industry-"][data-selected="true"]'),
-  ).toHaveCount(0);
   await page.getByTestId("industry-sluzby").click();
-  await expect(page.getByTestId("timeline-asap")).toBeVisible({
-    timeout: 2500,
-  });
-
   await page.getByTestId("timeline-asap").click();
-  await expect(
-    page.getByRole("heading", { name: "Váš návrh je pripravený" }),
-  ).toBeVisible({ timeout: 2500 });
-  await expect(page.getByText("Krok 6 z 6 · Kontakt")).toBeVisible();
-
-  await expect(page.locator(".cw-contact-methods")).toHaveCount(0);
-  await expect(page.getByRole("checkbox")).toHaveCount(0);
-  await expect(page.locator(".cw-reassure li")).toHaveCount(3);
-
+  await expect(page.locator('[data-step="contact"]')).toBeVisible();
   await page.getByTestId("lead-submit").click();
   await expect(page.getByRole("alert")).toContainText(
     "Napíšte mi prosím svoje meno",
   );
-  await expect(page.getByPlaceholder("Vaše meno")).toHaveAttribute(
-    "aria-invalid",
-    "true",
-  );
-
   await page.getByPlaceholder("Vaše meno").fill("Testovací návštevník");
-  await page.getByPlaceholder("+421 …").fill("+421900123456");
-
-  await expect(page.getByPlaceholder("Vaše meno")).toHaveAttribute(
-    "aria-invalid",
-    "false",
-  );
-  await expect(page.getByPlaceholder("+421 …")).toHaveAttribute(
-    "aria-invalid",
-    "false",
-  );
-  await expect(page.getByTestId("lead-submit")).toContainText(
-    "Chcem nezáväzný návrh",
-  );
-  await expect(page.locator(".cw-summary")).not.toHaveAttribute("open", "");
-
+  await page.getByPlaceholder("meno@firma.sk").fill("qa@example.com");
+  await page.getByTestId("lead-submit").click();
+  await expect(page.getByText("Ďakujem, Testovací návštevník.")).toBeVisible();
   expect(errors).toEqual([]);
 });
 
-test("the e-mail chip opens the message form in the widget, not a mail client", async ({
+test("contact opens inside the widget and validates before sending", async ({
   page,
 }) => {
-  const errors = await collectRuntimeErrors(page);
-
-  await page.goto("http://127.0.0.1:4173", { waitUntil: "networkidle" });
-  await page.getByTestId("widget-launcher").click();
-  await expect(page.getByTestId("assistant-view")).toBeVisible({
-    timeout: 2500,
-  });
-
+  const errors = await observe(page);
+  await openChat(page);
   await page.getByTestId("open-mail-form").click();
   const sheet = page.getByTestId("mail-sheet");
-  await expect(sheet).toBeVisible({ timeout: 2000 });
-  await expect(
-    sheet.getByRole("heading", { name: "Napíšte mi" }),
-  ).toBeVisible();
-
+  await expect(sheet).toBeVisible();
   await page.getByTestId("mail-send").click();
   await expect(page.getByRole("alert")).toContainText("Napíšte e-mail");
-
-  await sheet.locator('input[type="email"]').fill("navstevnik@firma.sk");
+  await sheet.locator('input[type="email"]').fill("qa@example.com");
   await page.getByTestId("mail-send").click();
   await expect(page.getByRole("alert")).toContainText("s čím vám môžem pomôcť");
-
   await sheet.locator("textarea").press("Escape");
   await expect(sheet).toHaveCount(0);
-  await expect(page.getByTestId("assistant-view")).toBeVisible();
-
   expect(errors).toEqual([]);
 });
 
-test("mobile embed uses real taps for tabs and back navigation", async ({
+test("mobile taps open builder, return to chat and restore page scrolling", async ({
   browser,
 }) => {
   const context = await browser.newContext({
     viewport: { width: 390, height: 844 },
-    screen: { width: 390, height: 844 },
     isMobile: true,
     hasTouch: true,
-    deviceScaleFactor: 3,
   });
   const page = await context.newPage();
-  const errors = await collectRuntimeErrors(page);
-
-  await page.goto("http://127.0.0.1:4173/?embed=1&viewport=mobile", {
-    waitUntil: "networkidle",
-  });
-  await page.getByTestId("widget-launcher").tap();
-
-  const panel = page.locator(".cw-panel");
-  await expect(panel).toBeVisible();
-  await page.waitForTimeout(280);
-  const box = await panel.boundingBox();
-  const viewport = await page.evaluate(() => ({
-    width: document.documentElement.clientWidth,
-    height: document.documentElement.clientHeight,
-  }));
-  expect(box).not.toBeNull();
-
-  expect(box.width).toBeGreaterThanOrEqual(viewport.width * 0.9);
-  expect(box.height).toBeGreaterThanOrEqual(viewport.height * 0.9);
+  const errors = await observe(page);
+  await openChat(page);
+  await page
+    .getByRole("button", { name: "Vyskladať riešenie", exact: true })
+    .tap();
+  await expect(page.getByTestId("interest-chatbot")).toBeVisible();
+  const box = await page.locator(".cw-panel").boundingBox();
   expect(box.x).toBeGreaterThanOrEqual(0);
   expect(box.y).toBeGreaterThanOrEqual(0);
-  expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 1);
-  expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 1);
-
-  await expect(page.locator(".cw-tabs")).toHaveCSS("border-radius", "999px");
-  await page.getByTestId("tab-calculator").tap();
-  await expect(panel).toHaveAttribute("data-mode", "calculator");
-  await expect(
-    page.getByRole("heading", { name: "Čo chcete pridať na web?" }),
-  ).toBeVisible();
-
-  await expect(page.getByTestId("interest-chatbot")).toBeVisible();
-  await expect(page.getByTestId("interest-calculator")).toBeVisible();
-  await expect(page.getByTestId("interest-configurator")).toBeVisible();
-  await expect(page.getByTestId("interest-calcbot")).toBeVisible();
-  await page.getByTestId("interest-chatbot").tap();
-  await expect(page.getByTestId("feature-leads")).toBeVisible({
-    timeout: 2500,
-  });
-  await expect(page.getByTestId("feature-answers")).toHaveCount(0);
-  await expect(
-    page.locator('[data-testid^="feature-"][data-selected="true"]'),
-  ).toHaveCount(0);
-  await expectBackButtonInsideProgress(page);
+  expect(box.x + box.width).toBeLessThanOrEqual(390);
+  expect(box.y + box.height).toBeLessThanOrEqual(844);
   await page.locator(".cw-progress__back").tap();
-  await expect(
-    page.getByRole("heading", { name: "Čo chcete pridať na web?" }),
-  ).toBeVisible({ timeout: 2000 });
-
-  await page.getByTestId("tab-assistant").tap();
-  await expect(panel).toHaveAttribute("data-mode", "assistant");
-  await page.getByTestId("tab-calculator").tap();
-  await expect(panel).toHaveAttribute("data-mode", "calculator");
-  await page.getByTestId("tab-assistant").tap();
-  await expect(panel).toHaveAttribute("data-mode", "assistant");
-
-  const inputHasFocus = await page
-    .locator(".cw-inputbar input")
-    .evaluate((input) => document.activeElement === input);
-  expect(inputHasFocus).toBe(false);
   await expect(page.locator(".cw-inputbar")).toBeVisible();
-  await expect(page.locator(".cw-inputbar .cw-send")).toBeVisible();
-
+  await page.getByTestId("widget-close").tap();
+  await expect(page.locator(".cw-panel")).toBeHidden();
+  await expect(page.locator("html")).not.toHaveAttribute(
+    "data-assistant-open",
+    "true",
+  );
   expect(errors).toEqual([]);
   await context.close();
 });

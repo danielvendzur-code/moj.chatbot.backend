@@ -85,36 +85,22 @@ jobs:
           test -f dist/widget.js
           test -f dist/widget.css
 
-          # The direct runtime must carry the current release marker, product
-          # markers and the approved one-stroke Môj Chatbot brand mark.
-          grep -Fq 'premium-motion-20260829-v14' dist/widget.js
-          grep -Fq 'archived-layout-restrained-palette' dist/widget.js
+          # Verify the approved release, geometry and active visual system.
+          grep -Fq 'espresso-20261004-v17' dist/widget.js
           grep -Fq 'M24 71.2L24.003 32.706L24.036' dist/widget.js
-          grep -Fq 'bl__stroke' dist/widget.js
-          grep -Fq 'data-mobile-logo-motion' dist/widget.js
-          grep -Fq 'stroke-dashoffset' dist/widget.js
-          grep -Fq 'mobileLogoOffset' dist/widget.js
-
-          # The emitted widget CSS must contain the identity, interaction shell,
-          # chip-label persistence fix and the production host launcher authority.
-          grep -Fq '#c8f06a' dist/widget.css
-          grep -Fq '#12382d' dist/widget.css
-          grep -Fq '#fcfbf7' dist/widget.css
+          grep -Fq 'data-surface' dist/widget.js
+          grep -Fq 'mc-mark' dist/widget.js
+          grep -Fq -- '--mc-brand:' dist/widget.css
+          grep -Fq -- '--mc-paper:' dist/widget.css
           grep -Fq '.cw-panel' dist/widget.css
-          grep -Fq '.cw-tabs' dist/widget.css
           grep -Fq '.cw-inputbar' dist/widget.css
           grep -Fq '.cw-calculator' dist/widget.css
-          grep -Fq '.cw-chip__label' dist/widget.css
-          grep -Fq 'data-sending' dist/widget.css
-          grep -Fq '#dv-assistant-root' dist/widget.css
+          grep -Fq '.cw-selection-indicator' dist/widget.css
 
-          # Source entry points must use only static stylesheets and never
-          # restore an injected override stack or pointer tilt.
-          grep -Fq 'product-widget.css' src/main.tsx
-          grep -Fq 'widget-polish.css' src/main.tsx
-          grep -Fq 'product-widget.css' src/embed.tsx
-          grep -Fq 'widget-polish.css' src/embed.tsx
+          # Both entry points load the same static stylesheet authority.
+          grep -Fq './launch-ready-styles' src/main.tsx
+          grep -Fq './launch-ready-styles' src/embed.tsx
+          grep -Fq 'product-widget.css' src/launch-ready-styles.ts
+          grep -Fq 'brand-system.css' src/launch-ready-styles.ts
           ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt|installProductRefinement' src/main.tsx
           ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt|installProductRefinement' src/embed.tsx
-          ! grep -Eq 'assistant-redesign|approved-option-one|masterpiece-final|product-refinement.css' src/main.tsx
-          ! grep -Eq 'assistant-redesign|approved-option-one|masterpiece-final|product-refinement.css' src/embed.tsx

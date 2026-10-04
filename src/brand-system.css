@@ -221,7 +221,7 @@
   outline: none;
 }
 .cw-widget .cw-inputbar input::placeholder {
-  color: #8c7f74;
+  color: var(--mc-muted);
 }
 .cw-widget .cw-send {
   flex: 0 0 36px;
@@ -509,4 +509,11 @@
 .cw-widget .cw-launcher-dock:has(.cw-launcher[aria-expanded="true"]) {
   display: none;
   pointer-events: none;
+}
+
+.cw-widget .cw-launcher[data-surface="dark"],
+.cw-widget .cw-launcher[data-surface="dark"]:hover {
+  background: var(--mc-paper);
+  color: var(--mc-brand);
+  border-color: var(--mc-line);
 }

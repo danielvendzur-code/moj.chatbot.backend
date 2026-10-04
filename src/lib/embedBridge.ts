@@ -42,8 +42,14 @@ function normalizeOptions(value: unknown): OpenSiteAssistantOptions {
   if (!value || typeof value !== "object") return { entry: "builder" };
 
   const candidate = value as Partial<OpenSiteAssistantOptions>;
-  const entry = candidate.entry && entries.has(candidate.entry) ? candidate.entry : "builder";
-  const preset = candidate.preset && presets.has(candidate.preset) ? candidate.preset : undefined;
+  const entry =
+    candidate.entry && entries.has(candidate.entry)
+      ? candidate.entry
+      : "builder";
+  const preset =
+    candidate.preset && presets.has(candidate.preset)
+      ? candidate.preset
+      : undefined;
 
   return preset ? { entry, preset } : { entry };
 }
@@ -66,12 +72,16 @@ export function isEmbedMode(): boolean {
 }
 
 export function getInitialEmbedViewport(): EmbedViewport {
-  return new URLSearchParams(window.location.search).get("viewport") === "mobile"
+  return new URLSearchParams(window.location.search).get("viewport") ===
+    "mobile"
     ? "mobile"
     : "desktop";
 }
 
-export function installEmbedBridge({ open, close }: EmbedBridgeHandlers): () => void {
+export function installEmbedBridge({
+  open,
+  close,
+}: EmbedBridgeHandlers): () => void {
   if (!isEmbedMode() || window.parent === window) return () => undefined;
 
   const parentOrigin = getParentOrigin();
@@ -79,6 +89,16 @@ export function installEmbedBridge({ open, close }: EmbedBridgeHandlers): () => 
     if (event.source !== window.parent) return;
     if (parentOrigin && event.origin !== parentOrigin) return;
     if (!event.data || event.data.source !== PARENT_MESSAGE_SOURCE) return;
+
+    if (
+      event.data.type === "surface-tone" &&
+      ["light", "dark"].includes(event.data.tone)
+    ) {
+      window.dispatchEvent(
+        new CustomEvent("site-assistant:surface", { detail: event.data.tone }),
+      );
+      return;
+    }
 
     if (event.data.type === "open") {
       open(normalizeOptions(event.data.options));
@@ -91,7 +111,8 @@ export function installEmbedBridge({ open, close }: EmbedBridgeHandlers): () => 
     }
 
     if (event.data.type === "viewport") {
-      const viewport: EmbedViewport = event.data.mobile === true ? "mobile" : "desktop";
+      const viewport: EmbedViewport =
+        event.data.mobile === true ? "mobile" : "desktop";
       document.documentElement.dataset.embedViewport = viewport;
     }
   };

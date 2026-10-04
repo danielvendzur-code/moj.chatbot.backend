@@ -28,11 +28,12 @@ export function BrandMark({
   size?: number;
   className?: string;
   loop?: boolean;
-  tone?: "ink" | "paper";
+  tone?: "ink" | "paper" | "brand";
 }) {
   const [run, setRun] = useState(0);
   const duration = run ? 1200 : 1700;
-  const color = tone === "paper" ? "#FFFCF7" : "#1C1612";
+  const color =
+    tone === "paper" ? "#FFFCF7" : tone === "brand" ? "#5B3A26" : "#1C1612";
   const base = {
     d: PATH,
     pathLength: 1,
