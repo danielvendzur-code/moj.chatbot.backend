@@ -3,6 +3,7 @@ import type { WidgetIconName } from "../components/widget/WidgetIcon";
 
 export type StepId =
   | "interest"
+  | "solutions"
   | "features"
   | "details"
   | "industry"
@@ -25,7 +26,11 @@ export const QUESTION_STEPS: StepId[] = STEPS.filter((id) => id !== "contact");
 export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
   interest: [
     "Čo chcete pridať na web?",
-    "Jeden nástroj, kombinácia alebo všetko spolu. Potom pokračujete doplnkami.",
+    "Vyberte samostatný nástroj alebo spojte tie, ktoré potrebujete.",
+  ],
+  solutions: [
+    "Ktoré riešenia chcete kombinovať?",
+    "Vyberte aspoň dva nástroje. Otázky potom prispôsobíme vášmu výberu.",
   ],
   features: [
     "Ktoré doplnkové funkcie chcete?",
@@ -39,10 +44,7 @@ export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
     "Čo robí vaša firma?",
     "Vyberte odvetvie, aby som vedel návrh lepšie prispôsobiť vašej ponuke.",
   ],
-  timeline: [
-    "Kedy to chcete mať hotové?",
-    "Vyberte približný termín.",
-  ],
+  timeline: ["Kedy to chcete mať hotové?", "Vyberte približný termín."],
   /* The old heading asked the visitor to pay with their contact details for
      something vague they could not picture. This names what they get instead,
      and says out loud that it costs nothing. */
@@ -50,14 +52,8 @@ export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
     "Váš návrh je pripravený",
     "Pošlem vám rozsah aj cenu do 24 hodín. Nezáväzne a bez registrácie.",
   ],
-  priority: [
-    "Čo je pre vás najdôležitejšie?",
-    "Túto otázku teraz nepoužívam.",
-  ],
-  volume: [
-    "Koľko ľudí sa vás denne pýta?",
-    "Túto otázku teraz nepoužívam.",
-  ],
+  priority: ["Čo je pre vás najdôležitejšie?", "Túto otázku teraz nepoužívam."],
+  volume: ["Koľko ľudí sa vás denne pýta?", "Túto otázku teraz nepoužívam."],
 };
 
 export type InterestOption = {
@@ -69,6 +65,13 @@ export type InterestOption = {
 };
 
 export const INTERESTS: InterestOption[] = [
+  {
+    id: "advisor",
+    label: "Interaktívny poradca",
+    description:
+      "Odporučí vhodný produkt alebo službu podľa potrieb zákazníka.",
+    icon: "options",
+  },
   {
     id: "chatbot",
     label: "Chatbot",
@@ -85,23 +88,25 @@ export const INTERESTS: InterestOption[] = [
   },
   {
     id: "configurator",
-    label: "Konfigurátor",
+    label: "3D konfigurátor",
     badge: "Samostatne",
-    description: "Prevedie výberom variantov, rozmerov, farieb a doplnkov — aj s 3D náhľadom.",
+    description:
+      "Prevedie výberom variantov, rozmerov, farieb a doplnkov — aj s 3D náhľadom.",
     icon: "options",
   },
   {
     id: "calcbot",
     label: "Kombinované riešenie",
     badge: "Spojené",
-    description: "Chatbot s kalkulačkou, konfigurátorom alebo poradcom v jednom.",
+    description: "Vyberiete si, ktoré nástroje majú spolu fungovať.",
     icon: "spark",
   },
   {
     id: "all",
     label: "Všetko spolu",
     badge: "Kompletné",
-    description: "Chatbot, kalkulačka, konfigurátor aj poradca v jednom nástroji.",
+    description:
+      "Chatbot, kalkulačka, konfigurátor aj poradca v jednom nástroji.",
     icon: "check",
   },
   {
@@ -207,10 +212,26 @@ export type PriorityOption = {
 };
 
 export const PRIORITIES: PriorityOption[] = [
-  { id: "dopyty", label: "Viac pripravených dopytov", description: "Získať kontakt aj relevantné vstupy." },
-  { id: "telefonaty", label: "Menej opakovaných otázok", description: "Bežné otázky vybaví asistent." },
-  { id: "nonstop", label: "Dostupnosť 24/7", description: "Odpovie aj mimo pracovného času." },
-  { id: "rychlost", label: "Okamžitá reakcia", description: "Zákazník nečaká na e-mail." },
+  {
+    id: "dopyty",
+    label: "Viac pripravených dopytov",
+    description: "Získať kontakt aj relevantné vstupy.",
+  },
+  {
+    id: "telefonaty",
+    label: "Menej opakovaných otázok",
+    description: "Bežné otázky vybaví asistent.",
+  },
+  {
+    id: "nonstop",
+    label: "Dostupnosť 24/7",
+    description: "Odpovie aj mimo pracovného času.",
+  },
+  {
+    id: "rychlost",
+    label: "Okamžitá reakcia",
+    description: "Zákazník nečaká na e-mail.",
+  },
 ];
 
 export type FeatureOption = {
@@ -224,12 +245,14 @@ export const FEATURES: FeatureOption[] = [
   {
     id: "answers",
     label: "Odpovedať na otázky zákazníkov",
-    description: "Ponuka, dostupnosť, doprava, služby a bežné otázky priamo na webe.",
+    description:
+      "Ponuka, dostupnosť, doprava, služby a bežné otázky priamo na webe.",
   },
   {
     id: "leads",
     label: "Zbierať dopyty a kontakty",
-    description: "Zistí, čo zákazník potrebuje, a odošle firme pripravený kontakt.",
+    description:
+      "Zistí, čo zákazník potrebuje, a odošle firme pripravený kontakt.",
   },
   {
     id: "cena",
@@ -249,7 +272,8 @@ export const FEATURES: FeatureOption[] = [
   {
     id: "calc-variant",
     label: "Počítať podľa typu alebo modelu",
-    description: "Cena sa mení podľa zvoleného produktu, variantu alebo služby.",
+    description:
+      "Cena sa mení podľa zvoleného produktu, variantu alebo služby.",
   },
   {
     id: "calc-extras",
@@ -274,7 +298,8 @@ export const FEATURES: FeatureOption[] = [
   {
     id: "addons",
     label: "Vyberať doplnky a príslušenstvo",
-    description: "Voliteľné prvky pridá k hlavnej zostave prehľadne na jednom mieste.",
+    description:
+      "Voliteľné prvky pridá k hlavnej zostave prehľadne na jednom mieste.",
   },
   {
     id: "advisor",
@@ -299,12 +324,14 @@ export const FEATURES: FeatureOption[] = [
   {
     id: "rules",
     label: "Strážiť technické pravidlá",
-    description: "Nedovolí rozmer ani kombináciu, ktorú neviete vyrobiť alebo namontovať.",
+    description:
+      "Nedovolí rozmer ani kombináciu, ktorú neviete vyrobiť alebo namontovať.",
   },
   {
     id: "share-link",
     label: "Uložiť zostavu do odkazu",
-    description: "Výber sa dá poslať ďalej alebo otvoriť neskôr presne tak, ako bol.",
+    description:
+      "Výber sa dá poslať ďalej alebo otvoriť neskôr presne tak, ako bol.",
   },
   {
     id: "tracking",
@@ -371,6 +398,7 @@ export const FEATURES: FeatureOption[] = [
 /* Krok 2 obsahuje iba doplnkové funkcie k zvolenému nástroju. Jadro nástroja
    sa pýta až v nasledujúcom kroku cez DETAILS. */
 export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
+  advisor: ["compare", "leads", "stock-alert", "handoff", "jazyky"],
   chatbot: [
     "advisor",
     "leads",
@@ -429,7 +457,16 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
     "rezervacie",
     "handoff",
   ],
-  custom: ["leads", "handoff", "document", "tabulka", "jazyky", "fotky", "rezervacie", "payment"],
+  custom: [
+    "leads",
+    "handoff",
+    "document",
+    "tabulka",
+    "jazyky",
+    "fotky",
+    "rezervacie",
+    "payment",
+  ],
 };
 
 export type DetailOption = {
@@ -439,6 +476,21 @@ export type DetailOption = {
 };
 
 export const DETAILS: DetailOption[] = [
+  {
+    id: "advisor-product",
+    label: "Výber produktu",
+    description: "Odporúčanie z vášho katalógu podľa potrieb zákazníka.",
+  },
+  {
+    id: "advisor-service",
+    label: "Výber služby",
+    description: "Nájde vhodnú službu alebo balík vo vašej ponuke.",
+  },
+  {
+    id: "advisor-budget",
+    label: "Rozpočet a požiadavky",
+    description: "Zohľadní cenu, použitie a dôležité vlastnosti.",
+  },
   {
     id: "chat-offer",
     label: "Ponuka a služby",
@@ -452,7 +504,8 @@ export const DETAILS: DetailOption[] = [
   {
     id: "chat-availability",
     label: "Dostupnosť a termíny",
-    description: "Kedy je služba alebo produkt dostupný a aké sú možnosti termínu.",
+    description:
+      "Kedy je služba alebo produkt dostupný a aké sú možnosti termínu.",
   },
   {
     id: "chat-orders",
@@ -482,12 +535,14 @@ export const DETAILS: DetailOption[] = [
   {
     id: "calc-variant-detail",
     label: "Typ alebo model",
-    description: "Výsledok sa mení podľa produktu, variantu alebo druhu služby.",
+    description:
+      "Výsledok sa mení podľa produktu, variantu alebo druhu služby.",
   },
   {
     id: "calc-extras-detail",
     label: "Montáž, doprava a príplatky",
-    description: "Voliteľné položky, doprava, montáž a ďalšie pravidlá výsledku.",
+    description:
+      "Voliteľné položky, doprava, montáž a ďalšie pravidlá výsledku.",
   },
   {
     id: "config-variant",
@@ -512,16 +567,19 @@ export const DETAILS: DetailOption[] = [
   {
     id: "config-placement",
     label: "Umiestnenie a osadenie",
-    description: "Samostatne, pri stene alebo v rohu — podľa toho sa mení konštrukcia.",
+    description:
+      "Samostatne, pri stene alebo v rohu — podľa toho sa mení konštrukcia.",
   },
   {
     id: "config-roof",
     label: "Strecha, výplne a tienenie",
-    description: "Typ strechy, bočné steny, lamely alebo rolety ako súčasť zostavy.",
+    description:
+      "Typ strechy, bočné steny, lamely alebo rolety ako súčasť zostavy.",
   },
 ];
 
 export const DETAIL_IDS_BY_INTEREST: Record<InterestId, string[]> = {
+  advisor: ["advisor-product", "advisor-service", "advisor-budget"],
   chatbot: [
     "chat-offer",
     "chat-pricing",
@@ -602,6 +660,7 @@ export const DETAIL_IDS_BY_INTEREST: Record<InterestId, string[]> = {
 };
 
 export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
+  advisor: [],
   chatbot: [],
   calculator: [],
   configurator: [],
@@ -614,7 +673,14 @@ export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
 
 export const INDUSTRY_RECOMMENDED_FEATURES: Record<string, string[]> = {
   sluzby: ["rezervacie", "fotky", "payment", "document"],
-  eshop: ["advisor", "tracking", "order-change", "returns", "stock-alert", "cart-recovery"],
+  eshop: [
+    "advisor",
+    "tracking",
+    "order-change",
+    "returns",
+    "stock-alert",
+    "cart-recovery",
+  ],
   gastro: ["rezervacie", "jazyky", "payment", "handoff"],
   zdravie: ["rezervacie", "payment", "jazyky", "handoff"],
   stavba: ["viz-3d", "scene", "rules", "document", "fotky"],
@@ -629,10 +695,18 @@ export type VolumeOption = {
 };
 
 export const VOLUMES: VolumeOption[] = [
-  { id: "v20", label: "Do 20", description: "Občasné dopyty a osobný prístup." },
+  {
+    id: "v20",
+    label: "Do 20",
+    description: "Občasné dopyty a osobný prístup.",
+  },
   { id: "v100", label: "20 – 100", description: "Stabilný tok dopytov." },
   { id: "v500", label: "100 – 500", description: "Vyťažená prevádzka." },
-  { id: "v500plus", label: "Viac než 500", description: "Veľký objem a automatizácia." },
+  {
+    id: "v500plus",
+    label: "Viac než 500",
+    description: "Veľký objem a automatizácia.",
+  },
 ];
 
 export type TimelineOption = {
@@ -642,17 +716,33 @@ export type TimelineOption = {
 };
 
 export const TIMELINES: TimelineOption[] = [
-  { id: "asap", label: "Čo najskôr", description: "Začnem, len čo mi pošlete podklady." },
-  { id: "mesiac", label: "Do mesiaca", description: "Máme priestor všetko doladiť." },
-  { id: "kvartal", label: "Za dva až tri mesiace", description: "Rozdelíme to na menšie kroky." },
-  { id: "rozhliadam", label: "Len sa pozerám", description: "Najprv si chcete ujasniť možnosti." },
+  {
+    id: "asap",
+    label: "Čo najskôr",
+    description: "Začnem, len čo mi pošlete podklady.",
+  },
+  {
+    id: "mesiac",
+    label: "Do mesiaca",
+    description: "Máme priestor všetko doladiť.",
+  },
+  {
+    id: "kvartal",
+    label: "Za dva až tri mesiace",
+    description: "Rozdelíme to na menšie kroky.",
+  },
+  {
+    id: "rozhliadam",
+    label: "Len sa pozerám",
+    description: "Najprv si chcete ujasniť možnosti.",
+  },
 ];
 
 export const PRESET_TO_INTEREST: Record<AssistantPreset, InterestId> = {
   calculator: "calculator",
   product: "configurator",
   inquiry: "chatbot",
-  advisor: "chatbot",
+  advisor: "advisor",
   booking: "booking",
 };
 
@@ -663,4 +753,69 @@ export const labelOf = (
 
 export function buildProposalNumber(): string {
   return `MC-${Date.now().toString(36).toUpperCase().slice(-6)}`;
+}
+
+export type ToolId = "chatbot" | "calculator" | "configurator" | "advisor";
+export const COMBINABLE_TOOLS = INTERESTS.filter(
+  (item): item is InterestOption & { id: ToolId } =>
+    ["chatbot", "calculator", "configurator", "advisor"].includes(item.id),
+);
+export const isCombinedInterest = (interest: InterestId | null): boolean =>
+  interest === "calcbot" || interest === "all" || interest === "product";
+export function stepsForInterest(interest: InterestId | null): StepId[] {
+  return isCombinedInterest(interest)
+    ? ["interest", "solutions", ...STEPS.slice(1)]
+    : STEPS;
+}
+export function selectedToolIds(
+  interest: InterestId | null,
+  combination: ToolId[],
+): InterestId[] {
+  return isCombinedInterest(interest)
+    ? combination
+    : interest
+      ? [interest]
+      : [];
+}
+export function optionIdsForTools(
+  map: Record<InterestId, string[]>,
+  interest: InterestId | null,
+  combination: ToolId[],
+): string[] {
+  const tools = selectedToolIds(interest, combination);
+  const ids = [...new Set(tools.flatMap((tool) => map[tool]))];
+  if (map !== FEATURE_IDS_BY_INTEREST) return ids;
+  // A selected tool already supplies its core capability.
+  return ids.filter(
+    (id) =>
+      !(id === "viz-3d" && tools.includes("configurator")) &&
+      !(id === "advisor" && tools.includes("advisor")) &&
+      !(id === "cena" && tools.includes("calculator")),
+  );
+}
+export function detailsQuestion(interest: InterestId | null): [string, string] {
+  switch (interest) {
+    case "chatbot":
+      return [
+        "S čím má chatbot pomáhať?",
+        "Vyberte témy, na ktoré sa zákazníci pýtajú. Môžete označiť viac možností.",
+      ];
+    case "calculator":
+      return [
+        "Čo má kalkulačka počítať?",
+        "Cenu, rozmery, množstvo alebo rozsah služby podľa vašich pravidiel.",
+      ];
+    case "configurator":
+      return [
+        "Čo si má zákazník meniť v 3D?",
+        "Vyberte vlastnosti produktu. Konkrétny model a podklady doladíme spolu.",
+      ];
+    case "advisor":
+      return [
+        "S čím má poradca pomôcť pri výbere?",
+        "Zohľadní vašu ponuku a to, čo zákazník skutočne potrebuje.",
+      ];
+    default:
+      return QUESTIONS.details;
+  }
 }

@@ -13,6 +13,7 @@ const mime = {
   ".png": "image/png",
   ".svg": "image/svg+xml",
   ".webp": "image/webp",
+  ".woff2": "font/woff2",
 };
 
 createServer(async (request, response) => {
@@ -30,7 +31,10 @@ createServer(async (request, response) => {
       }
       pathname = `/${pathname.slice(basePath.length)}`;
     }
-    const relative = pathname === "/" ? "index.html" : normalize(pathname).replace(/^[/\\]+/, "");
+    const relative =
+      pathname === "/"
+        ? "index.html"
+        : normalize(pathname).replace(/^[/\\]+/, "");
     let file = join(root, relative);
     if (!file.startsWith(root)) {
       response.writeHead(403).end("Forbidden");
@@ -51,6 +55,7 @@ createServer(async (request, response) => {
     response.writeHead(200, {
       "Content-Type": mime[extname(file)] || "application/octet-stream",
       "Cache-Control": "no-store",
+      "Access-Control-Allow-Origin": "*",
     });
     response.end(body);
   } catch {

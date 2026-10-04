@@ -13,8 +13,8 @@ async function verifyAdaptiveFill(page, launcher) {
   );
 
   for (const [tone, background, fill] of [
-    ["dark", "#071b15", "rgb(31, 128, 83)"],
-    ["light", "#ffffff", "rgb(18, 56, 45)"],
+    ["dark", "#071b15", "rgb(16, 23, 19)"],
+    ["light", "#ffffff", "rgb(16, 23, 19)"],
   ]) {
     await page.evaluate((background) => {
       let surface = document.getElementById("test-background");
@@ -33,7 +33,7 @@ async function verifyAdaptiveFill(page, launcher) {
     }, background);
     await expect(launcher).toHaveAttribute("data-surface-tone", tone);
     await expect(launcher).toHaveCSS("background-color", fill);
-    await expect(launcher).toHaveCSS("color", "rgb(255, 255, 255)");
+    await expect(launcher).toHaveCSS("color", "rgb(200, 240, 106)");
     expect(
       await launcher
         .locator(".cw-launcher__icon")
@@ -51,7 +51,7 @@ async function verifyAdaptiveFill(page, launcher) {
 
 for (const device of ["mobile", "desktop"]) {
   for (const mode of ["preview", "production assets"]) {
-    test(`${device} ${mode} adapts only the green bubble fill`, async ({
+    test(`${device} ${mode} keeps the branded launcher stable across light and dark surfaces`, async ({
       browser,
     }) => {
       const context = await browser.newContext({

@@ -13,21 +13,12 @@ const HOST_ID = "dv-assistant-root";
 const scriptSrc =
   (document.currentScript as HTMLScriptElement | null)?.src ?? "";
 
-const FONT_HREF =
-  "https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&display=swap";
-
-/*
- * Inter Tight is the brand typeface — the same one mojchatbot.sk serves. The
- * chatbot used to adopt the host page's font instead, so it looked like a
- * different product on every site. If this request fails, the system font is
- * used and the layout still works.
- */
+// Same self-hosted Geist as the website, resolved relative to the stable loader.
 function ensureBrandFont(): void {
-  if (document.querySelector(`link[data-dv-assistant-font="true"]`)) return;
-
+  if (!scriptSrc || document.querySelector('link[data-dv-assistant-font="true"]')) return;
   const link = document.createElement("link");
   link.rel = "stylesheet";
-  link.href = FONT_HREF;
+  link.href = new URL("fonts/brand.css", scriptSrc).toString();
   link.crossOrigin = "anonymous";
   link.dataset.dvAssistantFont = "true";
   document.head.appendChild(link);
@@ -57,11 +48,11 @@ function mount(): void {
 
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "premium-motion-20260829-v14");
+  host.setAttribute("data-dv-assistant-version", "premium-redesign-20261004-v16");
   host.setAttribute("data-dv-assistant-theme", "website-paper-forest-lime");
   host.setAttribute(
     "data-dv-assistant-quality",
-    "archived-layout-restrained-palette",
+    "responsive-tool-combinations",
   );
 
   if (!existing) document.body.appendChild(host);

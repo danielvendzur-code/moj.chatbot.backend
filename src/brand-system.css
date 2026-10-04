@@ -1,0 +1,294 @@
+/* Website and widget share one palette and typeface. Legacy motion layers use
+   aliases below; all new component states take their colors from these tokens. */
+.widget-preview,
+html body :is(#root, #dv-assistant-root) .cw-widget {
+  --cw-white: #ffffff;
+  --cw-paper: #ffffff;
+  --cw-mint: #f5f6f2;
+  --cw-lime: #c8f06a;
+  --cw-lime-bright: #c8f06a;
+  --cw-green: #1f5b47;
+  --cw-green-hover: #101713;
+  --cw-forest: #101713;
+  --cw-ink: #101713;
+  --cw-muted: #56605a;
+  --cw-faint: #56605a;
+  --cw-line: #d8dcd5;
+  --restored-forest: var(--cw-green);
+  --restored-forest-deep: var(--cw-ink);
+  --restored-lime: var(--cw-lime);
+  --restored-paper: var(--cw-paper);
+  --restored-soft: var(--cw-mint);
+  --restored-ink: var(--cw-ink);
+  --restored-muted: var(--cw-muted);
+  --mc-green: var(--cw-green);
+  --mc-lime: var(--cw-lime);
+  --goal-green: var(--cw-green);
+  --goal-lime: var(--cw-lime);
+  --cw-font-stack: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --cw-r-panel: 18px;
+  --cw-r-card: 12px;
+  --cw-r-inner: 8px;
+}
+html body :is(#root, #dv-assistant-root) .cw-widget .cw-panel {
+  background: var(--cw-paper) !important;
+  border-color: var(--cw-line) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 24px 70px -26px #10171350 !important;
+}
+html body :is(#root, #dv-assistant-root) .cw-widget .cw-panel-head {
+  background: var(--cw-ink) !important;
+  border-bottom-color: #ffffff25 !important;
+}
+html
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget
+  .cw-panel-head
+  :is(h2, .cw-panel-head__actions button) {
+  color: var(--cw-paper) !important;
+}
+html
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget
+  .cw-panel-head
+  :is(.cw-panel-head__mascot, .cw-panel-head__online) {
+  color: var(--cw-lime) !important;
+}
+html
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget
+  .cw-panel-head__actions
+  button:hover {
+  background: #ffffff18 !important;
+}
+html:root
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget.cw-widget
+  .cw-launcher.cw-launcher {
+  width: 60px !important;
+  height: 60px !important;
+  border: 1px solid #ffffff50 !important;
+  background: var(--cw-ink) !important;
+  color: var(--cw-lime) !important;
+  backdrop-filter: none !important;
+  box-shadow: 0 8px 26px -14px #10171360 !important;
+}
+html:root
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget.cw-widget
+  .cw-launcher.cw-launcher:hover {
+  background: var(--cw-lime) !important;
+  color: var(--cw-ink) !important;
+  border-color: var(--cw-ink) !important;
+}
+html body :is(#root, #dv-assistant-root) .cw-widget .cw-launcher__icon {
+  width: 27px;
+  height: 27px;
+}
+html body :is(#root, #dv-assistant-root) .cw-widget .cw-interest-group {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+}
+html
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget
+  .cw-interest-group[data-group="custom"] {
+  display: grid !important;
+}
+html body :is(#root, #dv-assistant-root) .cw-widget .cw-choice-grid--interest {
+  gap: 8px !important;
+}
+html body :is(#root, #dv-assistant-root) .cw-widget .cw-rowcard {
+  min-height: 78px !important;
+  border-radius: 10px !important;
+  background: var(--cw-paper) !important;
+  border-color: var(--cw-line) !important;
+}
+html
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget
+  :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"] {
+  background: var(--cw-ink) !important;
+  border-color: var(--cw-ink) !important;
+  color: var(--cw-paper) !important;
+}
+html
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget
+  :is(.cw-rowcard, .cw-scard, .cw-opt, .cw-vcard)[data-selected="true"]
+  :is(
+    b,
+    strong,
+    small,
+    .cw-opt__body span,
+    .cw-vcard__copy span,
+    .cw-rowcard__icon
+  ) {
+  color: var(--cw-paper) !important;
+  -webkit-text-fill-color: var(--cw-paper) !important;
+}
+html body :is(#root, #dv-assistant-root) .cw-widget :is(.cw-next, .cw-submit) {
+  background: var(--cw-lime) !important;
+  color: var(--cw-ink) !important;
+  border-color: var(--cw-lime) !important;
+  -webkit-text-fill-color: var(--cw-ink) !important;
+  box-shadow: none !important;
+}
+html
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget
+  :is(.cw-next, .cw-submit):not(:disabled):hover {
+  background: var(--cw-ink) !important;
+  color: var(--cw-lime) !important;
+  border-color: var(--cw-ink) !important;
+}
+html
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget
+  :is(.cw-next, .cw-submit):not(:disabled):hover
+  :is(span, svg) {
+  color: var(--cw-lime) !important;
+  -webkit-text-fill-color: var(--cw-lime) !important;
+}
+html
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget
+  .cw-conversation
+  > .cw-scroll-shell {
+  margin-top: 12px;
+}
+.cw-combination-hint {
+  grid-column: 1/-1;
+  margin: 8px 0;
+  color: var(--cw-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.cw-choice-grid--solutions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+@media (max-width: 600px) {
+  html body :is(#root, #dv-assistant-root) .cw-widget .cw-panel {
+    border-radius: 0 !important;
+  }
+  html body :is(#root, #dv-assistant-root) .cw-widget .cw-rowcard {
+    min-height: 74px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cw-widget * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html body :is(#root, #dv-assistant-root) .cw-widget .cw-tabs__thumb {
+  background: var(--cw-ink) !important;
+  box-shadow: none !important;
+}
+html:root
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget.cw-widget.cw-widget
+  .cw-quick-replies
+  .cw-chip.cw-chip {
+  color: var(--cw-ink) !important;
+}
+html:root
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget.cw-widget.cw-widget
+  .cw-quick-replies
+  .cw-chip.cw-chip:hover {
+  color: var(--cw-green) !important;
+}
+
+html
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget
+  .cw-calculator[data-composing="true"]
+  .cw-progress {
+  display: flex !important;
+}
+
+html:root
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget.cw-widget
+  .cw-direct-actions__grid
+  :is(a, button) {
+  --cw-contact-hover-ink: var(--cw-green);
+  --cw-contact-glow: transparent;
+  --cw-contact-tint: transparent;
+  background: var(--cw-paper) !important;
+  color: var(--cw-ink) !important;
+  border-color: var(--cw-line) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+html:root
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget.cw-widget
+  .cw-direct-actions__grid
+  :is(a, button)
+  svg {
+  color: var(--cw-green) !important;
+  filter: none !important;
+  transform: none !important;
+}
+html:root
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget.cw-widget
+  .cw-direct-actions__grid
+  :is(a, button):is(:hover, :focus-visible) {
+  background: var(--cw-ink) !important;
+  color: var(--cw-lime) !important;
+  border-color: var(--cw-ink) !important;
+  box-shadow: none !important;
+}
+html:root
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget.cw-widget
+  .cw-direct-actions__grid
+  :is(a, button):is(:hover, :focus-visible)
+  svg {
+  color: var(--cw-lime) !important;
+}
+
+html:root
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget
+  :is(.cw-next, .cw-submit)
+  :is(span, svg) {
+  color: var(--cw-ink) !important;
+  -webkit-text-fill-color: var(--cw-ink) !important;
+}
+html:root
+  body
+  :is(#root, #dv-assistant-root)
+  .cw-widget
+  :is(.cw-next, .cw-submit):not(:disabled):hover
+  :is(span, svg) {
+  color: var(--cw-lime) !important;
+  -webkit-text-fill-color: var(--cw-lime) !important;
+}

@@ -7,6 +7,8 @@ import "./preview.css";
 import "./widget.css";
 import "./product-widget.css";
 import "./widget-polish.css";
+import "./brand-system.css";
+import "../public/fonts/brand.css";
 
 installConfiguratorAutoAdvance();
 

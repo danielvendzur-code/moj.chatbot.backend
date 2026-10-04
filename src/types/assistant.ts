@@ -20,6 +20,7 @@ export type OpenSiteAssistantOptions = {
 
 export type InterestId =
   | "chatbot"
+  | "advisor"
   | "calculator"
   | "configurator"
   | "calcbot"
