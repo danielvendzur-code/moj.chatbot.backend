@@ -1,5 +1,9 @@
 /* Q3 — rýchle otázky ako zoznam „Často sa pýtajú“. Posledná vrstva. */
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-replies.cw-quick-replies {
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-quick-replies.cw-quick-replies {
   display: flex !important;
   flex-direction: column !important;
   flex-wrap: nowrap !important;
@@ -13,16 +17,28 @@ html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-rep
   mask-image: none !important;
 }
 
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-replies__title {
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-quick-replies__title {
   display: block;
   padding: 0 2px 6px;
-  font: 500 10px/1.2 "Geist Mono", ui-monospace, monospace;
-  letter-spacing: .08em;
+  font:
+    500 10px/1.2 "Geist Mono",
+    ui-monospace,
+    monospace;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #5c645f;
 }
 
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-replies .cw-chip.cw-chip {
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-quick-replies
+  .cw-chip.cw-chip {
   all: unset;
   box-sizing: border-box !important;
   display: flex !important;
@@ -32,7 +48,7 @@ html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-rep
   width: 100% !important;
   min-height: 44px !important;
   padding: 10px 2px !important;
-  border-top: 1px solid rgba(14, 21, 18, .1) !important;
+  border-top: 1px solid rgba(14, 21, 18, 0.1) !important;
   border-radius: 0 !important;
   background: none !important;
   box-shadow: none !important;
@@ -43,64 +59,273 @@ html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-rep
   line-height: 1.35 !important;
   text-align: left !important;
   cursor: pointer;
-  transition: color .18s ease, padding .18s ease;
+  transition:
+    color 0.18s ease,
+    padding 0.18s ease;
 }
 
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-replies .cw-chip:last-child {
-  border-bottom: 1px solid rgba(14, 21, 18, .1) !important;
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-quick-replies
+  .cw-chip:last-child {
+  border-bottom: 1px solid rgba(14, 21, 18, 0.1) !important;
 }
 
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-replies .cw-chip::before,
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-replies .cw-chip::after { content: none !important; }
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-quick-replies
+  .cw-chip::before,
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-quick-replies
+  .cw-chip::after {
+  content: none !important;
+}
 
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-replies .cw-chip__arrow {
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-quick-replies
+  .cw-chip__arrow {
   flex: none;
   color: #1f5b47;
-  transition: transform .18s ease;
+  transition: transform 0.18s ease;
 }
 
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-replies .cw-chip:hover:not(:disabled),
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-replies .cw-chip:focus-visible {
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-quick-replies
+  .cw-chip:hover:not(:disabled),
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-quick-replies
+  .cw-chip:focus-visible {
   color: #1f5b47 !important;
   padding-left: 6px !important;
 }
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-replies .cw-chip:hover:not(:disabled) .cw-chip__arrow { transform: translateX(3px); }
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-replies .cw-chip:focus-visible { outline: 2px solid #1f5b47 !important; outline-offset: 2px; }
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-replies .cw-chip[data-sending] { color: #1f5b47 !important; font-weight: 600 !important; }
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-replies .cw-chip:disabled:not([data-sending]) { opacity: .5; }
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-quick-replies
+  .cw-chip:hover:not(:disabled)
+  .cw-chip__arrow {
+  transform: translateX(3px);
+}
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-quick-replies
+  .cw-chip:focus-visible {
+  outline: 2px solid #1f5b47 !important;
+  outline-offset: 2px;
+}
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-quick-replies
+  .cw-chip[data-sending] {
+  color: #1f5b47 !important;
+  font-weight: 600 !important;
+}
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-quick-replies
+  .cw-chip:disabled:not([data-sending]) {
+  opacity: 0.5;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-replies .cw-chip,
-  html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-quick-replies .cw-chip__arrow { transition: none !important; }
+  html:root
+    body
+    :is(#dv-assistant-root, #root)
+    .cw-widget.cw-widget
+    .cw-quick-replies
+    .cw-chip,
+  html:root
+    body
+    :is(#dv-assistant-root, #root)
+    .cw-widget.cw-widget
+    .cw-quick-replies
+    .cw-chip__arrow {
+    transition: none !important;
+  }
 }
 
-/* B1 — bublina ako na koverta.sk: tmavý kruh, biela okrúhla bublina s tromi bodkami */
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-launcher.cw-launcher {
-  width: 60px !important; height: 60px !important; border-radius: 50% !important;
-  background: #1b1b1b !important; color: #fff !important; border: 0 !important;
-  box-shadow: 0 16px 32px -14px rgba(0,0,0,.55) !important;
-  display: flex !important; align-items: center !important; justify-content: center !important;
-  transition: transform .2s cubic-bezier(.16,1,.3,1) !important;
+/* Zelená výplň bubliny reaguje na plochu pod ňou; ikona zostáva biela. */
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-launcher.cw-launcher {
+  width: 60px !important;
+  height: 60px !important;
+  border-radius: 50% !important;
+  background: var(--cw-launcher-fill, #12382d) !important;
+  color: #fff !important;
+  border: 0 !important;
+  box-shadow: 0 16px 32px -14px rgba(0, 0, 0, 0.55) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-launcher .cw-launcher__icon { width: 28px; height: 28px; }
-@media (hover: hover) { html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-launcher:hover { transform: translateY(-2px) !important; } }
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-launcher:focus-visible { outline: 2px solid #1f5b47 !important; outline-offset: 3px !important; }
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-launcher
+  .cw-launcher__icon {
+  width: 28px;
+  height: 28px;
+}
+@media (hover: hover) {
+  html:root
+    body
+    :is(#dv-assistant-root, #root)
+    .cw-widget.cw-widget
+    .cw-launcher:hover {
+    transform: translateY(-2px) !important;
+  }
+}
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-launcher:focus-visible {
+  outline: 2px solid #1f5b47 !important;
+  outline-offset: 3px !important;
+}
 
 /* „Vyskladať riešenie“ — biela karta, ikonka nastavení, tmavý krúžok so šípkou */
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-chat-builder.cw-chat-builder {
-  background: #fff !important; color: #0e1512 !important;
-  border: 1px solid rgba(14,21,18,.12) !important; border-radius: 16px !important;
-  box-shadow: 0 6px 18px -12px rgba(12,26,21,.35) !important;
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-chat-builder.cw-chat-builder {
+  background: #fff !important;
+  color: #0e1512 !important;
+  border: 1px solid rgba(14, 21, 18, 0.12) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 18px -12px rgba(12, 26, 21, 0.35) !important;
 }
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-chat-builder:hover { border-color: #0e1512 !important; }
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-chat-builder__icon.cw-chat-builder__icon {
-  width: 36px !important; height: 36px !important; border-radius: 11px !important;
-  background: #f5f4ef !important; color: #0c1a15 !important;
-  display: flex !important; align-items: center !important; justify-content: center !important;
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-chat-builder:hover {
+  border-color: #0e1512 !important;
 }
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-chat-builder__icon svg { width: 19px !important; height: 19px !important; }
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-chat-builder__copy small { color: #5c645f !important; }
-html:root body :is(#dv-assistant-root, #root) .cw-widget.cw-widget .cw-chat-builder__arrow.cw-chat-builder__arrow {
-  width: 30px !important; height: 30px !important; padding: 7px !important; box-sizing: border-box !important;
-  border-radius: 50% !important; background: #0c1a15 !important; color: #c9f26b !important;
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-chat-builder__icon.cw-chat-builder__icon {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 11px !important;
+  background: #f5f4ef !important;
+  color: #0c1a15 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-chat-builder__icon
+  svg {
+  width: 19px !important;
+  height: 19px !important;
+}
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-chat-builder__copy
+  small {
+  color: #5c645f !important;
+}
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-chat-builder__arrow.cw-chat-builder__arrow {
+  width: 30px !important;
+  height: 30px !important;
+  padding: 7px !important;
+  box-sizing: border-box !important;
+  border-radius: 50% !important;
+  background: #0c1a15 !important;
+  color: #c9f26b !important;
+}
+
+/* Zaoblenie patrí celej správe, vrstva za textom je priehľadná. */
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-panel.cw-panel {
+  border-radius: 26px !important;
+  overflow: hidden !important;
+  background: #fafbf7 !important;
+  border: 1px solid rgba(18, 56, 45, 0.16) !important;
+}
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  :is(.cw-message-row, .cw-message-wrap) {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-message-wrap {
+  border-radius: 22px !important;
+  overflow: hidden !important;
+}
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-message-wrap
+  p {
+  border-radius: 22px !important;
+  background: #fff !important;
+  color: #12382d !important;
+  border: 1px solid rgba(18, 56, 45, 0.12) !important;
+  box-shadow: none !important;
+}
+html:root
+  body
+  :is(#dv-assistant-root, #root)
+  .cw-widget.cw-widget
+  .cw-message-row--me
+  .cw-message-wrap
+  p {
+  background: #19834f !important;
+  color: #fff !important;
+  border-color: transparent !important;
 }
