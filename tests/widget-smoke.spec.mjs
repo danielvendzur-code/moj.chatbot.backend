@@ -1,6 +1,29 @@
 import { test, expect } from "@playwright/test";
 
-const collectRuntimeErrors = (page) => {
+const collectRuntimeErrors = async (page) => {
+  await page.route("https://fonts.googleapis.com/**", (route) =>
+    route.fulfill({ contentType: "text/css", body: "" }),
+  );
+  await page.route("**/api/chat", async (route) => {
+    if (route.request().method() === "OPTIONS") {
+      await route.fulfill({
+        status: 204,
+        headers: {
+          "access-control-allow-origin": "*",
+          "access-control-allow-methods": "POST, OPTIONS",
+          "access-control-allow-headers": "content-type",
+        },
+      });
+      return;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    await route.fulfill({
+      json: {
+        reply: "Chatbot odpovie na opakované otázky a pomôže pripraviť dopyt.",
+      },
+      headers: { "access-control-allow-origin": "*" },
+    });
+  });
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => {
@@ -32,7 +55,7 @@ const expectBackButtonInsideProgress = async (page) => {
 test("desktop interactions stay clickable, unselected and visually stable", async ({
   page,
 }) => {
-  const errors = collectRuntimeErrors(page);
+  const errors = await collectRuntimeErrors(page);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("http://127.0.0.1:4173", { waitUntil: "networkidle" });
 
@@ -68,30 +91,16 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
   });
   const quickReplyLabel = quickReply.locator(".cw-chip__label");
 
-  // Editorial chips may lift by one pixel, but their contrast and hit area stay stable.
+  // FAQ rows retain their contrast and full-width hit area on hover.
   await quickReply.hover();
-  await page.waitForTimeout(480);
-  await expect(quickReply).toHaveCSS("color", "rgb(7, 27, 21)");
-  await expect(quickReply).toHaveCSS("background-color", "rgb(255, 255, 255)");
-  await expect
-    .poll(() =>
-      quickReply.evaluate(
-        (element) => getComputedStyle(element, "::before").backgroundColor,
-      ),
-    )
-    .toBe("rgb(200, 240, 106)");
+  await expect(quickReply).toHaveCSS("color", "rgb(31, 91, 71)");
+  await expect(quickReply).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(quickReply).toHaveCSS("min-height", "44px");
+  await expect(quickReply).toHaveCSS("border-top-width", "1px");
 
   await page.mouse.move(0, 0);
-  await page.waitForTimeout(760);
-  await expect(quickReply).toHaveCSS("color", "rgb(11, 14, 12)");
-  await expect(quickReply).toHaveCSS("background-color", "rgb(255, 255, 255)");
-  await expect
-    .poll(() =>
-      quickReply.evaluate(
-        (element) => getComputedStyle(element, "::before").backgroundColor,
-      ),
-    )
-    .toBe("rgb(200, 240, 106)");
+  await expect(quickReply).toHaveCSS("color", "rgb(14, 21, 18)");
+  await expect(quickReply).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
 
   await quickReply.click();
   await expect(quickReply).toHaveAttribute("data-sending", "true");
@@ -260,7 +269,7 @@ test("desktop interactions stay clickable, unselected and visually stable", asyn
 test("the e-mail chip opens the message form in the widget, not a mail client", async ({
   page,
 }) => {
-  const errors = collectRuntimeErrors(page);
+  const errors = await collectRuntimeErrors(page);
 
   await page.goto("http://127.0.0.1:4173", { waitUntil: "networkidle" });
   await page.getByTestId("widget-launcher").click();
@@ -300,7 +309,7 @@ test("mobile embed uses real taps for tabs and back navigation", async ({
     deviceScaleFactor: 3,
   });
   const page = await context.newPage();
-  const errors = collectRuntimeErrors(page);
+  const errors = await collectRuntimeErrors(page);
 
   await page.goto("http://127.0.0.1:4173/?embed=1&viewport=mobile", {
     waitUntil: "networkidle",
