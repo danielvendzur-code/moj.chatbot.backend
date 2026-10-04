@@ -1,13 +1,9 @@
+import "./launch-ready-styles";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import { installConfiguratorAutoAdvance } from "./lib/configuratorAutoAdvance";
 import { getInitialEmbedViewport, isEmbedMode } from "./lib/embedBridge";
-import "./preview.css";
-import "./widget.css";
-import "./product-widget.css";
-import "./widget-polish.css";
-import "./brand-system.css";
 import "../public/fonts/brand.css";
 
 installConfiguratorAutoAdvance();

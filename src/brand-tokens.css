@@ -1,0 +1,60 @@
+/* Môj Chatbot — brand 2026 (návrh 1a Espresso a karamel).
+   Jediný zdroj farieb pre vne-n aj moj.chatbot.backend. Iné farby nepoužívať. */
+:root {
+  --mc-ink: #1c1612; /* text, hlavička chatu, správa zákazníka, vybraná možnosť */
+  --mc-brand: #5b3a26; /* hlavné tlačidlo, progres */
+  --mc-brand-hover: #4a2f1f;
+  --mc-accent: #c8925e; /* iba drobný detail, nikdy text */
+  --mc-muted: #6e6157; /* sekundárny text */
+  --mc-line: #e2d8ca; /* okraje, oddeľovače */
+  --mc-line-strong: #cdbfae;
+  --mc-sand: #e9e0d3; /* bublina chatbota */
+  --mc-page: #f5efe6; /* pozadie stránky a chatu */
+  --mc-paper: #fffcf7; /* karty, panel, vstupy */
+  --mc-ok: #4e9a6b; /* iba stavová bodka */
+
+  --mc-font: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mc-r-btn: 12px;
+  --mc-r-card: 12px;
+  --mc-r-panel: 22px;
+  --mc-ease: cubic-bezier(0.25, 0.65, 0.35, 1);
+}
+
+/* Jediné CTA na webe aj v chatbote */
+.mc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: var(--mc-r-btn);
+  background: var(--mc-brand);
+  color: var(--mc-paper);
+  border: 0;
+  font: 600 15px/1 var(--mc-font);
+  cursor: pointer;
+  transition: background-color 160ms ease;
+}
+.mc-btn:hover {
+  background: var(--mc-brand-hover);
+}
+.mc-btn--secondary {
+  background: transparent;
+  color: var(--mc-ink);
+  border: 1px solid var(--mc-line-strong);
+}
+.mc-btn--secondary:hover {
+  background: var(--mc-page);
+}
+.mc-btn--on-dark {
+  background: var(--mc-paper);
+  color: var(--mc-ink);
+}
+.mc-btn--on-dark:hover {
+  background: var(--mc-page);
+}
+.mc-btn:focus-visible {
+  outline: 2px solid var(--mc-ink);
+  outline-offset: 2px;
+}
