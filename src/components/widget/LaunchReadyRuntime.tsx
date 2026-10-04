@@ -59,11 +59,6 @@ export function LaunchReadyRuntime(): null {
 
   useEffect(() => {
     type SurfaceTone = "light" | "dark";
-    const toneColour: Record<SurfaceTone, string> = {
-      dark: "#c8f06a",
-      light: "#12382d",
-    };
-
     const applyTone = (
       tone: SurfaceTone,
       topTone: SurfaceTone = tone,
@@ -73,18 +68,15 @@ export function LaunchReadyRuntime(): null {
       const launcher = document.querySelector<HTMLElement>(".cw-launcher");
       if (!launcher) return;
       launcher.dataset.surfaceTone = tone;
-
-      const stops = launcher.querySelectorAll<SVGStopElement>(".bl__surface-stop");
-      if (stops.length !== 4) return;
-      const transition = topTone === bottomTone ? 0 : 3.5;
-      const topOffset = Math.max(0, Math.min(100, boundary - transition));
-      const bottomOffset = Math.max(0, Math.min(100, boundary + transition));
-      const offsets = [0, topOffset, bottomOffset, 100];
-      const colours = [toneColour[topTone], toneColour[topTone], toneColour[bottomTone], toneColour[bottomTone]];
-      stops.forEach((stop, index) => {
-        stop.setAttribute("offset", `${offsets[index]}%`);
-        stop.style.stopColor = colours[index];
-      });
+      const fillColour: Record<SurfaceTone, string> = {
+        dark: "#1f8053",
+        light: "#12382d",
+      };
+      const fill =
+        topTone === bottomTone
+          ? fillColour[tone]
+          : `linear-gradient(to bottom, ${fillColour[topTone]} 0%, ${fillColour[topTone]} ${Math.max(0, boundary - 3.5)}%, ${fillColour[bottomTone]} ${Math.min(100, boundary + 3.5)}%, ${fillColour[bottomTone]} 100%)`;
+      launcher.style.setProperty("--cw-launcher-fill", fill);
     };
 
     const onMessage = (event: MessageEvent) => {
@@ -103,10 +95,20 @@ export function LaunchReadyRuntime(): null {
       )
         return;
       if (data.tone === "light" || data.tone === "dark") {
-        const topTone = data.topTone === "light" || data.topTone === "dark" ? data.topTone : data.tone;
+        const topTone =
+          data.topTone === "light" || data.topTone === "dark"
+            ? data.topTone
+            : data.tone;
         const bottomTone =
-          data.bottomTone === "light" || data.bottomTone === "dark" ? data.bottomTone : data.tone;
-        applyTone(data.tone, topTone, bottomTone, Number.isFinite(data.boundary) ? data.boundary : 50);
+          data.bottomTone === "light" || data.bottomTone === "dark"
+            ? data.bottomTone
+            : data.tone;
+        applyTone(
+          data.tone,
+          topTone,
+          bottomTone,
+          Number.isFinite(data.boundary) ? data.boundary : 50,
+        );
       }
     };
 
@@ -157,13 +159,20 @@ export function LaunchReadyRuntime(): null {
       frame = 0;
       const launcher = document.querySelector<HTMLElement>(".cw-launcher");
       if (!launcher) return;
-      const mark = launcher.querySelector<HTMLElement>(".bl--launcher") ?? launcher;
+      const mark =
+        launcher.querySelector<HTMLElement>(".bl--launcher") ?? launcher;
       const rect = mark.getBoundingClientRect();
-      const x = Math.max(0, Math.min(window.innerWidth - 1, rect.left + rect.width / 2));
+      const x = Math.max(
+        0,
+        Math.min(window.innerWidth - 1, rect.left + rect.width / 2),
+      );
       const sampleCount = 13;
       const tones = Array.from({ length: sampleCount }, (_, index) => {
         const ratio = index / (sampleCount - 1);
-        const y = Math.max(0, Math.min(window.innerHeight - 1, rect.top + rect.height * ratio));
+        const y = Math.max(
+          0,
+          Math.min(window.innerHeight - 1, rect.top + rect.height * ratio),
+        );
         return toneAtPoint(x, y);
       });
       const topTone = tones[0];
