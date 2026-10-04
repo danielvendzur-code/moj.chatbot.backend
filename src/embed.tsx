@@ -1,11 +1,8 @@
+import "./launch-ready-styles";
 import { createRoot } from "react-dom/client";
 import { AssistantWidget } from "./components/widget/AssistantWidget";
-import { LaunchReadyRuntime } from "./components/widget/LaunchReadyRuntime";
+
 import { installConfiguratorAutoAdvance } from "./lib/configuratorAutoAdvance";
-import "./widget.css";
-import "./product-widget.css";
-import "./widget-polish.css";
-import "./launch-ready-styles";
 
 installConfiguratorAutoAdvance();
 
@@ -15,7 +12,11 @@ const scriptSrc =
 
 // Same self-hosted Geist as the website, resolved relative to the stable loader.
 function ensureBrandFont(): void {
-  if (!scriptSrc || document.querySelector('link[data-dv-assistant-font="true"]')) return;
+  if (
+    !scriptSrc ||
+    document.querySelector('link[data-dv-assistant-font="true"]')
+  )
+    return;
   const link = document.createElement("link");
   link.rel = "stylesheet";
   link.href = new URL("fonts/brand.css", scriptSrc).toString();
@@ -48,8 +49,8 @@ function mount(): void {
 
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "premium-redesign-20261004-v16");
-  host.setAttribute("data-dv-assistant-theme", "website-paper-forest-lime");
+  host.setAttribute("data-dv-assistant-version", "espresso-20261004-v17");
+  host.setAttribute("data-dv-assistant-theme", "espresso-caramel");
   host.setAttribute(
     "data-dv-assistant-quality",
     "responsive-tool-combinations",
@@ -59,7 +60,6 @@ function mount(): void {
 
   createRoot(host).render(
     <>
-      <LaunchReadyRuntime />
       <AssistantWidget />
     </>,
   );

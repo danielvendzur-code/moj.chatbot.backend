@@ -1,4 +1,3 @@
-import { PrivacyNotice } from "./PrivacyNotice";
 import { useEffect, useRef, useState } from "react";
 import { sendChat, type ChatTurn } from "../../lib/assistantApi";
 import {
@@ -16,6 +15,7 @@ import { WidgetIcon } from "./WidgetIcon";
 type AssistantConversationProps = {
   active: boolean;
   resetToken: number;
+  onOpenBuilder: () => void;
 };
 
 type ChatMessage = {
@@ -29,35 +29,12 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   {
     id: 1,
     from: "bot",
-    text: "Dobrý deň. Napíšte mi, čo zákazníkom stále dokola vysvetľujete, počítate alebo vyberáte. Ukážem vám, čo môže web vybaviť za vás.",
-  },
-];
-
-type QuickReply = { label: string; question: string };
-
-const QUICK_REPLIES: QuickReply[] = [
-  {
-    label: "Kde mi to ušetrí čas?",
-    question: "Kde mi chatbot alebo konfigurátor ušetrí najviac času?",
-  },
-  {
-    label: "Ako vyzerá hotové riešenie?",
-    question: "Ako vyzerá hotové riešenie na skutočnom webe?",
-  },
-  {
-    label: "Čo odo mňa potrebujete?",
-    question: "Čo vám mám poslať, aby ste mi vedeli pripraviť riešenie?",
-  },
-  {
-    label: "Koľko to stojí?",
-    question: "Koľko stojí chatbot alebo konfigurátor na mieru a čo je v cene?",
+    text: "Dobrý deň. Pomôžem vám vyskladať chatbot, kalkulačku alebo konfigurátor pre váš web.",
   },
 ];
 
 const CHAT_FALLBACK =
-  "Teraz sa mi nepodarilo odpovedať. Skúste to ešte raz alebo použite priamy kontakt nižšie.";
-const QUICK_REPLY_CONFIRM_MS = 210;
-const QUICK_REPLY_HOLD_MS = 360;
+  "Teraz sa mi nepodarilo odpovedať. Skúste to ešte raz alebo ťuknite na Kontakt.";
 
 const prefersReducedMotion = (): boolean =>
   typeof window !== "undefined" &&
@@ -70,6 +47,7 @@ const canAutoFocus = (): boolean =>
 export function AssistantConversation({
   active,
   resetToken,
+  onOpenBuilder,
 }: AssistantConversationProps): JSX.Element {
   const restored = useRef(loadHistory()).current;
   const [messages, setMessages] = useState<ChatMessage[]>(
@@ -78,13 +56,11 @@ export function AssistantConversation({
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const [sendAnimating, setSendAnimating] = useState(false);
-  const [activeQuickReply, setActiveQuickReply] = useState<string | null>(null);
   const [composing, setComposing] = useState(false);
   const [mailOpen, setMailOpen] = useState(false);
   const nextIdRef = useRef(restored?.nextId ?? 2);
   const messagesRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const quickReplyTimerRef = useRef<number | null>(null);
   const sendAnimationTimerRef = useRef<number | null>(null);
   const requestEpochRef = useRef(0);
   const requestAbortRef = useRef<AbortController | null>(null);
@@ -92,7 +68,6 @@ export function AssistantConversation({
   const previousActiveRef = useRef(active);
 
   const conversationStarted = messages.some((message) => message.from === "me");
-  const showQuickReplies = !conversationStarted || activeQuickReply !== null;
 
   const resetTokenRef = useRef(resetToken);
   useEffect(() => {
@@ -106,15 +81,10 @@ export function AssistantConversation({
     setInput("");
     setTyping(false);
     setSendAnimating(false);
-    setActiveQuickReply(null);
     setComposing(false);
     setMailOpen(false);
     clearHistory();
     nextIdRef.current = 2;
-    if (quickReplyTimerRef.current !== null) {
-      window.clearTimeout(quickReplyTimerRef.current);
-      quickReplyTimerRef.current = null;
-    }
     if (sendAnimationTimerRef.current !== null) {
       window.clearTimeout(sendAnimationTimerRef.current);
       sendAnimationTimerRef.current = null;
@@ -123,9 +93,6 @@ export function AssistantConversation({
 
   useEffect(
     () => () => {
-      if (quickReplyTimerRef.current !== null) {
-        window.clearTimeout(quickReplyTimerRef.current);
-      }
       if (sendAnimationTimerRef.current !== null) {
         window.clearTimeout(sendAnimationTimerRef.current);
       }
@@ -258,7 +225,7 @@ export function AssistantConversation({
 
   const submit = () => {
     const value = input.trim();
-    if (!value || typing || activeQuickReply) return;
+    if (!value || typing) return;
     setInput("");
     if (!prefersReducedMotion()) {
       setSendAnimating(true);
@@ -271,38 +238,6 @@ export function AssistantConversation({
       }, 620);
     }
     void ask(value);
-  };
-
-  const chooseQuickReply = (label: string, question: string) => {
-    if (typing || activeQuickReply) return;
-    setActiveQuickReply(label);
-
-    const commit = () => {
-      quickReplyTimerRef.current = null;
-      void ask(question);
-
-      quickReplyTimerRef.current = window.setTimeout(
-        () => {
-          quickReplyTimerRef.current = null;
-          setActiveQuickReply(null);
-          if (canAutoFocus()) {
-            window.requestAnimationFrame(() =>
-              inputRef.current?.focus({ preventScroll: true }),
-            );
-          }
-        },
-        prefersReducedMotion() ? 120 : QUICK_REPLY_HOLD_MS,
-      );
-    };
-
-    if (prefersReducedMotion()) {
-      window.requestAnimationFrame(commit);
-      return;
-    }
-    quickReplyTimerRef.current = window.setTimeout(
-      commit,
-      QUICK_REPLY_CONFIRM_MS,
-    );
   };
 
   return (
@@ -328,6 +263,27 @@ export function AssistantConversation({
               ) : null}
               <div className="cw-message-wrap">
                 <p>{message.text}</p>
+                {message.from === "bot" && !message.streaming ? (
+                  <div
+                    className={
+                      message.id === 1 && !conversationStarted
+                        ? "cw-welcome-actions"
+                        : "cw-reply-actions"
+                    }
+                    aria-label="Ďalší krok"
+                  >
+                    <button type="button" onClick={onOpenBuilder}>
+                      Vyskladať riešenie
+                    </button>
+                    <button
+                      type="button"
+                      data-testid="open-mail-form"
+                      onClick={() => setMailOpen(true)}
+                    >
+                      Kontakt
+                    </button>
+                  </div>
+                ) : null}
               </div>
             </div>
           ))}
@@ -352,40 +308,7 @@ export function AssistantConversation({
         <ScrollCue targetRef={messagesRef} label="Zobraziť novšie správy" />
       </div>
 
-      {showQuickReplies ? (
-        <div
-          className="cw-quick-replies"
-          aria-label="Často sa pýtajú"
-          data-confirming={activeQuickReply !== null || undefined}
-        >
-          <span className="cw-quick-replies__title" aria-hidden="true">Často sa pýtajú</span>
-          {QUICK_REPLIES.map(({ label, question }) => {
-            const sending = activeQuickReply === label;
-            return (
-              <button
-                type="button"
-                className="cw-chip"
-                data-sending={sending || undefined}
-                aria-pressed={sending}
-                disabled={typing || activeQuickReply !== null}
-                key={label}
-                title={question}
-                onClick={() => chooseQuickReply(label, question)}
-              >
-                <span className="cw-chip__label">{label}</span>
-                <span className="cw-chip__arrow" aria-hidden="true">→</span>
-              </button>
-            );
-          })}
-        </div>
-      ) : null}
-
-      <PrivacyNotice chat />
-
-      <div
-        className="cw-inputbar"
-        aria-busy={typing || activeQuickReply !== null}
-      >
+      <div className="cw-inputbar" aria-busy={typing}>
         <input
           ref={inputRef}
           value={input}
@@ -398,9 +321,8 @@ export function AssistantConversation({
           }}
           onFocus={() => setComposing(true)}
           onBlur={() => setComposing(false)}
-          placeholder="Napíšte svoju otázku…"
+          placeholder="Napíšte otázku…"
           aria-label="Vaša otázka"
-          disabled={activeQuickReply !== null}
         />
         <button
           type="button"
@@ -408,42 +330,20 @@ export function AssistantConversation({
           data-waiting={typing || undefined}
           data-sending={sendAnimating || undefined}
           onClick={submit}
-          disabled={!input.trim() || typing || activeQuickReply !== null}
+          disabled={!input.trim() || typing}
           aria-label="Odoslať správu"
         >
-          <WidgetIcon name="send" />
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            aria-hidden="true"
+          >
+            <path d="M12 19V5m-6 6 6-6 6 6" />
+          </svg>
         </button>
       </div>
-
-      {/* The former "Radšej priamo?" label is intentionally omitted. */}
-      <nav className="cw-direct-actions" aria-label="Priamy kontakt">
-        <div className="cw-direct-actions__grid">
-          <a href="https://wa.me/421948699433" target="_blank" rel="noreferrer">
-            <WidgetIcon name="chat" />
-            <span>WhatsApp</span>
-          </a>
-          <a href="tel:+421948699433">
-            <WidgetIcon name="phone" />
-            <span>Zavolať</span>
-          </a>
-          {/* The href stays a real mailto so the chip can still be copied or
-              opened in a new tab; the click itself opens the form in place,
-              which is the part that actually works on a phone. */}
-          <a
-            href="mailto:info@mojchatbot.sk"
-            data-testid="open-mail-form"
-            aria-haspopup="dialog"
-            onClick={(event) => {
-              if (event.metaKey || event.ctrlKey || event.shiftKey) return;
-              event.preventDefault();
-              setMailOpen(true);
-            }}
-          >
-            <WidgetIcon name="mail" />
-            <span>E-mail</span>
-          </a>
-        </div>
-      </nav>
 
       {mailOpen ? <MessageSheet onClose={() => setMailOpen(false)} /> : null}
     </div>

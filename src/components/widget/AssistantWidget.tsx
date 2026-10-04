@@ -1,11 +1,11 @@
 import {
-  type PointerEvent as ReactPointerEvent,
   useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
   useState,
 } from "react";
+import { useLauncherSurface } from "../../hooks/useLauncherSurface";
 import { useFocusTrap } from "../../hooks/useFocusTrap";
 import {
   installSiteAssistantGlobal,
@@ -17,8 +17,6 @@ import type {
   AssistantPreset,
   OpenSiteAssistantOptions,
 } from "../../types/assistant";
-import "../../liquid-glass-final.css";
-import "../../tinder-swipe-final.css";
 import { AssistantConversation } from "./AssistantConversation";
 import { BubbleLogo } from "./BubbleLogo";
 import { ToolCalculator } from "./ToolCalculator";
@@ -27,7 +25,6 @@ import { WidgetIcon } from "./WidgetIcon";
 type WidgetMode = "assistant" | "calculator";
 type SwipeDirection = "forward" | "backward";
 type ActionAnimation = "reset" | "close" | null;
-type SwipeStart = { x: number; y: number };
 
 type AssistantWidgetProps = {
   embedMode?: boolean;
@@ -35,25 +32,16 @@ type AssistantWidgetProps = {
 
 const isPreset = (value: string | undefined): value is AssistantPreset =>
   Boolean(
-    value && ["calculator", "product", "inquiry", "advisor", "booking"].includes(value),
+    value &&
+    ["calculator", "product", "inquiry", "advisor", "booking"].includes(value),
   );
 
 const PANEL_EXIT_MS = 220;
 const ACTION_ANIMATION_MS = 520;
-const SWIPE_THRESHOLD_PX = 26;
-const BODY_SWIPE_THRESHOLD_PX = 54;
 
 const reducedMotion = (): boolean =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-const isInteractiveSwipeTarget = (target: EventTarget | null): boolean =>
-  target instanceof Element &&
-  Boolean(
-    target.closest(
-      "button, a, input, textarea, select, summary, label, [role='button'], [contenteditable='true']",
-    ),
-  );
 
 export function AssistantWidget({
   embedMode = false,
@@ -64,17 +52,15 @@ export function AssistantWidget({
   const [mode, setMode] = useState<WidgetMode>("assistant");
   const [transitionDirection, setTransitionDirection] =
     useState<SwipeDirection>("forward");
-  const [actionAnimating, setActionAnimating] =
-    useState<ActionAnimation>(null);
-  const [resetToken, setResetToken] = useState(0);
+  const [actionAnimating, setActionAnimating] = useState<ActionAnimation>(null);
+  const resetToken = 0;
   const [preset, setPreset] = useState<AssistantPreset | null>(null);
 
   const closeTimerRef = useRef<number | null>(null);
   const actionTimerRef = useRef<number | null>(null);
-  const tabSwipeStartRef = useRef<SwipeStart | null>(null);
-  const bodySwipeStartRef = useRef<SwipeStart | null>(null);
   const panelRef = useRef<HTMLElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
+  const launcherSurface = useLauncherSurface(launcherRef, isOpen);
   const calculatorViewRef = useRef<HTMLDivElement>(null);
   const assistantViewRef = useRef<HTMLDivElement>(null);
   const openRef = useRef(false);
@@ -140,7 +126,9 @@ export function AssistantWidget({
       restoreLauncherFocusRef.current = false;
       setHasOpened(true);
       setIsClosing(false);
-      setTransitionDirection(nextMode === "calculator" ? "forward" : "backward");
+      setTransitionDirection(
+        nextMode === "calculator" ? "forward" : "backward",
+      );
       setMode(nextMode);
       setPreset(nextPreset);
       setIsOpen(true);
@@ -152,53 +140,20 @@ export function AssistantWidget({
   const switchMode = useCallback(
     (nextMode: WidgetMode) => {
       if (nextMode === mode) return;
-      setTransitionDirection(nextMode === "calculator" ? "forward" : "backward");
+      setTransitionDirection(
+        nextMode === "calculator" ? "forward" : "backward",
+      );
       setMode(nextMode);
       track("mode_switch", { to: nextMode });
     },
     [mode],
   );
 
-  const beginSwipe = (
-    event: ReactPointerEvent<HTMLElement>,
-    ref: { current: SwipeStart | null },
-    allowInteractive: boolean,
-  ) => {
-    if (!allowInteractive && isInteractiveSwipeTarget(event.target)) return;
-    ref.current = { x: event.clientX, y: event.clientY };
-    try {
-      event.currentTarget.setPointerCapture(event.pointerId);
-    } catch {
-      // Pointer capture is optional.
-    }
-  };
-
-  const finishSwipe = (
-    event: ReactPointerEvent<HTMLElement>,
-    ref: { current: SwipeStart | null },
-    threshold: number,
-  ) => {
-    const start = ref.current;
-    ref.current = null;
-    if (!start) return;
-
-    const dx = event.clientX - start.x;
-    const dy = event.clientY - start.y;
-    if (Math.abs(dx) < threshold || Math.abs(dx) <= Math.abs(dy) * 1.15) {
-      return;
-    }
-
-    if (mode === "assistant" && dx < 0) {
-      switchMode("calculator");
-    } else if (mode === "calculator" && dx > 0) {
-      switchMode("assistant");
-    }
-  };
-
   const openFromOptions = useCallback(
     (options: OpenSiteAssistantOptions) => {
       const directPreset =
-        options?.preset ?? (isPreset(options?.entry) ? options.entry : undefined);
+        options?.preset ??
+        (isPreset(options?.entry) ? options.entry : undefined);
       const calculatorEntry =
         options?.entry === "builder" ||
         options?.entry === "calculator" ||
@@ -262,25 +217,14 @@ export function AssistantWidget({
     };
   }, [isOpen]);
 
-  const reset = () => {
-    animateAction("reset");
-    setPreset(null);
-    setResetToken((value) => value + 1);
-    track("widget_reset", { mode });
-  };
-
   return (
     <div className="cw-widget">
       <div className="cw-launcher-dock">
-        {/* Previous contract wording, not rendered: Vyskladajte si asistenta na počkanie. */}
-        <div className="cw-launcher-preview" aria-hidden="true">
-          <strong>Otázka k vášmu webu?</strong>
-          <span>Napíšte nám, s čím potrebujete pomôcť.</span>
-        </div>
         <button
           id="chameleon-widget-launcher"
           data-testid="widget-launcher"
           className="cw-launcher"
+          data-surface={launcherSurface}
           ref={launcherRef}
           type="button"
           aria-label="Otvoriť Môj Chatbot"
@@ -288,13 +232,10 @@ export function AssistantWidget({
           aria-controls="chameleon-widget-panel"
           onClick={() => open(mode, preset)}
         >
-          <svg className="cw-launcher__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M12 3.5a8.5 8.5 0 0 0-7.4 12.7L3.5 20.5l4.4-1.1A8.5 8.5 0 1 0 12 3.5Z" />
-            <circle cx="8.3" cy="12" r=".9" fill="currentColor" stroke="none" />
-            <circle cx="12" cy="12" r=".9" fill="currentColor" stroke="none" />
-            <circle cx="15.7" cy="12" r=".9" fill="currentColor" stroke="none" />
-          </svg>
+          <BubbleLogo
+            size="launcher"
+            tone={launcherSurface === "dark" ? "brand" : "paper"}
+          />
         </button>
       </div>
 
@@ -327,18 +268,6 @@ export function AssistantWidget({
             <div className="cw-panel-head__actions">
               <button
                 type="button"
-                data-testid="widget-reset"
-                data-action-animating={
-                  actionAnimating === "reset" ? "reset" : undefined
-                }
-                aria-label="Začať odznova"
-                title="Začať odznova"
-                onClick={reset}
-              >
-                <WidgetIcon name="reset" />
-              </button>
-              <button
-                type="button"
                 className="cw-panel-head__close"
                 data-testid="widget-close"
                 data-action-animating={
@@ -353,70 +282,17 @@ export function AssistantWidget({
             </div>
           </header>
 
-          <nav
-            className="cw-tabs"
-            aria-label="Výber časti"
-            role="tablist"
-            data-mode={mode}
-            onPointerDown={(event) =>
-              beginSwipe(event, tabSwipeStartRef, true)
-            }
-            onPointerUp={(event) =>
-              finishSwipe(event, tabSwipeStartRef, SWIPE_THRESHOLD_PX)
-            }
-            onPointerCancel={() => {
-              tabSwipeStartRef.current = null;
-            }}
-          >
-            <span className="cw-tabs__thumb" aria-hidden="true" />
-            <button
-              id="cw-tab-assistant"
-              type="button"
-              role="tab"
-              data-testid="tab-assistant"
-              data-active={mode === "assistant"}
-              aria-selected={mode === "assistant"}
-              aria-controls="cw-panel-assistant"
-              onClick={() => switchMode("assistant")}
-            >
-              <WidgetIcon name="chat" />
-              <span>Chatbot</span>
-            </button>
-            <button
-              id="cw-tab-calculator"
-              type="button"
-              role="tab"
-              data-testid="tab-calculator"
-              data-active={mode === "calculator"}
-              aria-selected={mode === "calculator"}
-              aria-controls="cw-panel-calculator"
-              onClick={() => switchMode("calculator")}
-            >
-              <WidgetIcon name="calculator" />
-              <span>Konfigurátor</span>
-            </button>
-          </nav>
-
           <div
             className="cw-panel-body"
             data-mode={mode}
             data-direction={transitionDirection}
-            onPointerDown={(event) =>
-              beginSwipe(event, bodySwipeStartRef, false)
-            }
-            onPointerUp={(event) =>
-              finishSwipe(event, bodySwipeStartRef, BODY_SWIPE_THRESHOLD_PX)
-            }
-            onPointerCancel={() => {
-              bodySwipeStartRef.current = null;
-            }}
           >
             <div
               id="cw-panel-assistant"
               className="cw-mode-view"
               ref={assistantViewRef}
-              role="tabpanel"
-              aria-labelledby="cw-tab-assistant"
+              role="region"
+              aria-label="Konverzácia"
               data-view="assistant"
               data-active={mode === "assistant"}
               aria-hidden={mode !== "assistant"}
@@ -424,14 +300,15 @@ export function AssistantWidget({
               <AssistantConversation
                 active={mode === "assistant"}
                 resetToken={resetToken}
+                onOpenBuilder={() => switchMode("calculator")}
               />
             </div>
             <div
               id="cw-panel-calculator"
               className="cw-mode-view"
               ref={calculatorViewRef}
-              role="tabpanel"
-              aria-labelledby="cw-tab-calculator"
+              role="region"
+              aria-label="Konfigurátor riešenia"
               data-view="calculator"
               data-active={mode === "calculator"}
               aria-hidden={mode !== "calculator"}

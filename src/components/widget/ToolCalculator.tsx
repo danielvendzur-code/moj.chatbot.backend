@@ -1,4 +1,3 @@
-import { PrivacyNotice } from "./PrivacyNotice";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { drawCheck } from "../../lib/motion";
 import { track } from "../../lib/analytics";
@@ -490,8 +489,12 @@ export function ToolCalculator({
         <button
           type="button"
           className="cw-progress__back"
-          onClick={() => setStep((value) => Math.max(0, value - 1))}
-          disabled={step === 0 || leaving}
+          onClick={() =>
+            step === 0
+              ? onOpenChat()
+              : setStep((value) => Math.max(0, value - 1))
+          }
+          disabled={leaving}
           aria-label="Späť na predchádzajúcu otázku"
         >
           <WidgetIcon name="arrow" className="cw-back-icon" />
@@ -500,16 +503,16 @@ export function ToolCalculator({
           <span className="cw-progress__count" aria-live="polite">
             {questionIndex === -1
               ? `Krok ${visibleStep + 1} z ${flowSteps.length} · Kontakt`
-              : `Otázka ${questionIndex + 1} zo ${questionSteps.length}`}
+              : `Otázka ${questionIndex + 1} z ${questionSteps.length}`}
           </span>
           <div
             className="cw-progress__dots"
             aria-hidden="true"
             style={{
-              gridTemplateColumns: `repeat(${flowSteps.length}, minmax(0, 1fr))`,
+              gridTemplateColumns: `repeat(${questionSteps.length}, minmax(0, 1fr))`,
             }}
           >
-            {flowSteps.map((item, index) => (
+            {questionSteps.map((item, index) => (
               <i
                 key={item}
                 data-current={index === visibleStep || undefined}
@@ -533,7 +536,11 @@ export function ToolCalculator({
               <h3 className="cw-q" ref={questionRef} tabIndex={-1}>
                 {title}
               </h3>
-              <p className="cw-q-sub">{subtitle}</p>
+              <p className="cw-q-sub">
+                {stepId === "features" || stepId === "details"
+                  ? "Ťuknite na všetko, čo sa hodí."
+                  : subtitle}
+              </p>
             </header>
 
             {stepId === "interest" ? (
@@ -730,6 +737,15 @@ export function ToolCalculator({
               </div>
             ) : null}
 
+            {stepId === "features" || stepId === "details" ? (
+              <p className="cw-picked-count" role="status">
+                Vybrané{" "}
+                {stepId === "features" ? features.length : details.length} ·
+                {stepId === "features"
+                  ? "môžete pokračovať aj bez výberu"
+                  : "vyberte aspoň jednu možnosť"}
+              </p>
+            ) : null}
             {stepId === "contact" ? (
               <div className="cw-contact-stage">
                 <ul className="cw-reassure" aria-label="Čo pre vás platí">
@@ -851,8 +867,6 @@ export function ToolCalculator({
                     </details>
                   </div>
                 </div>
-
-                <PrivacyNotice />
 
                 {/* Closed by default and titled with what was actually chosen —
                   "4 položky" told the visitor nothing about their own answers. */}

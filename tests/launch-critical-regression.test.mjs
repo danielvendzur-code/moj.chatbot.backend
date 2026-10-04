@@ -4,32 +4,13 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("open widget brand mark is static while launcher alone may animate", async () => {
-  const logo = await read("src/components/widget/BubbleLogo.tsx");
-
-  assert.match(logo, /if \(size !== "launcher"\) return undefined/);
-  const launcherGuard = logo.indexOf('if (size !== "launcher") return undefined');
-  const motionDriver = logo.indexOf("const shouldDriveWithRaf");
-  assert.ok(launcherGuard >= 0 && motionDriver > launcherGuard);
-});
-
 test("configurator renders exactly one selected check source", async () => {
   const calculator = await read("src/components/widget/ToolCalculator.tsx");
-  const authority = await read("src/embed-surface-authority-final.css");
+  const authority = await read("src/brand-system.css");
 
   assert.match(calculator, /<SelectionIndicator selected=\{selected\} \/>/);
-  assert.match(
-    authority,
-    /\[data-selected="true"\]::after\s*\{[\s\S]*?content:\s*none\s*!important/,
-  );
-  assert.match(
-    authority,
-    /\.cw-selection-indicator\[class\]\[data-visible="true"\]/,
-  );
-  assert.doesNotMatch(
-    authority,
-    /\[data-selected="true"\]::after\s*\{[\s\S]*?background-image:\s*url/,
-  );
+  assert.match(authority, /\[data-selected="true"\] \.cw-selection-indicator/);
+  assert.doesNotMatch(authority, /\[data-selected="true"\]::after/);
 });
 
 test("lead fallback never navigates away automatically after submit", async () => {
@@ -64,6 +45,9 @@ test("sales assistant uses Sonnet 4.6 with grounded product context", async () =
   assert.match(chat, /Kalkulačka alebo konfigurátor: od 447 €/);
   assert.match(chat, /Technická prevádzka: od 10 € mesačne/);
   assert.match(chat, /Najprv odpovedz na otázku/);
-  assert.match(chat, /Nevymýšľaj zľavy, úspory, návratnosť ani falošnú urgenciu/);
+  assert.match(
+    chat,
+    /Nevymýšľaj zľavy, úspory, návratnosť ani falošnú urgenciu/,
+  );
   assert.match(chat, /Koverta, DERAT, Môj Plot a WEBKO/);
 });

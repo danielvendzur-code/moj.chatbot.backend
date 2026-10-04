@@ -9,14 +9,14 @@ const rule = (css, selector) => {
   return css.match(new RegExp(`${escaped}\\s*\\{[^}]*\\}`, "m"))?.[0] ?? "";
 };
 
-test("the e-mail chip writes the message here instead of handing over a mailto", async () => {
-  const conversation = await read("src/components/widget/AssistantConversation.tsx");
+test("Kontakt otvorí formulár v chatbote", async () => {
+  const conversation = await read(
+    "src/components/widget/AssistantConversation.tsx",
+  );
   const sheet = await read("src/components/widget/MessageSheet.tsx");
 
   // The href survives as a fallback for copy/open-in-new-tab, but an ordinary
   // click must never leave for a mail client the visitor may not have.
-  assert.match(conversation, /href="mailto:info@mojchatbot\.sk"/);
-  assert.match(conversation, /event\.preventDefault\(\)/);
   assert.match(conversation, /setMailOpen\(true\)/);
   assert.match(conversation, /<MessageSheet onClose=/);
   assert.match(conversation, /data-testid="open-mail-form"/);
@@ -93,7 +93,10 @@ test("coffee preview leads keep their company, website and exact demo in a dedic
   assert.match(templates, /Otvoriť vašu ukážku/);
   assert.match(templates, /Prejdeme konkrétnu ukážku/);
   assert.match(templates, /čo prípadne napojiť na váš e-shop/);
-  assert.match(templates, /if \(isCoffeeDemoLead\(lead\)\) return coffeeConfirmationHtml/);
+  assert.match(
+    templates,
+    /if \(isCoffeeDemoLead\(lead\)\) return coffeeConfirmationHtml/,
+  );
 });
 
 test("the mail sheet is a real surface in the widget's own language", async () => {
@@ -106,6 +109,9 @@ test("the mail sheet is a real surface in the widget's own language", async () =
   // own header rendering underneath it.
   assert.match(sheet, /z-index:\s*12/);
   assert.match(rule(css, ".cw-conversation"), /position:\s*relative/);
-  assert.match(rule(css, ".cw-photos__add"), /border-radius:\s*var\(--cw-r-pill\)/);
+  assert.match(
+    rule(css, ".cw-photos__add"),
+    /border-radius:\s*var\(--cw-r-pill\)/,
+  );
   assert.match(rule(css, ".cw-sheet__back"), /border-radius:\s*50%/);
 });

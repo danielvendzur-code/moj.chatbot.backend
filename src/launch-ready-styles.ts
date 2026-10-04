@@ -1,16 +1,4 @@
-import "./smooth-logo-final.css";
-import "./launch-ready-final.css";
-import "./solid-widget-final.css";
-import "./dark-chip-final.css";
-import "./goal-lock-final.css";
-import "./interaction-stability-final.css";
-import "./restored-widget-palette.css";
-import "./premium-motion-system.css";
-import "./requested-august-widget.css";
-import "./contact-chip-glow-final.css";
-import "./logo-match-final.css";
-import "./sep08-picker-final.css";
-import "./embed-surface-authority-final.css";
-import "./faq-quick-replies-final.css";
-
+import "./widget.css";
+import "./product-widget.css";
+import "./brand-tokens.css";
 import "./brand-system.css";

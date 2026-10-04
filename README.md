@@ -1,39 +1,16 @@
 # Môj Chatbot — widget pre web
 
-Samostatný React/TypeScript widget: chat, ktorý odpovedá zákazníkom, a štvor-otázkový
-tok, ktorý vyskladá potrebné funkcie a odošle zadanie. Vizuál používa broskyňový
-akcent `#ffc79d` na teplom charcoal základe `#0a0908`, s jednou krivkou pohybu `cubic-bezier(0.16, 1, 0.3, 1)`
-zhodnou s webom, písmom Inter Tight a jedinou farbou hraníc.
+Samostatný React/TypeScript widget s AI chatom, kontaktným formulárom a konfigurátorom riešenia. Vzhľad „Espresso a karamel“ používa spoločné tokeny s webom `vne-n`: atrament `#1C1612`, orech `#5B3A26`, karamel `#C8925E`, krém `#F5EFE6` a papier `#FFFCF7`. Písmo Geist a Geist Mono sa načítava lokálne.
 
-Pravidlá, ktoré widget drží a testy ich strážia:
+Panel má tmavú hlavičku, krémovú konverzáciu, dve akcie „Vyskladať riešenie“ a „Kontakt“ a kapsulové možnosti konfigurátora. Zachováva pôvodné dáta, validáciu, históriu, streaming a API. Nový krok nemá predvolený výber; návrat späť zachováva odpovede. Teaser je vypnutý a panel sa otvára kliknutím. Pohyb rešpektuje `prefers-reduced-motion`.
 
-- **Nový krok nikdy neprichádza s vybraným čipom.** Nič nie je predvolené,
-  žiadny čip nedrží `:focus` ani `:hover` z predchádzajúceho kroku a `key`
-  každej možnosti obsahuje aj číslo kroku, takže React nerecykluje DOM prvok
-  medzi krokmi.
-- **Pohyb vysvetľuje zmenu.** Výber sa krátko potvrdí, kroky sa vymenia smerovým
-  prechodom a odoslaná správa letí z inputu do konverzácie. Všetky animácie sú v
-  `@media (prefers-reduced-motion: no-preference)`; kto má pohyb vypnutý, vidí
-  rovnaký obsah bez pohybu.
-- **Na broskyňovej je vždy tmavý text `#0a0908`.** Kontrast každého textu voči
-  skutočne vykreslenému pozadiu je nad 4,5 : 1 — vrátane prípadov, kde je
-  pozadie súrodenec (jazdec prepínača), kde sa farba odčítava z pixelov snímky.
-- **Plocha na klik je aspoň 44 × 44 px**, aj keď je ovládací prvok vizuálne
-  nižší. `touch-action: manipulation` je len na ovládacích prvkoch, nikdy na
-  paneli ani na scrollovacej oblasti, aby zostalo priblíženie prstami.
-- **`overflow: hidden` nie je na `html` ani `body`.** Vodorovný presah rieši
-  `overflow-x: clip` na vnútornom kontajneri, takže scrollovanie a zoom fungujú
-  aj po vyskočení klávesnice na mobile.
-- **Texty sú bez odborných slov.** Žiadny „konfigurátor", „parametre",
-  „špecifikácia" ani „kvalifikácia dopytu"; každá otázka je jedna veta.
+`npm test` overuje históriu, kontakty a regresie odosielania. Staré testy predchádzajúcich dizajnov sú archivované v `tests/design-archive/`; ich požiadavky na zelenú farbu, prepínače a reset už neplatia.
 
 Verejná ukážka: <https://danielvendzur-code.github.io/moj.chatbot.backend/>
 
 ## Logo
 
-Logom je čistá chatová značka v broskyňovej farbe (`src/components/widget/BubbleLogo.tsx`)
-v troch veľkostiach — launcher, hlavička a avatar pri správach. (Skorší pixel-art maskot
-chameleóna zostáva dostupný v git histórii, keby sa hodil neskôr.)
+Logo je spoločný `BrandMark` s pôvodnou geometriou ťahu, 24 vrstvami tieňovania a karamelovou animáciou pera. `BubbleLogo` určuje veľkosť pre launcher, hlavičku a avatar. GIF varianty pre e-mail sú v `public/email-assets/`.
 
 ## Spustenie
 
@@ -71,12 +48,12 @@ a vyplní viewport. Loader používa otvorený Shadow DOM s hostom
 
 ## Architektúra
 
-- `src/components/widget/AssistantWidget.tsx` — launcher, teaser, okno, prepínanie režimov.
+- `src/components/widget/AssistantWidget.tsx` — launcher, okno, otvorenie chatu alebo konfigurátora.
 - `src/components/widget/BubbleLogo.tsx` — logo asistenta (chatová bublina, tri veľkosti).
 - `src/components/widget/AssistantConversation.tsx` — konverzácia s rýchlymi čipmi.
-- `src/components/widget/ToolCalculator.tsx` — päť krokov: čo má web robiť → typ firmy → čo má zvládnuť → kedy → kontakt (s poďakovaním).
+- `src/components/widget/ToolCalculator.tsx` — konfigurátor: riešenie → funkcie → podrobnosti → odvetvie → termín → kontakt (kombinované riešenia pridávajú svoj krok).
 - `src/lib/assistantFlow.ts` — dáta krokov, schopnosti, odporúčania podľa výberu a číslo dopytu.
-- `src/unified-experience-final.css` — posledná autoritatívna vrstva: charcoal/peach paleta, textúra, focus, hover a pohyb.
+- `src/brand-tokens.css` a `src/brand-system.css` — spoločné farby a autoritatívny vzhľad widgetu; poradie importov drží `src/launch-ready-styles.ts`.
 - `src/hooks/useStepTransition.ts` — prechod medzi krokmi, ktorý drží výšku panela, takže nič nepodskočí.
 - `src/lib/siteAssistant.ts` — verejné API a integračné udalosti.
 
@@ -121,7 +98,7 @@ window.dispatchEvent(
 
 ## Reálny AI chat (Claude cez Vercel)
 
-Režim „Poradiť sa" odpovedá naozaj cez Claude (model **Haiku 4.5**). Keďže GitHub Pages je
+Chat odpovedá naozaj cez Claude (model **Haiku 4.5**). Keďže GitHub Pages je
 statický, API kľúč nesmie ísť do prehliadača — chat prechádza cez malú serverless funkciu
 `api/chat.ts` nasadenú na **Vercel**.
 
