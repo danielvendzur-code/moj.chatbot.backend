@@ -21,4 +21,4 @@ New browser specifications: `tests/premium-flow.spec.mjs` and `tests/premium-hos
 
 Paired web branch: `codex/premium-redesign-oct4` in `vne-n`. Both changes must be reviewed together. A backend Vercel preview provides `/widget.js`, `/widget.css` and `/fonts/brand.css`; point the web preview's `VITE_ASSISTANT_EMBED_URL` to its widget script.
 
-Remote PR/preview publication is blocked by an invalid GitHub credential in this environment. Production is unchanged. Merge/deploy requires the user's approval. On release, publish all widget and font assets before the website, and verify real lead/chat delivery with the production services configured.
+Both review branches were pushed successfully. GitHub API requests return Forbidden, so draft PR creation and retrieval of an external deployment URL are blocked. Branch: https://github.com/danielvendzur-code/moj.chatbot.backend/tree/codex/premium-widget-oct4 Production is unchanged. Merge/deploy requires the user's approval. On release, publish all widget and font assets before the website, and verify real lead/chat delivery with the production services configured.
