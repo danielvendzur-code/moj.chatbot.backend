@@ -13,7 +13,7 @@ test("desktop hero, FAQ keyboard controls, comparison and CTA work together", as
   await expect(page.locator(".redesign-cursor")).toHaveCount(0);
   expect(
     await page.locator("#top").evaluate((el) => getComputedStyle(el).cursor),
-  ).toContain("pixel-arrow.svg");
+  ).toContain("clean-arrow.svg");
   const button = page.locator(".redesign-nav-cta");
   await expect(button).toHaveCSS("background-color", "rgb(200, 240, 106)");
   await button.hover();
@@ -60,7 +60,7 @@ test("mobile navigation closes with Escape and outside click, touch keeps native
   await expect(toggle).toHaveAttribute("aria-expanded", "false");
   expect(
     await page.locator("#top").evaluate((el) => getComputedStyle(el).cursor),
-  ).not.toContain("pixel-arrow.svg");
+  ).not.toContain("clean-arrow.svg");
   const hero = await page.locator("#top").boundingBox();
   const cta = await page
     .locator("#top")
