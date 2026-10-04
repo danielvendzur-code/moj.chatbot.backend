@@ -55,7 +55,7 @@ jobs:
       - name: Create immutable build metadata
         shell: bash
         run: |
-          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"premium-redesign-20261004-v16"},null,2))'
+          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"espresso-20261004-v17"},null,2))'
 
       - name: Validate production artifacts
         shell: bash
@@ -85,13 +85,14 @@ jobs:
             if (!condition) throw new Error(message);
           };
 
-          must(js.includes('premium-redesign-20261004-v16'), 'current widget version missing');
-          must(css.includes('#dv-assistant-root'), 'production embed launcher authority missing');
+          must(js.includes('espresso-20261004-v17'), 'current widget version missing');
+          must(css.includes('.cw-widget'), 'production widget authority missing');
           must(css.includes('cw-choice-grid'), 'choice grid missing');
           must(css.includes('cw-selection-indicator'), 'selection indicator missing');
-          must(css.includes('--cw-glass-panel'), 'liquid glass layer missing');
-          must(css.includes('cw-tabs'), 'mode switch styles missing');
-          must(widget.includes('liquid-glass-final.css'), 'final glass import missing');
+          must(css.includes('--mc-brand:') && css.includes('--mc-paper:'), 'shared brand tokens missing');
+          must(!widget.includes('cw-tabs'), 'removed tabs remain mounted');
+          must(main.includes('launch-ready-styles') && embed.includes('launch-ready-styles'), 'shared static stylesheet authority missing');
+          must(widget.includes('data-surface'), 'adaptive launcher missing');
           must(!main.includes('installWidgetSpotlight') && !embed.includes('installWidgetSpotlight'), 'legacy spotlight still mounted');
           must(lead.includes('api/lead'), 'lead API missing');
           must(!conversation.includes('cw-chat-builder'), 'removed quick builder card remains');
@@ -110,7 +111,7 @@ jobs:
           must(!calculator.includes('cw-choice-arrow'), 'legacy choice arrow remains');
           must(!js.includes('REPLACE-ME'), 'placeholder remains');
           must(meta.sourceSha === process.env.GITHUB_SHA, 'build metadata SHA mismatch');
-          must(meta.version === 'premium-redesign-20261004-v16', 'build metadata version mismatch');
+          must(meta.version === 'espresso-20261004-v17', 'build metadata version mismatch');
           NODE
 
       - name: Configure GitHub Pages
@@ -165,9 +166,9 @@ jobs:
           }
 
           verify "/" "Môj Chatbot"
-          verify "/widget.js" "premium-redesign-20261004-v16"
-          verify "/widget.css" "#dv-assistant-root"
-          verify "/widget.css" "--restored-forest"
+          verify "/widget.js" "espresso-20261004-v17"
+          verify "/widget.css" ".cw-widget"
+          verify "/widget.css" "--mc-brand:"
           verify "/build-meta.json" "$SOURCE_SHA"
 
       - name: Verify live backend and Sonnet response
