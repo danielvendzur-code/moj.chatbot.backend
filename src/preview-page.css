@@ -1,0 +1,16 @@
+body {
+  margin: 0;
+  background: #f5efe6;
+  color: #1c1612;
+  font-family: Geist, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: #5b3a26;
+}
+a:hover {
+  color: #1c1612;
+}
+* {
+  box-sizing: border-box;
+}
