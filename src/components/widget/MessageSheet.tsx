@@ -50,9 +50,13 @@ export function MessageSheet({ onClose }: MessageSheetProps): JSX.Element {
 
   useEffect(() => {
     track("mail_form_open");
-    window.requestAnimationFrame(() =>
-      emailRef.current?.focus({ preventScroll: true }),
-    );
+    const frame = window.requestAnimationFrame(() => {
+      const emailInput = emailRef.current;
+      if (emailInput?.closest(".cw-sheet")?.contains(document.activeElement))
+        return;
+      emailInput?.focus({ preventScroll: true });
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
