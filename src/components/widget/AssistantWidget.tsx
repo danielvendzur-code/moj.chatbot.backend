@@ -6,6 +6,7 @@ import {
   useState,
 } from "react";
 import { useLauncherSurface } from "../../hooks/useLauncherSurface";
+import { useMobilePanelViewport } from "../../hooks/useMobilePanelViewport";
 import { useFocusTrap } from "../../hooks/useFocusTrap";
 import {
   installSiteAssistantGlobal,
@@ -114,6 +115,7 @@ export function AssistantWidget({
   }, [animateAction]);
 
   useFocusTrap(panelRef, isOpen && !isClosing, close, launcherRef);
+  useMobilePanelViewport(panelRef, isOpen, embedMode);
 
   const open = useCallback(
     (nextMode: WidgetMode, nextPreset: AssistantPreset | null = null) => {
@@ -218,7 +220,7 @@ export function AssistantWidget({
   }, [isOpen]);
 
   return (
-    <div className="cw-widget">
+    <div className="cw-widget" data-open={isOpen}>
       <div className="cw-launcher-dock">
         <button
           id="chameleon-widget-launcher"
