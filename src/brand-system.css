@@ -41,7 +41,7 @@
   z-index: 40;
   width: min(384px, calc(100vw - 32px));
   height: min(640px, calc(100dvh - 32px));
-  border: 1px solid var(--mc-line);
+  border: 1px solid var(--mc-line-strong);
   border-radius: 22px;
   background: var(--mc-paper);
   box-shadow: 0 24px 64px rgba(28, 22, 18, 0.14);
@@ -228,10 +228,10 @@
   align-items: center;
   margin: 0 16px 16px;
   padding: 6px 6px 6px 16px;
-  border: 1px solid var(--mc-line);
+  border: 1px solid #bfa78f;
   border-radius: 26px;
-  background: var(--mc-paper);
-  box-shadow: none;
+  background: var(--mc-sand);
+  box-shadow: 0 0 0 8px var(--mc-page);
 }
 .cw-widget .cw-inputbar input {
   border: 0;
@@ -263,6 +263,19 @@
   background: var(--mc-ink);
   color: var(--mc-paper);
   box-shadow: none;
+}
+.cw-widget .cw-inputbar .cw-send:disabled {
+  background: var(--mc-brand);
+  color: var(--mc-paper);
+  opacity: 0.65;
+}
+.cw-widget .cw-inputbar .cw-send:not(:disabled) {
+  background: var(--mc-brand);
+  color: var(--mc-paper);
+  opacity: 1;
+}
+.cw-widget .cw-inputbar .cw-send:hover:not(:disabled) {
+  background: var(--mc-ink);
 }
 .cw-widget .cw-send svg {
   transform: none;
