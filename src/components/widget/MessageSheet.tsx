@@ -78,14 +78,16 @@ export function MessageSheet({ onClose }: MessageSheetProps): JSX.Element {
       } catch (failure) {
         rejected += 1;
         track("mail_form_attachment_rejected", {
-          reason: failure instanceof AttachmentFailure ? failure.kind : "unknown",
+          reason:
+            failure instanceof AttachmentFailure ? failure.kind : "unknown",
         });
       }
     }
 
     setPhotos((current) => [...current, ...accepted]);
     setPreparing(false);
-    if (rejected) setError("Jednu fotku sa nepodarilo pripraviť, skúste menšiu.");
+    if (rejected)
+      setError("Jednu fotku sa nepodarilo pripraviť, skúste menšiu.");
   };
 
   const removePhoto = (index: number) => {
@@ -124,7 +126,7 @@ export function MessageSheet({ onClose }: MessageSheetProps): JSX.Element {
         consent: true,
       });
       setHandedToMailClient(!result.delivered);
-      setFallbackHref(result.delivered ? "" : result.fallback ?? "");
+      setFallbackHref(result.delivered ? "" : (result.fallback ?? ""));
       setSendState("done");
       track("mail_form_success", { delivered: result.delivered });
     } catch (failure) {
@@ -161,18 +163,20 @@ export function MessageSheet({ onClose }: MessageSheetProps): JSX.Element {
           onClick={onClose}
         >
           <WidgetIcon name="arrow" />
+          <span>Späť do chatu</span>
         </button>
-        <div className="cw-sheet__title">
-          <h3 id={titleId}>
-            {sendState === "done" ? "Správa odoslaná" : "Napíšte mi"}
-          </h3>
-          <p>
-            {sendState === "done"
-              ? "Ozvem sa na váš e-mail."
-              : "Odpoviem vám na e-mail, väčšinou v ten istý deň."}
-          </p>
-        </div>
       </header>
+
+      <div className="cw-sheet__intro">
+        <h3 id={titleId}>
+          {sendState === "done" ? "Správa odoslaná" : "Napíšte mi"}
+        </h3>
+        <p>
+          {sendState === "done"
+            ? "Ozvem sa na váš e-mail."
+            : "Odpoviem vám na e-mail, väčšinou v ten istý deň."}
+        </p>
+      </div>
 
       {sendState === "done" ? (
         <div className="cw-sheet__done" role="status">
@@ -197,7 +201,11 @@ export function MessageSheet({ onClose }: MessageSheetProps): JSX.Element {
             ) : null}
             <button
               type="button"
-              className={fallbackHref ? "cw-sheet__done-action cw-sheet__done-action--secondary" : "cw-sheet__done-action"}
+              className={
+                fallbackHref
+                  ? "cw-sheet__done-action cw-sheet__done-action--secondary"
+                  : "cw-sheet__done-action"
+              }
               onClick={onClose}
             >
               Späť do chatu
@@ -223,7 +231,9 @@ export function MessageSheet({ onClose }: MessageSheetProps): JSX.Element {
                 autoComplete="email"
                 enterKeyHint="next"
                 placeholder="meno@firma.sk"
-                aria-invalid={Boolean(error) && !EMAIL_PATTERN.test(email.trim())}
+                aria-invalid={
+                  Boolean(error) && !EMAIL_PATTERN.test(email.trim())
+                }
               />
             </label>
 
