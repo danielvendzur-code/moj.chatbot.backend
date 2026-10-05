@@ -45,8 +45,8 @@ for (const device of ["mobile", "desktop"]) {
       // Serve a real parent origin, so iframe bridge origin checks remain active.
       await page.route("http://127.0.0.1:4173/surface-test", (route) =>
         route.fulfill({
-          contentType: "text/html",
-          body: `<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"/></head><body style="margin:0"><section style="height:100vh;background:#1c1612"></section><section style="height:100vh;background:#fffcf7"></section><script src="/${mode === "iframe" ? "embed" : "widget"}.js"></script></body></html>`,
+          contentType: "text/html; charset=utf-8",
+          body: `<!doctype html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head><body style="margin:0"><section style="height:100vh;background:#1c1612"></section><section style="height:100vh;background:#fffcf7"></section><script src="/${mode === "iframe" ? "embed" : "widget"}.js"></script></body></html>`,
         }),
       );
       await page.goto("http://127.0.0.1:4173/surface-test", {
@@ -85,7 +85,7 @@ test("embedded widget stylesheet preserves host link hover and body styles", asy
 }) => {
   await page.route("http://127.0.0.1:4173/host-style-test", (route) =>
     route.fulfill({
-      contentType: "text/html",
+      contentType: "text/html; charset=utf-8",
       body: '<!doctype html><html><head><style>body{margin:17px;background:rgb(20,30,40);color:rgb(240,230,220);font-family:serif}a{color:rgb(250,240,230)}a:hover{color:rgb(220,200,180)}</style></head><body><a href="#test">Host navigation</a><script src="/widget.js"></script></body></html>',
     }),
   );
@@ -112,8 +112,8 @@ for (const width of [320, 390, 640]) {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.route("http://127.0.0.1:4173/mobile-overlay-test", (route) =>
       route.fulfill({
-        contentType: "text/html",
-        body: '<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"/><style>body{margin:0}header{position:fixed;top:0;left:0;right:0;height:76px;z-index:50;background:#1c1612;color:white}main{height:2500px;background:#f5efe6}</style></head><body><header>Menu hostiteľského webu</header><main>Obsah stránky</main><script src="/widget.js"></script></body></html>',
+        contentType: "text/html; charset=utf-8",
+        body: '<!doctype html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><style>body{margin:0}header{position:fixed;top:0;left:0;right:0;height:76px;z-index:50;background:#1c1612;color:white}main{height:2500px;background:#f5efe6}</style></head><body><header>Menu hostiteľského webu</header><main>Obsah stránky</main><script src="/widget.js"></script></body></html>',
       }),
     );
     await page.goto("http://127.0.0.1:4173/mobile-overlay-test", {
