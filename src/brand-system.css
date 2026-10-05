@@ -574,19 +574,27 @@
   .cw-widget select {
     font-size: 16px !important;
   }
+  .cw-widget[data-open="true"]::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: var(--mc-ink);
+  }
   .cw-widget .cw-panel {
-    inset: var(--cw-viewport-top, 0px) 0 auto;
-    width: 100vw;
-    height: var(--cw-viewport-height, 100dvh);
+    inset: calc(var(--cw-viewport-top, 0px) + 8px) 6px auto;
+    width: calc(100vw - 12px);
+    height: calc(var(--cw-viewport-height, 100dvh) - 14px);
     max-height: none;
-    border: 0;
-    border-radius: 0;
+    border: 1px solid var(--mc-line-strong);
+    border-radius: 18px;
+    overflow: hidden;
   }
   html[data-embed="true"] .cw-widget .cw-panel {
-    inset: 0;
-    width: 100%;
-    height: 100dvh;
-    border-radius: 0;
+    inset: 8px 6px auto;
+    width: calc(100% - 12px);
+    height: calc(100dvh - 14px);
+    border-radius: 18px;
   }
   .cw-widget .cw-calc-body {
     padding: 12px 16px 24px;

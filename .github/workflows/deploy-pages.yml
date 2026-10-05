@@ -55,7 +55,7 @@ jobs:
       - name: Create immutable build metadata
         shell: bash
         run: |
-          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"mobile-overlay-20261005-v21"},null,2))'
+          node -e 'const fs=require("fs");fs.writeFileSync("dist/build-meta.json",JSON.stringify({sourceSha:process.env.GITHUB_SHA,generatedAt:new Date().toISOString(),version:"coherent-motion-20261005-v22"},null,2))'
 
       - name: Validate production artifacts
         shell: bash
@@ -85,7 +85,7 @@ jobs:
             if (!condition) throw new Error(message);
           };
 
-          must(js.includes('mobile-overlay-20261005-v21'), 'current widget version missing');
+          must(js.includes('coherent-motion-20261005-v22'), 'current widget version missing');
           must(css.includes('.cw-widget'), 'production widget authority missing');
           must(css.includes('cw-choice-grid'), 'choice grid missing');
           must(css.includes('cw-selection-indicator'), 'selection indicator missing');
@@ -111,7 +111,7 @@ jobs:
           must(!calculator.includes('cw-choice-arrow'), 'legacy choice arrow remains');
           must(!js.includes('REPLACE-ME'), 'placeholder remains');
           must(meta.sourceSha === process.env.GITHUB_SHA, 'build metadata SHA mismatch');
-          must(meta.version === 'mobile-overlay-20261005-v21', 'build metadata version mismatch');
+          must(meta.version === 'coherent-motion-20261005-v22', 'build metadata version mismatch');
           NODE
 
       - name: Configure GitHub Pages
@@ -166,7 +166,7 @@ jobs:
           }
 
           verify "/" "Môj Chatbot"
-          verify "/widget.js" "mobile-overlay-20261005-v21"
+          verify "/widget.js" "coherent-motion-20261005-v22"
           verify "/widget.css" ".cw-widget"
           verify "/widget.css" "--mc-brand:"
           verify "/build-meta.json" "$SOURCE_SHA"

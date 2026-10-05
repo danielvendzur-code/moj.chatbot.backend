@@ -129,12 +129,20 @@ for (const width of [320, 390, 640]) {
         const r = el.getBoundingClientRect();
         return { top: r.top, height: r.height, width: r.width };
       }),
-    ).toEqual({ top: 0, height: 844, width });
+    ).toEqual({ top: 8, height: 830, width: width - 12 });
     expect(
       await page.evaluate(() =>
         Boolean(document.elementFromPoint(20, 20)?.closest(".cw-panel")),
       ),
     ).toBe(true);
+    // The thin frame is separated from browser chrome without exposing host navigation.
+    expect(
+      await page
+        .locator(".cw-widget")
+        .evaluate((el) => getComputedStyle(el, "::before").backgroundColor),
+    ).toBe("rgb(28, 22, 18)");
+    await expect(panel).toHaveCSS("border-top-width", "1px");
+    await expect(panel).toHaveCSS("border-top-left-radius", "18px");
     await expect(page.locator("body")).toHaveCSS("position", "fixed");
     await expect(page.locator("body")).toHaveCSS("top", "-500px");
     const input = page.getByPlaceholder("Napíšte otázku…");
@@ -146,7 +154,7 @@ for (const width of [320, 390, 640]) {
       .poll(() =>
         panel.evaluate((el) => Math.round(el.getBoundingClientRect().height)),
       )
-      .toBe(440);
+      .toBe(426);
     expect(
       await input.evaluate(
         (el) => el.getBoundingClientRect().bottom <= innerHeight,
