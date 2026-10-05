@@ -51,6 +51,7 @@ export function BrandMark({
       aria-label="Môj Chatbot logo"
       className={`brand-mark mc-mark ${className}`}
       fill="none"
+      style={{ color }}
       focusable="false"
       onMouseEnter={() => setRun((v) => v + 1)}
     >

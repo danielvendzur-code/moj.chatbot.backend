@@ -105,12 +105,31 @@ test("contact opens inside the widget and validates before sending", async ({
   await page.getByTestId("open-mail-form").click();
   const sheet = page.getByTestId("mail-sheet");
   await expect(sheet).toBeVisible();
+  await expect(page.locator(".cw-sheet__back svg")).toBeVisible();
+  await page
+    .getByRole("button", { name: "Späť do chatu", exact: true })
+    .click();
+  await expect(sheet).toHaveCount(0);
+  await expect(page.getByPlaceholder("Napíšte otázku…")).toBeVisible();
+  await page.getByTestId("open-mail-form").click();
   await page.getByTestId("mail-send").click();
   await expect(page.getByRole("alert")).toContainText("Napíšte e-mail");
   await sheet.locator('input[type="email"]').fill("qa@example.com");
   await page.getByTestId("mail-send").click();
   await expect(page.getByRole("alert")).toContainText("s čím vám môžem pomôcť");
   await sheet.locator("textarea").press("Escape");
+  await expect(sheet).toHaveCount(0);
+  await page.getByTestId("open-mail-form").click();
+  await sheet.locator('input[type="email"]').fill("qa@example.com");
+  await sheet.locator("textarea").fill("Prosím o návrh chatbota pre web.");
+  await page.getByTestId("mail-send").click();
+  await expect(
+    sheet.getByRole("heading", { name: "Správa odoslaná" }),
+  ).toBeVisible();
+  await sheet
+    .getByRole("button", { name: "Späť do chatu", exact: true })
+    .last()
+    .click();
   await expect(sheet).toHaveCount(0);
   expect(errors).toEqual([]);
 });
