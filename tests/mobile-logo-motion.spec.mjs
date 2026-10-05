@@ -79,3 +79,18 @@ for (const device of ["mobile", "desktop"]) {
     });
   }
 }
+
+test("embedded widget stylesheet preserves host link hover and body styles", async ({ page }) => {
+  await page.route("http://127.0.0.1:4173/host-style-test", route => route.fulfill({
+    contentType: "text/html",
+    body: '<!doctype html><html><head><style>body{margin:17px;background:rgb(20,30,40);color:rgb(240,230,220);font-family:serif}a{color:rgb(250,240,230)}a:hover{color:rgb(220,200,180)}</style></head><body><a href="#test">Host navigation</a><script src="/widget.js"></script></body></html>'
+  }));
+  await page.goto("http://127.0.0.1:4173/host-style-test", { waitUntil: "networkidle" });
+  await expect(page.getByTestId("widget-launcher")).toBeVisible();
+  await expect(page.locator("body")).toHaveCSS("margin", "17px");
+  await expect(page.locator("body")).toHaveCSS("background-color", "rgb(20, 30, 40)");
+  const link = page.getByRole("link", { name: "Host navigation" });
+  await expect(link).toHaveCSS("color", "rgb(250, 240, 230)");
+  await link.hover();
+  await expect(link).toHaveCSS("color", "rgb(220, 200, 180)");
+});
