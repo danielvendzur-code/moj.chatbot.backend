@@ -86,7 +86,7 @@ jobs:
           test -f dist/widget.css
 
           # Verify the approved release, geometry and active visual system.
-          grep -Fq 'coherent-motion-20261005-v22' dist/widget.js
+          grep -Fq 'expressive-interactions-20261005-v23' dist/widget.js
           grep -Fq 'M24 71.2L24.003 32.706L24.036' dist/widget.js
           grep -Fq 'data-surface' dist/widget.js
           grep -Fq 'mc-mark' dist/widget.js

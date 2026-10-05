@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("launcher moves a highlight without changing logo width or geometry", async ({
+test("launcher logo stays static without drawing or changing geometry", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
@@ -22,9 +22,11 @@ test("launcher moves a highlight without changing logo width or geometry", async
   }
   expect(new Set(samples.flat().map((sample) => sample.width)).size).toBe(1);
   expect(new Set(samples.flat().map((sample) => sample.geometry)).size).toBe(1);
-  expect(new Set(samples.map((sample) => sample[1].dash)).size).toBeGreaterThan(
-    1,
-  );
+  expect(new Set(samples.map((sample) => sample[1].dash)).size).toBe(1);
+  await expect(logo.locator(".mc-pen")).toHaveCSS("display", "none");
+  expect(
+    await logo.evaluate((el) => el.getAnimations({ subtree: true }).length),
+  ).toBe(0);
 });
 
 for (const device of ["mobile", "desktop"]) {
