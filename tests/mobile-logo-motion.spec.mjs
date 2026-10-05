@@ -1,5 +1,32 @@
 import { test, expect } from "@playwright/test";
 
+test("launcher moves a highlight without changing logo width or geometry", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("http://127.0.0.1:4173/", { waitUntil: "networkidle" });
+  const logo = page.getByTestId("widget-launcher").locator(".mc-mark");
+  await expect(logo.locator("path")).toHaveCount(2);
+  const samples = [];
+  for (let i = 0; i < 4; i++) {
+    samples.push(
+      await logo.locator("path").evaluateAll((paths) =>
+        paths.map((path) => ({
+          width: getComputedStyle(path).strokeWidth,
+          geometry: path.getAttribute("d"),
+          dash: getComputedStyle(path).strokeDashoffset,
+        })),
+      ),
+    );
+    await page.waitForTimeout(250);
+  }
+  expect(new Set(samples.flat().map((sample) => sample.width)).size).toBe(1);
+  expect(new Set(samples.flat().map((sample) => sample.geometry)).size).toBe(1);
+  expect(new Set(samples.map((sample) => sample[1].dash)).size).toBeGreaterThan(
+    1,
+  );
+});
+
 for (const device of ["mobile", "desktop"]) {
   for (const mode of ["direct", "iframe"]) {
     test(`${device} ${mode} adapts launcher fill and logo to the page`, async ({

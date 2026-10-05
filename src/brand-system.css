@@ -107,11 +107,26 @@
   box-shadow: 0 8px 24px rgba(28, 22, 18, 0.14);
   backdrop-filter: none;
   transform: none;
+  transition:
+    transform 350ms var(--mc-ease),
+    box-shadow 350ms var(--mc-ease),
+    background-color 250ms ease;
 }
 .cw-widget .cw-launcher:hover {
   background: var(--mc-ink);
   color: var(--mc-paper);
-  transform: none;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(28, 22, 18, 0.22);
+}
+.cw-widget .cw-launcher:active {
+  transform: translateY(-1px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cw-widget .cw-launcher:hover,
+  .cw-widget .cw-launcher:active {
+    transform: none;
+    transition: none;
+  }
 }
 .cw-widget .cw-launcher-preview {
   display: none;
