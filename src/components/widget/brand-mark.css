@@ -99,3 +99,20 @@ a:is(:hover, :focus-visible) .mc-mark,
 .mc-mark:hover .mc-half {
   animation: none;
 }
+
+/* A solid underlay removes antialiasing seams between the approved paths. */
+.mc-mark .mc-join { opacity: 0; transition: opacity 60ms 540ms; }
+.mc-mark:hover .mc-join,
+a:is(:hover, :focus-visible) .mc-join,
+.cw-launcher:is(:hover, :focus-visible, [aria-expanded="true"]) .mc-join { opacity: 1; }
+.mc-mark[data-loop] .mc-join { animation: mc-join-cycle 1.6s ease-in-out infinite; }
+@keyframes mc-join-cycle { 0%, 44%, 56%, 100% { opacity: 0; } 49%, 51% { opacity: 1; } }
+.mc-mark:hover .mc-join, .cw-launcher .mc-join { animation: none; }
+.mc-mark.mc-mark--static, .mc-mark.mc-mark--static * { animation: none !important; transition: none !important; }
+.mc-mark.mc-mark--static { transform: none !important; }
+.mc-mark--static .mc-half--top { transform: translate(15px, 3.6px); }
+.mc-mark--static .mc-half--bottom { transform: translate(-15px, -3.6px); }
+.mc-mark--static .mc-join { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .mc-mark .mc-join { animation: none; transition: none; } }
+
+.cw-launcher .mc-mark[data-loop] .mc-join { animation: none; }

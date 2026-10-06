@@ -25,6 +25,7 @@ export function BrandMark({
       data-loop={loop || undefined}
       fill="currentColor"
     >
+      <rect className="mc-join" x="21.3" y="49" width="57.4" height="2" />
       <path className="mc-half mc-half--top" d="M6 46.5A29 29 0 0 1 64 46.5Z" />
       <path
         className="mc-half mc-half--bottom"

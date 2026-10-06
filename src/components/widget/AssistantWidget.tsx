@@ -234,6 +234,7 @@ export function AssistantWidget({
           aria-controls="chameleon-widget-panel"
           onClick={() => open(mode, preset)}
         >
+          <span className="cw-launcher-hint" aria-hidden="true">Ako môžeme pomôcť vášmu webu?</span>
           <BubbleLogo
             size="launcher"
             tone={launcherSurface === "dark" ? "brand" : "paper"}
