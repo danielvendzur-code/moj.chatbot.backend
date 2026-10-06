@@ -49,7 +49,7 @@ function mount(): void {
 
   const host = existing ?? document.createElement("div");
   host.id = HOST_ID;
-  host.setAttribute("data-dv-assistant-version", "expressive-interactions-20261005-v23");
+  host.setAttribute("data-dv-assistant-version", "mobile-finish-20261006-v24");
   host.setAttribute("data-dv-assistant-theme", "espresso-caramel");
   host.setAttribute(
     "data-dv-assistant-quality",

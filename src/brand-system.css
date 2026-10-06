@@ -247,11 +247,18 @@
 .cw-widget .cw-inputbar input::placeholder {
   color: var(--mc-muted);
 }
-.cw-widget .cw-send {
-  flex: 0 0 36px;
-  width: 36px;
-  height: 36px;
-  min-height: 36px;
+.cw-widget .cw-inputbar > .cw-send {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  max-width: 44px;
+  max-height: 44px;
+  aspect-ratio: 1;
+  padding: 0;
+  display: grid;
+  place-items: center;
   background: var(--mc-ink);
   color: var(--mc-paper);
   border: 0;

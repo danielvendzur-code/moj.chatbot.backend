@@ -6,7 +6,12 @@ export type LauncherSurface = "light" | "dark";
 function pageSurface(x: number, y: number): LauncherSurface {
   const behind = document
     .elementsFromPoint(x, y)
-    .find((element) => !element.closest(".cw-widget"));
+    .find(
+      (element) =>
+        !element.closest(
+          ".cw-widget, .cw-launcher-dock, #dv-assistant-root, #site-assistant-widget-host",
+        ),
+    );
   for (
     let element = behind;
     element;
@@ -42,7 +47,16 @@ export function useLauncherSurface(
       const rect = ref.current?.getBoundingClientRect();
       if (rect && !embedded)
         setSurface(
-          pageSurface(rect.x + rect.width / 2, rect.y + rect.height / 2),
+          pageSurface(
+            Math.max(
+              0,
+              Math.min(window.innerWidth - 1, rect.x + rect.width / 2),
+            ),
+            Math.max(
+              0,
+              Math.min(window.innerHeight - 1, rect.y + rect.height / 2),
+            ),
+          ),
         );
     };
     const schedule = () => {
@@ -57,15 +71,27 @@ export function useLauncherSurface(
       capture: true,
     });
     window.addEventListener("resize", schedule);
+    document.addEventListener("animationend", schedule, true);
     window.addEventListener("site-assistant:surface", parentSurface);
     const observer = new ResizeObserver(schedule);
     observer.observe(document.body);
+    // Consent dialogs and route content may disappear without a body resize.
+    const content = new MutationObserver(schedule);
+    content.observe(document.body, { childList: true, subtree: true });
+    // The entrance can start outside the viewport. Sample again as it arrives.
+    const visibility = new IntersectionObserver(schedule, {
+      threshold: [0, 0.5, 1],
+    });
+    if (ref.current) visibility.observe(ref.current);
     schedule();
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
+      content.disconnect();
+      visibility.disconnect();
       window.removeEventListener("scroll", schedule, true);
       window.removeEventListener("resize", schedule);
+      document.removeEventListener("animationend", schedule, true);
       window.removeEventListener("site-assistant:surface", parentSurface);
     };
   }, [ref, open]);
