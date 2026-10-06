@@ -27,7 +27,7 @@ async function openChat(page) {
   await expect(page.locator(".cw-panel")).toBeVisible();
 }
 
-test("desktop chat sends a reply and keeps two usable actions", async ({
+test("desktop chat sends a reply and keeps welcome and response actions", async ({
   page,
 }) => {
   const errors = await observe(page);
@@ -44,7 +44,9 @@ test("desktop chat sends a reply and keeps two usable actions", async ({
   await expect(
     page.getByText("Pomôžeme pripraviť konkrétny návrh."),
   ).toBeVisible();
-  await expect(page.locator(".cw-reply-actions")).toHaveCount(2);
+  await expect(page.locator(".cw-welcome-actions")).toHaveCount(1);
+  await expect(page.locator('.cw-message[data-message-id="1"] button')).toHaveCount(0);
+  await expect(page.locator(".cw-reply-actions")).toHaveCount(1);
   await expect(
     page
       .getByRole("button", { name: "Vyskladať riešenie", exact: true })
@@ -71,7 +73,13 @@ test("builder preserves selections, validates and submits a complete brief", asy
   await expect(
     page.locator('[data-testid^="feature-"][data-selected="true"]'),
   ).toHaveCount(0);
+  // Compare dimensions, since Playwright may scroll the overflow panel on click.
+  const chipSizes = () => page.locator('[data-testid^="feature-"]').evaluateAll(
+    (chips) => chips.map((chip) => ({id:chip.dataset.testid,width:chip.offsetWidth,height:chip.offsetHeight})),
+  );
+  const sizesBefore = await chipSizes();
   await page.getByTestId("feature-leads").click();
+  expect(await chipSizes()).toEqual(sizesBefore);
   await page.getByTestId("feature-jazyky").click();
   await page.getByTestId("flow-next").click();
   await expect(page.locator('[data-step="details"]')).toBeVisible();
