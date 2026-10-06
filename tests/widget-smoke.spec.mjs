@@ -44,7 +44,9 @@ test("desktop chat sends a reply and keeps two usable actions", async ({
   await expect(
     page.getByText("Pomôžeme pripraviť konkrétny návrh."),
   ).toBeVisible();
-  await expect(page.locator(".cw-reply-actions")).toHaveCount(2);
+  await expect(page.locator(".cw-welcome-actions")).toHaveCount(1);
+  await expect(page.locator('[data-message-id="1"] button')).toHaveCount(0);
+  await expect(page.locator(".cw-reply-actions")).toHaveCount(1);
   await expect(
     page
       .getByRole("button", { name: "Vyskladať riešenie", exact: true })

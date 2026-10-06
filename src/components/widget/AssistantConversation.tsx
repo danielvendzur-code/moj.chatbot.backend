@@ -306,11 +306,11 @@ export function AssistantConversation({
                   <p>{text}</p>
                   {message.from === "bot" &&
                   !message.streaming &&
-                  (conversationStarted ||
+                  (message.id > 2 ||
                     (message.id === 2 && introComplete)) ? (
                     <div
                       className={
-                        message.id === 2 && !conversationStarted
+                        message.id === 2
                           ? "cw-welcome-actions"
                           : "cw-reply-actions"
                       }
