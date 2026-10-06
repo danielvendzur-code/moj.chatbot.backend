@@ -650,3 +650,31 @@
   color: var(--mc-brand);
   border-color: var(--mc-line);
 }
+
+/* A clear composer on the same espresso surface as the header. */
+.cw-widget .cw-inputbar {
+  background: var(--mc-ink);
+  border-color: var(--mc-ink);
+  padding: 8px 8px 8px 16px;
+  box-shadow:
+    0 0 0 7px var(--mc-page),
+    0 5px 18px rgba(28, 22, 18, 0.16);
+}
+.cw-widget .cw-inputbar input {
+  color: var(--mc-paper);
+}
+.cw-widget .cw-inputbar input::placeholder {
+  color: rgba(255, 252, 247, 0.72);
+}
+.cw-widget .cw-inputbar:focus-within {
+  border-color: var(--mc-accent);
+}
+.cw-widget .cw-inputbar > .cw-send:not(:disabled),
+.cw-widget .cw-inputbar > .cw-send:disabled {
+  background: var(--mc-paper);
+  color: var(--mc-ink);
+}
+.cw-widget .cw-inputbar > .cw-send:hover:not(:disabled) {
+  background: var(--mc-accent);
+  color: var(--mc-ink);
+}

@@ -30,7 +30,12 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   {
     id: 1,
     from: "bot",
-    text: "Dobrý deň. Pomôžem vám vyskladať chatbot, kalkulačku alebo konfigurátor pre váš web.",
+    text: "Dobrý deň. Pomôžem vám vybrať riešenie pre váš web.",
+  },
+  {
+    id: 2,
+    from: "bot",
+    text: "Môžeme spolu vyskladať chatbot, kalkulačku alebo 3D konfigurátor. Čo by ste chceli zákazníkom zjednodušiť?",
   },
 ];
 
@@ -54,12 +59,20 @@ export function AssistantConversation({
   const [messages, setMessages] = useState<ChatMessage[]>(
     restored?.messages.length ? restored.messages : INITIAL_MESSAGES,
   );
+  const introLength = INITIAL_MESSAGES.reduce(
+    (sum, message) => sum + message.text.length,
+    0,
+  );
+  const [introChars, setIntroChars] = useState(
+    restored?.messages.length || prefersReducedMotion() ? introLength : 0,
+  );
+  const introComplete = introChars >= introLength;
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const [sendAnimating, setSendAnimating] = useState(false);
   const [composing, setComposing] = useState(false);
   const [mailOpen, setMailOpen] = useState(false);
-  const nextIdRef = useRef(restored?.nextId ?? 2);
+  const nextIdRef = useRef(restored?.nextId ?? 3);
   const messagesRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const sendAnimationTimerRef = useRef<number | null>(null);
@@ -70,6 +83,19 @@ export function AssistantConversation({
 
   const conversationStarted = messages.some((message) => message.from === "me");
 
+  useEffect(() => {
+    if (!active || introComplete || conversationStarted) return;
+    if (prefersReducedMotion()) {
+      setIntroChars(introLength);
+      return;
+    }
+    const timer = window.setInterval(
+      () => setIntroChars((count) => Math.min(introLength, count + 3)),
+      35,
+    );
+    return () => window.clearInterval(timer);
+  }, [active, introComplete, conversationStarted, introLength]);
+
   const resetTokenRef = useRef(resetToken);
   useEffect(() => {
     if (resetTokenRef.current === resetToken) return;
@@ -79,13 +105,14 @@ export function AssistantConversation({
     requestAbortRef.current = null;
     inFlightRef.current = false;
     setMessages(INITIAL_MESSAGES);
+    setIntroChars(prefersReducedMotion() ? introLength : 0);
     setInput("");
     setTyping(false);
     setSendAnimating(false);
     setComposing(false);
     setMailOpen(false);
     clearHistory();
-    nextIdRef.current = 2;
+    nextIdRef.current = 3;
     if (sendAnimationTimerRef.current !== null) {
       window.clearTimeout(sendAnimationTimerRef.current);
       sendAnimationTimerRef.current = null;
@@ -108,9 +135,9 @@ export function AssistantConversation({
   const streamingReply = messages.some((message) => message.streaming);
 
   useEffect(() => {
-    if (streamingReply || typing) return;
+    if (streamingReply || typing || !introComplete) return;
     saveHistory(messages, nextIdRef.current);
-  }, [messages, streamingReply, typing]);
+  }, [messages, streamingReply, typing, introComplete]);
 
   useEffect(() => {
     const container = messagesRef.current;
@@ -143,6 +170,7 @@ export function AssistantConversation({
 
   const ask = async (question: string) => {
     if (inFlightRef.current) return;
+    setIntroChars(introLength);
     inFlightRef.current = true;
     const requestEpoch = requestEpochRef.current;
     const controller = new AbortController();
@@ -249,47 +277,63 @@ export function AssistantConversation({
       data-started={conversationStarted || undefined}
     >
       <div className="cw-scroll-shell">
-        <div className="cw-messages" ref={messagesRef} aria-live="polite">
-          {messages.map((message) => (
-            <div
-              className={`cw-message-row cw-message-row--${message.from}`}
-              data-message-id={message.id}
-              data-streaming={message.streaming || undefined}
-              key={message.id}
-            >
-              {message.from === "bot" ? (
-                <span className="cw-avatar" aria-hidden="true">
-                  <BubbleLogo size="avatar" />
-                </span>
-              ) : null}
-              <div className="cw-message-wrap">
-                <p>{message.text}</p>
-                {message.from === "bot" && !message.streaming ? (
-                  <div
-                    className={
-                      message.id === 1 && !conversationStarted
-                        ? "cw-welcome-actions"
-                        : "cw-reply-actions"
-                    }
-                    aria-label="Ďalší krok"
-                  >
-                    <button type="button" onClick={onOpenBuilder}>
-                      Vyskladať riešenie
-                    </button>
-                    <button
-                      type="button"
-                      data-testid="open-mail-form"
-                      onClick={() => setMailOpen(true)}
-                    >
-                      Kontakt
-                    </button>
-                  </div>
+        <div
+          className="cw-messages"
+          ref={messagesRef}
+          aria-live={introComplete ? "polite" : "off"}
+        >
+          {messages.map((message) => {
+            const prefix =
+              message.id === 2 ? INITIAL_MESSAGES[0].text.length : 0;
+            const greeting = !conversationStarted && message.id <= 2;
+            const text = greeting
+              ? message.text.slice(0, Math.max(0, introChars - prefix))
+              : message.text;
+            if (greeting && !text) return null;
+            return (
+              <div
+                className={`cw-message-row cw-message-row--${message.from}`}
+                data-message-id={message.id}
+                data-streaming={message.streaming || undefined}
+                key={message.id}
+              >
+                {message.from === "bot" ? (
+                  <span className="cw-avatar" aria-hidden="true">
+                    <BubbleLogo size="avatar" />
+                  </span>
                 ) : null}
+                <div className="cw-message-wrap">
+                  <p>{text}</p>
+                  {message.from === "bot" &&
+                  !message.streaming &&
+                  (conversationStarted ||
+                    (message.id === 2 && introComplete)) ? (
+                    <div
+                      className={
+                        message.id === 2 && !conversationStarted
+                          ? "cw-welcome-actions"
+                          : "cw-reply-actions"
+                      }
+                      aria-label="Ďalší krok"
+                    >
+                      <button type="button" onClick={onOpenBuilder}>
+                        Vyskladať riešenie
+                      </button>
+                      <button
+                        type="button"
+                        data-testid="open-mail-form"
+                        onClick={() => setMailOpen(true)}
+                      >
+                        Kontakt
+                      </button>
+                    </div>
+                  ) : null}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
 
-          {typing ? (
+          {typing || (!introComplete && !conversationStarted) ? (
             <div className="cw-message-row cw-message-row--bot">
               <span className="cw-avatar" aria-hidden="true">
                 <BubbleLogo size="avatar" />
