@@ -56,7 +56,7 @@ const shell = (
   content: string,
 ) => `<!doctype html>
 <html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="x-apple-disable-message-reformatting"><title>Môj Chatbot</title>
-<style>@media(max-width:640px){.shell{width:100%!important}.pad{padding-left:20px!important;padding-right:20px!important}.hero{padding:28px 20px!important}.title{font-size:28px!important}.stack{display:block!important;width:100%!important;text-align:left!important;padding:0!important}.button{display:block!important;text-align:center!important}}</style></head>
+<style>@media(max-width:640px){.shell{width:100%!important}.pad{padding-left:20px!important;padding-right:20px!important}.hero{padding:28px 20px!important}.title{font-size:28px!important}.stack{display:block!important;width:100%!important;text-align:left!important;padding:0!important}.button{display:block!important;text-align:center!important}.email-header-cell{display:block!important;width:100%!important;text-align:left!important}.email-header-label{padding-top:12px!important}.email-header-logo{width:200px!important;height:auto!important}}</style></head>
 <body style="margin:0;background:#f2ede7;color:#17130f;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased">
 <div style="display:none;max-height:0;overflow:hidden;opacity:0">${esc(preheader)}&nbsp;&zwnj;&nbsp;&zwnj;</div>
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f2ede7"><tr><td align="center" style="padding:32px 12px">
@@ -65,7 +65,7 @@ const shell = (
 </td></tr></table></body></html>`;
 
 const header = (label: string) =>
-  `<tr><td style="background:#1C1612;padding:20px 28px"><table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td><img src="https://mojchatbot.sk/email-assets/mojchatbot-email-dark.gif" width="242" height="45" alt="Môj Chatbot" style="display:block;border:0;max-width:100%"></td><td align="right" style="color:#C8925E;font-size:11px;font-weight:600">${esc(label)}</td></tr></table></td></tr>`;
+  `<tr><td style="background:#1C1612;padding:20px 28px"><table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td class="email-header-cell"><img class="email-header-logo" src="https://danielvendzur-code.github.io/moj.chatbot.backend/email-assets/mojchatbot-email-dark.gif" width="242" height="45" alt="Môj Chatbot" style="display:block;border:0;width:242px;max-width:100%;height:auto"></td><td class="email-header-cell email-header-label" align="right" style="color:#C8925E;font-size:11px;font-weight:600">${esc(label)}</td></tr></table></td></tr>`;
 
 const row = (label: string, value: string, href = "") => {
   const shown = href
