@@ -174,3 +174,19 @@ for (const width of [320, 390, 640]) {
     await expect(input).toHaveValue("Rozpracovaná otázka");
   });
 }
+
+test("only launcher hover joins the separated logo; header stays static", async ({page}) => {
+  await page.goto("http://127.0.0.1:4173/", {waitUntil:"networkidle"});
+  const launcher=page.getByTestId("widget-launcher");
+  const mark=launcher.locator(".mc-mark");
+  await expect(mark.locator(".mc-half--top")).toHaveCSS("transform","none");
+  await launcher.hover();
+  await expect(mark).toHaveCSS("transform","matrix(1.22, 0, 0, 1.22, 0, 0)");
+  await expect(mark.locator(".mc-half--top")).toHaveCSS("transform","matrix(1, 0, 0, 1, 15, 3.6)");
+  await expect(mark.locator(".mc-half--bottom")).toHaveCSS("transform","matrix(1, 0, 0, 1, -15, -3.6)");
+  await expect(mark.locator(".mc-join")).toHaveCSS("opacity","1");
+  await launcher.click();
+  const header=page.locator(".cw-panel-head .mc-mark");
+  await expect(header.locator(".mc-half--top")).toHaveCSS("transform","none");
+  expect(await header.evaluate(e=>e.getAnimations({subtree:true}).length)).toBe(0);
+});

@@ -11,7 +11,7 @@ export function BubbleLogo({
       <BrandMark
         size={size === "header" ? 30 : size === "launcher" ? 36 : 24}
         tone={tone}
-        loop={size === "launcher"}
+        className={size === "launcher" ? "" : "mc-mark--static"}
       />
     </span>
   );
