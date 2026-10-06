@@ -1,3 +1,4 @@
+import { BrandMark } from "./BrandMark";
 import { useEffect, useRef, useState } from "react";
 import { sendChat, type ChatTurn } from "../../lib/assistantApi";
 import {
@@ -298,9 +299,7 @@ export function AssistantConversation({
                 role="status"
                 aria-label="Píšem odpoveď"
               >
-                <i />
-                <i />
-                <i />
+                <BrandMark size={22} tone="brand" loop />
               </div>
             </div>
           ) : null}

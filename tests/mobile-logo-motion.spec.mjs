@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("launcher logo stays static without drawing or changing geometry", async ({
+test("launcher filled logo keeps its geometry while resting", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
@@ -21,9 +21,11 @@ test("launcher logo stays static without drawing or changing geometry", async ({
     await page.waitForTimeout(250);
   }
   expect(new Set(samples.flat().map((sample) => sample.width)).size).toBe(1);
-  expect(new Set(samples.flat().map((sample) => sample.geometry)).size).toBe(1);
+  for (let i = 0; i < 2; i++) {
+    expect(new Set(samples.map((sample) => sample[i].geometry)).size).toBe(1);
+  }
   expect(new Set(samples.map((sample) => sample[1].dash)).size).toBe(1);
-  await expect(logo.locator(".mc-pen")).toHaveCSS("display", "none");
+  await expect(logo.locator(".mc-pen")).toHaveCount(0);
   expect(
     await logo.evaluate((el) => el.getAnimations({ subtree: true }).length),
   ).toBe(0);
@@ -66,7 +68,8 @@ for (const device of ["mobile", "desktop"]) {
       await expect(launcher).toHaveCSS("color", "rgb(91, 58, 38)");
       const path = launcher.locator(".mc-mark path").first();
       await expect(path).toHaveCSS("animation-name", "none");
-      await expect(path).toHaveCSS("stroke", "rgb(91, 58, 38)");
+      await expect(path).toHaveCSS("fill", "rgb(91, 58, 38)");
+      await expect(path).toHaveCSS("stroke", "none");
       await page.evaluate(() => scrollTo(0, innerHeight));
       await expect(launcher).toHaveAttribute("data-surface", "light");
       await expect(launcher).toHaveCSS("background-color", "rgb(28, 22, 18)");
