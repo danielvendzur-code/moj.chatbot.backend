@@ -653,106 +653,29 @@
 
 /* Quiet composer: colour lives in the outline and send button. */
 .cw-widget .cw-inputbar {
-  background: var(--mc-paper);
-  border-color: rgba(91, 58, 38, 0.32);
-  padding: 8px 8px 8px 16px;
-  box-shadow:
-    0 0 0 7px var(--mc-page),
-    0 3px 12px rgba(28, 22, 18, 0.05);
+ background: var(--mc-paper); border-color: rgba(91,58,38,.32);
+ padding: 8px 8px 8px 16px; box-shadow: 0 0 0 7px var(--mc-page), 0 3px 12px rgba(28,22,18,.05);
 }
-.cw-widget .cw-inputbar input {
-  color: var(--mc-ink);
-}
-.cw-widget .cw-inputbar input::placeholder {
-  color: var(--mc-muted);
-}
-.cw-widget .cw-inputbar:focus-within {
-  border-color: var(--mc-brand);
-  box-shadow:
-    0 0 0 7px var(--mc-page),
-    0 0 0 8px rgba(91, 58, 38, 0.13);
-}
-.cw-widget .cw-inputbar > .cw-send:not(:disabled),
-.cw-widget .cw-inputbar > .cw-send:disabled {
-  background: var(--mc-brand);
-  color: var(--mc-paper);
-}
-.cw-widget .cw-inputbar > .cw-send:hover:not(:disabled) {
-  background: var(--mc-brand-hover);
-  color: var(--mc-paper);
-}
+.cw-widget .cw-inputbar input { color: var(--mc-ink); }
+.cw-widget .cw-inputbar input::placeholder { color: var(--mc-muted); }
+.cw-widget .cw-inputbar:focus-within { border-color: var(--mc-brand); box-shadow: 0 0 0 7px var(--mc-page), 0 0 0 8px rgba(91,58,38,.13); }
+.cw-widget .cw-inputbar > .cw-send:not(:disabled), .cw-widget .cw-inputbar > .cw-send:disabled { background: var(--mc-brand); color: var(--mc-paper); }
+.cw-widget .cw-inputbar > .cw-send:hover:not(:disabled) { background: var(--mc-brand-hover); color: var(--mc-paper); }
 /* Selection never changes chip dimensions or label weight. */
-.cw-widget :is(.cw-rowcard, .cw-opt, .cw-scard, .cw-vcard),
-.cw-widget
-  :is(.cw-rowcard, .cw-opt, .cw-scard, .cw-vcard)[data-selected="true"] {
-  box-sizing: border-box;
-  max-width: 100%;
-  padding: 0 16px 0 36px;
-  border: 1px solid transparent;
-  transition:
-    background-color 180ms,
-    color 180ms,
-    border-color 180ms,
-    box-shadow 180ms;
+.cw-widget :is(.cw-rowcard,.cw-opt,.cw-scard,.cw-vcard),
+.cw-widget :is(.cw-rowcard,.cw-opt,.cw-scard,.cw-vcard)[data-selected="true"] {
+ box-sizing: border-box; max-width: 100%; padding: 0 16px 0 36px; border: 1px solid transparent;
+ transition: background-color 180ms, color 180ms, border-color 180ms, box-shadow 180ms;
 }
-.cw-widget .cw-selection-indicator {
-  display: grid;
-  position: absolute;
-  left: 13px;
-  opacity: 0;
-  visibility: hidden;
-}
-.cw-widget [data-selected="true"] .cw-selection-indicator {
-  opacity: 1;
-  visibility: visible;
-}
-.cw-widget :is(.cw-rowcard, .cw-opt, .cw-scard, .cw-vcard):hover {
-  background: #e6d9cb;
-  border-color: rgba(91, 58, 38, 0.24);
-}
-.cw-widget
-  :is(.cw-rowcard, .cw-opt, .cw-scard, .cw-vcard)[data-selected="true"]:hover {
-  background: var(--mc-brand);
-  color: var(--mc-paper);
-}
-.cw-widget :is(.cw-rowcard, .cw-opt, .cw-scard, .cw-vcard):focus-visible {
-  outline: 2px solid var(--mc-brand);
-  outline-offset: 3px;
-}
-.cw-widget .cw-launcher:is(:hover, :focus-visible) .mc-mark {
-  transform: scale(1.22);
-}
-.cw-widget .cw-launcher-hint {
-  position: absolute;
-  right: 76px;
-  bottom: 10px;
-  width: max-content;
-  max-width: min(245px, calc(100vw - 120px));
-  padding: 12px 16px;
-  border-radius: 12px;
-  background: var(--mc-paper);
-  border: 1px solid var(--mc-line);
-  color: var(--mc-ink);
-  font: 500 13px/1.4 var(--mc-font);
-  box-shadow: 0 8px 25px #0001;
-  pointer-events: none;
-  opacity: 0;
-  translate: 6px 0;
-  transition:
-    opacity 180ms,
-    translate 250ms;
-}
-.cw-widget .cw-launcher:is(:hover, :focus-visible) .cw-launcher-hint {
-  opacity: 1;
-  translate: 0 0;
-}
-.cw-widget .cw-panel-head {
-  background-image: radial-gradient(
-    ellipse at 85% 0%,
-    rgba(200, 146, 94, 0.14),
-    transparent 70%
-  );
-}
+.cw-widget .cw-selection-indicator { display: grid; position: absolute; left: 13px; opacity: 0; visibility: hidden; }
+.cw-widget [data-selected="true"] .cw-selection-indicator { opacity: 1; visibility: visible; }
+.cw-widget :is(.cw-rowcard,.cw-opt,.cw-scard,.cw-vcard):hover { background: #e6d9cb; border-color: rgba(91,58,38,.24); }
+.cw-widget :is(.cw-rowcard,.cw-opt,.cw-scard,.cw-vcard)[data-selected="true"]:hover { background: var(--mc-brand); color: var(--mc-paper); }
+.cw-widget :is(.cw-rowcard,.cw-opt,.cw-scard,.cw-vcard):focus-visible { outline: 2px solid var(--mc-brand); outline-offset: 3px; }
+.cw-widget .cw-launcher:is(:hover,:focus-visible) .mc-mark { transform: scale(1.22); }
+.cw-widget .cw-launcher-hint { position: absolute; right: 76px; bottom: 10px; width: max-content; max-width: min(245px, calc(100vw - 120px)); padding: 12px 16px; border-radius: 12px; background: var(--mc-paper); border: 1px solid var(--mc-line); color: var(--mc-ink); font: 500 13px/1.4 var(--mc-font); box-shadow: 0 8px 25px #0001; pointer-events: none; opacity: 0; translate: 6px 0; transition: opacity 180ms, translate 250ms; }
+.cw-widget .cw-launcher:is(:hover,:focus-visible) .cw-launcher-hint { opacity: 1; translate: 0 0; }
+.cw-widget .cw-panel-head { background-image: radial-gradient(ellipse at 85% 0%,rgba(200,146,94,.14),transparent 70%); }
 
 /* One cinematic surface, with content settling after the shell. */
 .cw-widget .cw-panel {
@@ -807,36 +730,12 @@
     translate: 0 0;
   }
 }
-.cw-widget .cw-panel {
-  background: #faf8f4;
-}
-.cw-widget .cw-panel-head {
-  background: var(--mc-ink);
-  background-image: none;
-}
-.cw-widget .cw-conversation,
-.cw-widget .cw-messages {
-  background: #faf8f4;
-}
-.cw-widget .cw-message-row--bot .cw-message-wrap p {
-  background: #fff;
-  border: 1px solid #e9e2d9;
-  color: var(--mc-ink);
-  box-shadow: 0 3px 12px #1c161205;
-  font-size: 14px;
-  line-height: 1.65;
-}
-.cw-widget .cw-message-row--me .cw-message-wrap p {
-  background: #e7d9c8;
-  border-color: #e7d9c8;
-  color: #3f2c1f;
-}
 .cw-widget .cw-typing {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #fff;
-  border: 1px solid #e9e2d9;
+  background: var(--mc-sand);
+  border: 0;
   min-height: 36px;
   padding: 7px 12px;
 }
@@ -849,7 +748,7 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #9f7856;
+  background: var(--mc-brand);
   animation: cw-dot-wave 1400ms ease-in-out infinite;
 }
 .cw-widget .cw-writing-dots i:nth-child(2) {
