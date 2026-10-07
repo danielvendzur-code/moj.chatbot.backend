@@ -86,7 +86,7 @@ jobs:
           test -f dist/widget.css
 
           # Verify the approved release, geometry and active visual system.
-          grep -Fq 'koverta-motion-20261007-v32' dist/widget.js
+          grep -Fq 'compact-ui-fixes-20261007-v33' dist/widget.js
           grep -Fq 'M6 46.5A29 29 0 0 1 64 46.5Z' dist/widget.js
           grep -Fq 'data-surface' dist/widget.js
           grep -Fq 'mc-mark' dist/widget.js
