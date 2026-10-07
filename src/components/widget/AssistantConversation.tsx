@@ -66,6 +66,8 @@ export function AssistantConversation({
   const [introChars, setIntroChars] = useState(
     restored?.messages.length || prefersReducedMotion() ? introLength : 0,
   );
+  const introCursorRef = useRef(introChars);
+  introCursorRef.current = introChars;
   const introComplete = introChars >= introLength;
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
@@ -89,11 +91,25 @@ export function AssistantConversation({
       setIntroChars(introLength);
       return;
     }
-    const timer = window.setInterval(
-      () => setIntroChars((count) => Math.min(introLength, count + 3)),
-      35,
-    );
-    return () => window.clearInterval(timer);
+    let timer = 0;
+    let cursor = introCursorRef.current;
+    const advance = () => {
+      cursor = Math.min(introLength, introCursorRef.current + 1);
+      introCursorRef.current = cursor;
+      setIntroChars(cursor);
+      if (cursor >= introLength) return;
+      const boundary = INITIAL_MESSAGES[0].text.length;
+      const allText = INITIAL_MESSAGES.map((message) => message.text).join("");
+      const pause =
+        cursor === boundary
+          ? 360
+          : /[.!?]/.test(allText[cursor - 1])
+            ? 100
+            : 18;
+      timer = window.setTimeout(advance, pause);
+    };
+    timer = window.setTimeout(advance, 160);
+    return () => window.clearTimeout(timer);
   }, [active, introComplete, conversationStarted, introLength]);
 
   const resetTokenRef = useRef(resetToken);
@@ -142,12 +158,12 @@ export function AssistantConversation({
   useEffect(() => {
     const container = messagesRef.current;
     if (!container) return;
-    const smooth = !prefersReducedMotion() && !streamingReply;
+    const smooth = !prefersReducedMotion() && !streamingReply && introComplete;
     container.scrollTo({
       top: container.scrollHeight,
       behavior: smooth ? "smooth" : "auto",
     });
-  }, [messages, typing, streamingReply]);
+  }, [messages, typing, streamingReply, introChars, introComplete]);
 
   useEffect(() => {
     const container = messagesRef.current;
@@ -213,6 +229,51 @@ export function AssistantConversation({
       );
     };
 
+    let targetReply = "";
+    let visibleReply = "";
+    let revealTimer: number | null = null;
+    let resolveDrain: (() => void) | null = null;
+    const stopReveal = () => {
+      if (revealTimer !== null) window.clearInterval(revealTimer);
+      revealTimer = null;
+      resolveDrain?.();
+      resolveDrain = null;
+    };
+    controller.signal.addEventListener("abort", stopReveal, { once: true });
+    const enqueue = (partial: string) => {
+      targetReply = partial;
+      if (visibleReply.length >= partial.length && visibleReply !== partial) {
+        visibleReply = partial;
+        paint(partial);
+      }
+      if (prefersReducedMotion()) {
+        visibleReply = partial;
+        paint(partial);
+        return;
+      }
+      if (revealTimer !== null) return;
+      revealTimer = window.setInterval(() => {
+        if (controller.signal.aborted) {
+          stopReveal();
+          return;
+        }
+        if (visibleReply.length < targetReply.length) {
+          const length = Math.min(targetReply.length, visibleReply.length + 4);
+          visibleReply = targetReply.slice(0, length);
+          paint(visibleReply);
+        }
+        if (visibleReply === targetReply && resolveDrain) stopReveal();
+      }, 24);
+    };
+    const finishReveal = (text: string) => {
+      enqueue(text);
+      return visibleReply === text
+        ? Promise.resolve()
+        : new Promise<void>((resolve) => {
+            resolveDrain = resolve;
+          });
+    };
+
     const settle = (text: string) => {
       setMessages((current) =>
         opened
@@ -229,9 +290,12 @@ export function AssistantConversation({
       const reply = await sendChat(
         history,
         controller.signal,
-        paint,
+        enqueue,
         conversationId(),
       );
+      if (requestEpoch !== requestEpochRef.current || controller.signal.aborted)
+        return;
+      await finishReveal(reply);
       if (requestEpoch !== requestEpochRef.current || controller.signal.aborted)
         return;
       settle(reply);
@@ -244,6 +308,8 @@ export function AssistantConversation({
         reason: error instanceof Error ? error.message : "unknown",
       });
     } finally {
+      stopReveal();
+      controller.signal.removeEventListener("abort", stopReveal);
       if (requestEpoch === requestEpochRef.current) {
         requestAbortRef.current = null;
         inFlightRef.current = false;
@@ -254,7 +320,7 @@ export function AssistantConversation({
 
   const submit = () => {
     const value = input.trim();
-    if (!value || typing) return;
+    if (!value || typing || streamingReply || inFlightRef.current) return;
     setInput("");
     if (!prefersReducedMotion()) {
       setSendAnimating(true);
@@ -294,7 +360,11 @@ export function AssistantConversation({
               <div
                 className={`cw-message-row cw-message-row--${message.from}`}
                 data-message-id={message.id}
-                data-streaming={message.streaming || undefined}
+                data-streaming={
+                  message.streaming ||
+                  (greeting && introChars < prefix + message.text.length) ||
+                  undefined
+                }
                 key={message.id}
               >
                 {message.from === "bot" ? (
@@ -303,11 +373,20 @@ export function AssistantConversation({
                   </span>
                 ) : null}
                 <div className="cw-message-wrap">
-                  <p>{text}</p>
+                  <p>
+                    {text
+                      .split(/(\*\*[^*]+\*\*)/g)
+                      .map((part, index) =>
+                        part.startsWith("**") && part.endsWith("**") ? (
+                          <strong key={index}>{part.slice(2, -2)}</strong>
+                        ) : (
+                          <span key={index}>{part}</span>
+                        ),
+                      )}
+                  </p>
                   {message.from === "bot" &&
                   !message.streaming &&
-                  (message.id > 2 ||
-                    (message.id === 2 && introComplete)) ? (
+                  (message.id > 2 || (message.id === 2 && introComplete)) ? (
                     <div
                       className={
                         message.id === 2
@@ -351,7 +430,7 @@ export function AssistantConversation({
         <ScrollCue targetRef={messagesRef} label="Zobraziť novšie správy" />
       </div>
 
-      <div className="cw-inputbar" aria-busy={typing}>
+      <div className="cw-inputbar" aria-busy={typing || streamingReply}>
         <input
           ref={inputRef}
           value={input}
@@ -370,10 +449,10 @@ export function AssistantConversation({
         <button
           type="button"
           className="cw-send"
-          data-waiting={typing || undefined}
+          data-waiting={typing || streamingReply || undefined}
           data-sending={sendAnimating || undefined}
           onClick={submit}
-          disabled={!input.trim() || typing}
+          disabled={!input.trim() || typing || streamingReply}
           aria-label="Odoslať správu"
         >
           <svg

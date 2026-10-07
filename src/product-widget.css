@@ -2806,3 +2806,11 @@ html[data-embed="true"] .widget-preview__surface {
     transform: none;
   }
 }
+/* Quiet, legible conversation; streaming owns its single existing bubble. */
+.cw-message-row--bot .cw-message-wrap p { line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; border-color: rgba(94,57,37,.1); box-shadow: none; }
+.cw-message-row--bot .cw-avatar { align-self: flex-start; margin-top: 5px; }
+.cw-message-row--bot, .cw-message-row--bot[data-streaming="true"] { animation: cw-message-appear 200ms ease-out both; }
+.cw-message-row--bot .cw-message-wrap p { animation: none; }
+@keyframes cw-message-appear { from { opacity: 0; } to { opacity: 1; } }
+.cw-message-wrap p strong { font-weight: 650; color: inherit; }
+.cw-message-row[data-streaming="true"] .cw-message-wrap p::after { width: 2px; height: .9em; opacity: .65; animation-duration: 1200ms; }
