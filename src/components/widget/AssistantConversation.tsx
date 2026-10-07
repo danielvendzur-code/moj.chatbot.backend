@@ -231,18 +231,57 @@ export function AssistantConversation({
 
     let targetReply = "";
     let visibleReply = "";
-    let revealTimer: number | null = null;
+    let revealFrame: number | null = null;
     let resolveDrain: (() => void) | null = null;
+    let lastFrame = 0;
+    let letterCredit = 0;
+    let pauseUntil = 0;
     const stopReveal = () => {
-      if (revealTimer !== null) window.clearInterval(revealTimer);
-      revealTimer = null;
+      if (revealFrame !== null) window.cancelAnimationFrame(revealFrame);
+      revealFrame = null;
       resolveDrain?.();
       resolveDrain = null;
     };
     controller.signal.addEventListener("abort", stopReveal, { once: true });
+    const advance = (now: number) => {
+      if (controller.signal.aborted) {
+        stopReveal();
+        return;
+      }
+      const elapsed = lastFrame ? Math.min(48, now - lastFrame) : 16;
+      lastFrame = now;
+      if (visibleReply.length < targetReply.length && now >= pauseUntil) {
+        const backlog = targetReply.length - visibleReply.length;
+        letterCredit += (elapsed * Math.min(150, 58 + backlog * 0.16)) / 1000;
+        if (letterCredit >= 1) {
+          let length = Math.min(
+            targetReply.length,
+            visibleReply.length + Math.floor(letterCredit),
+          );
+          // Preserve emoji surrogate pairs on every frame.
+          const previous = targetReply.charCodeAt(length - 1);
+          if (
+            previous >= 0xd800 &&
+            previous <= 0xdbff &&
+            length < targetReply.length
+          )
+            length += 1;
+          letterCredit %= 1;
+          visibleReply = targetReply.slice(0, length);
+          paint(visibleReply);
+          if (/[.!?\n]$/.test(visibleReply)) pauseUntil = now + 95;
+        }
+      }
+      if (visibleReply === targetReply) {
+        revealFrame = null;
+        if (resolveDrain) stopReveal();
+        return;
+      }
+      revealFrame = window.requestAnimationFrame(advance);
+    };
     const enqueue = (partial: string) => {
       targetReply = partial;
-      if (visibleReply.length >= partial.length && visibleReply !== partial) {
+      if (!partial.startsWith(visibleReply)) {
         visibleReply = partial;
         paint(partial);
       }
@@ -251,19 +290,9 @@ export function AssistantConversation({
         paint(partial);
         return;
       }
-      if (revealTimer !== null) return;
-      revealTimer = window.setInterval(() => {
-        if (controller.signal.aborted) {
-          stopReveal();
-          return;
-        }
-        if (visibleReply.length < targetReply.length) {
-          const length = Math.min(targetReply.length, visibleReply.length + 4);
-          visibleReply = targetReply.slice(0, length);
-          paint(visibleReply);
-        }
-        if (visibleReply === targetReply && resolveDrain) stopReveal();
-      }, 24);
+      if (revealFrame !== null || visibleReply === partial) return;
+      lastFrame = 0;
+      revealFrame = window.requestAnimationFrame(advance);
     };
     const finishReveal = (text: string) => {
       enqueue(text);
@@ -412,7 +441,9 @@ export function AssistantConversation({
             );
           })}
 
-          {typing || (!introComplete && !conversationStarted) ? (
+          {typing ||
+          streamingReply ||
+          (!introComplete && !conversationStarted) ? (
             <div className="cw-message-row cw-message-row--bot">
               <span className="cw-avatar" aria-hidden="true">
                 <BubbleLogo size="avatar" />
@@ -423,6 +454,11 @@ export function AssistantConversation({
                 aria-label="Píšem odpoveď"
               >
                 <BrandMark size={22} tone="brand" loop />
+                <span className="cw-writing-dots" aria-hidden="true">
+                  <i />
+                  <i />
+                  <i />
+                </span>
               </div>
             </div>
           ) : null}
