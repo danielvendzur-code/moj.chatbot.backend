@@ -45,7 +45,9 @@ test("desktop chat sends a reply and keeps welcome and response actions", async 
     page.getByText("Pomôžeme pripraviť konkrétny návrh."),
   ).toBeVisible();
   await expect(page.locator(".cw-welcome-actions")).toHaveCount(1);
-  await expect(page.locator('.cw-message[data-message-id="1"] button')).toHaveCount(0);
+  await expect(
+    page.locator('.cw-message[data-message-id="1"] button'),
+  ).toHaveCount(0);
   await expect(page.locator(".cw-reply-actions")).toHaveCount(1);
   await expect(
     page
@@ -74,9 +76,16 @@ test("builder preserves selections, validates and submits a complete brief", asy
     page.locator('[data-testid^="feature-"][data-selected="true"]'),
   ).toHaveCount(0);
   // Compare dimensions, since Playwright may scroll the overflow panel on click.
-  const chipSizes = () => page.locator('[data-testid^="feature-"]').evaluateAll(
-    (chips) => chips.map((chip) => ({id:chip.dataset.testid,width:chip.offsetWidth,height:chip.offsetHeight})),
-  );
+  const chipSizes = () =>
+    page
+      .locator('[data-testid^="feature-"]')
+      .evaluateAll((chips) =>
+        chips.map((chip) => ({
+          id: chip.dataset.testid,
+          width: chip.offsetWidth,
+          height: chip.offsetHeight,
+        })),
+      );
   const sizesBefore = await chipSizes();
   await page.getByTestId("feature-leads").click();
   expect(await chipSizes()).toEqual(sizesBefore);
@@ -172,4 +181,43 @@ test("mobile taps open builder, return to chat and restore page scrolling", asyn
   );
   expect(errors).toEqual([]);
   await context.close();
+});
+
+test("draft survives Enter during a streamed reply and sends after completion", async ({
+  page,
+}) => {
+  const errors = await observe(page);
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  let requests = 0;
+  const reply =
+    "**Kalkulačka** spočíta cenu podľa rozmerov.\n\n" +
+    "Vyberiete model, rozmery a výbavu podľa svojich potrieb. ".repeat(6);
+  await page.route("**/api/chat", (route) => {
+    requests += 1;
+    return route.fulfill({
+      json: { reply },
+      headers: { "access-control-allow-origin": "*" },
+    });
+  });
+  await openChat(page);
+  const input = page.getByPlaceholder("Napíšte otázku…");
+  const send = page.getByRole("button", { name: "Odoslať správu" });
+  await input.fill("Ako mi pomôže kalkulačka?");
+  await send.click();
+  await expect(
+    page.locator('.cw-message-row--bot[data-streaming="true"]'),
+  ).toBeVisible();
+  await input.fill("A čo konfigurátor?");
+  await expect(send).toBeDisabled();
+  await input.press("Enter");
+  await expect(input).toHaveValue("A čo konfigurátor?");
+  expect(requests).toBe(1);
+  await expect(send).toBeEnabled();
+  await expect(page.locator(".cw-message-row--bot strong").first()).toHaveText(
+    "Kalkulačka",
+  );
+  await send.click();
+  await expect.poll(() => requests).toBe(2);
+  await expect(input).toHaveValue("");
+  expect(errors).toEqual([]);
 });
