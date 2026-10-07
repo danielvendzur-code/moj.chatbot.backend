@@ -677,63 +677,43 @@
 .cw-widget .cw-launcher:is(:hover,:focus-visible) .cw-launcher-hint { opacity: 1; translate: 0 0; }
 .cw-widget .cw-panel-head { background-image: radial-gradient(ellipse at 85% 0%,rgba(200,146,94,.14),transparent 70%); }
 
-/* One cinematic surface, with content settling after the shell. */
+/* The same quiet panel motion as Koverta: one surface, no staged content. */
 .cw-widget .cw-panel {
   transform-origin: bottom right;
-  animation: cw-cinematic-open 780ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: cw-koverta-open 450ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .cw-widget .cw-panel[data-state="closing"] {
-  animation: cw-cinematic-close 360ms cubic-bezier(0.55, 0, 1, 0.45) both;
+  animation: cw-koverta-close 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
   pointer-events: none;
 }
-.cw-widget .cw-panel[data-state="open"] .cw-panel-head {
-  animation: cw-head-arrive 650ms cubic-bezier(0.16, 1, 0.3, 1) 100ms both;
+.cw-widget .cw-panel-head,
+.cw-widget .cw-panel-body,
+.cw-widget .cw-mode-view,
+.cw-widget .cw-message-row,
+.cw-widget .cw-message-wrap p,
+.cw-widget .cw-send svg {
+  animation: none;
 }
-.cw-widget .cw-panel[data-state="open"] .cw-panel-body {
-  animation: cw-body-arrive 800ms cubic-bezier(0.16, 1, 0.3, 1) 190ms both;
+.cw-widget .cw-message-row[data-streaming="true"] .cw-message-wrap p::after {
+  content: none;
 }
-@keyframes cw-cinematic-open {
-  from {
-    opacity: 0;
-    transform: translateY(32px) scale(0.88);
-    clip-path: inset(38% 0 0 30% round 30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    clip-path: inset(0 round var(--cw-r-panel));
-  }
+.cw-widget .cw-writing-row {
+  padding-left: 39px;
 }
-@keyframes cw-cinematic-close {
-  to {
-    opacity: 0;
-    transform: translateY(24px) scale(0.94);
-  }
+@keyframes cw-koverta-open {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  49% { opacity: 1; }
+  to { opacity: 1; transform: none; }
 }
-@keyframes cw-head-arrive {
-  from {
-    opacity: 0;
-    translate: 0 12px;
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
-  }
-}
-@keyframes cw-body-arrive {
-  from {
-    opacity: 0;
-    translate: 0 18px;
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
-  }
+@keyframes cw-koverta-close {
+  from { opacity: 1; transform: none; }
+  60% { opacity: 0; }
+  to { opacity: 0; transform: translateY(14px) scale(0.985); }
 }
 .cw-widget .cw-typing {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
   background: var(--mc-sand);
   border: 0;
   min-height: 36px;
@@ -745,17 +725,17 @@
   gap: 5px;
 }
 .cw-widget .cw-writing-dots i {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--mc-brand);
-  animation: cw-dot-wave 1400ms ease-in-out infinite;
+  animation: cw-dot-wave 1200ms ease-in-out infinite;
 }
 .cw-widget .cw-writing-dots i:nth-child(2) {
-  animation-delay: 160ms;
+  animation-delay: 150ms;
 }
 .cw-widget .cw-writing-dots i:nth-child(3) {
-  animation-delay: 320ms;
+  animation-delay: 300ms;
 }
 @keyframes cw-dot-wave {
   0%,
@@ -766,14 +746,28 @@
   }
   35% {
     opacity: 1;
-    transform: translateY(-4px);
+    transform: translateY(-2px);
   }
 }
 @media (max-width: 640px) {
   .cw-widget .cw-panel {
     --cw-r-panel: 18px;
     transform-origin: bottom center;
+    animation-name: cw-koverta-mobile-open;
   }
+}
+@media (max-width: 640px) {
+  .cw-widget .cw-panel[data-state="closing"] { animation-name: cw-koverta-mobile-close; }
+}
+@keyframes cw-koverta-mobile-open {
+  from { opacity: 0; transform: translateY(24px); }
+  49% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+@keyframes cw-koverta-mobile-close {
+  from { opacity: 1; transform: none; }
+  60% { opacity: 0; }
+  to { opacity: 0; transform: translateY(24px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .cw-widget .cw-panel,

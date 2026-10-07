@@ -25,7 +25,6 @@ import { WidgetIcon } from "./WidgetIcon";
 
 type WidgetMode = "assistant" | "calculator";
 type SwipeDirection = "forward" | "backward";
-type ActionAnimation = "reset" | "close" | null;
 
 type AssistantWidgetProps = {
   embedMode?: boolean;
@@ -37,8 +36,7 @@ const isPreset = (value: string | undefined): value is AssistantPreset =>
     ["calculator", "product", "inquiry", "advisor", "booking"].includes(value),
   );
 
-const PANEL_EXIT_MS = 360;
-const ACTION_ANIMATION_MS = 520;
+const PANEL_EXIT_MS = 400;
 
 const reducedMotion = (): boolean =>
   typeof window !== "undefined" &&
@@ -53,12 +51,10 @@ export function AssistantWidget({
   const [mode, setMode] = useState<WidgetMode>("assistant");
   const [transitionDirection, setTransitionDirection] =
     useState<SwipeDirection>("forward");
-  const [actionAnimating, setActionAnimating] = useState<ActionAnimation>(null);
   const resetToken = 0;
   const [preset, setPreset] = useState<AssistantPreset | null>(null);
 
   const closeTimerRef = useRef<number | null>(null);
-  const actionTimerRef = useRef<number | null>(null);
   const panelRef = useRef<HTMLElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
   const launcherSurface = useLauncherSurface(launcherRef, isOpen);
@@ -68,33 +64,9 @@ export function AssistantWidget({
   const closingRef = useRef(false);
   const restoreLauncherFocusRef = useRef(false);
 
-  const clearActionTimer = useCallback(() => {
-    if (actionTimerRef.current !== null) {
-      window.clearTimeout(actionTimerRef.current);
-      actionTimerRef.current = null;
-    }
-  }, []);
-
-  const animateAction = useCallback(
-    (action: Exclude<ActionAnimation, null>) => {
-      clearActionTimer();
-      setActionAnimating(action);
-      if (reducedMotion()) {
-        setActionAnimating(null);
-        return;
-      }
-      actionTimerRef.current = window.setTimeout(() => {
-        actionTimerRef.current = null;
-        setActionAnimating(null);
-      }, ACTION_ANIMATION_MS);
-    },
-    [clearActionTimer],
-  );
-
   const close = useCallback(() => {
     if (!openRef.current || closingRef.current) return;
     closingRef.current = true;
-    animateAction("close");
     setIsClosing(true);
     track("widget_close");
 
@@ -112,7 +84,7 @@ export function AssistantWidget({
       return;
     }
     closeTimerRef.current = window.setTimeout(finish, PANEL_EXIT_MS);
-  }, [animateAction]);
+  }, []);
 
   useFocusTrap(panelRef, isOpen && !isClosing, close, launcherRef);
   useMobilePanelViewport(panelRef, isOpen, embedMode);
@@ -206,9 +178,8 @@ export function AssistantWidget({
       if (closeTimerRef.current !== null) {
         window.clearTimeout(closeTimerRef.current);
       }
-      clearActionTimer();
     },
-    [clearActionTimer],
+    [],
   );
 
   useEffect(() => {
@@ -275,9 +246,6 @@ export function AssistantWidget({
                 type="button"
                 className="cw-panel-head__close"
                 data-testid="widget-close"
-                data-action-animating={
-                  actionAnimating === "close" ? "close" : undefined
-                }
                 aria-label="Zavrieť"
                 title="Zavrieť"
                 onClick={close}
