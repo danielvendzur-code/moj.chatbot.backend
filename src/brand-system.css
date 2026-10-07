@@ -701,7 +701,7 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-    clip-path: inset(0 round 22px);
+    clip-path: inset(0 round var(--cw-r-panel));
   }
 }
 @keyframes cw-cinematic-close {
@@ -771,6 +771,7 @@
 }
 @media (max-width: 640px) {
   .cw-widget .cw-panel {
+    --cw-r-panel: 18px;
     transform-origin: bottom center;
   }
 }
