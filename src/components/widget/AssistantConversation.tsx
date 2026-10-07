@@ -1,4 +1,3 @@
-import { BrandMark } from "./BrandMark";
 import { useEffect, useRef, useState } from "react";
 import { sendChat, type ChatTurn } from "../../lib/assistantApi";
 import {
@@ -444,16 +443,12 @@ export function AssistantConversation({
           {typing ||
           streamingReply ||
           (!introComplete && !conversationStarted) ? (
-            <div className="cw-message-row cw-message-row--bot">
-              <span className="cw-avatar" aria-hidden="true">
-                <BubbleLogo size="avatar" />
-              </span>
+            <div className="cw-message-row cw-message-row--bot cw-writing-row">
               <div
                 className="cw-typing"
                 role="status"
                 aria-label="Píšem odpoveď"
               >
-                <BrandMark size={22} tone="brand" loop />
                 <span className="cw-writing-dots" aria-hidden="true">
                   <i />
                   <i />
