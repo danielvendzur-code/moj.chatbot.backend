@@ -37,7 +37,7 @@ const isPreset = (value: string | undefined): value is AssistantPreset =>
     ["calculator", "product", "inquiry", "advisor", "booking"].includes(value),
   );
 
-const PANEL_EXIT_MS = 220;
+const PANEL_EXIT_MS = 360;
 const ACTION_ANIMATION_MS = 520;
 
 const reducedMotion = (): boolean =>
@@ -234,7 +234,9 @@ export function AssistantWidget({
           aria-controls="chameleon-widget-panel"
           onClick={() => open(mode, preset)}
         >
-          <span className="cw-launcher-hint" aria-hidden="true">Ako môžeme pomôcť vášmu webu?</span>
+          <span className="cw-launcher-hint" aria-hidden="true">
+            Ako môžeme pomôcť vášmu webu?
+          </span>
           <BubbleLogo
             size="launcher"
             tone={launcherSurface === "dark" ? "brand" : "paper"}

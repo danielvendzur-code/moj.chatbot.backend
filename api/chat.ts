@@ -58,7 +58,7 @@ const SYSTEM_PROMPT = [
   "• Chatbot alebo produktový poradca: od 347 €.",
   "• Kalkulačka alebo konfigurátor: od 447 €.",
   "• 3D konfigurátor sa vždy nacení individuálne podľa počtu modelov, variantov a pravidiel; štartovacia cena konfigurátora 447 € je iba spodná hranica.",
-  "• Technická prevádzka: od 10 € mesačne (podľa rozsahu riešenia).",
+  "• Technická prevádzka: od 10 € mesačne pri chatbote a kalkulačke podľa rozsahu. Samostatný 3D konfigurátor nemá mesačný poplatok za prevádzku.",
   "Tieto čísla sú iba štartovacie ceny z webu. Nikdy ich neprezentuj ako konečnú cenu konkrétneho projektu. Pri konkrétnej ponuke sa uvedie rozsah, základ dane, DPH a celková cena.",
   "",
   "AKO PREDÁVAŠ:",
