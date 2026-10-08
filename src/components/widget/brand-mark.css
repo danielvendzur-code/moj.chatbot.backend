@@ -12,20 +12,9 @@
   opacity: 0;
   transition: opacity 60ms;
 }
-.cw-launcher:is(:hover, :focus-visible, [aria-expanded="true"]) .mc-half--top {
-  transform: translate(15px, 4.4px);
-}
-.cw-launcher:is(:hover, :focus-visible, [aria-expanded="true"])
-  .mc-half--bottom {
-  transform: translate(-15px, -4.4px);
-}
-.cw-launcher:is(:hover, :focus-visible) .mc-mark {
-  transform: scale(1.22);
-}
-.cw-launcher:is(:hover, :focus-visible, [aria-expanded="true"]) .mc-join {
-  opacity: 1;
-  transition-delay: 540ms;
-}
+.cw-launcher .mc-half { transform: none; }
+.cw-launcher .mc-join { opacity: 0; }
+.cw-launcher:is(:hover, :focus-visible) .mc-mark { transform: scale(1.22); }
 .cw-typing .mc-mark .mc-half--top {
   animation: mc-type-top 2s cubic-bezier(0.37, 0, 0.63, 1) infinite;
 }
