@@ -19,7 +19,10 @@ export function useFocusTrap(
     if (!active || !ref.current) return;
 
     const root = ref.current;
-    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previous =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
     root.focus({ preventScroll: true });
 
     const onKeyDown = (event: KeyboardEvent) => {
@@ -30,8 +33,12 @@ export function useFocusTrap(
       }
 
       if (event.key !== "Tab") return;
-      const items = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
-        (item) => item.offsetParent !== null,
+      const items = Array.from(
+        root.querySelectorAll<HTMLElement>(FOCUSABLE),
+      ).filter(
+        (item) =>
+          item.offsetParent !== null &&
+          !item.closest('[inert], [aria-hidden="true"]'),
       );
       if (!items.length) {
         event.preventDefault();

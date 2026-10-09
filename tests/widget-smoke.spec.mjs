@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { createServer } from "node:http";
 
 async function observe(page) {
   const errors = [];
@@ -77,15 +78,13 @@ test("builder preserves selections, validates and submits a complete brief", asy
   ).toHaveCount(0);
   // Compare dimensions, since Playwright may scroll the overflow panel on click.
   const chipSizes = () =>
-    page
-      .locator('[data-testid^="feature-"]')
-      .evaluateAll((chips) =>
-        chips.map((chip) => ({
-          id: chip.dataset.testid,
-          width: chip.offsetWidth,
-          height: chip.offsetHeight,
-        })),
-      );
+    page.locator('[data-testid^="feature-"]').evaluateAll((chips) =>
+      chips.map((chip) => ({
+        id: chip.dataset.testid,
+        width: chip.offsetWidth,
+        height: chip.offsetHeight,
+      })),
+    );
   const sizesBefore = await chipSizes();
   await page.getByTestId("feature-leads").click();
   expect(await chipSizes()).toEqual(sizesBefore);
@@ -220,4 +219,46 @@ test("draft survives Enter during a streamed reply and sends after completion", 
   await expect.poll(() => requests).toBe(2);
   await expect(input).toHaveValue("");
   expect(errors).toEqual([]);
+});
+
+test("stalled stream releases the composer and keeps received text", async ({
+  page,
+}) => {
+  const server = createServer((req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Headers", "content-type");
+    if (req.method === "OPTIONS") {
+      res.writeHead(204);
+      res.end();
+      return;
+    }
+    res.writeHead(200, { "Content-Type": "text/event-stream" });
+    res.write('event: delta\ndata: {"text":"Máme váš výber. "}\n\n');
+    // Deliberately keep the connection open: simulate a lost upstream stream.
+  });
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const endpoint = `http://127.0.0.1:${server.address().port}/stalled`;
+  try {
+    await page.addInitScript((url) => {
+      window.__DV_ASSISTANT_ENDPOINT__ = url;
+    }, endpoint);
+    await page.clock.install();
+    await openChat(page);
+    const input = page.getByRole("textbox", { name: "Vaša otázka" });
+    await expect(input).toBeFocused();
+    await input.fill("Čo mám vybrať?");
+    await page.getByRole("button", { name: "Odoslať správu" }).click();
+    await expect(page.getByText("Máme váš výber.")).toBeVisible();
+    await input.fill("Ďalšia otázka");
+    await page.clock.fastForward(16_000);
+    await expect(page.locator('[data-streaming="true"]')).toHaveCount(0);
+    await expect(
+      page.getByRole("button", { name: "Odoslať správu" }),
+    ).toBeEnabled();
+    await expect(input).toHaveValue("Ďalšia otázka");
+    await expect(page.getByText("Máme váš výber.")).toBeVisible();
+  } finally {
+    server.closeAllConnections();
+    await new Promise((resolve) => server.close(resolve));
+  }
 });

@@ -867,3 +867,20 @@
   .cw-widget .cw-calc-step, .cw-widget .cw-calc-step .cw-choice-grid > *,
   .cw-widget .cw-selection-indicator, .cw-widget .cw-selection-indicator svg { animation: none !important; transition: none !important; }
 }
+
+/* One coherent message surface, with readable paragraphs and lists. */
+.cw-widget .cw-message-text { padding:12px 15px; border-radius:18px 18px 18px 7px; background:var(--mc-sand); color:var(--mc-ink); font:400 14.5px/1.65 var(--mc-font); overflow-wrap:anywhere; }
+.cw-widget .cw-message-text p { margin:0; padding:0; border-radius:0; background:transparent; color:inherit; line-height:inherit; }
+.cw-widget .cw-message-text > :not(:first-child) { margin-top:12px; }
+.cw-widget .cw-message-text ul, .cw-widget .cw-message-text ol { margin-bottom:0; padding-left:19px; }
+.cw-widget .cw-message-text ul { list-style:disc; }
+.cw-widget .cw-message-text ol { list-style:decimal; }
+.cw-widget .cw-message-text li + li { margin-top:6px; }
+.cw-widget .cw-message-text strong { font-weight:650; }
+.cw-widget .cw-message-row--me .cw-message-text { background:var(--mc-ink); color:var(--mc-paper); border-radius:18px 18px 7px 18px; }
+.cw-widget .cw-message-row--me .cw-message-text p { background:transparent; color:inherit; }
+.cw-widget .cw-message-row--bot[data-streaming="true"] .cw-message-text::after { content:""; display:inline-block; width:5px; height:5px; margin-left:5px; border-radius:50%; background:var(--mc-brand); opacity:.55; }
+@media (prefers-reduced-motion:no-preference) {
+ .cw-widget .cw-message-row--me { animation:cw-message-arrive 380ms cubic-bezier(.22,1,.36,1) both; }
+ @keyframes cw-message-arrive { from { opacity:0; transform:translate3d(0,8px,0); } to { opacity:1; transform:none; } }
+}

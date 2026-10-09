@@ -128,9 +128,8 @@ export async function sendChat(
   if (requestSignal?.aborted) controller.abort();
   else
     requestSignal?.addEventListener("abort", abortFromCaller, { once: true });
-  /* The timeout guards the wait for the first byte. Once text is arriving the
-     stream is alive, so cutting it off mid-sentence would be the bug, not the
-     fix — the timer is cleared as soon as the first delta lands. */
+  // Guard inactivity as well as the first byte. A broken stream must release
+  // the composer; an active stream extends its deadline with every chunk.
   let timeout: number | null = window.setTimeout(
     () => controller.abort(),
     REQUEST_TIMEOUT_MS,
@@ -140,6 +139,11 @@ export async function sendChat(
     window.clearTimeout(timeout);
     timeout = null;
   };
+  const refreshTimeout = () => {
+    clearTimeoutOnce();
+    timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  };
+  let receivedReply = "";
 
   try {
     const response = await fetch(endpoint, {
@@ -180,8 +184,8 @@ export async function sendChat(
       try {
         const parsed = JSON.parse(data) as { text?: unknown };
         if (typeof parsed.text !== "string" || !parsed.text) return;
-        clearTimeoutOnce();
         reply = (reply + parsed.text).slice(0, MAX_REPLY_CHARS);
+        receivedReply = reply;
         onPartial?.(reply);
       } catch {
         /* A frame we cannot read is a frame we skip; the rest still arrives. */
@@ -191,6 +195,7 @@ export async function sendChat(
     for (;;) {
       const { done, value } = await reader.read();
       if (done) break;
+      refreshTimeout();
       buffer = parseEventStream(
         buffer + decoder.decode(value, { stream: true }),
         handleFrame,
@@ -201,7 +206,10 @@ export async function sendChat(
     const finished = cleanText(reply, MAX_REPLY_CHARS);
     return finished || localAssistantReply(lastQuestion);
   } catch {
-    return localAssistantReply(lastQuestion);
+    return (
+      cleanText(receivedReply, MAX_REPLY_CHARS) ||
+      localAssistantReply(lastQuestion)
+    );
   } finally {
     clearTimeoutOnce();
     requestSignal?.removeEventListener("abort", abortFromCaller);
