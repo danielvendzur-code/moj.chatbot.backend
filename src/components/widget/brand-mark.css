@@ -14,7 +14,10 @@
 }
 .cw-launcher .mc-half { transform: none; }
 .cw-launcher .mc-join { opacity: 0; }
-.cw-launcher:is(:hover, :focus-visible) .mc-mark { transform: scale(1.22); }
+.cw-launcher:is(:hover, :focus-visible) .mc-mark { transform: scale(1.12); }
+.cw-launcher:is(:hover, :focus-visible) .mc-half--top { transform: translate(15px, 4.4px); }
+.cw-launcher:is(:hover, :focus-visible) .mc-half--bottom { transform: translate(-15px, -4.4px); }
+.cw-launcher:is(:hover, :focus-visible) .mc-join { opacity: 1; transition: opacity 80ms linear 480ms; }
 .cw-typing .mc-mark .mc-half--top {
   animation: mc-type-top 2s cubic-bezier(0.37, 0, 0.63, 1) infinite;
 }
