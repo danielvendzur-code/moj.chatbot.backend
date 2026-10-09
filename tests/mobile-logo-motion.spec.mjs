@@ -181,6 +181,7 @@ test("launcher joins cleanly on hover, returns to a static split logo and keeps 
   await page.goto("http://127.0.0.1:4173/", { waitUntil: "networkidle" });
   const launcher = page.getByTestId("widget-launcher");
   const mark = launcher.locator(".mc-mark");
+  await expect(launcher.locator(".cw-launcher-hint")).toHaveCount(0);
   await expect(mark.locator(".mc-half--top")).toHaveCSS("transform", "none");
   await launcher.hover();
   await expect(mark).toHaveCSS("transform", "matrix(1.12, 0, 0, 1.12, 0, 0)");
