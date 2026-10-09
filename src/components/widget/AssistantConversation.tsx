@@ -10,7 +10,7 @@ import { track } from "../../lib/analytics";
 import { BubbleLogo } from "./BubbleLogo";
 import { MessageSheet } from "./MessageSheet";
 import { ScrollCue } from "./ScrollCue";
-import { WidgetIcon } from "./WidgetIcon";
+import { MessageText } from "./MessageText";
 
 type AssistantConversationProps = {
   active: boolean;
@@ -80,7 +80,8 @@ export function AssistantConversation({
   const requestEpochRef = useRef(0);
   const requestAbortRef = useRef<AbortController | null>(null);
   const inFlightRef = useRef(false);
-  const previousActiveRef = useRef(active);
+  const previousActiveRef = useRef(false);
+  const followReplyRef = useRef(true);
 
   const conversationStarted = messages.some((message) => message.from === "me");
 
@@ -93,18 +94,26 @@ export function AssistantConversation({
     let timer = 0;
     let cursor = introCursorRef.current;
     const advance = () => {
-      cursor = Math.min(introLength, introCursorRef.current + 1);
+      const allText = INITIAL_MESSAGES.map((message) => message.text).join("");
+      const boundary = INITIAL_MESSAGES[0].text.length;
+      const remaining =
+        cursor < boundary
+          ? allText.slice(cursor, boundary)
+          : allText.slice(cursor);
+      const nextWord = remaining.match(/^\s*\S+\s*/)?.[0];
+      cursor = Math.min(
+        introLength,
+        introCursorRef.current + (nextWord?.length ?? 1),
+      );
       introCursorRef.current = cursor;
       setIntroChars(cursor);
       if (cursor >= introLength) return;
-      const boundary = INITIAL_MESSAGES[0].text.length;
-      const allText = INITIAL_MESSAGES.map((message) => message.text).join("");
       const pause =
         cursor === boundary
           ? 360
-          : /[.!?]/.test(allText[cursor - 1])
-            ? 100
-            : 18;
+          : /[.!?]\s*$/.test(allText.slice(0, cursor))
+            ? 160
+            : 58;
       timer = window.setTimeout(advance, pause);
     };
     timer = window.setTimeout(advance, 160);
@@ -156,7 +165,7 @@ export function AssistantConversation({
 
   useEffect(() => {
     const container = messagesRef.current;
-    if (!container) return;
+    if (!container || !followReplyRef.current) return;
     const smooth = !prefersReducedMotion() && !streamingReply && introComplete;
     container.scrollTo({
       top: container.scrollHeight,
@@ -186,6 +195,7 @@ export function AssistantConversation({
   const ask = async (question: string) => {
     if (inFlightRef.current) return;
     setIntroChars(introLength);
+    followReplyRef.current = true;
     inFlightRef.current = true;
     const requestEpoch = requestEpochRef.current;
     const controller = new AbortController();
@@ -235,12 +245,20 @@ export function AssistantConversation({
     let lastFrame = 0;
     let letterCredit = 0;
     let pauseUntil = 0;
+    let replyComplete = false;
     const stopReveal = () => {
       if (revealFrame !== null) window.cancelAnimationFrame(revealFrame);
       revealFrame = null;
       resolveDrain?.();
       resolveDrain = null;
     };
+    const flushHidden = () => {
+      if (document.visibilityState !== "hidden") return;
+      visibleReply = targetReply;
+      if (visibleReply) paint(visibleReply);
+      stopReveal();
+    };
+    document.addEventListener("visibilitychange", flushHidden);
     controller.signal.addEventListener("abort", stopReveal, { once: true });
     const advance = (now: number) => {
       if (controller.signal.aborted) {
@@ -251,7 +269,7 @@ export function AssistantConversation({
       lastFrame = now;
       if (visibleReply.length < targetReply.length && now >= pauseUntil) {
         const backlog = targetReply.length - visibleReply.length;
-        letterCredit += (elapsed * Math.min(150, 58 + backlog * 0.16)) / 1000;
+        letterCredit += (elapsed * Math.min(240, 100 + backlog * 0.2)) / 1000;
         if (letterCredit >= 1) {
           let length = Math.min(
             targetReply.length,
@@ -265,7 +283,22 @@ export function AssistantConversation({
             length < targetReply.length
           )
             length += 1;
-          letterCredit %= 1;
+          // Wait for a word boundary while network chunks are still arriving.
+          while (length < targetReply.length && !/\s/.test(targetReply[length]))
+            length += 1;
+          if (
+            length === targetReply.length &&
+            !replyComplete &&
+            !/\s$/.test(targetReply)
+          ) {
+            const boundary = targetReply.lastIndexOf(" ");
+            length = Math.max(visibleReply.length, boundary + 1);
+          }
+          if (length <= visibleReply.length) {
+            revealFrame = window.requestAnimationFrame(advance);
+            return;
+          }
+          letterCredit -= length - visibleReply.length;
           visibleReply = targetReply.slice(0, length);
           paint(visibleReply);
           if (/[.!?\n]$/.test(visibleReply)) pauseUntil = now + 95;
@@ -284,7 +317,7 @@ export function AssistantConversation({
         visibleReply = partial;
         paint(partial);
       }
-      if (prefersReducedMotion()) {
+      if (prefersReducedMotion() || document.visibilityState === "hidden") {
         visibleReply = partial;
         paint(partial);
         return;
@@ -294,6 +327,7 @@ export function AssistantConversation({
       revealFrame = window.requestAnimationFrame(advance);
     };
     const finishReveal = (text: string) => {
+      replyComplete = true;
       enqueue(text);
       return visibleReply === text
         ? Promise.resolve()
@@ -337,6 +371,7 @@ export function AssistantConversation({
       });
     } finally {
       stopReveal();
+      document.removeEventListener("visibilitychange", flushHidden);
       controller.signal.removeEventListener("abort", stopReveal);
       if (requestEpoch === requestEpochRef.current) {
         requestAbortRef.current = null;
@@ -374,6 +409,11 @@ export function AssistantConversation({
         <div
           className="cw-messages"
           ref={messagesRef}
+          onScroll={(event) => {
+            const node = event.currentTarget;
+            followReplyRef.current =
+              node.scrollHeight - node.scrollTop - node.clientHeight < 80;
+          }}
           aria-live={introComplete ? "polite" : "off"}
         >
           {messages.map((message) => {
@@ -401,17 +441,7 @@ export function AssistantConversation({
                   </span>
                 ) : null}
                 <div className="cw-message-wrap">
-                  <p>
-                    {text
-                      .split(/(\*\*[^*]+\*\*)/g)
-                      .map((part, index) =>
-                        part.startsWith("**") && part.endsWith("**") ? (
-                          <strong key={index}>{part.slice(2, -2)}</strong>
-                        ) : (
-                          <span key={index}>{part}</span>
-                        ),
-                      )}
-                  </p>
+                  <MessageText text={text} />
                   {message.from === "bot" &&
                   !message.streaming &&
                   (message.id > 2 || (message.id === 2 && introComplete)) ? (
@@ -440,9 +470,7 @@ export function AssistantConversation({
             );
           })}
 
-          {typing ||
-          streamingReply ||
-          (!introComplete && !conversationStarted) ? (
+          {typing || (!introComplete && !conversationStarted) ? (
             <div className="cw-message-row cw-message-row--bot cw-writing-row">
               <div
                 className="cw-typing"

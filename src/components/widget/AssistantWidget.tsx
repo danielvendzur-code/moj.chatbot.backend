@@ -182,7 +182,9 @@ export function AssistantWidget({
     [],
   );
 
-  useEffect(() => {
+  // Remove the document scroll lock in the layout phase, before the mobile
+  // viewport hook restores the saved scroll position on the next frame.
+  useLayoutEffect(() => {
     if (!isOpen) return;
     document.documentElement.dataset.assistantOpen = "true";
     return () => {
@@ -271,7 +273,7 @@ export function AssistantWidget({
               aria-hidden={mode !== "assistant"}
             >
               <AssistantConversation
-                active={mode === "assistant"}
+                active={isOpen && !isClosing && mode === "assistant"}
                 resetToken={resetToken}
                 onOpenBuilder={() => switchMode("calculator")}
               />
