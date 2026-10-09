@@ -175,18 +175,71 @@ for (const width of [320, 390, 640]) {
   });
 }
 
-test("launcher hover preserves the supplied split logo; header stays static", async ({page}) => {
-  await page.goto("http://127.0.0.1:4173/", {waitUntil:"networkidle"});
-  const launcher=page.getByTestId("widget-launcher");
-  const mark=launcher.locator(".mc-mark");
-  await expect(mark.locator(".mc-half--top")).toHaveCSS("transform","none");
+test("launcher joins cleanly on hover, returns to a static split logo and keeps the header static", async ({
+  page,
+}) => {
+  await page.goto("http://127.0.0.1:4173/", { waitUntil: "networkidle" });
+  const launcher = page.getByTestId("widget-launcher");
+  const mark = launcher.locator(".mc-mark");
+  await expect(mark.locator(".mc-half--top")).toHaveCSS("transform", "none");
   await launcher.hover();
-  await expect(mark).toHaveCSS("transform","matrix(1.22, 0, 0, 1.22, 0, 0)");
-  await expect(mark.locator(".mc-half--top")).toHaveCSS("transform","none");
-  await expect(mark.locator(".mc-half--bottom")).toHaveCSS("transform","none");
-  await expect(mark.locator(".mc-join")).toHaveCSS("opacity","0");
+  await expect(mark).toHaveCSS("transform", "matrix(1.12, 0, 0, 1.12, 0, 0)");
+  await expect(mark.locator(".mc-half--top")).toHaveCSS(
+    "transform",
+    "matrix(1, 0, 0, 1, 15, 4.4)",
+  );
+  await expect(mark.locator(".mc-half--bottom")).toHaveCSS(
+    "transform",
+    "matrix(1, 0, 0, 1, -15, -4.4)",
+  );
+  await expect(mark.locator(".mc-join")).toHaveCSS("opacity", "1");
+  const seam = await mark.evaluate(async (svg) => {
+    const clone = svg.cloneNode(true);
+    clone.setAttribute("width", "400");
+    clone.setAttribute("height", "400");
+    clone.style.transform = "none";
+    [...svg.children].forEach((node, index) => {
+      const style = getComputedStyle(node);
+      clone.children[index].setAttribute(
+        "style",
+        `transform:${style.transform};opacity:${style.opacity};fill:${style.fill}`,
+      );
+    });
+    const source = URL.createObjectURL(
+      new Blob([new XMLSerializer().serializeToString(clone)], {
+        type: "image/svg+xml",
+      }),
+    );
+    const image = new Image();
+    image.src = source;
+    await image.decode();
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 400;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(image, 0, 0);
+    URL.revokeObjectURL(source);
+    const pixels = ctx.getImageData(100, 199, 200, 3).data;
+    return [...pixels]
+      .filter((_, index) => index % 4 === 3)
+      .every((alpha) => alpha === 255);
+  });
+  expect(seam, "joined silhouette has no transparent seam").toBe(true);
+  await page.mouse.move(0, 0);
+  await expect(mark.locator(".mc-half--top")).toHaveCSS("transform", "none");
+  await expect(mark.locator(".mc-half--bottom")).toHaveCSS("transform", "none");
+  await expect(mark.locator(".mc-join")).toHaveCSS("opacity", "0");
+  expect(
+    await launcher.evaluate(
+      (e) =>
+        e
+          .getAnimations({ subtree: true })
+          .filter((a) => a.playState === "running").length,
+    ),
+  ).toBe(0);
   await launcher.click();
-  const header=page.locator(".cw-panel-head .mc-mark");
-  await expect(header.locator(".mc-half--top")).toHaveCSS("transform","none");
-  expect(await header.evaluate(e=>e.getAnimations({subtree:true}).length)).toBe(0);
+  const header = page.locator(".cw-panel-head .mc-mark");
+  await expect(header.locator(".mc-half--top")).toHaveCSS("transform", "none");
+  expect(
+    await header.evaluate((e) => e.getAnimations({ subtree: true }).length),
+  ).toBe(0);
 });
