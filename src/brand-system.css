@@ -883,3 +883,13 @@
  .cw-widget .cw-message-row--me { animation:cw-message-arrive 380ms cubic-bezier(.22,1,.36,1) both; }
  @keyframes cw-message-arrive { from { opacity:0; transform:translate3d(0,8px,0); } to { opacity:1; transform:none; } }
 }
+
+/* The mobile dialog must be painted immediately while the document is locked.
+   Keep message/logo motion, without a transparent full-screen compositor layer. */
+@media (max-width: 640px) {
+  .cw-widget .cw-panel[data-state="open"] {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -25,21 +25,30 @@ export function useMobilePanelViewport(
     body.style.left = "0";
     body.style.right = "0";
     body.style.width = "100%";
+    let frame = 0;
     const sync = () => {
+      // Safari can briefly report the old visual viewport offset after the
+      // document is fixed. Never position the dialog outside the layout viewport.
+      const height = Math.min(viewport?.height ?? window.innerHeight, window.innerHeight);
+      const top = Math.max(0, Math.min(viewport?.offsetTop ?? 0, window.innerHeight - height));
       panel.style.setProperty(
         "--cw-viewport-top",
-        `${viewport?.offsetTop ?? 0}px`,
+        `${top}px`,
       );
       panel.style.setProperty(
         "--cw-viewport-height",
-        `${viewport?.height ?? window.innerHeight}px`,
+        `${height}px`,
       );
     };
     sync();
+    // Measure again after the scroll lock has been laid out, even when Safari
+    // does not emit a visualViewport resize for that change.
+    frame = window.requestAnimationFrame(sync);
     viewport?.addEventListener("resize", sync);
     viewport?.addEventListener("scroll", sync);
     window.addEventListener("resize", sync);
     return () => {
+      window.cancelAnimationFrame(frame);
       viewport?.removeEventListener("resize", sync);
       viewport?.removeEventListener("scroll", sync);
       window.removeEventListener("resize", sync);
