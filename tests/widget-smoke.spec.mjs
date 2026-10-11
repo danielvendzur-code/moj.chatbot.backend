@@ -28,6 +28,24 @@ async function openChat(page) {
   await expect(page.locator(".cw-panel")).toBeVisible();
 }
 
+test("mobile dialog stays onscreen with a stale Safari viewport offset and reopens", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => {
+    Object.defineProperty(window.visualViewport, "offsetTop", { get: () => 1700 });
+  });
+  const errors = await observe(page);
+  await openChat(page);
+  const panel = page.locator(".cw-panel");
+  await expect.poll(async () => (await panel.boundingBox())?.y).toBe(8);
+  await expect(page.getByPlaceholder("Napíšte otázku…")).toBeVisible();
+  await page.getByTestId("widget-close").click();
+  await expect(panel).toBeHidden();
+  await expect(page.locator("html")).not.toHaveAttribute("data-assistant-open", "true");
+  await page.getByTestId("widget-launcher").click();
+  await expect.poll(async () => (await panel.boundingBox())?.y).toBe(8);
+  expect(errors).toEqual([]);
+});
+
 test("desktop chat sends a reply and keeps welcome and response actions", async ({
   page,
 }) => {
