@@ -118,6 +118,7 @@ export function ToolCalculator({
   const [composing, setComposing] = useState(false);
   const [interest, setInterest] = useState<InterestId | null>(initialInterest);
   const [customText, setCustomText] = useState("");
+  const [extraRequirements, setExtraRequirements] = useState("");
   const [combination, setCombination] = useState<ToolId[]>([]);
   const flowSteps = useMemo(() => stepsForInterest(interest), [interest]);
   const questionSteps = useMemo(
@@ -149,6 +150,7 @@ export function ToolCalculator({
     setStep(0);
     setInterest(nextInterest);
     setCustomText("");
+    setExtraRequirements("");
     setCombination([]);
     setIndustry(null);
     setFeatures(nextInterest ? RECOMMENDED_FEATURES[nextInterest] : []);
@@ -200,6 +202,7 @@ export function ToolCalculator({
       combination,
     );
     return ids
+      .filter((id) => id !== "fotky")
       .map((id) => FEATURES.find((option) => option.id === id))
       .filter((option): option is (typeof FEATURES)[number] => Boolean(option));
   }, [interest, combination]);
@@ -244,7 +247,7 @@ export function ToolCalculator({
       case "features":
         return true;
       case "details":
-        return details.length > 0;
+        return details.length > 0 || extraRequirements.trim().length > 0;
       case "industry":
         return industry !== null;
       case "timeline":
@@ -376,6 +379,7 @@ export function ToolCalculator({
            made a lead with no note look like it carried one. */
         note: [
           lead.note.trim(),
+          extraRequirements.trim() ? `Dodatočné požiadavky: ${extraRequirements.trim()}` : "",
           interest === "custom" && customText.trim()
             ? `Čo dnes riešia ručne: ${customText.trim()}`
             : "",
@@ -557,8 +561,21 @@ export function ToolCalculator({
                         <strong id={`cw-interest-group-${group.id}`}>
                           {group.label}
                         </strong>
-                        <span>{group.description}</span>
                       </header>
+                      {group.id === "custom" ? (
+                        <textarea
+                          className="cw-interest-custom-input"
+                          data-testid="interest-custom"
+                          aria-label="Napíšte, čo potrebujete na mieru"
+                          placeholder="Opíšte vlastné riešenie…"
+                          value={customText}
+                          rows={2}
+                          onFocus={() => {
+                            if (interest !== "custom") pickInterest("custom");
+                          }}
+                          onChange={(event) => setCustomText(event.target.value)}
+                        />
+                      ) : (
                       <div className="cw-choice-grid cw-choice-grid--interest">
                         {group.items.map((interestId) => {
                           const option = INTERESTS.find(
@@ -590,20 +607,10 @@ export function ToolCalculator({
                           );
                         })}
                       </div>
+                      )}
                     </section>
                   ))}
                 </div>
-                {interest === "custom" ? (
-                  <label className="cw-custom">
-                    <span>Čo vás dnes najviac zdržuje?</span>
-                    <textarea
-                      value={customText}
-                      onChange={(event) => setCustomText(event.target.value)}
-                      placeholder="Napríklad opakované otázky, cenové ponuky alebo výber produktu…"
-                      rows={3}
-                    />
-                  </label>
-                ) : null}
               </>
             ) : null}
 
@@ -684,6 +691,15 @@ export function ToolCalculator({
                     </button>
                   );
                 })}
+                <label className="cw-extra-requirements">
+                  <span>Máte inú požiadavku? <small>Voliteľné</small></span>
+                  <textarea
+                    value={extraRequirements}
+                    rows={2}
+                    onChange={(event) => setExtraRequirements(event.target.value)}
+                    placeholder="Dopíšte, čo nie je v možnostiach…"
+                  />
+                </label>
               </div>
             ) : null}
 
@@ -743,7 +759,7 @@ export function ToolCalculator({
                 {stepId === "features" ? features.length : details.length} ·
                 {stepId === "features"
                   ? "môžete pokračovať aj bez výberu"
-                  : "vyberte aspoň jednu možnosť"}
+                  : "alebo dopíšte vlastnú požiadavku"}
               </p>
             ) : null}
             {stepId === "contact" ? (

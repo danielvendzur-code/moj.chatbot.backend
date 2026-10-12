@@ -50,7 +50,7 @@ export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
      and says out loud that it costs nothing. */
   contact: [
     "Váš návrh je pripravený",
-    "Pošlem vám rozsah aj cenu do 24 hodín. Nezáväzne a bez registrácie.",
+    "Do 24 hodín vám pošlem návrh riešenia s rozsahom a orientačnou cenou. Nezáväzne.",
   ],
   priority: ["Čo je pre vás najdôležitejšie?", "Túto otázku teraz nepoužívam."],
   volume: ["Koľko ľudí sa vás denne pýta?", "Túto otázku teraz nepoužívam."],
@@ -364,11 +364,6 @@ export const FEATURES: FeatureOption[] = [
     description: "Konzultáciu alebo službu zapíše do kalendára.",
   },
   {
-    id: "fotky",
-    label: "Prijímať fotky a prílohy",
-    description: "Podklady k odhadu, návrhu alebo reklamácii.",
-  },
-  {
     id: "payment",
     label: "Poslať platobný odkaz alebo zálohu",
     description: "Po výbere ponúkne bezpečný ďalší krok k objednávke.",
@@ -410,7 +405,7 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
     "jazyky",
     "stock-alert",
   ],
-  calculator: ["document", "fotky", "tabulka", "payment"],
+  calculator: ["document",  "tabulka", "payment"],
   configurator: [
     "viz-3d",
     "cena",
@@ -418,7 +413,7 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
     "rules",
     "share-link",
     "compare",
-    "fotky",
+    
     "document",
     "tabulka",
     "cart-recovery",
@@ -429,7 +424,7 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
     "leads",
     "document",
     "payment",
-    "fotky",
+    
     "tabulka",
     "rezervacie",
     "handoff",
@@ -452,7 +447,7 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
     "compare",
     "document",
     "payment",
-    "fotky",
+    
     "tabulka",
     "rezervacie",
     "handoff",
@@ -463,7 +458,7 @@ export const FEATURE_IDS_BY_INTEREST: Record<InterestId, string[]> = {
     "document",
     "tabulka",
     "jazyky",
-    "fotky",
+    
     "rezervacie",
     "payment",
   ],
@@ -672,7 +667,7 @@ export const RECOMMENDED_FEATURES: Record<InterestId, string[]> = {
 };
 
 export const INDUSTRY_RECOMMENDED_FEATURES: Record<string, string[]> = {
-  sluzby: ["rezervacie", "fotky", "payment", "document"],
+  sluzby: ["rezervacie",  "payment", "document"],
   eshop: [
     "advisor",
     "tracking",
@@ -684,7 +679,7 @@ export const INDUSTRY_RECOMMENDED_FEATURES: Record<string, string[]> = {
   gastro: ["rezervacie", "jazyky", "payment", "handoff"],
   zdravie: ["rezervacie", "payment", "jazyky", "handoff"],
   stavba: ["viz-3d", "scene", "rules", "document", "fotky"],
-  vyroba: ["document", "fotky", "tabulka", "compare"],
+  vyroba: ["document",  "tabulka", "compare"],
   ine: ["leads", "handoff", "document", "tabulka", "jazyky"],
 };
 
