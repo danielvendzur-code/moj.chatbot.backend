@@ -286,3 +286,25 @@ test("stalled stream releases the composer and keeps received text", async ({
     await new Promise((resolve) => server.close(resolve));
   }
 });
+
+test("rapid close/reopen never leaves a hidden or inert panel", async ({ page }) => {
+  for (const width of [390, 1440]) {
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 900 });
+    const errors = await observe(page);
+    await openChat(page);
+    for (let i = 0; i < 5; i++) {
+      await page.getByTestId("widget-close").click();
+      await expect(page.locator(".cw-panel")).toBeHidden();
+      await expect(page.locator("html")).not.toHaveAttribute("data-assistant-open", "true");
+      await page.getByTestId("widget-launcher").click();
+      const panel = page.locator(".cw-panel");
+      await expect(panel).toBeVisible();
+      await expect(panel).not.toHaveAttribute("inert");
+      await expect(panel).toHaveAttribute("data-state", "open");
+      await expect(page.getByTestId("widget-close")).toBeEnabled();
+    }
+    await page.getByTestId("widget-close").click();
+    await expect(page.locator(".cw-panel")).toBeHidden();
+    expect(errors).toEqual([]);
+  }
+});
