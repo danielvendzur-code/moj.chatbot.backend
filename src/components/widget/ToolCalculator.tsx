@@ -247,7 +247,7 @@ export function ToolCalculator({
       case "features":
         return true;
       case "details":
-        return details.length > 0;
+        return details.length > 0 || extraRequirements.trim().length > 0;
       case "industry":
         return industry !== null;
       case "timeline":
@@ -759,7 +759,7 @@ export function ToolCalculator({
                 {stepId === "features" ? features.length : details.length} ·
                 {stepId === "features"
                   ? "môžete pokračovať aj bez výberu"
-                  : "vyberte aspoň jednu možnosť"}
+                  : "alebo dopíšte vlastnú požiadavku"}
               </p>
             ) : null}
             {stepId === "contact" ? (
