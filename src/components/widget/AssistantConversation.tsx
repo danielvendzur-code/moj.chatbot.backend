@@ -92,31 +92,19 @@ export function AssistantConversation({
       return;
     }
     let timer = 0;
-    let cursor = introCursorRef.current;
+    const text = INITIAL_MESSAGES.map((message) => message.text).join("");
+    const firstBoundary = INITIAL_MESSAGES[0].text.length;
     const advance = () => {
-      const allText = INITIAL_MESSAGES.map((message) => message.text).join("");
-      const boundary = INITIAL_MESSAGES[0].text.length;
-      const remaining =
-        cursor < boundary
-          ? allText.slice(cursor, boundary)
-          : allText.slice(cursor);
-      const nextWord = remaining.match(/^\s*\S+\s*/)?.[0];
-      cursor = Math.min(
-        introLength,
-        introCursorRef.current + (nextWord?.length ?? 1),
-      );
+      const cursor = Math.min(introLength, introCursorRef.current + 1);
+      const character = text.charAt(cursor - 1);
       introCursorRef.current = cursor;
       setIntroChars(cursor);
       if (cursor >= introLength) return;
-      const pause =
-        cursor === boundary
-          ? 360
-          : /[.!?]\s*$/.test(allText.slice(0, cursor))
-            ? 160
-            : 58;
+      // Type actual characters (not entire words), with restrained punctuation pauses.
+      const pause = cursor === firstBoundary ? 240 : /[.!?]/.test(character) ? 115 : 23;
       timer = window.setTimeout(advance, pause);
     };
-    timer = window.setTimeout(advance, 160);
+    timer = window.setTimeout(advance, 120);
     return () => window.clearTimeout(timer);
   }, [active, introComplete, conversationStarted, introLength]);
 
@@ -440,8 +428,19 @@ export function AssistantConversation({
                     <BubbleLogo size="avatar" />
                   </span>
                 ) : null}
-                <div className="cw-message-wrap">
-                  <MessageText text={text} />
+                <div className="cw-message-wrap" data-intro={greeting || undefined}>
+                  {greeting ? (
+                    <>
+                      <div className="cw-intro-measure" aria-hidden="true">
+                        <MessageText text={message.text} />
+                      </div>
+                      <div className="cw-intro-visible">
+                        <MessageText text={text} />
+                      </div>
+                    </>
+                  ) : (
+                    <MessageText text={text} />
+                  )}
                   {message.from === "bot" &&
                   !message.streaming &&
                   (message.id > 2 || (message.id === 2 && introComplete)) ? (
@@ -470,7 +469,7 @@ export function AssistantConversation({
             );
           })}
 
-          {typing || (!introComplete && !conversationStarted) ? (
+          {typing ? (
             <div className="cw-message-row cw-message-row--bot cw-writing-row">
               <div
                 className="cw-typing"
