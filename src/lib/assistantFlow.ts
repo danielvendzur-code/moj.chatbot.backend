@@ -364,11 +364,6 @@ export const FEATURES: FeatureOption[] = [
     description: "Konzultáciu alebo službu zapíše do kalendára.",
   },
   {
-    id: 
-    label: "Prijímať fotky a prílohy",
-    description: "Podklady k odhadu, návrhu alebo reklamácii.",
-  },
-  {
     id: "payment",
     label: "Poslať platobný odkaz alebo zálohu",
     description: "Po výbere ponúkne bezpečný ďalší krok k objednávke.",
