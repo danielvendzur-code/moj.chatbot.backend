@@ -339,8 +339,6 @@
 .cw-widget .cw-calculator,
 .cw-widget .cw-calc-body {
   background: var(--mc-paper);
-}
-.cw-widget .cw-calc-body {
   padding: 12px 16px 24px;
 }
 .cw-widget .cw-q {
@@ -356,27 +354,11 @@
   line-height: 1.5;
   color: var(--mc-muted);
 }
-.cw-widget .cw-interest-groups {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.cw-widget .cw-interest-group {
-  display: contents;
-  background: none;
-  border: 0;
-  padding: 0;
-}
-.cw-widget .cw-interest-group__head {
-  display: none;
-}
+/* Interest layout is declared once below, at the v34 builder layout. */
 .cw-widget .cw-choice-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-}
-.cw-widget .cw-choice-grid--interest {
-  display: contents;
 }
 .cw-widget :is(.cw-rowcard, .cw-opt, .cw-scard, .cw-vcard) {
   position: relative;
@@ -787,16 +769,22 @@
 .cw-widget .cw-interest-groups {
   display:grid; grid-template-columns:minmax(0,1fr); gap:16px; width:100%; align-content:start;
 }
-.cw-widget .cw-interest-group { display:block; min-width:0; }
+.cw-widget .cw-interest-group {
+  display: block;
+  min-width: 0;
+  background: none;
+  border: 0;
+  padding: 0;
+}
 .cw-widget .cw-interest-group__head {
   display:flex; flex-wrap:wrap; gap:2px 7px; align-items:baseline;
   margin:0 0 8px; padding:0 2px; color:var(--mc-muted);
 }
 .cw-widget .cw-interest-group__head strong { font-size:12px; line-height:1.4; color:var(--mc-ink); font-weight:700; }
-.cw-widget .cw-interest-group__head span { font-size:11px; line-height:1.4; }
 .cw-widget .cw-choice-grid--interest { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; width:100%; }
-.cw-widget .cw-interest-group[data-group="combined"] .cw-choice-grid--interest,
-.cw-widget .cw-interest-group[data-group="custom"] .cw-choice-grid--interest { grid-template-columns:minmax(0,1fr); }
+.cw-widget .cw-interest-group[data-group="combined"] .cw-choice-grid--interest {
+  grid-template-columns: minmax(0, 1fr);
+}
 .cw-widget .cw-interest-group .cw-rowcard {
   width:100%; min-width:0; min-height:56px; height:100%; display:flex; justify-content:center;
   padding:10px 12px 10px 25px; white-space:normal; text-wrap:balance; text-align:center;
@@ -808,7 +796,6 @@
 .cw-widget .cw-interest-group .cw-rowcard[data-selected="true"] { background:var(--mc-ink); border-color:var(--mc-ink); color:var(--mc-paper); }
 .cw-widget .cw-choice-grid--solutions { display:grid; grid-template-columns:minmax(0,1fr); gap:8px; }
 .cw-widget .cw-choice-grid--solutions .cw-opt { width:100%; justify-content:flex-start; text-align:left; }
-.cw-widget .cw-calc-step:not([data-leaving="true"]) { animation-duration:480ms; }
 .cw-widget .cw-calc-step[data-leaving="true"] { animation-duration:170ms; }
 .cw-widget .cw-progress__dots i { transition:background-color 300ms cubic-bezier(.16,1,.3,1), transform 350ms cubic-bezier(.16,1,.3,1); }
 .cw-widget .cw-progress__dots i[data-current="true"] { transform:scaleY(1.7); }
