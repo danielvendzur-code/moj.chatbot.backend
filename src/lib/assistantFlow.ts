@@ -50,7 +50,7 @@ export const QUESTIONS: Record<StepId, [title: string, subtitle: string]> = {
      and says out loud that it costs nothing. */
   contact: [
     "Váš návrh je pripravený",
-    "Pošlem vám rozsah aj cenu do 24 hodín. Nezáväzne a bez registrácie.",
+    "Do 24 hodín vám pošlem návrh riešenia s rozsahom a orientačnou cenou. Nezáväzne.",
   ],
   priority: ["Čo je pre vás najdôležitejšie?", "Túto otázku teraz nepoužívam."],
   volume: ["Koľko ľudí sa vás denne pýta?", "Túto otázku teraz nepoužívam."],
