@@ -36,7 +36,7 @@ const isPreset = (value: string | undefined): value is AssistantPreset =>
     ["calculator", "product", "inquiry", "advisor", "booking"].includes(value),
   );
 
-const PANEL_EXIT_MS = 400;
+const PANEL_EXIT_MS = 450; // Safety timeout if animationend is interrupted.
 
 const reducedMotion = (): boolean =>
   typeof window !== "undefined" &&
@@ -64,27 +64,33 @@ export function AssistantWidget({
   const closingRef = useRef(false);
   const restoreLauncherFocusRef = useRef(false);
 
+  const finishClose = useCallback(() => {
+    if (!closingRef.current) return;
+    if (closeTimerRef.current !== null) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+    openRef.current = false;
+    closingRef.current = false;
+    restoreLauncherFocusRef.current = true;
+    setIsOpen(false);
+    setIsClosing(false);
+  }, []);
+
   const close = useCallback(() => {
     if (!openRef.current || closingRef.current) return;
     closingRef.current = true;
     setIsClosing(true);
     track("widget_close");
 
-    const finish = () => {
-      closeTimerRef.current = null;
-      openRef.current = false;
-      closingRef.current = false;
-      restoreLauncherFocusRef.current = true;
-      setIsOpen(false);
-      setIsClosing(false);
-    };
-
+    // Animation events finish at the actual end. A timeout handles cancelled
+    // animations, background tabs and browsers that never dispatch the event.
     if (reducedMotion()) {
-      finish();
+      finishClose();
       return;
     }
-    closeTimerRef.current = window.setTimeout(finish, PANEL_EXIT_MS);
-  }, []);
+    closeTimerRef.current = window.setTimeout(finishClose, PANEL_EXIT_MS);
+  }, [finishClose]);
 
   useFocusTrap(panelRef, isOpen && !isClosing, close, launcherRef);
   useMobilePanelViewport(panelRef, isOpen, embedMode);
@@ -221,6 +227,17 @@ export function AssistantWidget({
           data-mode={mode}
           data-direction={transitionDirection}
           data-state={isClosing ? "closing" : "open"}
+          onAnimationEnd={(event) => {
+            if (
+              event.target === event.currentTarget &&
+              isClosing &&
+              (event.animationName === "cw-koverta-close" ||
+                event.animationName === "cw-koverta-mobile-close" ||
+                event.animationName === "cw-panel-out")
+            ) {
+              finishClose();
+            }
+          }}
           hidden={!isOpen}
           aria-hidden={isClosing || !isOpen}
           ref={panelRef}
