@@ -86,8 +86,9 @@ test("builder preserves selections, validates and submits a complete brief", asy
   await page
     .getByRole("button", { name: "Vyskladať riešenie", exact: true })
     .click();
-  await expect(page.getByTestId("interest-custom").locator("b")).toHaveText(
-    "Riešenie na mieru",
+  await expect(page.getByTestId("interest-custom")).toHaveAttribute(
+    "placeholder",
+    "Opíšte vlastné riešenie…",
   );
   await page.getByTestId("interest-chatbot").click();
   await expect(page.locator('[data-step="features"]')).toBeVisible();
