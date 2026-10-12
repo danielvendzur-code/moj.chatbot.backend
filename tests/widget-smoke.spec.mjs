@@ -90,6 +90,11 @@ test("builder preserves selections, validates and submits a complete brief", asy
     "placeholder",
     "Opíšte vlastné riešenie…",
   );
+  const firstStepOverflow = await page.locator(".cw-calc-body").evaluate(
+    (body) => body.scrollHeight - body.clientHeight,
+  );
+  expect(firstStepOverflow).toBeLessThanOrEqual(2);
+
   await page.getByTestId("interest-chatbot").click();
   await expect(page.locator('[data-step="features"]')).toBeVisible();
   await expect(
