@@ -961,3 +961,63 @@
 @media (prefers-reduced-motion: reduce) {
  .cw-widget .cw-typing .cw-writing-dots i { animation: none !important; opacity: .65; }
 }
+
+
+/* Initial greeting only: Koverta's two compact bubbles and two clear actions.
+   Reply actions, contact sheet and builder keep their existing layout. */
+.cw-widget .cw-conversation:not([data-started]) .cw-message-row[data-message-id="1"] {
+  margin-bottom: -7px;
+}
+.cw-widget .cw-conversation:not([data-started]) .cw-message-row[data-message-id="1"] .cw-message-text {
+  border-bottom-left-radius: 7px;
+}
+.cw-widget .cw-conversation:not([data-started]) .cw-message-row[data-message-id="2"] .cw-message-wrap:has(.cw-welcome-actions) {
+  background: var(--mc-sand);
+  border-radius: 18px 18px 18px 7px;
+  overflow: hidden;
+}
+.cw-widget .cw-conversation:not([data-started]) .cw-welcome-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin: 0 12px 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--mc-line-strong);
+}
+.cw-widget .cw-conversation:not([data-started]) .cw-welcome-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 0;
+  min-height: 43px;
+  padding: 8px 9px;
+  border: 1px solid var(--mc-line-strong);
+  border-radius: 12px;
+  background: var(--mc-paper);
+  color: var(--mc-ink);
+  font-size: 12.5px;
+  font-weight: 650;
+  text-align: center;
+  line-height: 1.25;
+}
+.cw-widget .cw-conversation:not([data-started]) .cw-welcome-actions button svg {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+}
+.cw-widget .cw-conversation:not([data-started]) .cw-welcome-actions button span {
+  min-width: 0;
+}
+@media (max-width: 360px) {
+  .cw-widget .cw-conversation:not([data-started]) .cw-welcome-actions button {
+    gap: 5px;
+    padding-inline: 6px;
+    font-size: 11.5px;
+  }
+  .cw-widget .cw-conversation:not([data-started]) .cw-welcome-actions button svg {
+    flex-basis: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
