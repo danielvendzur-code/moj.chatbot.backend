@@ -11,6 +11,7 @@ import { BubbleLogo } from "./BubbleLogo";
 import { MessageSheet } from "./MessageSheet";
 import { ScrollCue } from "./ScrollCue";
 import { MessageText } from "./MessageText";
+import { WidgetIcon } from "./WidgetIcon";
 
 type AssistantConversationProps = {
   active: boolean;
@@ -29,12 +30,12 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   {
     id: 1,
     from: "bot",
-    text: "Dobrý deň. Pomôžem vám vybrať riešenie pre váš web.",
+    text: "Dobrý deň, som online poradca Môj Chatbot.",
   },
   {
     id: 2,
     from: "bot",
-    text: "Môžeme spolu vyskladať chatbot, kalkulačku alebo 3D konfigurátor. Čo by ste chceli zákazníkom zjednodušiť?",
+    text: "Pomôžem vybrať riešenie pre váš web alebo vás spojím s kolegom.",
   },
 ];
 
@@ -453,14 +454,16 @@ export function AssistantConversation({
                       aria-label="Ďalší krok"
                     >
                       <button type="button" onClick={onOpenBuilder}>
-                        Vyskladať riešenie
+                        {greeting ? <WidgetIcon name="calculator" /> : null}
+                        <span>Vyskladať riešenie</span>
                       </button>
                       <button
                         type="button"
                         data-testid="open-mail-form"
                         onClick={() => setMailOpen(true)}
                       >
-                        Kontakt
+                        {greeting ? <WidgetIcon name="user" /> : null}
+                        <span>Kontakt</span>
                       </button>
                     </div>
                   ) : null}

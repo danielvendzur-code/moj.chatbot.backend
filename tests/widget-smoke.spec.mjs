@@ -46,6 +46,27 @@ test("mobile dialog stays onscreen with a stale Safari viewport offset and reope
   expect(errors).toEqual([]);
 });
 
+test("initial welcome matches Koverta's compact two-message shortcut layout", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const errors = await observe(page);
+  await openChat(page);
+  await expect(page.locator('.cw-message-row[data-message-id="1"]')).toContainText(
+    "Dobrý deň, som online poradca Môj Chatbot.",
+  );
+  await expect(page.locator('.cw-message-row[data-message-id="2"]')).toContainText(
+    "Pomôžem vybrať riešenie pre váš web alebo vás spojím s kolegom.",
+  );
+  const actions = page.locator(".cw-conversation:not([data-started]) .cw-welcome-actions");
+  await expect(actions).toBeVisible();
+  await expect(actions.locator("button")).toHaveCount(2);
+  await expect(actions.locator("button svg")).toHaveCount(2);
+  await expect(actions.getByRole("button", { name: "Kontakt" })).toBeVisible();
+  await actions.getByRole("button", { name: "Kontakt" }).click();
+  await expect(page.getByTestId("open-mail-form")).toHaveCount(1);
+  await expect(page.locator(".cw-conversation")).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
 test("desktop chat sends a reply and keeps welcome and response actions", async ({
   page,
 }) => {
