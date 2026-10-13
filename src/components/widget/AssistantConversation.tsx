@@ -101,10 +101,10 @@ export function AssistantConversation({
       setIntroChars(cursor);
       if (cursor >= introLength) return;
       // Type actual characters (not entire words), with restrained punctuation pauses.
-      const pause = cursor === firstBoundary ? 240 : /[.!?]/.test(character) ? 115 : 23;
+      const pause = cursor === firstBoundary ? 95 : /[.!?]/.test(character) ? 65 : 13;
       timer = window.setTimeout(advance, pause);
     };
-    timer = window.setTimeout(advance, 120);
+    timer = window.setTimeout(advance, 45);
     return () => window.clearTimeout(timer);
   }, [active, introComplete, conversationStarted, introLength]);
 
@@ -257,7 +257,7 @@ export function AssistantConversation({
       lastFrame = now;
       if (visibleReply.length < targetReply.length && now >= pauseUntil) {
         const backlog = targetReply.length - visibleReply.length;
-        letterCredit += (elapsed * Math.min(240, 100 + backlog * 0.2)) / 1000;
+        letterCredit += (elapsed * Math.min(340, 155 + backlog * 0.35)) / 1000;
         if (letterCredit >= 1) {
           let length = Math.min(
             targetReply.length,
@@ -289,7 +289,7 @@ export function AssistantConversation({
           letterCredit -= length - visibleReply.length;
           visibleReply = targetReply.slice(0, length);
           paint(visibleReply);
-          if (/[.!?\n]$/.test(visibleReply)) pauseUntil = now + 95;
+          if (/[.!?\n]$/.test(visibleReply)) pauseUntil = now + 45;
         }
       }
       if (visibleReply === targetReply) {
