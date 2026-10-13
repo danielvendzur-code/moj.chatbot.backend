@@ -454,7 +454,7 @@ export function AssistantConversation({
                       aria-label="Ďalší krok"
                     >
                       <button type="button" onClick={onOpenBuilder}>
-                        {message.id === 2 ? <WidgetIcon name="calculator" /> : null}
+                        {greeting ? <WidgetIcon name="calculator" /> : null}
                         <span>Vyskladať riešenie</span>
                       </button>
                       <button
@@ -462,7 +462,7 @@ export function AssistantConversation({
                         data-testid="open-mail-form"
                         onClick={() => setMailOpen(true)}
                       >
-                        {message.id === 2 ? <WidgetIcon name="user" /> : null}
+                        {greeting ? <WidgetIcon name="user" /> : null}
                         <span>Kontakt</span>
                       </button>
                     </div>
