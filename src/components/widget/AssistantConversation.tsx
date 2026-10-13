@@ -101,10 +101,10 @@ export function AssistantConversation({
       setIntroChars(cursor);
       if (cursor >= introLength) return;
       // Type actual characters (not entire words), with restrained punctuation pauses.
-      const pause = cursor === firstBoundary ? 240 : /[.!?]/.test(character) ? 115 : 23;
+      const pause = cursor === firstBoundary ? 95 : /[.!?]/.test(character) ? 65 : 13;
       timer = window.setTimeout(advance, pause);
     };
-    timer = window.setTimeout(advance, 120);
+    timer = window.setTimeout(advance, 45);
     return () => window.clearTimeout(timer);
   }, [active, introComplete, conversationStarted, introLength]);
 
