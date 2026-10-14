@@ -1017,6 +1017,17 @@
   text-align: center;
   line-height: 1.25;
 }
+/* The primary action carries the bronze accent; contact remains ivory. */
+.cw-widget .cw-conversation:not([data-started]) .cw-welcome-actions button:first-child {
+  background: var(--mc-brand);
+  border-color: var(--mc-brand);
+  color: var(--mc-paper);
+}
+.cw-widget .cw-conversation:not([data-started]) .cw-welcome-actions button:first-child:hover {
+  background: var(--mc-brand-hover);
+  border-color: var(--mc-brand-hover);
+  color: var(--mc-paper);
+}
 .cw-widget .cw-conversation:not([data-started]) .cw-welcome-actions button svg {
   flex: 0 0 18px;
   width: 18px;
