@@ -11,7 +11,11 @@ export function BrandMark({
   tone?: "ink" | "paper" | "brand";
 }) {
   const color =
-    tone === "paper" ? "#FFFCF7" : tone === "brand" ? "#5B3A26" : "#1C1612";
+    tone === "paper"
+      ? "var(--mc-paper, #FFFCF7)"
+      : tone === "brand"
+        ? "var(--mc-brand, #5B3A26)"
+        : "var(--mc-ink, #1C1612)";
   return (
     <svg
       width={size}

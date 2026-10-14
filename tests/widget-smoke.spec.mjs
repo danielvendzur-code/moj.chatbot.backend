@@ -28,6 +28,66 @@ async function openChat(page) {
   await expect(page.locator(".cw-panel")).toBeVisible();
 }
 
+
+test("graphite, sand and bronze remain readable on mobile and desktop", async ({ page }) => {
+  const errors = await observe(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openChat(page);
+
+  const widget = page.locator(".cw-widget");
+  await expect(widget).toHaveCSS("--mc-ink", "#252424");
+  await expect(widget).toHaveCSS("--mc-brand", "#79513e");
+  await expect(widget).toHaveCSS("--mc-page", "#f7f4ef");
+  await expect(page.locator(".cw-panel-head")).toHaveCSS(
+    "background-color",
+    "rgb(37, 36, 36)",
+  );
+  await expect(page.locator(".cw-conversation")).toHaveCSS(
+    "background-color",
+    "rgb(247, 244, 239)",
+  );
+  await expect(page.locator(".cw-inputbar")).toHaveCSS(
+    "background-color",
+    "rgb(255, 252, 248)",
+  );
+  await expect(page.locator(".cw-inputbar > .cw-send")).toHaveCSS(
+    "background-color",
+    "rgb(121, 81, 62)",
+  );
+  await expect(page.locator(".cw-welcome-actions")).toBeVisible();
+  await expect(page.locator(".cw-welcome-actions button").first()).toHaveCSS(
+    "background-color",
+    "rgb(121, 81, 62)",
+  );
+  await expect(page.locator(".cw-welcome-actions button").last()).toHaveCSS(
+    "background-color",
+    "rgb(255, 252, 248)",
+  );
+  await page.screenshot({
+    path: "test-results/graphite-sand-bronze-mobile.png",
+    animations: "disabled",
+  });
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect(page.locator(".cw-panel")).toBeVisible();
+  await page.screenshot({
+    path: "test-results/graphite-sand-bronze-desktop.png",
+    animations: "disabled",
+  });
+  await page.getByRole("button", { name: "Vyskladať riešenie", exact: true }).click();
+  await expect(page.getByTestId("interest-chatbot")).toBeVisible();
+  await page.getByTestId("interest-chatbot").click();
+  await expect(page.getByTestId("feature-leads")).toBeVisible();
+  await page.getByTestId("feature-leads").click();
+  await expect(page.getByTestId("feature-leads")).toHaveCSS(
+    "background-color",
+    "rgb(37, 36, 36)",
+  );
+  await page.getByTestId("widget-close").click();
+  await expect(page.locator(".cw-panel")).toBeHidden();
+  expect(errors).toEqual([]);
+});
+
 test("mobile dialog stays onscreen with a stale Safari viewport offset and reopens", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.addInitScript(() => {

@@ -1,6 +1,19 @@
-/* Espresso a karamel: jediná farebná a komponentová autorita widgetu. */
+/* Môj Chatbot — graphite, ivory and bronze. Scoped only to widget surfaces. */
 .widget-preview,
 .cw-widget {
+  /* Palette B. Host site and other vendor chatbots retain their own brand. */
+  --mc-ink: #252424;
+  --mc-brand: #79513e;
+  --mc-brand-hover: #62402f;
+  --mc-accent: #bb906e;
+  --mc-muted: #6d625a;
+  --mc-line: #e5dcd2;
+  --mc-line-strong: #cbb9a7;
+  --mc-taupe: #806d60;
+  --mc-sand: #f0e9e1;
+  --mc-page: #f7f4ef;
+  --mc-paper: #fffcf8;
+  --mc-ok: #56a579;
   --cw-white: var(--mc-paper);
   --cw-paper: var(--mc-paper);
   --cw-mint: var(--mc-page);
@@ -44,7 +57,7 @@
   border: 1px solid var(--mc-line-strong);
   border-radius: 22px;
   background: var(--mc-paper);
-  box-shadow: 0 24px 64px rgba(28, 22, 18, 0.14);
+  box-shadow: 0 26px 76px rgba(28, 25, 24, 0.2);
 }
 .cw-widget .cw-panel-head {
   height: 64px;
@@ -54,6 +67,7 @@
   gap: 10px;
   background: var(--mc-ink);
   border: 0;
+  box-shadow: inset 0 -1px 0 rgba(255, 252, 248, 0.1);
 }
 .cw-widget .cw-panel-head__mascot {
   width: 30px;
@@ -77,14 +91,14 @@
 }
 .cw-widget .cw-panel-head__online {
   font-size: 12px;
-  color: var(--mc-paper);
-  font-weight: 400;
+  color: #e3ddd5;
+  font-weight: 450;
 }
 .cw-widget .cw-panel-head__online i {
   width: 6px;
   height: 6px;
-  background: var(--mc-paper);
-  box-shadow: none;
+  background: #80ca9a;
+  box-shadow: 0 0 0 3px rgba(128, 202, 154, 0.14);
   animation: none;
 }
 .cw-widget .cw-panel-head__actions button {
@@ -107,7 +121,7 @@
   border: 1px solid var(--mc-line-strong);
   background: var(--mc-ink);
   color: var(--mc-paper);
-  box-shadow: 0 8px 24px rgba(28, 22, 18, 0.14);
+  box-shadow: 0 12px 30px rgba(28, 25, 24, 0.2), 0 0 0 3px rgba(187, 144, 110, 0.1);
   backdrop-filter: none;
   transform: none;
   transition:
@@ -119,7 +133,7 @@
   background: var(--mc-ink);
   color: var(--mc-paper);
   transform: translateY(-3px) scale(1.04);
-  box-shadow: 0 12px 30px rgba(28, 22, 18, 0.22);
+  box-shadow: 0 16px 36px rgba(28, 25, 24, 0.24), 0 0 0 3px rgba(187, 144, 110, 0.14);
 }
 .cw-widget .cw-launcher:active {
   transform: translateY(-1px);
@@ -159,7 +173,7 @@
 .cw-widget .cw-message-wrap p {
   padding: 11px 14px;
   border: 0;
-  background: var(--mc-sand);
+  background: var(--mc-paper);
   color: var(--mc-ink);
   border-radius: 18px 18px 18px 7px;
   font: 400 14.5px/1.5 var(--mc-font);
@@ -177,6 +191,7 @@
 }
 .cw-widget .cw-message-wrap:has(.cw-welcome-actions) {
   background: var(--mc-sand);
+  border: 1px solid var(--mc-line);
   border-radius: 18px 18px 18px 7px;
   overflow: hidden;
 }
@@ -186,7 +201,7 @@
   gap: 6px;
   margin: 0 14px 14px;
   padding-top: 12px;
-  border-top: 1px solid #d6c9b8;
+  border-top: 1px solid var(--mc-line-strong);
 }
 .cw-reply-actions {
   display: flex;
@@ -197,7 +212,7 @@
 .cw-widget :is(.cw-welcome-actions, .cw-reply-actions) button {
   min-height: 44px;
   padding: 0 12px;
-  border: 1px solid #d6c9b8;
+  border: 1px solid var(--mc-line-strong);
   border-radius: 12px;
   background: var(--mc-paper);
   color: var(--mc-ink);
@@ -214,6 +229,7 @@
 }
 .cw-widget :is(.cw-welcome-actions, .cw-reply-actions) button:hover {
   background: var(--mc-page);
+  border-color: var(--mc-accent);
   color: var(--mc-ink);
   transform: none;
 }
@@ -229,10 +245,10 @@
   align-items: center;
   margin: 0 16px 16px;
   padding: 6px 6px 6px 16px;
-  border: 1px solid #bfa78f;
+  border: 1px solid var(--mc-line-strong);
   border-radius: 26px;
   background: var(--mc-sand);
-  box-shadow: 0 0 0 8px var(--mc-page);
+  box-shadow: 0 0 0 8px var(--mc-page), 0 3px 14px rgba(37, 36, 36, 0.035);
 }
 .cw-widget .cw-inputbar input {
   border: 0;
@@ -374,14 +390,14 @@
   padding: 0 16px;
   border: 0;
   border-radius: 999px;
-  background: #f1eae0;
+  background: #f4efe9;
   color: var(--mc-ink);
   box-shadow: none;
   transform: none;
   font: 600 14px/1.35 var(--mc-font);
 }
 .cw-widget :is(.cw-rowcard, .cw-opt, .cw-scard, .cw-vcard):hover {
-  background: #f1eae0;
+  background: #f4efe9;
   color: var(--mc-ink);
   box-shadow: none;
   transform: none;
@@ -638,28 +654,28 @@
 
 /* Quiet composer: colour lives in the outline and send button. */
 .cw-widget .cw-inputbar {
- background: var(--mc-paper); border-color: rgba(91,58,38,.32);
- padding: 8px 8px 8px 16px; box-shadow: 0 0 0 7px var(--mc-page), 0 3px 12px rgba(28,22,18,.05);
+ background: var(--mc-paper); border-color: rgba(121,81,62,.32);
+ padding: 8px 8px 8px 16px; box-shadow: 0 0 0 7px var(--mc-page), 0 3px 12px rgba(37,36,36,.05);
 }
 .cw-widget .cw-inputbar input { color: var(--mc-ink); }
 .cw-widget .cw-inputbar input::placeholder { color: var(--mc-muted); }
-.cw-widget .cw-inputbar:focus-within { border-color: var(--mc-brand); box-shadow: 0 0 0 7px var(--mc-page), 0 0 0 8px rgba(91,58,38,.13); }
+.cw-widget .cw-inputbar:focus-within { border-color: var(--mc-brand); box-shadow: 0 0 0 7px var(--mc-page), 0 0 0 8px rgba(121,81,62,.14); }
 .cw-widget .cw-inputbar > .cw-send:not(:disabled), .cw-widget .cw-inputbar > .cw-send:disabled { background: var(--mc-brand); color: var(--mc-paper); }
 .cw-widget .cw-inputbar > .cw-send:hover:not(:disabled) { background: var(--mc-brand-hover); color: var(--mc-paper); }
 /* Selection never changes chip dimensions or label weight. */
 .cw-widget :is(.cw-rowcard,.cw-opt,.cw-scard,.cw-vcard),
 .cw-widget :is(.cw-rowcard,.cw-opt,.cw-scard,.cw-vcard)[data-selected="true"] {
- box-sizing: border-box; max-width: 100%; padding: 0 16px 0 36px; border: 1px solid transparent;
+ box-sizing: border-box; max-width: 100%; padding: 0 16px 0 36px; border: 1px solid var(--mc-line);
  transition: background-color 180ms, color 180ms, border-color 180ms, box-shadow 180ms;
 }
 .cw-widget .cw-selection-indicator { display: grid; position: absolute; left: 13px; opacity: 0; visibility: hidden; }
 .cw-widget [data-selected="true"] .cw-selection-indicator { opacity: 1; visibility: visible; }
-.cw-widget :is(.cw-rowcard,.cw-opt,.cw-scard,.cw-vcard):hover { background: #f1eae0; border-color: transparent; }
+.cw-widget :is(.cw-rowcard,.cw-opt,.cw-scard,.cw-vcard):hover { background: #efe5db; border-color: var(--mc-accent); }
 .cw-widget :is(.cw-rowcard,.cw-opt,.cw-scard,.cw-vcard)[data-selected="true"]:hover { background: var(--mc-ink); color: var(--mc-paper); }
 .cw-widget :is(.cw-rowcard,.cw-opt,.cw-scard,.cw-vcard):focus-visible { outline: 2px solid var(--mc-brand); outline-offset: 3px; }
-.cw-widget[data-pointer-parked="true"] :is(.cw-rowcard,.cw-opt,.cw-scard,.cw-vcard):hover:not([data-selected="true"]) { background: #f1eae0; border-color: transparent; box-shadow: none; }
+.cw-widget[data-pointer-parked="true"] :is(.cw-rowcard,.cw-opt,.cw-scard,.cw-vcard):hover:not([data-selected="true"]) { background: #f4efe9; border-color: var(--mc-line); box-shadow: none; }
 .cw-widget .cw-launcher:is(:hover,:focus-visible) .mc-mark { transform: scale(1.12); }
-.cw-widget .cw-panel-head { background-image: radial-gradient(ellipse at 85% 0%,rgba(200,146,94,.14),transparent 70%); }
+.cw-widget .cw-panel-head { background-image: radial-gradient(ellipse at 85% 0%, rgba(187,144,110,.2), transparent 68%), linear-gradient(115deg, #252424, #302b29); }
 
 /* The same quiet panel motion as Koverta: one surface, no staged content. */
 .cw-widget .cw-panel {
@@ -785,7 +801,7 @@
   width:100%; min-width:0; min-height:56px; height:100%; display:flex; justify-content:center;
   padding:10px 12px 10px 25px; white-space:normal; text-wrap:balance; text-align:center;
   border-radius:13px; border:1px solid var(--mc-line); line-height:1.25;
-  background:#f1eae0; position:relative; isolation:isolate;
+  background:#f4efe9; position:relative; isolation:isolate;
 }
 .cw-widget .cw-interest-group .cw-rowcard b { font-weight:600; line-height:1.3; text-align:center; overflow-wrap:anywhere; }
 .cw-widget .cw-interest-group .cw-rowcard .cw-selection-indicator { left:7px; width:13px; height:13px; }
@@ -851,7 +867,7 @@
 }
 
 /* One coherent message surface, with readable paragraphs and lists. */
-.cw-widget .cw-message-text { padding:12px 15px; border-radius:18px 18px 18px 7px; background:var(--mc-sand); color:var(--mc-ink); font:400 14.5px/1.65 var(--mc-font); overflow-wrap:anywhere; }
+.cw-widget .cw-message-text { padding:12px 15px; border:1px solid var(--mc-line); border-radius:18px 18px 18px 7px; background:var(--mc-paper); color:var(--mc-ink); font:400 14.5px/1.65 var(--mc-font); overflow-wrap:anywhere; }
 .cw-widget .cw-message-text p { margin:0; padding:0; border-radius:0; background:transparent; color:inherit; line-height:inherit; }
 .cw-widget .cw-message-text > :not(:first-child) { margin-top:12px; }
 .cw-widget .cw-message-text ul, .cw-widget .cw-message-text ol { margin-bottom:0; padding-left:19px; }
@@ -859,7 +875,7 @@
 .cw-widget .cw-message-text ol { list-style:decimal; }
 .cw-widget .cw-message-text li + li { margin-top:6px; }
 .cw-widget .cw-message-text strong { font-weight:650; }
-.cw-widget .cw-message-row--me .cw-message-text { background:var(--mc-ink); color:var(--mc-paper); border-radius:18px 18px 7px 18px; }
+.cw-widget .cw-message-row--me .cw-message-text { background:var(--mc-ink); color:var(--mc-paper); border-color:var(--mc-ink); border-radius:18px 18px 7px 18px; }
 .cw-widget .cw-message-row--me .cw-message-text p { background:transparent; color:inherit; }
 .cw-widget .cw-message-row--bot[data-streaming="true"] .cw-message-text::after { content:""; display:inline-block; width:5px; height:5px; margin-left:5px; border-radius:50%; background:var(--mc-brand); opacity:.55; }
 @media (prefers-reduced-motion:no-preference) {
@@ -1000,6 +1016,17 @@
   font-weight: 650;
   text-align: center;
   line-height: 1.25;
+}
+/* The primary action carries the bronze accent; contact remains ivory. */
+.cw-widget .cw-conversation:not([data-started]) .cw-welcome-actions button:first-child {
+  background: var(--mc-brand);
+  border-color: var(--mc-brand);
+  color: var(--mc-paper);
+}
+.cw-widget .cw-conversation:not([data-started]) .cw-welcome-actions button:first-child:hover {
+  background: var(--mc-brand-hover);
+  border-color: var(--mc-brand-hover);
+  color: var(--mc-paper);
 }
 .cw-widget .cw-conversation:not([data-started]) .cw-welcome-actions button svg {
   flex: 0 0 18px;

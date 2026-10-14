@@ -104,3 +104,12 @@ jobs:
           grep -Fq 'brand-system.css' src/launch-ready-styles.ts
           ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt|installProductRefinement' src/main.tsx
           ! grep -Eq 'installLimeWhiteStyles|installPremiumTilt|installProductRefinement' src/embed.tsx
+
+      - name: Upload palette B mobile and desktop previews
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: palette-b-previews-${{ github.run_id }}
+          path: test-results/graphite-sand-bronze-*.png
+          retention-days: 7
+          if-no-files-found: ignore
