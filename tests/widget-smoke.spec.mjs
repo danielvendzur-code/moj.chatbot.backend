@@ -131,6 +131,9 @@ test("builder preserves selections, validates and submits a complete brief", asy
       })),
     );
   const sizesBefore = await chipSizes();
+  expect(new Set(sizesBefore.map((chip) => chip.height)).size).toBe(1);
+  expect(new Set(sizesBefore.map((chip) => chip.width)).size).toBe(1);
+  expect(sizesBefore[0].height).toBeGreaterThanOrEqual(80);
   await page.getByTestId("feature-leads").click();
   expect(await chipSizes()).toEqual(sizesBefore);
   await page.getByTestId("feature-jazyky").click();
