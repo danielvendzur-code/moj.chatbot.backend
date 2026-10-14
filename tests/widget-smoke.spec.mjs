@@ -55,6 +55,14 @@ test("graphite, sand and bronze remain readable on mobile and desktop", async ({
     "rgb(121, 81, 62)",
   );
   await expect(page.locator(".cw-welcome-actions")).toBeVisible();
+  await expect(page.locator(".cw-welcome-actions button").first()).toHaveCSS(
+    "background-color",
+    "rgb(121, 81, 62)",
+  );
+  await expect(page.locator(".cw-welcome-actions button").last()).toHaveCSS(
+    "background-color",
+    "rgb(255, 252, 248)",
+  );
   await page.screenshot({
     path: "test-results/graphite-sand-bronze-mobile.png",
     animations: "disabled",
