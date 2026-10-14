@@ -63,22 +63,22 @@ for (const device of ["mobile", "desktop"]) {
       await expect(launcher).toHaveAttribute("data-surface", "dark");
       await expect(launcher).toHaveCSS(
         "background-color",
-        "rgb(255, 252, 247)",
+        "rgb(255, 252, 248)",
       );
-      await expect(launcher).toHaveCSS("color", "rgb(91, 58, 38)");
+      await expect(launcher).toHaveCSS("color", "rgb(121, 81, 62)");
       const path = launcher.locator(".mc-mark path").first();
       await expect(path).toHaveCSS("animation-name", "none");
-      await expect(path).toHaveCSS("fill", "rgb(91, 58, 38)");
+      await expect(path).toHaveCSS("fill", "rgb(121, 81, 62)");
       await expect(path).toHaveCSS("stroke", "none");
       await page.evaluate(() => scrollTo(0, innerHeight));
       await expect(launcher).toHaveAttribute("data-surface", "light");
-      await expect(launcher).toHaveCSS("background-color", "rgb(28, 22, 18)");
-      await expect(launcher).toHaveCSS("color", "rgb(255, 252, 247)");
+      await expect(launcher).toHaveCSS("background-color", "rgb(37, 36, 36)");
+      await expect(launcher).toHaveCSS("color", "rgb(255, 252, 248)");
       await launcher.click();
       await expect(surface.locator(".cw-panel")).toBeVisible();
       await expect(surface.locator(".cw-panel-head")).toHaveCSS(
         "background-color",
-        "rgb(28, 22, 18)",
+        "rgb(37, 36, 36)",
       );
       await context.close();
     });
@@ -145,7 +145,7 @@ for (const width of [320, 390, 640]) {
       await page
         .locator(".cw-widget")
         .evaluate((el) => getComputedStyle(el, "::before").backgroundColor),
-    ).toBe("rgb(28, 22, 18)");
+    ).toBe("rgb(37, 36, 36)");
     await expect(panel).toHaveCSS("border-top-width", "1px");
     await expect(panel).toHaveCSS("border-top-left-radius", "18px");
     await expect(page.locator("body")).toHaveCSS("position", "fixed");
